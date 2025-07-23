@@ -1,0 +1,16 @@
+# Build output
+dist/
+
+# Static assets
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.min.js
+*.bundle.js
+*.d.ts
+
+# Logs
+*.log
