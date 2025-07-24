@@ -6,7 +6,7 @@ TODO:
 - [ ] Unit - coverage
 - [ ] Unit test report extra files (optional)
 - [ ] Check storybook build
-- [ ] Gitlab repo checklist
+- [X] Gitlab repo checklist
 - [ ] README
 - [ ] NPM publish/unpublish
 - [ ] Update from Design team
