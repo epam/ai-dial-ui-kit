@@ -4,7 +4,7 @@ TODO:
 - [ ] Tailwind - check prefix and reset
 - [ ] Themes how to apply to config
 - [ ] Unit - coverage
-- [ ] Unit test report extra files
+- [ ] Unit test report extra files (optional)
 - [ ] Check storybook build
 - [ ] Gitlab repo checklist
 - [ ] README
