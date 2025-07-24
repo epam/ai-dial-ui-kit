@@ -1,0 +1,13 @@
+TODO:
+- [ ] Check TS configuration/compare with current apps
+- [ ] Add SASS preprocessor and update build configuration + integrate in storybook
+- [ ] Tailwind - check prefix and reset
+- [ ] Themes how to apply to config
+- [ ] Unit - coverage
+- [ ] Unit test report extra files
+- [ ] Check storybook build
+- [ ] Gitlab repo checklist
+- [ ] README
+- [ ] NPM publish/unpublish
+- [ ] Update from Design team
+- [ ] Move components
