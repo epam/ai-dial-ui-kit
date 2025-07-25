@@ -1,5 +1,7 @@
 @layer ui {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -117,8 +119,8 @@
 */
 
   *,
-::before,
-::after {
+  ::before,
+  ::after {
     box-sizing: border-box;
     /* 1 */
     border-width: 0;
@@ -130,7 +132,7 @@
   }
 
   ::before,
-::after {
+  ::after {
     --tw-content: '';
   }
 
@@ -145,7 +147,7 @@
 */
 
   html,
-:host {
+  :host {
     line-height: 1.5;
     /* 1 */
     -webkit-text-size-adjust: 100%;
@@ -153,9 +155,11 @@
     -moz-tab-size: 4;
     /* 3 */
     -o-tab-size: 4;
-       tab-size: 4;
+    tab-size: 4;
     /* 3 */
-    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family:
+      ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     /* 4 */
     font-feature-settings: normal;
     /* 5 */
@@ -198,7 +202,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
   abbr:where([title]) {
     -webkit-text-decoration: underline dotted;
-            text-decoration: underline dotted;
+    text-decoration: underline dotted;
   }
 
   /*
@@ -206,11 +210,11 @@ Remove the default font size and weight for headings.
 */
 
   h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-size: inherit;
     font-weight: inherit;
   }
@@ -229,7 +233,7 @@ Add the correct font weight in Edge and Safari.
 */
 
   b,
-strong {
+  strong {
     font-weight: bolder;
   }
 
@@ -241,10 +245,12 @@ strong {
 */
 
   code,
-kbd,
-samp,
-pre {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  kbd,
+  samp,
+  pre {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace;
     /* 1 */
     font-feature-settings: normal;
     /* 2 */
@@ -267,7 +273,7 @@ Prevent `sub` and `sup` elements from affecting the line height in all browsers.
 */
 
   sub,
-sup {
+  sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
@@ -304,10 +310,10 @@ sup {
 */
 
   button,
-input,
-optgroup,
-select,
-textarea {
+  input,
+  optgroup,
+  select,
+  textarea {
     font-family: inherit;
     /* 1 */
     font-feature-settings: inherit;
@@ -335,7 +341,7 @@ Remove the inheritance of text transform in Edge and Firefox.
 */
 
   button,
-select {
+  select {
     text-transform: none;
   }
 
@@ -345,9 +351,9 @@ select {
 */
 
   button,
-input:where([type='button']),
-input:where([type='reset']),
-input:where([type='submit']) {
+  input:where([type='button']),
+  input:where([type='reset']),
+  input:where([type='submit']) {
     -webkit-appearance: button;
     /* 1 */
     background-color: transparent;
@@ -385,7 +391,7 @@ Correct the cursor style of increment and decrement buttons in Safari.
 */
 
   ::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
+  ::-webkit-outer-spin-button {
     height: auto;
   }
 
@@ -434,18 +440,18 @@ Removes the default spacing and border for appropriate elements.
 */
 
   blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
+  dl,
+  dd,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hr,
+  figure,
+  p,
+  pre {
     margin: 0;
   }
 
@@ -459,8 +465,8 @@ pre {
   }
 
   ol,
-ul,
-menu {
+  ul,
+  menu {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -487,7 +493,8 @@ Prevent resizing textareas horizontally by default.
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
 
-  input::-moz-placeholder, textarea::-moz-placeholder {
+  input::-moz-placeholder,
+  textarea::-moz-placeholder {
     opacity: 1;
     /* 1 */
     color: #9ca3af;
@@ -495,7 +502,7 @@ Prevent resizing textareas horizontally by default.
   }
 
   input::placeholder,
-textarea::placeholder {
+  textarea::placeholder {
     opacity: 1;
     /* 1 */
     color: #9ca3af;
@@ -507,7 +514,7 @@ Set the default cursor for buttons.
 */
 
   button,
-[role="button"] {
+  [role='button'] {
     cursor: pointer;
   }
 
@@ -526,13 +533,13 @@ Make sure disabled buttons don't get the pointer cursor.
 */
 
   img,
-svg,
-video,
-canvas,
-audio,
-iframe,
-embed,
-object {
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
     display: block;
     /* 1 */
     vertical-align: middle;
@@ -544,14 +551,14 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 */
 
   img,
-video {
+  video {
     max-width: 100%;
     height: auto;
   }
 
   /* Make elements with the HTML hidden attribute stay hidden by default */
 
-  [hidden]:where(:not([hidden="until-found"])) {
+  [hidden]:where(:not([hidden='until-found'])) {
     display: none;
   }
 

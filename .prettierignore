@@ -14,3 +14,8 @@ node_modules/
 
 # Logs
 *.log
+
+.github
+CONTRIBUTING.md
+README.md
+SECURITY.md

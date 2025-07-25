@@ -1,4 +1,5 @@
 TODO:
+
 - [ ] Check TS configuration/compare with current apps - Natasha
 - [ ] Add SASS preprocessor and update build configuration + integrate in storybook - Natasha
 - [ ] Tailwind - check prefix and reset
@@ -6,8 +7,8 @@ TODO:
 - [ ] Unit - coverage - Natasha
 - [ ] Unit test report extra files (optional)
 - [ ] Check storybook build
-- [X] Gitlab repo checklist - Palina
-- [X] pipelines - Palina
+- [x] Gitlab repo checklist - Palina
+- [x] pipelines - Palina
 - [ ] README
 - [ ] NPM publish/unpublish
 - [ ] Update from Design team
