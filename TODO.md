@@ -6,7 +6,7 @@ TODO:
 - [ ] Themes how to apply to config
 - [ ] Unit - coverage - Natasha
 - [ ] Unit test report extra files (optional)
-- [ ] Check storybook build
+- [ ] Check storybook build ?
 - [x] Gitlab repo checklist - Palina
 - [x] pipelines - Palina
 - [ ] Remove Docker file and fix pipeline - Palina
