@@ -9,7 +9,7 @@ TODO:
 - [ ] Check storybook build
 - [x] Gitlab repo checklist - Palina
 - [x] pipelines - Palina
-- [ ] Remove Docker file and fix pipeline  - Palina
+- [ ] Remove Docker file and fix pipeline - Palina
 - [ ] README
 - [ ] NPM publish/unpublish - Palina
 - [ ] Update from Design team
