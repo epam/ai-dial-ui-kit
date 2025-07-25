@@ -6,7 +6,8 @@ TODO:
 - [ ] Unit - coverage
 - [ ] Unit test report extra files (optional)
 - [ ] Check storybook build
-- [ ] Gitlab repo checklist
+- [ ] Gitlab repo checklist - Palina
+- [ ] pipelines - Palina
 - [ ] README
 - [ ] NPM publish/unpublish
 - [ ] Update from Design team
