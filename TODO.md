@@ -11,6 +11,6 @@ TODO:
 - [x] pipelines - Palina
 - [ ] Remove Docker file and fix pipeline  - Palina
 - [ ] README
-- [ ] NPM publish/unpublish
+- [ ] NPM publish/unpublish - Palina
 - [ ] Update from Design team
 - [ ] Move components
