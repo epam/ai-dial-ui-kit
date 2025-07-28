@@ -1,6 +1,7 @@
 import type { FC } from 'react';
+import './ExampleComponent.scss';
 
-interface ExampleComponentProps {
+export interface ExampleComponentProps {
   title: string;
   description: string;
 }
@@ -11,7 +12,7 @@ export const ExampleComponent: FC<ExampleComponentProps> = ({
 }) => {
   return (
     <div className="dial">
-      <h1 className="dial-p-4">{title}</h1>
+      <h1 className="dial-p-4 example-component">{title}</h1>
       <p className="dial-p-4">{description}</p>
     </div>
   );
