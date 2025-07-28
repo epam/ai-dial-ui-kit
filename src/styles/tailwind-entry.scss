@@ -3,7 +3,133 @@
   @tailwind components;
   @tailwind utilities;
 
-  .dial * {
-    all: revert;
+  @layer components {
+    .base-button {
+      @apply dial-flex dial-flex-row dial-items-center dial-px-3 dial-py-2;
+      @apply dial-rounded dial-border dial-border-solid dial-border-transparent;
+      @apply small-medium;
+
+      min-width: 38px;
+      min-height: 38px;
+    }
+
+    .base-button-disable {
+      @apply dial-pointer-events-none dial-text-controls-disable dial-bg-controls-disable;
+    }
+
+    .primary {
+      @apply base-button dial-bg-controls-accent dial-text-controls-primary;
+
+      &:hover,
+      &:focus {
+        @apply dial-bg-controls-accent-hover;
+      }
+
+      &:focus {
+        @apply dial-border-hover;
+      }
+
+      &:disabled {
+        @apply base-button-disable;
+      }
+    }
+
+    .secondary {
+      @apply base-button dial-bg-transparent dial-text-primary;
+      @apply dial-border-primary;
+
+      &:hover,
+      &:focus {
+        @apply dial-bg-layer-4;
+      }
+
+      &:focus {
+        @apply dial-border-hover;
+      }
+
+      &:disabled {
+        @apply base-button-disable;
+      }
+    }
+
+    .tertiary {
+      @apply base-button dial-text-accent-primary dial-bg-transparent;
+
+      &:hover,
+      &:focus {
+        @apply dial-bg-controls-accent-alpha;
+      }
+
+      &:focus {
+        @apply dial-border-accent-primary;
+      }
+
+      &:disabled {
+        @apply base-button-disable;
+      }
+    }
+    h1 {
+      @apply dial-font-semibold;
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    h2 {
+      @apply dial-font-normal;
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    h3 {
+      @apply dial-font-semibold;
+      font-size: 16px;
+      line-height: 18px;
+    }
+
+    .body {
+      @apply dial-font-normal;
+      font-size: 16px;
+      line-height: 28px;
+    }
+
+    .small {
+      @apply dial-font-normal;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .small-text-semi {
+      @apply small dial-font-semibold;
+    }
+
+    .small-medium {
+      @apply dial-font-normal;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .small-150 {
+      @apply dial-font-normal;
+      font-size: 14px;
+      line-height: 21px;
+    }
+
+    .tiny {
+      @apply dial-font-normal;
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    .tiny-150 {
+      @apply dial-font-normal;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .caption {
+      @apply dial-font-normal;
+      font-size: 10px;
+      line-height: 12px;
+    }
   }
 }

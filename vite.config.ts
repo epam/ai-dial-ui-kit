@@ -1,11 +1,12 @@
 import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
+import tailwindcss from 'tailwindcss';
 import { peerDependencies } from './package.json';
 
 export default defineConfig({
-  plugins: [react(), dts({ exclude: ['**/*.stories.tsx', '**/*.spec.tsx'] })],
+  plugins: [react(), dts({ exclude: ['**/*.spec.tsx'] })],
   build: {
     lib: {
       entry: './src/index.ts',
@@ -21,6 +22,11 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
         },
       },
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [tailwindcss()],
     },
   },
 });
