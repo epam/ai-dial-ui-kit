@@ -25,3 +25,4 @@ coverage
 
 *storybook.log
 storybook-static
+src/index.css

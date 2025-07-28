@@ -2,7 +2,7 @@
 export default {
   important: '.dial',
   prefix: 'dial-',
-  content: ['.src/**/*.{ts,tsx}'],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {},
   },
