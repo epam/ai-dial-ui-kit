@@ -1,5 +1,6 @@
 # Build output
 dist/
+storybook-static/
 
 # Static assets
 coverage/
@@ -11,9 +12,13 @@ node_modules/
 *.min.js
 *.bundle.js
 *.d.ts
+package-lock.json
 
 # Logs
 *.log
+
+# Config files
+.prettierrc
 
 .github
 CONTRIBUTING.md
