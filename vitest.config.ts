@@ -1,7 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import {
+  configDefaults,
+  defineConfig,
+  coverageConfigDefaults,
+} from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { configDefaults } from 'vitest/config';
 
 export default defineConfig({
   root: __dirname,
@@ -26,12 +29,11 @@ export default defineConfig({
         statements: 70,
       },
       exclude: [
+        ...coverageConfigDefaults.exclude,
         '**/*.stories.tsx',
         'storybook-static/**',
         '.storybook/**',
         '**/index.ts',
-        'dist/**',
-        'node_modules/**',
         '**/__mocks__/**',
         '*.config.[jt]s',
       ],
