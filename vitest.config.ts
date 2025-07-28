@@ -20,10 +20,10 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       provider: 'v8',
       thresholds: {
-        branches: 30,
-        functions: 30,
-        lines: 5,
-        statements: 5,
+        branches: 70,
+        functions: 70,
+        lines: 70,
+        statements: 70,
       },
       exclude: [
         '**/*.stories.tsx',
@@ -33,6 +33,7 @@ export default defineConfig({
         'dist/**',
         'node_modules/**',
         '**/__mocks__/**',
+        '*.config.[jt]s',
       ],
     },
     reporters: 'verbose',
