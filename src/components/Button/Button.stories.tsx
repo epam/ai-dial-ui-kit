@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import Button from './Button';
+import { Button } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 const meta = {
@@ -51,7 +51,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="dial p-8 max-w-[1000px] flex justify-center">
+    <div className="dial p-4 max-w-[1000px] flex justify-center">
       <div className="grid grid-cols-4 gap-8">
         {/* Header */}
         <div></div>

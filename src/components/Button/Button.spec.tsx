@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import Button from './Button';
+import { Button } from './Button';
 
 describe('Common components :: Button', () => {
   test('Should render with title and be accessible by role', () => {
