@@ -1,5 +1,308 @@
-# How to contribute
+# Contributing to AI DIAL UI Kit
 
-As an open-source project in a rapidly developing field, we are open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
+Thank you for your interest in contributing to AI DIAL UI Kit! This document provides guidelines and information for contributors.
 
-For detailed information on how to contribute, see the full [contributing documentation](https://github.com/epam/ai-dial/blob/main/CONTRIBUTING.md).
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Project Structure](#project-structure)
+- [Development Workflow](#development-workflow)
+- [Component Development](#component-development)
+- [Testing](#testing)
+- [Code Style](#code-style)
+- [Pull Request Process](#pull-request-process)
+- [Release Process](#release-process)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 22.2.0
+- npm >= 10.7.0
+- Git
+
+### Development Setup
+
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/your-username/ai-dial-ui-kit.git
+   cd ai-dial-ui-kit
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Development Environment**
+   ```bash
+   # Start Storybook for component development
+   npm run storybook
+   
+   # Run tests in watch mode
+   npm run test -- --watch
+   
+   # Start Vite dev server
+   npm run dev
+   ```
+
+## Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── Button/         # Example component
+│   │   ├── Button.tsx
+│   │   ├── Button.spec.tsx
+│   │   └── Button.stories.tsx
+│   └── ...
+├── styles/             # Global styles and Tailwind configuration
+│   ├── buttons.scss
+│   ├── typography.scss
+│   └── tailwind-entry.scss
+├── types/              # TypeScript type definitions
+└── index.ts            # Main entry point
+```
+
+## Development Workflow
+
+### Branching Strategy
+
+We follow a simple branching strategy:
+
+- `development` - main branch for integrating development code
+- `<custom name>` - feature development branches
+
+### Creating a Feature Branch
+
+```bash
+git checkout development
+git pull origin development
+git checkout -b your-feature-name
+```
+
+## Component Development
+
+### Component Guidelines
+
+1. **File Structure**: Each component should have its own directory with:
+   - `ComponentName.tsx` - Main component
+   - `ComponentName.spec.tsx` - Unit tests
+   - `ComponentName.stories.tsx` - Storybook stories
+
+2. **TypeScript**: Use proper TypeScript with:
+   - Explicit interface definitions for props
+   - Generic types where appropriate
+   - Proper export patterns
+
+3. **Styling**: 
+   - Use Tailwind CSS classes
+   - Create reusable SCSS mixins when needed
+   - Follow design system
+   - Do not inline styles
+   - Do not use hardcored custom values like hex colors, font sizes, etc
+
+4. **Update policy**:
+ - Do not make breaking changes to existing UI components. Use Open-Close principle from SOLID 
+
+
+### Example Component Structure
+
+```tsx
+// Button.tsx
+import classNames from 'classnames';
+import type { FC, ReactNode } from 'react';
+
+export interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  children: ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+
+export const Button: FC<ButtonProps> = ({
+  variant = 'primary',
+  size = 'md',
+  children,
+  disabled = false,
+  onClick,
+}) => {
+  return (
+    <button
+      className={classNames(
+        'btn',
+        `btn--${variant}`,
+        `btn--${size}`,
+        { 'btn--disabled': disabled }
+      )}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+### Storybook Stories
+
+Every component must have Storybook stories:
+
+```tsx
+// Button.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    variant: 'primary',
+    children: 'Click me',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+    children: 'Click me',
+  },
+};
+```
+
+## Testing
+
+### Testing Requirements
+
+- **Coverage**: Minimum 70% code coverage required
+- **Unit Tests**: Every component must have unit tests
+- **Test Framework**: Vitest with React Testing Library
+
+### Writing Tests
+
+```tsx
+// Button.spec.tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { Button } from './Button';
+
+describe('Button', () => {
+  it('renders children correctly', () => {
+    render(<Button>Test Button</Button>);
+    expect(screen.getByText('Test Button')).toBeInTheDocument();
+  });
+
+  it('calls onClick when clicked', () => {
+    const handleClick = vi.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+    
+    fireEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('applies disabled state correctly', () => {
+    render(<Button disabled>Disabled Button</Button>);
+    expect(screen.getByText('Disabled Button')).toBeDisabled();
+  });
+});
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test -- --coverage
+
+# Run tests in watch mode
+npm run test -- --watch
+
+# Run tests for specific file
+npm run test Button.spec.tsx
+```
+
+## Code Style
+
+### Linting and Formatting
+
+We use ESLint and Prettier for code consistency:
+
+```bash
+# Check linting
+npm run lint
+
+# Fix linting issues
+npm run lint -- --fix
+
+# Check formatting
+npm run format
+
+# Fix formatting
+npm run format-fix
+```
+
+### Code Style Guidelines
+
+- Use functional components with hooks
+- Prefer explicit typing over `any`
+- Use destructuring for props
+- Keep components small and focused
+- Use meaningful variable and function names
+- Add JSDoc comments for complex functions
+
+## Pull Request Process
+
+### Before Submitting
+
+1. **Run Quality Checks**
+Do not skip pre-commit and pre-push hooks. They'll run:
+   ```bash
+   npm run lint
+   npm run format
+   npm run test
+   ```
+
+2. **Update Documentation**
+   - Update Storybook stories if needed
+   - Add/update README sections
+   - Document breaking changes
+
+### PR Guidelines
+
+Follow rules from `.github/pull_request_template.md`
+
+### Review Process
+
+- All PRs require at least one approval
+- Automated checks must pass
+- Address review feedback
+- Keep PRs focused and reasonably sized
+
+## Release Process
+
+### Versioning
+
+We follow [Semantic Versioning](https://semver.org/):
+
+- **MAJOR**: Breaking changes
+- **MINOR**: New features (backward compatible)
+- **PATCH**: Bug fixes (backward compatible)
+
+
+## Code of Conduct
+
+For detailed information on DIAL project contributing guidelines, see the main [contributing documentation](https://github.com/epam/ai-dial/blob/main/CONTRIBUTING.md).

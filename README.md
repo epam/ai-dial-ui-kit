@@ -1,27 +1,32 @@
-# AI DIAL UI KIT
+# AI DIAL UI Kit
+
 [<img align="right" width="120" height="120" 
      alt="AI-DIAL-UI-KIT project logo"
      src="https://avatars.githubusercontent.com/u/1589802?s=200&v=4" 
       />](#)
-React-based UI components library for building AI-driven applications with ease.
-<br/>     
 
-## Features
+A comprehensive React-based UI components library specifically designed for building AI-driven applications with modern standards and enterprise-grade quality.
 
-- :robot: **AI-First Design**: Components specifically designed for AI and conversational interfaces
-- :black_joker: **Unified User Experience**: Use these components for any AI DIAL applications 
-- :rocket: **Modern Stack**: Built with React 19, TypeScript, Vite, and Tailwind CSS
-- :art: **Customizable**: Deep theming capabilities with CSS custom properties
-- :test_tube: **Well-Tested**: Comprehensive test coverage with Vitest and React Testing Library
-- :books: **Storybook Ready**: Interactive component documentation and playground
-- :gear: **Developer Experience**: ESLint, Prettier, Husky for code quality
-- :package: **Distribution Ready**: Distributed as npm package, this library can be easily adopted 
+[![npm version](https://badge.fury.io/js/@epam%2Fai-dial-ui-kit.svg)](https://badge.fury.io/js/@epam%2Fai-dial-ui-kit)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19+-61dafb.svg)](https://reactjs.org/)
 
-## Documentation
+## ✨ Features
 
-Explore the components and their usage in our interactive [Storybook documentation](#storybook).
+- 🎨 **Unified User Experience**: Consistent design language for all AI DIAL applications
+- ⚡ **Modern Stack**: Built with latest React, TypeScript, Vite, and Tailwind CSS
+- 🎨 **Highly Customizable**: Deep theming capabilities with CSS custom properties
+- 🧪 **Well-Tested**: Comprehensive test coverage (70%+) with Vitest and React Testing Library
+- 📚 **Storybook Ready**: Interactive component documentation and development playground
+- 🛠️ **Developer Experience**: ESLint, Prettier, Husky for maintainable code quality
+- 📦 **Distribution Ready**: NPM package ready for easy integration
 
-## Getting Started
+## 📖 Documentation
+
+Explore our components and their usage in our interactive [Storybook documentation](http://localhost:6006).
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
@@ -37,40 +42,53 @@ npm install @epam/ai-dial-ui-kit
 ### Basic Usage
 
 ```tsx
-import { ExampleComponent } from '@epam/ai-dial-ui-kit';
+import { Button } from '@epam/ai-dial-ui-kit';
 import '@epam/ai-dial-ui-kit/styles.css';
 
 function App() {
   return (
-    <ExampleComponent 
-      title="Welcome to AI-DIAL" 
-      description="Build amazing AI applications with our UI components"
-    />
+    <div>
+      <Button 
+        cssClass="dial-primary"
+        onClick={() => alert('Hello AI DIAL!')}
+      >
+        Get Started
+      </Button>
+    </div>
   );
 }
 ```
 
-### With Custom Styling
+## 🎨 Theming & Customization
 
-The library uses CSS custom properties for theming. You can customize the appearance by overriding theme variables:
+The library uses CSS custom properties for comprehensive theming. Override these variables to match your brand:
 
 ```css
 :root {
+  /* Background layers */
   --bg-layer-0: #000000;
   --bg-layer-1: #090D13;
+  --bg-layer-2: #171B21;
+  
+  /* Text colors */
   --text-primary: #F3F4F6;
-  --controls-bg-accent: #5C8DEA;
-  /* ... */
+  --text-secondary: #9CA3AF;
+  --text-tertiary: #6B7280;
+   ...
 }
 ```
 
-## Storybook
+Full list of variables is available [here](tailwind.config.js)
+
+## 📖 Storybook
 
 ### Development Mode
+Access our interactive component documentation:
+
 ```bash
 npm run storybook
+# Open http://localhost:6006
 ```
-Access Storybook at `http://localhost:6006`
 
 ### Production Build
 ```bash
@@ -78,70 +96,84 @@ npm run build-storybook
 npx http-server ./storybook-static
 ```
 
-## Development
+Storybook provides:
+- 📖 Interactive component documentation
+- 🎨 Visual testing playground
+- ♿ Accessibility testing tools
+- 📱 Responsive design testing
+- 🎯 Component isolation
 
-### Setup
+## 🚀 Usage in Projects
 
-```bash
-# Clone the repository
-git clone https://github.com/epam/ai-dial-ui-kit.git
-cd ai-dial-ui-kit
+### Next.js Integration
 
-# Install dependencies
-npm install
+```tsx
+// pages/_app.tsx
+import '@epam/ai-dial-ui-kit/styles.css';
+import type { AppProps } from 'next/app';
 
-# Start development
-npm run dev
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+
+// components/MyComponent.tsx
+import { Button } from '@epam/ai-dial-ui-kit';
+
+export function MyComponent() {
+  return (
+    <Button onClick={() => console.log('Next.js + AI DIAL UI Kit!')}>
+      Click me
+    </Button>
+  );
+}
 ```
 
-### Project Structure
+### Vite Integration
 
-```
-src/
-├── components/          # React components
-│   ├── ...
-│   └── ...
-├── styles/             # Global styles and Tailwind configuration
-└── types/              # TypeScript type definitions
-```
+```tsx
+// main.tsx
+import '@epam/ai-dial-ui-kit/styles.css';
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
-
-## Testing
-
-We maintain high code quality standards with comprehensive testing:
-
-- **Unit Tests**: Vitest with React Testing Library
-- **Coverage**: Minimum 70% coverage requirement
-- **E2E**: Storybook test runner for component interactions
-
-```bash
-# Run tests
-npm test
-
-# Run tests with coverage
-npm run test -- --coverage
-
-# Run tests in watch mode
-npm run test -- --watch
+createRoot(document.getElementById('root')!).render(<App />);
 ```
 
+### Tree Shaking
 
-## Contributing
+Import only the components you need:
 
-We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+```tsx
+// ✅ Good - Tree shakable
+import { Button } from '@epam/ai-dial-ui-kit';
 
-## Security
+// ❌ Avoid - Imports entire library
+import * as UIKit from '@epam/ai-dial-ui-kit';
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details on:
+
+- Setting up the development environment
+- Code style guidelines
+- Testing requirements
+- Pull request process
+
+
+## 🔒 Security
 
 If you discover a security vulnerability, please refer to our [Security Policy](./SECURITY.md).
 
-## License
+## 📄 License
 
 [Apache 2.0](./LICENSE) - see the [LICENSE](./LICENSE) file for details.
 
-## Related Projects
+## 🌟 Related Projects
 
-- [AI-DIAL](https://github.com/epam/ai-dial) - The main AI-DIAL framework
-- [AI-DIAL Admin Frontend](https://github.com/epam/ai-dial-admin-frontend) - Admin interface using this UI kit
+- [AI-DIAL](https://github.com/epam/ai-dial) - Entrypoint for all AI Dial project
+- [AI-DIAL Chat](https://github.com/epam/ai-dial-chat) - AI Dial Chat
+- [AI-DIAL Admin Frontend](https://github.com/epam/ai-dial-admin-frontend) - AI Dial Admin
 
 ---
 
