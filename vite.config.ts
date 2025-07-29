@@ -6,7 +6,7 @@ import tailwindcss from 'tailwindcss';
 import { peerDependencies } from './package.json';
 
 export default defineConfig({
-  plugins: [react(), dts({ exclude: ['**/*.spec.tsx'] })],
+  plugins: [react(), dts({ exclude: ['**/*.stories.tsx', '**/*.spec.tsx'] })],
   build: {
     lib: {
       entry: './src/index.ts',

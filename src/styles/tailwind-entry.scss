@@ -5,8 +5,8 @@
 
   @layer components {
     .base-button {
-      @apply dial-flex dial-flex-row dial-items-center dial-px-3 dial-py-2;
-      @apply dial-rounded dial-border dial-border-solid dial-border-transparent;
+      @apply flex flex-row items-center px-3 py-2;
+      @apply rounded border border-solid border-transparent;
       @apply small-medium;
 
       min-width: 38px;
@@ -14,19 +14,19 @@
     }
 
     .base-button-disable {
-      @apply dial-pointer-events-none dial-text-controls-disable dial-bg-controls-disable;
+      @apply pointer-events-none text-controls-disable bg-controls-disable;
     }
 
     .primary {
-      @apply base-button dial-bg-controls-accent dial-text-controls-primary;
+      @apply base-button bg-controls-accent text-controls-primary;
 
       &:hover,
       &:focus {
-        @apply dial-bg-controls-accent-hover;
+        @apply bg-controls-accent-hover;
       }
 
       &:focus {
-        @apply dial-border-hover;
+        @apply border-hover;
       }
 
       &:disabled {
@@ -35,16 +35,16 @@
     }
 
     .secondary {
-      @apply base-button dial-bg-transparent dial-text-primary;
-      @apply dial-border-primary;
+      @apply base-button bg-transparent text-primary;
+      @apply border-primary;
 
       &:hover,
       &:focus {
-        @apply dial-bg-layer-4;
+        @apply bg-layer-4;
       }
 
       &:focus {
-        @apply dial-border-hover;
+        @apply border-hover;
       }
 
       &:disabled {
@@ -53,16 +53,16 @@
     }
 
     .tertiary {
-      @apply base-button dial-text-accent-primary dial-bg-transparent;
+      @apply base-button text-accent-primary bg-transparent;
 
       &:hover,
       &:focus {
-        @apply dial-bg-controls-accent-alpha;
+        @apply bg-controls-accent-alpha;
       }
 
       &:focus,
       &:active {
-        @apply dial-border-accent-primary;
+        @apply border-accent-primary;
       }
 
       &:disabled {
@@ -71,65 +71,65 @@
     }
 
     h1 {
-      @apply dial-font-semibold;
+      @apply font-semibold;
       font-size: 20px;
       line-height: 24px;
     }
 
     h2 {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 20px;
       line-height: 24px;
     }
 
     h3 {
-      @apply dial-font-semibold;
+      @apply font-semibold;
       font-size: 16px;
       line-height: 18px;
     }
 
     .body {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 16px;
       line-height: 28px;
     }
 
     .small {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 14px;
       line-height: 16px;
     }
 
     .small-text-semi {
-      @apply small dial-font-semibold;
+      @apply small font-semibold;
     }
 
     .small-medium {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 14px;
       line-height: 16px;
     }
 
     .small-150 {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 14px;
       line-height: 21px;
     }
 
     .tiny {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 12px;
       line-height: 14px;
     }
 
     .tiny-150 {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 12px;
       line-height: 18px;
     }
 
     .caption {
-      @apply dial-font-normal;
+      @apply font-normal;
       font-size: 10px;
       line-height: 12px;
     }

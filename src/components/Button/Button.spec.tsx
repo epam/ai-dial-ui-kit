@@ -58,23 +58,20 @@ describe('Common components :: Button', () => {
   test('Should apply focus-visible outline classes', () => {
     render(<Button title="Focus test" />);
     const button = screen.getByRole('button', { name: 'Focus test' });
-    expect(button).toHaveClass(
-      'dial-focus-visible:outline',
-      'dial-outline-offset-0',
-    );
+    expect(button).toHaveClass('focus-visible:outline', 'outline-offset-0');
   });
 
   test('Should hide title on mobile when hideTitleOnMobile is true', () => {
     render(<Button title="Mobile test" hideTitleOnMobile />);
     const titleSpan = screen.getByText('Mobile test');
-    expect(titleSpan).toHaveClass('dial-hidden', 'dial-sm:inline');
+    expect(titleSpan).toHaveClass('hidden', 'sm:inline');
   });
 
   test('Should show title on all devices when hideTitleOnMobile is false', () => {
     render(<Button title="Desktop test" hideTitleOnMobile={false} />);
     const titleSpan = screen.getByText('Desktop test');
-    expect(titleSpan).toHaveClass('dial-inline');
-    expect(titleSpan).not.toHaveClass('dial-hidden');
+    expect(titleSpan).toHaveClass('inline');
+    expect(titleSpan).not.toHaveClass('hidden');
   });
 
   test('Should apply correct spacing classes with icons', () => {
@@ -86,21 +83,21 @@ describe('Common components :: Button', () => {
       />,
     );
     const titleSpan = screen.getByText('Spacing test');
-    expect(titleSpan).toHaveClass('dial-mr-2', 'dial-ml-2');
+    expect(titleSpan).toHaveClass('mr-2', 'ml-2');
   });
 
   test('Should apply correct spacing with only iconBefore', () => {
     render(<Button title="Before only" iconBefore={<span>Before</span>} />);
     const titleSpan = screen.getByText('Before only');
-    expect(titleSpan).toHaveClass('dial-ml-2');
-    expect(titleSpan).not.toHaveClass('dial-mr-2');
+    expect(titleSpan).toHaveClass('ml-2');
+    expect(titleSpan).not.toHaveClass('mr-2');
   });
 
   test('Should apply correct spacing with only iconAfter', () => {
     render(<Button title="After only" iconAfter={<span>After</span>} />);
     const titleSpan = screen.getByText('After only');
-    expect(titleSpan).toHaveClass('dial-mr-2');
-    expect(titleSpan).not.toHaveClass('dial-ml-2');
+    expect(titleSpan).toHaveClass('mr-2');
+    expect(titleSpan).not.toHaveClass('ml-2');
   });
 
   test('Should use ariaLabel when title is not provided', () => {

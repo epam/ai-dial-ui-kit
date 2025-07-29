@@ -27,15 +27,15 @@ const Button: FC<Props> = ({
   ariaLabel,
 }) => {
   const btnTextClassNames = classNames(
-    'dial-small-text-semi',
-    iconAfter ? 'dial-mr-2' : '',
-    iconBefore ? 'dial-ml-2' : '',
-    hideTitleOnMobile ? 'dial-hidden dial-sm:inline' : 'dial-inline',
+    'small-text-semi',
+    iconAfter ? 'mr-2' : '',
+    iconBefore ? 'ml-2' : '',
+    hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
   );
   const btnClassNames = classNames(
     'dial',
     cssClass,
-    'dial-focus-visible:outline dial-outline-offset-0',
+    'focus-visible:outline outline-offset-0',
   );
 
   return (

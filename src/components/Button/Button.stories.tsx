@@ -55,25 +55,17 @@ type Story = StoryObj<typeof meta>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="dial dial-p-8 max-w-[400px]">
-      <div className="dial-grid dial-grid-cols-4 dial-gap-8">
+    <div className="dial p-8 max-w-[400px]">
+      <div className="grid grid-cols-4 gap-8">
         {/* Header */}
         <div></div>
-        <div className="dial-text-primary dial-text-center dial-font-semibold">
-          Primary
-        </div>
-        <div className="dial-text-primary dial-text-center dial-font-semibold">
-          Secondary
-        </div>
-        <div className="dial-text-primary dial-text-center dial-font-semibold">
-          Tertiary
-        </div>
+        <div className="text-primary text-center font-semibold">Primary</div>
+        <div className="text-primary text-center font-semibold">Secondary</div>
+        <div className="text-primary text-center font-semibold">Tertiary</div>
 
         {/* Default State */}
-        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
-          Default
-        </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="text-primary text-right pr-4 py-2">Default</div>
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="primary"
@@ -81,7 +73,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="secondary"
@@ -89,7 +81,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="tertiary"
@@ -99,10 +91,8 @@ export const AllVariants: Story = {
         </div>
 
         {/* Hover State */}
-        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
-          Hover
-        </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="text-primary text-right pr-4 py-2">Hover</div>
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="primary"
@@ -110,7 +100,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="secondary"
@@ -118,7 +108,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="tertiary"
@@ -128,10 +118,8 @@ export const AllVariants: Story = {
         </div>
 
         {/* Focus State */}
-        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
-          Focus
-        </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="text-primary text-right pr-4 py-2">Focus</div>
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="primary"
@@ -139,7 +127,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="secondary"
@@ -147,7 +135,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="tertiary"
@@ -157,10 +145,8 @@ export const AllVariants: Story = {
         </div>
 
         {/* Active State */}
-        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
-          Active
-        </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="text-primary text-right pr-4 py-2">Active</div>
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="primary"
@@ -168,7 +154,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="secondary"
@@ -176,7 +162,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="tertiary"
@@ -186,10 +172,8 @@ export const AllVariants: Story = {
         </div>
 
         {/* Disabled State */}
-        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
-          Disable
-        </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="text-primary text-right pr-4 py-2">Disable</div>
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="primary"
@@ -198,7 +182,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="secondary"
@@ -207,7 +191,7 @@ export const AllVariants: Story = {
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
-        <div className="dial-flex dial-justify-center">
+        <div className="flex justify-center">
           <Button
             title="Button label"
             cssClass="tertiary"
