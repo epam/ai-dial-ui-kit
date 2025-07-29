@@ -60,7 +60,8 @@
         @apply dial-bg-controls-accent-alpha;
       }
 
-      &:focus {
+      &:focus,
+      &:active {
         @apply dial-border-accent-primary;
       }
 
@@ -68,6 +69,7 @@
         @apply base-button-disable;
       }
     }
+
     h1 {
       @apply dial-font-semibold;
       font-size: 20px;

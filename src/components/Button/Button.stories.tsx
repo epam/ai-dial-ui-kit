@@ -53,95 +53,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const PrimaryButton: Story = {
-  args: {
-    title: 'Primary Button',
-    cssClass: 'primary',
-  },
-};
-
-export const SecondaryButton: Story = {
-  args: {
-    title: 'Secondary Button',
-    cssClass: 'secondary',
-  },
-};
-export const TertiaryButton: Story = {
-  args: {
-    title: 'Tertiary Button',
-    cssClass: 'tertiary',
-  },
-};
-
-export const WithBothIcons: Story = {
-  args: {
-    title: 'Action',
-    iconBefore: <IconArrowLeft size={16} />,
-    iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'secondary',
-  },
-};
-
-export const WithIconBefore: Story = {
-  args: {
-    title: 'Save',
-    iconBefore: <IconArrowRight size={16} />,
-    cssClass: 'primary',
-  },
-};
-
-export const WithIconAfter: Story = {
-  args: {
-    title: 'Alert',
-    iconAfter: <IconArrowLeft size={16} />,
-    cssClass: 'tertiary',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    title: 'Disabled Button',
-    cssClass: 'tertiary',
-    disable: true,
-  },
-};
-
-export const Hover: Story = {
-  args: {
-    title: 'Hover Button',
-    cssClass: 'primary',
-  },
-  parameters: {
-    pseudo: {
-      hover: true,
-    },
-  },
-};
-
-export const Focus: Story = {
-  args: {
-    title: 'Focus Button',
-    cssClass: 'secondary',
-  },
-  parameters: {
-    pseudo: {
-      focus: true,
-    },
-  },
-};
-
-export const Active: Story = {
-  args: {
-    title: 'Active Button',
-    cssClass: 'tertiary',
-  },
-  parameters: {
-    pseudo: {
-      active: true,
-    },
-  },
-};
-
 export const AllVariants: Story = {
   render: () => (
     <div className="dial dial-p-8 max-w-[400px]">
@@ -317,14 +228,14 @@ export const AllVariants: Story = {
         'div:nth-child(12) button',
       ],
       focus: [
-        'div:nth-child(14) button', // Primary focus
-        'div:nth-child(15) button', // Secondary focus
-        'div:nth-child(16) button', // Tertiary focus
+        'div:nth-child(14) button',
+        'div:nth-child(15) button',
+        'div:nth-child(16) button',
       ],
       active: [
-        'div:nth-child(18) button', // Primary active
-        'div:nth-child(19) button', // Secondary active
-        'div:nth-child(20) button', // Tertiary active
+        'div:nth-child(18) button',
+        'div:nth-child(19) button',
+        'div:nth-child(20) button',
       ],
     },
     docs: {
@@ -332,6 +243,95 @@ export const AllVariants: Story = {
         story:
           'A comprehensive view of all button variants and states. This story displays Primary, Secondary, and Tertiary buttons across Default, Hover, Focus, Active, and Disabled states.',
       },
+    },
+  },
+};
+
+export const PrimaryButton: Story = {
+  args: {
+    title: 'Primary Button',
+    cssClass: 'primary',
+  },
+};
+
+export const SecondaryButton: Story = {
+  args: {
+    title: 'Secondary Button',
+    cssClass: 'secondary',
+  },
+};
+export const TertiaryButton: Story = {
+  args: {
+    title: 'Tertiary Button',
+    cssClass: 'tertiary',
+  },
+};
+
+export const WithBothIcons: Story = {
+  args: {
+    title: 'Action',
+    iconBefore: <IconArrowLeft size={16} />,
+    iconAfter: <IconArrowRight size={16} />,
+    cssClass: 'secondary',
+  },
+};
+
+export const WithIconBefore: Story = {
+  args: {
+    title: 'Save',
+    iconBefore: <IconArrowRight size={16} />,
+    cssClass: 'primary',
+  },
+};
+
+export const WithIconAfter: Story = {
+  args: {
+    title: 'Alert',
+    iconAfter: <IconArrowRight size={16} />,
+    cssClass: 'tertiary',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    title: 'Disabled Button',
+    cssClass: 'tertiary',
+    disable: true,
+  },
+};
+
+export const Hover: Story = {
+  args: {
+    title: 'Hover Button',
+    cssClass: 'primary',
+  },
+  parameters: {
+    pseudo: {
+      hover: true,
+    },
+  },
+};
+
+export const Focus: Story = {
+  args: {
+    title: 'Focus Button',
+    cssClass: 'secondary',
+  },
+  parameters: {
+    pseudo: {
+      focus: true,
+    },
+  },
+};
+
+export const Active: Story = {
+  args: {
+    title: 'Active Button',
+    cssClass: 'tertiary',
+  },
+  parameters: {
+    pseudo: {
+      active: true,
     },
   },
 };
