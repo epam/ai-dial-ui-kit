@@ -106,6 +106,42 @@ export const Disabled: Story = {
   },
 };
 
+export const Hover: Story = {
+  args: {
+    title: 'Hover Button',
+    cssClass: 'primary',
+  },
+  parameters: {
+    pseudo: {
+      hover: true,
+    },
+  },
+};
+
+export const Focus: Story = {
+  args: {
+    title: 'Focus Button',
+    cssClass: 'secondary',
+  },
+  parameters: {
+    pseudo: {
+      focus: true,
+    },
+  },
+};
+
+export const Active: Story = {
+  args: {
+    title: 'Active Button',
+    cssClass: 'tertiary',
+  },
+  parameters: {
+    pseudo: {
+      active: true,
+    },
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="dial dial-p-8 max-w-[400px]">
@@ -125,6 +161,93 @@ export const AllVariants: Story = {
         {/* Default State */}
         <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
           Default
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="primary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="secondary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="tertiary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+
+        {/* Hover State */}
+        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
+          Hover
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="primary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="secondary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="tertiary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+
+        {/* Focus State */}
+        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
+          Focus
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="primary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="secondary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+        <div className="dial-flex dial-justify-center">
+          <Button
+            title="Button label"
+            cssClass="tertiary"
+            iconBefore={<IconArrowLeft size={16} />}
+            iconAfter={<IconArrowRight size={16} />}
+          />
+        </div>
+
+        {/* Active State */}
+        <div className="dial-text-primary dial-text-right dial-pr-4 dial-py-2">
+          Active
         </div>
         <div className="dial-flex dial-justify-center">
           <Button
@@ -187,6 +310,23 @@ export const AllVariants: Story = {
   ),
   parameters: {
     layout: 'fullscreen',
+    pseudo: {
+      hover: [
+        'div:nth-child(10) button',
+        'div:nth-child(11) button',
+        'div:nth-child(12) button',
+      ],
+      focus: [
+        'div:nth-child(14) button', // Primary focus
+        'div:nth-child(15) button', // Secondary focus
+        'div:nth-child(16) button', // Tertiary focus
+      ],
+      active: [
+        'div:nth-child(18) button', // Primary active
+        'div:nth-child(19) button', // Secondary active
+        'div:nth-child(20) button', // Tertiary active
+      ],
+    },
     docs: {
       description: {
         story:
