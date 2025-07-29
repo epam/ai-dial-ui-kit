@@ -1,19 +1,19 @@
 @layer components {
-  .base-button {
+  .dial-base-button {
     @apply flex flex-row items-center px-3 py-2;
     @apply rounded border border-solid border-transparent;
-    @apply small-medium;
+    @apply dial-small-medium;
 
     min-width: 38px;
     min-height: 38px;
   }
 
-  .base-button-disable {
+  .dial-base-button-disable {
     @apply pointer-events-none text-controls-disable bg-controls-disable;
   }
 
-  .primary {
-    @apply base-button bg-controls-accent text-controls-primary;
+  .dial-primary {
+    @apply dial-base-button bg-controls-accent text-controls-primary;
 
     &:hover,
     &:focus {
@@ -25,12 +25,12 @@
     }
 
     &:disabled {
-      @apply base-button-disable;
+      @apply dial-base-button-disable;
     }
   }
 
-  .secondary {
-    @apply base-button bg-transparent text-primary;
+  .dial-secondary {
+    @apply dial-base-button bg-transparent text-primary;
     @apply border-primary;
 
     &:hover,
@@ -43,12 +43,12 @@
     }
 
     &:disabled {
-      @apply base-button-disable;
+      @apply dial-base-button-disable;
     }
   }
 
-  .tertiary {
-    @apply base-button text-accent-primary bg-transparent;
+  .dial-tertiary {
+    @apply dial-base-button text-accent-primary bg-transparent;
 
     &:hover,
     &:focus {
@@ -61,7 +61,7 @@
     }
 
     &:disabled {
-      @apply base-button-disable;
+      @apply dial-base-button-disable;
     }
   }
 }

@@ -32,10 +32,6 @@ const meta = {
       control: { type: 'text' },
       description: 'Accessibility label (used when title is not provided)',
     },
-    dataTestId: {
-      control: { type: 'text' },
-      description: 'Test identifier for testing frameworks',
-    },
     onClick: {
       action: 'clicked',
       description: 'Click event handler',
@@ -55,7 +51,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="dial p-8 max-w-[400px]">
+    <div className="dial p-8 max-w-[1000px] flex justify-center">
       <div className="grid grid-cols-4 gap-8">
         {/* Header */}
         <div></div>
@@ -63,12 +59,11 @@ export const AllVariants: Story = {
         <div className="text-primary text-center font-semibold">Secondary</div>
         <div className="text-primary text-center font-semibold">Tertiary</div>
 
-        {/* Default State */}
         <div className="text-primary text-right pr-4 py-2">Default</div>
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="primary"
+            cssClass="dial-primary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -76,7 +71,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="secondary"
+            cssClass="dial-secondary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -84,7 +79,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="tertiary"
+            cssClass="dial-tertiary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -95,7 +90,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="primary"
+            cssClass="dial-primary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -103,7 +98,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="secondary"
+            cssClass="dial-secondary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -111,7 +106,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="tertiary"
+            cssClass="dial-tertiary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -122,7 +117,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="primary"
+            cssClass="dial-primary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -130,7 +125,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="secondary"
+            cssClass="dial-secondary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -138,7 +133,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="tertiary"
+            cssClass="dial-tertiary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -149,7 +144,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="primary"
+            cssClass="dial-primary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -157,7 +152,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="secondary"
+            cssClass="dial-secondary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -165,7 +160,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="tertiary"
+            cssClass="dial-tertiary"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -176,7 +171,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="primary"
+            cssClass="dial-primary"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -185,7 +180,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="secondary"
+            cssClass="dial-secondary"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -194,7 +189,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <Button
             title="Button label"
-            cssClass="tertiary"
+            cssClass="dial-tertiary"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -234,20 +229,20 @@ export const AllVariants: Story = {
 export const PrimaryButton: Story = {
   args: {
     title: 'Primary Button',
-    cssClass: 'primary',
+    cssClass: 'dial-primary',
   },
 };
 
 export const SecondaryButton: Story = {
   args: {
     title: 'Secondary Button',
-    cssClass: 'secondary',
+    cssClass: 'dial-secondary',
   },
 };
 export const TertiaryButton: Story = {
   args: {
     title: 'Tertiary Button',
-    cssClass: 'tertiary',
+    cssClass: 'dial-tertiary',
   },
 };
 
@@ -256,7 +251,7 @@ export const WithBothIcons: Story = {
     title: 'Action',
     iconBefore: <IconArrowLeft size={16} />,
     iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'secondary',
+    cssClass: 'dial-secondary',
   },
 };
 
@@ -264,7 +259,7 @@ export const WithIconBefore: Story = {
   args: {
     title: 'Save',
     iconBefore: <IconArrowRight size={16} />,
-    cssClass: 'primary',
+    cssClass: 'dial-primary',
   },
 };
 
@@ -272,14 +267,14 @@ export const WithIconAfter: Story = {
   args: {
     title: 'Alert',
     iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'tertiary',
+    cssClass: 'dial-tertiary',
   },
 };
 
 export const Disabled: Story = {
   args: {
     title: 'Disabled Button',
-    cssClass: 'tertiary',
+    cssClass: 'dial-tertiary',
     disable: true,
   },
 };
@@ -287,7 +282,7 @@ export const Disabled: Story = {
 export const Hover: Story = {
   args: {
     title: 'Hover Button',
-    cssClass: 'primary',
+    cssClass: 'dial-primary',
   },
   parameters: {
     pseudo: {
@@ -299,7 +294,7 @@ export const Hover: Story = {
 export const Focus: Story = {
   args: {
     title: 'Focus Button',
-    cssClass: 'secondary',
+    cssClass: 'dial-secondary',
   },
   parameters: {
     pseudo: {
@@ -311,7 +306,7 @@ export const Focus: Story = {
 export const Active: Story = {
   args: {
     title: 'Active Button',
-    cssClass: 'tertiary',
+    cssClass: 'dial-tertiary',
   },
   parameters: {
     pseudo: {

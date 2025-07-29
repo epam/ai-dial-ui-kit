@@ -1,63 +1,63 @@
 @layer components {
-  h1 {
+  .dial-h1 {
     @apply font-semibold;
     font-size: 20px;
     line-height: 24px;
   }
 
-  h2 {
+  .dial-h2 {
     @apply font-normal;
     font-size: 20px;
     line-height: 24px;
   }
 
-  h3 {
+  .dial-h3 {
     @apply font-semibold;
     font-size: 16px;
     line-height: 18px;
   }
 
-  .body {
+  .dial-body {
     @apply font-normal;
     font-size: 16px;
     line-height: 28px;
   }
 
-  .small {
+  .dial-small {
     @apply font-normal;
     font-size: 14px;
     line-height: 16px;
   }
 
-  .small-text-semi {
-    @apply small font-semibold;
+  .dial-small-text-semi {
+    @apply dial-small font-semibold;
   }
 
-  .small-medium {
+  .dial-small-medium {
     @apply font-normal;
     font-size: 14px;
     line-height: 16px;
   }
 
-  .small-150 {
+  .dial-small-150 {
     @apply font-normal;
     font-size: 14px;
     line-height: 21px;
   }
 
-  .tiny {
+  .dial-tiny {
     @apply font-normal;
     font-size: 12px;
     line-height: 14px;
   }
 
-  .tiny-150 {
+  .dial-tiny-150 {
     @apply font-normal;
     font-size: 12px;
     line-height: 18px;
   }
 
-  .caption {
+  .dial-caption {
     @apply font-normal;
     font-size: 10px;
     line-height: 12px;

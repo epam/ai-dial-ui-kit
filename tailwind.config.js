@@ -78,7 +78,6 @@ const iconColors = {
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  important: '.dial',
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
   theme: {
     backgroundColor: { ...backgroundsColors, ...buttonsBgColors },

@@ -116,11 +116,6 @@ describe('Common components :: Button', () => {
     ).toBeInTheDocument();
   });
 
-  test('Should set data-testid when provided', () => {
-    render(<Button title="Test ID" dataTestId="my-button" />);
-    expect(screen.getByTestId('my-button')).toBeInTheDocument();
-  });
-
   test('Should have correct button type', () => {
     render(<Button title="Type test" />);
     const button = screen.getByRole('button', { name: 'Type test' });
