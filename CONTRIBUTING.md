@@ -6,6 +6,7 @@ Thank you for your interest in contributing to AI DIAL UI Kit! This document pro
 
 - [Development Workflow](#development-workflow)
 - [Component Development](#component-development)
+- [PR Guidelines](#pr-guidelines)
 - [Testing](#testing)
 - [Code Style](#code-style)
 - [Pull Request Process](#pull-request-process)
@@ -28,6 +29,10 @@ git pull origin development
 git checkout -b your-feature-name
 ```
 
+## PR Guidelines
+
+Follow rules from [pull request template](.github/pull_request_template.md)
+
 ## Component Development
 
 ### Component Guidelines
@@ -46,94 +51,22 @@ git checkout -b your-feature-name
    - Use Tailwind CSS classes
    - Create reusable SCSS mixins when needed
    - Follow design system
-   - Do not inline styles
-   - Do not use hardcored custom values like hex colors, font sizes, etc
+   - Do not write inline styles
+   - Do not use hardcoded custom values like hex colors, font sizes, etc
+   - Use `dial` prefix for custom css classes
 
 4. **Update policy**:
- - Do not make breaking changes to existing UI components. Use Open-Close principle from SOLID 
+   - Do not make breaking changes to existing UI components. Use Open-Close principle from SOLID 
 
-
-
-<details>
-<summary>Example Component Structure</summary>
-
-```tsx
-// Button.tsx
-import classNames from 'classnames';
-import type { FC, ReactNode } from 'react';
-
-export interface ButtonProps {
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
-  children: ReactNode;
-  disabled?: boolean;
-  onClick?: () => void;
-}
-
-export const Button: FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
-  children,
-  disabled = false,
-  onClick,
-}) => {
-  return (
-    <button
-      className={classNames(
-        'btn',
-        `btn--${variant}`,
-        `btn--${size}`,
-        { 'btn--disabled': disabled }
-      )}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-};
-```
-</details>
+5. **Documentation**:
+   - Add JsDoc for Component
+  
+6. **Naming**
+   - Use `Dial` prefix for the components
 
 ### Storybook Stories
 
-Every component must have Storybook stories
-
-<details>
-<summary>Example Storybook stories</summary>
-
-```tsx
-// Button.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-
-const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
-  component: Button,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
-};
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    variant: 'primary',
-    children: 'Click me',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-    children: 'Click me',
-  },
-};
-```
-</details>
+Every component must have Storybook stories. See `src\components\Button\Button.stories.tsx` as an example.
 
 ## Testing
 
@@ -143,53 +76,12 @@ export const Secondary: Story = {
 - **Unit Tests**: Every component must have unit tests
 - **Test Framework**: Vitest with React Testing Library
 
+### Guidelines
 
-<details>
-<summary>Example component tests</summary>
-
-```tsx
-// Button.spec.tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { Button } from './Button';
-
-describe('Button', () => {
-  it('renders children correctly', () => {
-    render(<Button>Test Button</Button>);
-    expect(screen.getByText('Test Button')).toBeInTheDocument();
-  });
-
-  it('calls onClick when clicked', () => {
-    const handleClick = vi.fn();
-    render(<Button onClick={handleClick}>Click me</Button>);
-    
-    fireEvent.click(screen.getByText('Click me'));
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  it('applies disabled state correctly', () => {
-    render(<Button disabled>Disabled Button</Button>);
-    expect(screen.getByText('Disabled Button')).toBeDisabled();
-  });
-});
-```
-</details>
-
-### Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests with coverage
-npm run test -- --coverage
-
-# Run tests in watch mode
-npm run test -- --watch
-
-# Run tests for specific file
-npm run test Button.spec.tsx
-```
+- Consult documentation: (react testing library)[https://testing-library.com/docs/react-testing-library/intro/]
+- Prefer roles over tags/text/testId.
+- Prefer to test layout/callbacks.
+- Prefer to move complex logic to utils and test separately.
 
 ## Code Style
 
@@ -237,10 +129,6 @@ Do not skip pre-commit and pre-push hooks. They'll run:
    - Add/update README sections
    - Document breaking changes
 
-### PR Guidelines
-
-Follow rules from `.github/pull_request_template.md`
-
 ### Review Process
 
 - All PRs require at least one approval
@@ -257,7 +145,6 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MAJOR**: Breaking changes
 - **MINOR**: New features (backward compatible)
 - **PATCH**: Bug fixes (backward compatible)
-
 
 ## Code of Conduct
 

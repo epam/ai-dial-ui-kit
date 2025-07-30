@@ -117,6 +117,15 @@ function App() {
    npm run dev
    ```
 
+### Running Tests
+
+### Running Tests
+
+```bash
+# Run all tests with coverage
+npm run test
+```
+
 ### Project Structure
 
 ```
@@ -252,9 +261,7 @@ If you discover a security vulnerability, please refer to our [Security Policy](
 
 ## 🌟 Related Projects
 
-- [AI-DIAL](https://github.com/epam/ai-dial) - Entrypoint for all AI Dial project
-- [AI-DIAL Chat](https://github.com/epam/ai-dial-chat) - AI Dial Chat
-- [AI-DIAL Admin Frontend](https://github.com/epam/ai-dial-admin-frontend) - AI Dial Admin
+- [AI-DIAL](https://github.com/epam/ai-dial) - Entrypoint for all AI Dial projects
 
 ---
 
