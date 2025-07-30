@@ -4,66 +4,12 @@ Thank you for your interest in contributing to AI DIAL UI Kit! This document pro
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Project Structure](#project-structure)
 - [Development Workflow](#development-workflow)
 - [Component Development](#component-development)
 - [Testing](#testing)
 - [Code Style](#code-style)
 - [Pull Request Process](#pull-request-process)
 - [Release Process](#release-process)
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js >= 22.2.0
-- npm >= 10.7.0
-- Git
-
-### Development Setup
-
-1. **Fork and Clone**
-   ```bash
-   git clone https://github.com/your-username/ai-dial-ui-kit.git
-   cd ai-dial-ui-kit
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start Development Environment**
-   ```bash
-   # Start Storybook for component development
-   npm run storybook
-   
-   # Run tests in watch mode
-   npm run test -- --watch
-   
-   # Start Vite dev server
-   npm run dev
-   ```
-
-## Project Structure
-
-```
-src/
-├── components/          # React components
-│   ├── Button/         # Example component
-│   │   ├── Button.tsx
-│   │   ├── Button.spec.tsx
-│   │   └── Button.stories.tsx
-│   └── ...
-├── styles/             # Global styles and Tailwind configuration
-│   ├── buttons.scss
-│   ├── typography.scss
-│   └── tailwind-entry.scss
-├── types/              # TypeScript type definitions
-└── index.ts            # Main entry point
-```
 
 ## Development Workflow
 
@@ -107,7 +53,9 @@ git checkout -b your-feature-name
  - Do not make breaking changes to existing UI components. Use Open-Close principle from SOLID 
 
 
-### Example Component Structure
+
+<details>
+<summary>Example Component Structure</summary>
 
 ```tsx
 // Button.tsx
@@ -145,10 +93,14 @@ export const Button: FC<ButtonProps> = ({
   );
 };
 ```
+</details>
 
 ### Storybook Stories
 
-Every component must have Storybook stories:
+Every component must have Storybook stories
+
+<details>
+<summary>Example Storybook stories</summary>
 
 ```tsx
 // Button.stories.tsx
@@ -181,6 +133,7 @@ export const Secondary: Story = {
   },
 };
 ```
+</details>
 
 ## Testing
 
@@ -190,7 +143,9 @@ export const Secondary: Story = {
 - **Unit Tests**: Every component must have unit tests
 - **Test Framework**: Vitest with React Testing Library
 
-### Writing Tests
+
+<details>
+<summary>Example component tests</summary>
 
 ```tsx
 // Button.spec.tsx
@@ -218,6 +173,7 @@ describe('Button', () => {
   });
 });
 ```
+</details>
 
 ### Running Tests
 

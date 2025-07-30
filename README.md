@@ -12,6 +12,31 @@ A comprehensive React-based UI components library specifically designed for buil
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19+-61dafb.svg)](https://reactjs.org/)
 
+## Table of Contents
+
+- [✨ Features](#-features)
+- [📖 Documentation](#-documentation)
+- [🚀 Quick Start](#-quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Basic Usage](#basic-usage)
+- [Development](#development)
+  - [Prerequisites](#prerequisites-1)
+  - [Development Setup](#development-setup)
+  - [Project Structure](#project-structure)
+- [🎨 Theming & Customization](#-theming--customization)
+- [📖 Storybook](#-storybook)
+  - [Development Mode](#development-mode)
+  - [Production Build](#production-build)
+- [🚀 Usage in Projects](#-usage-in-projects)
+  - [Next.js Integration](#nextjs-integration)
+  - [Vite Integration](#vite-integration)
+  - [Tree Shaking](#tree-shaking)
+- [🤝 Contributing](#-contributing)
+- [🔒 Security](#-security)
+- [📄 License](#-license)
+- [🌟 Related Projects](#-related-projects)
+
 ## ✨ Features
 
 - 🎨 **Unified User Experience**: Consistent design language for all AI DIAL applications
@@ -57,6 +82,57 @@ function App() {
     </div>
   );
 }
+```
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 22.2.0
+- npm >= 10.7.0
+- Git
+
+### Development Setup
+
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/your-username/ai-dial-ui-kit.git
+   cd ai-dial-ui-kit
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Development Environment**
+   ```bash
+   # Start Storybook for component development
+   npm run storybook
+   
+   # Run tests in watch mode
+   npm run test -- --watch
+   
+   # Start Vite dev server
+   npm run dev
+   ```
+
+### Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── Button/         # Example component
+│   │   ├── Button.tsx
+│   │   ├── Button.spec.tsx
+│   │   └── Button.stories.tsx
+│   └── ...
+├── styles/             # Global styles and Tailwind configuration
+│   ├── buttons.scss
+│   ├── typography.scss
+│   └── tailwind-entry.scss
+├── types/              # TypeScript type definitions
+└── index.ts            # Main entry point
 ```
 
 ## 🎨 Theming & Customization
@@ -105,7 +181,8 @@ Storybook provides:
 
 ## 🚀 Usage in Projects
 
-### Next.js Integration
+<details>
+<summary>Next.js Integration</summary>
 
 ```tsx
 // pages/_app.tsx
@@ -128,7 +205,10 @@ export function MyComponent() {
 }
 ```
 
-### Vite Integration
+</details>
+
+<details>
+<summary>Vite Integration</summary>
 
 ```tsx
 // main.tsx
@@ -138,6 +218,8 @@ import App from './App';
 
 createRoot(document.getElementById('root')!).render(<App />);
 ```
+</details>
+
 
 ### Tree Shaking
 
@@ -155,7 +237,6 @@ import * as UIKit from '@epam/ai-dial-ui-kit';
 
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details on:
 
-- Setting up the development environment
 - Code style guidelines
 - Testing requirements
 - Pull request process
