@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialButton } from './Button';
 
-describe('Common components :: Button', () => {
+describe('Dial UI Kit :: DialButton', () => {
   test('Should render with title and be accessible by role', () => {
     render(<DialButton title="Click me" />);
     expect(

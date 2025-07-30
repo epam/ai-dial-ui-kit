@@ -119,8 +119,6 @@ function App() {
 
 ### Running Tests
 
-### Running Tests
-
 ```bash
 # Run all tests with coverage
 npm run test

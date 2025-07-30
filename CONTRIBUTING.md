@@ -90,16 +90,10 @@ Every component must have Storybook stories. See `src\components\Button\Button.s
 We use ESLint and Prettier for code consistency:
 
 ```bash
-# Check linting
+# Check linting and fix issues
 npm run lint
 
-# Fix linting issues
-npm run lint -- --fix
-
-# Check formatting
-npm run format
-
-# Fix formatting
+# Check formatting and fix issues
 npm run format-fix
 ```
 
