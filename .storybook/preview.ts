@@ -3,12 +3,14 @@ import '../src/index.css';
 
 const preview: Preview = {
   parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
+    backgrounds: {
+      options: {
+        dark: { name: 'Dark', value: '#222932' },
       },
     },
+  },
+  initialGlobals: {
+    backgrounds: { value: 'dark' },
   },
 };
 

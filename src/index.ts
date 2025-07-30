@@ -1,3 +1,3 @@
 import './styles/tailwind-entry.scss';
 
-export { ExampleComponent } from './components/ExampleComponent';
+export { DialButton as Button } from './components/Button/Button';

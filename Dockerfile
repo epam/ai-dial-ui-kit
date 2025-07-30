@@ -9,7 +9,7 @@ RUN npm ci
 COPY . .
 
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the Next.js app (runs as root)
 RUN npm run build
