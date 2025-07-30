@@ -12,7 +12,7 @@
     @apply pointer-events-none text-controls-disable bg-controls-disable;
   }
 
-  .dial-primary {
+  .dial-primary-button {
     @apply dial-base-button bg-controls-accent text-controls-primary;
 
     &:hover,
@@ -29,7 +29,7 @@
     }
   }
 
-  .dial-secondary {
+  .dial-secondary-button {
     @apply dial-base-button bg-transparent text-primary;
     @apply border-primary;
 
@@ -47,7 +47,7 @@
     }
   }
 
-  .dial-tertiary {
+  .dial-tertiary-button {
     @apply dial-base-button text-accent-primary bg-transparent;
 
     &:hover,

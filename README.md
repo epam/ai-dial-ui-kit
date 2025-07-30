@@ -49,7 +49,7 @@ function App() {
   return (
     <div>
       <Button 
-        cssClass="dial-primary"
+        cssClass="dial-primary-button"
         onClick={() => alert('Hello AI DIAL!')}
       >
         Get Started

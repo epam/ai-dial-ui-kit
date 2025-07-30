@@ -1,10 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from './Button';
+import { DialButton, type DialButton as ButtonProps } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+interface StoryButtonProps
+  extends Omit<ButtonProps, 'iconBefore' | 'iconAfter' | 'onClick'> {
+  showIconBefore?: boolean;
+  showIconAfter?: boolean;
+  enableOnClick?: boolean;
+}
 
 const meta = {
   title: 'Components/Button',
-  component: Button,
+  component: DialButton,
   parameters: {
     layout: 'centered',
     docs: {
@@ -17,8 +24,13 @@ const meta = {
       description: 'Button text content',
     },
     cssClass: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply',
+      control: { type: 'select' },
+      options: [
+        'dial-primary-button',
+        'dial-secondary-button',
+        'dial-tertiary-button',
+      ],
+      description: 'Button style variant',
     },
     disable: {
       control: { type: 'boolean' },
@@ -28,23 +40,46 @@ const meta = {
       control: { type: 'boolean' },
       description: 'Hide title text on mobile devices',
     },
+    showIconBefore: {
+      control: { type: 'boolean' },
+      description: 'Show icon before the button text',
+    },
+    showIconAfter: {
+      control: { type: 'boolean' },
+      description: 'Show icon after the button text',
+    },
     ariaLabel: {
       control: { type: 'text' },
       description: 'Accessibility label (used when title is not provided)',
     },
-    onClick: {
-      action: 'clicked',
-      description: 'Click event handler',
+    enableOnClick: {
+      control: { type: 'boolean' },
+      description: 'Add click handler that shows an alert',
     },
   },
   args: {
     title: 'Button',
+    cssClass: 'dial-primary-button',
     disable: false,
     hideTitleOnMobile: false,
-    iconBefore: undefined,
-    iconAfter: undefined,
+    showIconBefore: false,
+    showIconAfter: false,
+    enableOnClick: false,
   },
-} satisfies Meta<typeof Button>;
+  render: (args: StoryButtonProps) => {
+    const { showIconBefore, showIconAfter, enableOnClick, ...buttonProps } =
+      args;
+
+    return (
+      <DialButton
+        {...buttonProps}
+        iconBefore={showIconBefore ? <IconArrowLeft size={16} /> : undefined}
+        iconAfter={showIconAfter ? <IconArrowRight size={16} /> : undefined}
+        onClick={enableOnClick ? () => alert('Button clicked!') : undefined}
+      />
+    );
+  },
+} satisfies Meta<StoryButtonProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -61,25 +96,25 @@ export const AllVariants: Story = {
 
         <div className="text-primary text-right pr-4 py-2">Default</div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-primary"
+            cssClass="dial-primary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-secondary"
+            cssClass="dial-secondary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-tertiary"
+            cssClass="dial-tertiary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -88,25 +123,25 @@ export const AllVariants: Story = {
         {/* Hover State */}
         <div className="text-primary text-right pr-4 py-2">Hover</div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-primary"
+            cssClass="dial-primary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-secondary"
+            cssClass="dial-secondary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-tertiary"
+            cssClass="dial-tertiary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -115,25 +150,25 @@ export const AllVariants: Story = {
         {/* Focus State */}
         <div className="text-primary text-right pr-4 py-2">Focus</div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-primary"
+            cssClass="dial-primary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-secondary"
+            cssClass="dial-secondary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-tertiary"
+            cssClass="dial-tertiary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -142,25 +177,25 @@ export const AllVariants: Story = {
         {/* Active State */}
         <div className="text-primary text-right pr-4 py-2">Active</div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-primary"
+            cssClass="dial-primary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-secondary"
+            cssClass="dial-secondary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-tertiary"
+            cssClass="dial-tertiary-button"
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -169,27 +204,27 @@ export const AllVariants: Story = {
         {/* Disabled State */}
         <div className="text-primary text-right pr-4 py-2">Disable</div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-primary"
+            cssClass="dial-primary-button"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-secondary"
+            cssClass="dial-secondary-button"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
         </div>
         <div className="flex justify-center">
-          <Button
+          <DialButton
             title="Button label"
-            cssClass="dial-tertiary"
+            cssClass="dial-tertiary-button"
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -229,52 +264,51 @@ export const AllVariants: Story = {
 export const PrimaryButton: Story = {
   args: {
     title: 'Primary Button',
-    cssClass: 'dial-primary',
+    cssClass: 'dial-primary-button',
   },
 };
 
 export const SecondaryButton: Story = {
   args: {
     title: 'Secondary Button',
-    cssClass: 'dial-secondary',
+    cssClass: 'dial-secondary-button',
   },
 };
 export const TertiaryButton: Story = {
   args: {
     title: 'Tertiary Button',
-    cssClass: 'dial-tertiary',
+    cssClass: 'dial-tertiary-button',
   },
 };
 
 export const WithBothIcons: Story = {
   args: {
     title: 'Action',
-    iconBefore: <IconArrowLeft size={16} />,
-    iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'dial-secondary',
+    showIconAfter: true,
+    showIconBefore: true,
   },
 };
 
 export const WithIconBefore: Story = {
   args: {
     title: 'Save',
-    iconBefore: <IconArrowRight size={16} />,
-    cssClass: 'dial-primary',
+    showIconBefore: true,
+    cssClass: 'dial-primary-button',
   },
 };
 
 export const WithIconAfter: Story = {
   args: {
     title: 'Alert',
-    iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'dial-tertiary',
+    showIconAfter: true,
+    cssClass: 'dial-tertiary-button',
   },
 };
 
 export const Disabled: Story = {
   args: {
     title: 'Disabled Button',
-    cssClass: 'dial-tertiary',
+    cssClass: 'dial-tertiary-button',
     disable: true,
   },
 };
@@ -282,7 +316,7 @@ export const Disabled: Story = {
 export const Hover: Story = {
   args: {
     title: 'Hover Button',
-    cssClass: 'dial-primary',
+    cssClass: 'dial-primary-button',
   },
   parameters: {
     pseudo: {
@@ -294,7 +328,7 @@ export const Hover: Story = {
 export const Focus: Story = {
   args: {
     title: 'Focus Button',
-    cssClass: 'dial-secondary',
+    cssClass: 'dial-secondary-button',
   },
   parameters: {
     pseudo: {
@@ -306,7 +340,7 @@ export const Focus: Story = {
 export const Active: Story = {
   args: {
     title: 'Active Button',
-    cssClass: 'dial-tertiary',
+    cssClass: 'dial-tertiary-button',
   },
   parameters: {
     pseudo: {

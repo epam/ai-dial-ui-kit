@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import type { FC, MouseEvent, ReactNode, Ref } from 'react';
 
-export interface Button {
+export interface DialButton {
   cssClass?: string;
   disable?: boolean;
   title?: string;
@@ -18,7 +18,7 @@ export interface Button {
  *
  * @example
  * ```tsx
- * <Button
+ * <DialButton
  *   title="Click me"
  *   onClick={handleClick}
  *   iconBefore={<Icon />}
@@ -26,19 +26,18 @@ export interface Button {
  * />
  * ```
  *
- * @param props - The button component props
- * @param props.title - The text content of the button
- * @param props.cssClass - Additional CSS classes to apply to the button
- * @param props.ref - Ref to access the button DOM element
- * @param props.onClick - Click event handler for the button
- * @param props.disable - Whether the button should be disabled
- * @param props.iconAfter - Icon or element to display after the button text
- * @param props.iconBefore - Icon or element to display before the button text
- * @param props.hideTitleOnMobile - Whether to hide the title text on mobile devices
- * @param props.ariaLabel - Accessible label for screen readers when no title is provided
+ * @param title - The text content of the button
+ * @param cssClass - Additional CSS classes to apply to the button
+ * @param onClick - Click event handler for the button
+ * @param disable - Whether the button should be disabled
+ * @param iconAfter - Icon or element to display after the button text
+ * @param iconBefore - Icon or element to display before the button text
+ * @param hideTitleOnMobile - Whether to hide the title text on mobile devices
+ * @param ariaLabel - Accessible label for screen readers when no title is provided
+ * @param ref - Ref to access the button DOM element
  * @returns A button element
  */
-export const Button: FC<Button> = ({
+export const DialButton: FC<DialButton> = ({
   title,
   cssClass,
   ref,
@@ -50,7 +49,7 @@ export const Button: FC<Button> = ({
   ariaLabel,
 }) => {
   const btnTextClassNames = classNames(
-    'dial-small-text-semi',
+    'dial-small-semi',
     iconAfter ? 'mr-2' : '',
     iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
