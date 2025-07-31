@@ -1,0 +1,60 @@
+@layer components {
+  .dial-input {
+    @apply border border-solid border-primary rounded;
+
+    &:hover {
+      @apply border-hover;
+    }
+
+    &:focus,
+    &:focus-within {
+      @apply border-accent-primary;
+    }
+  }
+
+  .dial-input,
+  .dial-input-no-border {
+    @apply bg-transparent dial-small truncate;
+    @apply px-3 py-2 w-full outline-0;
+
+    &:not(:placeholder-shown) {
+      @apply text-primary;
+    }
+
+    &:disabled {
+      @apply dial-input-disable;
+    }
+  }
+
+  .dial-input-disable,
+  .dial-input-readonly {
+    @apply bg-layer-3;
+  }
+
+  .dial-input-disable,
+  .dial-input-disable:not(:placeholder-shown) {
+    @apply text-secondary;
+  }
+
+  .dial-input-error {
+    @apply border-error;
+  }
+
+  .dial-input-field {
+    @apply h-[38px];
+  }
+}
+
+input {
+  -moz-appearance: textfield; /* Firefox */
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

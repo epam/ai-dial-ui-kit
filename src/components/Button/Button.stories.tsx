@@ -86,7 +86,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="dial p-4 max-w-[1000px] flex justify-center">
+    <div className="p-4 max-w-[1000px]">
       <div className="grid grid-cols-4 gap-8">
         {/* Header */}
         <div></div>
@@ -234,7 +234,6 @@ export const AllVariants: Story = {
     </div>
   ),
   parameters: {
-    layout: 'fullscreen',
     pseudo: {
       hover: [
         'div:nth-child(10) button',
