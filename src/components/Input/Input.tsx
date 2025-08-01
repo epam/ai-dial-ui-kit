@@ -72,13 +72,15 @@ export const DialInput: FC<DialInputProps> = ({
         containerCssClass,
       )}
     >
-      {iconBeforeInput}
+      {iconBeforeInput && (
+        <span className="flex-shrink-0">{iconBeforeInput}</span>
+      )}
       <input
         type={type}
         autoComplete="new-password"
         id={inputId}
         placeholder={placeholder}
-        value={value || ''}
+        value={value ?? ''}
         title={value ? String(value) : ''}
         disabled={disabled}
         className={classNames(
@@ -89,7 +91,9 @@ export const DialInput: FC<DialInputProps> = ({
         )}
         onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
       />
-      {iconAfterInput}
+      {iconAfterInput && (
+        <span className="flex-shrink-0">{iconAfterInput}</span>
+      )}
     </div>
   );
 };
