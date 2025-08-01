@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialInput } from './Input';
 
-describe('Ui Kit components :: DialInput', () => {
+describe('Dial UI Kit :: DialInput', () => {
   test('renders with default props', () => {
     const { getByPlaceholderText } = render(
       <DialInput inputId="test-input" placeholder="Enter text" />,

@@ -17,6 +17,35 @@ export interface DialInputProps {
   iconBeforeInput?: ReactNode;
 }
 
+/**
+ * A flexible input component with icon support and various styling options
+ *
+ * @example
+ * ```tsx
+ * <DialInput
+ *   inputId="search"
+ *   placeholder="Search..."
+ *   iconBefore={<SearchIcon />}
+ *   iconAfter={<ClearIcon />}
+ *   onChange={(value) => console.log(value)}
+ * />
+ * ```
+ *
+ * @param inputId - Unique identifier for the input element
+ * @param value - The current value of the input
+ * @param onChange - Callback function called when the input value changes
+ * @param iconBeforeInput - Icon or element to display before the input
+ * @param iconAfterInput - Icon or element to display after the input
+ * @param placeholder - Placeholder text displayed when input is empty
+ * @param containerCssClass - Additional CSS classes to apply to the container div
+ * @param cssClass - Additional CSS classes to apply to the input element
+ * @param type - The type of input (text, password, email, etc.)
+ * @param disabled - Whether the input is disabled
+ * @param readonly - Whether the input is read-only (prevents onChange from firing)
+ * @param invalid - Whether the input has validation errors (applies error styling)
+ * @param hideBorder - Whether to hide the input border styling
+ * @returns A styled input element with optional icons
+ */
 export const DialInput: FC<DialInputProps> = ({
   iconBeforeInput,
   iconAfterInput,
