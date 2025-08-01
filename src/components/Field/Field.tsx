@@ -3,7 +3,6 @@ import type { FC } from 'react';
 
 export interface DialFieldLabelProps {
   fieldTitle?: string;
-  edited?: boolean;
   htmlFor: string;
   optional?: boolean;
   optionalText?: string;
