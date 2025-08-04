@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import type { FC, MouseEvent, ReactNode, Ref } from 'react';
-import { DialIcon } from '../Icon/Icon';
+
+import { DialIcon } from '@/components/Icon/Icon';
 
 export interface DialButton {
   cssClass?: string;
