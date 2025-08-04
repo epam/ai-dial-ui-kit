@@ -9,3 +9,7 @@ export { DialIcon } from './components/Icon/Icon';
 export { DialInput } from './components/Input/Input';
 export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
+
+// Textareas
+export { DialTextarea } from './components/Textarea/Textarea';
+export { default as DialTextAreaField } from './components/TextAreaField/TextAreaField';

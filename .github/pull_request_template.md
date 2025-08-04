@@ -22,5 +22,7 @@ Issues:
 - [ ] custom css classes has dial- prefix
 - [ ] component export added to index.ts
 - [ ] jsdoc is added for component
+- [ ] absolute paths are used for imports
+ e.g. `import { Button } from '@/components/Button/Button` instead of `import { Button } from '../../Button/Button`
 - [ ] stories are added
 - [ ] tests are added

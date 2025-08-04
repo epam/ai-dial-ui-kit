@@ -13,7 +13,6 @@ export interface Props {
  * ```
  *
  * @param errorText - The error message text to display. If undefined or empty, nothing is rendered
- * @returns A span element with error styling, or null if no error text is provided
  */
 export const DialErrorText: FC<Props> = ({ errorText }) => {
   return (

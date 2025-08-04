@@ -46,7 +46,6 @@ export interface DialInputProps {
  * @param readonly - Whether the input is read-only (prevents onChange from firing)
  * @param invalid - Whether the input has validation errors (applies error styling)
  * @param hideBorder - Whether to hide the input border styling
- * @returns A styled input element with optional icons
  */
 export const DialInput: FC<DialInputProps> = ({
   iconBeforeInput,
