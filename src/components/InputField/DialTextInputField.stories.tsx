@@ -20,6 +20,7 @@ const InteractiveTextInputField = (args: DialTextInputFieldProps) => {
 const meta = {
   title: 'Inputs/TextInputField',
   component: DialTextInputField,
+  tags: ['input'],
   parameters: {
     layout: 'centered',
     docs: {

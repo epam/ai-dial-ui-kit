@@ -23,6 +23,7 @@ const InteractiveNumberInputField = (args: DialNumberInputFieldProps) => {
 const meta = {
   title: 'Inputs/NumberInputField',
   component: DialNumberInputField,
+  tags: ['input'],
   parameters: {
     layout: 'centered',
     docs: {

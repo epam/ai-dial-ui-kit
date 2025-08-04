@@ -1,6 +1,8 @@
 import type { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 
+import { DialIcon } from '@/components/Icon/Icon';
+
 export interface DialInputProps {
   inputId: string;
   type?: string;
@@ -72,9 +74,7 @@ export const DialInput: FC<DialInputProps> = ({
         containerCssClass,
       )}
     >
-      {iconBeforeInput && (
-        <span className="flex-shrink-0">{iconBeforeInput}</span>
-      )}
+      <DialIcon icon={iconBeforeInput} />
       <input
         type={type}
         autoComplete="new-password"
@@ -91,9 +91,7 @@ export const DialInput: FC<DialInputProps> = ({
         )}
         onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
       />
-      {iconAfterInput && (
-        <span className="flex-shrink-0">{iconAfterInput}</span>
-      )}
+      <DialIcon icon={iconAfterInput} />
     </div>
   );
 };
