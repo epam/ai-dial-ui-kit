@@ -12,4 +12,4 @@ export { DialTextInputField } from './components/InputField/InputField';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
-export { default as DialTextAreaField } from './components/TextAreaField/TextAreaField';
+export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
