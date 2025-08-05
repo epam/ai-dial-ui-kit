@@ -20,6 +20,8 @@ const compat = new FlatCompat({
 export default defineConfig([
   globalIgnores([
     '**/node_modules',
+    'storybook-static/**',
+    'coverage/**',
     '**/dist',
     '**/**.config.js',
     '**/**.config.mjs',

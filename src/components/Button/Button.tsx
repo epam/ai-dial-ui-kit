@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import type { FC, MouseEvent, ReactNode, Ref } from 'react';
 
+import { DialIcon } from '@/components/Icon/Icon';
+
 export interface DialButton {
   cssClass?: string;
   disable?: boolean;
@@ -68,9 +70,9 @@ export const DialButton: FC<DialButton> = ({
       disabled={disable}
       aria-label={title || ariaLabel}
     >
-      {iconBefore}
+      <DialIcon icon={iconBefore} />
       {title && <span className={btnTextClassNames}>{title}</span>}
-      {iconAfter}
+      <DialIcon icon={iconAfter} />
     </button>
   );
 };

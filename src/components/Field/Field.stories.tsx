@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFieldLabel } from './Field';
-
-interface StoryFieldLabelProps {
-  fieldTitle?: string;
-  htmlFor: string;
-  optional?: boolean;
-  optionalText?: string;
-}
+import { DialFieldLabel, type DialFieldLabelProps } from './Field';
 
 const meta = {
   title: 'Inputs/FieldLabel',
@@ -44,7 +37,7 @@ const meta = {
     optional: false,
     optionalText: undefined,
   },
-  render: (args: StoryFieldLabelProps) => {
+  render: (args: DialFieldLabelProps) => {
     const { optionalText, ...fieldLabelProps } = args;
 
     return (
@@ -53,7 +46,7 @@ const meta = {
       </div>
     );
   },
-} satisfies Meta<StoryFieldLabelProps>;
+} satisfies Meta<DialFieldLabelProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

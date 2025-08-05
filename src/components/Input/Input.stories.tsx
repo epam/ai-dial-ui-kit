@@ -27,6 +27,7 @@ const InteractiveInput = (args: StoryInputProps) => {
 const meta = {
   title: 'Inputs/Input',
   component: DialInput,
+  tags: ['input'],
   parameters: {
     layout: 'centered',
     docs: {
