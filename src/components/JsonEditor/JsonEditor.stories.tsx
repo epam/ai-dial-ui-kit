@@ -30,6 +30,7 @@ const meta = {
     },
     onValidateJSON: {
       action: 'validated',
+      control: false,
       description: 'Callback fired when JSON validation occurs',
     },
   },

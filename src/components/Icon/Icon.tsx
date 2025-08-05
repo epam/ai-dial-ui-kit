@@ -15,8 +15,8 @@ export interface DialIconProps {
  * <DialIcon icon={<CloseIcon />} className="text-primary" />
  * ```
  *
- * @param icon - The icon element to render
- * @param className - Additional CSS classes to apply to the icon wrapper
+ * @param optional icon - The icon element to render
+ * @param optional className - Additional CSS classes to apply to the icon wrapper
  */
 export const DialIcon: FC<DialIconProps> = ({ icon, className }) => {
   if (!icon) {

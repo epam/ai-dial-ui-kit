@@ -6,7 +6,7 @@ import { Editor, type Monaco, type OnValidate } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 
 export interface Props {
-  value: string | undefined;
+  value?: string | undefined;
   currentTheme: string;
   themesConfig?: Record<EDITOR_THEMES, editor.IStandaloneThemeData>;
   onChange: (value: string | undefined) => void;
@@ -18,12 +18,13 @@ export interface Props {
  * A JSON editor component built on top of Monaco Editor.
  * Provides syntax highlighting, validation, and theme support for JSON editing.
  *
- * @param value - The JSON string value to edit
- * @param currentTheme - The theme to apply to the editor
- * @param themesConfig - Custom theme configurations
- * @param onChange - Callback fired when the editor content changes
- * @param onValidateJSON - Callback fired when JSON validation occurs
- * @param options - Additional Monaco editor options
+ * @param required currentTheme - The theme to apply to the editor
+ * @param required onChange - Callback fired when the editor content changes
+ * @param optional value - The JSON string value to edit
+ * @param optional themesConfig - Custom theme configurations
+ * @default EDITOR_THEMES_CONFIG
+ * @param optional onValidateJSON - Callback fired when JSON validation occurs
+ * @param optional options - Additional Monaco editor options
  */
 export const DialJsonEditor: FC<Props> = ({
   value,
