@@ -3,20 +3,6 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialJsonEditor } from './JsonEditor';
 import { EDITOR_THEMES } from '@/types/editor';
 
-// Mock Monaco Editor for performance and simplicity
-vi.mock('@monaco-editor/react', () => ({
-  Editor: vi.fn(({ value, onChange, theme }) => (
-    <div role="textbox" aria-label="JSON Editor">
-      <textarea
-        value={value || ''}
-        onChange={(e) => onChange?.(e.target.value)}
-        data-theme={theme}
-        aria-label="JSON content"
-      />
-    </div>
-  )),
-}));
-
 describe('Dial UI Kit :: DialJsonEditor', () => {
   test('Should render the Monaco Editor', () => {
     const mockOnChange = vi.fn();

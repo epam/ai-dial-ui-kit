@@ -66,9 +66,7 @@ export const Default: Story = {
   args: {
     value: sampleJsonValue,
     currentTheme: EDITOR_THEMES.dark,
-    onChange: () => {
-      // Handle change
-    },
+    onChange: () => void 0,
   },
   render: renderWithContainer,
 };
@@ -77,9 +75,7 @@ export const Empty: Story = {
   args: {
     value: '',
     currentTheme: EDITOR_THEMES.dark,
-    onChange: () => {
-      // Handle change
-    },
+    onChange: () => void 0,
   },
   render: renderWithContainer,
 };
@@ -88,9 +84,7 @@ export const LightTheme: Story = {
   args: {
     value: sampleJsonValue,
     currentTheme: EDITOR_THEMES.light,
-    onChange: () => {
-      // Handle change
-    },
+    onChange: () => void 0,
   },
   render: renderWithContainer,
 };
@@ -155,9 +149,7 @@ export const ComplexJson: Story = {
       2,
     ),
     currentTheme: EDITOR_THEMES.dark,
-    onChange: () => {
-      // Handle change
-    },
+    onChange: () => void 0,
   },
   render: renderWithContainer,
 };
@@ -166,9 +158,7 @@ export const WithCustomOptions: Story = {
   args: {
     value: sampleJsonValue,
     currentTheme: EDITOR_THEMES.dark,
-    onChange: () => {
-      // Handle change
-    },
+    onChange: () => void 0,
     options: {
       fontSize: 16,
       lineNumbers: 'off',

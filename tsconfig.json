@@ -24,8 +24,6 @@
     /* Linting */
     "strict": true,
     "noUnusedParameters": true,
-    // enable to forbid non-erasable syntax, e.g. enums
-    // "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
