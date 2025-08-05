@@ -8,7 +8,6 @@ const preview: Preview = {
         dark: { name: 'Dark', value: '#090D13' },
       },
     },
-
     a11y: {
       // 'todo' - show a11y violations in the test UI only
       // 'error' - fail CI on a11y violations
@@ -19,6 +18,7 @@ const preview: Preview = {
   initialGlobals: {
     backgrounds: { value: 'dark' },
   },
+  tags: ['autodocs'],
 };
 
 export default preview;

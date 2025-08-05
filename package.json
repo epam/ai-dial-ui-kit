@@ -35,7 +35,9 @@
     "build-storybook:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "test": "vitest --coverage"
+    "test": "vitest --coverage",
+    "storybook-docs": "storybook dev --docs",
+    "build-storybook-docs": "storybook build --docs"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

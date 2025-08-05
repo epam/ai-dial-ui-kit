@@ -93,6 +93,87 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const BasicNumberField: Story = {
+  args: {
+    fieldTitle: 'Age',
+    elementId: 'age-input',
+    placeholder: 'Enter your age',
+  },
+};
+
+export const WithValue: Story = {
+  args: {
+    fieldTitle: 'Price',
+    elementId: 'price-input',
+    placeholder: 'Enter price',
+    value: 29.99,
+  },
+};
+
+export const OptionalField: Story = {
+  args: {
+    fieldTitle: 'Discount Percentage',
+    elementId: 'discount-input',
+    placeholder: 'Enter discount %',
+    optional: true,
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    fieldTitle: 'Budget',
+    elementId: 'budget-input',
+    placeholder: 'Enter budget amount',
+    value: -100,
+    invalid: true,
+    errorText: 'Budget must be a positive number',
+  },
+};
+
+export const DisabledField: Story = {
+  args: {
+    fieldTitle: 'System Generated ID',
+    elementId: 'id-input',
+    value: 12345,
+    disabled: true,
+  },
+};
+
+export const ReadOnlyField: Story = {
+  args: {
+    fieldTitle: 'Total Amount',
+    elementId: 'total-input',
+    value: 150.75,
+    readonly: true,
+  },
+};
+
+export const ReadOnlyWithEmptyValue: Story = {
+  args: {
+    fieldTitle: 'Score',
+    elementId: 'score-input',
+    readonly: true,
+    defaultEmptyText: 'Not calculated yet',
+  },
+};
+
+export const DecimalHandling: Story = {
+  args: {
+    fieldTitle: 'Precision Value',
+    elementId: 'precision-input',
+    placeholder: 'Enter decimal value',
+    value: 0.005,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'This story demonstrates how the component handles decimal values with leading zeros.',
+      },
+    },
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="p-8 max-w-[1400px]">
@@ -295,87 +376,6 @@ export const AllVariants: Story = {
       description: {
         story:
           'Comprehensive showcase of all number input field variants in a grid layout: columns show different states (basic, hover, focus, disabled, readonly) and rows show different configurations (no value, with value, no value with icons, value with icons).',
-      },
-    },
-  },
-};
-
-export const BasicNumberField: Story = {
-  args: {
-    fieldTitle: 'Age',
-    elementId: 'age-input',
-    placeholder: 'Enter your age',
-  },
-};
-
-export const WithValue: Story = {
-  args: {
-    fieldTitle: 'Price',
-    elementId: 'price-input',
-    placeholder: 'Enter price',
-    value: 29.99,
-  },
-};
-
-export const OptionalField: Story = {
-  args: {
-    fieldTitle: 'Discount Percentage',
-    elementId: 'discount-input',
-    placeholder: 'Enter discount %',
-    optional: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    fieldTitle: 'Budget',
-    elementId: 'budget-input',
-    placeholder: 'Enter budget amount',
-    value: -100,
-    invalid: true,
-    errorText: 'Budget must be a positive number',
-  },
-};
-
-export const DisabledField: Story = {
-  args: {
-    fieldTitle: 'System Generated ID',
-    elementId: 'id-input',
-    value: 12345,
-    disabled: true,
-  },
-};
-
-export const ReadOnlyField: Story = {
-  args: {
-    fieldTitle: 'Total Amount',
-    elementId: 'total-input',
-    value: 150.75,
-    readonly: true,
-  },
-};
-
-export const ReadOnlyWithEmptyValue: Story = {
-  args: {
-    fieldTitle: 'Score',
-    elementId: 'score-input',
-    readonly: true,
-    defaultEmptyText: 'Not calculated yet',
-  },
-};
-
-export const DecimalHandling: Story = {
-  args: {
-    fieldTitle: 'Precision Value',
-    elementId: 'precision-input',
-    placeholder: 'Enter decimal value',
-    value: 0.005,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'This story demonstrates how the component handles decimal values with leading zeros.',
       },
     },
   },

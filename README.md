@@ -165,18 +165,44 @@ Full list of variables is available [here](tailwind.config.js)
 
 ## 📖 Storybook
 
-### Development Mode
-Access our interactive component documentation:
+Storybook is a frontend workshop for building UI components and pages in isolation.
 
+### Stories
+To run fully interactive storybook:
+
+#### Development mode
 ```bash
 npm run storybook
 # Open http://localhost:6006
 ```
 
-### Production Build
+#### Production Build
 ```bash
 npm run build-storybook
+```
+#### Production start
+
+```bash
 npx http-server ./storybook-static
+# Open http://127.0.0.1:8080/
+```
+
+### Documents
+To run documents only:
+
+#### Development mode
+``` bash
+npm run storybook-docs
+# Open http://localhost:54800/
+```
+#### Production build
+```bash
+npm run build-storybook-docs
+```
+#### Production start
+```bash
+npx http-server ./storybook-static
+# Open http://127.0.0.1:8080/
 ```
 
 Storybook provides:

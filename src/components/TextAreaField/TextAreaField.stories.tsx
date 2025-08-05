@@ -78,6 +78,58 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Default: Story = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Description',
+    elementId: 'default-textarea-field',
+    placeholder: 'Enter your description here...',
+  },
+};
+
+export const WithValue: Story = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Comments',
+    elementId: 'textarea-field-with-value',
+    placeholder: 'Enter your comments...',
+    value: 'This is some default text in the textarea field',
+  },
+};
+
+export const Optional: Story = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Additional Notes',
+    elementId: 'optional-textarea-field',
+    placeholder: 'Enter additional notes (optional)...',
+    optional: true,
+  },
+};
+
+export const WithError: Story = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Message',
+    elementId: 'error-textarea-field',
+    placeholder: 'Enter your message...',
+    value: 'This text has validation errors',
+    invalid: true,
+    errorText: 'This field is required and must contain at least 10 characters',
+  },
+};
+
+export const Disabled: Story = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Read-only Information',
+    elementId: 'disabled-textarea-field',
+    placeholder: 'This field is disabled',
+    value: 'This textarea field is disabled and cannot be edited',
+    disabled: true,
+  },
+};
+
 export const AllVariants: Story = {
   args: {
     fieldTitle: 'Description',
@@ -197,57 +249,5 @@ export const AllVariants: Story = {
       hover: ['.dial-textarea-field-for-hover'],
       focus: ['.dial-textarea-field-for-focus'],
     },
-  },
-};
-
-export const Default: Story = {
-  render: InteractiveTextAreaField,
-  args: {
-    fieldTitle: 'Description',
-    elementId: 'default-textarea-field',
-    placeholder: 'Enter your description here...',
-  },
-};
-
-export const WithValue: Story = {
-  render: InteractiveTextAreaField,
-  args: {
-    fieldTitle: 'Comments',
-    elementId: 'textarea-field-with-value',
-    placeholder: 'Enter your comments...',
-    value: 'This is some default text in the textarea field',
-  },
-};
-
-export const Optional: Story = {
-  render: InteractiveTextAreaField,
-  args: {
-    fieldTitle: 'Additional Notes',
-    elementId: 'optional-textarea-field',
-    placeholder: 'Enter additional notes (optional)...',
-    optional: true,
-  },
-};
-
-export const WithError: Story = {
-  render: InteractiveTextAreaField,
-  args: {
-    fieldTitle: 'Message',
-    elementId: 'error-textarea-field',
-    placeholder: 'Enter your message...',
-    value: 'This text has validation errors',
-    invalid: true,
-    errorText: 'This field is required and must contain at least 10 characters',
-  },
-};
-
-export const Disabled: Story = {
-  render: InteractiveTextAreaField,
-  args: {
-    fieldTitle: 'Read-only Information',
-    elementId: 'disabled-textarea-field',
-    placeholder: 'This field is disabled',
-    value: 'This textarea field is disabled and cannot be edited',
-    disabled: true,
   },
 };

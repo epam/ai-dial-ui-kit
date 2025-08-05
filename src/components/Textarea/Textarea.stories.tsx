@@ -64,6 +64,43 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Default: Story = {
+  render: InteractiveTextarea,
+  args: {
+    textareaId: 'default-textarea',
+    placeholder: 'Enter your text here...',
+  },
+};
+
+export const WithValue: Story = {
+  render: InteractiveTextarea,
+  args: {
+    textareaId: 'textarea-with-value',
+    placeholder: 'Enter your text here...',
+    value: 'This is some default text in the textarea',
+  },
+};
+
+export const Disabled: Story = {
+  render: InteractiveTextarea,
+  args: {
+    textareaId: 'disabled-textarea',
+    placeholder: 'This textarea is disabled',
+    value: 'This textarea is disabled and cannot be edited',
+    disabled: true,
+  },
+};
+
+export const Invalid: Story = {
+  render: InteractiveTextarea,
+  args: {
+    textareaId: 'invalid-textarea',
+    placeholder: 'Enter valid text...',
+    value: 'This text has validation errors',
+    invalid: true,
+  },
+};
+
 export const AllVariants: Story = {
   args: {
     textareaId: 'all-variants-textarea',
@@ -162,42 +199,5 @@ export const AllVariants: Story = {
       hover: ['.dial-textarea-for-hover'],
       focus: ['.dial-textarea-for-focus'],
     },
-  },
-};
-
-export const Default: Story = {
-  render: InteractiveTextarea,
-  args: {
-    textareaId: 'default-textarea',
-    placeholder: 'Enter your text here...',
-  },
-};
-
-export const WithValue: Story = {
-  render: InteractiveTextarea,
-  args: {
-    textareaId: 'textarea-with-value',
-    placeholder: 'Enter your text here...',
-    value: 'This is some default text in the textarea',
-  },
-};
-
-export const Disabled: Story = {
-  render: InteractiveTextarea,
-  args: {
-    textareaId: 'disabled-textarea',
-    placeholder: 'This textarea is disabled',
-    value: 'This textarea is disabled and cannot be edited',
-    disabled: true,
-  },
-};
-
-export const Invalid: Story = {
-  render: InteractiveTextarea,
-  args: {
-    textareaId: 'invalid-textarea',
-    placeholder: 'Enter valid text...',
-    value: 'This text has validation errors',
-    invalid: true,
   },
 };
