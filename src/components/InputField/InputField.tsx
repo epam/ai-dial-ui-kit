@@ -194,7 +194,6 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * @param elementCssClass - Additional CSS classes to apply to the input element
  * @param elementContainerCssClass - Additional CSS classes to apply to the input container
  * @param containerCssClass - Additional CSS classes to apply to the outer container
- * @returns A complete text input field with label, input, and optional error text
  */
 export const DialTextInputField: FC<DialTextInputFieldProps> = ({
   onChange,

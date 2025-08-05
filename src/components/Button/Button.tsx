@@ -37,7 +37,6 @@ export interface DialButton {
  * @param hideTitleOnMobile - Whether to hide the title text on mobile devices
  * @param ariaLabel - Accessible label for screen readers when no title is provided
  * @param ref - Ref to access the button DOM element
- * @returns A button element
  */
 export const DialButton: FC<DialButton> = ({
   title,

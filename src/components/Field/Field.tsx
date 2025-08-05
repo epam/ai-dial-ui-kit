@@ -23,7 +23,6 @@ export interface DialFieldLabelProps {
  * @param optional - Whether the field is optional (displays "(Optional)" text if optionalText is not provided)
  * @param optionalText - Custom text for optional indicator
  * @param cssClass - Additional CSS classes to apply to the label element
- * @returns A label element
  */
 export const DialFieldLabel: FC<DialFieldLabelProps> = ({
   fieldTitle,

@@ -90,6 +90,70 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const BasicTextField: Story = {
+  args: {
+    fieldTitle: 'Full Name',
+    elementId: 'name-input',
+    placeholder: 'Enter your full name',
+  },
+};
+
+export const WithValue: Story = {
+  args: {
+    fieldTitle: 'Email Address',
+    elementId: 'email-input',
+    placeholder: 'Enter your email',
+    value: 'user@example.com',
+  },
+};
+
+export const OptionalField: Story = {
+  args: {
+    fieldTitle: 'Middle Name',
+    elementId: 'middle-name-input',
+    placeholder: 'Enter middle name',
+    optional: true,
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    fieldTitle: 'Username',
+    elementId: 'username-input',
+    placeholder: 'Enter username',
+    value: 'user@123',
+    invalid: true,
+    errorText: 'Username can only contain letters, numbers, and underscores',
+  },
+};
+
+export const DisabledField: Story = {
+  args: {
+    fieldTitle: 'System User ID',
+    elementId: 'user-id-input',
+    value: 'USR_12345',
+    disabled: true,
+  },
+};
+
+export const ReadOnlyField: Story = {
+  args: {
+    fieldTitle: 'Account Type',
+    elementId: 'account-type-input',
+    value: 'Premium',
+    readonly: true,
+  },
+};
+
+export const ReadOnlyWithEmptyValue: Story = {
+  args: {
+    fieldTitle: 'Nickname',
+    elementId: 'nickname-input',
+    readonly: true,
+    defaultEmptyText: 'No nickname set',
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="p-8 max-w-[1400px]">
@@ -294,69 +358,5 @@ export const AllVariants: Story = {
           'Comprehensive showcase of all text input field variants in a grid layout: columns show different states (basic, hover, focus, disabled, readonly) and rows show different configurations (no value, with value, no value with icons, value with icons).',
       },
     },
-  },
-};
-
-export const BasicTextField: Story = {
-  args: {
-    fieldTitle: 'Full Name',
-    elementId: 'name-input',
-    placeholder: 'Enter your full name',
-  },
-};
-
-export const WithValue: Story = {
-  args: {
-    fieldTitle: 'Email Address',
-    elementId: 'email-input',
-    placeholder: 'Enter your email',
-    value: 'user@example.com',
-  },
-};
-
-export const OptionalField: Story = {
-  args: {
-    fieldTitle: 'Middle Name',
-    elementId: 'middle-name-input',
-    placeholder: 'Enter middle name',
-    optional: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    fieldTitle: 'Username',
-    elementId: 'username-input',
-    placeholder: 'Enter username',
-    value: 'user@123',
-    invalid: true,
-    errorText: 'Username can only contain letters, numbers, and underscores',
-  },
-};
-
-export const DisabledField: Story = {
-  args: {
-    fieldTitle: 'System User ID',
-    elementId: 'user-id-input',
-    value: 'USR_12345',
-    disabled: true,
-  },
-};
-
-export const ReadOnlyField: Story = {
-  args: {
-    fieldTitle: 'Account Type',
-    elementId: 'account-type-input',
-    value: 'Premium',
-    readonly: true,
-  },
-};
-
-export const ReadOnlyWithEmptyValue: Story = {
-  args: {
-    fieldTitle: 'Nickname',
-    elementId: 'nickname-input',
-    readonly: true,
-    defaultEmptyText: 'No nickname set',
   },
 };
