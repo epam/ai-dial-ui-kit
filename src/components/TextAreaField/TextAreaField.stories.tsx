@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import DialTextAreaField, {
+import {
   type DialTextAreaFieldProps,
+  DialTextAreaField,
 } from './TextAreaField';
 
 const InteractiveTextAreaField = (args: DialTextAreaFieldProps) => {

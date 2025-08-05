@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import DialTextAreaField from './TextAreaField';
+import { DialTextAreaField } from './TextAreaField';
 
 describe('Dial UI Kit :: DialTextAreaField', () => {
   test('Should render with basic props', () => {

@@ -34,7 +34,7 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param readonly - Whether the textarea is read-only (no user input allowed)
  * @param elementCssClass - Additional CSS classes to apply to the textarea element
  */
-const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
+export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   fieldTitle,
   optional,
   elementId,
@@ -58,5 +58,3 @@ const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
     </div>
   );
 };
-
-export default DialTextAreaField;
