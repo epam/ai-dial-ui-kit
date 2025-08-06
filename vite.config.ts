@@ -21,11 +21,19 @@ export default defineConfig({
       formats: ['es', 'cjs', 'umd'],
     },
     rollupOptions: {
-      external: Object.keys(peerDependencies),
+      external: [
+        ...Object.keys(peerDependencies),
+        'monaco-editor',
+        '@monaco-editor/react',
+      ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          classnames: 'classNames',
+          '@tabler/icons-react': 'TablerIcons',
+          'monaco-editor': 'monaco',
+          '@monaco-editor/react': 'MonacoEditor',
         },
       },
     },
