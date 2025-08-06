@@ -12,7 +12,7 @@ export interface Props {
  * <DialErrorText errorText="This field is required" />
  * ```
  *
- * @param optional errorText - The error message text to display. If undefined or empty, nothing is rendered
+ * @param [errorText] - The error message text to display. If undefined or empty, nothing is rendered
  */
 export const DialErrorText: FC<Props> = ({ errorText }) => {
   return (

@@ -34,23 +34,18 @@ export interface DialInputProps {
  * ```
  *
  * @param required inputId - Unique identifier for the input element
- * @param optional value - The current value of the input
- * @param optional onChange - Callback function called when the input value changes
- * @param optional iconBeforeInput - Icon or element to display before the input
- * @param optional iconAfterInput - Icon or element to display after the input
- * @param optional placeholder - Placeholder text displayed when input is empty
- * @param optional containerCssClass - Additional CSS classes to apply to the container div
- * @param optional cssClass - Additional CSS classes to apply to the input element
- * @param optional type - The type of input (text, password, email, etc.)
- * @default "text"
- * @param optional disabled - Whether the input is disabled
- * @default false
- * @param optional readonly - Whether the input is read-only (prevents onChange from firing)
- * @default false
- * @param optional invalid - Whether the input has validation errors (applies error styling)
- * @default false
- * @param optional hideBorder - Whether to hide the input border styling
- * @default false
+ * @param [value] - The current value of the input
+ * @param [onChange] - Callback function called when the input value changes
+ * @param [iconBeforeInput] - Icon or element to display before the input
+ * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [placeholder] - Placeholder text displayed when input is empty
+ * @param [containerCssClass] - Additional CSS classes to apply to the container div
+ * @param [cssClass] - Additional CSS classes to apply to the input element
+ * @param [type="text"] - The type of input (text, password, email, etc.)
+ * @param [disabled=false] - Whether the input is disabled
+ * @param [readonly=false] - Whether the input is read-only (prevents onChange from firing)
+ * @param [invalid=false] - Whether the input has validation errors (applies error styling)
+ * @param [hideBorder=false] - Whether to hide the input border styling
  */
 export const DialInput: FC<DialInputProps> = ({
   iconBeforeInput,

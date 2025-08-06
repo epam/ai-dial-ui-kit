@@ -20,11 +20,10 @@ export interface Props {
  *
  * @param required currentTheme - The theme to apply to the editor
  * @param required onChange - Callback fired when the editor content changes
- * @param optional value - The JSON string value to edit
- * @param optional themesConfig - Custom theme configurations
- * @default EDITOR_THEMES_CONFIG
- * @param optional onValidateJSON - Callback fired when JSON validation occurs
- * @param optional options - Additional Monaco editor options
+ * @param [value] - The JSON string value to edit
+ * @param [themesConfig=EDITOR_THEMES_CONFIG] - Custom theme configurations
+ * @param [onValidateJSON] - Callback fired when JSON validation occurs
+ * @param [options] - Additional Monaco editor options
  */
 export const DialJsonEditor: FC<Props> = ({
   value,
