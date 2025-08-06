@@ -10,5 +10,4 @@ export interface JSONEditorErrorNotification extends JSONEditorError {
 export enum EDITOR_THEMES {
   dark = 'dark',
   light = 'light',
-  'light-orange' = 'light-orange',
 }
