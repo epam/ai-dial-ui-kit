@@ -13,3 +13,6 @@ export { DialTextInputField } from './components/InputField/InputField';
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
 export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
+
+// JSON Editor
+export { DialJsonEditor } from './components/JsonEditor/JsonEditor';

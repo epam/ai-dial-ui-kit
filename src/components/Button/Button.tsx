@@ -28,15 +28,15 @@ export interface DialButton {
  * />
  * ```
  *
- * @param title - The text content of the button
- * @param cssClass - Additional CSS classes to apply to the button
- * @param onClick - Click event handler for the button
- * @param disable - Whether the button should be disabled
- * @param iconAfter - Icon or element to display after the button text
- * @param iconBefore - Icon or element to display before the button text
- * @param hideTitleOnMobile - Whether to hide the title text on mobile devices
- * @param ariaLabel - Accessible label for screen readers when no title is provided
- * @param ref - Ref to access the button DOM element
+ * @param [title] - The text content of the button
+ * @param [cssClass] - Additional CSS classes to apply to the button
+ * @param [onClick] - Click event handler for the button
+ * @param [disable=false] - Whether the button should be disabled
+ * @param [iconAfter] - Icon or element to display after the button text
+ * @param [iconBefore] - Icon or element to display before the button text
+ * @param [hideTitleOnMobile=false] - Whether to hide the title text on mobile devices
+ * @param [ariaLabel] - Accessible label for screen readers when no title is provided
+ * @param [ref] - Ref to access the button DOM element
  */
 export const DialButton: FC<DialButton> = ({
   title,

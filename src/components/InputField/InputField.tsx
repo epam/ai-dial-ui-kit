@@ -45,24 +45,24 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  *   onChange={(value) => setUsername(value as string)}
  * />
  *
- * @param elementId - Unique identifier for the input element (required)
- * @param fieldTitle - The label text to display above the input
+ * @param elementId - Unique identifier for the input element
  * @param type - The HTML input type (text, email, password, number, etc.)
- * @param placeholder - Placeholder text shown when input is empty
- * @param value - The current value of the input (string or number)
- * @param onChange - Callback function called when the input value changes, receives the new value
- * @param optional - Whether the field is optional (displays "(Optional)" indicator)
- * @param disabled - Whether the input is disabled and cannot be interacted with
- * @param readonly - Whether the input is read-only (displays value as text, no input element)
- * @param invalid - Whether the input has validation errors (applies error styling)
- * @param errorText - Error message text to display below the input
- * @param defaultEmptyText - Text to display when readonly and value is empty (defaults to "None")
- * @param iconBeforeInput - Icon or element to display before the input
- * @param iconAfterInput - Icon or element to display after the input
- * @param textBeforeInput - Text to display before the input
- * @param elementCssClass - Additional CSS classes to apply to the input element
- * @param elementContainerCssClass - Additional CSS classes to apply to the input container
- * @param containerCssClass - Additional CSS classes to apply to the outer container
+ * @param [fieldTitle] - The label text to display above the input
+ * @param [placeholder] - Placeholder text shown when input is empty
+ * @param [value] - The current value of the input (string or number)
+ * @param [onChange] - Callback function called when the input value changes, receives the new value
+ * @param [optional=false] - Whether the field is optional (displays "(Optional)" indicator)
+ * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
+ * @param [readonly=false] - Whether the input is read-only (displays value as text, no input element)
+ * @param [invalid=false] - Whether the input has validation errors (applies error styling)
+ * @param [errorText] - Error message text to display below the input
+ * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
+ * @param [iconBeforeInput] - Icon or element to display before the input
+ * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [textBeforeInput] - Text to display before the input
+ * @param [elementCssClass] - Additional CSS classes to apply to the input element
+ * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
+ * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  */
 const DialInputField: FC<DialInputFieldProps> = ({
   fieldTitle,
@@ -120,23 +120,23 @@ export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param elementId - Unique identifier for the input element (required)
- * @param fieldTitle - The label text to display above the input
- * @param placeholder - Placeholder text shown when input is empty
- * @param value - The current numeric value of the input
- * @param onChange - Callback function called when the input value changes.
+ * @param elementId - Unique identifier for the input element
+ * @param [fieldTitle] - The label text to display above the input
+ * @param [placeholder] - Placeholder text shown when input is empty
+ * @param [value] - The current numeric value of the input
+ * @param [onChange] - Callback function called when the input value changes.
  *                   Returns either a number (for most values) or a string (for decimal values < 1 with leading zeros)
- * @param optional - Whether the field is optional
- * @param disabled - Whether the input is disabled
- * @param readonly - Whether the input is read-only
- * @param invalid - Whether the input has validation errors (applies error styling)
- * @param errorText - Error message text to display below the input
- * @param defaultEmptyText - Text to display when readonly and value is empty (defaults to "None")
- * @param iconBeforeInput - Icon or element to display before the input
- * @param iconAfterInput - Icon or element to display after the input
- * @param elementCssClass - Additional CSS classes to apply to the input element
- * @param elementContainerCssClass - Additional CSS classes to apply to the input container
- * @param containerCssClass - Additional CSS classes to apply to the DialNumberInputField container
+ * @param [optional=false] - Whether the field is optional
+ * @param [disabled=false] - Whether the input is disabled
+ * @param [readonly=false] - Whether the input is read-only
+ * @param [invalid=false] - Whether the input has validation errors (applies error styling)
+ * @param [errorText] - Error message text to display below the input
+ * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
+ * @param [iconBeforeInput] - Icon or element to display before the input
+ * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [elementCssClass] - Additional CSS classes to apply to the input element
+ * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
+ * @param [containerCssClass] - Additional CSS classes to apply to the DialNumberInputField container
  */
 export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
   onChange,
@@ -178,22 +178,22 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param elementId - Unique identifier for the input element (required)
- * @param fieldTitle - The label text to display above the input
- * @param placeholder - Placeholder text shown when input is empty
- * @param value - The current text value of the input
- * @param onChange - Callback function called when the input value changes, receives the new string value
- * @param optional - Whether the field is optional (displays "(Optional)" indicator)
- * @param disabled - Whether the input is disabled and cannot be interacted with
- * @param readonly - Whether the input is read-only (displays value as text, no input element)
- * @param invalid - Whether the input has validation errors (applies error styling)
- * @param errorText - Error message text to display below the input
- * @param defaultEmptyText - Text to display when readonly and value is empty (defaults to "None")
- * @param iconBeforeInput - Icon or element to display before the input
- * @param iconAfterInput - Icon or element to display after the input
- * @param elementCssClass - Additional CSS classes to apply to the input element
- * @param elementContainerCssClass - Additional CSS classes to apply to the input container
- * @param containerCssClass - Additional CSS classes to apply to the outer container
+ * @param elementId - Unique identifier for the input element
+ * @param [fieldTitle] - The label text to display above the input
+ * @param [placeholder] - Placeholder text shown when input is empty
+ * @param [value] - The current text value of the input
+ * @param [onChange] - Callback function called when the input value changes, receives the new string value
+ * @param [optional=false] - Whether the field is optional (displays "(Optional)" indicator)
+ * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
+ * @param [readonly=false] - Whether the input is read-only (displays value as text, no input element)
+ * @param [invalid=false] - Whether the input has validation errors (applies error styling)
+ * @param [errorText] - Error message text to display below the input
+ * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
+ * @param [iconBeforeInput] - Icon or element to display before the input
+ * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [elementCssClass] - Additional CSS classes to apply to the input element
+ * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
+ * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  */
 export const DialTextInputField: FC<DialTextInputFieldProps> = ({
   onChange,

@@ -25,14 +25,22 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param fieldTitle - The label text for the field
  * @param elementId - Unique identifier for the textarea element
- * @param value - The current value of the textarea
- * @param onChange - Callback function called when the textarea value changes
- * @param errorText - Error message to display below the textarea
- * @param optional - Whether to show optional indicator next to the label
- * @param readonly - Whether the textarea is read-only (no user input allowed)
- * @param elementCssClass - Additional CSS classes to apply to the textarea element
+ * @param [fieldTitle] - The label text for the field
+ * @param [value] - The current value of the textarea
+ * @param [onChange] - Callback function called when the textarea value changes
+ * @param [errorText] - Error message to display below the textarea
+ * @param [optional=false] - Whether to show optional indicator next to the label
+ * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
+ * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
+ * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
+ * @param [invalid=false] - Whether the input has validation errors (applies error styling)
+ * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
+ * @param [iconBeforeInput] - Icon or element to display before the input
+ * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [textBeforeInput] - Text to display before the input
+ * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
+ * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  */
 export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   fieldTitle,

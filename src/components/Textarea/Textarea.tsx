@@ -26,13 +26,13 @@ export interface DialTextareaProps {
  * ```
  *
  * @param textareaId - Unique identifier for the textarea element
- * @param value - The current value of the textarea
- * @param onChange - Callback function called when the textarea value changes
- * @param placeholder - Placeholder text displayed when textarea is empty
- * @param cssClass - Additional CSS classes to apply to the textarea element
- * @param disabled - Whether the textarea is disabled
- * @param readonly - Whether the textarea is read-only (no user input allowed)
- * @param invalid - Whether the textarea has validation errors (applies error styling)
+ * @param [value] - The current value of the textarea
+ * @param [onChange] - Callback function called when the textarea value changes
+ * @param [placeholder] - Placeholder text displayed when textarea is empty
+ * @param [cssClass=""] - Additional CSS classes to apply to the textarea element
+ * @param [disabled=false] - Whether the textarea is disabled
+ * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
+ * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
  */
 export const DialTextarea: FC<DialTextareaProps> = ({
   value,

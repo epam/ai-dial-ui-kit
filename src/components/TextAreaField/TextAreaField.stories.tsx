@@ -71,6 +71,7 @@ const meta = {
     },
     onChange: {
       action: 'changed',
+      control: false,
       description: 'Callback function called when the textarea value changes',
     },
   },
