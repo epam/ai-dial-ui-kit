@@ -18,7 +18,7 @@ export interface DialFieldLabelProps {
  * <DialFieldLabel htmlFor="email-input" fieldTitle="Email Address" />
  * ```
  *
- * @param required htmlFor - The ID of the form element this label is associated with
+ * @param htmlFor - The ID of the form element this label is associated with
  * @param [fieldTitle] - The title/label text to display for the field
  * @param [optional=false] - Whether the field is optional (displays "(Optional)" text if optionalText is not provided)
  * @param [optionalText="(Optional)"] - Custom text for optional indicator

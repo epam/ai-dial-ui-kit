@@ -18,8 +18,8 @@ export interface Props {
  * A JSON editor component built on top of Monaco Editor.
  * Provides syntax highlighting, validation, and theme support for JSON editing.
  *
- * @param required currentTheme - The theme to apply to the editor
- * @param required onChange - Callback fired when the editor content changes
+ * @param currentTheme - The theme to apply to the editor
+ * @param onChange - Callback fired when the editor content changes
  * @param [value] - The JSON string value to edit
  * @param [themesConfig=EDITOR_THEMES_CONFIG] - Custom theme configurations
  * @param [onValidateJSON] - Callback fired when JSON validation occurs

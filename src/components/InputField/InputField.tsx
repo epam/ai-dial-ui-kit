@@ -45,8 +45,8 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  *   onChange={(value) => setUsername(value as string)}
  * />
  *
- * @param required elementId - Unique identifier for the input element
- * @param required type - The HTML input type (text, email, password, number, etc.)
+ * @param elementId - Unique identifier for the input element
+ * @param type - The HTML input type (text, email, password, number, etc.)
  * @param [fieldTitle] - The label text to display above the input
  * @param [placeholder] - Placeholder text shown when input is empty
  * @param [value] - The current value of the input (string or number)
@@ -120,7 +120,7 @@ export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param required elementId - Unique identifier for the input element
+ * @param elementId - Unique identifier for the input element
  * @param [fieldTitle] - The label text to display above the input
  * @param [placeholder] - Placeholder text shown when input is empty
  * @param [value] - The current numeric value of the input
@@ -178,7 +178,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param required elementId - Unique identifier for the input element
+ * @param elementId - Unique identifier for the input element
  * @param [fieldTitle] - The label text to display above the input
  * @param [placeholder] - Placeholder text shown when input is empty
  * @param [value] - The current text value of the input

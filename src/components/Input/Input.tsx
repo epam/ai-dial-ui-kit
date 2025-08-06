@@ -33,7 +33,7 @@ export interface DialInputProps {
  * />
  * ```
  *
- * @param required inputId - Unique identifier for the input element
+ * @param inputId - Unique identifier for the input element
  * @param [value] - The current value of the input
  * @param [onChange] - Callback function called when the input value changes
  * @param [iconBeforeInput] - Icon or element to display before the input

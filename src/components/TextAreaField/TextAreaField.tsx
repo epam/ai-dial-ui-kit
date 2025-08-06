@@ -25,7 +25,7 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param required elementId - Unique identifier for the textarea element
+ * @param elementId - Unique identifier for the textarea element
  * @param [fieldTitle] - The label text for the field
  * @param [value] - The current value of the textarea
  * @param [onChange] - Callback function called when the textarea value changes

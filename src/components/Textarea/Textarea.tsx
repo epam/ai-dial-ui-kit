@@ -25,7 +25,7 @@ export interface DialTextareaProps {
  * />
  * ```
  *
- * @param required textareaId - Unique identifier for the textarea element
+ * @param textareaId - Unique identifier for the textarea element
  * @param [value] - The current value of the textarea
  * @param [onChange] - Callback function called when the textarea value changes
  * @param [placeholder] - Placeholder text displayed when textarea is empty
