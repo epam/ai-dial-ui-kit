@@ -81,7 +81,7 @@ const meta = {
   },
   render: (args) => (
     <DialTooltip
-      contentClassName="text-primary dial-small"
+      contentClassName="dial-small"
       triggerClassName="text-primary"
       {...args}
     />
@@ -147,17 +147,17 @@ export const OnlyMouse: Story = {
         tooltip="Tooltip only on hover"
         isTriggerClickable={true}
         placement="top"
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
-        <DialInput inputId="clickable-input" value="Hover only" />
+        <DialInput elementId="clickable-input" value="Hover only" />
       </DialTooltip>
       <DialTooltip
         tooltip="Tooltip on focus and hover"
         placement="bottom"
         isTriggerClickable={false}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
-        <DialInput inputId="focusable-input" value="Hover and focus" />
+        <DialInput elementId="focusable-input" value="Hover and focus" />
       </DialTooltip>
     </div>
   ),
@@ -190,7 +190,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="top"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Top</div>
@@ -203,7 +203,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="top-start"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Top Start</div>
@@ -216,7 +216,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="top-end"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Top End</div>
@@ -230,7 +230,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="left"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Left</div>
@@ -243,7 +243,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="left-start"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Left Start</div>
@@ -256,7 +256,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="left-end"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Left End</div>
@@ -270,7 +270,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="right"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Right</div>
@@ -283,7 +283,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="right-start"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Right Start</div>
@@ -296,7 +296,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="right-end"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Right End</div>
@@ -310,7 +310,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="bottom"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Bottom</div>
@@ -323,7 +323,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="bottom-start"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Bottom Start</div>
@@ -336,7 +336,7 @@ export const AllPositions: Story = {
         tooltip="text"
         placement="bottom-end"
         initialOpen={true}
-        contentClassName="text-primary dial-small"
+        contentClassName="dial-small"
       >
         <div className="bg-layer-3 p-1 rounded text-center">
           <div className="font-semibold">Bottom End</div>

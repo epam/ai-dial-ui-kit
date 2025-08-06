@@ -1,29 +1,26 @@
-import type { FC, ReactNode } from 'react';
 import classNames from 'classnames';
+import type { FC } from 'react';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialFieldLabel } from '@/components/Field/Field';
 import { DialInput } from '@/components/Input/Input';
-import type { FieldControlProps } from '@/models/field-control-props';
+import type {
+  FieldControlProps,
+  InputBaseProps,
+} from '@/models/field-control-props';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;
 
-export interface DialInputFieldBaseProps extends FieldControlProps {
-  placeholder?: string;
+export interface DialInputFieldBaseProps
+  extends FieldControlProps,
+    InputBaseProps {
   value?: string | number;
-  elementId: string;
+  defaultEmptyText?: string;
+  errorText?: string;
   elementCssClass?: string;
   elementContainerCssClass?: string;
   containerCssClass?: string;
-  disabled?: boolean;
-  readonly?: boolean;
-  invalid?: boolean;
-  errorText?: string;
-  iconAfterInput?: ReactNode;
-  iconBeforeInput?: ReactNode;
-  textBeforeInput?: string;
-  defaultEmptyText?: string;
 }
 
 export interface DialInputFieldProps extends DialInputFieldBaseProps {
@@ -61,12 +58,15 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
  * @param [iconBeforeInput] - Icon or element to display before the input
  * @param [iconAfterInput] - Icon or element to display after the input
- * @param [textBeforeInput] - Text to display before the input
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  * @param [min] - Minimum allowed value for number inputs
  * @param [max] - Maximum allowed value for number inputs
+ * @param [prefix] - Text to display inside the input on the left
+ * @param [suffix] - Text to display inside the input on the right
+ * @param [textAfterInput] - Text to display after the input
+ * @param [textBeforeInput] - Text to display before the input
  */
 const DialInputField: FC<DialInputFieldProps> = ({
   fieldTitle,
@@ -95,7 +95,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
       ) : (
         <>
           <DialInput
-            inputId={elementId}
+            elementId={elementId}
             cssClass={elementCssClass}
             containerCssClass={elementContainerCssClass}
             invalid={errorText != null}

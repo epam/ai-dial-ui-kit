@@ -311,4 +311,32 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     const container = screen.getByRole('textbox').closest('.custom-container');
     expect(container).toBeInTheDocument();
   });
+
+  it('renders with prefix and suffix', () => {
+    const { container } = render(
+      <DialTextInputField
+        elementId="test-text"
+        fieldTitle="Test Text Field"
+        prefix="$"
+        suffix="USD"
+      />,
+    );
+
+    expect(container.textContent).toContain('$');
+    expect(container.textContent).toContain('USD');
+  });
+
+  it('renders with text before and after input', () => {
+    const { container } = render(
+      <DialTextInputField
+        elementId="test-text"
+        fieldTitle="Test Text Field"
+        textBeforeInput="https://"
+        textAfterInput=".com"
+      />,
+    );
+
+    expect(container.textContent).toContain('https://');
+    expect(container.textContent).toContain('.com');
+  });
 });

@@ -4,6 +4,7 @@ import { DialTooltipContainer } from '@/components/Tooltip/TooltipContainer';
 import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
 import type { DialTooltipContainerOptions } from '@/components/Tooltip/TooltipContext';
 import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
+import classNames from 'classnames';
 
 export interface Props extends DialTooltipContainerOptions {
   hideTooltip?: boolean;
@@ -51,7 +52,9 @@ export const DialTooltip: FC<Props> = ({
       <DialTooltipTrigger className={triggerClassName}>
         {children}
       </DialTooltipTrigger>
-      <DialTooltipContent className={contentClassName}>
+      <DialTooltipContent
+        className={classNames('text-primary', contentClassName)}
+      >
         {tooltip}
       </DialTooltipContent>
     </DialTooltipContainer>
