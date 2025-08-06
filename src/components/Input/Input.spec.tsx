@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, screen, render } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialInput } from './Input';
 
@@ -140,15 +140,24 @@ describe('Dial UI Kit :: DialInput', () => {
   });
 
   test('renders text before and after input', () => {
-    const { container } = render(
+    render(
       <DialInput
         elementId="test-input"
         placeholder="domain"
         textBeforeInput="https://"
+        value="123"
         textAfterInput=".com"
       />,
     );
-    expect(container.textContent).toContain('https://');
-    expect(container.textContent).toContain('.com');
+    expect(screen.getByDisplayValue('123')).toBeInTheDocument();
+
+    expect(screen.getByDisplayValue('https://')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('.com')).toBeInTheDocument();
+
+    const httpsInput = screen.getByDisplayValue('https://');
+    const comInput = screen.getByDisplayValue('.com');
+
+    expect(httpsInput).toBeDisabled();
+    expect(comInput).toBeDisabled();
   });
 });
