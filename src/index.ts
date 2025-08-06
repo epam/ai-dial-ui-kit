@@ -4,6 +4,7 @@ export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
+export { DialTooltip } from './components/Tooltip/Tooltip';
 
 // Inputs
 export { DialInput } from './components/Input/Input';

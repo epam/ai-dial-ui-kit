@@ -34,6 +34,7 @@ export default defineConfig({
           '@tabler/icons-react': 'TablerIcons',
           'monaco-editor': 'monaco',
           '@monaco-editor/react': 'MonacoEditor',
+          '@floating-ui/react': 'FloatingUIReact',
         },
       },
     },
