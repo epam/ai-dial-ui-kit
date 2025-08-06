@@ -96,6 +96,86 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
 
     expect(screen.getByRole('spinbutton')).toBeDisabled();
   });
+
+  it('applies min and max attributes correctly', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0}
+        max={100}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '0');
+    expect(input).toHaveAttribute('max', '100');
+  });
+
+  it('applies only min attribute when max is not provided', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={10}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '10');
+    expect(input).not.toHaveAttribute('max');
+  });
+
+  it('does not apply min/max attributes when not provided', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).not.toHaveAttribute('min');
+    expect(input).not.toHaveAttribute('max');
+  });
+
+  it('handles decimal values with min and max constraints', () => {
+    const onChange = vi.fn();
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0.1}
+        max={99.9}
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '0.1');
+    expect(input).toHaveAttribute('max', '99.9');
+
+    fireEvent.change(input, { target: { value: '50.5' } });
+    expect(onChange).toHaveBeenCalledWith(50.5);
+  });
+
+  it('handles leading zeros properly with min/max constraints', () => {
+    const onChange = vi.fn();
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0}
+        max={1}
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '0.005' } });
+
+    expect(onChange).toHaveBeenCalledWith('0.005');
+  });
 });
 
 describe('Dial UI Kit :: DialTextInputField', () => {

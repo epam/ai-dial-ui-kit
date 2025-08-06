@@ -17,6 +17,8 @@ export interface DialInputProps {
   onChange?: (value: string) => void;
   iconAfterInput?: ReactNode;
   iconBeforeInput?: ReactNode;
+  min?: number;
+  max?: number;
 }
 
 /**
@@ -46,6 +48,8 @@ export interface DialInputProps {
  * @param [readonly=false] - Whether the input is read-only (prevents onChange from firing)
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [hideBorder=false] - Whether to hide the input border styling
+ * @param [min] - Minimum value for number inputs
+ * @param [max] - Maximum value for number inputs
  */
 export const DialInput: FC<DialInputProps> = ({
   iconBeforeInput,
@@ -61,6 +65,8 @@ export const DialInput: FC<DialInputProps> = ({
   readonly,
   invalid,
   onChange,
+  min,
+  max,
 }) => {
   return (
     <div
@@ -82,6 +88,8 @@ export const DialInput: FC<DialInputProps> = ({
         value={value ?? ''}
         title={value ? String(value) : ''}
         disabled={disabled}
+        min={min}
+        max={max}
         className={classNames(
           'border-0 bg-transparent',
           iconBeforeInput ? 'pl-2' : '',

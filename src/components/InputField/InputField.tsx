@@ -29,6 +29,8 @@ export interface DialInputFieldBaseProps extends FieldControlProps {
 export interface DialInputFieldProps extends DialInputFieldBaseProps {
   type: string;
   onChange?: (value: string | number) => void;
+  min?: number;
+  max?: number;
 }
 
 /**
@@ -63,6 +65,8 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container
+ * @param [min] - Minimum allowed value for number inputs
+ * @param [max] - Maximum allowed value for number inputs
  */
 const DialInputField: FC<DialInputFieldProps> = ({
   fieldTitle,
@@ -74,6 +78,8 @@ const DialInputField: FC<DialInputFieldProps> = ({
   containerCssClass,
   readonly,
   defaultEmptyText,
+  min,
+  max,
   ...props
 }) => {
   return (
@@ -93,6 +99,8 @@ const DialInputField: FC<DialInputFieldProps> = ({
             cssClass={elementCssClass}
             containerCssClass={elementContainerCssClass}
             invalid={errorText != null}
+            min={min}
+            max={max}
             {...props}
           />
           <DialErrorText errorText={errorText} />
@@ -104,6 +112,8 @@ const DialInputField: FC<DialInputFieldProps> = ({
 
 export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
   onChange?: (value: number | string) => void;
+  min?: number;
+  max?: number;
 }
 
 /**
@@ -137,10 +147,14 @@ export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the DialNumberInputField container
+ * @param [min] - Minimum allowed value for the number input
+ * @param [max] - Maximum allowed value for the number input
  */
 export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
   onChange,
   value,
+  min,
+  max,
   ...props
 }) => {
   const getInputValue = (inputValue: string | number): string | number => {
@@ -154,6 +168,8 @@ export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
       type="number"
       onChange={(inputValue) => onChange?.(getInputValue(inputValue))}
       value={value}
+      min={min}
+      max={max}
       {...props}
     />
   );
