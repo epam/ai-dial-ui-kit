@@ -45,12 +45,13 @@
     ]
   },
   "peerDependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tabler/icons-react": "^3.34.1",
     "classnames": "^2.5.1",
+    "@floating-ui/react": "^0.27.15",
+    "monaco-editor": "^0.52.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "@monaco-editor/react": "^4.7.0",
-    "monaco-editor": "^0.52.2"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.0",
