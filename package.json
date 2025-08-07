@@ -1,6 +1,5 @@
 {
   "name": "@epam/ai-dial-ui-kit",
-  "private": true,
   "version": "0.0.1",
   "type": "module",
   "types": "dist/src/index.d.ts",
@@ -10,8 +9,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/dial-ui-kit.es.js",
-      "require": "./dist/dial-ui-kit.umd.js"
+      "require": "./dist/dial-ui-kit.cjs.js"
     },
     "./styles.css": {
       "require": "./dist/index.css",
@@ -20,6 +20,12 @@
   },
   "files": [
     "dist"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "./src/styles/*",
+    "./src/components/JsonEditor/*"
   ],
   "scripts": {
     "dev": "vite",

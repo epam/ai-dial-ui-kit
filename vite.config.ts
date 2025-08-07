@@ -18,7 +18,7 @@ export default defineConfig({
       entry: './src/index.ts',
       name: 'dial-ui-kit',
       fileName: (format) => `dial-ui-kit.${format}.js`,
-      formats: ['es', 'cjs', 'umd'],
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: [
