@@ -50,6 +50,7 @@ export default defineConfig({
         '.storybook/**',
         '**/index.ts',
         '**/__mocks__/**',
+        'src/models/**',
         '*.config.[jt]s',
       ],
     },

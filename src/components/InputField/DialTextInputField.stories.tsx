@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconSearch } from '@tabler/icons-react';
+import { IconNetwork, IconSearch, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialTextInputField, type DialTextInputFieldProps } from './InputField';
 
@@ -7,7 +7,7 @@ const InteractiveTextInputField = (args: DialTextInputFieldProps) => {
   const [value, setValue] = useState(args.value || '');
 
   return (
-    <div className="max-w-80 text-primary">
+    <div className="text-primary">
       <DialTextInputField
         {...args}
         value={value}
@@ -70,6 +70,30 @@ const meta = {
     defaultEmptyText: {
       control: { type: 'text' },
       description: 'Text to display when readonly and value is empty',
+    },
+    iconBeforeInput: {
+      control: false,
+      description: 'Icon or element to display before the input',
+    },
+    iconAfterInput: {
+      control: false,
+      description: 'Icon or element to display after the input',
+    },
+    prefix: {
+      control: { type: 'text' },
+      description: 'Text to display inside the input on the left',
+    },
+    suffix: {
+      control: { type: 'text' },
+      description: 'Text to display inside the input on the right',
+    },
+    textBeforeInput: {
+      control: { type: 'text' },
+      description: 'Text to display before the input in a separate field',
+    },
+    textAfterInput: {
+      control: { type: 'text' },
+      description: 'Text to display after the input in a separate field',
     },
   },
   args: {
@@ -151,6 +175,48 @@ export const ReadOnlyWithEmptyValue: Story = {
     elementId: 'nickname-input',
     readonly: true,
     defaultEmptyText: 'No nickname set',
+  },
+};
+
+export const WithTextBeforeInput: Story = {
+  args: {
+    fieldTitle: 'Website URL',
+    elementId: 'website-input',
+    placeholder: 'Enter website URL',
+    textBeforeInput: 'https://example.com/custom-domains/',
+  },
+};
+
+export const WithTextAfterInput: Story = {
+  args: {
+    fieldTitle: 'Phone Number',
+    elementId: 'phone-input',
+    placeholder: 'Enter phone number',
+    textAfterInput: 'US',
+  },
+};
+
+export const WithPrefixAndSuffix: Story = {
+  args: {
+    fieldTitle: 'Price',
+    elementId: 'price-input',
+    placeholder: 'Enter price',
+    prefix: '$',
+    suffix: 'USD',
+  },
+};
+
+export const WithAllExtraParts: Story = {
+  args: {
+    fieldTitle: 'Endpoint',
+    elementId: 'custom-input',
+    placeholder: 'Enter domain',
+    iconBeforeInput: <IconNetwork size={16} />,
+    iconAfterInput: <IconTrash size={16} />,
+    textBeforeInput: 'https://',
+    textAfterInput: '.com',
+    prefix: 'id',
+    suffix: 'end',
   },
 };
 
@@ -344,6 +410,97 @@ export const AllVariants: Story = {
             readonly={true}
           />
         </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    pseudo: {
+      hover: ['.dial-input-for-hover'],
+      focus: ['.dial-input-for-focus'],
+    },
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of all text input field variants in a grid layout: columns show different states (basic, hover, focus, disabled, readonly) and rows show different configurations (no value, with value, no value with icons, value with icons).',
+      },
+    },
+  },
+};
+
+export const AllVariantsForExtraParts: Story = {
+  render: () => (
+    <div className="p-8 max-w-[1400px]">
+      <div className="grid gap-x-2 gap-y-10 grid-cols-[minmax(0,100px)_1fr] items-center">
+        {/* row 1 */}
+        <div className="text-primary font-semibold text-center">Basic</div>
+        <InteractiveTextInputField
+          fieldTitle="Endpoint"
+          elementId="custom-input"
+          placeholder="Enter domain"
+          iconBeforeInput={<IconNetwork size={16} />}
+          iconAfterInput={<IconTrash size={16} />}
+          textBeforeInput="https://"
+          textAfterInput=".com"
+          prefix="id"
+          suffix="end"
+        />
+
+        {/* row 2 */}
+        <div className="text-primary font-semibold text-center">Hover</div>
+        <InteractiveTextInputField
+          fieldTitle="Endpoint"
+          elementId="custom-input"
+          placeholder="Enter domain"
+          elementContainerCssClass="dial-input-for-hover"
+          iconBeforeInput={<IconNetwork size={16} />}
+          iconAfterInput={<IconTrash size={16} />}
+          textBeforeInput="https://"
+          textAfterInput=".com"
+          prefix="id"
+          suffix="end"
+        />
+        {/* row 3 */}
+        <div className="text-primary font-semibold text-center">Focus</div>
+        <InteractiveTextInputField
+          fieldTitle="Endpoint"
+          elementId="custom-input"
+          placeholder="Enter domain"
+          elementContainerCssClass="dial-input-for-focus"
+          iconBeforeInput={<IconNetwork size={16} />}
+          iconAfterInput={<IconTrash size={16} />}
+          textBeforeInput="https://"
+          textAfterInput=".com"
+          prefix="id"
+          suffix="end"
+        />
+        {/* row 4 */}
+        <div className="text-primary font-semibold text-center">Disabled</div>
+        <InteractiveTextInputField
+          fieldTitle="Endpoint"
+          elementId="custom-input"
+          placeholder="Enter domain"
+          iconBeforeInput={<IconNetwork size={16} />}
+          iconAfterInput={<IconTrash size={16} />}
+          textBeforeInput="https://"
+          textAfterInput=".com"
+          disabled={true}
+          prefix="id"
+          suffix="end"
+        />
+        {/* row 5 */}
+        <div className="text-primary font-semibold text-center">Readonly</div>
+        <InteractiveTextInputField
+          fieldTitle="Endpoint"
+          elementId="custom-input"
+          placeholder="Enter domain"
+          iconBeforeInput={<IconNetwork size={16} />}
+          iconAfterInput={<IconTrash size={16} />}
+          textBeforeInput="https://"
+          textAfterInput=".com"
+          readonly={true}
+          prefix="id"
+          suffix="end"
+        />
       </div>
     </div>
   ),

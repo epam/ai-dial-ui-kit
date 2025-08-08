@@ -74,6 +74,14 @@ const meta = {
       control: { type: 'text' },
       description: 'Text to display when readonly and value is empty',
     },
+    min: {
+      control: { type: 'number' },
+      description: 'Minimum allowed value for the number input',
+    },
+    max: {
+      control: { type: 'number' },
+      description: 'Maximum allowed value for the number input',
+    },
   },
   args: {
     fieldTitle: 'Number Field',
@@ -86,6 +94,8 @@ const meta = {
     invalid: false,
     errorText: undefined,
     defaultEmptyText: undefined,
+    min: undefined,
+    max: undefined,
   },
   render: InteractiveNumberInputField,
 } satisfies Meta<DialNumberInputFieldProps>;
@@ -376,6 +386,60 @@ export const AllVariants: Story = {
       description: {
         story:
           'Comprehensive showcase of all number input field variants in a grid layout: columns show different states (basic, hover, focus, disabled, readonly) and rows show different configurations (no value, with value, no value with icons, value with icons).',
+      },
+    },
+  },
+};
+
+export const WithMinMax: Story = {
+  args: {
+    fieldTitle: 'Age',
+    elementId: 'age-input',
+    placeholder: 'Enter your age (18-120)',
+    min: 18,
+    max: 120,
+    value: 25,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'This story demonstrates a number input with minimum and maximum value constraints.',
+      },
+    },
+  },
+};
+
+export const WithMinOnly: Story = {
+  args: {
+    fieldTitle: 'Temperature',
+    elementId: 'temp-input',
+    placeholder: 'Enter temperature (min: -273.15°C)',
+    min: -273.15,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'This story demonstrates a number input with only a minimum value constraint.',
+      },
+    },
+  },
+};
+
+export const WithMaxOnly: Story = {
+  args: {
+    fieldTitle: 'Percentage',
+    elementId: 'percentage-input',
+    placeholder: 'Enter percentage (max: 100%)',
+    max: 100,
+    value: 85,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'This story demonstrates a number input with only a maximum value constraint.',
       },
     },
   },

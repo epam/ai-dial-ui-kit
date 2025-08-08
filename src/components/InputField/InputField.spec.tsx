@@ -96,6 +96,86 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
 
     expect(screen.getByRole('spinbutton')).toBeDisabled();
   });
+
+  it('applies min and max attributes correctly', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0}
+        max={100}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '0');
+    expect(input).toHaveAttribute('max', '100');
+  });
+
+  it('applies only min attribute when max is not provided', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={10}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '10');
+    expect(input).not.toHaveAttribute('max');
+  });
+
+  it('does not apply min/max attributes when not provided', () => {
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).not.toHaveAttribute('min');
+    expect(input).not.toHaveAttribute('max');
+  });
+
+  it('handles decimal values with min and max constraints', () => {
+    const onChange = vi.fn();
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0.1}
+        max={99.9}
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    expect(input).toHaveAttribute('min', '0.1');
+    expect(input).toHaveAttribute('max', '99.9');
+
+    fireEvent.change(input, { target: { value: '50.5' } });
+    expect(onChange).toHaveBeenCalledWith(50.5);
+  });
+
+  it('handles leading zeros properly with min/max constraints', () => {
+    const onChange = vi.fn();
+    render(
+      <DialNumberInputField
+        elementId="test-number"
+        fieldTitle="Test Number Field"
+        min={0}
+        max={1}
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '0.005' } });
+
+    expect(onChange).toHaveBeenCalledWith('0.005');
+  });
 });
 
 describe('Dial UI Kit :: DialTextInputField', () => {
@@ -230,5 +310,42 @@ describe('Dial UI Kit :: DialTextInputField', () => {
 
     const container = screen.getByRole('textbox').closest('.custom-container');
     expect(container).toBeInTheDocument();
+  });
+
+  it('renders with prefix and suffix', () => {
+    const { container } = render(
+      <DialTextInputField
+        elementId="test-text"
+        fieldTitle="Test Text Field"
+        prefix="$"
+        suffix="USD"
+      />,
+    );
+
+    expect(container.textContent).toContain('$');
+    expect(container.textContent).toContain('USD');
+  });
+
+  it('renders with text before and after input', () => {
+    render(
+      <DialTextInputField
+        elementId="test-text"
+        fieldTitle="Test Text Field"
+        textBeforeInput="https://"
+        value="example"
+        textAfterInput=".com"
+      />,
+    );
+
+    expect(screen.getByDisplayValue('example')).toBeInTheDocument();
+
+    expect(screen.getByDisplayValue('https://')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('.com')).toBeInTheDocument();
+
+    const httpsInput = screen.getByDisplayValue('https://');
+    const comInput = screen.getByDisplayValue('.com');
+
+    expect(httpsInput).toBeDisabled();
+    expect(comInput).toBeDisabled();
   });
 });

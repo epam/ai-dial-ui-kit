@@ -1,11 +1,11 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, screen, render } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialInput } from './Input';
 
 describe('Dial UI Kit :: DialInput', () => {
   test('renders with default props', () => {
     const { getByPlaceholderText } = render(
-      <DialInput inputId="test-input" placeholder="Enter text" />,
+      <DialInput elementId="test-input" placeholder="Enter text" />,
     );
     expect(getByPlaceholderText('Enter text')).toBeInTheDocument();
   });
@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        inputId="test-input-change"
+        elementId="test-input-change"
         placeholder="Type value here"
         onChange={handleChange}
       />,
@@ -26,7 +26,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('is disabled when disabled prop is true', () => {
     const { getByPlaceholderText } = render(
-      <DialInput inputId="test-input" placeholder="Disabled" disabled />,
+      <DialInput elementId="test-input" placeholder="Disabled" disabled />,
     );
     const input = getByPlaceholderText('Disabled');
     expect(input).toBeDisabled();
@@ -34,7 +34,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('renders input with placeholder', () => {
     const { getByPlaceholderText } = render(
-      <DialInput inputId="icon-input" placeholder="With icon" />,
+      <DialInput elementId="icon-input" placeholder="With icon" />,
     );
     expect(getByPlaceholderText('With icon')).toBeInTheDocument();
   });
@@ -44,7 +44,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const after = <span>A</span>;
     const { container } = render(
       <DialInput
-        inputId="icon-input"
+        elementId="icon-input"
         placeholder="With icon"
         iconBeforeInput={before}
         iconAfterInput={after}
@@ -59,7 +59,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        inputId="icon-input"
+        elementId="icon-input"
         placeholder="Type here"
         onChange={handleChange}
       />,
@@ -71,7 +71,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('applies hideBorder class correctly', () => {
     const { container } = render(
-      <DialInput inputId="test-input" placeholder="Test" hideBorder />,
+      <DialInput elementId="test-input" placeholder="Test" hideBorder />,
     );
     const inputContainer = container.querySelector('.dial-input-field');
     expect(inputContainer).toHaveClass('dial-input-no-border');
@@ -80,7 +80,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('handles value and title attributes correctly', () => {
     const { getByDisplayValue } = render(
-      <DialInput inputId="test-input" value="test value" />,
+      <DialInput elementId="test-input" value="test value" />,
     );
     const input = getByDisplayValue('test value');
     expect(input).toHaveAttribute('title', 'test value');
@@ -88,7 +88,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('applies invalid class when invalid prop is true', () => {
     const { getByPlaceholderText } = render(
-      <DialInput inputId="test-input" placeholder="Invalid input" invalid />,
+      <DialInput elementId="test-input" placeholder="Invalid input" invalid />,
     );
     const input = getByPlaceholderText('Invalid input');
     const container = input.parentElement;
@@ -100,7 +100,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        inputId="test-input"
+        elementId="test-input"
         placeholder="Readonly input"
         readonly
         onChange={handleChange}
@@ -109,5 +109,55 @@ describe('Dial UI Kit :: DialInput', () => {
     const input = getByPlaceholderText('Readonly input');
     fireEvent.change(input, { target: { value: 'should not call onChange' } });
     expect(handleChange).not.toHaveBeenCalled();
+  });
+
+  test('renders with min and max attributes for number input', () => {
+    const { getByPlaceholderText } = render(
+      <DialInput
+        elementId="test-number"
+        type="number"
+        placeholder="Enter number"
+        min={0}
+        max={100}
+      />,
+    );
+    const input = getByPlaceholderText('Enter number');
+    expect(input).toHaveAttribute('min', '0');
+    expect(input).toHaveAttribute('max', '100');
+  });
+
+  test('renders prefix and suffix text', () => {
+    const { container } = render(
+      <DialInput
+        elementId="test-input"
+        placeholder="Amount"
+        prefix="$"
+        suffix="USD"
+      />,
+    );
+    expect(container.textContent).toContain('$');
+    expect(container.textContent).toContain('USD');
+  });
+
+  test('renders text before and after input', () => {
+    render(
+      <DialInput
+        elementId="test-input"
+        placeholder="domain"
+        textBeforeInput="https://"
+        value="123"
+        textAfterInput=".com"
+      />,
+    );
+    expect(screen.getByDisplayValue('123')).toBeInTheDocument();
+
+    expect(screen.getByDisplayValue('https://')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('.com')).toBeInTheDocument();
+
+    const httpsInput = screen.getByDisplayValue('https://');
+    const comInput = screen.getByDisplayValue('.com');
+
+    expect(httpsInput).toBeDisabled();
+    expect(comInput).toBeDisabled();
   });
 });
