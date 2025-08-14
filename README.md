@@ -67,18 +67,16 @@ npm install @epam/ai-dial-ui-kit
 ### Basic Usage
 
 ```tsx
-import { Button } from '@epam/ai-dial-ui-kit';
+import { DialButton } from '@epam/ai-dial-ui-kit';
 import '@epam/ai-dial-ui-kit/styles.css';
 
 function App() {
   return (
     <div>
-      <Button 
+      <DialButton 
         cssClass="dial-primary-button"
         onClick={() => alert('Hello AI DIAL!')}
-      >
-        Get Started
-      </Button>
+      />
     </div>
   );
 }
@@ -217,50 +215,50 @@ Storybook provides:
 <details>
 <summary>Next.js Integration</summary>
 
+1. Install the package and peer dependencies that are not currently in your project
+``` bash
+npm install @epam/ai-dial-ui-kit
+npm install react react-dom  @tabler/icons-react classnames
+npm install @floating-ui/react monaco-editor @monaco-editor/react
+```
+
+2. Import style in the root layout of the project:
+
 ```tsx
-// pages/_app.tsx
-import '@epam/ai-dial-ui-kit/styles.css';
-import type { AppProps } from 'next/app';
+// app/layout.tsx
+import "@epam/ai-dial-ui-kit/styles.css";
+```
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+3. Usage example
 
-// components/MyComponent.tsx
-import { Button } from '@epam/ai-dial-ui-kit';
+```tsx
+// app/page.tsx
+"use client";
+import { DialButton } from "@epam/ai-dial-ui-kit";
 
-export function MyComponent() {
+export default function Home() {
   return (
-    <Button onClick={() => console.log('Next.js + AI DIAL UI Kit!')}>
-      Click me
-    </Button>
+    <div className="w-full h-full flex flex-col gap-3 items-center justify-center">
+      <h1>Test library</h1>
+      <DialButton
+        onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
+        title="Click me"
+        cssClass="dial-primary-button"
+      />
+    </div>
   );
 }
-```
-
-</details>
-
-<details>
-<summary>Vite Integration</summary>
-
-```tsx
-// main.tsx
-import '@epam/ai-dial-ui-kit/styles.css';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-
-createRoot(document.getElementById('root')!).render(<App />);
-```
 </details>
 
 
 ### Tree Shaking
 
-Import only the components you need:
+ Import only the components you need:
 
 ```tsx
-// ✅ Good - Tree shakable
-import { Button } from '@epam/ai-dial-ui-kit';
+// ✅ Good - Tree shakable imports
+import { DialButton, DialInput } from '@epam/ai-dial-ui-kit';
+import '@epam/ai-dial-ui-kit/styles.css'; // Import styles separately
 
 // ❌ Avoid - Imports entire library
 import * as UIKit from '@epam/ai-dial-ui-kit';
