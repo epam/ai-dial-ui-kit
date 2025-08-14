@@ -50,6 +50,9 @@
       "npm run lint"
     ]
   },
+  "overrides": {
+    "esbuild": "0.25.8"
+  },
   "peerDependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@tabler/icons-react": "^3.34.1",
