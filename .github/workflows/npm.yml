@@ -2,7 +2,7 @@ name: Release Workflow
 
 on:
   push:
-    branches: [development, release-*]
+    branches: [development, release-*, feat/add-npm-publish-ci]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   release:
-    uses: dspashynskyi/ai-dial-ci/.github/workflows/npm_release.yml@development
+    uses: dspashynskyi/ai-dial-ci/.github/workflows/npm_release.yml@feat/add-npm-publish-only
     secrets: inherit
     # with:
     #   platforms: "linux/amd64,linux/arm64"
