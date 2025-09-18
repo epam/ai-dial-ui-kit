@@ -1,0 +1,65 @@
+@layer components {
+  .dial-h1 {
+    @apply font-semibold;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .dial-h2 {
+    @apply font-normal;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .dial-h3 {
+    @apply font-semibold;
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  .dial-body {
+    @apply font-normal;
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  .dial-small {
+    @apply font-normal;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .dial-small-semi {
+    @apply dial-small font-semibold;
+  }
+
+  .dial-small-medium {
+    @apply font-normal;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .dial-small-150 {
+    @apply font-normal;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .dial-tiny {
+    @apply font-normal;
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  .dial-tiny-150 {
+    @apply font-normal;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .dial-caption {
+    @apply font-normal;
+    font-size: 10px;
+    line-height: 12px;
+  }
+}

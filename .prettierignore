@@ -1,0 +1,26 @@
+# Build output
+dist/
+storybook-static/
+
+# Static assets
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.min.js
+*.bundle.js
+*.d.ts
+package-lock.json
+
+# Logs
+*.log
+
+# Config files
+.prettierrc
+
+.github
+CONTRIBUTING.md
+README.md
+SECURITY.md
