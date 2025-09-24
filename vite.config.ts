@@ -22,9 +22,10 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        ...Object.keys(peerDependencies),
+        'react/jsx-runtime',
         'monaco-editor',
         '@monaco-editor/react',
+        ...Object.keys(peerDependencies),
       ],
       output: {
         globals: {
