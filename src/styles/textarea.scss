@@ -1,5 +1,3 @@
-@layer components {
-  .dial-textarea {
-    @apply min-h-[72px] resize whitespace-normal overflow-auto;
-  }
+.dial-textarea {
+  @apply min-h-[72px] resize whitespace-normal overflow-auto;
 }

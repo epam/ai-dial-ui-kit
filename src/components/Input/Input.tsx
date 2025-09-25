@@ -1,15 +1,17 @@
 import classNames from 'classnames';
-import type { FC } from 'react';
+import type { ChangeEvent, FC, KeyboardEvent, WheelEvent } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import type { InputBaseProps } from '@/models/field-control-props';
+import { handleKeyDown } from './utils';
 
 export interface DialInputProps extends InputBaseProps {
   type?: string;
   containerCssClass?: string;
   cssClass?: string;
   hideBorder?: boolean;
+  tooltipTriggerClassName?: string;
   onChange?: (value: string) => void;
 }
 
@@ -45,6 +47,7 @@ export interface DialInputProps extends InputBaseProps {
  * @param [prefix] - Text to display inside the input on the left
  * @param [suffix] - Text to display inside the input on the right
  * @param [textBeforeInput] - Text to display before the input in a separate field
+ * @param [tooltipTriggerClassName] - Additional CSS classes to apply to the tooltip
  * @param [textAfterInput] - Text to display after the input in a separate field
  */
 export const DialInput: FC<DialInputProps> = ({
@@ -56,6 +59,7 @@ export const DialInput: FC<DialInputProps> = ({
   placeholder = '',
   cssClass = '',
   containerCssClass,
+  tooltipTriggerClassName,
   type = 'text',
   disabled,
   readonly,
@@ -68,6 +72,41 @@ export const DialInput: FC<DialInputProps> = ({
   textBeforeInput,
   textAfterInput,
 }) => {
+  const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
+    (e.target as HTMLInputElement).blur();
+
+  const isNumericInput =
+    type === 'number' || min !== undefined || max !== undefined;
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    handleKeyDown(e, type, min, max);
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.currentTarget.value;
+
+    if (isNumericInput && newValue !== '') {
+      const numericValue = parseFloat(newValue);
+
+      // If it's not a valid number (except for partial inputs like "-" or ".")
+      if (isNaN(numericValue) && newValue !== '-' && newValue !== '.') {
+        return;
+      }
+
+      // Check range constraints for complete numbers
+      if (!isNaN(numericValue)) {
+        if (min !== undefined && numericValue < min) {
+          return;
+        }
+        if (max !== undefined && numericValue > max) {
+          return;
+        }
+      }
+    }
+
+    onChange?.(newValue);
+  };
+
   return (
     <div
       className={classNames(
@@ -96,19 +135,23 @@ export const DialInput: FC<DialInputProps> = ({
       {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
       <DialIcon icon={iconBeforeInput} className="pl-2" />
 
-      <input
-        type={type}
-        autoComplete="new-password"
-        id={elementId}
-        placeholder={placeholder}
-        value={value ?? ''}
-        title={value ? String(value) : ''}
-        disabled={disabled}
-        min={min}
-        max={max}
-        className={classNames('border-0 bg-transparent px-2', cssClass)}
-        onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
-      />
+      <DialTooltip tooltip={value} triggerClassName={tooltipTriggerClassName}>
+        <input
+          type={type}
+          autoComplete="off"
+          id={elementId}
+          placeholder={placeholder}
+          value={value ?? ''}
+          title={value ? String(value) : ''}
+          disabled={disabled}
+          className={classNames('border-0 bg-transparent px-2', cssClass)}
+          onChange={(event) => !readonly && handleChange?.(event)}
+          onKeyDown={onKeyDown}
+          onWheel={handleWheel}
+          min={min}
+          max={max}
+        />
+      </DialTooltip>
 
       <DialIcon icon={iconAfterInput} className="pr-2" />
       {suffix && <p className="text-secondary dial-small pr-2"> {suffix}</p>}
