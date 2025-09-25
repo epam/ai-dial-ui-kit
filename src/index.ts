@@ -11,6 +11,9 @@ export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
 
+// Switch
+export { DialSwitch } from './components/Switch/Switch';
+
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';

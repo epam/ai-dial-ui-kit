@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
-import { DialTooltip } from '../Tooltip/Tooltip';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
 export interface DialTextareaProps {
   value?: string | number | null;
