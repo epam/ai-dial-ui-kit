@@ -14,7 +14,7 @@
 .dial-input,
 .dial-input-no-border {
   @apply bg-transparent dial-small truncate;
-  @apply py-2 w-full outline-0;
+  @apply px-3 py-2 w-full outline-0;
 
   &:not(:placeholder-shown) {
     @apply text-primary;

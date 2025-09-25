@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
+import { DialTooltip } from '../Tooltip/Tooltip';
 
 export interface DialTextareaProps {
-  value?: string | number;
+  value?: string | number | null;
   placeholder?: string;
   textareaId: string;
   cssClass?: string;
@@ -45,19 +46,21 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   onChange,
 }) => {
   return (
-    <textarea
-      id={textareaId}
-      placeholder={placeholder}
-      value={value}
-      disabled={disabled}
-      className={classNames(
-        'dial-textarea dial-input',
-        invalid ? 'dial-input-error' : '',
-        disabled && 'dial-input-disable',
-        readonly && 'dial-input-readonly',
-        cssClass,
-      )}
-      onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
-    />
+    <DialTooltip tooltip={value} triggerClassName="flex">
+      <textarea
+        id={textareaId}
+        placeholder={placeholder}
+        value={value || ''}
+        disabled={disabled}
+        className={classNames(
+          'dial-textarea dial-input',
+          invalid ? 'dial-input-error' : '',
+          disabled && 'dial-input-disable',
+          readonly && 'dial-input-readonly',
+          cssClass,
+        )}
+        onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
+      />
+    </DialTooltip>
   );
 };

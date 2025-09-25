@@ -49,11 +49,16 @@ export const DialTooltip: FC<Props> = ({
 
   return (
     <DialTooltipContainer {...tooltipProps}>
-      <DialTooltipTrigger className={triggerClassName}>
+      <DialTooltipTrigger className={classNames(triggerClassName, 'truncate')}>
         {children}
       </DialTooltipTrigger>
       <DialTooltipContent
-        className={classNames('text-primary', contentClassName)}
+        className={classNames(
+          'text-primary',
+          contentClassName,
+          'max-w-[300px]',
+          (hideTooltip || !tooltip) && 'hidden',
+        )}
       >
         {tooltip}
       </DialTooltipContent>
