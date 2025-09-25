@@ -2,6 +2,7 @@
   "name": "@epam/ai-dial-ui-kit",
   "version": "0.0.1",
   "type": "module",
+  "license": "Apache-2.0",
   "types": "dist/src/index.d.ts",
   "engines": {
     "node": ">=22.2.0",

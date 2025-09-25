@@ -91,7 +91,7 @@ describe('Dial UI Kit :: DialInput', () => {
       <DialInput elementId="test-input" placeholder="Invalid input" invalid />,
     );
     const input = getByPlaceholderText('Invalid input');
-    const container = input.parentElement;
+    const container = input.parentElement?.parentElement;
     expect(input).toHaveClass('border-0 bg-transparent');
     expect(container).toHaveClass('dial-input-error');
   });

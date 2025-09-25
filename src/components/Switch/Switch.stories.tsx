@@ -109,7 +109,7 @@ export const AllVariants: Story = {
           />
         </div>
 
-         {/* Disabled State for not active Switch */}
+        {/* Disabled State for not active Switch */}
         <div>
           <div className="text-primary font-semibold mb-2">
             Disabled for not active Switch
