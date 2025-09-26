@@ -88,7 +88,6 @@ function getDevVersion(potentialVersion) {
     }
   }
 
-  console.log('result', result);
   if (!result) {
     throw new Error(`Could not get version.`);
   }
@@ -96,7 +95,6 @@ function getDevVersion(potentialVersion) {
   if (!Array.isArray(result) && typeof result === 'string') {
     result = [result];
   }
-
   const lastVersionToIncrement = result
     .filter((ver) => ver.startsWith(mainPackageJson.version))
     .map((ver) => ver.match(/\d+$/)?.[0])
@@ -105,15 +103,12 @@ function getDevVersion(potentialVersion) {
     .sort((a, b) => a - b)
     .reverse()[0];
 
-  const mainVersion = mainPackageJson.version.match(/\d+.\d+./)?.[0];
-
   if (typeof lastVersionToIncrement !== 'undefined') {
     const incrementedNum = lastVersionToIncrement + 1;
-    potentialVersion = `${mainVersion}${incrementedNum}`;
+    potentialVersion = `${mainPackageJson.version}.${incrementedNum}`;
   } else {
-    potentialVersion = `${mainVersion}0`;
+    potentialVersion = `${mainPackageJson.version}.0`;
   }
-
   console.warn(
     `Version of development package for ${name} will be: ${potentialVersion}`,
   );
