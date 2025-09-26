@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * This is a minimal script to publish your package to "npm".
  * This is meant to be used as-is or customize as you see fit.
@@ -24,7 +25,7 @@ function invariant(condition, message) {
 // Executing publish script: node path/to/publish.mjs {name} --version {version} --tag {tag}
 // Default "tag" to "next" so we won't publish the "latest" tag by accident.
 let params = minimist(process.argv);
-console.log(params)
+console.log(params);
 let version = params.version;
 const isDevelopment = params.development;
 const dry = params.dry === 'true';
