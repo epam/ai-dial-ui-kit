@@ -42,7 +42,7 @@
     "build-storybook:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "publish": "node tools/publish-lib.mjs --version={args.ver} --dry={args.dry} --tag={args.tag} --development={args.development}",
+    "publish": "node tools/publish-lib.mjs",
     "publish:dry": "npm run publish --output-style=static --dry",
     "test": "vitest --coverage",
     "storybook-docs": "storybook dev --docs",

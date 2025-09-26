@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /**
  * This is a minimal script to publish your package to "npm".
  * This is meant to be used as-is or customize as you see fit.
@@ -25,6 +24,7 @@ function invariant(condition, message) {
 // Executing publish script: node path/to/publish.mjs {name} --version {version} --tag {tag}
 // Default "tag" to "next" so we won't publish the "latest" tag by accident.
 let params = minimist(process.argv);
+console.log(params)
 let version = params.version;
 const isDevelopment = params.development;
 const dry = params.dry === 'true';
@@ -57,73 +57,9 @@ invariant(
   `No version provided or version did not match Semantic Versioning, expected: #.#.#-tag.# or #.#.# or special name 'dev', got ${version}.`,
 );
 
-const projects = [mainPackageJson.name];
-
-const isFromCurrentProj = (dep) => {
-  if (dep.startsWith(PREFIX)) {
-    // from current monorepo
-    return projects.includes(dep);
-  }
-  return false;
-};
-
-const getDependencyVersion = (dep) => {
-  let localVersion =
-    mainPackageJson.dependencies && mainPackageJson.dependencies[dep];
-  if (localVersion) {
-    return localVersion;
-  }
-  localVersion =
-    mainPackageJson.devDependencies && mainPackageJson.devDependencies[dep];
-  if (localVersion) {
-    return localVersion;
-  }
-  localVersion =
-    mainPackageJson.peerDependencies && mainPackageJson.peerDependencies[dep];
-  if (localVersion) {
-    return localVersion;
-  }
-
-  if (isFromCurrentProj(dep)) {
-    localVersion = version;
-  }
-
-  return localVersion;
-};
-
-const outputPath = 'dist';
-invariant(
-  outputPath,
-  `Could not find "build.options.outputPath" of project "${name}". Is project.json configured  correctly?`,
-);
-
-process.chdir(outputPath);
-
-// Updating the version in "package.json" before publishing
 try {
   const json = JSON.parse(readFileSync(`package.json`).toString());
   json.version = version;
-
-  for (const dep in json.dependencies) {
-    if (
-      json.dependencies[dep] === '*' ||
-      json.dependencies[dep] === '' ||
-      isFromCurrentProj(dep)
-    ) {
-      json.dependencies[dep] =
-        getDependencyVersion(dep) || json.dependencies[dep];
-    }
-  }
-  for (const dep in json.peerDependencies) {
-    if (
-      json.peerDependencies[dep] === '*' ||
-      json.peerDependencies[dep] === '' ||
-      isFromCurrentProj(dep)
-    ) {
-      json.peerDependencies[dep] =
-        getDependencyVersion(dep) || json.peerDependencies[dep];
-    }
-  }
 
   writeFileSync(`package.json`, JSON.stringify(json, null, 2));
 } catch {
@@ -131,7 +67,7 @@ try {
 }
 
 // Execute "npm publish" to publish
-execSync(`npm publish --access public --tag ${tag} --dry-run ${dry}`);
+execSync(`npm publish --access public --dry-run ${dry}`);
 
 function getDevVersion(potentialVersion) {
   let result;
@@ -151,6 +87,7 @@ function getDevVersion(potentialVersion) {
     }
   }
 
+  console.log('result', result);
   if (!result) {
     throw new Error(`Could not get version.`);
   }
@@ -158,6 +95,7 @@ function getDevVersion(potentialVersion) {
   if (!Array.isArray(result) && typeof result === 'string') {
     result = [result];
   }
+
   const lastVersionToIncrement = result
     .filter((ver) => ver.startsWith(mainPackageJson.version))
     .map((ver) => ver.match(/\d+$/)?.[0])
@@ -166,14 +104,17 @@ function getDevVersion(potentialVersion) {
     .sort((a, b) => a - b)
     .reverse()[0];
 
+  const mainVersion = mainPackageJson.version.match(/\d+.\d+./)?.[0];
+
   if (typeof lastVersionToIncrement !== 'undefined') {
     const incrementedNum = lastVersionToIncrement + 1;
-    potentialVersion = `${mainPackageJson.version}.${incrementedNum}`;
+    potentialVersion = `${mainVersion}${incrementedNum}`;
   } else {
-    potentialVersion = `${mainPackageJson.version}.0`;
+    potentialVersion = `${mainVersion}0`;
   }
+
   console.warn(
-    `Version of development package for ${PREFIX + '-' + name} will be: ${potentialVersion}`,
+    `Version of development package for ${name} will be: ${potentialVersion}`,
   );
   return potentialVersion;
 }
