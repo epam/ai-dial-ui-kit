@@ -1,6 +1,6 @@
 {
   "name": "@epam/ai-dial-ui-kit",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "license": "Apache-2.0",
   "types": "dist/src/index.d.ts",
@@ -42,7 +42,8 @@
     "build-storybook:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "publish": "npm publish --access public",
+    "publish": "node tools/publish-lib.mjs --version={args.ver} --dry={args.dry} --tag={args.tag} --development={args.development}",
+    "publish:dry": "npm run publish --output-style=static --dry",
     "test": "vitest --coverage",
     "storybook-docs": "storybook dev --docs",
     "build-storybook-docs": "storybook build --docs"
