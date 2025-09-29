@@ -13,6 +13,8 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import minimist from 'minimist';
 
+console.log('Version in package.json', mainPackageJson.version);
+
 function invariant(condition, message) {
   if (!condition) {
     console.error(message);
@@ -67,10 +69,12 @@ try {
 }
 
 console.log(
-  `Running publish command: npm publish --access public --tag ${tag} --dry-run ${dry}`,
+  `Running publish command: npm publish --access public --tag ${tag}`,
 );
 // Execute "npm publish" to publish
-execSync(`npm publish --access public --tag ${tag} --dry-run ${dry}`);
+execSync(`npm publish --access public --tag ${tag}`);
+
+process.exit(0);
 
 function getDevVersion(potentialVersion) {
   let result;
