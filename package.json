@@ -44,7 +44,7 @@
     "prepublishOnly": "npm run build",
     "prepare": "husky",
     "publish": "node tools/publish-lib.mjs",
-    "publish:dry": "npm run publish --output-style=static --dry",
+    "publish:dry": "node tools/publish-lib.mjs --output-style=static --dry",
     "test": "vitest --coverage",
     "storybook-docs": "storybook dev --docs",
     "build-storybook-docs": "storybook build --docs"

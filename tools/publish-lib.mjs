@@ -28,7 +28,7 @@ let params = minimist(process.argv);
 console.log(params);
 let version = params.version;
 const isDevelopment = params.development;
-const dry = params.dry === 'true';
+const dry = params.dry === true || params.dry === 'true';
 const tag = params.tag || 'next';
 const name = mainPackageJson.name;
 
