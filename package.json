@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm run build:css",
+    "build": "vite build && npm run build:css",
     "build:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./dist/index.css",
     "lint": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --check .",
@@ -40,9 +40,9 @@
     "storybook:css": "tailwindcss -w -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
     "build-storybook": "concurrently 'npm run build-storybook:css' 'storybook build'",
     "build-storybook:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
-    "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "publish": "npm publish --access public",
+    "publish": "node tools/publish-lib.mjs",
+    "publish:dry": "node tools/publish-lib.mjs --output-style=static --dry",
     "test": "vitest --coverage",
     "storybook-docs": "storybook dev --docs",
     "build-storybook-docs": "storybook build --docs"
