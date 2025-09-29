@@ -25,7 +25,6 @@ function invariant(condition, message) {
 // Executing publish script: node path/to/publish.mjs {name} --version {version} --tag {tag}
 // Default "tag" to "next" so we won't publish the "latest" tag by accident.
 let params = minimist(process.argv);
-console.log(params);
 let version = params.version;
 const isDevelopment = params.development;
 const dry = params.dry === true || params.dry === 'true';
@@ -68,13 +67,15 @@ try {
   console.error(`Error reading package.json file from library build output.`);
 }
 
-console.log(
-  `Running publish command: npm publish --access public --tag ${tag}`,
-);
-// Execute "npm publish" to publish
-execSync(`npm publish --access public --tag ${tag}`);
-
-process.exit(0);
+try {
+  console.log(
+    `Running publish command: npm publish --access public --tag ${tag}`,
+  );
+  // Execute "npm publish" to publish
+  execSync(`npm publish --access public --tag ${tag}`);
+} catch {
+  console.error(`Publish failed.`);
+}
 
 function getDevVersion(potentialVersion) {
   let result;
