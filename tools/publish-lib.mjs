@@ -28,7 +28,7 @@ let params = minimist(process.argv);
 console.log(params);
 let version = params.version;
 const isDevelopment = params.development;
-const dry = params.dry === 'true';
+const dry = params.dry === true || params.dry === 'true';
 const tag = params.tag || 'next';
 const name = mainPackageJson.name;
 
@@ -60,6 +60,7 @@ invariant(
 
 try {
   const json = JSON.parse(readFileSync(`package.json`).toString());
+  console.info(`Setting version in package.json to ${version}`);
   json.version = version;
 
   writeFileSync(`package.json`, JSON.stringify(json, null, 2));
@@ -67,8 +68,11 @@ try {
   console.error(`Error reading package.json file from library build output.`);
 }
 
+console.log(
+  `Running publish command: npm publish --access public --tag ${tag} --dry-run ${dry}`,
+);
 // Execute "npm publish" to publish
-execSync(`npm publish --access public --dry-run ${dry}`);
+execSync(`npm publish --access public --tag ${tag} --dry-run ${dry}`);
 
 function getDevVersion(potentialVersion) {
   let result;
@@ -94,7 +98,13 @@ function getDevVersion(potentialVersion) {
 
   if (!Array.isArray(result) && typeof result === 'string') {
     result = [result];
+
+    console.info(
+      `Calculating version increment based on package
+ version (${mainPackageJson.version}) and version from registry (${result})`,
+    );
   }
+
   const lastVersionToIncrement = result
     .filter((ver) => ver.startsWith(mainPackageJson.version))
     .map((ver) => ver.match(/\d+$/)?.[0])
