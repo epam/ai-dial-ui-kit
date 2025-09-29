@@ -1,4 +1,3 @@
-//SSR-safe
 export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
