@@ -13,8 +13,6 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import minimist from 'minimist';
 
-const PREFIX = '@epam/';
-
 function invariant(condition, message) {
   if (!condition) {
     console.error(message);
@@ -78,7 +76,7 @@ function getDevVersion(potentialVersion) {
   let result;
   try {
     result = JSON.parse(
-      execSync(`npm view ${PREFIX}-${name} versions --json`).toString(),
+      execSync(`npm view ${name} versions --json`).toString(),
     );
   } catch (e) {
     if (JSON.parse(e.stdout).error.code === 'E404') {
@@ -98,12 +96,11 @@ function getDevVersion(potentialVersion) {
 
   if (!Array.isArray(result) && typeof result === 'string') {
     result = [result];
-
-    console.info(
-      `Calculating version increment based on package
- version (${mainPackageJson.version}) and version from registry (${result})`,
-    );
   }
+
+  console.info(
+    `Calculating version increment based on package version (${mainPackageJson.version}) and version from registry (${JSON.stringify(result)})`,
+  );
 
   const lastVersionToIncrement = result
     .filter((ver) => ver.startsWith(mainPackageJson.version))
@@ -113,11 +110,11 @@ function getDevVersion(potentialVersion) {
     .sort((a, b) => a - b)
     .reverse()[0];
 
-  if (typeof lastVersionToIncrement !== 'undefined') {
+  if (typeof lastVersionToIncrement === 'undefined') {
+    potentialVersion = `${mainPackageJson.version}.0`;
+  } else {
     const incrementedNum = lastVersionToIncrement + 1;
     potentialVersion = `${mainPackageJson.version}.${incrementedNum}`;
-  } else {
-    potentialVersion = `${mainPackageJson.version}.0`;
   }
   console.warn(
     `Version of development package for ${name} will be: ${potentialVersion}`,
