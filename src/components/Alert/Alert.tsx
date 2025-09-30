@@ -1,17 +1,15 @@
-import {
-  IconAlertCircle,
-  IconAlertTriangle,
-  IconCircleCheck,
-  IconInfoCircle,
-  IconX,
-} from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import type { FC, ReactNode, MouseEvent } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
-import { alertVariantClassMap } from '@/constants/alert';
 import { AlertVariant } from '@/types/alert';
+import {
+  alertBaseClasses,
+  alertVariantClassMap,
+  variantIcons,
+} from './constants';
 
 export interface DialAlertProps {
   variant?: AlertVariant;
@@ -20,13 +18,6 @@ export interface DialAlertProps {
   closable?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
-
-const variantIcons: Record<AlertVariant, ReactNode> = {
-  info: <IconInfoCircle size={24} />,
-  error: <IconAlertCircle size={24} />,
-  warning: <IconAlertTriangle size={24} />,
-  success: <IconCircleCheck size={24} />,
-};
 
 /**
  * A contextual feedback component for displaying important messages.
@@ -67,14 +58,11 @@ export const DialAlert: FC<DialAlertProps> = ({
   closable = true,
   onClose,
 }) => {
-  const baseClasses =
-    'inline-flex items-center justify-between gap-2 px-3 py-2 border border-solid shadow text-sm w-auto rounded';
-
   return (
     <div
       role="alert"
       className={classNames(
-        baseClasses,
+        alertBaseClasses,
         alertVariantClassMap[variant],
         cssClass,
       )}
