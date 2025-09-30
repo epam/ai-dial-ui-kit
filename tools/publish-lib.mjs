@@ -67,15 +67,11 @@ try {
   console.error(`Error reading package.json file from library build output.`);
 }
 
-try {
-  console.log(
-    `Running publish command: npm publish --access public --tag ${tag}`,
-  );
-  // Execute "npm publish" to publish
-  execSync(`npm publish --access public --tag ${tag}`);
-} catch {
-  console.error(`Publish failed.`);
-}
+console.log(
+  `Running publish command: npm publish --access public --tag ${tag}`,
+);
+// using npx to avoid triggering npm scripts and therefore infinite publish loop
+execSync(`npx --yes npm@latest publish --access public --tag ${tag}`);
 
 function getDevVersion(potentialVersion) {
   let result;
