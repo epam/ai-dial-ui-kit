@@ -54,7 +54,7 @@ const variantIcons: Record<AlertVariant, ReactNode> = {
  * />
  * ```
  *
- * @param [variant='info'] - Defines the visual style and icon of the alert
+ * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
  * @param message - Message text to display inside the alert
  * @param [cssClass] - Additional CSS classes applied to the alert container
  * @param [closable=true] - Whether the alert has a close button
