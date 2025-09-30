@@ -11,7 +11,7 @@ import type { FC, ReactNode, MouseEvent } from 'react';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
 import { alertVariantClassMap } from '@/constants/alert';
-import { AlertVariant } from './utils';
+import { AlertVariant } from '@/types/alert';
 
 export interface DialAlertProps {
   variant?: AlertVariant;

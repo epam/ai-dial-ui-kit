@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialAlert, type DialAlertProps } from './Alert';
-import { AlertVariant } from './utils';
+import { AlertVariant } from '@/types/alert';
 
 const meta = {
   title: 'Components/Alert',

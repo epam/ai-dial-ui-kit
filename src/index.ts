@@ -25,4 +25,4 @@ export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
 
 // Types
-export { AlertVariant } from './components/Alert/utils';
+export { AlertVariant } from './types/alert';

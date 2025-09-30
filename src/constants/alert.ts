@@ -1,4 +1,4 @@
-import { AlertVariant } from '@/components/Alert/utils';
+import { AlertVariant } from '@/types/alert';
 
 export const alertVariantClassMap: Record<AlertVariant, string> = {
   [AlertVariant.Info]: 'bg-info border-info text-info',
