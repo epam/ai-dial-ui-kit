@@ -14,43 +14,18 @@ import { DialButton } from '@/components/Button/Button';
 export type AlertVariant = 'info' | 'error' | 'warning' | 'success';
 
 export interface DialAlertProps {
-  /**
-   * Defines the visual style and icon of the alert.
-   *
-   * - `info` – Informational message (default)
-   * - `error` – Error or critical message
-   * - `warning` – Warning or caution message
-   * - `success` – Success or confirmation message
-   */
   variant?: AlertVariant;
-
-  /**
-   * Message text displayed inside the alert.
-   */
   message: string | ReactNode;
-
-  /**
-   * Additional CSS classes applied to the root element.
-   */
   cssClass?: string;
-
-  /**
-   * Whether the close button should be shown.
-   * @default true
-   */
   closable?: boolean;
-
-  /**
-   * Callback fired when the close button is clicked.
-   */
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const variantIcons: Record<AlertVariant, ReactNode> = {
-  info: <IconInfoCircle size={24} data-testid="icon-info" />,
-  error: <IconAlertCircle size={24} data-testid="icon-error" />,
-  warning: <IconAlertTriangle size={24} data-testid="icon-warning" />,
-  success: <IconCircleCheck size={24} data-testid="icon-success" />,
+  info: <IconInfoCircle size={24} />,
+  error: <IconAlertCircle size={24} />,
+  warning: <IconAlertTriangle size={24} />,
+  success: <IconCircleCheck size={24} />,
 };
 
 const variantClassMap: Record<AlertVariant, string> = {
