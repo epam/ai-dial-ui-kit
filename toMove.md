@@ -33,7 +33,7 @@
 | RangeSlider           | ?       |      |
 | ReadonlyField         | ?       |      |
 | MdEditor              | ?       |      |
-| Alerts                | ?       |      |
+| Alerts                | +       |  +   |
 | AutocompleteInput     | ?       |      |
 | Blackout              | ?       |      |
 | DraggableItem         | ?       |      |
