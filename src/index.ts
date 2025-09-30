@@ -3,6 +3,7 @@ export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
+export { DialAlert } from './components/Alert/Alert';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -22,3 +23,6 @@ export { DialSwitch } from './components/Switch/Switch';
 export { DialInput } from './components/Input/Input';
 export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
+
+// Types
+export { AlertVariant } from './types/alert';
