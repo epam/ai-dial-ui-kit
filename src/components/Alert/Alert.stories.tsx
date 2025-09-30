@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialAlert, type DialAlertProps } from './Alert';
+import { AlertVariant } from './utils';
 
 const meta = {
   title: 'Components/Alert',
@@ -37,7 +38,7 @@ const meta = {
     },
   },
   args: {
-    variant: 'info',
+    variant: AlertVariant.Info,
     message: 'This is an info alert',
     closable: true,
   },
@@ -48,35 +49,35 @@ type Story = StoryObj<typeof meta>;
 
 export const Info: Story = {
   args: {
-    variant: 'info',
+    variant: AlertVariant.Info,
     message: 'Information alert',
   },
 };
 
 export const Success: Story = {
   args: {
-    variant: 'success',
+    variant: AlertVariant.Success,
     message: 'Operation successful',
   },
 };
 
 export const Warning: Story = {
   args: {
-    variant: 'warning',
+    variant: AlertVariant.Warning,
     message: 'Be careful',
   },
 };
 
 export const Error: Story = {
   args: {
-    variant: 'error',
+    variant: AlertVariant.Error,
     message: 'Something went wrong',
   },
 };
 
 export const NotClosable: Story = {
   args: {
-    variant: 'error',
+    variant: AlertVariant.Error,
     message: 'Critical error (cannot be dismissed)',
     closable: false,
   },
@@ -85,10 +86,10 @@ export const NotClosable: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div className="p-6 max-w-[600px] flex flex-col gap-4">
-      <DialAlert variant="info" message="Info alert" />
-      <DialAlert variant="success" message="Success alert" />
-      <DialAlert variant="warning" message="Warning alert" />
-      <DialAlert variant="error" message="Error alert" />
+      <DialAlert variant={AlertVariant.Info} message="Info alert" />
+      <DialAlert variant={AlertVariant.Success} message="Success alert" />
+      <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
+      <DialAlert variant={AlertVariant.Error} message="Error alert" />
     </div>
   ),
   parameters: {

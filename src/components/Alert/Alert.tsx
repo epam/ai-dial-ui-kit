@@ -10,8 +10,8 @@ import type { FC, ReactNode, MouseEvent } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
-
-export type AlertVariant = 'info' | 'error' | 'warning' | 'success';
+import { alertVariantClassMap } from '@/constants/alert';
+import { AlertVariant } from './utils';
 
 export interface DialAlertProps {
   variant?: AlertVariant;
@@ -26,13 +26,6 @@ const variantIcons: Record<AlertVariant, ReactNode> = {
   error: <IconAlertCircle size={24} />,
   warning: <IconAlertTriangle size={24} />,
   success: <IconCircleCheck size={24} />,
-};
-
-const variantClassMap: Record<AlertVariant, string> = {
-  info: 'bg-info border-info text-info',
-  success: 'bg-success border-success text-success',
-  warning: 'bg-warning border-warning text-warning',
-  error: 'bg-error border-error text-error',
 };
 
 /**
@@ -68,7 +61,7 @@ const variantClassMap: Record<AlertVariant, string> = {
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialAlert: FC<DialAlertProps> = ({
-  variant = 'info',
+  variant = AlertVariant.Info,
   message,
   cssClass,
   closable = true,
@@ -80,7 +73,11 @@ export const DialAlert: FC<DialAlertProps> = ({
   return (
     <div
       role="alert"
-      className={classNames(baseClasses, variantClassMap[variant], cssClass)}
+      className={classNames(
+        baseClasses,
+        alertVariantClassMap[variant],
+        cssClass,
+      )}
     >
       <div className="flex items-center gap-2">
         <DialIcon icon={variantIcons[variant]} />

@@ -23,3 +23,6 @@ export { DialSwitch } from './components/Switch/Switch';
 export { DialInput } from './components/Input/Input';
 export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
+
+// Types
+export { AlertVariant } from './components/Alert/utils';
