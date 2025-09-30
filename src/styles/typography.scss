@@ -29,7 +29,9 @@
 }
 
 .dial-small-semi {
-  @apply dial-small font-semibold;
+  font-size: 14px;
+  line-height: 16px;
+  @apply font-semibold;
 }
 
 .dial-small-medium {
