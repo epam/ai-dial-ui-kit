@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialButton, type DialButton as ButtonProps } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { ButtonVariant } from '@/types/button';
 
 const meta = {
   title: 'Components/Button',
@@ -16,14 +17,18 @@ const meta = {
       control: { type: 'text' },
       description: 'Button text content',
     },
-    cssClass: {
+    variant: {
       control: { type: 'select' },
       options: [
-        'dial-primary-button',
-        'dial-secondary-button',
-        'dial-tertiary-button',
+        ButtonVariant.Primary,
+        ButtonVariant.Secondary,
+        ButtonVariant.Tertiary,
       ],
       description: 'Button style variant',
+    },
+    cssClass: {
+      control: { type: 'text' },
+      description: 'Button additional styles',
     },
     disable: {
       control: { type: 'boolean' },
@@ -56,7 +61,7 @@ const meta = {
   },
   args: {
     title: 'Button',
-    cssClass: 'dial-primary-button',
+    variant: ButtonVariant.Primary,
     disable: false,
     hideTitleOnMobile: false,
   },
@@ -68,20 +73,20 @@ type Story = StoryObj<typeof meta>;
 export const PrimaryButton: Story = {
   args: {
     title: 'Primary Button',
-    cssClass: 'dial-primary-button',
+    variant: ButtonVariant.Primary,
   },
 };
 
 export const SecondaryButton: Story = {
   args: {
     title: 'Secondary Button',
-    cssClass: 'dial-secondary-button',
+    variant: ButtonVariant.Secondary,
   },
 };
 export const TertiaryButton: Story = {
   args: {
     title: 'Tertiary Button',
-    cssClass: 'dial-tertiary-button',
+    variant: ButtonVariant.Tertiary,
   },
 };
 
@@ -97,7 +102,7 @@ export const WithIconBefore: Story = {
   args: {
     title: 'Save',
     iconBefore: <IconArrowLeft size={16} />,
-    cssClass: 'dial-primary-button',
+    variant: ButtonVariant.Primary,
   },
 };
 
@@ -112,7 +117,7 @@ export const WithIconAfter: Story = {
 export const Disabled: Story = {
   args: {
     title: 'Disabled Button',
-    cssClass: 'dial-tertiary-button',
+    variant: ButtonVariant.Tertiary,
     disable: true,
   },
 };
@@ -120,7 +125,7 @@ export const Disabled: Story = {
 export const Hover: Story = {
   args: {
     title: 'Hover Button',
-    cssClass: 'dial-primary-button',
+    variant: ButtonVariant.Primary,
   },
   parameters: {
     pseudo: {
@@ -132,7 +137,7 @@ export const Hover: Story = {
 export const Focus: Story = {
   args: {
     title: 'Focus Button',
-    cssClass: 'dial-secondary-button',
+    variant: ButtonVariant.Secondary,
   },
   parameters: {
     pseudo: {
@@ -144,7 +149,7 @@ export const Focus: Story = {
 export const Active: Story = {
   args: {
     title: 'Active Button',
-    cssClass: 'dial-tertiary-button',
+    variant: ButtonVariant.Tertiary,
   },
   parameters: {
     pseudo: {
@@ -167,7 +172,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-primary-button"
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -175,7 +180,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-secondary-button"
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -183,7 +188,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-tertiary-button"
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -194,7 +199,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-primary-button"
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -202,7 +207,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-secondary-button"
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -210,7 +215,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-tertiary-button"
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -221,7 +226,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-primary-button"
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -229,7 +234,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-secondary-button"
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -237,7 +242,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-tertiary-button"
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -248,7 +253,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-primary-button"
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -256,7 +261,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-secondary-button"
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -264,7 +269,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-tertiary-button"
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -275,7 +280,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-primary-button"
+            variant={ButtonVariant.Primary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -284,7 +289,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-secondary-button"
+            variant={ButtonVariant.Secondary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -293,7 +298,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass="dial-tertiary-button"
+            variant={ButtonVariant.Tertiary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}

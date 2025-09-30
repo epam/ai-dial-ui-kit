@@ -26,3 +26,4 @@ export { DialTextInputField } from './components/InputField/InputField';
 
 // Types
 export { AlertVariant } from './types/alert';
+export { ButtonVariant } from './types/button';
