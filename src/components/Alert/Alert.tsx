@@ -29,10 +29,10 @@ const variantIcons: Record<AlertVariant, ReactNode> = {
 };
 
 const variantClassMap: Record<AlertVariant, string> = {
-  info: 'dial-base-alert bg-info border-info text-info',
-  success: 'dial-base-alert bg-success border-success text-success',
-  warning: 'dial-base-alert bg-warning border-warning text-warning',
-  error: 'dial-base-alert bg-error border-error text-error',
+  info: 'bg-info border-info text-info',
+  success: 'bg-success border-success text-success',
+  warning: 'bg-warning border-warning text-warning',
+  error: 'bg-error border-error text-error',
 };
 
 /**
@@ -74,19 +74,22 @@ export const DialAlert: FC<DialAlertProps> = ({
   closable = true,
   onClose,
 }) => {
+  const baseClasses =
+    'inline-flex items-center justify-between gap-2 px-3 py-2 border border-solid shadow text-sm w-auto rounded';
+
   return (
     <div
       role="alert"
-      className={classNames(variantClassMap[variant], cssClass)}
+      className={classNames(baseClasses, variantClassMap[variant], cssClass)}
     >
       <div className="flex items-center gap-2">
         <DialIcon icon={variantIcons[variant]} />
-        <div className="dial-alert-message">{message}</div>
+        <div className="text-primary">{message}</div>
       </div>
 
       {closable && (
         <DialButton
-          cssClass="dial-alert-close"
+          cssClass="ml-2 text-secondary hover:text-primary ml-2 text-secondary hover:text-primary "
           ariaLabel="Close alert"
           iconBefore={<IconX size={16} />}
           onClick={(e) => onClose?.(e)}
