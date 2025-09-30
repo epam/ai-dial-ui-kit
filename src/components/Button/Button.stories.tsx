@@ -172,7 +172,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Primary}
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -180,7 +180,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Secondary}
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -188,7 +188,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Tertiary}
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -199,7 +199,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Primary}
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -207,7 +207,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Secondary}
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -215,7 +215,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Tertiary}
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -226,7 +226,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Primary}
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -234,7 +234,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Secondary}
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -242,7 +242,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Tertiary}
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -253,7 +253,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Primary}
+            variant={ButtonVariant.Primary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -261,7 +261,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Secondary}
+            variant={ButtonVariant.Secondary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -269,7 +269,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Tertiary}
+            variant={ButtonVariant.Tertiary}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
           />
@@ -280,7 +280,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Primary}
+            variant={ButtonVariant.Primary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -289,7 +289,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Secondary}
+            variant={ButtonVariant.Secondary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
@@ -298,7 +298,7 @@ export const AllVariants: Story = {
         <div className="flex justify-center">
           <DialButton
             title="Button label"
-            cssClass={ButtonVariant.Tertiary}
+            variant={ButtonVariant.Tertiary}
             disable={true}
             iconBefore={<IconArrowLeft size={16} />}
             iconAfter={<IconArrowRight size={16} />}
