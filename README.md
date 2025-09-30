@@ -31,7 +31,6 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
   - [Production Build](#production-build)
 - [🚀 Usage in Projects](#-usage-in-projects)
   - [Next.js Integration](#nextjs-integration)
-  - [Vite Integration](#vite-integration)
   - [Tree Shaking](#tree-shaking)
 - [🤝 Contributing](#-contributing)
 - [🔒 Security](#-security)
@@ -93,9 +92,9 @@ function App() {
 
 ### Development Setup
 
-1. **Fork and Clone**
+1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/ai-dial-ui-kit.git
+   git clone https://github.com/epam/ai-dial-ui-kit.git
    cd ai-dial-ui-kit
    ```
 
@@ -164,7 +163,7 @@ Full list of variables is available [here](tailwind.config.js)
 
 ## 📖 Storybook
 
-Storybook is a frontend workshop for building UI components and pages in isolation.
+Storybook is a handy library for documenting and developing of UI components.
 
 ### Stories
 To run fully interactive storybook:
@@ -273,7 +272,6 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 - Code style guidelines
 - Testing requirements
 - Pull request process
-
 
 ## 🔒 Security
 
