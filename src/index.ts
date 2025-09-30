@@ -3,6 +3,7 @@ export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
+export { DialAlert } from './components/Alert/Alert';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
