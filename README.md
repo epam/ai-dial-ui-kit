@@ -14,7 +14,7 @@ A comprehensive React-based UI components library specifically designed for buil
 
 ## Table of Contents
 
-- [✨ Features](#-features)
+- [✨ Highlights](#-highlights)
 - [📖 Documentation](#-documentation)
 - [🚀 Quick Start](#-quick-start)
   - [Prerequisites](#prerequisites)
@@ -37,15 +37,19 @@ A comprehensive React-based UI components library specifically designed for buil
 - [📄 License](#-license)
 - [🌟 Related Projects](#-related-projects)
 
-## ✨ Features
+## ✨ Highlights
 
-- 🎨 **Unified User Experience**: Consistent design language for all AI DIAL applications
+The AI DIAL UI Kit is an production-ready React component library designed to streamline your development process. It features a collection of base components, such as Buttons, Inputs, Dropdowns, and more — allowing you to effortlessly reuse elements, quick and easy.
+
+Core highlights:
+
+- 🎨 **Unified User Experience**: Ui Kit usage helps with design consistency across AI DIAL applications
 - ⚡ **Modern Stack**: Built with latest React, TypeScript, Vite, and Tailwind CSS
 - 🎨 **Highly Customizable**: Deep theming capabilities with CSS custom properties
 - 🧪 **Well-Tested**: Comprehensive test coverage (70%+) with Vitest and React Testing Library
-- 📚 **Storybook Ready**: Interactive component documentation and development playground
-- 🛠️ **Developer Experience**: ESLint, Prettier, Husky for maintainable code quality
-- 📦 **Distribution Ready**: NPM package ready for easy integration
+- 📚 **Storybook Ready**: Includes interactive component documentation and development playground
+- 🛠️ **Developer Experience**: Leverage ESLint, Prettier, Husky for maintainable code quality
+- 📦 **Distribution Ready**: Deployed as NPM package ready for easy integration
 
 ## 📖 Documentation
 
@@ -248,6 +252,7 @@ export default function Home() {
     </div>
   );
 }
+```
 </details>
 
 
