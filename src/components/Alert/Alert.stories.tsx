@@ -72,6 +72,23 @@ export const Closable: Story = {
   },
 };
 
+export const LongMessage: Story = {
+  args: {
+    variant: AlertVariant.Warning,
+    message:
+      'This is a long alert message that should wrap onto multiple lines to demonstrate the alert’s behavior with longer text content. Please pay attention to how the layout adjusts accordingly.',
+    closable: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An example of an alert with a long message that wraps onto multiple lines.',
+      },
+    },
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="p-6 flex flex-col gap-4">
