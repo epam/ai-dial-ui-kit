@@ -4,6 +4,7 @@ export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
+export { DialLoader } from './components/Loader/Loader';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
