@@ -89,6 +89,22 @@ export const LongMessage: Story = {
   },
 };
 
+export const CustomClass: Story = {
+  args: {
+    variant: AlertVariant.Info,
+    message: 'Alert with custom CSS class',
+    cssClass: 'border-dashed w-[250px] bg-layer-2',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An example of an alert with a custom CSS class applied to change its border style.',
+      },
+    },
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="p-6 flex flex-col gap-4">
