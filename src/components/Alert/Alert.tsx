@@ -15,9 +15,7 @@ export interface DialAlertProps {
   variant?: AlertVariant;
   message: string | ReactNode;
   cssClass?: string;
-  /** Whether the close button should be shown. @default false */
   closable?: boolean;
-  /** Stretch to full width of container. @default true */
   fullWidth?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
@@ -38,7 +36,6 @@ export interface DialAlertProps {
  * <DialAlert
  *   variant={AlertVariant.Success}
  *   message="Changes saved successfully."
- *   fullWidth={false}
  * />
  *
  * <DialAlert
@@ -53,7 +50,6 @@ export interface DialAlertProps {
  * @param message - Message text to display inside the alert
  * @param [cssClass] - Additional CSS classes applied to the alert container
  * @param [closable=false] - Whether the alert has a close button
- * @param [fullWidth=true] - Stretch to full width of container
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialAlert: FC<DialAlertProps> = ({
@@ -61,18 +57,12 @@ export const DialAlert: FC<DialAlertProps> = ({
   message,
   cssClass,
   closable = false,
-  fullWidth = true,
   onClose,
 }) => {
-  const widthClasses = fullWidth
-    ? 'flex w-full'
-    : 'inline-flex w-auto self-start';
-
   return (
     <div
       role="alert"
       className={classNames(
-        widthClasses,
         alertBaseClasses,
         alertVariantClassMap[variant],
         cssClass,

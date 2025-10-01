@@ -9,19 +9,6 @@ describe('Dial UI Kit :: DialAlert', () => {
     expect(screen.getByText('Hello alert')).toBeInTheDocument();
   });
 
-  test('Should default to full width (flex w-full)', () => {
-    render(<DialAlert message="Full width default" />);
-    const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('flex', 'w-full');
-    expect(alert).not.toHaveClass('inline-flex', 'w-auto');
-  });
-
-  test('Should be content width when fullWidth is false (inline-flex w-auto)', () => {
-    render(<DialAlert message="Content width" fullWidth={false} />);
-    const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('inline-flex', 'w-auto');
-  });
-
   test('Should call onClose when close button clicked', () => {
     const onClose = vi.fn();
     render(<DialAlert message="Closable" onClose={onClose} closable />);

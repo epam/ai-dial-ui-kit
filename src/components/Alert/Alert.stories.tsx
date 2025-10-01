@@ -32,10 +32,6 @@ const meta = {
       control: { type: 'boolean' },
       description: 'Whether the close button should be shown',
     },
-    fullWidth: {
-      control: { type: 'boolean' },
-      description: 'Stretch to full width of container',
-    },
     onClose: {
       control: false,
       description: 'Callback fired when the close button is clicked',
@@ -74,23 +70,6 @@ export const Closable: Story = {
     message: 'Closable alert example',
     closable: true,
     onClose: (e) => alert('Alert closed! Event: ' + e.type),
-  },
-};
-
-export const NonFullWidth: Story = {
-  args: {
-    variant: AlertVariant.Info,
-    message: 'Content width alert',
-    fullWidth: false,
-  },
-};
-
-export const FullWidth: Story = {
-  parameters: { layout: 'padded' },
-  args: {
-    variant: AlertVariant.Info,
-    message: 'Full width alert (fills canvas)',
-    fullWidth: true,
   },
 };
 
