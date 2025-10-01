@@ -37,7 +37,8 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   onChange,
 }) => {
   const switchClassName = classNames(
-    'flex w-[36px] h-[18px]  cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
+    'flex w-[36px] h-[18px] cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
+    'hover:bg-accent-primary-hover',
     isOn ? 'flex-row-reverse' : 'flex-row',
     disabled ? 'pointer-events-none' : '',
     disabled
@@ -79,9 +80,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           )}
         ></span>
       </label>
-      {title && (
-        <span className="h-[14px] pl-2 small text-primary">{title}</span>
-      )}
+      {title && <span className="pl-2 dial-small text-primary">{title}</span>}
     </div>
   );
 };

@@ -6,13 +6,11 @@ const InteractiveSwitch = (args: DialSwitchProps) => {
   const [value, setValue] = useState(args.isOn);
 
   return (
-    <div className="w-full text-primary">
-      <DialSwitch
-        {...args}
-        isOn={value}
-        onChange={(newValue) => setValue(newValue)}
-      />
-    </div>
+    <DialSwitch
+      {...args}
+      isOn={value}
+      onChange={(newValue) => setValue(newValue)}
+    />
   );
 };
 
@@ -78,6 +76,16 @@ export const Disabled: Story = {
   args: {
     switchId: 'default-switch',
     title: 'Enable feature',
+    isOn: false,
+    disabled: true,
+  },
+};
+
+export const DisabledWithActiveValue: Story = {
+  render: InteractiveSwitch,
+  args: {
+    switchId: 'default-switch',
+    title: 'Enable feature',
     isOn: true,
     disabled: true,
   },
@@ -88,39 +96,49 @@ export const AllVariants: Story = {
     switchId: 'all-variants-textarea',
   },
   render: () => (
-    <div className="min-w-[800px] p-8">
-      <div className="grid grid-cols-3 gap-6">
-        {/* Default State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Default</div>
-          <InteractiveSwitch switchId="default-switch" title="Switch" />
-        </div>
+    <div className="min-w-[800px] p-8 flex flex-col gap-y-6">
+      {/* Default State */}
+      <div>
+        <div className="text-primary font-semibold mb-2">Default</div>
+        <InteractiveSwitch switchId="default-switch" title="Switch" />
+      </div>
 
-        {/* Disabled State for active Switch */}
-        <div>
-          <div className="text-primary font-semibold mb-2">
-            Disabled for active Switch
-          </div>
-          <InteractiveSwitch
-            switchId="disabled-switch"
-            title="Disabled Switch"
-            disabled={true}
-            isOn={true}
-          />
+      {/* Default State active Switch  */}
+      <div>
+        <div className="text-primary font-semibold mb-2">
+          Default for active Switch
         </div>
+        <InteractiveSwitch
+          switchId="default-switch"
+          title="Switch"
+          isOn={true}
+        />
+      </div>
 
-        {/* Disabled State for not active Switch */}
-        <div>
-          <div className="text-primary font-semibold mb-2">
-            Disabled for not active Switch
-          </div>
-          <InteractiveSwitch
-            switchId="disabled-switch"
-            title="Disabled Switch"
-            disabled={true}
-            isOn={false}
-          />
+      {/* Disabled State for active Switch */}
+      <div>
+        <div className="text-primary font-semibold mb-2">
+          Disabled for active Switch
         </div>
+        <InteractiveSwitch
+          switchId="disabled-switch"
+          title="Disabled Switch"
+          disabled={true}
+          isOn={true}
+        />
+      </div>
+
+      {/* Disabled State for not active Switch */}
+      <div>
+        <div className="text-primary font-semibold mb-2">
+          Disabled for not active Switch
+        </div>
+        <InteractiveSwitch
+          switchId="disabled-switch"
+          title="Disabled Switch"
+          disabled={true}
+          isOn={false}
+        />
       </div>
     </div>
   ),
