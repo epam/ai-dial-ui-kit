@@ -2,8 +2,11 @@ import classNames from 'classnames';
 import type { FC, MouseEvent, ReactNode, Ref } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
+import type { ButtonVariant } from '@/types/button';
+import { variantClassMap } from './constants';
 
 export interface DialButton {
+  variant?: ButtonVariant;
   cssClass?: string;
   disable?: boolean;
   title?: string;
@@ -29,6 +32,7 @@ export interface DialButton {
  * ```
  *
  * @param [title] - The text content of the button
+ * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
  * @param [cssClass] - Additional CSS classes to apply to the button
  * @param [onClick] - Click event handler for the button
  * @param [disable=false] - Whether the button should be disabled
@@ -40,6 +44,7 @@ export interface DialButton {
  */
 export const DialButton: FC<DialButton> = ({
   title,
+  variant,
   cssClass,
   ref,
   onClick,
@@ -56,6 +61,7 @@ export const DialButton: FC<DialButton> = ({
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
   );
   const btnClassNames = classNames(
+    variant && variantClassMap[variant],
     cssClass,
     'focus-visible:outline outline-offset-0',
   );

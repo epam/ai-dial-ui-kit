@@ -5,7 +5,8 @@
      src="https://avatars.githubusercontent.com/u/1589802?s=200&v=4" 
       />](#)
 
-A comprehensive React-based UI components library specifically designed for building AI-driven applications with modern standards and enterprise-grade quality.
+
+The AI DIAL UI Kit is an production-ready React component library designed to streamline your development process. It features a collection of base components, such as Buttons, Inputs, Dropdowns, and more — allowing you to effortlessly reuse elements, quick and easy.
 
 [![npm version](https://badge.fury.io/js/@epam%2Fai-dial-ui-kit.svg)](https://badge.fury.io/js/@epam%2Fai-dial-ui-kit)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -14,7 +15,7 @@ A comprehensive React-based UI components library specifically designed for buil
 
 ## Table of Contents
 
-- [✨ Features](#-features)
+- [✨ Highlights](#-highlights)
 - [📖 Documentation](#-documentation)
 - [🚀 Quick Start](#-quick-start)
   - [Prerequisites](#prerequisites)
@@ -30,22 +31,21 @@ A comprehensive React-based UI components library specifically designed for buil
   - [Production Build](#production-build)
 - [🚀 Usage in Projects](#-usage-in-projects)
   - [Next.js Integration](#nextjs-integration)
-  - [Vite Integration](#vite-integration)
   - [Tree Shaking](#tree-shaking)
 - [🤝 Contributing](#-contributing)
 - [🔒 Security](#-security)
 - [📄 License](#-license)
 - [🌟 Related Projects](#-related-projects)
 
-## ✨ Features
+## ✨ Highlights
 
-- 🎨 **Unified User Experience**: Consistent design language for all AI DIAL applications
+- 🎨 **Unified User Experience**: Ui Kit usage helps with design consistency across AI DIAL applications
 - ⚡ **Modern Stack**: Built with latest React, TypeScript, Vite, and Tailwind CSS
 - 🎨 **Highly Customizable**: Deep theming capabilities with CSS custom properties
 - 🧪 **Well-Tested**: Comprehensive test coverage (70%+) with Vitest and React Testing Library
-- 📚 **Storybook Ready**: Interactive component documentation and development playground
-- 🛠️ **Developer Experience**: ESLint, Prettier, Husky for maintainable code quality
-- 📦 **Distribution Ready**: NPM package ready for easy integration
+- 📚 **Storybook Ready**: Includes interactive component documentation and development playground
+- 🛠️ **Developer Experience**: Leverage ESLint, Prettier, Husky for maintainable code quality
+- 📦 **Distribution Ready**: Deployed as NPM package ready for easy integration
 
 ## 📖 Documentation
 
@@ -92,9 +92,9 @@ function App() {
 
 ### Development Setup
 
-1. **Fork and Clone**
+1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/ai-dial-ui-kit.git
+   git clone https://github.com/epam/ai-dial-ui-kit.git
    cd ai-dial-ui-kit
    ```
 
@@ -163,7 +163,7 @@ Full list of variables is available [here](tailwind.config.js)
 
 ## 📖 Storybook
 
-Storybook is a frontend workshop for building UI components and pages in isolation.
+Storybook is a handy library for documenting and developing of UI components.
 
 ### Stories
 To run fully interactive storybook:
@@ -248,6 +248,7 @@ export default function Home() {
     </div>
   );
 }
+```
 </details>
 
 
@@ -271,7 +272,6 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 - Code style guidelines
 - Testing requirements
 - Pull request process
-
 
 ## 🔒 Security
 

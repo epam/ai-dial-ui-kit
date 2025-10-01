@@ -24,17 +24,17 @@
 | RadioField            | +       |      |
 | IconFile              | ?       |      |
 | Steps                 | ?       |      |
-| PasswordInput         | ?       |      |
-| LabeledText           | ?       |      |
-| Loader                | ?       |      |
+| PasswordInput         | +       |      |
+| LabeledText           | +       |      |
+| Loader                | +       |      |
 | RadioGroup            | ?       |      |
 | RadioGroupModalField  | ?       |      |
 | RangePicker           | ?       |      |
 | RangeSlider           | ?       |      |
 | ReadonlyField         | ?       |      |
-| MdEditor              | ?       |      |
-| Alerts                | ?       |      |
-| AutocompleteInput     | ?       |      |
+| MdEditor              | +       |      |
+| Alerts                | +       | +    |
+| AutocompleteInput     | +       |      |
 | Blackout              | ?       |      |
 | DraggableItem         | ?       |      |
 | LoadFileArea          |         |      |
