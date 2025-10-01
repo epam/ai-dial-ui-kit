@@ -45,7 +45,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
 }) => {
   return (
     <div
-      role="loader"
+      role="status"
       aria-label={ariaLabel}
       className={classNames({
         [loaderBaseClasses]: true,
