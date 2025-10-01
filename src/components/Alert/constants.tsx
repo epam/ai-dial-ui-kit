@@ -8,10 +8,10 @@ import {
 } from '@tabler/icons-react';
 
 export const variantIcons: Record<AlertVariant, ReactNode> = {
-  info: <IconInfoCircle size={24} />,
-  error: <IconAlertCircle size={24} />,
-  warning: <IconAlertTriangle size={24} />,
-  success: <IconCircleCheck size={24} />,
+  info: <IconInfoCircle size={24} stroke={2} />,
+  error: <IconAlertCircle size={24} stroke={2} />,
+  warning: <IconAlertTriangle size={24} stroke={2} />,
+  success: <IconCircleCheck size={24} stroke={2} />,
 };
 
 export const alertVariantClassMap: Record<AlertVariant, string> = {
@@ -22,4 +22,4 @@ export const alertVariantClassMap: Record<AlertVariant, string> = {
 };
 
 export const alertBaseClasses =
-  'inline-flex items-center justify-between gap-2 px-3 py-2 border border-solid shadow text-sm w-auto rounded';
+  'items-center justify-between gap-2 p-3 border border-solid dial-small-150 rounded flex';

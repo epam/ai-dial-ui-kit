@@ -11,7 +11,7 @@ describe('Dial UI Kit :: DialAlert', () => {
 
   test('Should call onClose when close button clicked', () => {
     const onClose = vi.fn();
-    render(<DialAlert message="Closable" onClose={onClose} />);
+    render(<DialAlert message="Closable" onClose={onClose} closable />);
     const closeBtn = screen.getByRole('button', { name: 'Close alert' });
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalled();
@@ -37,7 +37,7 @@ describe('Dial UI Kit :: DialAlert', () => {
 
   test('Should pass mouse event to onClose handler', () => {
     const onClose = vi.fn();
-    render(<DialAlert message="Event test" onClose={onClose} />);
+    render(<DialAlert message="Event test" onClose={onClose} closable />);
     const closeBtn = screen.getByRole('button', { name: 'Close alert' });
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalledWith(expect.any(Object));
