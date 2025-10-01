@@ -13,7 +13,27 @@ export interface DialCheckboxProps {
   indeterminate?: boolean;
   onChange?: (value?: boolean, id?: string) => void;
 }
-
+/**
+ * A Checkbox component with styling options
+ *
+ * @example
+ * ```tsx
+ * <DialCheckbox
+ *   id="checkbox"
+ *   label="Dial Checkbox"
+ *   checked={true}
+ *   disabled={false}
+ *   onChange={(value) => console.log(value)}
+ * />
+ * ```
+ *
+ * @param id - Unique identifier for the checkbox element
+ * @param [label] - The label text for the field
+ * @param [checked=false] - The current value of the checkbox
+ * @param [disabled=false] - Whether the checkbox is disabled
+ * @param [indeterminate=false] - indeterminate state
+ * @param [onChange] - Callback function called when the checkbox value changes
+ */
 export const DialCheckbox: FC<DialCheckboxProps> = ({
   label,
   id,
