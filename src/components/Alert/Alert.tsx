@@ -16,7 +16,6 @@ export interface DialAlertProps {
   message: string | ReactNode;
   cssClass?: string;
   closable?: boolean;
-  fullWidth?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
