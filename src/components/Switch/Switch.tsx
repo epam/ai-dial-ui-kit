@@ -38,7 +38,6 @@ export const DialSwitch: FC<DialSwitchProps> = ({
 }) => {
   const switchClassName = classNames(
     'flex w-[36px] h-[18px] cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
-    'hover:bg-accent-primary-hover',
     isOn ? 'flex-row-reverse' : 'flex-row',
     disabled ? 'pointer-events-none' : '',
     disabled
@@ -73,7 +72,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           className={classNames(
             'size-3 rounded-full',
             disabled
-              ? !isOn
+              ? isOn
                 ? 'bg-layer-4'
                 : 'bg-controls-disable'
               : 'bg-controls-enable-primary',
