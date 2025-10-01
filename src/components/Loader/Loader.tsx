@@ -65,5 +65,3 @@ export const DialLoader: FC<DialLoaderProps> = ({
     </div>
   );
 };
-
-export default DialLoader;
