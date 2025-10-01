@@ -41,7 +41,6 @@ const meta = {
     variant: AlertVariant.Info,
     message: 'This is an info alert',
     closable: false,
-    fullWidth: true,
   },
 } satisfies Meta<DialAlertProps>;
 
