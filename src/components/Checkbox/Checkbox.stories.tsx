@@ -9,7 +9,7 @@ const InteractiveCheckbox = (args: DialCheckboxProps) => {
     <DialCheckbox
       {...args}
       checked={value}
-      onChange={(newValue) => setValue(newValue)}
+      onChange={(newValue) => setValue(!!newValue)}
     />
   );
 };
@@ -41,6 +41,7 @@ const meta = {
   args: {
     label: 'Checkbox',
     id: 'checkbox',
+    checked: false,
   },
 } satisfies Meta<DialCheckboxProps>;
 
