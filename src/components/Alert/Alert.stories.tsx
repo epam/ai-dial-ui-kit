@@ -6,7 +6,7 @@ const meta = {
   title: 'Components/Alert',
   component: DialAlert,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
         component:
@@ -32,6 +32,10 @@ const meta = {
       control: { type: 'boolean' },
       description: 'Whether the close button should be shown',
     },
+    fullWidth: {
+      control: { type: 'boolean' },
+      description: 'Stretch to full width of container',
+    },
     onClose: {
       control: false,
       description: 'Callback fired when the close button is clicked',
@@ -40,7 +44,8 @@ const meta = {
   args: {
     variant: AlertVariant.Info,
     message: 'This is an info alert',
-    closable: true,
+    closable: false,
+    fullWidth: true,
   },
 } satisfies Meta<DialAlertProps>;
 
@@ -48,44 +53,50 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Info: Story = {
-  args: {
-    variant: AlertVariant.Info,
-    message: 'Information alert',
-  },
+  args: { variant: AlertVariant.Info, message: 'Information alert' },
 };
 
 export const Success: Story = {
-  args: {
-    variant: AlertVariant.Success,
-    message: 'Operation successful',
-  },
+  args: { variant: AlertVariant.Success, message: 'Operation successful' },
 };
 
 export const Warning: Story = {
-  args: {
-    variant: AlertVariant.Warning,
-    message: 'Be careful',
-  },
+  args: { variant: AlertVariant.Warning, message: 'Be careful' },
 };
 
 export const Error: Story = {
+  args: { variant: AlertVariant.Error, message: 'Something went wrong' },
+};
+
+export const Closable: Story = {
   args: {
-    variant: AlertVariant.Error,
-    message: 'Something went wrong',
+    variant: AlertVariant.Success,
+    message: 'Closable alert example',
+    closable: true,
+    onClose: (e) => alert('Alert closed! Event: ' + e.type),
   },
 };
 
-export const NotClosable: Story = {
+export const NonFullWidth: Story = {
   args: {
-    variant: AlertVariant.Error,
-    message: 'Critical error (cannot be dismissed)',
-    closable: false,
+    variant: AlertVariant.Info,
+    message: 'Content width alert',
+    fullWidth: false,
+  },
+};
+
+export const FullWidth: Story = {
+  parameters: { layout: 'padded' },
+  args: {
+    variant: AlertVariant.Info,
+    message: 'Full width alert (fills canvas)',
+    fullWidth: true,
   },
 };
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="p-6 max-w-[600px] flex flex-col gap-4">
+    <div className="p-6 flex flex-col gap-4">
       <DialAlert variant={AlertVariant.Info} message="Info alert" />
       <DialAlert variant={AlertVariant.Success} message="Success alert" />
       <DialAlert variant={AlertVariant.Warning} message="Warning alert" />

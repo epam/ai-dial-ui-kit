@@ -15,7 +15,10 @@ export interface DialAlertProps {
   variant?: AlertVariant;
   message: string | ReactNode;
   cssClass?: string;
+  /** Whether the close button should be shown. @default false */
   closable?: boolean;
+  /** Stretch to full width of container. @default true */
+  fullWidth?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -35,33 +38,41 @@ export interface DialAlertProps {
  * <DialAlert
  *   variant="success"
  *   message="Changes saved successfully."
- *   onClose={(e) => console.log('closed', e)}
+ *   fullWidth={false}
  * />
  *
  * <DialAlert
  *   variant="error"
- *   closable={false}
+ *   closable
  *   message="Something went wrong."
+ *   onClose={(e) => console.log('closed', e)}
  * />
  * ```
  *
  * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
  * @param message - Message text to display inside the alert
  * @param [cssClass] - Additional CSS classes applied to the alert container
- * @param [closable=true] - Whether the alert has a close button
+ * @param [closable=false] - Whether the alert has a close button
+ * @param [fullWidth=true] - Stretch to full width of container
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialAlert: FC<DialAlertProps> = ({
   variant = AlertVariant.Info,
   message,
   cssClass,
-  closable = true,
+  closable = false,
+  fullWidth = true,
   onClose,
 }) => {
+  const widthClasses = fullWidth
+    ? 'flex w-full'
+    : 'inline-flex w-auto self-start';
+
   return (
     <div
       role="alert"
       className={classNames(
+        widthClasses,
         alertBaseClasses,
         alertVariantClassMap[variant],
         cssClass,
@@ -74,7 +85,7 @@ export const DialAlert: FC<DialAlertProps> = ({
 
       {closable && (
         <DialButton
-          cssClass="ml-2 text-secondary hover:text-primary ml-2 text-secondary hover:text-primary "
+          cssClass="ml-2 text-secondary hover:text-primary"
           ariaLabel="Close alert"
           iconBefore={<IconX size={16} />}
           onClick={(e) => onClose?.(e)}
