@@ -31,18 +31,18 @@ export interface DialAlertProps {
  * @example
  * ```tsx
  * <DialAlert
- *   variant="info"
+ *   variant={AlertVariant.Info}
  *   message="This is an info alert."
  * />
  *
  * <DialAlert
- *   variant="success"
+ *   variant={AlertVariant.Success}
  *   message="Changes saved successfully."
  *   fullWidth={false}
  * />
  *
  * <DialAlert
- *   variant="error"
+ *   variant={AlertVariant.Error}
  *   closable
  *   message="Something went wrong."
  *   onClose={(e) => console.log('closed', e)}
