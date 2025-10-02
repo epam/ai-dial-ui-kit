@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { getStepClass, getCircleClass } from '../utils';
 import { StepStatus } from '@/models/step';
 
-const baseStep = { id: 'step1', label: 'Step 1' };
+const baseStep = { id: 'step1', name: 'Step 1' };
 
 describe('getStepClass', () => {
   it('returns correct class for current step with VALID status', () => {
