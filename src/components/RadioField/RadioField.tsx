@@ -7,7 +7,7 @@ import {
   optionsWrapperBaseClasses,
   orientationClassMap,
 } from './constants';
-import type { RadioFieldOrientation } from '@/types/radioField';
+import type { RadioFieldOrientation } from '@/types/radio-field';
 import { DialFieldLabel } from '@/components/Field/Field';
 
 export interface RadioButtonModel {

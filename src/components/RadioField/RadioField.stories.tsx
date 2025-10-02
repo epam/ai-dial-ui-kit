@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialRadioField, type DialRadioFieldProps } from './RadioField';
-import { RadioFieldOrientation } from '@/types/radioField';
+import { RadioFieldOrientation } from '@/types/radio-field';
 
 const ControlledExample: FC = () => {
   const [selected, setSelected] = useState<'none' | 'all'>('none');

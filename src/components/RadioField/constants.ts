@@ -1,4 +1,4 @@
-import { RadioFieldOrientation } from '@/types/radioField';
+import { RadioFieldOrientation } from '@/types/radio-field';
 
 export const groupBaseClasses = 'flex flex-col';
 export const legendBaseClasses = 'text-sm font-medium text-primary';

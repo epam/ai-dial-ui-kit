@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialRadioField } from './RadioField';
-import { RadioFieldOrientation } from '@/types/radioField';
+import { RadioFieldOrientation } from '@/types/radio-field';
 
 const radios = [
   { id: 'none', name: '— None —' },
