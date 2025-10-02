@@ -26,6 +26,8 @@ export { DialSwitch } from './components/Switch/Switch';
 export { DialInput } from './components/Input/Input';
 export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
+export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
+export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 
 // Types
 export { AlertVariant } from './types/alert';
