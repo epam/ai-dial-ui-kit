@@ -51,7 +51,7 @@ export const ActiveErrorStep: Story = {
     ],
     currentStep: '3',
     // eslint-disable-next-line no-console
-    onChangeStep: (step) => console.log('Step changed to:', step),
+    onChangeStep: (step) => console.log('Step changed to: ', step),
   },
 };
 
