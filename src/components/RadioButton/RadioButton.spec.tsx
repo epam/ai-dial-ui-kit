@@ -25,6 +25,25 @@ describe('Dial UI Kit :: DialRadioButton', () => {
     expect(screen.queryByLabelText(/.+/)).not.toBeInTheDocument();
   });
 
+  test('applies custom classes', () => {
+    render(
+      <DialRadioButton
+        name="group1"
+        value="opt-y"
+        inputId="radio-y"
+        title="With classes"
+        cssClass="custom-input"
+        labelCssClass="custom-label"
+        description="desc text"
+        descriptionCssClass="custom-desc"
+        checked
+      />,
+    );
+    expect(screen.getByRole('radio')).toHaveClass('custom-input');
+    expect(screen.getByText('With classes')).toHaveClass('custom-label');
+    expect(screen.getByText('desc text')).toHaveClass('custom-desc');
+  });
+
   test('calls onChange with value when changed', () => {
     const onChange = vi.fn();
     render(
@@ -83,5 +102,37 @@ describe('Dial UI Kit :: DialRadioButton', () => {
       />,
     );
     expect(screen.getByText('Extra details')).toBeInTheDocument();
+  });
+
+  test('adds aria-describedby when checked and description present', () => {
+    render(
+      <DialRadioButton
+        name="group1"
+        value="opt-e"
+        inputId="radio-e"
+        title="Option E"
+        description="Desc"
+        checked
+      />,
+    );
+    const radio = screen.getByRole('radio', { name: 'Option E' });
+    expect(radio).toHaveAttribute('aria-describedby', 'radio-e-desc');
+  });
+
+  test('onChange is not called when already checked radio is clicked again', () => {
+    const onChange = vi.fn();
+    render(
+      <DialRadioButton
+        name="group1"
+        value="opt-f"
+        inputId="radio-f"
+        title="Option F"
+        checked
+        onChange={onChange}
+      />,
+    );
+    const radio = screen.getByRole('radio', { name: 'Option F' });
+    fireEvent.click(radio);
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

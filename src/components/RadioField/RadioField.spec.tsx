@@ -2,7 +2,6 @@ import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialRadioField } from './RadioField';
 import { RadioFieldOrientation } from '@/types/radioField';
-import type { DialRadioButtonProps } from '../RadioButton/RadioButton';
 
 vi.mock('@/components/Field/Field', () => {
   const DialFieldLabel = ({ fieldTitle }: { fieldTitle?: string }) => (
@@ -12,37 +11,6 @@ vi.mock('@/components/Field/Field', () => {
     DialFieldLabel,
   };
 });
-
-vi.mock('@/components/DialRadio/DialRadio', () => ({
-  DialRadio: ({
-    title,
-    inputId,
-    name,
-    value,
-    checked,
-    disabled,
-    onChange,
-    description,
-    cssClass,
-  }: DialRadioButtonProps) => (
-    <div>
-      <label htmlFor={inputId}>{title}</label>
-      <input
-        type="radio"
-        role="radio"
-        id={inputId}
-        name={name}
-        value={value}
-        checked={checked}
-        disabled={disabled}
-        onChange={() => onChange?.(value)}
-        className={cssClass}
-        readOnly
-      />
-      {checked && description ? <div>{description}</div> : null}
-    </div>
-  ),
-}));
 
 const radios = [
   { id: 'none', name: '— None —' },
