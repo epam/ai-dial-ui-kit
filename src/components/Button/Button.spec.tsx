@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialButton } from './Button';
+import { ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
   test('Should render with title and be accessible by role', () => {
@@ -138,5 +139,17 @@ describe('Dial UI Kit :: DialButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Event test' }));
     expect(onClick).toHaveBeenCalledWith(expect.any(Object));
     expect(onClick.mock.calls[0][0]).toHaveProperty('type', 'click');
+  });
+
+  test.each([
+    [ButtonVariant.Primary, 'dial-primary-button'],
+    [ButtonVariant.Secondary, 'dial-secondary-button'],
+    [ButtonVariant.Tertiary, 'dial-tertiary-button'],
+  ])('applies mapped class for variant %s', (variant, expectedClass) => {
+    render(<DialButton title="Click me" variant={variant} />);
+
+    const btn = screen.getByRole('button', { name: 'Click me' });
+    expect(btn).toBeInTheDocument();
+    expect(btn).toHaveClass(expectedClass);
   });
 });
