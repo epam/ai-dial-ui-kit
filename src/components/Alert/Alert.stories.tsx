@@ -17,7 +17,12 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['info', 'success', 'warning', 'error'],
+      options: [
+        AlertVariant.Info,
+        AlertVariant.Success,
+        AlertVariant.Warning,
+        AlertVariant.Error,
+      ],
       description: 'Defines the visual style and icon of the alert',
     },
     message: {

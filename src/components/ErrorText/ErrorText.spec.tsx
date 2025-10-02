@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 
 import { DialErrorText } from './ErrorText';
 
-describe('Common components :: ErrorText', () => {
+describe('Dial UI Kit :: ErrorText', () => {
   test('Should render error text when provided', () => {
     render(<DialErrorText errorText="This is an error" />);
     expect(screen.getByText('This is an error')).toBeInTheDocument();

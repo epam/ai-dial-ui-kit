@@ -6,6 +6,7 @@ export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
 export { DialCheckbox } from './components/Checkbox/Checkbox';
+export { DialSteps } from './components/Steps/Steps';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -29,3 +30,7 @@ export { DialTextInputField } from './components/InputField/InputField';
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
+
+// Models
+export { StepStatus } from './models/step';
+export type { Step } from './models/step';
