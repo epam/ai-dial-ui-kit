@@ -25,7 +25,7 @@ const meta: Meta<typeof DialPasswordInputField> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'An password input component with various states.',
+        component: 'A password input component with various states.',
       },
     },
   },
@@ -128,7 +128,7 @@ export const AllVariants: Story = {
           />
         </div>
 
-        {/* With Error */}
+        {/* Optional */}
         <div>
           <div className="text-primary font-semibold mb-2">Optional</div>
           <InteractiveInput
