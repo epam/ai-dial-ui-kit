@@ -7,6 +7,8 @@ export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
 export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
+export { DialRadioButton } from './components/RadioButton/RadioButton';
+export { DialRadioField } from './components/RadioField/RadioField';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
