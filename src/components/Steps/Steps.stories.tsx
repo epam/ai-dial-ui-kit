@@ -25,7 +25,7 @@ export const Default: Story = {
     ],
     currentStep: '1',
     // eslint-disable-next-line no-console
-    setCurrentStep: (step) => console.log('Step changed to:', step),
+    onChangeStep: (step) => console.log('Step changed to:', step),
   },
 };
 
@@ -38,7 +38,7 @@ export const CompletedStep: Story = {
     ],
     currentStep: '1',
     // eslint-disable-next-line no-console
-    setCurrentStep: (step) => console.log('Step changed to:', step),
+    onChangeStep: (step) => console.log('Step changed to:', step),
   },
 };
 
@@ -51,7 +51,7 @@ export const ActiveErrorStep: Story = {
     ],
     currentStep: '3',
     // eslint-disable-next-line no-console
-    setCurrentStep: (step) => console.log('Step changed to:', step),
+    onChangeStep: (step) => console.log('Step changed to:', step),
   },
 };
 
@@ -64,7 +64,7 @@ export const AllVariants: Story = {
     ],
     currentStep: '3',
     // eslint-disable-next-line no-console
-    setCurrentStep: (step) => console.log('Step changed to:', step),
+    onChangeStep: (step) => console.log('Step changed to:', step),
   },
   render: () => (
     <div className="min-w-[800px] p-8 flex flex-col gap-y-6">
@@ -79,7 +79,7 @@ export const AllVariants: Story = {
           ]}
           currentStep="3"
           // eslint-disable-next-line no-console
-          setCurrentStep={(step) => console.log('Step changed to:', step)}
+          onChangeStep={(step) => console.log('Step changed to:', step)}
         />
       </div>
 
@@ -94,7 +94,7 @@ export const AllVariants: Story = {
           ]}
           currentStep="3"
           // eslint-disable-next-line no-console
-          setCurrentStep={(step) => console.log('Step changed to:', step)}
+          onChangeStep={(step) => console.log('Step changed to:', step)}
         />
       </div>
 
@@ -109,7 +109,7 @@ export const AllVariants: Story = {
           ]}
           currentStep="3"
           // eslint-disable-next-line no-console
-          setCurrentStep={(step) => console.log('Step changed to:', step)}
+          onChangeStep={(step) => console.log('Step changed to:', step)}
         />
       </div>
     </div>

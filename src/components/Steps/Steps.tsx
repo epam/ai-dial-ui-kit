@@ -6,7 +6,7 @@ import { DialStep } from './Step';
 export interface DialStepsProps {
   steps: Step[];
   currentStep: string;
-  setCurrentStep: (step: string) => void;
+  onChangeStep: (step: string) => void;
 }
 
 /**
@@ -17,18 +17,18 @@ export interface DialStepsProps {
  * <DialSteps
  *   steps={[{ id: 'step1', label: 'Step 1', status: StepStatus.VALID }, { id: 'step2', label: 'Step 2', status: StepStatus.ERROR }]}
  *   currentStep="step1"
- *   setCurrentStep={(step) => console.log(step)}
+ *   onChangeStep={(step) => console.log(step)}
  * />
  * ```
  *
  * @param steps - Array of step objects to display
  * @param currentStep - The id of the currently active step
- * @param setCurrentStep - Callback to set the current step by id
+ * @param onChangeStep - Callback to set the current step by id
  */
 export const DialSteps: FC<DialStepsProps> = ({
   steps,
   currentStep,
-  setCurrentStep,
+  onChangeStep,
 }) => {
   const handleStepChange = (step: string) => {
     const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
@@ -39,7 +39,7 @@ export const DialSteps: FC<DialStepsProps> = ({
         steps[currentStepIndex].status === StepStatus.VALID) ||
       targetStepIndex < currentStepIndex
     ) {
-      setCurrentStep(step);
+      onChangeStep(step);
     }
   };
 
@@ -50,7 +50,7 @@ export const DialSteps: FC<DialStepsProps> = ({
           <DialStep
             key={step.id}
             currentStep={currentStep}
-            handleStepChange={handleStepChange}
+            onChangeStep={handleStepChange}
             step={step}
             index={index}
           />
