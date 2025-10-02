@@ -70,7 +70,6 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   const inputClasses = classNames(
     'cursor-pointer dial-input-radio',
     title && 'mr-2',
-    checked && 'bg-accent-primary',
     cssClass,
   );
 
