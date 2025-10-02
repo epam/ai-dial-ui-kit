@@ -5,6 +5,7 @@ export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
+export { DialCheckbox } from './components/Checkbox/Checkbox';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';

@@ -10,7 +10,7 @@ export interface DialSwitchProps {
 }
 
 /**
- * A flexible input component with icon support and various styling options
+ * A Switch component with various styling options
  *
  * @example
  * ```tsx
