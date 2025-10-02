@@ -9,14 +9,14 @@ export interface DialStepProps {
   step: Step;
   index: number;
   currentStep: string;
-  handleStepChange: (step: string) => void;
+  onChangeStep: (step: string) => void;
 }
 
 export const DialStep: FC<DialStepProps> = ({
   step,
   index,
   currentStep,
-  handleStepChange,
+  onChangeStep,
 }) => {
   const stepClass =
     'h-[32px] flex flex-1 min-w-[180px] items-center dial-tiny border-t-2 cursor-pointer';
@@ -36,7 +36,7 @@ export const DialStep: FC<DialStepProps> = ({
   return (
     <button
       className={classNames(stepClass, getStepClass(step, currentStep))}
-      onClick={() => handleStepChange(step.id)}
+      onClick={() => onChangeStep(step.id)}
     >
       <span
         className={classNames(circleClass, getCircleClass(step, currentStep))}

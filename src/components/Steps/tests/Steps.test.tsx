@@ -16,7 +16,7 @@ describe('Dial UI Kit :: DialSteps', () => {
       <DialSteps
         steps={steps}
         currentStep="step1"
-        setCurrentStep={setCurrentStep}
+        onChangeStep={setCurrentStep}
       />,
     );
     expect(getByText('Step 1')).toBeTruthy();
@@ -30,7 +30,7 @@ describe('Dial UI Kit :: DialSteps', () => {
       <DialSteps
         steps={steps}
         currentStep="step1"
-        setCurrentStep={setCurrentStep}
+        onChangeStep={setCurrentStep}
       />,
     );
     fireEvent.click(getByText('Step 2'));
@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialSteps', () => {
       <DialSteps
         steps={invalidSteps}
         currentStep="step1"
-        setCurrentStep={setCurrentStep}
+        onChangeStep={setCurrentStep}
       />,
     );
     fireEvent.click(getByText('Step 2'));
@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialSteps', () => {
       <DialSteps
         steps={steps}
         currentStep="step2"
-        setCurrentStep={setCurrentStep}
+        onChangeStep={setCurrentStep}
       />,
     );
     fireEvent.click(getByText('Step 1'));
