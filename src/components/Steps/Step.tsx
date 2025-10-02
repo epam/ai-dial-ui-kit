@@ -35,7 +35,6 @@ export const DialStep: FC<DialStepProps> = ({
   };
   return (
     <button
-      key={step.id}
       className={classNames(stepClass, getStepClass(step, currentStep))}
       onClick={() => handleStepChange(step.id)}
     >

@@ -48,6 +48,7 @@ export const DialSteps: FC<DialStepsProps> = ({
       {steps.map((step, index) => {
         return (
           <DialStep
+            key={step.id}
             currentStep={currentStep}
             handleStepChange={handleStepChange}
             step={step}
