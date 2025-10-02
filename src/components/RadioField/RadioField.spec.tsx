@@ -3,15 +3,6 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialRadioField } from './RadioField';
 import { RadioFieldOrientation } from '@/types/radioField';
 
-vi.mock('@/components/Field/Field', () => {
-  const DialFieldLabel = ({ fieldTitle }: { fieldTitle?: string }) => (
-    <span>{fieldTitle}</span>
-  );
-  return {
-    DialFieldLabel,
-  };
-});
-
 const radios = [
   { id: 'none', name: '— None —' },
   { id: 'all', name: 'All attachments' },

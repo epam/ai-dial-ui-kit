@@ -135,4 +135,23 @@ describe('Dial UI Kit :: DialRadioButton', () => {
     fireEvent.click(radio);
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  test('does not render label when title is missing (null branch)', () => {
+    const { container } = render(
+      <DialRadioButton name="group1" value="opt-n" inputId="radio-n" />,
+    );
+
+    expect(container.querySelector('label')).toBeNull();
+
+    const radio = container.querySelector(
+      'input[type="radio"]',
+    ) as HTMLInputElement;
+    expect(radio).toBeInTheDocument();
+
+    // when no title, the input shouldn't get the spacing class
+    expect(radio).not.toHaveClass('mr-2');
+
+    // no description relationship when there's no description/checked
+    expect(radio).not.toHaveAttribute('aria-describedby');
+  });
 });

@@ -8,7 +8,7 @@ import {
   orientationClassMap,
 } from './constants';
 import type { RadioFieldOrientation } from '@/types/radioField';
-import { DialFieldLabel } from '../Field/Field';
+import { DialFieldLabel } from '@/components/Field/Field';
 
 export interface RadioButtonModel {
   id: string;
