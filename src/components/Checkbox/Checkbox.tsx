@@ -11,6 +11,7 @@ export interface DialCheckboxProps {
   checked: boolean;
   disabled?: boolean;
   indeterminate?: boolean;
+  ariaLabel?: string;
   onChange?: (value?: boolean, id?: string) => void;
 }
 /**
@@ -29,9 +30,10 @@ export interface DialCheckboxProps {
  *
  * @param id - Unique identifier for the checkbox element
  * @param [label] - The label text for the field
- * @param [checked=false] - The current value of the checkbox
+ * @param [checked] - The current value of the checkbox
  * @param [disabled=false] - Whether the checkbox is disabled
  * @param [indeterminate=false] - indeterminate state
+ * @param [ariaLabel] - Accessible label for screen readers when no title is provided
  * @param [onChange] - Callback function called when the checkbox value changes
  */
 export const DialCheckbox: FC<DialCheckboxProps> = ({
@@ -40,6 +42,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   checked,
   indeterminate,
   disabled,
+  ariaLabel,
   onChange,
 }) => {
   const handleChange = useCallback(
@@ -81,6 +84,9 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
         onChange={handleChange}
         id={id}
         checked={checked}
+        aria-checked={indeterminate ? 'mixed' : checked}
+        aria-disabled={disabled || undefined}
+        aria-label={!label ? ariaLabel : undefined}
         className="invisible w-0 h-0"
       />
     </label>
