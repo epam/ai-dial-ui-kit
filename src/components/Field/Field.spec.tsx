@@ -128,4 +128,11 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     expect(screen.getByText('(Choose if needed)')).toBeInTheDocument();
     expect(label).toHaveAttribute('for', 'full-input');
   });
+
+  test('returns null when fieldTitle is an empty string', () => {
+    const { container } = render(
+      <DialFieldLabel htmlFor="email-input" fieldTitle="" />,
+    );
+    expect(container.firstChild).toBeNull();
+  });
 });
