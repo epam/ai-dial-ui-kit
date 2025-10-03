@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialPopup } from './Popup';
+import { PopupSize } from '@/types/popup';
+import { popupSizeClassMap } from './constants';
 
 describe('Dial UI Kit :: DialPopup', () => {
   test('does not render when closed', () => {
@@ -59,5 +61,16 @@ describe('Dial UI Kit :: DialPopup', () => {
     expect(dialog).not.toHaveAttribute('aria-labelledby');
 
     expect(screen.queryByText('dial-popup-heading')).not.toBeInTheDocument();
+  });
+
+  test('applies size class correctly', () => {
+    render(
+      <DialPopup open title="Size Test" size={PopupSize.Lg}>
+        <div>Body</div>
+      </DialPopup>,
+    );
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveClass(popupSizeClassMap[PopupSize.Lg]);
   });
 });

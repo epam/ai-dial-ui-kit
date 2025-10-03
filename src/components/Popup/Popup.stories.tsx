@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialPopup, type DialPopupProps } from './Popup';
+import { PopupSize } from '@/types/popup';
 
 const meta = {
   title: 'Components/Popup',
@@ -37,7 +38,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Reusable stateful renderer that opens the popup via a button click
-const StatefulRender = (args: DialPopupProps) => {
+const StatefulRender = (args: DialPopupProps & { buttonLabel?: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -45,7 +46,7 @@ const StatefulRender = (args: DialPopupProps) => {
         className="px-3 py-2 rounded bg-accent-primary text-white hover:opacity-90"
         onClick={() => setOpen(true)}
       >
-        Open popup
+        {args.buttonLabel || 'Open Popup'}
       </button>
 
       <DialPopup
@@ -91,4 +92,33 @@ export const CustomClasses: Story = {
     cssClass: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
     headingClass: 'font-medium bg-red-400',
   },
+};
+
+export const DifferentSizes: Story = {
+  render: (args) => (
+    <div className="flex flex-col gap-4">
+      <div>
+        <StatefulRender
+          {...args}
+          size={PopupSize.Sm}
+          buttonLabel="Open Small Popup"
+        />
+      </div>
+      <div>
+        <StatefulRender
+          {...args}
+          size={PopupSize.Md}
+          buttonLabel="Open Medium Popup"
+        />
+      </div>
+      <div>
+        <StatefulRender
+          {...args}
+          size={PopupSize.Lg}
+          buttonLabel="Open Large Popup"
+        />
+      </div>
+    </div>
+  ),
+  args: {},
 };

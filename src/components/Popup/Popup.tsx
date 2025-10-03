@@ -17,8 +17,10 @@ import {
   popupBaseClasses,
   popupDividerClasses,
   popupHeaderClasses,
+  popupSizeClassMap,
 } from './constants';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { PopupSize } from '@/types/popup';
 
 export interface DialPopupProps {
   open?: boolean;
@@ -31,6 +33,7 @@ export interface DialPopupProps {
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
+  size?: PopupSize;
 }
 
 /**
@@ -67,6 +70,7 @@ export interface DialPopupProps {
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
+ * @param [size=PopupSize.Md] - Sets the max-width of the popup
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -79,6 +83,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   children,
   footer,
   onClose,
+  size = PopupSize.Md,
 }) => {
   const { refs, context } = useFloating({
     open,
@@ -126,6 +131,7 @@ export const DialPopup: FC<DialPopupProps> = ({
             aria-labelledby={headingId}
             className={classNames(
               popupBaseClasses,
+              popupSizeClassMap[size],
               dividers && popupDividerClasses,
               cssClass,
             )}
@@ -139,7 +145,10 @@ export const DialPopup: FC<DialPopupProps> = ({
                 onClick={(e) => onClose?.(e)}
               />
             </div>
-            {children}
+            <div className="flex-grow overflow-auto">
+              {/* Body area */}
+              {children}
+            </div>
             {footer}
           </div>
         </FloatingFocusManager>
