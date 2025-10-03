@@ -43,10 +43,6 @@ export const DialTooltip: FC<Props> = ({
   contentClassName,
   ...tooltipProps
 }) => {
-  if (hideTooltip || !tooltip) {
-    return <span className={triggerClassName}>{children}</span>;
-  }
-
   return (
     <DialTooltipContainer {...tooltipProps}>
       <DialTooltipTrigger className={classNames(triggerClassName, 'truncate')}>
