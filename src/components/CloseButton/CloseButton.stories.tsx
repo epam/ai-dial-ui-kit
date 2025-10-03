@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialCloseButton, type DialCloseButtonProps } from './CloseButton';
 
 const meta: Meta<typeof DialCloseButton> = {
-  title: 'Components/DialCloseButton',
+  title: 'Components/CloseButton',
   component: DialCloseButton,
   parameters: {
     layout: 'padded',
@@ -67,42 +67,34 @@ export const NoAriaLabel: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="min-w-[800px] p-8 flex flex-col gap-y-6">
+    <div className="p-8 flex flex-col gap-y-6">
       {/* Default */}
-      <div>
-        <div className="text-primary text-right pr-4 py-2">Default</div>
-        <div className="flex justify-center">
-          <DialCloseButton
-            ariaLabel="Close dialog"
-            onClose={() => alert('Closed!')}
-          />
-        </div>
+      <div className="flex flex-row items-center">
+        <div className="text-primary pr-4 py-2">Default</div>
+        <DialCloseButton
+          ariaLabel="Close dialog"
+          onClose={() => alert('Closed!')}
+        />
       </div>
 
       {/* CustomSize */}
-      <div>
-        <div className="text-primary text-right pr-4 py-2">Custom Size</div>
-        <div className="flex justify-center">
-          <DialCloseButton
-            ariaLabel="Close dialog"
-            size={32}
-            onClose={() => alert('Closed!')}
-          />
-        </div>
+      <div className="flex flex-row items-center">
+        <div className="text-primary pr-4 py-2">Custom Size</div>
+        <DialCloseButton
+          ariaLabel="Close dialog"
+          size={32}
+          onClose={() => alert('Closed!')}
+        />
       </div>
 
       {/* WithCustomClass */}
-      <div>
-        <div className="text-primary text-right pr-4 py-2">
-          With custom class
-        </div>
-        <div className="flex justify-center">
-          <DialCloseButton
-            ariaLabel="Close dialog"
-            cssClass="bg-red-100 text-red-600 hover:text-red-800"
-            onClose={() => alert('Closed!')}
-          />
-        </div>
+      <div className="flex flex-row items-center">
+        <div className="text-primary pr-4 py-2">With custom class</div>
+        <DialCloseButton
+          ariaLabel="Close dialog"
+          cssClass="bg-error text-error hover:text-error"
+          onClose={() => alert('Closed!')}
+        />
       </div>
     </div>
   ),
