@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
-import { Fragment as ReactFragment } from 'react';
 
 import {
   groupBaseClasses,
@@ -88,7 +87,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
         )}
       >
         {radioButtons.map((radio) => (
-          <ReactFragment key={radio.id}>
+          <div key={radio.id} className="flex flex-col">
             <DialRadioButton
               name={elementId}
               value={radio.id}
@@ -103,7 +102,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
             {radio.id === activeRadioButton && radio.content ? (
               <div className={selectedContentClasses}>{radio.content}</div>
             ) : null}
-          </ReactFragment>
+          </div>
         ))}
       </div>
     </div>
