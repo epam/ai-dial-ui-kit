@@ -84,3 +84,11 @@ export const WithLongTitle: Story = {
       'This is a very long title that should wrap onto multiple lines to demonstrate text wrapping behavior in the popup header. It might even be long enough to require truncation with an ellipsis if it exceeds a certain length',
   },
 };
+
+export const CustomClasses: Story = {
+  render: StatefulRender,
+  args: {
+    cssClass: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
+    headingClass: 'font-medium bg-red-400',
+  },
+};

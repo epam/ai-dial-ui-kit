@@ -133,7 +133,7 @@ export const DialPopup: FC<DialPopupProps> = ({
             <div className={popupHeaderClasses}>
               {renderTitle(title)}
               <DialButton
-                cssClass="ml-1 text-secondary hover:text-accent-primary"
+                cssClass="text-secondary hover:text-accent-primary"
                 ariaLabel="Close dialog"
                 iconBefore={<IconX size={18} />}
                 onClick={(e) => onClose?.(e)}
