@@ -30,6 +30,7 @@ export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
+export { DialSearch } from './components/Search/Search';
 
 // Types
 export { AlertVariant } from './types/alert';
