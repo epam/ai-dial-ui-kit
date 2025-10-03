@@ -37,6 +37,8 @@ export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
+export { RadioGroupOrientation } from './types/radio-group';
+export { PopupSize } from './types/popup';
 
 // Models
 export { StepStatus } from './models/step';
