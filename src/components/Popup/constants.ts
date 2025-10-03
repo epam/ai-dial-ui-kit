@@ -9,7 +9,7 @@ export const popupBaseClasses =
 export const popupDividerClasses = 'divide-tertiary divide-y';
 
 export const popupHeaderClasses =
-  'flex flex-row justify-between py-4 px-6 items-center mb-2';
+  'flex flex-row justify-between py-4 px-6 items-center';
 
 export const popupSizeClassMap: Record<PopupSize, string> = {
   [PopupSize.Sm]: 'max-w-full md:max-w-[400px]',
