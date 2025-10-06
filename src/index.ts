@@ -7,6 +7,7 @@ export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
+export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
