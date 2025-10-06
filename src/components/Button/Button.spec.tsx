@@ -56,6 +56,17 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(button).toHaveClass('custom-button-class');
   });
 
+  test('Should apply custom CSS class to button text with textCssClass prop', () => {
+    render(
+      <DialButton
+        title="Custom Text"
+        textCssClass="custom-text-class font-bold"
+      />,
+    );
+    const titleSpan = screen.getByText('Custom Text');
+    expect(titleSpan).toHaveClass('custom-text-class', 'font-bold');
+  });
+
   test('Should apply focus-visible outline classes', () => {
     render(<DialButton title="Focus test" />);
     const button = screen.getByRole('button', { name: 'Focus test' });
