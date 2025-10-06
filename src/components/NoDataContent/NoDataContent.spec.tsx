@@ -4,7 +4,12 @@ import { DialNoDataContent } from './NoDataContent';
 
 describe('Dial UI Kit :: NoDataContent', () => {
   test('renders default icon and title', () => {
-    render(<DialNoDataContent title="No data available" />);
+    render(
+      <DialNoDataContent
+        title="No data available"
+        description="Description message"
+      />,
+    );
     expect(screen.getByText('No data available')).toBeInTheDocument();
   });
 

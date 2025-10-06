@@ -45,6 +45,13 @@ export const LongMessage: Story = {
   },
 };
 
+export const WithDescription: Story = {
+  args: {
+    title: 'No results match your search.',
+    description: 'Try adjusting your filters or check back later.',
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="p-8 flex flex-col gap-y-6">
@@ -60,6 +67,15 @@ export const AllVariants: Story = {
         <DialNoDataContent
           title="Nothing found"
           icon={<IconAlertTriangle width={60} height={60} color="orange" />}
+        />
+      </div>
+
+      {/* With Description */}
+      <div className="flex flex-row items-center">
+        <div className="text-primary pr-4 py-2">With Description</div>
+        <DialNoDataContent
+          title="Nothing found"
+          description="Try adjusting your filters or check back later."
         />
       </div>
 
