@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialButton, type DialButton as ButtonProps } from './Button';
+import { DialButton, type DialButtonProps } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { ButtonVariant } from '@/types/button';
 
@@ -65,7 +65,7 @@ const meta = {
     disable: false,
     hideTitleOnMobile: false,
   },
-} satisfies Meta<ButtonProps>;
+} satisfies Meta<DialButtonProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
