@@ -133,7 +133,7 @@ export const DialInput: FC<DialInputProps> = ({
         </DialTooltip>
       )}
       {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
-      <DialIcon icon={iconBeforeInput} className="pl-2" />
+      <DialIcon icon={iconBeforeInput} />
 
       <DialTooltip tooltip={value} triggerClassName={tooltipTriggerClassName}>
         <input
@@ -153,7 +153,7 @@ export const DialInput: FC<DialInputProps> = ({
         />
       </DialTooltip>
 
-      <DialIcon icon={iconAfterInput} className="pr-2" />
+      <DialIcon icon={iconAfterInput} />
       {suffix && <p className="text-secondary dial-small pr-2"> {suffix}</p>}
       {textAfterInput && (
         <DialTooltip tooltip={textAfterInput}>

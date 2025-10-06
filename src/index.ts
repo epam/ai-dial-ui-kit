@@ -1,5 +1,3 @@
-//SSR-safe
-export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
@@ -8,7 +6,11 @@ export { DialLoader } from './components/Loader/Loader';
 export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
-export { DialRadioField } from './components/RadioField/RadioField';
+export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
+
+// Buttons
+export { DialButton } from './components/Button/Button';
+export { DialCloseButton } from './components/CloseButton/CloseButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -19,6 +21,9 @@ export { DialTooltip } from './components/Tooltip/Tooltip';
 
 // Switch
 export { DialSwitch } from './components/Switch/Switch';
+
+// Popup
+export { DialPopup } from './components/Popup/Popup';
 
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
@@ -35,6 +40,8 @@ export { DialSearch } from './components/Search/Search';
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
+export { RadioGroupOrientation } from './types/radio-group';
+export { PopupSize } from './types/popup';
 
 // Models
 export { StepStatus } from './models/step';
