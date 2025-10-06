@@ -135,7 +135,10 @@ export const DialInput: FC<DialInputProps> = ({
       {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
       <DialIcon icon={iconBefore} />
 
-      <DialTooltip tooltip={value} triggerClassName={tooltipTriggerClassName}>
+      <DialTooltip
+        tooltip={value}
+        triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
+      >
         <input
           type={type}
           autoComplete="off"
