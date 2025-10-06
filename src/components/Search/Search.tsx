@@ -1,20 +1,28 @@
 import { useCallback, useEffect, useState, type FC } from 'react';
-import { DialInput, type DialInputProps } from '@/components/Input/Input';
-import { DialIcon } from '@/components/Icon/Icon';
-import { IconSearch, IconX } from '@tabler/icons-react';
-import { BASE_ICON_PROPS } from '@/constants/icon';
 import classNames from 'classnames';
+import { IconSearch, IconX } from '@tabler/icons-react';
+
+import { DialIcon } from '@/components/Icon/Icon';
+import { DialSearchInput, type DialSearchInputProps } from './SearchInput';
+import { SIZE_CONFIG } from './constants';
+import { SearchSize } from '@/types/search';
+
+export interface DialSearchProps extends DialSearchInputProps {
+  size?: SearchSize;
+}
 
 /**
- * An input component with a customizable placeholder, icons, flexible props, and the ability to clear the input value via a clear button.
+ * A search input component with a customizable placeholder, icons, flexible props, and the ability
+ * to clear the input value via a clear button. Supports multiple sizes for flexible layouts.
  *
  * @example
  * ```tsx
  * <DialSearch
  *   elementId="search"
  *   value={query}
- *   placeholder="search"
- *   onChange={e => setQuery(e.target.value)}
+ *   placeholder="Search"
+ *   size="small"
+ *   onChange={(value) => setQuery(value)}
  *   disabled={false}
  * />
  * ```
@@ -22,10 +30,15 @@ import classNames from 'classnames';
  * @param elementId - Unique identifier for the input element
  * @param [value] - The current value of the input
  * @param [placeholder] - The placeholder text for the input
+ * @param [size='base'] - The size of the search input. Supported values: `'small'` | `'base'`
  * @param [onChange] - Callback function called when the input value changes
  * @param [disabled=false] - Whether the input is disabled
  */
-export const DialSearch: FC<DialInputProps> = ({ onChange, ...props }) => {
+export const DialSearch: FC<DialSearchProps> = ({
+  onChange,
+  size = SearchSize.Base,
+  ...props
+}) => {
   const [query, setQuery] = useState(props.value || '');
 
   useEffect(() => {
@@ -37,33 +50,39 @@ export const DialSearch: FC<DialInputProps> = ({ onChange, ...props }) => {
       setQuery(value);
       onChange?.(value);
     },
-    [onChange, setQuery],
+    [onChange],
   );
 
+  const sizeConfig = SIZE_CONFIG[size];
+
   return (
-    <DialInput
+    <DialSearchInput
+      {...props}
       value={query}
       onChange={handleChange}
-      tooltipTriggerClassName={classNames([
-        props.tooltipTriggerClassName,
-        'flex-1',
-      ])}
-      cssClass={classNames([props.cssClass, 'w-full'])}
+      cssClass={classNames('w-full', props.cssClass, sizeConfig.textClass)}
+      containerCssClass={classNames(sizeConfig.containerClass)}
       iconBeforeInput={
         <DialIcon
-          className={classNames([
+          className={classNames(
             props.disabled ? 'text-secondary' : 'text-primary',
-          ])}
-          icon={<IconSearch {...BASE_ICON_PROPS} />}
+          )}
+          icon={
+            <IconSearch
+              size={sizeConfig.iconSize}
+              stroke={sizeConfig.iconStroke}
+            />
+          }
         />
       }
       iconAfterInput={
-        props.value ? (
+        query ? (
           <DialIcon
-            className="text-primary"
+            className="text-primary cursor-pointer"
             icon={
               <IconX
-                {...BASE_ICON_PROPS}
+                size={sizeConfig.iconSize}
+                stroke={sizeConfig.iconStroke}
                 onClick={() => handleChange('')}
                 aria-label="Clear search"
                 role="button"
@@ -72,7 +91,6 @@ export const DialSearch: FC<DialInputProps> = ({ onChange, ...props }) => {
           />
         ) : undefined
       }
-      {...props}
     />
   );
 };
