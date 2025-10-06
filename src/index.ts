@@ -22,6 +22,9 @@ export { DialTooltip } from './components/Tooltip/Tooltip';
 // Switch
 export { DialSwitch } from './components/Switch/Switch';
 
+// Popup
+export { DialPopup } from './components/Popup/Popup';
+
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
@@ -36,6 +39,8 @@ export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
+export { RadioGroupOrientation } from './types/radio-group';
+export { PopupSize } from './types/popup';
 
 // Models
 export { StepStatus } from './models/step';
