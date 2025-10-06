@@ -1,5 +1,3 @@
-//SSR-safe
-export { DialButton } from './components/Button/Button';
 export { DialErrorText } from './components/ErrorText/ErrorText';
 export { DialFieldLabel } from './components/Field/Field';
 export { DialIcon } from './components/Icon/Icon';
@@ -9,6 +7,10 @@ export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
+
+// Buttons
+export { DialButton } from './components/Button/Button';
+export { DialCloseButton } from './components/CloseButton/CloseButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -34,6 +36,7 @@ export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
+export { DialSearch } from './components/Search/Search';
 
 // Types
 export { AlertVariant } from './types/alert';

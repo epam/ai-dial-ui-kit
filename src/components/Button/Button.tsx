@@ -5,7 +5,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
-export interface DialButton {
+export interface DialButtonProps {
   variant?: ButtonVariant;
   cssClass?: string;
   disable?: boolean;
@@ -42,7 +42,7 @@ export interface DialButton {
  * @param [ariaLabel] - Accessible label for screen readers when no title is provided
  * @param [ref] - Ref to access the button DOM element
  */
-export const DialButton: FC<DialButton> = ({
+export const DialButton: FC<DialButtonProps> = ({
   title,
   variant,
   cssClass,
