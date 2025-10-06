@@ -65,7 +65,7 @@
 }
 
 .dial-danger-button {
-  @apply dial-base-button bg-error text-primary;
+  @apply dial-base-button bg-red-400 text-primary;
 
   &:hover,
   &:focus {
