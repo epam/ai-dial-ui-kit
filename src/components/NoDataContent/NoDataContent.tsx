@@ -30,9 +30,7 @@ export const DialNoDataContent: FC<DialNoDataContentProps> = ({
     <div className="h-full w-full flex flex-col items-center justify-center text-secondary">
       {icon || <IconClipboardX width={60} height={60} />}
       <span className="small mt-2 text-primary">{title}</span>
-      {description && (
-        <span className="mt-1 text-secondary">{description}</span>
-      )}
+      {description && <span className="mt-1 text-primary">{description}</span>}
     </div>
   );
 };
