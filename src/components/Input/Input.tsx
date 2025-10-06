@@ -51,8 +51,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param [textAfterInput] - Text to display after the input in a separate field
  */
 export const DialInput: FC<DialInputProps> = ({
-  iconBefore: iconBefore,
-  iconAfter: iconAfter,
+  iconBefore,
+  iconAfter,
   hideBorder,
   value,
   elementId,
@@ -110,18 +110,18 @@ export const DialInput: FC<DialInputProps> = ({
   return (
     <div
       className={classNames(
-        'dial-input-field flex flex-row items-center justify-between px-3 py-2',
+        'dial-input-field flex flex-row items-center justify-between py-2',
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
         readonly && 'dial-input-readonly',
-        !textBeforeInput && 'pl-1',
-        !textAfterInput && 'pr-1',
+        !textBeforeInput && 'pl-3',
+        !textAfterInput && 'pr-3',
         containerCssClass,
       )}
     >
       {textBeforeInput && (
-        <DialTooltip tooltip={textBeforeInput}>
+        <div>
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-r-none border-r-0"
@@ -130,9 +130,9 @@ export const DialInput: FC<DialInputProps> = ({
             disabled={true}
             elementId={textBeforeInput + 'textBefore'}
           />
-        </DialTooltip>
+        </div>
       )}
-      {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
+      {prefix && <p className="text-secondary dial-small"> {prefix}</p>}
       <DialIcon icon={iconBefore} />
 
       <DialTooltip
@@ -145,7 +145,6 @@ export const DialInput: FC<DialInputProps> = ({
           id={elementId}
           placeholder={placeholder}
           value={value ?? ''}
-          title={value ? String(value) : ''}
           disabled={disabled}
           className={classNames('border-0 bg-transparent px-2', cssClass)}
           onChange={(event) => !readonly && handleChange?.(event)}
@@ -157,9 +156,9 @@ export const DialInput: FC<DialInputProps> = ({
       </DialTooltip>
 
       <DialIcon icon={iconAfter} />
-      {suffix && <p className="text-secondary dial-small pr-2"> {suffix}</p>}
+      {suffix && <p className="text-secondary dial-small"> {suffix}</p>}
       {textAfterInput && (
-        <DialTooltip tooltip={textAfterInput}>
+        <div>
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-l-none border-l-0"
@@ -168,7 +167,7 @@ export const DialInput: FC<DialInputProps> = ({
             disabled={true}
             elementId={textAfterInput + 'textAfter'}
           />
-        </DialTooltip>
+        </div>
       )}
     </div>
   );

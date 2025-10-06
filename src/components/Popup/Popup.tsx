@@ -7,11 +7,12 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import type { FC, MouseEvent, ReactNode } from 'react';
 
-import { DialButton } from '@/components/Button/Button';
+import { DialCloseButton } from '@/components/CloseButton/CloseButton';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { PopupSize } from '@/types/popup';
 import {
   overlayBaseClasses,
   popupBaseClasses,
@@ -19,8 +20,6 @@ import {
   popupHeaderClasses,
   popupSizeClassMap,
 } from './constants';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import { PopupSize } from '@/types/popup';
 
 export interface DialPopupProps {
   open?: boolean;
@@ -138,11 +137,9 @@ export const DialPopup: FC<DialPopupProps> = ({
           >
             <div className={popupHeaderClasses}>
               {renderTitle(title)}
-              <DialButton
-                cssClass="text-secondary hover:text-accent-primary"
+              <DialCloseButton
                 ariaLabel="Close dialog"
-                iconBefore={<IconX size={18} />}
-                onClick={(e) => onClose?.(e)}
+                onClose={(e) => onClose?.(e)}
               />
             </div>
             <div className="flex-grow overflow-auto">

@@ -78,14 +78,6 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(inputContainer).not.toHaveClass('dial-input');
   });
 
-  test('handles value and title attributes correctly', () => {
-    const { getByDisplayValue } = render(
-      <DialInput elementId="test-input" value="test value" />,
-    );
-    const input = getByDisplayValue('test value');
-    expect(input).toHaveAttribute('title', 'test value');
-  });
-
   test('applies invalid class when invalid prop is true', () => {
     const { getByPlaceholderText } = render(
       <DialInput elementId="test-input" placeholder="Invalid input" invalid />,
