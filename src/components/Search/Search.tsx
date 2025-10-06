@@ -29,7 +29,7 @@ export interface DialSearchProps {
  *   elementId="search"
  *   value={query}
  *   placeholder="Search"
- *   size="small"
+ *   size={SearchSize.Small}
  *   onChange={(value) => setQuery(value)}
  *   disabled={false}
  * />
@@ -44,7 +44,7 @@ export interface DialSearchProps {
  * @param [cssClass] - Additional CSS classes applied to the input element
  * @param [containerCssClass] - Additional CSS classes applied to the container
  * @param [onChange] - Callback fired when the input value changes
- * @param [size='base'] - The size of the search input. Supported values: `'small'` | `'base'`
+ * @param [size=SearchSize.Base] - The size of the search input. Uses the {@link SearchSize} enum.
  */
 export const DialSearch: FC<DialSearchProps> = ({
   elementId,
