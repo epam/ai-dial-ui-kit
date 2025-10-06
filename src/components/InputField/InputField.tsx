@@ -56,8 +56,8 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [errorText] - Error message text to display below the input
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container
@@ -142,8 +142,8 @@ export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [errorText] - Error message text to display below the input
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the DialNumberInputField container
@@ -205,8 +205,8 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [errorText] - Error message text to display below the input
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [elementCssClass] - Additional CSS classes to apply to the input element
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container

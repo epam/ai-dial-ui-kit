@@ -289,8 +289,8 @@ describe('Dial UI Kit :: DialTextInputField', () => {
       <DialTextInputField
         elementId="test-text"
         fieldTitle="Test Text Field"
-        iconBeforeInput={<span data-testid="before-icon">🔍</span>}
-        iconAfterInput={<span data-testid="after-icon">👁️</span>}
+        iconBefore={<span data-testid="before-icon">🔍</span>}
+        iconAfter={<span data-testid="after-icon">👁️</span>}
       />,
     );
 

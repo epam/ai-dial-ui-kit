@@ -12,8 +12,8 @@ export interface InputBaseProps {
   disabled?: boolean;
   readonly?: boolean;
   invalid?: boolean;
-  iconAfterInput?: ReactNode;
-  iconBeforeInput?: ReactNode;
+  iconAfter?: ReactNode;
+  iconBefore?: ReactNode;
   min?: number;
   max?: number;
 

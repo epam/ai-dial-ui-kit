@@ -36,8 +36,8 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [textBeforeInput] - Text to display before the input
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container

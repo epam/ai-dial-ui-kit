@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { DialTextarea } from './Textarea';
 
-describe('Common components :: DialTextarea', () => {
+describe('Dial UI Kit :: DialTextarea', () => {
   test('Should render successfully', () => {
     const { baseElement } = render(<DialTextarea textareaId="testArea" />);
     expect(baseElement).toBeTruthy();
