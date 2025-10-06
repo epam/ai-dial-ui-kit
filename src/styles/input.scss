@@ -44,8 +44,7 @@
 }
 
 input {
-  -moz-appearance: textfield;
-  /* Firefox */
+  -moz-appearance: textfield; /* Firefox */
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
