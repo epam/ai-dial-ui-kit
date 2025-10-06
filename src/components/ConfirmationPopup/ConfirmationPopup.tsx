@@ -2,36 +2,30 @@ import classNames from 'classnames';
 import { useCallback, type FC, type ReactNode } from 'react';
 
 import { DialButton } from '@/components/Button/Button';
-import { DialPopup } from '@/components/Popup/Popup';
+import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import {
   actionsBaseClasses,
   defaultCancelLabel,
   descriptionBaseClasses,
   variantConfig,
 } from './constants';
-import { DialLoader } from '../Loader/Loader';
+import { DialLoader } from '@/components/Loader/Loader';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 
-export interface ConfirmationPopupProps {
-  title: string | ReactNode;
+export interface DialConfirmationPopupProps extends DialPopupProps {
   description?: string | ReactNode;
   descriptionCssClass?: string;
-  open?: boolean;
   confirmLabel: string;
   cancelLabel?: string;
   isLoading?: boolean;
   disableConfirmButton?: boolean;
-  cssClass?: string;
   confirmClassName?: string;
-  onClose: () => void;
   onConfirm: () => void;
   onCancel?: () => void;
   children?: ReactNode;
-  dividers?: boolean;
   variant?: ConfirmationPopupVariant;
-  size?: PopupSize;
 }
 
 /**
@@ -70,7 +64,7 @@ export interface ConfirmationPopupProps {
  * @param [variant=ConfirmationPopupVariant.Info] - Visual variant for the popup
  * @param [size=PopupSize.Sm] - Size of the popup
  */
-export const DialConfirmationPopup: FC<ConfirmationPopupProps> = ({
+export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   title,
   description,
   descriptionCssClass,
@@ -94,7 +88,7 @@ export const DialConfirmationPopup: FC<ConfirmationPopupProps> = ({
       <DialButton
         variant={ButtonVariant.Secondary}
         title={cancelLabel}
-        onClick={() => (onCancel ? onCancel() : onClose())}
+        onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
       <DialButton
         variant={variantConfig[variant].confirmVariant}
@@ -138,7 +132,7 @@ export const DialConfirmationPopup: FC<ConfirmationPopupProps> = ({
       title={title}
       cssClass={classNames(variantConfig[variant].container, cssClass)}
       dividers={dividers}
-      onClose={() => onClose()}
+      onClose={() => onClose?.()}
       footer={footer}
       size={size}
     >

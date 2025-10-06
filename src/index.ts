@@ -22,7 +22,7 @@ export { DialTooltip } from './components/Tooltip/Tooltip';
 // Switch
 export { DialSwitch } from './components/Switch/Switch';
 
-// Popup
+// Popups
 export { DialPopup } from './components/Popup/Popup';
 export { DialConfirmationPopup } from './components/ConfirmationPopup/ConfirmationPopup';
 

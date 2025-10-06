@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   DialConfirmationPopup,
-  type ConfirmationPopupProps,
+  type DialConfirmationPopupProps,
 } from './ConfirmationPopup';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 
@@ -40,14 +40,14 @@ const meta = {
     disableConfirmButton: false,
     variant: ConfirmationPopupVariant.Info,
   },
-} satisfies Meta<ConfirmationPopupProps>;
+} satisfies Meta<DialConfirmationPopupProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Reusable stateful renderer that opens the popup via a button click
 const StatefulRender = (
-  args: ConfirmationPopupProps & { buttonLabel?: string },
+  args: DialConfirmationPopupProps & { buttonLabel?: string },
 ) => {
   const [open, setOpen] = useState(false);
   return (
