@@ -23,8 +23,8 @@ export interface DialInputProps extends InputBaseProps {
  * <DialInput
  *   elementId="search"
  *   placeholder="Search..."
- *   iconBeforeInput={<SearchIcon />}
- *   iconAfterInput={<ClearIcon />}
+ *   iconBefore={<SearchIcon />}
+ *   iconAfter={<ClearIcon />}
  *   onChange={(value) => console.log(value)}
  * />
  * ```
@@ -32,8 +32,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param elementId - Unique identifier for the input element
  * @param [value] - The current value of the input
  * @param [onChange] - Callback function called when the input value changes
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [placeholder] - Placeholder text displayed when input is empty
  * @param [containerCssClass] - Additional CSS classes to apply to the container div
  * @param [cssClass] - Additional CSS classes to apply to the input element
@@ -51,8 +51,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param [textAfterInput] - Text to display after the input in a separate field
  */
 export const DialInput: FC<DialInputProps> = ({
-  iconBeforeInput,
-  iconAfterInput,
+  iconBefore: iconBefore,
+  iconAfter: iconAfter,
   hideBorder,
   value,
   elementId,
@@ -133,7 +133,7 @@ export const DialInput: FC<DialInputProps> = ({
         </DialTooltip>
       )}
       {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
-      <DialIcon icon={iconBeforeInput} />
+      <DialIcon icon={iconBefore} />
 
       <DialTooltip tooltip={value} triggerClassName={tooltipTriggerClassName}>
         <input
@@ -153,7 +153,7 @@ export const DialInput: FC<DialInputProps> = ({
         />
       </DialTooltip>
 
-      <DialIcon icon={iconAfterInput} />
+      <DialIcon icon={iconAfter} />
       {suffix && <p className="text-secondary dial-small pr-2"> {suffix}</p>}
       {textAfterInput && (
         <DialTooltip tooltip={textAfterInput}>

@@ -39,15 +39,15 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(getByPlaceholderText('With icon')).toBeInTheDocument();
   });
 
-  test('renders iconBeforeInput and iconAfterInput', () => {
+  test('renders iconBefore and iconAfter', () => {
     const before = <span>B</span>;
     const after = <span>A</span>;
     const { container } = render(
       <DialInput
         elementId="icon-input"
         placeholder="With icon"
-        iconBeforeInput={before}
-        iconAfterInput={after}
+        iconBefore={before}
+        iconAfter={after}
       />,
     );
     // Check for the text content of the icons

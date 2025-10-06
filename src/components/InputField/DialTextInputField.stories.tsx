@@ -71,11 +71,11 @@ const meta = {
       control: { type: 'text' },
       description: 'Text to display when readonly and value is empty',
     },
-    iconBeforeInput: {
+    iconBefore: {
       control: false,
       description: 'Icon or element to display before the input',
     },
-    iconAfterInput: {
+    iconAfter: {
       control: false,
       description: 'Icon or element to display after the input',
     },
@@ -211,8 +211,8 @@ export const WithAllExtraParts: Story = {
     fieldTitle: 'Endpoint',
     elementId: 'custom-input',
     placeholder: 'Enter domain',
-    iconBeforeInput: <IconNetwork size={16} />,
-    iconAfterInput: <IconTrash size={16} />,
+    iconBefore: <IconNetwork size={16} />,
+    iconAfter: <IconTrash size={16} />,
     textBeforeInput: 'https://',
     textAfterInput: '.com',
     prefix: 'id',
@@ -323,7 +323,7 @@ export const AllVariants: Story = {
             elementId="basic-no-value-icon"
             fieldTitle="Basic with Icon"
             placeholder="Enter text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
           />
         </div>
         <div>
@@ -331,7 +331,7 @@ export const AllVariants: Story = {
             elementId="hover-no-value-icon"
             fieldTitle="Hover with Icon"
             placeholder="Enter text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             elementContainerCssClass="dial-input-for-hover"
           />
         </div>
@@ -340,7 +340,7 @@ export const AllVariants: Story = {
             elementId="focus-no-value-icon"
             fieldTitle="Focus with Icon"
             placeholder="Enter text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             elementContainerCssClass="dial-input-for-focus"
           />
         </div>
@@ -349,7 +349,7 @@ export const AllVariants: Story = {
             elementId="disabled-no-value-icon"
             fieldTitle="Disabled with Icon"
             placeholder="Enter text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             disabled={true}
           />
         </div>
@@ -369,7 +369,7 @@ export const AllVariants: Story = {
             fieldTitle="Basic with Icon"
             placeholder="Enter text"
             value="Sample text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
           />
         </div>
         <div>
@@ -378,7 +378,7 @@ export const AllVariants: Story = {
             fieldTitle="Hover with Icon"
             placeholder="Enter text"
             value="Sample text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             elementContainerCssClass="dial-input-for-hover"
           />
         </div>
@@ -388,7 +388,7 @@ export const AllVariants: Story = {
             fieldTitle="Focus with Icon"
             placeholder="Enter text"
             value="Sample text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             elementContainerCssClass="dial-input-for-focus"
           />
         </div>
@@ -398,7 +398,7 @@ export const AllVariants: Story = {
             fieldTitle="Disabled with Icon"
             placeholder="Enter text"
             value="Disabled text"
-            iconBeforeInput={<IconSearch size={16} />}
+            iconBefore={<IconSearch size={16} />}
             disabled={true}
           />
         </div>
@@ -437,8 +437,8 @@ export const AllVariantsForExtraParts: Story = {
           fieldTitle="Endpoint"
           elementId="custom-input"
           placeholder="Enter domain"
-          iconBeforeInput={<IconNetwork size={16} />}
-          iconAfterInput={<IconTrash size={16} />}
+          iconBefore={<IconNetwork size={16} />}
+          iconAfter={<IconTrash size={16} />}
           textBeforeInput="https://"
           textAfterInput=".com"
           prefix="id"
@@ -452,8 +452,8 @@ export const AllVariantsForExtraParts: Story = {
           elementId="custom-input"
           placeholder="Enter domain"
           elementContainerCssClass="dial-input-for-hover"
-          iconBeforeInput={<IconNetwork size={16} />}
-          iconAfterInput={<IconTrash size={16} />}
+          iconBefore={<IconNetwork size={16} />}
+          iconAfter={<IconTrash size={16} />}
           textBeforeInput="https://"
           textAfterInput=".com"
           prefix="id"
@@ -466,8 +466,8 @@ export const AllVariantsForExtraParts: Story = {
           elementId="custom-input"
           placeholder="Enter domain"
           elementContainerCssClass="dial-input-for-focus"
-          iconBeforeInput={<IconNetwork size={16} />}
-          iconAfterInput={<IconTrash size={16} />}
+          iconBefore={<IconNetwork size={16} />}
+          iconAfter={<IconTrash size={16} />}
           textBeforeInput="https://"
           textAfterInput=".com"
           prefix="id"
@@ -479,8 +479,8 @@ export const AllVariantsForExtraParts: Story = {
           fieldTitle="Endpoint"
           elementId="custom-input"
           placeholder="Enter domain"
-          iconBeforeInput={<IconNetwork size={16} />}
-          iconAfterInput={<IconTrash size={16} />}
+          iconBefore={<IconNetwork size={16} />}
+          iconAfter={<IconTrash size={16} />}
           textBeforeInput="https://"
           textAfterInput=".com"
           disabled={true}
@@ -493,8 +493,8 @@ export const AllVariantsForExtraParts: Story = {
           fieldTitle="Endpoint"
           elementId="custom-input"
           placeholder="Enter domain"
-          iconBeforeInput={<IconNetwork size={16} />}
-          iconAfterInput={<IconTrash size={16} />}
+          iconBefore={<IconNetwork size={16} />}
+          iconAfter={<IconTrash size={16} />}
           textBeforeInput="https://"
           textAfterInput=".com"
           readonly={true}
