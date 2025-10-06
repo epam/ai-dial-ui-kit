@@ -63,3 +63,20 @@
     @apply dial-base-button-disable;
   }
 }
+
+.dial-danger-button {
+  @apply dial-base-button bg-red-400 text-primary;
+
+  &:hover,
+  &:focus {
+    @apply bg-red-800;
+  }
+
+  &:focus {
+    @apply border-hover;
+  }
+
+  &:disabled {
+    @apply dial-base-button-disable;
+  }
+}
