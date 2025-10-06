@@ -7,7 +7,7 @@ export interface DialCloseButtonProps {
   ariaLabel?: string;
   cssClass?: string;
   size?: number;
-  onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onClose: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 /**
  * A Close button component with a customizable icon and accessible label.
