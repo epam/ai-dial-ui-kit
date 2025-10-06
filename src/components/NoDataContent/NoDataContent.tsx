@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { IconClipboardX } from '@tabler/icons-react';
 
-export interface NoDataContentProps {
+export interface DialNoDataContentProps {
   icon?: ReactNode;
   title: string;
 }
@@ -19,7 +19,10 @@ export interface NoDataContentProps {
  * @param [icon] - Custom icon to display (defaults to clipboard icon)
  * @param title - The message to display when no data is present
  */
-export const NoDataContent: FC<NoDataContentProps> = ({ icon, title }) => {
+export const DialNoDataContent: FC<DialNoDataContentProps> = ({
+  icon,
+  title,
+}) => {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center text-secondary">
       {icon || <IconClipboardX width={60} height={60} />}

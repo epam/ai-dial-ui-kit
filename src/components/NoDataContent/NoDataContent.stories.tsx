@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { NoDataContent } from './NoDataContent';
+import { DialNoDataContent } from './NoDataContent';
 
-const meta: Meta<typeof NoDataContent> = {
+const meta: Meta<typeof DialNoDataContent> = {
   title: 'Components/NoDataContent',
-  component: NoDataContent,
+  component: DialNoDataContent,
   parameters: {
     layout: 'padded',
     docs: {
@@ -23,7 +23,7 @@ const meta: Meta<typeof NoDataContent> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof NoDataContent>;
+type Story = StoryObj<typeof DialNoDataContent>;
 
 export const Default: Story = {
   args: {
@@ -51,13 +51,13 @@ export const AllVariants: Story = {
       {/* Default */}
       <div className="flex flex-row items-center">
         <div className="text-primary pr-4 py-2">Default</div>
-        <NoDataContent title="No data available" />
+        <DialNoDataContent title="No data available" />
       </div>
 
       {/* With Custom Icon */}
       <div className="flex flex-row items-center">
         <div className="text-primary pr-4 py-2">With Custom Icon</div>
-        <NoDataContent
+        <DialNoDataContent
           title="Nothing found"
           icon={<IconAlertTriangle width={60} height={60} color="orange" />}
         />
@@ -66,7 +66,7 @@ export const AllVariants: Story = {
       {/* Long Message */}
       <div className="flex flex-row items-center">
         <div className="text-primary pr-4 py-2">Long Message</div>
-        <NoDataContent title="No results match your search. Try adjusting your filters or check back later." />
+        <DialNoDataContent title="No results match your search. Try adjusting your filters or check back later." />
       </div>
     </div>
   ),
