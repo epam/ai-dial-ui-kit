@@ -110,7 +110,7 @@ export const DialInput: FC<DialInputProps> = ({
   return (
     <div
       className={classNames(
-        'dial-input-field flex flex-row items-center justify-between',
+        'dial-input-field flex flex-row items-center justify-between px-3 py-2',
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',

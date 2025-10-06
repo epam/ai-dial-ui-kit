@@ -14,7 +14,7 @@
 .dial-input,
 .dial-input-no-border {
   @apply bg-transparent dial-small truncate;
-  @apply px-3 py-2 w-full outline-0;
+  @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
     @apply text-primary;
@@ -44,7 +44,8 @@
 }
 
 input {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
