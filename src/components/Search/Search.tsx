@@ -105,7 +105,6 @@ export const DialSearch: FC<DialSearchProps> = ({
         autoComplete="off"
         placeholder={placeholder}
         value={query ?? ''}
-        title={query ? String(query) : ''}
         disabled={disabled}
         readOnly={readonly}
         className={classNames(
