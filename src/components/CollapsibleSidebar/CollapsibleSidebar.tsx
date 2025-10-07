@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { BASE_ICON_PROPS, BASE_ICON_SIZE } from '@/constants/icon';
 import { DialButton } from '@/components/Button/Button';
 
-export interface DialHorizontalCollapseBarProps {
+export interface DialCollapsibleSidebarProps {
   children: ReactNode;
   width: number;
   title: string;
@@ -23,7 +23,7 @@ const CLOSED_WIDTH = 60;
  *
  * @example
  * ```tsx
- * <DialHorizontalCollapseBar
+ * <DialCollapsibleSidebar
  *   width={300}
  *   title="Menu"
  *   titleCssClass="text-primary font-bold"
@@ -32,7 +32,7 @@ const CLOSED_WIDTH = 60;
  *   additionalButtons={<button>Extra</button>}
  * >
  *   <div>Content goes here</div>
- * </DialHorizontalCollapseBar>
+ * </DialCollapsibleSidebar>
  * ```
  *
  * @param children - The content to display inside the collapsible bar when expanded
@@ -43,7 +43,7 @@ const CLOSED_WIDTH = 60;
  * @param [iconSize] - The size of the toggle icons. Defaults to {@link BASE_ICON_SIZE}
  * @param [additionalButtons] - Additional buttons or elements displayed next to the toggle button when expanded
  */
-export const DialHorizontalCollapseBar: FC<DialHorizontalCollapseBarProps> = ({
+export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   containerCssClass,
   children,
   width,

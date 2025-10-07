@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
-  DialHorizontalCollapseBar,
-  type DialHorizontalCollapseBarProps,
-} from './HorizontalCollapseBar';
+  DialCollapsibleSidebar,
+  type DialCollapsibleSidebarProps,
+} from './CollapsibleSidebar';
 import { DialButton } from '@/components/Button/Button';
 import { IconSettings } from '@tabler/icons-react';
 import { ButtonVariant } from '@/types/button';
@@ -21,12 +21,10 @@ const BarContent = (
   </div>
 );
 
-const InteractiveCollapseBar = (args: DialHorizontalCollapseBarProps) => {
+const InteractiveCollapseBar = (args: DialCollapsibleSidebarProps) => {
   return (
     <div className="flex text-primary h-[250px]">
-      <DialHorizontalCollapseBar {...args}>
-        {args.children}
-      </DialHorizontalCollapseBar>
+      <DialCollapsibleSidebar {...args}>{args.children}</DialCollapsibleSidebar>
       <div className="flex-1 bg-layer-3 flex items-center justify-center">
         <p className="text-sm text-secondary">Main content area</p>
       </div>
@@ -34,9 +32,9 @@ const InteractiveCollapseBar = (args: DialHorizontalCollapseBarProps) => {
   );
 };
 
-const meta: Meta<typeof DialHorizontalCollapseBar> = {
-  title: 'Components/HorizontalCollapseBar',
-  component: DialHorizontalCollapseBar,
+const meta: Meta<typeof DialCollapsibleSidebar> = {
+  title: 'Components/DialCollapsibleSidebar',
+  component: DialCollapsibleSidebar,
   tags: ['collapse', 'sidebar'],
   parameters: {
     layout: 'fullscreen',

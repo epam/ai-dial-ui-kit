@@ -8,7 +8,7 @@ export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
-export { DialHorizontalCollapseBar } from './components/HorizontalCollapseBar/HorizontalCollapseBar';
+export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
