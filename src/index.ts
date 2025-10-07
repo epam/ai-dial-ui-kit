@@ -39,6 +39,8 @@ export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
+export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
+export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 
 // Types
 export { AlertVariant } from './types/alert';
