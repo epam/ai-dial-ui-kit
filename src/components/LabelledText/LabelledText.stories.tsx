@@ -39,7 +39,7 @@ export const Default: Story = {
 export const WithContent: Story = {
   args: {
     label: 'Custom Content',
-    content: <span style={{ color: 'green' }}>Custom node here</span>,
+    children: <span style={{ color: 'green' }}>Custom node here</span>,
   },
 };
 
@@ -47,7 +47,7 @@ export const WithContentAfterText: Story = {
   args: {
     label: 'With Action',
     text: 'Copy this value',
-    contentAfterText: <button style={{ marginLeft: 8 }}>Copy</button>,
+    postfix: <button style={{ marginLeft: 8 }}>Copy</button>,
   },
 };
 

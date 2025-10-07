@@ -11,10 +11,9 @@ describe('Dial UI Kit :: FieldLabel', () => {
 
   it('renders children instead of text if provided', () => {
     render(
-      <DialLabelledText
-        label="Child Label"
-        content={<span>Child Content</span>}
-      />,
+      <DialLabelledText label="Child Label">
+        <span>Child Content</span>
+      </DialLabelledText>,
     );
     expect(screen.getByText('Child Content')).toBeInTheDocument();
     expect(screen.getByText('Child Label')).toBeInTheDocument();
@@ -25,7 +24,7 @@ describe('Dial UI Kit :: FieldLabel', () => {
       <DialLabelledText
         label="Copy Label"
         text="Copy Text"
-        contentAfterText={<span>copy</span>}
+        postfix={<span>copy</span>}
       />,
     );
     expect(screen.getByText('copy')).toBeInTheDocument();
