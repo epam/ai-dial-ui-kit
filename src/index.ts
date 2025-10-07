@@ -51,3 +51,4 @@ export { SearchSize } from './types/search';
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
+export type { RadioButtonWithContent } from './models/radio';

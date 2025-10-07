@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 
 import {
   groupBaseClasses,
@@ -10,12 +10,7 @@ import {
 import { DialFieldLabel } from '@/components/Field/Field';
 import { DialRadioButton } from '@/components/RadioButton/RadioButton';
 import type { RadioGroupOrientation } from '@/types/radio-group';
-
-export interface RadioButtonWithContent {
-  id: string;
-  name: string;
-  content?: ReactNode;
-}
+import type { RadioButtonWithContent } from '@/models/radio';
 
 export interface DialRadioGroupProps {
   fieldTitle?: string;
