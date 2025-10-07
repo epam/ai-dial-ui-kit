@@ -38,13 +38,23 @@ export { DialPasswordInputField } from './components/PasswordInput/PasswordInput
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
 
+// Dropdowns
+export { DialDropdown } from './components/Dropdown';
+export type {
+  DialDropdownComponentProps,
+  DialDropdownItemProps,
+  DialDropdownFieldProps,
+} from './components/Dropdown';
+
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
+export { DropdownType } from './types/dropdown';
 
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
+export type { DropdownItemsModel } from './models/dropdown';
