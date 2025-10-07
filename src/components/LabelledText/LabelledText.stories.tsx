@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFieldLabel, type DialFieldLabelProps } from './FieldLabel';
+import { DialLabelledText, type DialLabelledTextProps } from './LabelledText';
 
-const meta: Meta<typeof DialFieldLabel> = {
-  title: 'Components/FieldLabel',
-  component: DialFieldLabel,
+const meta: Meta<typeof DialLabelledText> = {
+  title: 'Components/LabelledText',
+  component: DialLabelledText,
   parameters: {
     layout: 'padded',
     docs: {
@@ -23,11 +23,11 @@ const meta: Meta<typeof DialFieldLabel> = {
       description: 'The main text for the field',
     },
   },
-} satisfies Meta<DialFieldLabelProps>;
+} satisfies Meta<DialLabelledTextProps>;
 
 export default meta;
 
-type Story = StoryObj<typeof DialFieldLabel>;
+type Story = StoryObj<typeof DialLabelledText>;
 
 export const Default: Story = {
   args: {

@@ -3,7 +3,7 @@ import type { FC, ReactNode } from 'react';
 
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
-export interface DialFieldLabelProps {
+export interface DialLabelledTextProps {
   label: string;
   text?: string;
   content?: ReactNode;
@@ -26,7 +26,7 @@ export interface DialFieldLabelProps {
  * @param [content] - Custom content to render instead of the default text/tooltip
  * @param [contentAfterText] - Element to display after the text (e.g., an asterisk)
  */
-export const DialFieldLabel: FC<DialFieldLabelProps> = ({
+export const DialLabelledText: FC<DialLabelledTextProps> = ({
   label,
   text,
   content,
