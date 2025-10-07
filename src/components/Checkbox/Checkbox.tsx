@@ -86,6 +86,8 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       )}
       <input
         type="checkbox"
+        role="checkbox"
+        name={id}
         onChange={handleChange}
         id={id}
         checked={checked}
