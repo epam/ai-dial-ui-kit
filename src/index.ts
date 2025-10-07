@@ -8,6 +8,7 @@ export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
+export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -45,6 +46,7 @@ export { ButtonVariant } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
+export { SearchSize } from './types/search';
 
 // Models
 export { StepStatus } from './models/step';
