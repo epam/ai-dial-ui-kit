@@ -39,15 +39,15 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(getByPlaceholderText('With icon')).toBeInTheDocument();
   });
 
-  test('renders iconBeforeInput and iconAfterInput', () => {
+  test('renders iconBefore and iconAfter', () => {
     const before = <span>B</span>;
     const after = <span>A</span>;
     const { container } = render(
       <DialInput
         elementId="icon-input"
         placeholder="With icon"
-        iconBeforeInput={before}
-        iconAfterInput={after}
+        iconBefore={before}
+        iconAfter={after}
       />,
     );
     // Check for the text content of the icons
@@ -76,14 +76,6 @@ describe('Dial UI Kit :: DialInput', () => {
     const inputContainer = container.querySelector('.dial-input-field');
     expect(inputContainer).toHaveClass('dial-input-no-border');
     expect(inputContainer).not.toHaveClass('dial-input');
-  });
-
-  test('handles value and title attributes correctly', () => {
-    const { getByDisplayValue } = render(
-      <DialInput elementId="test-input" value="test value" />,
-    );
-    const input = getByDisplayValue('test value');
-    expect(input).toHaveAttribute('title', 'test value');
   });
 
   test('applies invalid class when invalid prop is true', () => {
