@@ -5,7 +5,9 @@ import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
-import { DialOpenPopUpIcon } from './icons/OpenPopUpIcon';
+import OpenPopupIcon from '@/public/assets/icons/open-popup.svg?react';
+import { DialIcon } from '../Icon/Icon';
+import { BASE_ICON_SIZE } from '@/constants/icon';
 
 export interface DialInputModalProps {
   open?: boolean;
@@ -96,7 +98,15 @@ export const DialInputModal: FC<DialInputModalProps> = ({
           </DialTooltip>
           {!readonly && (
             <div className="flex-shrink-0">
-              <DialOpenPopUpIcon />
+              <DialIcon
+                icon={
+                  <OpenPopupIcon
+                    role="img"
+                    width={BASE_ICON_SIZE}
+                    height={BASE_ICON_SIZE}
+                  />
+                }
+              />
             </div>
           )}
         </div>
@@ -116,7 +126,15 @@ export const DialInputModal: FC<DialInputModalProps> = ({
         <DialAutocompleteInputValue selectedItems={value as string[]} />
         {!readonly && (
           <div className="ml-1">
-            <DialOpenPopUpIcon />
+            <DialIcon
+              icon={
+                <OpenPopupIcon
+                  role="img"
+                  width={BASE_ICON_SIZE}
+                  height={BASE_ICON_SIZE}
+                />
+              }
+            />
           </div>
         )}
       </div>
