@@ -6,26 +6,36 @@ const mockFunction = vi.fn();
 
 describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render successfully', () => {
-    const { baseElement } = render(
+    render(
       <DialInputModal open onOpenModal={mockFunction} emptyValueText="None">
-        <div></div>
+        <div>Modal Content</div>
       </DialInputModal>,
     );
-    expect(baseElement).toBeTruthy();
+
+    const modalContent = screen.getByText('Modal Content');
+    expect(modalContent).toBeInTheDocument();
+
+    const emptyValueText = screen.getByText('None');
+    expect(emptyValueText).toBeInTheDocument();
   });
 
   test('Should render with empty value successfully', () => {
-    const { baseElement } = render(
+    render(
       <DialInputModal
         open
         onOpenModal={mockFunction}
         selectedValue={''}
         emptyValueText="None"
       >
-        <div></div>
+        <div>Modal Content</div>
       </DialInputModal>,
     );
-    expect(baseElement).toBeTruthy();
+
+    const modalContent = screen.getByText('Modal Content');
+    expect(modalContent).toBeInTheDocument();
+
+    const emptyValueText = screen.getByText('None');
+    expect(emptyValueText).toBeInTheDocument();
   });
 
   test('Should render with a single value successfully', () => {
