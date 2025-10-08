@@ -41,6 +41,7 @@ export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
 export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
+export { DialInputModal } from './components/InputModal/InputModal';
 
 // Types
 export { AlertVariant } from './types/alert';

@@ -14,7 +14,7 @@ import { BASE_ICON_SIZE } from '@/constants/icon';
  * @param {number} [size=BASE_ICON_SIZE] - The size of the icon in pixels. Defaults to the `BASE_ICON_SIZE` constant.
  * @param {string} [color='currentColor'] - The color of the icon. Accepts any valid CSS color value. Defaults to `'currentColor'`.
  */
-export const OpenPopUpIcon = ({
+export const DialOpenPopUpIcon = ({
   size = BASE_ICON_SIZE,
   color = 'currentColor',
 }) => {

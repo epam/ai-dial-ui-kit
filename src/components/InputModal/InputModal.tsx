@@ -2,11 +2,11 @@ import { createPortal } from 'react-dom';
 
 import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
-import { DialTooltip } from '../Tooltip/Tooltip';
-import { DialErrorText } from '../ErrorText/ErrorText';
-import { DialAutocompleteInputValue } from '../AutocompleteInput/AutocompleteInputValue';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
 import { PopupState } from '@/types/popup';
-import { OpenPopUpIcon } from './icons/OpenPopUpIcon';
+import { DialOpenPopUpIcon } from './icons/OpenPopUpIcon';
 
 export interface DialInputModalProps {
   modalState: PopupState;
@@ -97,7 +97,7 @@ export const DialInputModal: FC<DialInputModalProps> = ({
           </DialTooltip>
           {!readonly && (
             <div className="flex-shrink-0">
-              <OpenPopUpIcon />
+              <DialOpenPopUpIcon />
             </div>
           )}
         </div>
@@ -117,7 +117,7 @@ export const DialInputModal: FC<DialInputModalProps> = ({
         <DialAutocompleteInputValue selectedItems={value as string[]} />
         {!readonly && (
           <div className="ml-1">
-            <OpenPopUpIcon />
+            <DialOpenPopUpIcon />
           </div>
         )}
       </div>
