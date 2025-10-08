@@ -13,7 +13,7 @@ export interface DialInputModalProps {
   open?: boolean;
   selectedValue?: string | string[];
   children: ReactNode;
-  onOpenModal: () => void;
+  onOpen: () => void;
   readonly?: boolean;
   valueCssClasses?: string;
   inputCssClasses?: string;
@@ -62,7 +62,7 @@ export const DialInputModal: FC<DialInputModalProps> = ({
   selectedValue,
   valueCssClasses,
   inputCssClasses,
-  onOpenModal,
+  onOpen,
   elementId,
   errorText,
   emptyValueText,
@@ -74,7 +74,7 @@ export const DialInputModal: FC<DialInputModalProps> = ({
   const value =
     hasMultipleValues || hasSingleValue ? selectedValue : emptyValueText;
 
-  const handleClick = readonly ? undefined : onOpenModal;
+  const handleClick = readonly ? undefined : onOpen;
 
   const renderSingleValue = () => (
     <>

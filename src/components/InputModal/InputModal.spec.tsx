@@ -7,7 +7,7 @@ const mockFunction = vi.fn();
 describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render successfully', () => {
     render(
-      <DialInputModal open onOpenModal={mockFunction} emptyValueText="None">
+      <DialInputModal open onOpen={mockFunction} emptyValueText="None">
         <div>Modal Content</div>
       </DialInputModal>,
     );
@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     render(
       <DialInputModal
         open
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue={''}
         emptyValueText="None"
       >
@@ -42,7 +42,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const singleValue = 'Single Value';
     render(
       <DialInputModal
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
       >
@@ -58,7 +58,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
       <DialInputModal
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
       >
@@ -76,7 +76,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const singleValue = 'Readonly Value';
     render(
       <DialInputModal
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
         readonly={true}
@@ -95,7 +95,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
       <DialInputModal
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
         readonly={true}
@@ -116,7 +116,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const errorText = 'This is an error';
     render(
       <DialInputModal
-        onOpenModal={mockFunction}
+        onOpen={mockFunction}
         selectedValue="Some Value"
         emptyValueText="None"
         errorText={errorText}

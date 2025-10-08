@@ -19,7 +19,7 @@ const InteractiveInputModal = (args: DialInputModalProps) => {
         {...args}
         open={modalState}
         selectedValue={selectedValue}
-        onOpenModal={handleOpenModal}
+        onOpen={handleOpenModal}
         emptyValueText="None"
       >
         <DialPopup open onClose={handleCloseModal} title="Select value">
@@ -92,7 +92,7 @@ const meta: Meta<typeof DialInputModal> = {
       control: { type: 'text' },
       description: 'Displays error text below the input when provided',
     },
-    onOpenModal: {
+    onOpen: {
       action: 'openModal',
       control: false,
       description: 'Callback fired when user clicks to open modal',
@@ -148,7 +148,7 @@ export const AllVariants: Story = {
         <InteractiveInputModal
           selectedValue=""
           emptyValueText="None"
-          onOpenModal={() => null}
+          onOpen={() => null}
         >
           <div />
         </InteractiveInputModal>
@@ -158,7 +158,7 @@ export const AllVariants: Story = {
         <InteractiveInputModal
           selectedValue="Option 1"
           emptyValueText="None"
-          onOpenModal={() => null}
+          onOpen={() => null}
         >
           <div />
         </InteractiveInputModal>
@@ -168,7 +168,7 @@ export const AllVariants: Story = {
         <InteractiveInputModal
           selectedValue={['One', 'Two', 'Three']}
           emptyValueText="None"
-          onOpenModal={() => null}
+          onOpen={() => null}
         >
           <div />
         </InteractiveInputModal>
@@ -179,7 +179,7 @@ export const AllVariants: Story = {
           selectedValue="Static Value"
           emptyValueText="None"
           readonly
-          onOpenModal={() => null}
+          onOpen={() => null}
         >
           <div />
         </InteractiveInputModal>
@@ -190,7 +190,7 @@ export const AllVariants: Story = {
           selectedValue=""
           errorText="Selection is required"
           emptyValueText="None"
-          onOpenModal={() => null}
+          onOpen={() => null}
         >
           <div />
         </InteractiveInputModal>
