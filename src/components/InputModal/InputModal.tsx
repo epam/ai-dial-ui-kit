@@ -22,9 +22,9 @@ export interface DialInputModalProps {
 }
 
 /**
- * A versatile input component that supports modal-based interactions. The component can display
- * a single value or a list of selected values, and it integrates with a modal popup for additional
- * input or selection. It supports read-only mode, error states, and customizable styling.
+ * An input field that opens a modal (popup) when clicked, displaying a selected value or a list of values.
+ * It supports read-only mode, error states, and disabled state, with customizable styling.
+ * The modal content is rendered using a portal for seamless integration.
  *
  * @example
  * ```tsx
