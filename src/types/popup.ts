@@ -3,3 +3,8 @@ export enum PopupSize {
   Md = 'md',
   Lg = 'lg',
 }
+
+export enum PopupState {
+  Closed = 'closed',
+  Opened = 'opened',
+}

@@ -1,0 +1,35 @@
+import { BASE_ICON_SIZE } from '@/constants/icon';
+
+/**
+ * A React component that renders an SVG icon representing an "open pop-up" action.
+ * The icon's size and color can be customized via props, with default values provided.
+ *
+ * @example
+ * ```tsx
+ * <OpenPopUpIcon size={24} color="red" />
+ * <OpenPopUpIcon size={32} />
+ * <OpenPopUpIcon />
+ * ```
+ *
+ * @param {number} [size=BASE_ICON_SIZE] - The size of the icon in pixels. Defaults to the `BASE_ICON_SIZE` constant.
+ * @param {string} [color='currentColor'] - The color of the icon. Accepts any valid CSS color value. Defaults to `'currentColor'`.
+ */
+export const OpenPopUpIcon = ({
+  size = BASE_ICON_SIZE,
+  color = 'currentColor',
+}) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.25 13.5V12C2.25 11.5858 2.58579 11.25 3 11.25C3.41421 11.25 3.75 11.5858 3.75 12V13.5C3.75 13.6989 3.82907 13.8896 3.96973 14.0303C4.11038 14.1709 4.30109 14.25 4.5 14.25H6C6.41421 14.25 6.75 14.5858 6.75 15C6.75 15.4142 6.41421 15.75 6 15.75H4.5C3.90326 15.75 3.33114 15.5128 2.90918 15.0908C2.48722 14.6689 2.25 14.0967 2.25 13.5ZM14.25 6V4.5C14.25 4.30109 14.1709 4.11038 14.0303 3.96973C13.8896 3.82907 13.6989 3.75 13.5 3.75H12C11.5858 3.75 11.25 3.41421 11.25 3C11.25 2.58579 11.5858 2.25 12 2.25H13.5C14.0967 2.25 14.6689 2.48722 15.0908 2.90918C15.5128 3.33114 15.75 3.90326 15.75 4.5V6C15.75 6.41421 15.4142 6.75 15 6.75C14.5858 6.75 14.25 6.41421 14.25 6Z"
+        fill={color}
+      />
+    </svg>
+  );
+};
