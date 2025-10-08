@@ -1,18 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialInputModal } from './InputModal';
-import { PopupState } from '@/types/popup';
 
 const mockFunction = vi.fn();
 
 describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render successfully', () => {
     const { baseElement } = render(
-      <DialInputModal
-        modalState={PopupState.Opened}
-        onOpenModal={mockFunction}
-        emptyValueText="None"
-      >
+      <DialInputModal open onOpenModal={mockFunction} emptyValueText="None">
         <div></div>
       </DialInputModal>,
     );
@@ -22,7 +17,7 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render with empty value successfully', () => {
     const { baseElement } = render(
       <DialInputModal
-        modalState={PopupState.Opened}
+        open
         onOpenModal={mockFunction}
         selectedValue={''}
         emptyValueText="None"
@@ -37,7 +32,6 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const singleValue = 'Single Value';
     render(
       <DialInputModal
-        modalState={PopupState.Closed}
         onOpenModal={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
@@ -54,7 +48,6 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
       <DialInputModal
-        modalState={PopupState.Closed}
         onOpenModal={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
@@ -73,7 +66,6 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const singleValue = 'Readonly Value';
     render(
       <DialInputModal
-        modalState={PopupState.Closed}
         onOpenModal={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
@@ -93,7 +85,6 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
       <DialInputModal
-        modalState={PopupState.Closed}
         onOpenModal={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
@@ -115,7 +106,6 @@ describe('Dial UI Kit :: DialInputModal', () => {
     const errorText = 'This is an error';
     render(
       <DialInputModal
-        modalState={PopupState.Closed}
         onOpenModal={mockFunction}
         selectedValue="Some Value"
         emptyValueText="None"

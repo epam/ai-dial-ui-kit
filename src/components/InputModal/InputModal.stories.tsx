@@ -1,24 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { PopupState } from '@/types/popup';
 import { DialButton } from '@/components/Button/Button';
 import { DialInputModal, type DialInputModalProps } from './InputModal';
 import { DialPopup } from '../Popup/Popup';
 
 const InteractiveInputModal = (args: DialInputModalProps) => {
-  const [modalState, setModalState] = useState<PopupState>(PopupState.Closed);
+  const [modalState, setModalState] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string | string[]>(
     args.selectedValue || '',
   );
 
-  const handleOpenModal = () => setModalState(PopupState.Opened);
-  const handleCloseModal = () => setModalState(PopupState.Closed);
+  const handleOpenModal = () => setModalState(true);
+  const handleCloseModal = () => setModalState(false);
 
   return (
     <div className="rounded-md w-[320px]">
       <DialInputModal
         {...args}
-        modalState={modalState}
+        open={modalState}
         selectedValue={selectedValue}
         onOpenModal={handleOpenModal}
         emptyValueText="None"
@@ -65,7 +64,7 @@ const meta: Meta<typeof DialInputModal> = {
     },
   },
   argTypes: {
-    modalState: {
+    open: {
       control: false,
       description: 'Controls whether the modal is open or closed',
     },
@@ -147,7 +146,6 @@ export const AllVariants: Story = {
       <div>
         <h4 className="text-lg font-semibold mb-2">Default</h4>
         <InteractiveInputModal
-          modalState={PopupState.Closed}
           selectedValue=""
           emptyValueText="None"
           onOpenModal={() => null}
@@ -158,7 +156,6 @@ export const AllVariants: Story = {
       <div>
         <h4 className="text-lg font-semibold mb-2">Preselected</h4>
         <InteractiveInputModal
-          modalState={PopupState.Closed}
           selectedValue="Option 1"
           emptyValueText="None"
           onOpenModal={() => null}
@@ -169,7 +166,6 @@ export const AllVariants: Story = {
       <div>
         <h4 className="text-lg font-semibold mb-2">Multiple</h4>
         <InteractiveInputModal
-          modalState={PopupState.Closed}
           selectedValue={['One', 'Two', 'Three']}
           emptyValueText="None"
           onOpenModal={() => null}
@@ -180,7 +176,6 @@ export const AllVariants: Story = {
       <div>
         <h4 className="text-lg font-semibold mb-2">Readonly</h4>
         <InteractiveInputModal
-          modalState={PopupState.Closed}
           selectedValue="Static Value"
           emptyValueText="None"
           readonly
@@ -192,7 +187,6 @@ export const AllVariants: Story = {
       <div>
         <h4 className="text-lg font-semibold mb-2">With Error</h4>
         <InteractiveInputModal
-          modalState={PopupState.Closed}
           selectedValue=""
           errorText="Selection is required"
           emptyValueText="None"

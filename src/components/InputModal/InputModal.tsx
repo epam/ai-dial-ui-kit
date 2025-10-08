@@ -5,11 +5,10 @@ import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
-import { PopupState } from '@/types/popup';
 import { DialOpenPopUpIcon } from './icons/OpenPopUpIcon';
 
 export interface DialInputModalProps {
-  modalState: PopupState;
+  open?: boolean;
   selectedValue?: string | string[];
   children: ReactNode;
   onOpenModal: () => void;
@@ -29,10 +28,10 @@ export interface DialInputModalProps {
  * @example
  * ```tsx
  * <DialInputModal
- *   modalState={PopupState.Closed}
+ *   open={true}
  *   selectedValue="Selected Item"
  *   emptyValueText="No value selected"
- *   onOpenModal={() => setModalState(PopupState.Opened)}
+ *   onOpenModal={() => setModalState(true)}
  *   readonly={false}
  *   valueCssClasses="custom-value-class"
  *   inputCssClasses="custom-input-class"
@@ -43,7 +42,7 @@ export interface DialInputModalProps {
  * </DialInputModal>
  * ```
  *
- * @param modalState - The current state of the modal, indicating whether it is opened or closed. Uses the {@link PopupState} enum.
+ * @param [open] - The current state of the modal, indicating whether it is opened or closed.
  * @param [selectedValue] - The currently selected value(s). Can be a string for a single value or an array of strings for multiple values.
  * @param children - The content to render inside the modal when it is opened.
  * @param onOpenModal - A callback function triggered when the modal open button is clicked.
@@ -56,7 +55,7 @@ export interface DialInputModalProps {
  */
 export const DialInputModal: FC<DialInputModalProps> = ({
   children,
-  modalState,
+  open,
   readonly,
   selectedValue,
   valueCssClasses,
@@ -127,8 +126,7 @@ export const DialInputModal: FC<DialInputModalProps> = ({
   return (
     <>
       {hasMultipleValues ? renderMultipleValues() : renderSingleValue()}
-      {modalState === PopupState.Opened &&
-        createPortal(children, document.body)}
+      {open && createPortal(children, document.body)}
     </>
   );
 };
