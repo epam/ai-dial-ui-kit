@@ -5,7 +5,7 @@ import { PopupState } from '@/types/popup';
 
 const mockFunction = vi.fn();
 
-describe('Common components - InputModal', () => {
+describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render successfully', () => {
     const { baseElement } = render(
       <DialInputModal
