@@ -30,6 +30,11 @@ const meta = {
       control: { type: 'text' },
       description: 'Button additional styles',
     },
+    textCssClass: {
+      control: { type: 'text' },
+      description:
+        'Additional CSS classes to apply specifically to the button text',
+    },
     disable: {
       control: { type: 'boolean' },
       description: 'Whether the button is disabled',
@@ -111,6 +116,22 @@ export const WithIconAfter: Story = {
     title: 'Alert',
     iconAfter: <IconArrowRight size={16} />,
     cssClass: 'dial-tertiary-button',
+  },
+};
+
+export const WithCustomTextStyling: Story = {
+  args: {
+    title: 'Custom Text Styling',
+    variant: ButtonVariant.Primary,
+    textCssClass: 'font-bold uppercase tracking-wider',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates the textCssClass prop which allows custom styling of the button text while keeping the button container styling intact.',
+      },
+    },
   },
 };
 

@@ -9,6 +9,7 @@ export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
+export { DialLabelledText } from './components/LabelledText/LabelledText';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -53,3 +54,4 @@ export { SearchSize } from './types/search';
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
+export type { RadioButtonWithContent } from './models/radio';

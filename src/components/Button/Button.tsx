@@ -8,6 +8,7 @@ import { variantClassMap } from './constants';
 export interface DialButtonProps {
   variant?: ButtonVariant;
   cssClass?: string;
+  textCssClass?: string;
   disable?: boolean;
   title?: string;
   iconBefore?: ReactNode;
@@ -34,6 +35,7 @@ export interface DialButtonProps {
  * @param [title] - The text content of the button
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
  * @param [cssClass] - Additional CSS classes to apply to the button
+ * @param [textCssClass] - Additional CSS classes to apply specifically to the button text
  * @param [onClick] - Click event handler for the button
  * @param [disable=false] - Whether the button should be disabled
  * @param [iconAfter] - Icon or element to display after the button text
@@ -46,6 +48,7 @@ export const DialButton: FC<DialButtonProps> = ({
   title,
   variant,
   cssClass,
+  textCssClass,
   ref,
   onClick,
   disable,
@@ -59,6 +62,7 @@ export const DialButton: FC<DialButtonProps> = ({
     iconAfter ? 'mr-2' : '',
     iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
+    textCssClass,
   );
   const btnClassNames = classNames(
     variant && variantClassMap[variant],
