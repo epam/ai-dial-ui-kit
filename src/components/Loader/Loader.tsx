@@ -47,6 +47,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
     <div
       role="status"
       aria-label={ariaLabel}
+      name="loader"
       className={classNames({
         [loaderBaseClasses]: true,
         ['w-full h-full']: fullWidth,
@@ -59,6 +60,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
             width={size}
             height={size}
             className={classNames(loaderIconBaseClasses, iconClass)}
+            role="img"
           />
         }
       />

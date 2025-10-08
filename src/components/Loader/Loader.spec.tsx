@@ -32,4 +32,23 @@ describe('Dial UI Kit :: DialLoader', () => {
     expect(svg?.getAttribute('height')).toBe('32');
     expect(svg?.getAttribute('width')).toBe('32');
   });
+
+  test('applies custom CSS class', () => {
+    render(<DialLoader cssClass="custom-class" />);
+    const el = screen.getByRole('status');
+    expect(el).toHaveClass('custom-class');
+  });
+
+  test('applies custom icon class', () => {
+    const { container } = render(<DialLoader iconClass="custom-icon-class" />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveClass('custom-icon-class');
+  });
+
+  test('renders with default size when not specified', () => {
+    const { container } = render(<DialLoader />);
+    const svg = container.querySelector('svg');
+    expect(svg?.getAttribute('height')).toBe('18');
+    expect(svg?.getAttribute('width')).toBe('18');
+  });
 });
