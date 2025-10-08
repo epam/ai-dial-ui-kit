@@ -125,7 +125,7 @@ export const DialInput: FC<DialInputProps> = ({
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-r-none border-r-0"
-            cssClass="px-2 overflow-hidden overflow-ellipsis dial-small"
+            cssClass="overflow-hidden overflow-ellipsis dial-small"
             value={textBeforeInput}
             disabled={true}
             elementId={textBeforeInput + 'textBefore'}
@@ -146,7 +146,7 @@ export const DialInput: FC<DialInputProps> = ({
           placeholder={placeholder}
           value={value ?? ''}
           disabled={disabled}
-          className={classNames('border-0 bg-transparent px-2', cssClass)}
+          className={classNames('border-0 bg-transparent', cssClass)}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
@@ -162,7 +162,6 @@ export const DialInput: FC<DialInputProps> = ({
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-l-none border-l-0"
-            cssClass="px-2"
             value={textAfterInput}
             disabled={true}
             elementId={textAfterInput + 'textAfter'}

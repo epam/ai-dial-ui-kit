@@ -9,6 +9,7 @@ export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
+export { DialLabelledText } from './components/LabelledText/LabelledText';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
