@@ -1,13 +1,18 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import svgr from 'vite-plugin-svgr';
 import path from 'path';
 
 import tailwindcss from 'tailwindcss';
 import { peerDependencies } from './package.json';
 
 export default defineConfig({
-  plugins: [react(), dts({ exclude: ['**/*.stories.tsx', '**/*.spec.tsx'] })],
+  plugins: [
+    react(),
+    svgr(),
+    dts({ exclude: ['**/*.stories.tsx', '**/*.spec.tsx'] }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

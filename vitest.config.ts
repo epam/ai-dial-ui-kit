@@ -5,10 +5,11 @@ import {
 } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   root: __dirname,
-  plugins: [react()],
+  plugins: [react(), svgr()],
   resolve: {
     alias: [
       {
