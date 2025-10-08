@@ -5,8 +5,8 @@ import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
-import OpenPopupIcon from '@/public/assets/icons/open-popup.svg?react';
-import { DialIcon } from '../Icon/Icon';
+import OpenPopupIcon from '@/assets/icons/open-popup.svg?react';
+import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_SIZE } from '@/constants/icon';
 
 export interface DialInputModalProps {

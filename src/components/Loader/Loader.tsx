@@ -3,7 +3,7 @@ import type { FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { loaderBaseClasses, loaderIconBaseClasses } from './constants';
-import LoaderIcon from '@/public/assets/icons/loader.svg?react';
+import LoaderIcon from '@/assets/icons/loader.svg?react';
 
 export interface DialLoaderProps {
   size?: number;
