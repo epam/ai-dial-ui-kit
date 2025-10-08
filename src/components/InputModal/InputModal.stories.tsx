@@ -93,7 +93,7 @@ const meta: Meta<typeof DialInputModal> = {
       description: 'Displays error text below the input when provided',
     },
     onOpen: {
-      action: 'openModal',
+      action: 'open',
       control: false,
       description: 'Callback fired when user clicks to open modal',
     },

@@ -33,7 +33,7 @@ export interface DialInputModalProps {
  *   open={true}
  *   selectedValue="Selected Item"
  *   emptyValueText="No value selected"
- *   onOpenModal={() => setModalState(true)}
+ *   onOpen={() => setModalState(true)}
  *   readonly={false}
  *   valueCssClasses="custom-value-class"
  *   inputCssClasses="custom-input-class"
@@ -47,7 +47,7 @@ export interface DialInputModalProps {
  * @param [open] - The current state of the modal, indicating whether it is opened or closed.
  * @param [selectedValue] - The currently selected value(s). Can be a string for a single value or an array of strings for multiple values.
  * @param children - The content to render inside the modal when it is opened.
- * @param onOpenModal - A callback function triggered when the modal open button is clicked.
+ * @param onOpen - A callback function triggered when the modal open button is clicked.
  * @param [readonly=false] - Whether the input is read-only, preventing user interaction.
  * @param [valueCssClasses] - Additional CSS classes applied to the displayed value.
  * @param [inputCssClasses] - Additional CSS classes applied to the input container.
