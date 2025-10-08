@@ -3,7 +3,7 @@ import type { FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { loaderBaseClasses, loaderIconBaseClasses } from './constants';
-import { IconLoader } from '@tabler/icons-react';
+import LoaderIcon from '@/public/assets/icons/loader.svg?react';
 
 export interface DialLoaderProps {
   size?: number;
@@ -55,7 +55,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
     >
       <DialIcon
         icon={
-          <IconLoader
+          <LoaderIcon
             width={size}
             height={size}
             className={classNames(loaderIconBaseClasses, iconClass)}
