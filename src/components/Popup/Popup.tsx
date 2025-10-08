@@ -15,7 +15,6 @@ import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { PopupSize } from '@/types/popup';
 import {
   overlayBaseClasses,
-  popupBaseClasses,
   popupDividerClasses,
   popupHeaderClasses,
   popupSizeClassMap,
@@ -129,7 +128,7 @@ export const DialPopup: FC<DialPopupProps> = ({
             aria-modal="true"
             aria-labelledby={headingId}
             className={classNames(
-              popupBaseClasses,
+              'dial-popup',
               popupSizeClassMap[size],
               dividers && popupDividerClasses,
               cssClass,

@@ -1,0 +1,15 @@
+div .dial-sm-popup {
+  @apply max-w-full md:max-w-[400px];
+}
+
+div .dial-md-popup {
+  @apply max-w-full md:max-w-[800px];
+}
+
+div .dial-lg-popup {
+  @apply max-w-full md:max-w-[1200px];
+}
+
+div .dial-popup {
+  @apply relative max-h-full rounded bg-layer-3 flex flex-col shadow w-full h-full md:h-auto;
+}
