@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialButton } from '@/components/Button/Button';
-import { DialInputModal, type DialInputModalProps } from './InputModal';
-import { DialPopup } from '../Popup/Popup';
+import { DialInputPopup, type DialInputPopupProps } from './InputPopup';
+import { DialPopup } from '@/components/Popup/Popup';
 
-const InteractiveInputModal = (args: DialInputModalProps) => {
+const InteractiveInputModal = (args: DialInputPopupProps) => {
   const [modalState, setModalState] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string | string[]>(
     args.selectedValue || '',
@@ -15,7 +15,7 @@ const InteractiveInputModal = (args: DialInputModalProps) => {
 
   return (
     <div className="rounded-md w-[320px]">
-      <DialInputModal
+      <DialInputPopup
         {...args}
         open={modalState}
         selectedValue={selectedValue}
@@ -45,14 +45,14 @@ const InteractiveInputModal = (args: DialInputModalProps) => {
             />
           </div>
         </DialPopup>
-      </DialInputModal>
+      </DialInputPopup>
     </div>
   );
 };
 
-const meta: Meta<typeof DialInputModal> = {
-  title: 'Components/InputModal',
-  component: DialInputModal,
+const meta: Meta<typeof DialInputPopup> = {
+  title: 'Components/InputPopup',
+  component: DialInputPopup,
   tags: ['modal', 'input', 'form'],
   parameters: {
     layout: 'centered',

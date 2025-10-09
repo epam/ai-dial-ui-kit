@@ -40,7 +40,7 @@ export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
-export { DialInputModal } from './components/InputModal/InputModal';
+export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 

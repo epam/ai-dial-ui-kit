@@ -9,7 +9,7 @@ import OpenPopupIcon from '@/assets/icons/open-popup.svg?react';
 import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_SIZE } from '@/constants/icon';
 
-export interface DialInputModalProps {
+export interface DialInputPopupProps {
   open?: boolean;
   selectedValue?: string | string[];
   children: ReactNode;
@@ -23,13 +23,13 @@ export interface DialInputModalProps {
 }
 
 /**
- * An input field that opens a modal (popup) when clicked, displaying a selected value or a list of values.
+ * An input field that opens a popup when clicked, displaying a selected value or a list of values.
  * It supports read-only mode, error states, and disabled state, with customizable styling.
  * The modal content is rendered using a portal for seamless integration.
  *
  * @example
  * ```tsx
- * <DialInputModal
+ * <DialInputPopup
  *   open={true}
  *   selectedValue="Selected Item"
  *   emptyValueText="No value selected"
@@ -41,7 +41,7 @@ export interface DialInputModalProps {
  *   errorText="This field is required"
  * >
  *   <div>Modal Content Here</div>
- * </DialInputModal>
+ * </DialInputPopup>
  * ```
  *
  * @param [open] - The current state of the modal, indicating whether it is opened or closed.
@@ -55,7 +55,7 @@ export interface DialInputModalProps {
  * @param [errorText] - An optional error message displayed below the input when an error state is present.
  * @param emptyValueText - The text displayed when no value is selected.
  */
-export const DialInputModal: FC<DialInputModalProps> = ({
+export const DialInputPopup: FC<DialInputPopupProps> = ({
   children,
   open,
   readonly,
