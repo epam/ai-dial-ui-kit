@@ -296,7 +296,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         ref={refs.setReference}
         className={classNames(
           dropdownBaseClasses,
-          disabled && 'cursor-not-allowed opacity-60',
+          disabled && '!cursor-not-allowed opacity-75',
           cssClass,
         )}
         aria-haspopup="menu"
