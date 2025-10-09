@@ -1,15 +1,18 @@
 import { useCallback, useState, type FC } from 'react';
-import { DialFieldLabel, type DialFieldLabelProps } from '../Field/Field';
+import {
+  DialFieldLabel,
+  type DialFieldLabelProps,
+} from '@/components/Field/Field';
 import {
   DialInputPopup,
   type DialInputPopupProps,
-} from '../InputPopup/InputPopup';
+} from '@/components/InputPopup/InputPopup';
 import {
   DialRadioGroup,
   type DialRadioGroupProps,
-} from '../RadioGroup/RadioGroup';
+} from '@/components/RadioGroup/RadioGroup';
 import classNames from 'classnames';
-import { DialPopup, type DialPopupProps } from '../Popup/Popup';
+import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import { DialButton } from '../Button/Button';
 import { ButtonVariant } from '@/types/button';
 import { RadioGroupOrientation } from '@/types/radio-group';
