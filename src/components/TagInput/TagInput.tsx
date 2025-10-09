@@ -120,7 +120,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
         <div
           ref={containerRef}
           className={classNames(
-            'flex flex-wrap items-start gap-2',
+            'flex flex-wrap gap-2 items-center',
             wraps ? 'flex-col-reverse' : 'flex-row',
           )}
         >
