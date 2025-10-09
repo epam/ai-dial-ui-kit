@@ -40,7 +40,7 @@ export const DialTag: FC<DialTagProps> = ({
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
   const containerClass = classNames(
-    'flex items-center gap-1 tiny border rounded p-1 h-[22px] text-primary',
+    'flex items-center gap-1 dial-tiny border rounded p-1 h-[22px] text-primary',
     cssClass,
     variantClass,
   );
