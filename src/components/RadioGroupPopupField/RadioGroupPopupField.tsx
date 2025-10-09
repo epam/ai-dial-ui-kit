@@ -1,0 +1,175 @@
+import { useCallback, useState, type FC } from 'react';
+import {
+  DialFieldLabel,
+  type DialFieldLabelProps,
+} from '@/components/Field/Field';
+import {
+  DialInputPopup,
+  type DialInputPopupProps,
+} from '@/components/InputPopup/InputPopup';
+import {
+  DialRadioGroup,
+  type DialRadioGroupProps,
+} from '@/components/RadioGroup/RadioGroup';
+import classNames from 'classnames';
+import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
+import { DialButton } from '../Button/Button';
+import { ButtonVariant } from '@/types/button';
+import { RadioGroupOrientation } from '@/types/radio-group';
+
+export interface RadioGroupPopupFieldProps
+  extends Pick<DialFieldLabelProps, 'fieldTitle' | 'htmlFor'>,
+    Omit<DialInputPopupProps, 'onOpen' | 'children'>,
+    Pick<DialRadioGroupProps, 'radioButtons'>,
+    Pick<DialPopupProps, 'onClose' | 'portalId'> {
+  customInputValue?: string;
+  title: string;
+  cancelButtonTitle?: string;
+  applyButtonTitle?: string;
+  isValid: boolean;
+  onApply: () => void;
+  selectedRadioValue: string;
+  onChangeRadioField: (id: string) => void;
+  id: string;
+}
+
+/**
+ * A composite field that opens a popup with a radio group selector.
+ *
+ * Renders a labeled readout using `DialInputPopup`; when opened, a `DialPopup`
+ * displays a `DialRadioGroup` allowing the user to pick from a list of options.
+ * The footer provides Cancel/Apply actions, with Apply disabled when `isValid` is false.
+ *
+ * The value shown in the collapsed field is derived from either `customInputValue`
+ * or the name of the currently selected radio option identified by `selectedValue`.
+ *
+ * @example
+ * ```tsx
+ * <DialRadioGroupPopupField
+ *   fieldTitle="Status"
+ *   htmlFor="status"
+ *   title="Select status"
+ *   emptyValueText="None"
+ *   radioButtons={[
+ *     { id: 'draft', name: 'Draft' },
+ *     { id: 'review', name: 'In Review' },
+ *     { id: 'published', name: 'Published' },
+ *   ]}
+ *   selectedValue="draft"
+ *   selectedRadioValue="draft"
+ *   onChangeRadioField={(id) => console.log('radio changed', id)}
+ *   id="status-group"
+ *   isValid={true}
+ *   onApply={() => console.log('applied')}
+ * />
+ * ```
+ *
+ * @param fieldTitle - Field label text displayed above the input
+ * @param htmlFor - Associates the label with an input id for a11y
+ * @param [readonly] - When true, the popup cannot be opened
+ * @param [selectedValue] - Current value id used to resolve the displayed option name
+ * @param radioButtons - Collection of radio options (id/name)
+ * @param [customInputValue] - Custom value text to display instead of a radio option name
+ * @param [valueCssClasses] - Extra classes applied to the value text in the collapsed field
+ * @param [inputCssClasses] - Extra classes applied to the collapsed input container
+ * @param emptyValueText - Placeholder text when no value is selected
+ * @param [onClose] - Callback fired when the popup closes
+ * @param title - Title text shown in the popup header
+ * @param [portalId] - Target portal id for rendering the popup
+ * @param onApply - Callback fired when the Apply button is clicked
+ * @param [cancelButtonTitle="Cancel"] - Text for the Cancel button
+ * @param [applyButtonTitle="Apply"] - Text for the Apply button
+ * @param isValid - Determines whether the Apply action is enabled
+ * @param selectedRadioValue - Currently selected radio id inside the popup
+ * @param onChangeRadioField - Handler for radio selection changes
+ * @param id - Element id used for the internal radio group
+ */
+export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
+  fieldTitle,
+  htmlFor,
+  readonly,
+  selectedValue,
+  radioButtons,
+  customInputValue,
+  valueCssClasses,
+  inputCssClasses,
+  emptyValueText,
+  onClose,
+  title,
+  portalId,
+  onApply,
+  cancelButtonTitle = 'Cancel',
+  applyButtonTitle = 'Apply',
+  isValid,
+  selectedRadioValue,
+  onChangeRadioField,
+  id,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onOpenPopup = useCallback(() => {
+    if (readonly) return;
+    setIsOpen(true);
+  }, [readonly]);
+
+  const onClosePopup = useCallback(() => {
+    setIsOpen(false);
+    onClose?.();
+  }, [onClose]);
+
+  const onApplyValue = useCallback(() => {
+    onApply();
+    onClosePopup();
+  }, [onApply, onClosePopup]);
+
+  return (
+    <div className="flex flex-col">
+      <DialFieldLabel fieldTitle={fieldTitle} htmlFor={htmlFor} />
+      <DialInputPopup
+        readonly={readonly}
+        open={isOpen}
+        selectedValue={
+          customInputValue ??
+          radioButtons.find((rb) => rb.id === selectedValue)?.name
+        }
+        valueCssClasses={valueCssClasses}
+        inputCssClasses={classNames(inputCssClasses, 'py-2', 'px-3')}
+        emptyValueText={emptyValueText}
+        onOpen={onOpenPopup}
+      >
+        <DialPopup
+          open={isOpen}
+          onClose={onClosePopup}
+          title={title}
+          portalId={portalId}
+          footer={
+            <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
+              <DialButton
+                variant={ButtonVariant.Secondary}
+                title={cancelButtonTitle}
+                onClick={onClosePopup}
+              />
+              <DialButton
+                variant={ButtonVariant.Primary}
+                title={applyButtonTitle}
+                onClick={onApplyValue}
+                disable={!isValid}
+              />
+            </div>
+          }
+        >
+          <div className="px-6 py-4">
+            <DialRadioGroup
+              radioButtons={radioButtons}
+              labelCssClass="dial-small"
+              activeRadioButton={selectedRadioValue}
+              onChange={onChangeRadioField}
+              elementId={id}
+              orientation={RadioGroupOrientation.Column}
+            />
+          </div>
+        </DialPopup>
+      </DialInputPopup>
+    </div>
+  );
+};
