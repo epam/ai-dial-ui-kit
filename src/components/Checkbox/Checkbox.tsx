@@ -47,7 +47,6 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      e.stopPropagation();
       onChange?.(e.target.checked, id);
     },
     [onChange, id],
@@ -55,7 +54,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
 
   const checkboxClassNames = classNames(
     'flex flex-row items-center cursor-pointer text-accent-primary small-medium flex-1 min-w-0',
-    `${checked ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
+    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',
@@ -66,14 +65,19 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
     disabled ? 'bg-layer-4 border-icon-secondary' : '',
   );
 
+  const renderIcon = () => {
+    if (indeterminate) {
+      return <IconMinus className={iconClass} {...BASE_ICON_PROPS} />;
+    }
+    if (checked) {
+      return <IconCheck className={iconClass} {...BASE_ICON_PROPS} />;
+    }
+    return null;
+  };
+
   return (
     <label className={checkboxClassNames} htmlFor={id}>
-      {checked &&
-        (indeterminate ? (
-          <IconMinus className={iconClass} {...BASE_ICON_PROPS} />
-        ) : (
-          <IconCheck className={iconClass} {...BASE_ICON_PROPS} />
-        ))}
+      {renderIcon()}
       {label && (
         <DialTooltip tooltip={label} triggerClassName="flex-1 min-w-0">
           <p className="text-primary w-full truncate">{label}</p>
@@ -81,6 +85,8 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       )}
       <input
         type="checkbox"
+        role="checkbox"
+        name={id}
         onChange={handleChange}
         id={id}
         checked={checked}
