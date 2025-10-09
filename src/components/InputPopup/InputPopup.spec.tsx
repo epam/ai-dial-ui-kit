@@ -1,15 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { DialInputModal } from './InputModal';
+import { DialInputPopup } from './InputPopup';
 
 const mockFunction = vi.fn();
 
-describe('Dial UI Kit :: DialInputModal', () => {
+describe('Dial UI Kit :: DialInputPopup', () => {
   test('Should render successfully', () => {
     render(
-      <DialInputModal open onOpen={mockFunction} emptyValueText="None">
+      <DialInputPopup open onOpen={mockFunction} emptyValueText="None">
         <div>Modal Content</div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const modalContent = screen.getByText('Modal Content');
@@ -21,14 +21,14 @@ describe('Dial UI Kit :: DialInputModal', () => {
 
   test('Should render with empty value successfully', () => {
     render(
-      <DialInputModal
+      <DialInputPopup
         open
         onOpen={mockFunction}
         selectedValue={''}
         emptyValueText="None"
       >
         <div>Modal Content</div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const modalContent = screen.getByText('Modal Content');
@@ -41,13 +41,13 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render with a single value successfully', () => {
     const singleValue = 'Single Value';
     render(
-      <DialInputModal
+      <DialInputPopup
         onOpen={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
       >
         <div></div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const renderedValue = screen.getByText(singleValue);
@@ -57,13 +57,13 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render with multiple values successfully', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
-      <DialInputModal
+      <DialInputPopup
         onOpen={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
       >
         <div></div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     multipleValues.forEach((value) => {
@@ -75,14 +75,14 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should not trigger onOpenModal when readonly is true', () => {
     const singleValue = 'Readonly Value';
     render(
-      <DialInputModal
+      <DialInputPopup
         onOpen={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
         readonly={true}
       >
         <div></div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const buttonElement = screen.getByRole('button', { name: 'open-popup' });
@@ -94,14 +94,14 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should not trigger onOpenModal when readonly is true with multiple values', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
-      <DialInputModal
+      <DialInputPopup
         onOpen={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
         readonly={true}
       >
         <div></div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const containerElement = screen.getByText('Value 1').closest('div');
@@ -115,14 +115,14 @@ describe('Dial UI Kit :: DialInputModal', () => {
   test('Should render errorText when it is set', () => {
     const errorText = 'This is an error';
     render(
-      <DialInputModal
+      <DialInputPopup
         onOpen={mockFunction}
         selectedValue="Some Value"
         emptyValueText="None"
         errorText={errorText}
       >
         <div></div>
-      </DialInputModal>,
+      </DialInputPopup>,
     );
 
     const renderedErrorText = screen.getByText(errorText);
