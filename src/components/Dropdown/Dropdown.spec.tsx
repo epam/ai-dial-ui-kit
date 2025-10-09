@@ -1,12 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { DialDropdown, type DropdownItem } from './Dropdown';
+import { DialDropdown } from './Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
+import { DropdownItemType, type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile' },
   { key: 'settings', label: 'Settings' },
-  { key: 'd1', type: 'divider' },
+  { key: 'd1', type: DropdownItemType.Divider },
   { key: 'danger', label: 'Danger', danger: true },
   { key: 'logout', label: 'Logout' },
 ];

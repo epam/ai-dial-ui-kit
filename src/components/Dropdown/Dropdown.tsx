@@ -41,22 +41,11 @@ import {
   dropdownDividerClasses,
   dropdownGap,
 } from './constants';
-
-export type Key = string;
-
-export interface DropdownItem {
-  key: Key;
-  label?: ReactNode;
-  icon?: ReactNode;
-  disabled?: boolean;
-  danger?: boolean;
-  type?: 'item' | 'divider';
-  onClick?: (info: { key: Key; domEvent: MouseEvent }) => void;
-}
+import type { DropdownItem } from '@/models/dropdown';
 
 export interface DropdownMenuProps {
   items: DropdownItem[];
-  onClick?: (info: { key: Key; domEvent: MouseEvent }) => void;
+  onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
 }
 
 export interface DialDropdownProps {
@@ -168,9 +157,13 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     middleware: [
       offset({ mainAxis: dropdownGap, crossAxis: 0 }),
       useAuto
-        ? autoPlacement({ alignment: 'start', crossAxis: true, padding: 8 })
-        : flip({ padding: 8 }),
-      shift({ padding: 8 }),
+        ? autoPlacement({
+            alignment: 'start',
+            crossAxis: true,
+            padding: dropdownGap,
+          })
+        : flip({ padding: dropdownGap }),
+      shift({ padding: dropdownGap }),
       fuiSize({
         apply({ availableWidth, elements }) {
           const refWidth = getRefWidth(elements.reference);

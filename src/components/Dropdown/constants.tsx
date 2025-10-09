@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
 
 export const dropdownBaseClasses = classNames(
@@ -25,4 +24,4 @@ export const dropdownDividerClasses = 'my-1 border-t border-hover';
 
 export const dropdownGap = 8;
 
-export const submenuCaretIcon: ReactNode = <IconChevronRight size={14} />;
+export const submenuCaretIcon = <IconChevronRight size={14} />;

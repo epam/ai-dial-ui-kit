@@ -14,14 +14,11 @@ import {
   IconDots,
 } from '@tabler/icons-react';
 
-import {
-  DialDropdown,
-  type DialDropdownProps,
-  type DropdownItem,
-} from './Dropdown';
+import { DialDropdown, type DialDropdownProps } from './Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
+import { DropdownItemType, type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile', icon: <IconUser size={16} /> },
@@ -38,7 +35,7 @@ const items: DropdownItem[] = [
     icon: <IconRowRemove size={16} />,
     danger: true,
   },
-  { key: 'd1', type: 'divider' },
+  { key: 'd1', type: DropdownItemType.Divider },
   {
     key: 'logout',
     label: 'Logout',
@@ -57,7 +54,7 @@ const specItems: DropdownItem[] = [
     label: 'Duplicate as a new version',
     icon: <IconCopy size={16} />,
   },
-  { key: 'd2', type: 'divider' },
+  { key: 'd2', type: DropdownItemType.Divider },
   { key: 'del', label: 'Delete', icon: <IconTrash size={16} />, danger: true },
 ];
 
