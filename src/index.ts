@@ -28,6 +28,7 @@ export { DialSwitch } from './components/Switch/Switch';
 // Popups
 export { DialPopup } from './components/Popup/Popup';
 export { DialConfirmationPopup } from './components/ConfirmationPopup/ConfirmationPopup';
+export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/RadioGroupPopupField';
 
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
