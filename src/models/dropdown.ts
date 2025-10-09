@@ -1,9 +1,5 @@
+import type { DropdownItemType } from '@/types/dropdown';
 import type { ReactNode } from 'react';
-
-export enum DropdownItemType {
-  Item = 'item',
-  Divider = 'divider',
-}
 
 export interface DropdownItem {
   key: string;

@@ -15,10 +15,10 @@ import {
 } from '@tabler/icons-react';
 
 import { DialDropdown, type DialDropdownProps } from './Dropdown';
-import { DropdownTrigger } from '@/types/dropdown';
+import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
-import { DropdownItemType, type DropdownItem } from '@/models/dropdown';
+import { type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile', icon: <IconUser size={16} /> },

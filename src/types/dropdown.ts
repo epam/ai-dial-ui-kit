@@ -8,3 +8,8 @@ export enum DropdownTrigger {
   Hover = 'hover',
   ContextMenu = 'contextMenu',
 }
+
+export enum DropdownItemType {
+  Item = 'item',
+  Divider = 'divider',
+}

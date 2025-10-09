@@ -26,9 +26,7 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { IconX } from '@tabler/icons-react';
 
-import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger } from '@/types/dropdown';
 
@@ -41,7 +39,9 @@ import {
   dropdownDividerClasses,
   dropdownGap,
 } from './constants';
-import type { DropdownItem } from '@/models/dropdown';
+import { type DropdownItem } from '@/models/dropdown';
+import { DialCloseButton } from '@/components/CloseButton/CloseButton';
+import { DropdownItemType } from '@/types/dropdown';
 
 export interface DropdownMenuProps {
   items: DropdownItem[];
@@ -235,7 +235,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     : menu && (
         <div role="none" className="py-1">
           {menu.items.map((it) => {
-            if (it.type === 'divider') {
+            if (it.type === DropdownItemType.Divider) {
               return (
                 <div
                   key={it.key}
@@ -318,11 +318,9 @@ export const DialDropdown: FC<DialDropdownProps> = ({
             >
               {closable && (
                 <div className="flex items-center justify-between px-2 pt-2">
-                  <DialButton
-                    cssClass="ml-auto text-secondary hover:text-primary"
+                  <DialCloseButton
                     ariaLabel="Close dropdown"
-                    iconBefore={<IconX size={16} />}
-                    onClick={(e) => {
+                    onClose={(e) => {
                       onClose?.(e);
                       setOpen(false);
                     }}

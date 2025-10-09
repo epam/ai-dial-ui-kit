@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialDropdown } from './Dropdown';
-import { DropdownTrigger } from '@/types/dropdown';
-import { DropdownItemType, type DropdownItem } from '@/models/dropdown';
+import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
+import { type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile' },
