@@ -1,0 +1,6 @@
+import { TagVariant } from '@/types/tag';
+
+export const TAG_VARIANTS_CONFIG = {
+  [TagVariant.Default]: 'border-icon-secondary bg-layer-3',
+  // TODO: Add other variants here once they are finalized with the UI/UX team
+};
