@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagVariant } from '@/types/tag';
-import { DialTag, type DialTagProps } from '../Tag/Tag';
-
-const InteractiveTag = (args: DialTagProps) => {
-  return <DialTag {...args} />;
-};
+import { DialTag } from '../Tag/Tag';
 
 const meta: Meta<typeof DialTag> = {
   title: 'Components/Tag',
@@ -47,14 +43,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     tag: 'React',
-    variant: TagVariant.Default,
-  },
-};
-
-export const Removable: Story = {
-  render: InteractiveTag,
-  args: {
-    tag: 'Removable Tag',
     variant: TagVariant.Default,
   },
 };

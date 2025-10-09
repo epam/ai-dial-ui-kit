@@ -62,7 +62,6 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   onChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const [tags, setTags] = useState<string[]>(initialTags);
   const [inputValue, setInputValue] = useState('');
@@ -134,7 +133,6 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           ))}
 
           <input
-            ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
