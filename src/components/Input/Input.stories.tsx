@@ -69,11 +69,11 @@ const meta = {
       control: { type: 'boolean' },
       description: 'Whether to hide the input border',
     },
-    iconBeforeInput: {
+    iconBefore: {
       control: false,
       description: 'Icon or element to display before the input',
     },
-    iconAfterInput: {
+    iconAfter: {
       control: false,
       description: 'Icon or element to display after the input',
     },
@@ -136,7 +136,7 @@ export const WithValue: Story = {
 export const WithIconBefore: Story = {
   args: {
     placeholder: 'Search...',
-    iconBeforeInput: <IconSearch size={16} />,
+    iconBefore: <IconSearch size={16} />,
   },
 };
 
@@ -144,15 +144,15 @@ export const WithIconAfter: Story = {
   args: {
     placeholder: 'Password',
     type: 'password',
-    iconAfterInput: <IconEye size={16} />,
+    iconAfter: <IconEye size={16} />,
   },
 };
 
 export const WithBothIcons: Story = {
   args: {
     placeholder: 'Search...',
-    iconBeforeInput: <IconSearch size={16} />,
-    iconAfterInput: <IconEye size={16} />,
+    iconBefore: <IconSearch size={16} />,
+    iconAfter: <IconEye size={16} />,
   },
 };
 
@@ -229,8 +229,8 @@ export const WithAllExtraParts: Story = {
     suffix: 'suf',
     textBeforeInput: 'before',
     textAfterInput: 'after',
-    iconBeforeInput: <IconSearch size={16} />,
-    iconAfterInput: <IconEye size={16} />,
+    iconBefore: <IconSearch size={16} />,
+    iconAfter: <IconEye size={16} />,
   },
 };
 
@@ -244,8 +244,8 @@ export const AllVariantsWithIcons: Story = {
           <InteractiveInput
             elementId="default-input"
             placeholder="Placeholder"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -256,8 +256,8 @@ export const AllVariantsWithIcons: Story = {
             elementId="hover-input"
             containerCssClass="dial-input-for-hover"
             placeholder="Placeholder"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -268,8 +268,8 @@ export const AllVariantsWithIcons: Story = {
             elementId="field-input"
             placeholder="Placeholder"
             value="Input value"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -281,8 +281,8 @@ export const AllVariantsWithIcons: Story = {
             placeholder="Placeholder"
             containerCssClass="dial-input-for-hover"
             value="Input value"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -293,8 +293,8 @@ export const AllVariantsWithIcons: Story = {
             elementId="focus-input"
             containerCssClass="dial-input-for-focus"
             placeholder="Placeholder"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -305,8 +305,8 @@ export const AllVariantsWithIcons: Story = {
             elementId="error-input"
             placeholder="Placeholder"
             invalid={true}
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -318,8 +318,8 @@ export const AllVariantsWithIcons: Story = {
             placeholder="Placeholder"
             disabled={true}
             value="Disabled input"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
 
@@ -331,8 +331,8 @@ export const AllVariantsWithIcons: Story = {
             placeholder="Placeholder"
             readonly={true}
             value="Read-only value"
-            iconBeforeInput={<IconSearch size={16} />}
-            iconAfterInput={<IconEye size={16} />}
+            iconBefore={<IconSearch size={16} />}
+            iconAfter={<IconEye size={16} />}
           />
         </div>
       </div>
@@ -478,7 +478,7 @@ export const AllVariantsWithoutBorder: Story = {
                 type="password"
                 placeholder="Enter password"
                 hideBorder={true}
-                iconAfterInput={<IconEye size={16} />}
+                iconAfter={<IconEye size={16} />}
               />
             </td>
           </tr>
@@ -499,7 +499,7 @@ export const AllVariantsWithoutBorder: Story = {
                 placeholder="Enter password"
                 value="password123"
                 hideBorder={true}
-                iconAfterInput={<IconEye size={16} />}
+                iconAfter={<IconEye size={16} />}
               />
             </td>
           </tr>
@@ -522,7 +522,7 @@ export const AllVariantsWithoutBorder: Story = {
                 value="disabled123"
                 disabled={true}
                 hideBorder={true}
-                iconAfterInput={<IconEye size={16} />}
+                iconAfter={<IconEye size={16} />}
               />
             </td>
           </tr>
@@ -545,7 +545,7 @@ export const AllVariantsWithoutBorder: Story = {
                 value="readonly123"
                 readonly={true}
                 hideBorder={true}
-                iconAfterInput={<IconEye size={16} />}
+                iconAfter={<IconEye size={16} />}
               />
             </td>
           </tr>
@@ -568,7 +568,7 @@ export const AllVariantsWithoutBorder: Story = {
                 value="invalid123"
                 invalid={true}
                 hideBorder={true}
-                iconAfterInput={<IconEye size={16} />}
+                iconAfter={<IconEye size={16} />}
               />
             </td>
           </tr>

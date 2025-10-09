@@ -41,6 +41,6 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
       cssClass={classNames(buttonClass, cssClass)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
-    ></DialButton>
+    />
   );
 };

@@ -23,8 +23,8 @@ export interface DialInputProps extends InputBaseProps {
  * <DialInput
  *   elementId="search"
  *   placeholder="Search..."
- *   iconBeforeInput={<SearchIcon />}
- *   iconAfterInput={<ClearIcon />}
+ *   iconBefore={<SearchIcon />}
+ *   iconAfter={<ClearIcon />}
  *   onChange={(value) => console.log(value)}
  * />
  * ```
@@ -32,8 +32,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param elementId - Unique identifier for the input element
  * @param [value] - The current value of the input
  * @param [onChange] - Callback function called when the input value changes
- * @param [iconBeforeInput] - Icon or element to display before the input
- * @param [iconAfterInput] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [iconAfter] - Icon or element to display after the input
  * @param [placeholder] - Placeholder text displayed when input is empty
  * @param [containerCssClass] - Additional CSS classes to apply to the container div
  * @param [cssClass] - Additional CSS classes to apply to the input element
@@ -51,8 +51,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param [textAfterInput] - Text to display after the input in a separate field
  */
 export const DialInput: FC<DialInputProps> = ({
-  iconBeforeInput,
-  iconAfterInput,
+  iconBefore,
+  iconAfter,
   hideBorder,
   value,
   elementId,
@@ -110,41 +110,43 @@ export const DialInput: FC<DialInputProps> = ({
   return (
     <div
       className={classNames(
-        'dial-input-field flex flex-row items-center justify-between px-3 py-2',
+        'dial-input-field flex flex-row items-center justify-between py-2',
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
         readonly && 'dial-input-readonly',
-        !textBeforeInput && 'pl-1',
-        !textAfterInput && 'pr-1',
+        !textBeforeInput && 'pl-3',
+        !textAfterInput && 'pr-3',
         containerCssClass,
       )}
     >
       {textBeforeInput && (
-        <DialTooltip tooltip={textBeforeInput}>
+        <div>
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-r-none border-r-0"
-            cssClass="px-2 overflow-hidden overflow-ellipsis dial-small"
+            cssClass="overflow-hidden overflow-ellipsis dial-small"
             value={textBeforeInput}
             disabled={true}
             elementId={textBeforeInput + 'textBefore'}
           />
-        </DialTooltip>
+        </div>
       )}
-      {prefix && <p className="text-secondary dial-small pl-2"> {prefix}</p>}
-      <DialIcon icon={iconBeforeInput} />
+      {prefix && <p className="text-secondary dial-small"> {prefix}</p>}
+      <DialIcon icon={iconBefore} />
 
-      <DialTooltip tooltip={value} triggerClassName={tooltipTriggerClassName}>
+      <DialTooltip
+        tooltip={value}
+        triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
+      >
         <input
           type={type}
           autoComplete="off"
           id={elementId}
           placeholder={placeholder}
           value={value ?? ''}
-          title={value ? String(value) : ''}
           disabled={disabled}
-          className={classNames('border-0 bg-transparent px-2', cssClass)}
+          className={classNames('border-0 bg-transparent', cssClass)}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
@@ -153,19 +155,18 @@ export const DialInput: FC<DialInputProps> = ({
         />
       </DialTooltip>
 
-      <DialIcon icon={iconAfterInput} />
-      {suffix && <p className="text-secondary dial-small pr-2"> {suffix}</p>}
+      <DialIcon icon={iconAfter} />
+      {suffix && <p className="text-secondary dial-small"> {suffix}</p>}
       {textAfterInput && (
-        <DialTooltip tooltip={textAfterInput}>
+        <div>
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-l-none border-l-0"
-            cssClass="px-2"
             value={textAfterInput}
             disabled={true}
             elementId={textAfterInput + 'textAfter'}
           />
-        </DialTooltip>
+        </div>
       )}
     </div>
   );

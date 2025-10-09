@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { DialPasswordInputField } from './PasswordInputField';
 
-describe('Dia UI Kit :: DialPasswordInputField', () => {
+describe('Dial UI Kit :: DialPasswordInputField', () => {
   it('renders the field title', () => {
     render(<DialPasswordInputField fieldTitle="Password" elementId="pw" />);
     expect(screen.getByText('Password')).toBeInTheDocument();

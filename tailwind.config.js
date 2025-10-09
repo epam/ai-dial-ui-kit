@@ -91,7 +91,7 @@ export default {
     gradientColorStops: backgroundsColors,
     extend: {
       animation: {
-        'spin-steps': 'spin 0.75s steps(6, end) infinite',
+        'spin-steps': 'spin 0.75s steps(8, end) infinite',
       },
       boxShadow: {
         DEFAULT: '0 0 4px 0 var(--bg-blackout, #090D13B3)',

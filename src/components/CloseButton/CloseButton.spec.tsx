@@ -2,7 +2,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DialCloseButton } from './CloseButton';
 
-describe('DialCloseButton', () => {
+describe('Dial UI Kit :: DialCloseButton', () => {
   it('renders with default icon size', () => {
     const { getByRole } = render(<DialCloseButton onClose={vi.fn()} />);
     const button = getByRole('button');

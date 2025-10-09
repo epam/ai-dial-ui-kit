@@ -7,6 +7,9 @@ export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
+export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
+export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
+export { DialLabelledText } from './components/LabelledText/LabelledText';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -37,6 +40,9 @@ export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
+export { DialInputModal } from './components/InputModal/InputModal';
+export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
+export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
@@ -48,8 +54,9 @@ export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
 export { DropdownType } from './types/dropdown';
+export { SearchSize } from './types/search';
 
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
-export type { DropdownItemsModel } from './models/dropdown';
+export type { RadioButtonWithContent } from './models/radio';
