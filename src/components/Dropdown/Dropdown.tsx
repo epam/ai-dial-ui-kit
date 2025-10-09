@@ -277,7 +277,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 )}
                 <span
                   className={classNames(
-                    'flex-1 truncate',
+                    'flex-1 truncate text-left',
                     it.danger && 'text-error',
                     it.disabled && 'text-secondary',
                   )}
