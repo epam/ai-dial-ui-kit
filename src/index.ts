@@ -46,12 +46,16 @@ export { DialAutocompleteInput } from './components/AutocompleteInput/Autocomple
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
 
+// Dropdowns
+export { DialDropdown } from './components/Dropdown/Dropdown';
+
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
+export { DropdownType } from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
 
