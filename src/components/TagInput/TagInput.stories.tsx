@@ -6,17 +6,12 @@ const InteractiveTagInput = (args: DialTagInputProps) => {
   const [tags, setTags] = useState<string[]>(args.initialTags || []);
 
   return (
-    <div className="p-6 bg-gray-50 rounded-md w-[400px]">
+    <div className="bg-gray-50 rounded-md w-[400px]">
       <DialTagInput
         {...args}
         initialTags={tags}
         onChange={(newTags) => setTags(newTags)}
       />
-      {tags.length > 0 && (
-        <div className="mt-4 text-sm text-secondary">
-          Current tags: {tags.join(', ')}
-        </div>
-      )}
     </div>
   );
 };
@@ -83,7 +78,7 @@ export const Default: Story = {
   args: {
     elementId: 'tag-input-default',
     fieldTitle: 'Tags',
-    placeholder: 'Add a tag and press Enter or comma',
+    placeholder: 'Enter values, separated by commas',
     initialTags: [],
   },
 };
@@ -134,7 +129,7 @@ export const Disabled: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex flex-col gap-8 w-[450px]">
+    <div className="flex flex-col gap-5 w-[450px] text-primary">
       <div>
         <h4 className="text-lg font-semibold mb-2">Default</h4>
         <InteractiveTagInput
@@ -148,7 +143,7 @@ export const AllVariants: Story = {
         <InteractiveTagInput
           elementId="tag-input-initial"
           fieldTitle="Technologies"
-          initialTags={['React', 'TypeScript', 'Storybook']}
+          initialTags={['React', 'TypeScript']}
         />
       </div>
       <div>

@@ -86,7 +86,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
       />
       <div
         className={classNames(
-          'dial-input min-h-[38px] p-[6px] flex flex-row items-center justify-between',
+          'dial-input min-h-[38px] p-[6px]',
           invalid && 'dial-input-error',
           disabled && 'dial-input-disable',
         )}
@@ -102,7 +102,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             <DialTag
               key={tag + index}
               tag={tag}
-              remove={() => handleRemove(index)}
+              remove={!disabled ? () => handleRemove(index) : undefined}
             />
           ))}
 
