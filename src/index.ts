@@ -10,7 +10,7 @@ export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
-export { DialTag } from './components/TagInput/Tag';
+export { DialTag } from './components/Tag/Tag';
 
 // Buttons
 export { DialButton } from './components/Button/Button';

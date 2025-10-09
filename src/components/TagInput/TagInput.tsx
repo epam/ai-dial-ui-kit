@@ -8,7 +8,7 @@ import {
 
 import classNames from 'classnames';
 import { DialFieldLabel } from '@/components/Field/Field';
-import { DialTag } from './Tag';
+import { DialTag } from '@/components/Tag/Tag';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 
 export interface DialTagInputProps {

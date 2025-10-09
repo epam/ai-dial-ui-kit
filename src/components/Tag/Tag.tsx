@@ -3,8 +3,9 @@ import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import type { FC } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
+import { DialButton } from '../Button/Button';
 
-interface DialTagProps {
+export interface DialTagProps {
   tag: string;
   cssClass?: string;
   remove?: () => void;
@@ -39,7 +40,7 @@ export const DialTag: FC<DialTagProps> = ({
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
   const containerClass = classNames(
-    'flex items-center gap-1 tiny border rounded px-2 py-1 h-[24px]',
+    'flex items-center gap-1 tiny border rounded p-1 h-[22px] text-primary',
     cssClass,
     variantClass,
   );
@@ -48,9 +49,7 @@ export const DialTag: FC<DialTagProps> = ({
     <div key={tag} className={containerClass}>
       <span>{tag}</span>
       {remove && (
-        <button type="button" aria-label="button" onClick={remove}>
-          <IconX height={16} width={16} />
-        </button>
+        <DialButton iconAfter={<IconX size={16} />} onClick={remove} />
       )}
     </div>
   );
