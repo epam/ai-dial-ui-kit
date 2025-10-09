@@ -23,6 +23,33 @@ export interface DialTagInputProps {
   onChange?: (tags: string[]) => void;
 }
 
+/**
+ * A tag input field that allows users to add multiple tags using the Enter or comma key.
+ * Supports removing tags, displaying field labels, optional indicators, validation states,
+ * and dynamic layout adjustment when tags wrap to multiple lines.
+ *
+ * @example
+ * ```tsx
+ * <DialTagInput
+ *   elementId="skills"
+ *   fieldTitle="Skills"
+ *   placeholder="Add a skill"
+ *   initialTags={['React', 'TypeScript']}
+ *   optional
+ *   onChange={(tags) => console.log('Updated tags:', tags)}
+ * />
+ * ```
+ *
+ * @param elementId - Unique identifier for the input element.
+ * @param [fieldTitle] - Optional label displayed above the input field.
+ * @param [initialTags=[]] - Array of tags to be displayed initially.
+ * @param [placeholder] - Placeholder text shown when the input is empty.
+ * @param [errorText] - Error message displayed below the field when validation fails.
+ * @param [optional=false] - Whether the field is optional (renders an “optional” indicator).
+ * @param [invalid=false] - Whether the field should be styled as invalid.
+ * @param [disabled=false] - Whether the input and remove buttons are disabled.
+ * @param [onChange] - Callback fired whenever the tag list changes (tag added or removed).
+ */
 export const DialTagInput: FC<DialTagInputProps> = ({
   initialTags = [],
   fieldTitle,

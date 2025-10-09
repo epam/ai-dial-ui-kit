@@ -11,6 +11,25 @@ interface DialTagProps {
   variant?: TagVariant;
 }
 
+/**
+ * A small tag component used to display labeled items such as categories, filters, or selections.
+ * Optionally supports removal via a close button and multiple colors variants defined by {@link TagVariant}.
+ *
+ * @example
+ * ```tsx
+ * <DialTag
+ *   tag="React"
+ *   variant={TagVariant.Default}
+ *   remove={() => console.log('Tag removed')}
+ * />
+ * ```
+ *
+ * @param tag - The text label displayed inside the tag.
+ * @param [cssClass] - Optional additional CSS classes applied to the tag container.
+ * @param [remove] - Optional callback invoked when the remove button is clicked.
+ *                   If not provided, the remove button will not be rendered.
+ * @param [variant=TagVariant.Default] - Visual style of the tag. Uses the {@link TagVariant} enum.
+ */
 export const DialTag: FC<DialTagProps> = ({
   tag,
   cssClass,

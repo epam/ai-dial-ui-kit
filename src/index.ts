@@ -10,6 +10,7 @@ export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
+export { DialTag } from './components/TagInput/Tag';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -43,6 +44,7 @@ export { DialSearch } from './components/Search/Search';
 export { DialInputModal } from './components/InputModal/InputModal';
 export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
+export { DialTagInput } from './components/TagInput/TagInput';
 
 // Types
 export { AlertVariant } from './types/alert';
@@ -51,6 +53,7 @@ export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
 export { SearchSize } from './types/search';
+export { TagVariant } from './types/tag';
 
 // Models
 export { StepStatus } from './models/step';
