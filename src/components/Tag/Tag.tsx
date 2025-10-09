@@ -3,7 +3,7 @@ import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import type { FC } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
-import { DialButton } from '../Button/Button';
+import { DialButton } from '@/components/Button/Button';
 
 export interface DialTagProps {
   tag: string;

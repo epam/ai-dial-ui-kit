@@ -10,14 +10,13 @@ import classNames from 'classnames';
 import { DialFieldLabel } from '@/components/Field/Field';
 import { DialTag } from '@/components/Tag/Tag';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import type { FieldControlProps } from '@/models/field-control-props';
 
-export interface DialTagInputProps {
+export interface DialTagInputProps extends FieldControlProps {
   elementId: string;
-  fieldTitle?: string;
   initialTags?: string[];
   placeholder?: string;
   errorText?: string;
-  optional?: boolean;
   invalid?: boolean;
   disabled?: boolean;
   onChange?: (tags: string[]) => void;
@@ -133,6 +132,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           ))}
 
           <input
+            type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
