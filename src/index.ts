@@ -39,12 +39,7 @@ export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
 
 // Dropdowns
-export { DialDropdown } from './components/Dropdown';
-export type {
-  DialDropdownComponentProps,
-  DialDropdownItemProps,
-  DialDropdownFieldProps,
-} from './components/Dropdown';
+export { DialDropdown } from './components/Dropdown/Dropdown';
 
 // Types
 export { AlertVariant } from './types/alert';

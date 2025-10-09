@@ -47,7 +47,6 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      e.stopPropagation();
       onChange?.(e.target.checked, id);
     },
     [onChange, id],
