@@ -34,12 +34,9 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
 }) => {
   return (
     <div
-      className={classNames(
-        'flex flex-col text-secondary',
-        children ? '' : 'max-w-[200px]',
-      )}
+      className={classNames('flex flex-col', children ? '' : 'max-w-[200px]')}
     >
-      <label className="dial-tiny mb-2">{label}</label>
+      <label className="dial-tiny mb-2 text-secondary">{label}</label>
       {children ? (
         children
       ) : (
