@@ -15,7 +15,7 @@ const leadingZerosPattern = /^0+/;
 export interface DialInputFieldBaseProps
   extends FieldControlProps,
     InputBaseProps {
-  value?: string | number;
+  value?: string | number | null;
   defaultEmptyText?: string;
   errorText?: string;
   elementCssClass?: string;
