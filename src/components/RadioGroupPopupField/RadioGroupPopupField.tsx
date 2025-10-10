@@ -16,12 +16,13 @@ import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import { DialButton } from '../Button/Button';
 import { ButtonVariant } from '@/types/button';
 import { RadioGroupOrientation } from '@/types/radio-group';
+import { PopupSize } from '@/types/popup';
 
 export interface RadioGroupPopupFieldProps
   extends Pick<DialFieldLabelProps, 'fieldTitle' | 'htmlFor'>,
     Omit<DialInputPopupProps, 'onOpen' | 'children'>,
     Pick<DialRadioGroupProps, 'radioButtons'>,
-    Pick<DialPopupProps, 'onClose' | 'portalId'> {
+    Pick<DialPopupProps, 'onClose' | 'portalId' | 'size'> {
   customInputValue?: string;
   title: string;
   cancelButtonTitle?: string;
@@ -83,6 +84,7 @@ export interface RadioGroupPopupFieldProps
  * @param selectedRadioValue - Currently selected radio id inside the popup
  * @param onChangeRadioField - Handler for radio selection changes
  * @param id - Element id used for the internal radio group
+ * @param [size=PopupSize.Md] - Size of the popup
  */
 export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   fieldTitle,
@@ -104,6 +106,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   selectedRadioValue,
   onChangeRadioField,
   id,
+  size = PopupSize.Md,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -142,6 +145,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           onClose={onClosePopup}
           title={title}
           portalId={portalId}
+          size={size}
           footer={
             <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
               <DialButton

@@ -4,6 +4,7 @@ import {
   DialRadioGroupPopupField,
   type RadioGroupPopupFieldProps,
 } from './RadioGroupPopupField';
+import { PopupSize } from '@/types/popup';
 
 const demoOptions = [
   { id: 'option-1', name: 'Option 1' },
@@ -89,6 +90,10 @@ const meta = {
     onApply: { control: false },
     onClose: { control: false },
     id: { control: { type: 'text' } },
+    size: {
+      control: { type: 'select' },
+      options: [PopupSize.Sm, PopupSize.Md, PopupSize.Lg],
+    },
   },
   args: {
     fieldTitle: 'Status',
@@ -142,4 +147,24 @@ export const PreselectedSecond: Story = {
 export const LiveSyncSelection: Story = {
   name: 'Live sync (no Apply needed)',
   render: (args) => <LiveSyncRadioGroupPopupField {...args} />,
+};
+
+export const DifferentSizes: Story = {
+  name: 'Different sizes',
+  render: (args) => (
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="mb-2 font-medium">Small</p>
+        <LiveSyncRadioGroupPopupField {...args} size={PopupSize.Sm} />
+      </div>
+      <div>
+        <p className="mb-2 font-medium">Medium (default)</p>
+        <LiveSyncRadioGroupPopupField {...args} size={PopupSize.Md} />
+      </div>
+      <div>
+        <p className="mb-2 font-medium">Large</p>
+        <LiveSyncRadioGroupPopupField {...args} size={PopupSize.Lg} />
+      </div>
+    </div>
+  ),
 };
