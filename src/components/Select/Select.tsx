@@ -39,9 +39,9 @@ export interface DialSelectProps {
   searchable?: boolean;
   selectAll?: boolean;
   selectAllLabel?: string;
-  emptyTitle?: string;
-  emptyDescription?: string;
-  emptyIcon?: ReactNode;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
+  emptyStateIcon?: ReactNode;
   disabled?: boolean;
   cssClass?: string;
   closable?: boolean;
@@ -78,9 +78,9 @@ export interface DialSelectProps {
  * @property searchable - Whether to show a search input to filter options.
  * @property selectAll - Whether to show a "Select All" checkbox in multiple mode.
  * @property selectAllLabel - Label for the "Select All" checkbox.
- * @property emptyTitle - Title text when there are no options to display.
- * @property emptyDescription - Optional description text when there are no options.
- * @property emptyIcon - Optional icon to display when there are no options.
+ * @property emptyStateTitle - Title text when there are no options to display.
+ * @property emptyStateDescription - Optional description text when there are no options.
+ * @property emptyStateIcon - Optional icon to display when there are no options.
  * @property disabled - Whether the select is disabled.
  * @property cssClass - Additional CSS classes to apply to the select trigger.
  * @property closable - Whether to show a close button in the dropdown header.
@@ -96,9 +96,9 @@ export const DialSelect: FC<DialSelectProps> = ({
   searchable = false,
   selectAll = false,
   selectAllLabel = 'Select all',
-  emptyTitle = 'No options available',
-  emptyDescription,
-  emptyIcon,
+  emptyStateTitle = 'No options available',
+  emptyStateDescription,
+  emptyStateIcon,
   disabled = false,
   cssClass,
   closable = false,
@@ -312,9 +312,9 @@ export const DialSelect: FC<DialSelectProps> = ({
             {filtered.length === 0 ? (
               <div className="px-2 py-3">
                 <DialNoDataContent
-                  icon={emptyIcon ?? <IconClipboardX size={24} />}
-                  title={emptyTitle}
-                  description={emptyDescription}
+                  icon={emptyStateIcon ?? <IconClipboardX size={24} />}
+                  title={emptyStateTitle}
+                  description={emptyStateDescription}
                 />
               </div>
             ) : (
