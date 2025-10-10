@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
-import type { SelectOption } from './constants';
+import type { SelectOption } from '@/models/select';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [

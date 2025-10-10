@@ -13,6 +13,7 @@ export interface DialCheckboxProps {
   indeterminate?: boolean;
   ariaLabel?: string;
   onChange?: (value?: boolean, id?: string) => void;
+  cssClass?: string;
 }
 /**
  * A Checkbox component with styling options
@@ -35,6 +36,7 @@ export interface DialCheckboxProps {
  * @param [indeterminate=false] - indeterminate state
  * @param [ariaLabel] - Accessible label for screen readers when no title is provided
  * @param [onChange] - Callback function called when the checkbox value changes
+ * @param [cssClass] - Additional CSS classes to apply to the checkbox wrapper
  */
 export const DialCheckbox: FC<DialCheckboxProps> = ({
   label,
@@ -44,6 +46,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   disabled,
   ariaLabel,
   onChange,
+  cssClass,
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +61,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',
+    cssClass,
   );
 
   const iconClass = classNames(

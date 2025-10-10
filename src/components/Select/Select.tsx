@@ -18,7 +18,6 @@ import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 
 import {
-  type SelectOption,
   selectTriggerBaseClasses,
   selectOverlayBaseClasses,
   selectOptionBaseClasses,
@@ -27,8 +26,9 @@ import {
   selectOptionDisabledClasses,
   selectChevronIcon,
 } from './constants';
-import { DialTag } from '../Tag/Tag';
-import { DialSearch } from '../Search/Search';
+import { DialTag } from '@/components/Tag/Tag';
+import { DialSearch } from '@/components/Search/Search';
+import type { SelectOption } from '@/models/select';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -57,7 +57,35 @@ export interface DialSelectProps {
  * - In the list, the selected option is indicated by a LEFT border and tinted background
  *   (no check icon).
  *
+ * @example
+ * ```tsx
+ * <DialSelect
+ *   options={[
+ *     { value: 'option-1', label: 'Option 1' },
+ *     { value: 'option-2', label: 'Option 2' },
+ *   ]}
+ *   multiple
+ * />
+ * ```
+ *
  * Multiple mode uses checkboxes (including Select All with indeterminate state).
+ *
+ * @property options - Array of options to select from.
+ * @property multiple - Whether multiple selections are allowed.
+ * @property value - Controlled selected value(s).
+ * @property defaultValue - Uncontrolled initial selected value(s).
+ * @property placeholder - Placeholder text when no selection is made.
+ * @property searchable - Whether to show a search input to filter options.
+ * @property selectAll - Whether to show a "Select All" checkbox in multiple mode.
+ * @property selectAllLabel - Label for the "Select All" checkbox.
+ * @property emptyTitle - Title text when there are no options to display.
+ * @property emptyDescription - Optional description text when there are no options.
+ * @property emptyIcon - Optional icon to display when there are no options.
+ * @property disabled - Whether the select is disabled.
+ * @property cssClass - Additional CSS classes to apply to the select trigger.
+ * @property closable - Whether to show a close button in the dropdown header.
+ * @property onClose - Callback when the dropdown is closed via the close button.
+ * @property onChange - Callback when the selection changes.
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -92,15 +120,10 @@ export const DialSelect: FC<DialSelectProps> = ({
     return typeof currentValue === 'string' ? [currentValue] : [];
   }, [currentValue, multiple]);
 
-  const textLabel = (node: ReactNode): string =>
-    typeof node === 'string' || typeof node === 'number'
-      ? String(node)
-      : String(node);
-
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return options;
-    return options.filter((o) => textLabel(o.label).toLowerCase().includes(q));
+    return options.filter((o) => o.label.toLowerCase().includes(q));
   }, [options, query]);
 
   useEffect(() => {
@@ -143,31 +166,36 @@ export const DialSelect: FC<DialSelectProps> = ({
     [multiple, selectedValues, setSelection],
   );
 
-  // Select All (applies to filtered, non-disabled options)
   const selectableFiltered = useMemo(
     () => filtered.filter((o) => !o.disabled),
     [filtered],
   );
+
   const selectedInFilteredCount = useMemo(
     () =>
       selectableFiltered.filter((o) => selectedValues.includes(o.value)).length,
     [selectableFiltered, selectedValues],
   );
+
   const allSelectedInFiltered =
     selectableFiltered.length > 0 &&
     selectedInFilteredCount === selectableFiltered.length;
+
   const someSelectedInFiltered =
     selectedInFilteredCount > 0 && !allSelectedInFiltered;
 
   const toggleSelectAll = () => {
     if (!multiple || selectableFiltered.length === 0) return;
+
     if (allSelectedInFiltered) {
       const filteredIds = new Set(selectableFiltered.map((o) => o.value));
       const next = selectedValues.filter((v) => !filteredIds.has(v));
+
       setSelection(next);
     } else {
       const union = new Set(selectedValues);
       selectableFiltered.forEach((o) => union.add(o.value));
+
       setSelection(Array.from(union));
     }
   };
@@ -176,6 +204,7 @@ export const DialSelect: FC<DialSelectProps> = ({
 
   const singleSelectedValue =
     !multiple && hasSelection ? selectedValues[0] : undefined;
+
   const singleSelectedOption = useMemo(
     () =>
       singleSelectedValue
@@ -189,9 +218,7 @@ export const DialSelect: FC<DialSelectProps> = ({
     return (
       <div className="flex flex-wrap w-full items-center gap-1">
         {selectedValues.map((v) => {
-          const label = textLabel(
-            options.find((o) => o.value === v)?.label ?? v,
-          );
+          const label = options.find((o) => o.value === v)?.label ?? v;
           const icon = options.find((o) => o.value === v)?.icon;
           return (
             <DialTag
@@ -237,6 +264,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       disabled={disabled}
       closable={closable}
       onClose={onClose}
+      placement="bottom-start"
       renderOverlay={() => (
         <div
           id={listId}
@@ -307,11 +335,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                       <DialCheckbox
                         id={`${listId}-${opt.value}`}
                         label={
-                          <span className="flex w-full items-center gap-2 text-primary">
+                          <span className="flex w-full flex-1 min-w-0 items-center gap-2 text-primary">
                             {opt.icon && <DialIcon icon={opt.icon} />}
-                            <span className="truncate">
-                              {textLabel(opt.label)}
-                            </span>
+                            <span className="truncate">{opt.label}</span>
                           </span>
                         }
                         checked={selected}
@@ -319,7 +345,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                         onChange={() =>
                           !opt.disabled && handleToggle(opt.value)
                         }
-                        ariaLabel={textLabel(opt.label)}
+                        ariaLabel={opt.label}
                       />
                     </div>
                   );
@@ -367,7 +393,10 @@ export const DialSelect: FC<DialSelectProps> = ({
         <div className="flex min-w-0 items-center gap-2 text-primary">
           {renderSelectedValue()}
         </div>
-        <DialIcon icon={selectChevronIcon} className="text-primary" />
+        <DialIcon
+          icon={selectChevronIcon}
+          className={classNames('text-primary', open && 'rotate-180')}
+        />
       </button>
     </DialDropdown>
   );
