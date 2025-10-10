@@ -89,7 +89,7 @@ export interface RadioGroupPopupFieldProps
 export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   fieldTitle,
   htmlFor,
-  readonly,
+  disabled,
   selectedValue,
   radioButtons,
   customInputValue,
@@ -111,9 +111,9 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const onOpenPopup = useCallback(() => {
-    if (readonly) return;
+    if (disabled) return;
     setIsOpen(true);
-  }, [readonly]);
+  }, [disabled]);
 
   const onClosePopup = useCallback(() => {
     setIsOpen(false);
@@ -129,7 +129,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
     <div className="flex flex-col">
       <DialFieldLabel fieldTitle={fieldTitle} htmlFor={htmlFor} />
       <DialInputPopup
-        readonly={readonly}
+        disabled={disabled}
         open={isOpen}
         selectedValue={
           customInputValue ??

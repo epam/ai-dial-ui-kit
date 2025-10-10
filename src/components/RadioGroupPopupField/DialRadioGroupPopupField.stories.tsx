@@ -70,7 +70,7 @@ const meta = {
   argTypes: {
     fieldTitle: { control: { type: 'text' } },
     htmlFor: { control: { type: 'text' } },
-    readonly: { control: { type: 'boolean' } },
+    disabled: { control: { type: 'boolean' } },
     selectedValue: { control: { type: 'text' } },
     radioButtons: { control: { type: 'object' } },
     customInputValue: { control: { type: 'text' } },
@@ -126,8 +126,8 @@ export const WithCustomInputValue: Story = {
   render: (args) => <StatefulRadioGroupPopupField {...args} />,
 };
 
-export const Readonly: Story = {
-  args: { readonly: true },
+export const Disabled: Story = {
+  args: { disabled: true },
   render: (args) => <StatefulRadioGroupPopupField {...args} />,
 };
 
