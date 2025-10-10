@@ -72,14 +72,14 @@ describe('Dial UI Kit :: DialInputPopup', () => {
     });
   });
 
-  test('Should not trigger onOpenModal when readonly is true', () => {
-    const singleValue = 'Readonly Value';
+  test('Should not trigger onOpenModal when disabled is true', () => {
+    const singleValue = 'Disabled Value';
     render(
       <DialInputPopup
         onOpen={mockFunction}
         selectedValue={singleValue}
         emptyValueText="None"
-        readonly={true}
+        disabled={true}
       >
         <div></div>
       </DialInputPopup>,
@@ -91,14 +91,14 @@ describe('Dial UI Kit :: DialInputPopup', () => {
     expect(mockFunction).not.toHaveBeenCalled();
   });
 
-  test('Should not trigger onOpenModal when readonly is true with multiple values', () => {
+  test('Should not trigger onOpenModal when disabled is true with multiple values', () => {
     const multipleValues = ['Value 1', 'Value 2', 'Value 3'];
     render(
       <DialInputPopup
         onOpen={mockFunction}
         selectedValue={multipleValues}
         emptyValueText="None"
-        readonly={true}
+        disabled={true}
       >
         <div></div>
       </DialInputPopup>,

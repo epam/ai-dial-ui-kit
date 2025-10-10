@@ -73,11 +73,11 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
     expect(screen.getByRole('button', { name: 'Apply' })).toBeInTheDocument();
   });
 
-  test('does not open when readonly is true', () => {
+  test('does not open when disabled is true', () => {
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Readonly"
-        htmlFor="readonly"
+        fieldTitle="Disabled"
+        htmlFor="disabled"
         title="Hidden dialog"
         emptyValueText="None"
         radioButtons={radioButtons}
@@ -86,7 +86,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
         id="readonly-id"
         isValid={true}
         onApply={() => null}
-        readonly
+        disabled={true}
       />,
     );
 

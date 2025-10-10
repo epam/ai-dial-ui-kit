@@ -14,7 +14,7 @@ export interface DialInputPopupProps {
   selectedValue?: string | string[];
   children: ReactNode;
   onOpen: () => void;
-  readonly?: boolean;
+  disabled?: boolean;
   valueCssClasses?: string;
   inputCssClasses?: string;
   elementId?: string;
@@ -34,7 +34,7 @@ export interface DialInputPopupProps {
  *   selectedValue="Selected Item"
  *   emptyValueText="No value selected"
  *   onOpen={() => setModalState(true)}
- *   readonly={false}
+ *   disabled={false}
  *   valueCssClasses="custom-value-class"
  *   inputCssClasses="custom-input-class"
  *   elementId="input-modal"
@@ -48,7 +48,7 @@ export interface DialInputPopupProps {
  * @param [selectedValue] - The currently selected value(s). Can be a string for a single value or an array of strings for multiple values.
  * @param children - The content to render inside the modal when it is opened.
  * @param onOpen - A callback function triggered when the modal open button is clicked.
- * @param [readonly=false] - Whether the input is read-only, preventing user interaction.
+ * @param [disabled=false] - Whether the input is disabled, preventing user interaction.
  * @param [valueCssClasses] - Additional CSS classes applied to the displayed value.
  * @param [inputCssClasses] - Additional CSS classes applied to the input container.
  * @param [elementId] - A unique identifier for the input element, useful for accessibility and testing.
@@ -58,7 +58,7 @@ export interface DialInputPopupProps {
 export const DialInputPopup: FC<DialInputPopupProps> = ({
   children,
   open,
-  readonly,
+  disabled = false,
   selectedValue,
   valueCssClasses,
   inputCssClasses,
@@ -74,7 +74,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   const value =
     hasMultipleValues || hasSingleValue ? selectedValue : emptyValueText;
 
-  const handleClick = readonly ? undefined : onOpen;
+  const handleClick = disabled ? undefined : onOpen;
 
   const renderSingleValue = () => (
     <>
@@ -89,14 +89,14 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           className={classNames(
             'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
             inputCssClasses,
-            readonly && 'dial-input-disable',
+            disabled && 'dial-input-disable',
             errorText && 'dial-input-error',
           )}
         >
           <DialTooltip tooltip={String(value)}>
             <span className={valueCssClasses}>{value}</span>
           </DialTooltip>
-          {!readonly && (
+          {!disabled && (
             <div className="flex-shrink-0">
               <DialIcon
                 icon={
@@ -120,11 +120,11 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
       <div
         className={classNames(
           'dial-input px-3 py-2 flex flex-row items-center w-full justify-between',
-          readonly && 'dial-input-disable',
+          disabled && 'dial-input-disable',
         )}
       >
         <DialAutocompleteInputValue selectedItems={value as string[]} />
-        {!readonly && (
+        {!disabled && (
           <div className="ml-1">
             <DialIcon
               icon={
