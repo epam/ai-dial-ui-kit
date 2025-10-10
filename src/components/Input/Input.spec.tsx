@@ -1,4 +1,6 @@
 import { fireEvent, screen, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useState } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialInput } from './Input';
 
@@ -151,5 +153,162 @@ describe('Dial UI Kit :: DialInput', () => {
 
     expect(httpsInput).toBeDisabled();
     expect(comInput).toBeDisabled();
+  });
+
+  test('handleKeyDown blocks non-numeric keys on number input', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('');
+      return (
+        <DialInput
+          elementId="num"
+          placeholder="num"
+          type="number"
+          value={val}
+          onChange={(v) => {
+            setVal(v);
+            onChange(v);
+          }}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText('num');
+
+    await user.type(input, 'a');
+    expect(onChange).not.toHaveBeenCalled();
+
+    await user.type(input, '5');
+    expect(onChange).toHaveBeenLastCalledWith('5');
+    expect((input as HTMLInputElement).value).toBe('5');
+  });
+
+  test('handleKeyDown returns early for non-numeric inputs (type="text")', async () => {
+    const user = userEvent.setup();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('');
+      return (
+        <DialInput
+          elementId="plain"
+          placeholder="plain"
+          type="text"
+          value={val}
+          onChange={setVal}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText('plain') as HTMLInputElement;
+
+    await user.type(input, 'a1');
+    expect(input.value).toBe('a1');
+  });
+  test('allowed navigation keys are not blocked on number input', async () => {
+    const user = userEvent.setup();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('12');
+      return (
+        <DialInput
+          elementId="num-allowed"
+          placeholder="num-allowed"
+          type="number"
+          value={val}
+          onChange={setVal}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText(
+      'num-allowed',
+    ) as HTMLInputElement;
+
+    await user.type(input, '{ArrowLeft}');
+    expect(input.value).toBe('12');
+
+    await user.type(input, '7');
+    expect(input.value).toBe('127');
+  });
+
+  test('prevents typing when result would be below min (range check on keyDown)', async () => {
+    const user = userEvent.setup();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('');
+      return (
+        <DialInput
+          elementId="min-guard"
+          placeholder="min-guard"
+          type="number"
+          min={10}
+          value={val}
+          onChange={setVal}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText('min-guard') as HTMLInputElement;
+
+    await user.type(input, '5');
+    expect(input.value).toBe('');
+  });
+
+  test('prevents typing when result would be above max (range check on keyDown)', async () => {
+    const user = userEvent.setup();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('100');
+      return (
+        <DialInput
+          elementId="max-guard"
+          placeholder="max-guard"
+          type="number"
+          max={100}
+          value={val}
+          onChange={setVal}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText('max-guard') as HTMLInputElement;
+
+    await user.type(input, '1');
+    expect(input.value).toBe('100');
+  });
+
+  test('uses cursor position to build newValue; blocks when inserted digit violates range', async () => {
+    const user = userEvent.setup();
+
+    const Controlled = () => {
+      const [val, setVal] = useState('150');
+      return (
+        <DialInput
+          elementId="cursor-range"
+          placeholder="cursor-range"
+          max={180}
+          value={val}
+          onChange={setVal}
+        />
+      );
+    };
+
+    render(<Controlled />);
+    const input = screen.getByPlaceholderText(
+      'cursor-range',
+    ) as HTMLInputElement;
+
+    input.focus();
+    input.setSelectionRange(1, 1);
+    await user.type(input, '9');
+
+    expect(input.value).toBe('150');
   });
 });
