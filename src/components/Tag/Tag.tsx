@@ -1,15 +1,18 @@
 import { TagVariant } from '@/types/tag';
 import { IconX } from '@tabler/icons-react';
+import { twMerge } from 'tailwind-merge';
 import classNames from 'classnames';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
 import { DialButton } from '@/components/Button/Button';
+import { DialIcon } from '@/components/Icon/Icon';
 
 export interface DialTagProps {
   tag: string;
   cssClass?: string;
   remove?: () => void;
   variant?: TagVariant;
+  iconBefore?: ReactNode;
 }
 
 /**
@@ -36,17 +39,21 @@ export const DialTag: FC<DialTagProps> = ({
   cssClass,
   remove,
   variant = TagVariant.Default,
+  iconBefore,
 }) => {
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
-  const containerClass = classNames(
-    'flex items-center gap-1 dial-tiny border rounded p-1 h-[22px] text-primary',
-    cssClass,
-    variantClass,
+  const containerClass = twMerge(
+    classNames(
+      'flex items-center gap-1 dial-tiny border rounded p-1 h-[22px] text-primary',
+      variantClass,
+      cssClass,
+    ),
   );
 
   return (
     <div key={tag} className={containerClass}>
+      <DialIcon icon={iconBefore} />
       <span>{tag}</span>
       {remove && (
         <DialButton iconAfter={<IconX size={16} />} onClick={remove} />
