@@ -7,7 +7,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialCheckboxProps {
   id: string;
-  label?: string;
+  label?: string | React.ReactNode;
   checked: boolean;
   disabled?: boolean;
   indeterminate?: boolean;
@@ -78,11 +78,14 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   return (
     <label className={checkboxClassNames} htmlFor={id}>
       {renderIcon()}
-      {label && (
-        <DialTooltip tooltip={label} triggerClassName="flex-1 min-w-0">
-          <p className="text-primary w-full truncate">{label}</p>
-        </DialTooltip>
-      )}
+      {label &&
+        (typeof label === 'string' ? (
+          <DialTooltip tooltip={label} triggerClassName="flex-1 min-w-0">
+            <span className="text-primary w-full truncate">{label}</span>
+          </DialTooltip>
+        ) : (
+          label
+        ))}
       <input
         type="checkbox"
         role="checkbox"

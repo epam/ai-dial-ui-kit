@@ -46,6 +46,7 @@ export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
+export { DialSelect } from './components/Select/Select';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
