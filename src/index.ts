@@ -11,7 +11,6 @@ export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
-export { DialTruncateTooltip } from './components/TruncateTooltip/TruncateTooltip';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
