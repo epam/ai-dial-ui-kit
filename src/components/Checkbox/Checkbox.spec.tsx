@@ -55,4 +55,81 @@ describe('Dial UI Kit :: DialCheckbox', () => {
     await userEvent.click(input);
     expect(checkboxId).toEqual('testInput');
   });
+
+  test('applies disabled classes on wrapper (label) when disabled', () => {
+    render(
+      <DialCheckbox
+        id="disabled-1"
+        label="Disabled checkbox"
+        checked={false}
+        disabled={true}
+      />,
+    );
+
+    const input = screen.getByRole('checkbox');
+    const labelEl = input.closest('label') as HTMLLabelElement;
+
+    expect(labelEl).toBeInTheDocument();
+    expect(labelEl).toHaveClass(
+      'pointer-events-none',
+      'text-secondary',
+      'before:border-icon-secondary',
+      'before:bg-layer-4',
+    );
+
+    expect(input).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  test('applies disabled classes on icon when disabled and checked', () => {
+    const { rerender } = render(
+      <DialCheckbox
+        id="disabled-2"
+        label="Disabled checked"
+        checked={true}
+        disabled={true}
+      />,
+    );
+
+    let icon = document.querySelector('svg') as SVGElement;
+    expect(icon).toBeInTheDocument();
+
+    expect(icon).toHaveClass('mr-2', 'border', 'rounded');
+    expect(icon).toHaveClass('bg-layer-4', 'border-icon-secondary');
+
+    rerender(
+      <DialCheckbox
+        id="disabled-3"
+        label="Disabled indeterminate"
+        checked={false}
+        indeterminate={true}
+        disabled={true}
+      />,
+    );
+    icon = document.querySelector('svg') as SVGElement;
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveClass(
+      'mr-2',
+      'border',
+      'rounded',
+      'bg-layer-4',
+      'border-icon-secondary',
+    );
+  });
+
+  test('sets aria-checked="mixed" when indeterminate', () => {
+    render(
+      <DialCheckbox
+        id="indeterminate-1"
+        label="Indeterminate"
+        checked={false}
+        indeterminate={true}
+      />,
+    );
+
+    const input = screen.getByRole('checkbox');
+    expect(input).toHaveAttribute('aria-checked', 'mixed');
+
+    const svgs = document.querySelectorAll('svg');
+    expect(svgs.length).toBe(1);
+  });
 });

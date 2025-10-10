@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { DialTag } from '@/components/Tag/Tag';
 
 export interface DialAutocompleteInputValueProps {
   selectedItems?: string[];
@@ -40,21 +41,12 @@ export const DialAutocompleteInputValue: FC<
         )}
       >
         {selectedItems?.map((selectedItem) => (
-          <li
-            key={selectedItem}
-            className={classNames([
-              'tiny bg-layer-3 rounded p-1 border border-primary max-w-[200px] truncate',
-              listElementCssClass,
-            ])}
-          >
+          <li key={selectedItem}>
             <DialTooltip tooltip={selectedItem}>
-              <button
-                aria-label="autocomplete-action"
-                type="button"
-                className="truncate w-full"
-              >
-                {selectedItem}
-              </button>
+              <DialTag
+                tag={selectedItem}
+                cssClass={classNames([listElementCssClass])}
+              />
             </DialTooltip>
           </li>
         ))}

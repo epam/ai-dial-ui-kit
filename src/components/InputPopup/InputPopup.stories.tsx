@@ -72,7 +72,7 @@ const meta: Meta<typeof DialInputPopup> = {
       control: { type: 'object' },
       description: 'Selected value or array of values displayed in the input',
     },
-    readonly: {
+    disabled: {
       control: 'boolean',
       description: 'Disables interactivity and hides the open button',
     },
@@ -124,11 +124,11 @@ export const MultipleValues: Story = {
   },
 };
 
-export const Readonly: Story = {
+export const Disabled: Story = {
   render: InteractiveInputModal,
   args: {
-    selectedValue: 'Readonly Value',
-    readonly: true,
+    selectedValue: 'Disabled Value',
+    disabled: true,
   },
 };
 
@@ -178,7 +178,7 @@ export const AllVariants: Story = {
         <InteractiveInputModal
           selectedValue="Static Value"
           emptyValueText="None"
-          readonly
+          disabled={true}
           onOpen={() => null}
         >
           <div />
