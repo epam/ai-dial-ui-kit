@@ -1,4 +1,4 @@
-import { IconX, IconSearch } from '@tabler/icons-react';
+import { IconClipboardX, IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import {
   type FC,
@@ -25,10 +25,10 @@ import {
   selectOptionSelectedClasses,
   selectOptionSingleSelectedClasses,
   selectOptionDisabledClasses,
-  selectTagBaseClasses,
   selectChevronIcon,
 } from './constants';
-import { DialCloseButton } from '../CloseButton/CloseButton';
+import { DialTag } from '../Tag/Tag';
+import { DialSearch } from '../Search/Search';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -57,7 +57,7 @@ export interface DialSelectProps {
  * - In the list, the selected option is indicated by a LEFT border and tinted background
  *   (no check icon).
  *
- * Multiple mode uses DS checkboxes (including Select All with indeterminate state).
+ * Multiple mode uses checkboxes (including Select All with indeterminate state).
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -131,7 +131,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   };
 
   const handleRemoveTag = useCallback(
-    (val: string) => {
+    (event: React.MouseEvent<HTMLButtonElement>, val: string) => {
+      event.stopPropagation();
       if (!multiple) {
         setSelection('');
         return;
@@ -186,16 +187,20 @@ export const DialSelect: FC<DialSelectProps> = ({
   const renderTags = useCallback(() => {
     if (!multiple || selectedValues.length === 0) return null;
     return (
-      <div className="flex flex-wrap items-center gap-1">
+      <div className="flex flex-wrap w-full items-center gap-1">
         {selectedValues.map((v) => {
           const label = textLabel(
             options.find((o) => o.value === v)?.label ?? v,
           );
+          const icon = options.find((o) => o.value === v)?.icon;
           return (
-            <span key={v} className={selectTagBaseClasses}>
-              <span className="truncate max-w-[10rem]">{label}</span>
-              <DialCloseButton size={18} onClose={() => handleRemoveTag(v)} />
-            </span>
+            <DialTag
+              key={v}
+              tag={label}
+              remove={(e) => handleRemoveTag(e, v)}
+              iconBefore={icon ? <DialIcon icon={icon} /> : null}
+              cssClass="max-w-full"
+            />
           );
         })}
       </div>
@@ -242,16 +247,11 @@ export const DialSelect: FC<DialSelectProps> = ({
           {(searchable || closable) && (
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
-                <div className="flex items-center gap-2 rounded border border-secondary px-2 py-1 w-full">
-                  <DialIcon icon={<IconSearch size={16} />} />
-                  <input
-                    aria-label="Search options"
-                    className="w-full bg-transparent outline-none text-primary placeholder:text-secondary dial-small"
-                    placeholder="Search..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                </div>
+                <DialSearch
+                  onChange={setQuery}
+                  value={query}
+                  elementId={`search-${listId}`}
+                />
               )}
               {closable && (
                 <DialButton
@@ -280,11 +280,11 @@ export const DialSelect: FC<DialSelectProps> = ({
             </div>
           )}
 
-          <div className="max-h-64 overflow-auto py-1">
+          <div className="overflow-y-auto py-1">
             {filtered.length === 0 ? (
               <div className="px-2 py-3">
                 <DialNoDataContent
-                  icon={emptyIcon}
+                  icon={emptyIcon ?? <IconClipboardX size={24} />}
                   title={emptyTitle}
                   description={emptyDescription}
                 />
@@ -301,12 +301,13 @@ export const DialSelect: FC<DialSelectProps> = ({
                         selectOptionBaseClasses,
                         selected && selectOptionSelectedClasses,
                         opt.disabled && selectOptionDisabledClasses,
+                        'w-full',
                       )}
                     >
                       <DialCheckbox
                         id={`${listId}-${opt.value}`}
                         label={
-                          <span className="flex items-center gap-2 text-primary">
+                          <span className="flex w-full items-center gap-2 text-primary">
                             {opt.icon && <DialIcon icon={opt.icon} />}
                             <span className="truncate">
                               {textLabel(opt.label)}
@@ -339,7 +340,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                     )}
                     onClick={() => !opt.disabled && handleToggle(opt.value)}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       {opt.icon && <DialIcon icon={opt.icon} />}
                       <span className="truncate">{opt.label}</span>
                     </div>
