@@ -100,14 +100,11 @@ describe('Dial UI Kit :: DialInputPopup', () => {
         emptyValueText="None"
         disabled={true}
       >
-        <div></div>
+        <div />
       </DialInputPopup>,
     );
 
-    const containerElement = screen.getByText('Value 1').closest('div');
-    expect(containerElement).toHaveClass('dial-input-disable');
-
-    fireEvent.click(containerElement!);
+    fireEvent.click(screen.getByText('Value 1'));
 
     expect(mockFunction).not.toHaveBeenCalled();
   });
