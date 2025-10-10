@@ -34,9 +34,9 @@ export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/Radi
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
-
 // Inputs
 export { DialInput } from './components/Input/Input';
+export type { DialInputProps } from './components/Input/Input';
 export { DialNumberInputField } from './components/InputField/InputField';
 export { DialTextInputField } from './components/InputField/InputField';
 export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
