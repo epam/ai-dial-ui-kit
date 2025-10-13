@@ -18,6 +18,35 @@ export interface DialTabsProps {
   orientation?: TabOrientation;
 }
 
+/**
+ * A responsive tabs component that adapts between horizontal and dropdown (mobile) layouts
+ * based on screen size. Supports both horizontal and vertical orientations and can integrate
+ * with JSON editor states to toggle visibility when needed.
+ *
+ * When viewed on larger screens, tabs are displayed horizontally or vertically based on the
+ * {@link TabOrientation} prop. On smaller screens, the component automatically switches to
+ * a dropdown menu for better usability.
+ *
+ * @example
+ * ```tsx
+ * <DialTabs
+ *   tabs={[
+ *     { id: 'overview', label: 'Overview' },
+ *     { id: 'details', label: 'Details' },
+ *     { id: 'settings', label: 'Settings' },
+ *   ]}
+ *   activeTab="overview"
+ *   onClick={(id) => setActiveTab(id)}
+ *   orientation={TabOrientation.Horizontal}
+ * />
+ * ```
+ *
+ * @param tabs - Array of tab models to render. Each tab should include an `id` and `label`.
+ * @param activeTab - The identifier of the currently active tab.
+ * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
+ * @param [jsonEditorEnabled=false] - If true, hides the tab UI to integrate with JSON editor layouts.
+ * @param [orientation=TabOrientation.Horizontal] - The layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ */
 export const DialTabs: FC<DialTabsProps> = ({
   tabs,
   activeTab,
