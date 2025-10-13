@@ -25,8 +25,8 @@ describe('Dial UI Kit :: DialTab', () => {
     const btn = screen.getByRole('tab');
     expect(btn.className).toMatch(/pointer-events-none/);
     fireEvent.click(btn);
-    // Still calls onClick, as button is not truly disabled, but UI disables pointer events
-    expect(onClick).toHaveBeenCalledWith('tab1');
+
+    expect(onClick).not.toHaveBeenCalledWith('tab1');
   });
 
   test('shows exclamation icon if invalid', () => {
