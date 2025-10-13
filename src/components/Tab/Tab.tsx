@@ -3,6 +3,7 @@ import type { TabModel } from '@/models/tab';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconExclamationCircle } from '@tabler/icons-react';
 import type { FC } from 'react';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialTabProps {
   tab: TabModel;
@@ -69,7 +70,11 @@ export const DialTab: FC<DialTabProps> = ({
       onClick={() => onClick(tab.id)}
       disabled={disabled}
     >
-      <span>{tab.name}</span>
+      <DialEllipsisTooltip
+        text={tab.name}
+        contentClassName="max-w-[200px]"
+        cssClass="max-w-[200px]"
+      />
       {invalid && (
         <div className="text-error">
           <IconExclamationCircle {...BASE_ICON_PROPS} />

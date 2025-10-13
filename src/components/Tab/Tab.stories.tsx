@@ -87,6 +87,18 @@ export const Invalid: Story = {
   },
 };
 
+export const TooLongText: Story = {
+  args: {
+    tab: {
+      id: 'analytics',
+      name: 'Analytics Settings DialTabs Support Variant Of Long Text Message',
+    },
+    active: false,
+    horizontal: true,
+    onClick: () => null,
+  },
+};
+
 export const OrientationVariants: Story = {
   render: () => {
     const TabDemo = () => {
