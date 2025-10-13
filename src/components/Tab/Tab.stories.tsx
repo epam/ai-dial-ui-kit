@@ -114,7 +114,7 @@ export const OrientationVariants: Story = {
         <div className="flex gap-4 text-primary">
           <div>
             <h4 className="text-sm font-semibold mb-2">Horizontal</h4>
-            <div className="flex gap-2 bg-gray-50 rounded">
+            <div className="flex gap-2 rounded">
               {tabs.map((t) => (
                 <DialTab
                   key={t.id}
@@ -127,8 +127,8 @@ export const OrientationVariants: Story = {
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-semibold mb-2">Vertical</h4>
-            <div className="flex flex-col gap-2 bg-gray-50 p-2 rounded">
+            <h4 className="dial-small font-semibold mb-2">Vertical</h4>
+            <div className="flex flex-col gap-2 bg-layer-3 p-2 rounded">
               {tabs.map((t) => (
                 <DialTab
                   key={t.id}
