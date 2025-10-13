@@ -20,7 +20,7 @@ const InteractiveTextAreaField = (args: DialTextAreaFieldProps) => {
 };
 
 const meta = {
-  title: 'Inputs/TextAreaField',
+  title: 'Form/TextAreaField',
   component: DialTextAreaField,
   tags: ['textarea', 'field'],
   parameters: {

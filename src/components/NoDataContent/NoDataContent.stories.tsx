@@ -3,7 +3,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 import { DialNoDataContent } from './NoDataContent';
 
 const meta: Meta<typeof DialNoDataContent> = {
-  title: 'Components/NoDataContent',
+  title: 'Feedback/NoDataContent',
   component: DialNoDataContent,
   parameters: {
     layout: 'padded',

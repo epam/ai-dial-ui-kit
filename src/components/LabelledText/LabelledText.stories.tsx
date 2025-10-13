@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialLabelledText, type DialLabelledTextProps } from './LabelledText';
 
 const meta: Meta<typeof DialLabelledText> = {
-  title: 'Components/LabelledText',
+  title: 'Data Display/LabelledText',
   component: DialLabelledText,
   parameters: {
     layout: 'padded',

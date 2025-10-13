@@ -18,7 +18,7 @@ const InteractiveInput = (args: DialPasswordInputFieldProps) => {
 };
 
 const meta: Meta<typeof DialPasswordInputField> = {
-  title: 'Components/PasswordInput',
+  title: 'Form/PasswordInput',
   component: DialPasswordInputField,
   tags: ['input'],
   parameters: {

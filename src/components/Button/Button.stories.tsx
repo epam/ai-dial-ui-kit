@@ -4,7 +4,7 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { ButtonVariant } from '@/types/button';
 
 const meta = {
-  title: 'Components/Button',
+  title: 'Form/Button',
   component: DialButton,
   parameters: {
     layout: 'centered',

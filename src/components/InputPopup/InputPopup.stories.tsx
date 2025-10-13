@@ -51,7 +51,7 @@ const InteractiveInputModal = (args: DialInputPopupProps) => {
 };
 
 const meta: Meta<typeof DialInputPopup> = {
-  title: 'Components/InputPopup',
+  title: 'Overlay/InputPopup',
   component: DialInputPopup,
   tags: ['modal', 'input', 'form'],
   parameters: {

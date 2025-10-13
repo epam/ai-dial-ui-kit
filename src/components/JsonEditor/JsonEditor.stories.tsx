@@ -3,7 +3,7 @@ import { DialJsonEditor } from './JsonEditor';
 import { EDITOR_THEMES } from '@/types/editor';
 
 const meta = {
-  title: 'Components/JsonEditor',
+  title: 'Data Display/JsonEditor',
   component: DialJsonEditor,
   parameters: {
     layout: 'centered',
