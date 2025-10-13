@@ -1,8 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 import { describe, expect, test, vi } from 'vitest';
 import { DialDropdown } from './Dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { type DropdownItem } from '@/models/dropdown';
+import { IconCheck } from '@tabler/icons-react';
 
 const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile' },
@@ -29,7 +32,6 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     openByClick();
     expect(triggerWrapper).toHaveAttribute('aria-expanded', 'true');
-    // close by selecting an item
     fireEvent.click(screen.getByRole('menuitem', { name: 'Profile' }));
     expect(triggerWrapper).toHaveAttribute('aria-expanded', 'false');
   });
@@ -150,5 +152,230 @@ describe('Dial UI Kit :: Dropdown', () => {
     );
     openByClick();
     expect(screen.getByText('custom')).toBeInTheDocument();
+  });
+
+  test('icon is rendered and inherits state classes (danger/disabled)', () => {
+    render(
+      <DialDropdown
+        menu={{
+          items: [
+            {
+              key: 'i1',
+              label: 'With Icon Danger',
+              danger: true,
+              icon: <IconCheck />,
+            },
+            {
+              key: 'i2',
+              label: 'With Icon Disabled',
+              disabled: true,
+              icon: <IconCheck />,
+            },
+          ],
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    const dangerItem = screen.getByRole('menuitem', {
+      name: 'With Icon Danger',
+    });
+    const dangerIconWrapper = dangerItem.querySelector('span.text-error svg');
+    expect(dangerIconWrapper).toBeTruthy();
+
+    const disabledItem = screen.getByRole('menuitem', {
+      name: 'With Icon Disabled',
+    });
+    const disabledIconWrapper = disabledItem.querySelector(
+      'span.text-secondary svg',
+    );
+    expect(disabledIconWrapper).toBeTruthy();
+  });
+
+  test('disabled branch in click handler short-circuits when click is forced', () => {
+    const onItem = vi.fn();
+    const onMenu = vi.fn();
+
+    render(
+      <DialDropdown
+        menu={{
+          items: [
+            { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
+          ],
+          onClick: onMenu,
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    const btn = screen.getByRole('menuitem', {
+      name: 'Disabled',
+    }) as HTMLButtonElement;
+    btn.removeAttribute('disabled');
+    fireEvent.click(btn);
+
+    expect(onItem).not.toHaveBeenCalled();
+    expect(onMenu).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('becomes disabled while open -> closes via effect', () => {
+    const { rerender } = render(
+      <DialDropdown disabled={false} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    rerender(
+      <DialDropdown disabled menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('ignores contextmenu when trigger does not include ContextMenu', () => {
+    render(
+      <DialDropdown menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    fireEvent.contextMenu(screen.getByRole('button', { name: /open/i }));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('outsidePress closes by default, but ignores clicks inside outsidePressIgnoreRef', () => {
+    const ignoreRef: { current: HTMLElement | null } = { current: null };
+
+    const { container } = render(
+      <div>
+        <div
+          ref={(el) => {
+            ignoreRef.current = el;
+          }}
+        >
+          <button type="button">Safe Outside</button>
+        </div>
+        <DialDropdown outsidePressIgnoreRef={ignoreRef} menu={{ items }}>
+          <button type="button">Open</button>
+        </DialDropdown>
+      </div>,
+    );
+
+    const trigger = container.querySelector('[aria-haspopup="menu"]')!;
+    fireEvent.click(trigger);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'Safe Outside' }));
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    fireEvent.pointerDown(document.body);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('explicit placement uses flip middleware path', () => {
+    render(
+      <DialDropdown placement="bottom-end" menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('opens on hover when enabled', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DialDropdown trigger={[DropdownTrigger.Hover]} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    const triggerWrapper = container.querySelector('[aria-haspopup="menu"]')!;
+    await user.hover(triggerWrapper);
+
+    expect(await screen.findByRole('menu')).toBeInTheDocument();
+
+    await user.unhover(triggerWrapper);
+
+    await waitFor(() => {
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+  });
+
+  test('controlled mode uses the `open` prop (isControlled ? !!open) regardless of defaultOpen or clicks', () => {
+    const { container, rerender } = render(
+      <DialDropdown open={false} defaultOpen={true} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    let triggerWrapper = container.querySelector('[aria-haspopup="menu"]')!;
+    expect(triggerWrapper).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+    rerender(
+      <DialDropdown open={true} defaultOpen={true} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    triggerWrapper = container.querySelector('[aria-haspopup="menu"]')!;
+    expect(triggerWrapper).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    rerender(
+      <DialDropdown open={false} defaultOpen={true} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    triggerWrapper = container.querySelector('[aria-haspopup="menu"]')!;
+    expect(triggerWrapper).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('handleItemClick returns early when item.disabled is true (even if DOM not disabled)', () => {
+    const onItem = vi.fn();
+    const onMenu = vi.fn();
+
+    render(
+      <DialDropdown
+        menu={{
+          items: [
+            { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
+          ],
+          onClick: onMenu,
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+    const btn = screen.getByRole('menuitem', {
+      name: 'Disabled',
+    }) as HTMLButtonElement;
+
+    expect(btn).toBeDisabled();
+    btn.removeAttribute('disabled');
+
+    fireEvent.click(btn);
+
+    expect(onItem).not.toHaveBeenCalled();
+    expect(onMenu).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 });
