@@ -54,6 +54,7 @@ export const DialTabs: FC<DialTabsProps> = ({
   jsonEditorEnabled,
   orientation = TabOrientation.Horizontal,
 }) => {
+  // TODO: Tabs might have additional mobile versions (e.g., chat, mindmap). We need to support these later or allow flexible customization for the mobile view.
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const isTablet = useIsTabletScreen();
   const isHorizontal = orientation === TabOrientation.Horizontal;
