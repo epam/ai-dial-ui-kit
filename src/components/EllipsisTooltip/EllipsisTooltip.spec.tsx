@@ -91,7 +91,7 @@ describe('Dial UI Kit :: DialEllipsisTooltip', () => {
       <DialEllipsisTooltip
         text="Styled text"
         cssClass="w-96 px-4 text-secondary"
-        contentClassName="bg-surface"
+        contentClassName="bg-test"
         initialOpen
       />,
     );
@@ -102,6 +102,6 @@ describe('Dial UI Kit :: DialEllipsisTooltip', () => {
     expect(triggerSpan).toHaveClass('text-secondary');
 
     const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveClass('bg-surface');
+    expect(tooltip).toHaveClass('bg-test');
   });
 });
