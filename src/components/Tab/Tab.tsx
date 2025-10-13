@@ -1,9 +1,8 @@
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { TabModel } from '@/models/tab';
+import { mergeClasses } from '@/utils/merge-classes';
 import { IconExclamationCircle } from '@tabler/icons-react';
-import classNames from 'classnames';
 import type { FC } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 export interface DialTabProps {
   tab: TabModel;
@@ -50,20 +49,17 @@ export const DialTab: FC<DialTabProps> = ({
   const baseClasses =
     'rounded px-3 py-2 flex flex-row gap-2 h-[32px] cursor-pointer text-sm leading-4 hover:text-accent-primary';
 
-  const tabClassNames = twMerge(
-    classNames(
-      baseClasses,
-      {
-        'bg-layer-4': horizontal,
-        'bg-layer-1 text-secondary pointer-events-none': disabled,
-        'bg-accent-primary-alpha text-primary': active && !disabled,
-        'text-primary': !active && !disabled,
-        'border-b-2 border-b-accent-primary': active && horizontal && !disabled,
-        'border-l-2 border-l-accent-primary':
-          active && !horizontal && !disabled,
-      },
-      cssClass,
-    ),
+  const tabClassNames = mergeClasses(
+    baseClasses,
+    {
+      'bg-layer-4': horizontal,
+      'bg-layer-1 text-secondary pointer-events-none': disabled,
+      'bg-accent-primary-alpha text-primary': active && !disabled,
+      'text-primary': !active && !disabled,
+      'border-b-2 border-b-accent-primary': active && horizontal && !disabled,
+      'border-l-2 border-l-accent-primary': active && !horizontal && !disabled,
+    },
+    cssClass,
   );
 
   return (

@@ -1,11 +1,10 @@
 import { TagVariant } from '@/types/tag';
 import { IconX } from '@tabler/icons-react';
-import { twMerge } from 'tailwind-merge';
-import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialTagProps {
   tag: string;
@@ -47,13 +46,11 @@ export const DialTag: FC<DialTagProps> = ({
 }) => {
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
-  const containerClass = twMerge(
-    classNames(
-      'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
-      variantClass,
-      !bordered ? 'border-transparent' : 'border',
-      cssClass,
-    ),
+  const containerClass = mergeClasses(
+    'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
+    variantClass,
+    !bordered ? 'border-transparent' : 'border',
+    cssClass,
   );
 
   return (
