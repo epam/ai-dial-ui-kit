@@ -44,7 +44,7 @@ const baseOptions: SelectOption[] = [
 ];
 
 const meta = {
-  title: 'Components/Select',
+  title: 'Form/Select',
   component: DialSelect,
   parameters: { layout: 'centered' },
   argTypes: {

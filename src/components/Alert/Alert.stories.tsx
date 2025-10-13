@@ -3,7 +3,7 @@ import { DialAlert, type DialAlertProps } from './Alert';
 import { AlertVariant } from '@/types/alert';
 
 const meta = {
-  title: 'Components/Alert',
+  title: 'Feedback/Alert',
   component: DialAlert,
   parameters: {
     layout: 'padded',

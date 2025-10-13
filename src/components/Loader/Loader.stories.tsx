@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialLoader, type DialLoaderProps } from './Loader';
 
 const meta = {
-  title: 'Components/Loader',
+  title: 'Feedback/Loader',
   component: DialLoader,
   parameters: {
     layout: 'padded',

@@ -16,7 +16,7 @@ const InteractiveInput = (args: DialInputProps) => {
 };
 
 const meta = {
-  title: 'Inputs/Input',
+  title: 'Form/Input',
   component: DialInput,
   tags: ['input'],
   parameters: {

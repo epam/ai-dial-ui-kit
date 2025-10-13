@@ -3,7 +3,7 @@ import { StepStatus } from '@/models/step';
 import { type DialStepsProps, DialSteps } from './Steps';
 
 const meta = {
-  label: 'Components/Steps',
+  title: 'Navigation/Steps',
   component: DialSteps,
   parameters: {
     layout: 'centered',

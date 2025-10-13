@@ -15,7 +15,7 @@ const InteractiveCheckbox = (args: DialCheckboxProps) => {
 };
 
 const meta = {
-  label: 'Components/Checkbox',
+  title: 'Form/Checkbox',
   component: DialCheckbox,
   parameters: {
     layout: 'centered',

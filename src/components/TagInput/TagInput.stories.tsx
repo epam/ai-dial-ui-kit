@@ -17,7 +17,7 @@ const InteractiveTagInput = (args: DialTagInputProps) => {
 };
 
 const meta: Meta<typeof DialTagInput> = {
-  title: 'Components/TagInput',
+  title: 'Form/TagInput',
   component: DialTagInput,
   tags: ['form', 'input', 'tags'],
   parameters: {

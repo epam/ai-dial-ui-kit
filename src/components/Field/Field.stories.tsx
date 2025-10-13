@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFieldLabel, type DialFieldLabelProps } from './Field';
 
 const meta = {
-  title: 'Inputs/FieldLabel',
+  title: 'Form/FieldLabel',
   component: DialFieldLabel,
   parameters: {
     layout: 'centered',

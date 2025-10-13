@@ -15,7 +15,7 @@ const InteractiveSwitch = (args: DialSwitchProps) => {
 };
 
 const meta = {
-  title: 'Components/Switch',
+  title: 'Form/Switch',
   component: DialSwitch,
   tags: ['switch'],
   parameters: {

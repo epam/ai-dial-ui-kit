@@ -33,7 +33,7 @@ const InteractiveCollapseBar = (args: DialCollapsibleSidebarProps) => {
 };
 
 const meta: Meta<typeof DialCollapsibleSidebar> = {
-  title: 'Components/CollapsibleSidebar',
+  title: 'Navigation/CollapsibleSidebar',
   component: DialCollapsibleSidebar,
   tags: ['collapse', 'sidebar', 'panel'],
   parameters: {

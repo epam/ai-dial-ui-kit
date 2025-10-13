@@ -30,7 +30,7 @@ const ControlledExample: FC = () => {
 };
 
 const meta = {
-  title: 'Components/RadioGroup',
+  title: 'Form/RadioGroup',
   component: DialRadioGroup,
   parameters: { layout: 'centered' },
   argTypes: {

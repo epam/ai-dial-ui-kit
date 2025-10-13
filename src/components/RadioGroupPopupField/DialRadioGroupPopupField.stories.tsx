@@ -57,7 +57,7 @@ const LiveSyncRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = (args) => {
 };
 
 const meta = {
-  title: 'Components/RadioGroupPopupField',
+  title: 'Form/RadioGroupPopupField',
   component: DialRadioGroupPopupField,
   parameters: { layout: 'centered' },
   decorators: [

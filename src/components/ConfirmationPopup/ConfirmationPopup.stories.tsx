@@ -7,7 +7,7 @@ import {
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 
 const meta = {
-  title: 'Components/ConfirmationPopup',
+  title: 'Overlay/ConfirmationPopup',
   component: DialConfirmationPopup,
   parameters: { layout: 'centered' },
   argTypes: {

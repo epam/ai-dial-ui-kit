@@ -68,7 +68,7 @@ const ManyOptionsGroup: FC = () => {
 };
 
 const meta = {
-  title: 'Components/RadioButton',
+  title: 'Form/RadioButton',
   component: DialRadioButton,
   parameters: { layout: 'centered' },
   argTypes: {

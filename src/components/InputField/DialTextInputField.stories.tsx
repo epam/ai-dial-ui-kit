@@ -18,7 +18,7 @@ const InteractiveTextInputField = (args: DialTextInputFieldProps) => {
 };
 
 const meta = {
-  title: 'Inputs/TextInputField',
+  title: 'Form/TextInputField',
   component: DialTextInputField,
   tags: ['input'],
   parameters: {

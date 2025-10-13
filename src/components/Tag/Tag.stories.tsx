@@ -4,7 +4,7 @@ import { DialTag } from '../Tag/Tag';
 import { IconEye } from '@tabler/icons-react';
 
 const meta: Meta<typeof DialTag> = {
-  title: 'Components/Tag',
+  title: 'Data Display/Tag',
   component: DialTag,
   tags: ['display', 'tag', 'badge'],
   parameters: {

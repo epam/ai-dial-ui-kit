@@ -8,7 +8,7 @@ import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 
 const meta = {
-  title: 'Components/EllipsisTooltip',
+  title: 'Overlay/EllipsisTooltip',
   component: DialEllipsisTooltip,
   parameters: { layout: 'centered' },
   argTypes: {
