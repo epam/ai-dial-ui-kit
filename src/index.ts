@@ -12,6 +12,8 @@ export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/Collapsi
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
+export { DialTabs } from './components/Tabs/Tabs';
+export { DialTab } from './components/Tab/Tab';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -61,12 +63,14 @@ export { ConfirmationPopupVariant } from './types/confirmation-popup';
 export { DropdownType } from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
+export { TabOrientation } from './types/tab';
 
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
+export type { TabModel } from './models/tab';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
