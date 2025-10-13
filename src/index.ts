@@ -47,6 +47,7 @@ export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
+export { DialSelect } from './components/Select/Select';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
@@ -65,6 +66,7 @@ export { TagVariant } from './types/tag';
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
+export type { SelectOption } from './models/select';
 
 // Utils
 export { mergeClasses } from './utils/mergeClasses';

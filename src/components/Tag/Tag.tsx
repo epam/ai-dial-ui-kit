@@ -10,9 +10,10 @@ import { DialIcon } from '@/components/Icon/Icon';
 export interface DialTagProps {
   tag: string;
   cssClass?: string;
-  remove?: () => void;
+  remove?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   variant?: TagVariant;
   iconBefore?: ReactNode;
+  bordered?: boolean;
 }
 
 /**
@@ -33,6 +34,8 @@ export interface DialTagProps {
  * @param [remove] - Optional callback invoked when the remove button is clicked.
  *                   If not provided, the remove button will not be rendered.
  * @param [variant=TagVariant.Default] - Visual style of the tag. Uses the {@link TagVariant} enum.
+ * @param [iconBefore] - Optional icon or element to display before the tag text.
+ * @param [bordered=true] - When true, adds a border to the tag for better visibility on light backgrounds.
  */
 export const DialTag: FC<DialTagProps> = ({
   tag,
@@ -40,13 +43,15 @@ export const DialTag: FC<DialTagProps> = ({
   remove,
   variant = TagVariant.Default,
   iconBefore,
+  bordered = true,
 }) => {
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
   const containerClass = twMerge(
     classNames(
-      'flex items-center gap-1 dial-tiny border rounded p-1 h-[22px] text-primary',
+      'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
       variantClass,
+      !bordered ? 'border-transparent' : 'border',
       cssClass,
     ),
   );
@@ -54,9 +59,12 @@ export const DialTag: FC<DialTagProps> = ({
   return (
     <div key={tag} className={containerClass}>
       <DialIcon icon={iconBefore} />
-      <span>{tag}</span>
+      <span className="truncate">{tag}</span>
       {remove && (
-        <DialButton iconAfter={<IconX size={16} />} onClick={remove} />
+        <DialButton
+          iconAfter={<IconX size={16} />}
+          onClick={(e) => remove(e)}
+        />
       )}
     </div>
   );

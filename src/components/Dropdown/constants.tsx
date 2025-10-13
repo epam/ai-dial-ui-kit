@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { IconChevronRight } from '@tabler/icons-react';
 
 export const dropdownBaseClasses = classNames(
-  'inline-flex items-center gap-2 align-middle',
+  'flex items-center gap-2 align-middle',
   'h-auto px-0 bg-transparent border-0',
 );
 
