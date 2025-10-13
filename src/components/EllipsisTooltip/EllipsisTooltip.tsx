@@ -125,7 +125,6 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
           contentClassName,
           !tooltipContent && 'hidden',
         )}
-        data-testid="ellipsis-tooltip-content"
       >
         {tooltipContent}
       </DialTooltipContent>
