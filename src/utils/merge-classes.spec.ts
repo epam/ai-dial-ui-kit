@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { mergeClasses } from './mergeClasses';
+import { mergeClasses } from './merge-classes';
 
 describe('mergeClasses utility', () => {
   test('resolves Tailwind width conflicts (last one wins)', () => {

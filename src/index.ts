@@ -69,4 +69,4 @@ export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
 
 // Utils
-export { mergeClasses } from './utils/mergeClasses';
+export { mergeClasses } from './utils/merge-classes';
