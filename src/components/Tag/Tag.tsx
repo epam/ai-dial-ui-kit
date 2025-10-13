@@ -4,6 +4,7 @@ import type { FC, ReactNode } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialTagProps {
@@ -56,7 +57,7 @@ export const DialTag: FC<DialTagProps> = ({
   return (
     <div key={tag} className={containerClass}>
       <DialIcon icon={iconBefore} />
-      <span className="truncate">{tag}</span>
+      <DialEllipsisTooltip text={tag} />
       {remove && (
         <DialButton
           iconAfter={<IconX size={16} />}

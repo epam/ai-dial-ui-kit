@@ -29,6 +29,7 @@ import {
 import { DialTag } from '@/components/Tag/Tag';
 import { DialSearch } from '@/components/Search/Search';
 import type { SelectOption } from '@/models/select';
+import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -249,7 +250,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           {singleSelectedOption.icon && (
             <DialIcon icon={singleSelectedOption.icon} />
           )}
-          <span className="truncate">{singleSelectedOption.label}</span>
+          <DialEllipsisTooltip text={singleSelectedOption.label} />
         </>
       );
     }
@@ -368,7 +369,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                   >
                     <div className="flex items-center gap-2 w-full">
                       {opt.icon && <DialIcon icon={opt.icon} />}
-                      <span className="truncate">{opt.label}</span>
+                      <DialEllipsisTooltip text={opt.label} />
                     </div>
                   </button>
                 );
