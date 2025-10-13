@@ -7,10 +7,10 @@ import { twMerge } from 'tailwind-merge';
 
 export interface DialTabProps {
   tab: TabModel;
-  isActive: boolean;
+  active: boolean;
   disabled?: boolean;
   invalid?: boolean;
-  isHorizontal?: boolean;
+  horizontal?: boolean;
   cssClass?: string;
   onClick: (id: string) => void;
 }
@@ -31,20 +31,20 @@ export interface DialTabProps {
  * ```
  *
  * @param tab - The tab model containing its `id` and `name`.
- * @param isActive - Whether the tab is currently active.
+ * @param active - Whether the tab is currently active.
  * @param [disabled=false] - Whether the tab is disabled and non-interactive.
  * @param [invalid=false] - Whether the tab is marked as invalid, displaying an error icon.
- * @param [isHorizontal=false] - Whether the tab is displayed in horizontal orientation.
+ * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
  * @param [cssClass] - Additional CSS classes applied to the tab element.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
  */
 export const DialTab: FC<DialTabProps> = ({
   tab,
-  isActive,
+  active,
   disabled,
   invalid,
   cssClass,
-  isHorizontal,
+  horizontal,
   onClick,
 }) => {
   const baseClasses =
@@ -54,14 +54,13 @@ export const DialTab: FC<DialTabProps> = ({
     classNames(
       baseClasses,
       {
-        'bg-layer-4': isHorizontal,
+        'bg-layer-4': horizontal,
         'bg-layer-1 text-secondary pointer-events-none': disabled,
-        'bg-accent-primary-alpha text-primary': isActive && !disabled,
-        'text-primary': !isActive && !disabled,
-        'border-b-2 border-b-accent-primary':
-          isActive && isHorizontal && !disabled,
+        'bg-accent-primary-alpha text-primary': active && !disabled,
+        'text-primary': !active && !disabled,
+        'border-b-2 border-b-accent-primary': active && horizontal && !disabled,
         'border-l-2 border-l-accent-primary':
-          isActive && !isHorizontal && !disabled,
+          active && !horizontal && !disabled,
       },
       cssClass,
     ),

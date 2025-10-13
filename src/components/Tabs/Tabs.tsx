@@ -106,9 +106,9 @@ export const DialTabs: FC<DialTabsProps> = ({
           <DialTab
             key={tab.id}
             tab={tab}
-            isActive={activeTab === tab.id}
+            active={activeTab === tab.id}
             onClick={onClick}
-            isHorizontal={isHorizontal}
+            horizontal={isHorizontal}
           />
         ))}
       </div>
@@ -125,7 +125,7 @@ export const DialTabs: FC<DialTabsProps> = ({
                 <DialTab
                   key={tab.id}
                   tab={tab}
-                  isActive={tab.id === activeTab}
+                  active={tab.id === activeTab}
                   onClick={(id) => {
                     onClick(id);
                     setIsMobileOpen(false);
@@ -139,7 +139,7 @@ export const DialTabs: FC<DialTabsProps> = ({
               <DialTab
                 key={activeTab}
                 tab={activeTabModel}
-                isActive
+                active
                 onClick={onClick}
                 cssClass="rounded-none bg-transparent border-l-0 border-b-[2px] border-accent-primary h-full items-center px-0"
               />

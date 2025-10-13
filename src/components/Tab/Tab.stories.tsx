@@ -23,7 +23,7 @@ const meta: Meta<typeof DialTab> = {
       control: 'object',
       description: 'The tab object containing `id` and `name`.',
     },
-    isActive: {
+    active: {
       control: 'boolean',
       description: 'Marks the tab as active.',
     },
@@ -35,7 +35,7 @@ const meta: Meta<typeof DialTab> = {
       control: 'boolean',
       description: 'Marks the tab as invalid, showing an error icon.',
     },
-    isHorizontal: {
+    horizontal: {
       control: 'boolean',
       description: 'Determines horizontal vs vertical orientation.',
     },
@@ -53,7 +53,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     tab: sampleTab,
-    isActive: true,
+    active: true,
     onClick: () => null,
   },
 };
@@ -61,8 +61,8 @@ export const Default: Story = {
 export const Inactive: Story = {
   args: {
     tab: { id: 'details', name: 'Details' },
-    isActive: false,
-    isHorizontal: true,
+    active: false,
+    horizontal: true,
     onClick: () => null,
   },
 };
@@ -70,9 +70,9 @@ export const Inactive: Story = {
 export const Disabled: Story = {
   args: {
     tab: { id: 'settings', name: 'Settings' },
-    isActive: false,
+    active: false,
     disabled: true,
-    isHorizontal: true,
+    horizontal: true,
     onClick: () => null,
   },
 };
@@ -80,9 +80,9 @@ export const Disabled: Story = {
 export const Invalid: Story = {
   args: {
     tab: { id: 'analytics', name: 'Analytics' },
-    isActive: false,
+    active: false,
     invalid: true,
-    isHorizontal: true,
+    horizontal: true,
     onClick: () => null,
   },
 };
@@ -107,8 +107,8 @@ export const OrientationVariants: Story = {
                 <DialTab
                   key={t.id}
                   tab={t}
-                  isActive={t.id === activeId}
-                  isHorizontal
+                  active={t.id === activeId}
+                  horizontal
                   onClick={setActiveId}
                 />
               ))}
@@ -121,7 +121,7 @@ export const OrientationVariants: Story = {
                 <DialTab
                   key={t.id}
                   tab={t}
-                  isActive={t.id === activeId}
+                  active={t.id === activeId}
                   onClick={setActiveId}
                 />
               ))}
