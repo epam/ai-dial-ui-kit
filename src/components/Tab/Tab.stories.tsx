@@ -6,7 +6,7 @@ import { DialTab } from './Tab';
 const sampleTab: TabModel = { id: 'overview', name: 'Overview' };
 
 const meta: Meta<typeof DialTab> = {
-  title: 'Components/Tab',
+  title: 'Navigation/Tab',
   component: DialTab,
   tags: ['navigation', 'tab', 'display'],
   parameters: {

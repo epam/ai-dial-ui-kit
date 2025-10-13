@@ -29,7 +29,7 @@ const InteractiveTabs = (args: DialTabsProps) => {
 };
 
 const meta: Meta<typeof DialTabs> = {
-  title: 'Components/Tabs',
+  title: 'Navigation/Tabs',
   component: DialTabs,
   tags: ['navigation', 'tabs', 'layout'],
   parameters: {
