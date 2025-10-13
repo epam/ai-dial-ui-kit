@@ -4,7 +4,7 @@ import { DialPopup, type DialPopupProps } from './Popup';
 import { PopupSize } from '@/types/popup';
 
 const meta = {
-  title: 'Components/Popup',
+  title: 'Overlay/Popup',
   component: DialPopup,
   parameters: { layout: 'centered' },
   argTypes: {

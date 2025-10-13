@@ -4,7 +4,7 @@ import { DialButton } from '@/components/Button/Button';
 import { DialInput } from '@/components/Input/Input';
 
 const meta = {
-  title: 'Components/Tooltip',
+  title: 'Overlay/Tooltip',
   component: DialTooltip,
   parameters: {
     layout: 'centered',

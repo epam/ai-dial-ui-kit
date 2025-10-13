@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialCloseButton, type DialCloseButtonProps } from './CloseButton';
 
 const meta: Meta<typeof DialCloseButton> = {
-  title: 'Components/CloseButton',
+  title: 'Utility/CloseButton',
   component: DialCloseButton,
   parameters: {
     layout: 'padded',

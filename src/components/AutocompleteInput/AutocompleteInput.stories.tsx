@@ -22,7 +22,7 @@ const InteractiveAutocomplete = (args: DialAutocompleteInputProps) => {
 };
 
 const meta: Meta<typeof DialAutocompleteInput> = {
-  title: 'Components/AutocompleteInput',
+  title: 'Form/AutocompleteInput',
   component: DialAutocompleteInput,
   tags: ['autocomplete', 'input'],
   parameters: {

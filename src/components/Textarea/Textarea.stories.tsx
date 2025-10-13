@@ -17,7 +17,7 @@ const InteractiveTextarea = (args: DialTextareaProps) => {
 };
 
 const meta = {
-  title: 'Inputs/Textarea',
+  title: 'Form/Textarea',
   component: DialTextarea,
   tags: ['textarea'],
   parameters: {

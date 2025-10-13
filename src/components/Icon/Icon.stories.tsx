@@ -4,7 +4,7 @@ import { IconFlame, IconSnowflake } from '@tabler/icons-react';
 import { DialIcon } from './Icon';
 
 const meta: Meta<typeof DialIcon> = {
-  title: 'Components/Icon',
+  title: 'Data Display/Icon',
   component: DialIcon,
   parameters: {
     layout: 'centered',
