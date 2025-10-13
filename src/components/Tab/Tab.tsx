@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface DialTabProps {
+export interface DialTabProps {
   tab: TabModel;
   isActive: boolean;
   disabled?: boolean;

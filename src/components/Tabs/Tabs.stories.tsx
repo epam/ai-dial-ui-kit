@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { DialTabs, type DialTabsProps } from './Tabs';
 import { TabOrientation } from '@/types/tab';
 import type { TabModel } from '@/models/tab';
-import { DialTab } from './Tab';
 
 const sampleTabs: TabModel[] = [
   { id: 'overview', name: 'Overview' },
@@ -91,63 +90,28 @@ export const Vertical: Story = {
 };
 
 export const AllVariants: Story = {
-  render: () => {
-    const tabStates: {
-      id: string;
-      name: string;
-      isActive?: boolean;
-      disabled?: boolean;
-      invalid?: boolean;
-    }[] = [
-      { id: 'default', name: 'Default' },
-      { id: 'active', name: 'Active', isActive: true },
-      { id: 'disabled', name: 'Disabled', disabled: true },
-      { id: 'invalid', name: 'Invalid', invalid: true },
-    ];
-
-    const renderTabsRow = (orientation: TabOrientation) => (
-      <div className="flex gap-2">
-        {tabStates.map((tab) => (
-          <DialTab
-            key={tab.id}
-            tab={{ id: tab.id, name: tab.name }}
-            isActive={!!tab.isActive}
-            disabled={tab.disabled}
-            invalid={tab.invalid}
-            isHorizontal={orientation === TabOrientation.Horizontal}
+  render: () => (
+    <div className="flex flex-col gap-10 text-primary">
+      <div className="flex flex-col gap-10 w-[600px] text-primary">
+        <div>
+          <h4 className="text-lg font-semibold mb-2">Horizontal</h4>
+          <InteractiveTabs
+            tabs={sampleTabs}
+            activeTab="settings"
+            orientation={TabOrientation.Horizontal}
             onClick={() => null}
           />
-        ))}
-      </div>
-    );
-
-    return (
-      <div className="flex flex-col gap-10 text-primary">
-        <div className="flex flex-col gap-10 w-[600px] text-primary">
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Horizontal</h4>
-            <InteractiveTabs
-              tabs={sampleTabs}
-              activeTab="settings"
-              orientation={TabOrientation.Horizontal}
-              onClick={() => null}
-            />
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Vertical</h4>
-            <InteractiveTabs
-              tabs={sampleTabs}
-              activeTab="details"
-              orientation={TabOrientation.Vertical}
-              onClick={() => null}
-            />
-          </div>
         </div>
         <div>
-          <h4 className="text-lg font-semibold mb-2">All Tab's variants</h4>
-          {renderTabsRow(TabOrientation.Horizontal)}
+          <h4 className="text-lg font-semibold mb-2">Vertical</h4>
+          <InteractiveTabs
+            tabs={sampleTabs}
+            activeTab="details"
+            orientation={TabOrientation.Vertical}
+            onClick={() => null}
+          />
         </div>
       </div>
-    );
-  },
+    </div>
+  ),
 };

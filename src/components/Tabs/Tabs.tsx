@@ -8,7 +8,7 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { IconChevronDown } from '@tabler/icons-react';
-import { DialTab } from './Tab';
+import { DialTab } from '@/components/Tab/Tab';
 
 export interface DialTabsProps {
   tabs: TabModel[];
