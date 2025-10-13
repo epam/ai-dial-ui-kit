@@ -63,12 +63,14 @@ export { ConfirmationPopupVariant } from './types/confirmation-popup';
 export { DropdownType } from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
+export { TabOrientation } from './types/tab';
 
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
+export type { TabModel } from './models/tab';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
