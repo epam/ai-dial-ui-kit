@@ -165,13 +165,23 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         : flip({ padding: dropdownGap }),
       shift({ padding: dropdownGap }),
       fuiSize({
-        apply({ availableWidth, elements }) {
+        padding: dropdownGap,
+        apply({ availableWidth, availableHeight, elements }) {
+          const floating = elements.floating as HTMLElement;
           const refWidth = getRefWidth(elements.reference);
-          elements.floating.style.setProperty(
+
+          floating.style.setProperty(
             '--reference-width',
-            `${refWidth}px`,
+            `${Math.round(refWidth)}px`,
           );
-          elements.floating.style.maxWidth = `${availableWidth}px`;
+          floating.style.setProperty(
+            '--fui-available-height',
+            `${Math.floor(availableHeight)}px`,
+          );
+
+          floating.style.minWidth = `${Math.round(refWidth)}px`;
+          floating.style.maxWidth = `${Math.floor(availableWidth)}px`;
+          floating.style.maxHeight = `${Math.floor(availableHeight)}px`;
         },
       }),
     ],

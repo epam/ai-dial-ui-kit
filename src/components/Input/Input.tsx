@@ -121,7 +121,7 @@ export const DialInput: FC<DialInputProps> = ({
       )}
     >
       {textBeforeInput && (
-        <div>
+        <div className="mr-2">
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-r-none border-r-0"
@@ -132,7 +132,7 @@ export const DialInput: FC<DialInputProps> = ({
           />
         </div>
       )}
-      {prefix && <p className="text-secondary dial-small"> {prefix}</p>}
+      {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
       <DialIcon icon={iconBefore} />
 
       <DialTooltip
@@ -146,7 +146,7 @@ export const DialInput: FC<DialInputProps> = ({
           placeholder={placeholder}
           value={value ?? ''}
           disabled={disabled}
-          className={classNames('border-0 bg-transparent', cssClass)}
+          className={classNames('border-0 bg-transparent w-full', cssClass)}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
@@ -156,9 +156,9 @@ export const DialInput: FC<DialInputProps> = ({
       </DialTooltip>
 
       <DialIcon icon={iconAfter} />
-      {suffix && <p className="text-secondary dial-small"> {suffix}</p>}
+      {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
       {textAfterInput && (
-        <div>
+        <div className="ml-2">
           <DialInput
             hideBorder={true}
             containerCssClass="rounded-l-none border-l-0"
