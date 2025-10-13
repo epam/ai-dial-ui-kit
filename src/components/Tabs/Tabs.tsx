@@ -55,8 +55,9 @@ export const DialTabs: FC<DialTabsProps> = ({
   orientation = TabOrientation.Horizontal,
 }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+  const isTablet = useIsTabletScreen();
   const isHorizontal = orientation === TabOrientation.Horizontal;
+
   const staticTabsClassnames = classNames(
     'flex gap-3 flex-wrap',
     isHorizontal ? 'flex-row' : 'flex-col',
@@ -67,7 +68,7 @@ export const DialTabs: FC<DialTabsProps> = ({
     'h-11 flex items-center bg-layer-3',
     jsonEditorEnabled ? 'hidden' : '',
   );
-  const isTablet = useIsTabletScreen();
+
   const [tabsClassNames, setTabsClassNames] = useState(
     classNames(staticTabsClassnames, 'hidden'),
   );
@@ -82,6 +83,7 @@ export const DialTabs: FC<DialTabsProps> = ({
         isTablet || jsonEditorEnabled ? 'hidden' : '',
       ),
     );
+
     setMobileTabsClassNames(
       classNames(
         staticDropDownContainerClassNames,
@@ -91,9 +93,11 @@ export const DialTabs: FC<DialTabsProps> = ({
   }, [
     isTablet,
     jsonEditorEnabled,
-    staticDropDownContainerClassNames,
     staticTabsClassnames,
+    staticDropDownContainerClassNames,
   ]);
+
+  const activeTabModel = tabs.find((t) => t.id === activeTab)!;
 
   return (
     <>
@@ -102,7 +106,7 @@ export const DialTabs: FC<DialTabsProps> = ({
           <DialTab
             key={tab.id}
             tab={tab}
-            isActive={activeTab == tab.id}
+            isActive={activeTab === tab.id}
             onClick={onClick}
             isHorizontal={isHorizontal}
           />
@@ -134,7 +138,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             <div className="flex gap-2 items-center h-11 cursor-pointer">
               <DialTab
                 key={activeTab}
-                tab={tabs.find((t) => t.id === activeTab)!}
+                tab={activeTabModel}
                 isActive
                 onClick={onClick}
                 cssClass="rounded-none bg-transparent border-l-0 border-b-[2px] border-accent-primary h-full items-center px-0"
