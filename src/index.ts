@@ -11,6 +11,7 @@ export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
+export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -66,3 +67,6 @@ export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
+
+// Utils
+export { mergeClasses } from './utils/merge-classes';
