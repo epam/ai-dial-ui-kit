@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
 import { TabOrientation } from '@/types/tab';
 import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
-import { DialDropdown } from '../Dropdown/Dropdown';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
-import { DialIcon } from '../Icon/Icon';
+import { DialIcon } from '@/components/Icon/Icon';
 import { IconChevronDown } from '@tabler/icons-react';
 import { DialTab } from './Tab';
 
