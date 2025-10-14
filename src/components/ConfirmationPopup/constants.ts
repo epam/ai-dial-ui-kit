@@ -21,7 +21,7 @@ export const variantConfig: Record<
     cancelVariant: ButtonVariant.Secondary,
   },
   [ConfirmationPopupVariant.Danger]: {
-    container: 'border-t-4 border-error',
+    container: 'dial-danger-popup',
     confirmVariant: ButtonVariant.Danger,
     cancelVariant: ButtonVariant.Secondary,
   },

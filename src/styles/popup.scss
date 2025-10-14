@@ -13,3 +13,7 @@ div .dial-lg-popup {
 div .dial-popup {
   @apply relative max-h-full rounded bg-layer-3 flex flex-col shadow w-full h-full md:h-auto;
 }
+
+div .dial-danger-popup {
+  @apply border-t-4 border-error;
+}
