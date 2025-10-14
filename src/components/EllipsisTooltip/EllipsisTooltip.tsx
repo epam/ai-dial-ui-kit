@@ -5,10 +5,7 @@ import { DialTooltipContainer } from '@/components/Tooltip/TooltipContainer';
 import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
 import type { DialTooltipContainerOptions } from '@/components/Tooltip/TooltipContext';
 import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
-import {
-  ellipsisTriggerBaseClasses,
-  tooltipContentBaseClasses,
-} from './constants';
+import { tooltipContentBaseClasses } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
@@ -107,7 +104,6 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
       >
         <span
           className={mergeClasses(
-            ellipsisTriggerBaseClasses,
             'block truncate min-w-0 max-w-full',
             cssClass,
           )}
