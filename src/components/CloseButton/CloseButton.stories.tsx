@@ -54,7 +54,7 @@ export const CustomSize: Story = {
 export const WithCustomClass: Story = {
   args: {
     ariaLabel: 'Close',
-    cssClass: 'bg-red-100',
+    cssClass: 'bg-layer-2 text-primary hover:text-accent-tertiary',
     onClose: () => alert('Closed!'),
   },
 };
