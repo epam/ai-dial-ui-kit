@@ -76,5 +76,3 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
     </li>
   );
 };
-
-DialBreadcrumbItem.displayName = 'DialBreadcrumbItem';

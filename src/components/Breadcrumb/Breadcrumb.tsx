@@ -10,7 +10,7 @@ import {
   DialBreadcrumbItem,
   type DialBreadcrumbItemProps,
 } from './BreadcrumbItem';
-import type { DialBreadcrumbPathItem } from '@/types/breadcrumb';
+import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 
 export interface DialBreadcrumbProps {
   pathItems?: DialBreadcrumbPathItem[];
@@ -51,7 +51,7 @@ export interface DialBreadcrumbProps {
  * @param children - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
  * @param titleCssClass - Additional CSS classes applied to each item when using `pathItems` prop.
  */
-const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
+export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   pathItems,
   separator = defaultSeparator,
   ariaLabel = 'Breadcrumb',
@@ -87,7 +87,3 @@ const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
     </nav>
   );
 };
-
-Object.assign(DialBreadcrumb, { Item: DialBreadcrumbItem });
-
-export { DialBreadcrumb };
