@@ -121,6 +121,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             open={isMobileOpen}
             onOpenChange={setIsMobileOpen}
             placement="bottom-start"
+            allowedPlacements={['bottom-start', 'top-start']}
             renderOverlay={() =>
               tabs.map((tab) => (
                 <DialTab

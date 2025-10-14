@@ -12,8 +12,12 @@ export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/Collapsi
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
+
+// Navigation
 export { DialTabs } from './components/Tabs/Tabs';
 export { DialTab } from './components/Tab/Tab';
+export { DialBreadcrumb } from './components/Breadcrumb/Breadcrumb';
+export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
@@ -64,6 +68,7 @@ export { DropdownType } from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
+export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 
 // Models
 export { StepStatus } from './models/step';
