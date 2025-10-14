@@ -1,4 +1,4 @@
-import type { FC, MouseEvent, ReactElement, ReactNode } from 'react';
+import type { FC, ReactElement, ReactNode } from 'react';
 import { Children, cloneElement, isValidElement } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
@@ -10,18 +10,10 @@ import {
   DialBreadcrumbItem,
   type DialBreadcrumbItemProps,
 } from './BreadcrumbItem';
-
-export interface DialBreadcrumbRoute {
-  title: ReactNode;
-  href?: string;
-  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
-  disabled?: boolean;
-  cssClass?: string;
-  iconBefore?: ReactNode;
-}
+import type { DialBreadcrumbPathItem } from '@/types/breadcrumb';
 
 export interface DialBreadcrumbProps {
-  items?: DialBreadcrumbRoute[];
+  pathItems?: DialBreadcrumbPathItem[];
   separator?: ReactNode;
   ariaLabel?: string;
   cssClass?: string;
@@ -32,13 +24,13 @@ export interface DialBreadcrumbProps {
 /**
  * Breadcrumb navigation component with horizontal scroll on overflow.
  *
- * Use either the `items` prop or compose with `<DialBreadcrumbItem/>` as children.
+ * Use either the `pathItems` prop or compose with `<DialBreadcrumbItem/>` as children.
  * The last item is treated as the current page.
  *
  * @example
  * ```tsx
  * <DialBreadcrumb
- *   items={[
+ *   pathItems={[
  *     { title: 'Home', href: '/' },
  *     { title: 'Section', href: '/section' },
  *     { title: 'Current Page' },
@@ -52,27 +44,27 @@ export interface DialBreadcrumbProps {
  * </DialBreadcrumb>
  * ```
  *
- * @param items - Array of breadcrumb items (see `DialBreadcrumbRoute`).
+ * @param pathItems - Array of breadcrumb pathItems (see `DialBreadcrumbItem`).
  * @param separator - Custom separator node (default: right chevron icon).
  * @param ariaLabel - Aria label for the `<nav>` element (default: "Breadcrumb").
  * @param cssClass - Additional CSS classes for the `<nav>` container.
  * @param children - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
- * @param titleCssClass - Additional CSS classes applied to each item when using `items` prop.
+ * @param titleCssClass - Additional CSS classes applied to each item when using `pathItems` prop.
  */
 const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
-  items,
+  pathItems,
   separator = defaultSeparator,
   ariaLabel = 'Breadcrumb',
   cssClass,
   children,
   titleCssClass,
 }) => {
-  const content = items?.length
-    ? items.map((item, index) => (
+  const content = pathItems?.length
+    ? pathItems.map((item, index) => (
         <DialBreadcrumbItem
           key={`item-${index}`}
           {...item}
-          isLast={index === items.length - 1}
+          isLast={index === pathItems.length - 1}
           separator={separator}
           titleCssClass={titleCssClass}
         />

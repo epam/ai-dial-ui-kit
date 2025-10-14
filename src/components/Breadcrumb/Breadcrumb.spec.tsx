@@ -7,7 +7,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
   test('renders <nav> with default aria-label and horizontal scroll container', () => {
     render(
       <DialBreadcrumb
-        items={[
+        pathItems={[
           { title: 'Home', href: '/' },
           { title: 'Section', href: '/section' },
           { title: 'Current' },
@@ -21,10 +21,10 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
   });
 
-  test('items prop: interactive items are links; last is current with primary text', () => {
+  test('pathItems prop: interactive pathItems are links; last is current with primary text', () => {
     render(
       <DialBreadcrumb
-        items={[
+        pathItems={[
           { title: 'Home', href: '#home' },
           { title: 'Library', href: '#lib' },
           { title: 'Data' },
@@ -49,7 +49,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     const onClick = vi.fn();
     render(
       <DialBreadcrumb
-        items={[
+        pathItems={[
           { title: 'Home', href: '#', onClick, disabled: true },
           { title: 'Current' },
         ]}
@@ -86,11 +86,11 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(currentWrapper).toBeTruthy();
   });
 
-  test('custom separator string is rendered between items', () => {
+  test('custom separator string is rendered between pathItems', () => {
     render(
       <DialBreadcrumb
         separator="/"
-        items={[
+        pathItems={[
           { title: 'A', href: '#' },
           { title: 'B', href: '#' },
           { title: 'C' },
@@ -101,11 +101,11 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(separators.length).toBe(2);
   });
 
-  test('titleCssClass applies to interactive element when using items prop', () => {
+  test('titleCssClass applies to interactive element when using pathItems prop', () => {
     render(
       <DialBreadcrumb
         titleCssClass="underline"
-        items={[{ title: 'Home', href: '#u' }, { title: 'Current' }]}
+        pathItems={[{ title: 'Home', href: '#u' }, { title: 'Current' }]}
       />,
     );
     const homeLink = screen.getByRole('link', { name: 'Home' });
@@ -115,7 +115,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
   test('iconBefore is rendered when provided', () => {
     render(
       <DialBreadcrumb
-        items={[
+        pathItems={[
           {
             title: 'Folder',
             href: '#',

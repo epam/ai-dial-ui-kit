@@ -68,6 +68,7 @@ export { DropdownType } from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
+export type { DialBreadcrumbPathItem } from './types/breadcrumb';
 
 // Models
 export { StepStatus } from './models/step';

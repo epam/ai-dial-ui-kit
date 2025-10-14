@@ -11,7 +11,7 @@ const meta = {
     separator: { control: { type: 'text' } },
     ariaLabel: { control: { type: 'text' } },
     cssClass: { control: { type: 'text' } },
-    items: { control: false },
+    pathItems: { control: false },
     children: { control: false },
     titleCssClass: { control: { type: 'text' } },
   },
@@ -24,9 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  name: 'Default (items prop)',
+  name: 'Default (pathItems prop)',
   args: {
-    items: [
+    pathItems: [
       { title: 'First Level Navigation', href: '#' },
       { title: 'Second Level Navigation', href: '#' },
       { title: 'Third Level Navigation', href: '#' },
@@ -38,7 +38,7 @@ export const Default: Story = {
 export const CustomSeparator: Story = {
   args: {
     separator: '/',
-    items: [
+    pathItems: [
       { title: 'Home', href: '#' },
       { title: 'Library', href: '#' },
       { title: 'Data' },
@@ -48,7 +48,7 @@ export const CustomSeparator: Story = {
 
 export const DisabledItem: Story = {
   args: {
-    items: [
+    pathItems: [
       { title: 'Home', href: '#' },
       { title: 'Section (disabled)', href: '#', disabled: true },
       { title: 'Current Page' },
@@ -60,7 +60,7 @@ export const Scrollable: Story = {
   render: () => (
     <div className="w-[280px] border border-primary p-2 bg-layer-2">
       <DialBreadcrumb
-        items={[
+        pathItems={[
           { title: 'First Level Navigation', href: '#' },
           { title: 'Second Level Navigation', href: '#' },
           { title: 'Third Level Navigation', href: '#' },
@@ -88,7 +88,7 @@ export const LongLabelsTruncate: Story = {
   render: () => (
     <div className="w-[360px]">
       <DialBreadcrumb
-        items={[
+        pathItems={[
           {
             title: 'Very long first level navigation name that should truncate',
             href: '#',
