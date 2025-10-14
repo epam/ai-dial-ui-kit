@@ -1,7 +1,7 @@
 import { IconX } from '@tabler/icons-react';
-import classNames from 'classnames';
 import type { FC, MouseEvent } from 'react';
 import { DialButton } from '@/components/Button/Button';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialCloseButtonProps {
   ariaLabel?: string;
@@ -38,7 +38,7 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
   return (
     <DialButton
       ariaLabel={ariaLabel}
-      cssClass={classNames(buttonClass, cssClass)}
+      cssClass={mergeClasses(buttonClass, cssClass)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
     />
