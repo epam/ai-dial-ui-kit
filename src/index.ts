@@ -14,6 +14,7 @@ export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { DialTabs } from './components/Tabs/Tabs';
 export { DialTab } from './components/Tab/Tab';
+export { DialTypography } from './components/Typography';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
