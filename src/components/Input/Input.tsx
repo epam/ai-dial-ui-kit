@@ -1,5 +1,11 @@
 import classNames from 'classnames';
-import type { ChangeEvent, FC, KeyboardEvent, WheelEvent } from 'react';
+import type {
+  ChangeEvent,
+  FC,
+  FocusEvent,
+  KeyboardEvent,
+  WheelEvent,
+} from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
@@ -13,6 +19,7 @@ export interface DialInputProps extends InputBaseProps {
   hideBorder?: boolean;
   tooltipTriggerClassName?: string;
   onChange?: (value: string) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
 }
 
 /**
@@ -32,6 +39,7 @@ export interface DialInputProps extends InputBaseProps {
  * @param elementId - Unique identifier for the input element
  * @param [value] - The current value of the input
  * @param [onChange] - Callback function called when the input value changes
+ * @param [onBlur] - Callback function called when the input blurs
  * @param [iconBefore] - Icon or element to display before the input
  * @param [iconAfter] - Icon or element to display after the input
  * @param [placeholder] - Placeholder text displayed when input is empty
@@ -71,6 +79,7 @@ export const DialInput: FC<DialInputProps> = ({
   suffix,
   textBeforeInput,
   textAfterInput,
+  onBlur,
 }) => {
   const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
     (e.target as HTMLInputElement).blur();
@@ -150,6 +159,7 @@ export const DialInput: FC<DialInputProps> = ({
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
+          onBlur={onBlur}
           min={min}
           max={max}
         />
