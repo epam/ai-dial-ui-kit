@@ -11,6 +11,8 @@ const InteractiveInput = (args: DialInputProps) => {
       {...args}
       value={value}
       onChange={(newValue) => setValue(newValue)}
+      // eslint-disable-next-line no-console
+      onBlur={() => console.log('Input blurred')}
     />
   );
 };
@@ -104,6 +106,10 @@ const meta = {
     onChange: {
       control: false,
       description: 'Callback function called when the input value changes',
+    },
+    onBlur: {
+      control: false,
+      description: 'Callback function called when the input blurs',
     },
   },
   args: {
