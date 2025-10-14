@@ -266,6 +266,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       closable={closable}
       onClose={onClose}
       placement="bottom-start"
+      allowedPlacements={['bottom-start', 'top-start']}
       renderOverlay={() => (
         <div
           id={listId}

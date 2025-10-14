@@ -54,6 +54,7 @@ export interface DialDropdownProps {
   renderOverlay?: () => ReactNode;
   trigger?: DropdownTrigger[];
   placement?: Placement;
+  allowedPlacements?: Placement[];
   disabled?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
@@ -96,6 +97,7 @@ export interface DialDropdownProps {
  * @param [renderOverlay] - Render function for fully custom overlay content (ignored when `menu` is provided)
  * @param [trigger=[DropdownTrigger.Click]] - Interactions that open the menu
  * @param [placement] - Floating UI placement string; when omitted, auto placement is used
+ * @param [allowedPlacements] - Restricts the allowed placements
  * @param [disabled=false] - Disables interaction and prevents opening
  * @param [open] - Controlled open state (when provided, `defaultOpen` is ignored)
  * @param [defaultOpen=false] - Initial open state in uncontrolled mode
@@ -123,6 +125,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   listClassName,
   outsidePressIgnoreRef,
   outsideClosable = true,
+  allowedPlacements,
 }) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
@@ -161,6 +164,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
             alignment: 'start',
             crossAxis: true,
             padding: dropdownGap,
+            allowedPlacements,
           })
         : flip({ padding: dropdownGap }),
       shift({ padding: dropdownGap }),

@@ -198,3 +198,24 @@ export const SecondaryEllipsisTrigger: Story = {
     placement: 'bottom-end',
   },
 };
+
+export const AllowedPlacements: Story = {
+  name: 'Allowed placements',
+  render: (args) => (
+    <div className="flex flex-col gap-2">
+      <span className="text-primary dial-small">
+        The dropdown below is set to open at bottom-start, but if there is not
+        enough space, it can only be placed at top-start or top-end (no right or
+        left placements).
+      </span>
+      <DialDropdown
+        {...args}
+        placement="bottom-start"
+        allowedPlacements={['top-start', 'top-end']}
+        menu={{ items: specItems }}
+      >
+        <TriggerBtn label="Allowed Placements" />
+      </DialDropdown>
+    </div>
+  ),
+};
