@@ -12,7 +12,7 @@ const InteractiveInput = (args: DialInputProps) => {
       value={value}
       onChange={(newValue) => setValue(newValue)}
       // eslint-disable-next-line no-console
-      onBlur={() => console.log('Input blurred')}
+      onBlur={({ target }) => console.log(target.value)}
     />
   );
 };
@@ -136,6 +136,13 @@ export const WithValue: Story = {
   args: {
     placeholder: 'Enter text...',
     value: 'Sample text',
+  },
+};
+
+export const WithDefaultValue: Story = {
+  args: {
+    placeholder: 'Enter text...',
+    defaultValue: 'Sample text',
   },
 };
 
