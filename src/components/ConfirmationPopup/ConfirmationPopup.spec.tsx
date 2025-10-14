@@ -74,10 +74,7 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
         variant={ConfirmationPopupVariant.Danger}
       />,
     );
-    expect(screen.getByRole('dialog')).toHaveClass(
-      'border-t-4',
-      'border-error',
-    );
+    expect(screen.getByRole('dialog')).toHaveClass('dial-danger-popup');
   });
 
   test('confirm button disabled via prop', () => {
