@@ -8,6 +8,7 @@ export interface FieldControlProps {
 export interface InputBaseProps {
   elementId: string;
   value?: string | number | null;
+  defaultValue?: string | number;
   placeholder?: string;
   disabled?: boolean;
   readonly?: boolean;

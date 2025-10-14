@@ -38,6 +38,7 @@ export interface DialInputProps extends InputBaseProps {
  *
  * @param elementId - Unique identifier for the input element
  * @param [value] - The current value of the input
+ * @param [defaultValue] - The initial value of the input
  * @param [onChange] - Callback function called when the input value changes
  * @param [onBlur] - Callback function called when the input blurs
  * @param [iconBefore] - Icon or element to display before the input
@@ -80,6 +81,7 @@ export const DialInput: FC<DialInputProps> = ({
   textBeforeInput,
   textAfterInput,
   onBlur,
+  defaultValue,
 }) => {
   const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
     (e.target as HTMLInputElement).blur();
@@ -153,7 +155,7 @@ export const DialInput: FC<DialInputProps> = ({
           autoComplete="off"
           id={elementId}
           placeholder={placeholder}
-          value={value ?? ''}
+          value={defaultValue ? undefined : (value ?? '')}
           disabled={disabled}
           className={classNames('border-0 bg-transparent w-full', cssClass)}
           onChange={(event) => !readonly && handleChange?.(event)}
@@ -162,6 +164,7 @@ export const DialInput: FC<DialInputProps> = ({
           onBlur={onBlur}
           min={min}
           max={max}
+          defaultValue={defaultValue}
         />
       </DialTooltip>
 
