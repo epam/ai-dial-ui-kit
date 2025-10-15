@@ -40,7 +40,7 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param [iconAfter] - Icon or element to display after the input
  * @param [textBeforeInput] - Text to display before the input
  * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
- * @param [containerCssClass] - Additional CSS classes to apply to the outer container *
+ * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  * @param [elementContainerCssClass] - Additional CSS classes to apply to the textarea container
  * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
  */
