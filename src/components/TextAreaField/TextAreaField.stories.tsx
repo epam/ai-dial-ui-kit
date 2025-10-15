@@ -6,14 +6,19 @@ import {
 } from './TextAreaField';
 
 const InteractiveTextAreaField = (
-  args: DialTextAreaFieldProps & { cssClass?: string },
+  args: DialTextAreaFieldProps & {
+    divCssClass?: string;
+    additionalElements?: React.ReactNode;
+  },
 ) => {
   const [value, setValue] = useState(args.value || '');
+  const { divCssClass, additionalElements, ...rest } = args;
 
   return (
-    <div className={args.cssClass ? args.cssClass : 'w-full text-primary'}>
+    <div className={divCssClass ? divCssClass : 'w-full text-primary'}>
+      {additionalElements}
       <DialTextAreaField
-        {...args}
+        {...rest}
         value={value}
         onChange={(newValue) => setValue(newValue)}
       />
@@ -136,6 +141,14 @@ export const Disabled: Story = {
 
 export const FullParentHeightWithScroll = {
   render: InteractiveTextAreaField,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A story demonstrating a textarea field that fills the remaining height of its parent container, has scrolling, has disabled tooltip.',
+      },
+    },
+  },
   args: {
     fieldTitle: 'Detailed Description',
     elementId: 'full-height-textarea-field',
@@ -144,8 +157,15 @@ export const FullParentHeightWithScroll = {
 Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   `,
-    cssClass: 'h-[100px] w-[300px] flex flex-col',
-    containerCssClass: 'flex-1 bg-layer-1',
+    divCssClass: 'h-[200px] w-[300px] flex flex-col gap-4 bg-layer-1 p-2',
+    containerCssClass: 'flex-1',
+    elementContainerCssClass: 'flex-1',
+    disableTooltip: true,
+    additionalElements: (
+      <div className="text-primary">
+        Some text that is not part of the textarea field
+      </div>
+    ),
   },
 };
 
