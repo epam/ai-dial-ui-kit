@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import classNames from 'classnames';
+import { mergeClasses } from '@/utils/merge-classes';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialFieldLabel } from '@/components/Field/Field';
@@ -52,7 +52,7 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   ...props
 }) => {
   return (
-    <div className={classNames('flex flex-col', containerCssClass)}>
+    <div className={mergeClasses('flex flex-col', containerCssClass)}>
       <DialFieldLabel
         fieldTitle={fieldTitle}
         optional={optional}
