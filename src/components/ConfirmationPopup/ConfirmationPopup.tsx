@@ -6,6 +6,7 @@ import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import {
   actionsBaseClasses,
   defaultCancelLabel,
+  defaultConfirmLabel,
   descriptionBaseClasses,
   variantConfig,
 } from './constants';
@@ -17,7 +18,7 @@ import { PopupSize } from '@/types/popup';
 export interface DialConfirmationPopupProps extends DialPopupProps {
   description?: string | ReactNode;
   descriptionCssClass?: string;
-  confirmLabel: string;
+  confirmLabel?: string;
   cancelLabel?: string;
   isLoading?: boolean;
   disableConfirmButton?: boolean;
@@ -50,7 +51,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * @param [description] - Secondary text (ignored when `children` set)
  * @param [descriptionCssClass] - Custom CSS class for the description
  * @param [open=false] - Controls visibility of the popup
- * @param confirmLabel - Label for the confirm button
+ * @param [confirmLabel="Ok"] - Label for the confirm button
  * @param [cancelLabel="Cancel"] - Label for the cancel button
  * @param [isLoading=false] - Shows loader placeholder and hides actions
  * @param [disableConfirmButton=false] - Disables the confirm button
@@ -69,7 +70,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   description,
   descriptionCssClass,
   open = false,
-  confirmLabel,
+  confirmLabel = defaultConfirmLabel,
   cancelLabel = defaultCancelLabel,
   isLoading = false,
   disableConfirmButton = false,
@@ -82,8 +83,9 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   dividers = false,
   variant = ConfirmationPopupVariant.Info,
   size = PopupSize.Sm,
+  footer,
 }) => {
-  const footer = !isLoading ? (
+  const defaultFooter = !isLoading ? (
     <div className={actionsBaseClasses}>
       <DialButton
         variant={ButtonVariant.Secondary}
@@ -133,7 +135,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
       cssClass={classNames(variantConfig[variant].container, cssClass)}
       dividers={dividers}
       onClose={() => onClose?.()}
-      footer={footer}
+      footer={footer ?? defaultFooter}
       size={size}
     >
       {renderContent()}
