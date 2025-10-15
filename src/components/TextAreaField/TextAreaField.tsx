@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import classNames from 'classnames';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialFieldLabel } from '@/components/Field/Field';
@@ -32,14 +33,13 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param [errorText] - Error message to display below the textarea
  * @param [optional=false] - Whether to show optional indicator next to the label
  * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
- * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
  * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
  * @param [invalid=false] - Whether the input has validation errors (applies error styling)
  * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
  * @param [iconBefore] - Icon or element to display before the input
  * @param [iconAfter] - Icon or element to display after the input
  * @param [textBeforeInput] - Text to display before the input
- * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
+ * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container
  */
 export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
@@ -47,11 +47,12 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   optional,
   elementId,
   elementCssClass,
+  containerCssClass,
   errorText,
   ...props
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className={classNames('flex flex-col', containerCssClass)}>
       <DialFieldLabel
         fieldTitle={fieldTitle}
         optional={optional}
