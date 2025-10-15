@@ -5,11 +5,13 @@ import {
   DialTextAreaField,
 } from './TextAreaField';
 
-const InteractiveTextAreaField = (args: DialTextAreaFieldProps) => {
+const InteractiveTextAreaField = (
+  args: DialTextAreaFieldProps & { cssClass?: string },
+) => {
   const [value, setValue] = useState(args.value || '');
 
   return (
-    <div className="w-full text-primary">
+    <div className={args.cssClass ? args.cssClass : 'w-full text-primary'}>
       <DialTextAreaField
         {...args}
         value={value}
@@ -129,6 +131,21 @@ export const Disabled: Story = {
     placeholder: 'This field is disabled',
     value: 'This textarea field is disabled and cannot be edited',
     disabled: true,
+  },
+};
+
+export const FullParentHeightWithScroll = {
+  render: InteractiveTextAreaField,
+  args: {
+    fieldTitle: 'Detailed Description',
+    elementId: 'full-height-textarea-field',
+    placeholder: 'Enter a detailed description...',
+    value: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  `,
+    cssClass: 'h-[100px] w-[300px] flex flex-col',
+    containerCssClass: 'flex-1 bg-layer-1',
   },
 };
 
