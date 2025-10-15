@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { DialTabs } from './Tabs';
 import { TabOrientation } from '@/types/tab';
 
@@ -9,8 +9,27 @@ const tabsMock = [
 ];
 
 describe('Dial UI Kit :: DialTabs', () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
+  let originalResizeObserver: typeof ResizeObserver;
+
+  beforeAll(() => {
+    originalResizeObserver = globalThis.ResizeObserver;
+
+    class ResizeObserverMock implements ResizeObserver {
+      callback: ResizeObserverCallback;
+      constructor(callback: ResizeObserverCallback) {
+        this.callback = callback;
+      }
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+    }
+
+    globalThis.ResizeObserver =
+      ResizeObserverMock as unknown as typeof ResizeObserver;
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   test('renders horizontal tabs and handles click', () => {
