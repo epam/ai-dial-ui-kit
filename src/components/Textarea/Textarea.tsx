@@ -1,15 +1,19 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
+
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialTextareaProps {
   value?: string | number | null;
   placeholder?: string;
   textareaId: string;
   cssClass?: string;
+  containerCssClass?: string;
   disabled?: boolean;
   invalid?: boolean;
   readonly?: boolean;
+  disableTooltip?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -31,22 +35,29 @@ export interface DialTextareaProps {
  * @param [onChange] - Callback function called when the textarea value changes
  * @param [placeholder] - Placeholder text displayed when textarea is empty
  * @param [cssClass=""] - Additional CSS classes to apply to the textarea element
+ * @param [containerCssClass=""] - Additional CSS classes to apply to the container div
  * @param [disabled=false] - Whether the textarea is disabled
  * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
+ * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
  */
 export const DialTextarea: FC<DialTextareaProps> = ({
   value,
   textareaId,
   placeholder,
   cssClass = '',
+  containerCssClass = '',
   disabled,
   invalid,
   readonly,
+  disableTooltip,
   onChange,
 }) => {
   return (
-    <DialTooltip tooltip={value} triggerClassName="flex">
+    <DialTooltip
+      tooltip={disableTooltip ? null : value}
+      triggerClassName={mergeClasses('flex', containerCssClass)}
+    >
       <textarea
         id={textareaId}
         placeholder={placeholder}
