@@ -46,6 +46,8 @@ import { DropdownItemType } from '@/types/dropdown';
 export interface DropdownMenuProps {
   items: DropdownItem[];
   onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
+  header?: ReactNode | (() => ReactNode);
+  footer?: ReactNode | (() => ReactNode);
 }
 
 export interface DialDropdownProps {
@@ -247,54 +249,68 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   const overlayContent: ReactNode = renderOverlay
     ? renderOverlay()
     : menu && (
-        <div role="none" className="py-1">
-          {menu.items.map((it) => {
-            if (it.type === DropdownItemType.Divider) {
+        <>
+          {menu.header && (
+            <>
+              {typeof menu.header === 'function' ? menu.header() : menu.header}
+            </>
+          )}
+
+          <div role="none" className="py-1">
+            {menu.items.map((it) => {
+              if (it.type === DropdownItemType.Divider) {
+                return (
+                  <div
+                    key={it.key}
+                    role="separator"
+                    className={dropdownDividerClasses}
+                  />
+                );
+              }
               return (
-                <div
+                <button
                   key={it.key}
-                  role="separator"
-                  className={dropdownDividerClasses}
-                />
-              );
-            }
-            return (
-              <button
-                key={it.key}
-                role="menuitem"
-                type="button"
-                aria-disabled={!!it.disabled}
-                className={classNames(
-                  dropdownItemBaseClasses,
-                  it.disabled && dropdownItemDisabledClasses,
-                  it.danger && dropdownItemDangerClasses,
-                )}
-                disabled={it.disabled}
-                onClick={handleItemClick(it)}
-              >
-                {it.icon && (
+                  role="menuitem"
+                  type="button"
+                  aria-disabled={!!it.disabled}
+                  className={classNames(
+                    dropdownItemBaseClasses,
+                    it.disabled && dropdownItemDisabledClasses,
+                    it.danger && dropdownItemDangerClasses,
+                  )}
+                  disabled={it.disabled}
+                  onClick={handleItemClick(it)}
+                >
+                  {it.icon && (
+                    <span
+                      className={classNames(
+                        it.danger && 'text-error',
+                        it.disabled && 'text-secondary',
+                      )}
+                    >
+                      <DialIcon icon={it.icon} />
+                    </span>
+                  )}
                   <span
                     className={classNames(
+                      'flex-1 truncate text-left',
                       it.danger && 'text-error',
                       it.disabled && 'text-secondary',
                     )}
                   >
-                    <DialIcon icon={it.icon} />
+                    {it.label}
                   </span>
-                )}
-                <span
-                  className={classNames(
-                    'flex-1 truncate text-left',
-                    it.danger && 'text-error',
-                    it.disabled && 'text-secondary',
-                  )}
-                >
-                  {it.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {menu.footer && (
+            <>
+              {typeof menu.footer === 'function' ? menu.footer() : menu.footer}
+            </>
+          )}
+        </>
       );
 
   return (

@@ -378,4 +378,153 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(onMenu).not.toHaveBeenCalled();
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
+
+  test('renders menu.header (function) above items and footer (node) below items', () => {
+    const footerText = 'Times are displayed in UTC';
+    const headerText = 'Custom Time Range';
+
+    render(
+      <DialDropdown
+        menu={{
+          header: () => <div>{headerText}</div>,
+          footer: <div>{footerText}</div>,
+          items,
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    const menuEl = screen.getByRole('menu');
+    const headerEl = screen.getByText(headerText);
+    const firstItem = screen.getByRole('menuitem', { name: 'Profile' });
+    const footerEl = screen.getByText(footerText);
+    const lastItem = screen.getByRole('menuitem', { name: 'Logout' });
+
+    expect(
+      headerEl.compareDocumentPosition(firstItem) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    expect(
+      lastItem.compareDocumentPosition(footerEl) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    expect(menuEl).toContainElement(headerEl);
+    expect(menuEl).toContainElement(footerEl);
+  });
+
+  test('contextmenu does not open when disabled=true even if ContextMenu is in triggers', () => {
+    render(
+      <DialDropdown
+        disabled
+        trigger={[DropdownTrigger.ContextMenu]}
+        menu={{ items }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    fireEvent.contextMenu(screen.getByRole('button', { name: /open/i }));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+  test('menu.header (function) renders above items and does not close on click', () => {
+    const headerText = 'Custom Time Range';
+    const simpleItems: DropdownItem[] = [
+      { key: 'a', label: 'A' },
+      { key: 'b', label: 'B' },
+    ];
+
+    render(
+      <DialDropdown
+        menu={{
+          header: () => <div role="hdr">{headerText}</div>,
+          items: simpleItems,
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    const menu = screen.getByRole('menu');
+    const headerEl = screen.getByRole('hdr');
+    const firstItem = screen.getByRole('menuitem', { name: 'A' });
+
+    expect(menu).toContainElement(headerEl);
+
+    expect(
+      headerEl.compareDocumentPosition(firstItem) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    expect(
+      screen.queryByRole('menuitem', { name: headerText }),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(headerEl);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('menu.header (ReactNode) renders when provided as a node', () => {
+    const headerText = 'Filters';
+    render(
+      <DialDropdown
+        menu={{
+          header: <div>{headerText}</div>,
+          items: [
+            { key: 'a', label: 'A' },
+            { key: 'b', label: 'B' },
+          ],
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    const headerEl = screen.getByText(headerText);
+    expect(headerEl).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('menuitem', { name: headerText }),
+    ).not.toBeInTheDocument();
+  });
+
+  test('menu.footer (function) is invoked and its content renders after items', () => {
+    const footerText = 'Times are displayed in UTC';
+    const footerFn = vi.fn(() => <div role="footer">{footerText}</div>);
+
+    render(
+      <DialDropdown
+        menu={{
+          items: [
+            { key: 'a', label: 'A' },
+            { key: 'b', label: 'B' },
+          ],
+          footer: footerFn,
+        }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+
+    expect(footerFn.mock.calls.length).toBeGreaterThan(0);
+
+    const footerEl = screen.getByRole('footer');
+    expect(footerEl).toBeInTheDocument();
+    expect(screen.getByText(footerText)).toBeInTheDocument();
+
+    const lastItem = screen.getByRole('menuitem', { name: 'B' });
+    expect(
+      lastItem.compareDocumentPosition(footerEl) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
 });
