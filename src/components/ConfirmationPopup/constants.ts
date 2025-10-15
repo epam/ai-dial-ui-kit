@@ -7,6 +7,8 @@ export const descriptionBaseClasses = 'text-secondary dial-small-150 px-6 py-4';
 
 export const defaultCancelLabel = 'Cancel';
 
+export const defaultConfirmLabel = 'Ok';
+
 export const variantConfig: Record<
   ConfirmationPopupVariant,
   {

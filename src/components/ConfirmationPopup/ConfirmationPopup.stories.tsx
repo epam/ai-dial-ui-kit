@@ -33,12 +33,6 @@ const meta = {
   args: {
     title: 'Title',
     description: 'Body area',
-    confirmLabel: 'Confirm',
-    cancelLabel: 'Cancel',
-    dividers: false,
-    isLoading: false,
-    disableConfirmButton: false,
-    variant: ConfirmationPopupVariant.Info,
   },
 } satisfies Meta<DialConfirmationPopupProps>;
 
@@ -165,6 +159,25 @@ export const Loading: Story = {
 export const WithDividers: Story = {
   render: StatefulRender,
   args: { dividers: true, onClose: () => null, onConfirm: () => null },
+};
+
+export const CustomFooter: Story = {
+  render: StatefulRender,
+  args: {
+    footer: (
+      <div className="flex justify-between items-center px-6 py-3">
+        <span className="text-secondary dial-small-150">Custom footer</span>
+        <button
+          className="px-3 py-1.5 rounded bg-accent-primary text-primary hover:opacity-90 dial-small"
+          onClick={() => alert('Custom action')}
+        >
+          Action
+        </button>
+      </div>
+    ),
+    onClose: () => null,
+    onConfirm: () => null,
+  },
 };
 
 export const CustomClasses: Story = {
