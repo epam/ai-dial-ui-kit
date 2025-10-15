@@ -219,3 +219,113 @@ export const AllowedPlacements: Story = {
     </div>
   ),
 };
+
+const timeItems = [
+  { key: '15m', label: 'Last 15m' },
+  { key: '30m', label: 'Last 30m' },
+  { key: '1h', label: 'Last 1h' },
+  { key: '3h', label: 'Last 3h' },
+  { key: '6h', label: 'Last 6h' },
+  { key: '12h', label: 'Last 12h' },
+  { key: '24h', label: 'Last 24h' },
+  { key: 'd', label: 'Last 2d' },
+  { key: '7d', label: 'Last 7d' },
+  { key: '30d', label: 'Last 30d' },
+].map((i) => ({ key: i.key, label: i.label }));
+
+export const WithCustomHeader: Story = {
+  name: 'With custom header',
+  args: {
+    placement: 'bottom-start',
+    menu: {
+      header: (
+        <div className="px-3 pt-2">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="dial-small font-medium">Custom Time Range</span>
+            <IconChevronDown size={14} />
+          </div>
+        </div>
+      ),
+      items: [{ key: 'divider', type: DropdownItemType.Divider }, ...timeItems],
+    },
+  },
+};
+
+export const WithCustomFooter: Story = {
+  name: 'With custom footer',
+  args: {
+    placement: 'bottom-start',
+    menu: {
+      items: timeItems,
+      footer: (
+        <div className="px-3 py-2 border-t">
+          <span className="dial-small text-primary font-medium">
+            Footer content
+          </span>
+        </div>
+      ),
+    },
+  },
+};
+
+export const WithHeaderAndFooter: Story = {
+  name: 'With header and footer',
+  args: {
+    placement: 'bottom-start',
+    menu: {
+      header: (
+        <div className="px-3 py-2 border-b">
+          <span className="dial-small text-primary font-medium">
+            Select time range
+          </span>
+        </div>
+      ),
+      items: timeItems,
+      footer: (
+        <div className="px-3 py-2 border-t">
+          <span className="dial-small text-primary font-medium">
+            Footer content
+          </span>
+        </div>
+      ),
+    },
+  },
+};
+
+const FooterActionsExample = (args: DialDropdownProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <DialDropdown
+      {...args}
+      trigger={[DropdownTrigger.Click]}
+      open={open}
+      onOpenChange={setOpen}
+      menu={{
+        items: timeItems,
+        footer: () => (
+          <div className="px-2 pb-2 pt-1 border-t border-divider">
+            <div className="flex items-center justify-end gap-2">
+              <DialButton
+                variant={ButtonVariant.Secondary}
+                title="Cancel"
+                onClick={() => setOpen(false)}
+              />
+              <DialButton
+                variant={ButtonVariant.Primary}
+                title="Apply"
+                onClick={() => setOpen(false)}
+              />
+            </div>
+          </div>
+        ),
+      }}
+    >
+      <TriggerBtn label="With footer actions" />
+    </DialDropdown>
+  );
+};
+
+export const WithFooterActionsControlled: Story = {
+  render: (args) => <FooterActionsExample {...args} />,
+};
