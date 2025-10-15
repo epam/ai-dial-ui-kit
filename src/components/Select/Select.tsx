@@ -30,6 +30,7 @@ import { DialTag } from '@/components/Tag/Tag';
 import { DialSearch } from '@/components/Search/Search';
 import type { SelectOption } from '@/models/select';
 import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -385,7 +386,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        className={classNames(
+        className={mergeClasses(
           selectTriggerBaseClasses,
           disabled && 'opacity-75 !cursor-not-allowed',
           cssClass,

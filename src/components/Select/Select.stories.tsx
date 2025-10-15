@@ -111,3 +111,9 @@ export const Searchable: Story = {
     searchable: true,
   },
 };
+
+export const CustomTriggerClass: Story = {
+  args: {
+    cssClass: 'min-h-[48px] p-8',
+  },
+};
