@@ -11,13 +11,21 @@ const sampleTabs: TabModel[] = [
   { id: 'analytics', name: 'Analytics' },
 ];
 
+const manySampleTabs: TabModel[] = [
+  ...sampleTabs,
+  ...sampleTabs.map((t) => ({
+    id: t.id + '_copy',
+    name: t.name + ' Copy',
+  })),
+];
+
 const InteractiveTabs = (args: DialTabsProps) => {
   const [activeTab, setActiveTab] = useState(
     args.activeTab || sampleTabs[0].id,
   );
 
   return (
-    <div className="w-[500px] text-primary">
+    <div className="w-[600px] text-primary">
       <DialTabs
         {...args}
         tabs={args.tabs || sampleTabs}
@@ -89,6 +97,24 @@ export const Vertical: Story = {
   },
 };
 
+export const ManyHorizontalTabs: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: manySampleTabs,
+    activeTab: 'overview',
+    orientation: TabOrientation.Horizontal,
+  },
+};
+
+export const ManyVerticalTabs: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: manySampleTabs,
+    activeTab: 'overview',
+    orientation: TabOrientation.Vertical,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-10 text-primary">
@@ -108,6 +134,15 @@ export const AllVariants: Story = {
             tabs={sampleTabs}
             activeTab="details"
             orientation={TabOrientation.Vertical}
+            onClick={() => null}
+          />
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold mb-2">Many horizontal tabs</h4>
+          <InteractiveTabs
+            tabs={manySampleTabs}
+            activeTab="details"
+            orientation={TabOrientation.Horizontal}
             onClick={() => null}
           />
         </div>
