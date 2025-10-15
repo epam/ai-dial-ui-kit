@@ -36,10 +36,14 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
         fieldTitle="Test Field"
         elementId="test-textarea"
         elementCssClass="custom-class"
+        containerCssClass="container-class"
       />,
     );
 
     const textarea = screen.getByRole('textbox', { name: 'Test Field' });
     expect(textarea).toHaveClass('custom-class');
+
+    const container = textarea.parentElement?.parentElement;
+    expect(container).toHaveClass('container-class');
   });
 });
