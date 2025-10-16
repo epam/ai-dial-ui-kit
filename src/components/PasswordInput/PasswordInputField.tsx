@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
 import { DialPasswordInput } from './PasswordInput';
-import { DialErrorText } from '../ErrorText/ErrorText';
-import { DialFieldLabel } from '../Field/Field';
-import type { DialInputFieldBaseProps } from '../InputField/InputField';
+import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialFieldLabel } from '@/components/Field/Field';
+import type { DialInputFieldBaseProps } from '@/components/InputField/InputField';
 
 export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
   onChange?: (value: string) => void;
