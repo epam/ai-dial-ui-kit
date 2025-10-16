@@ -22,6 +22,8 @@ export const DialHideIcon: FC<Props> = ({ onClick }) => {
       {...BASE_ICON_PROPS}
       className="text-primary"
       onClick={onClick}
+      role="button"
+      aria-label="hide"
     />
   );
 };
