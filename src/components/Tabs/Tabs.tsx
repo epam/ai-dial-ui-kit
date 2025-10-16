@@ -16,6 +16,7 @@ import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
 import { DialTab } from '@/components/Tab/Tab';
+import { DialButton } from '@/components/Button/Button';
 
 export interface DialTabsProps {
   tabs: TabModel[];
@@ -199,16 +200,15 @@ export const DialTabs: FC<DialTabsProps> = ({
                 ))
               }
             >
-              <button
-                className={classNames(
+              <DialButton
+                iconBefore={<IconDotsVertical size={18} />}
+                cssClass={classNames(
                   'w-8 h-8 flex items-center justify-center rounded border',
                   isDropdownOpen
                     ? 'bg-layer-4 border-transparent'
                     : 'border-primary',
                 )}
-              >
-                <IconDotsVertical size={18} />
-              </button>
+              />
             </DialDropdown>
           </div>
         )}
