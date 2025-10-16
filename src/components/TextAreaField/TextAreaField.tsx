@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { mergeClasses } from '@/utils/merge-classes';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { mergeClasses } from '@/utils/merge-classes';
 import { DialFieldLabel } from '@/components/Field/Field';
 import { type DialInputFieldBaseProps } from '@/components/InputField/InputField';
 import { DialTextarea } from '@/components/Textarea/Textarea';
@@ -41,6 +41,8 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param [textBeforeInput] - Text to display before the input
  * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
  * @param [containerCssClass] - Additional CSS classes to apply to the outer container
+ * @param [elementContainerCssClass] - Additional CSS classes to apply to the textarea container
+ * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
  */
 export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   fieldTitle,
@@ -48,6 +50,7 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   elementId,
   elementCssClass,
   containerCssClass,
+  elementContainerCssClass,
   errorText,
   ...props
 }) => {
@@ -61,6 +64,7 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
       <DialTextarea
         textareaId={elementId}
         cssClass={elementCssClass}
+        containerCssClass={elementContainerCssClass}
         {...props}
       />
       <DialErrorText errorText={errorText} />
