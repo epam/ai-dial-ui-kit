@@ -5,7 +5,7 @@ import type {
   FieldControlProps,
   InputBaseProps,
 } from '@/models/field-control-props';
-import { DialFormItem } from '../FormItem/FormItem';
+import { DialFormItem } from '@/components/FormItem/FormItem';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;

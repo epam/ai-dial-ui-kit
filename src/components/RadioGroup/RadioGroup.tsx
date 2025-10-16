@@ -2,15 +2,14 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 
 import {
-  groupBaseClasses,
   optionsWrapperBaseClasses,
   orientationClassMap,
   selectedContentClasses,
 } from './constants';
-import { DialFieldLabel } from '@/components/Field/Field';
 import { DialRadioButton } from '@/components/RadioButton/RadioButton';
 import type { RadioGroupOrientation } from '@/types/radio-group';
 import type { RadioButtonWithContent } from '@/models/radio';
+import { DialFormItem } from '@/components/FormItem/FormItem';
 
 export interface DialRadioGroupProps {
   fieldTitle?: string;
@@ -67,11 +66,11 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
   onChange,
 }) => {
   return (
-    <div className={groupBaseClasses}>
-      {fieldTitle && (
-        <DialFieldLabel fieldTitle={fieldTitle} htmlFor={elementId} />
-      )}
-
+    <DialFormItem
+      elementId={elementId}
+      label={fieldTitle}
+      labelCssClass={labelCssClass}
+    >
       <div
         role="radiogroup"
         aria-label={fieldTitle}
@@ -100,8 +99,6 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
           </div>
         ))}
       </div>
-    </div>
+    </DialFormItem>
   );
 };
-
-export default DialRadioGroup;
