@@ -1,13 +1,11 @@
-import classNames from 'classnames';
 import type { FC } from 'react';
 
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
-import { DialFieldLabel } from '@/components/Field/Field';
 import { DialInput } from '@/components/Input/Input';
 import type {
   FieldControlProps,
   InputBaseProps,
 } from '@/models/field-control-props';
+import { DialFormItem } from '@/components/FormItem/FormItem';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;
@@ -83,30 +81,27 @@ const DialInputField: FC<DialInputFieldProps> = ({
   ...props
 }) => {
   return (
-    <div className={classNames('flex flex-col', containerCssClass)}>
-      <DialFieldLabel
-        fieldTitle={fieldTitle}
-        optional={optional}
-        htmlFor={elementId}
-      />
-
+    <DialFormItem
+      error={errorText}
+      elementId={elementId}
+      label={fieldTitle}
+      optional={optional}
+      cssClass={containerCssClass}
+    >
       {readonly ? (
         <span>{props.value || (defaultEmptyText ?? 'None')}</span>
       ) : (
-        <>
-          <DialInput
-            elementId={elementId}
-            cssClass={elementCssClass}
-            containerCssClass={elementContainerCssClass}
-            invalid={errorText != null}
-            min={min}
-            max={max}
-            {...props}
-          />
-          <DialErrorText errorText={errorText} />
-        </>
+        <DialInput
+          elementId={elementId}
+          cssClass={elementCssClass}
+          containerCssClass={elementContainerCssClass}
+          invalid={errorText != null}
+          min={min}
+          max={max}
+          {...props}
+        />
       )}
-    </div>
+    </DialFormItem>
   );
 };
 

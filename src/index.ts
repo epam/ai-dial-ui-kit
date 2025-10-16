@@ -13,6 +13,7 @@ export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { DialDraggableItem } from './components/DraggableItem/DraggableItem';
+export { DialFormItem } from './components/FormItem/FormItem';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -71,6 +72,7 @@ export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
+export { FormItemOrientation } from './types/form-item';
 
 // Models
 export { StepStatus } from './models/step';
@@ -78,6 +80,7 @@ export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
 export type { TabModel } from './models/tab';
+export type { DropdownItem } from './models/dropdown';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
