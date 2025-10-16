@@ -57,7 +57,8 @@ export const DialTab: FC<DialTabProps> = ({
       'bg-layer-1 text-secondary pointer-events-none': disabled,
       'bg-accent-primary-alpha text-primary': active && !disabled,
       'text-primary': !active && !disabled,
-      'border-b-2 border-b-accent-primary': active && horizontal && !disabled,
+      'pb-[6px] border-b-2 border-b-accent-primary':
+        active && horizontal && !disabled,
       'border-l-2 border-l-accent-primary': active && !horizontal && !disabled,
     },
     cssClass,

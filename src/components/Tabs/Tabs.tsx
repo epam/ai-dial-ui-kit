@@ -1,4 +1,11 @@
-import { useEffect, useState, type FC } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FC,
+} from 'react';
 
 import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
@@ -7,8 +14,10 @@ import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
-import { IconChevronDown } from '@tabler/icons-react';
+import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
 import { DialTab } from '@/components/Tab/Tab';
+import { DialButton } from '@/components/Button/Button';
+import { DESKTOP_TABS_GAP_PX } from './constants';
 
 export interface DialTabsProps {
   tabs: TabModel[];
@@ -19,13 +28,15 @@ export interface DialTabsProps {
 }
 
 /**
- * A responsive tabs component that adapts between horizontal and dropdown (mobile) layouts
- * based on screen size. Supports both horizontal and vertical orientations and can integrate
- * with JSON editor states to toggle visibility when needed.
+ * A responsive and overflow-aware tabs component that adapts between horizontal and dropdown (mobile) layouts
+ * based on screen size and available space. When there are too many tabs to fit in one line,
+ * the component automatically adds a dropdown button for accessing hidden tabs and enables smooth horizontal scrolling.
  *
- * When viewed on larger screens, tabs are displayed horizontally or vertically based on the
- * {@link TabOrientation} prop. On smaller screens, the component automatically switches to
- * a dropdown menu for better usability.
+ * Supports both horizontal and vertical orientations and can integrate with JSON editor states to toggle
+ * visibility when needed. Automatically keeps the active tab in view when navigating through scrollable tabs.
+ *
+ * On larger screens, tabs are displayed horizontally or vertically according to the {@link TabOrientation} prop.
+ * On smaller screens, tabs collapse into a dropdown menu for better usability.
  *
  * @example
  * ```tsx
@@ -46,6 +57,12 @@ export interface DialTabsProps {
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
  * @param [jsonEditorEnabled=false] - If true, hides the tab UI to integrate with JSON editor layouts.
  * @param [orientation=TabOrientation.Horizontal] - The layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ *
+ * @remarks
+ * - Automatically detects overflow using a `ResizeObserver` and toggles a dropdown button when tabs exceed
+ *   available width.
+ * - Smoothly scrolls the tab row to keep the active tab visible.
+ * - Switches to a dedicated dropdown interface on mobile and tablet screens via the `useIsTabletScreen` hook.
  */
 export const DialTabs: FC<DialTabsProps> = ({
   tabs,
@@ -54,74 +71,140 @@ export const DialTabs: FC<DialTabsProps> = ({
   jsonEditorEnabled,
   orientation = TabOrientation.Horizontal,
 }) => {
-  // TODO: Tabs might have additional mobile versions (e.g., chat, mindmap). We need to support these later or allow flexible customization for the mobile view.
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const isTablet = useIsTabletScreen();
   const isHorizontal = orientation === TabOrientation.Horizontal;
 
-  const staticTabsClassnames = classNames(
-    'flex gap-3 flex-wrap',
-    isHorizontal ? 'flex-row' : 'flex-col',
-    jsonEditorEnabled ? 'hidden' : '',
-  );
-
-  const staticDropDownContainerClassNames = classNames(
-    'h-11 flex items-center bg-layer-3',
-    jsonEditorEnabled ? 'hidden' : '',
-  );
-
-  const [tabsClassNames, setTabsClassNames] = useState(
-    classNames(staticTabsClassnames, 'hidden'),
-  );
-  const [mobileTabsClassNames, setMobileTabsClassNames] = useState(
-    classNames(staticDropDownContainerClassNames, 'hidden'),
-  );
-
-  useEffect(() => {
-    setTabsClassNames(
-      classNames(
-        staticTabsClassnames,
-        isTablet || jsonEditorEnabled ? 'hidden' : '',
-      ),
-    );
-
-    setMobileTabsClassNames(
-      classNames(
-        staticDropDownContainerClassNames,
-        !isTablet || jsonEditorEnabled ? 'hidden' : '',
-      ),
-    );
-  }, [
-    isTablet,
-    jsonEditorEnabled,
-    staticTabsClassnames,
-    staticDropDownContainerClassNames,
-  ]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollableRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLDivElement>(null);
 
   const activeTabModel = tabs.find((t) => t.id === activeTab)!;
 
-  return (
-    <>
-      <div className={tabsClassNames}>
-        {tabs.map((tab) => (
+  const scrollContainerClass = useMemo(
+    () =>
+      classNames(
+        'flex gap-3',
+        isHorizontal
+          ? 'flex-row flex-nowrap overflow-x-auto'
+          : 'flex-col flex-wrap w-full',
+      ),
+    [isHorizontal],
+  );
+
+  const checkOverflow = useCallback(() => {
+    const el = scrollableRef.current;
+    if (!el) return;
+    setShowDropdown(el.scrollWidth > el.clientWidth);
+  }, []);
+
+  useEffect(() => {
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    const scrollableEl = scrollableRef.current;
+    if (scrollableEl) observer.observe(scrollableEl);
+    return () => observer.disconnect();
+  }, [tabs, checkOverflow]);
+
+  useEffect(() => {
+    const activeEl = activeTabRef.current;
+    const scrollEl = scrollableRef.current;
+    if (!activeEl || !scrollEl) return;
+
+    const offsetLeft = activeEl.offsetLeft;
+    const offsetRight = offsetLeft + activeEl.offsetWidth;
+    const visibleStart = scrollEl.scrollLeft;
+    const visibleEnd = visibleStart + scrollEl.clientWidth;
+
+    if (offsetLeft < visibleStart) {
+      scrollEl.scrollTo({
+        left: offsetLeft - DESKTOP_TABS_GAP_PX,
+        behavior: 'smooth',
+      });
+    } else if (offsetRight > visibleEnd) {
+      scrollEl.scrollTo({
+        left: offsetRight - scrollEl.clientWidth + DESKTOP_TABS_GAP_PX,
+        behavior: 'smooth',
+      });
+    }
+  }, [activeTab]);
+
+  // Hide completely when JSON editor is enabled
+  if (jsonEditorEnabled) return null;
+
+  return isTablet ? (
+    <div className="h-11 flex items-center bg-layer-3 px-4">
+      <DialDropdown
+        trigger={[DropdownTrigger.Click]}
+        open={isMobileDropdownOpen}
+        onOpenChange={setIsMobileDropdownOpen}
+        placement="bottom-start"
+        allowedPlacements={['bottom-start', 'top-start']}
+        renderOverlay={() =>
+          tabs.map((tab) => (
+            <DialTab
+              key={tab.id}
+              tab={tab}
+              active={tab.id === activeTab}
+              onClick={(id) => {
+                onClick(id);
+                setIsMobileDropdownOpen(false);
+              }}
+              cssClass="w-full rounded-none h-11 items-center px-6"
+            />
+          ))
+        }
+      >
+        <div className="flex gap-2 items-center h-11 cursor-pointer">
           <DialTab
-            key={tab.id}
-            tab={tab}
-            active={activeTab === tab.id}
+            key={activeTab}
+            tab={activeTabModel}
+            active
             onClick={onClick}
-            horizontal={isHorizontal}
+            cssClass="rounded-none bg-transparent border-l-0 border-b-[2px] border-accent-primary h-full items-center px-0"
           />
+          <DialIcon
+            icon={<IconChevronDown size={16} />}
+            className={classNames(
+              'text-primary transition-transform',
+              isMobileDropdownOpen && 'rotate-180',
+            )}
+          />
+        </div>
+      </DialDropdown>
+    </div>
+  ) : (
+    // Desktop
+    <div ref={containerRef} className="flex w-full">
+      <div ref={scrollableRef} className={scrollContainerClass}>
+        {tabs.map((tab) => (
+          <div
+            key={tab.id}
+            ref={activeTab === tab.id ? activeTabRef : undefined}
+            className="w-full"
+          >
+            <DialTab
+              tab={tab}
+              active={activeTab === tab.id}
+              onClick={onClick}
+              horizontal={isHorizontal}
+              cssClass="w-full"
+            />
+          </div>
         ))}
       </div>
 
-      <div className={mobileTabsClassNames}>
-        <div className="h-full px-4">
+      {showDropdown && (
+        <div className="flex items-center ml-2">
           <DialDropdown
             trigger={[DropdownTrigger.Click]}
-            open={isMobileOpen}
-            onOpenChange={setIsMobileOpen}
-            placement="bottom-start"
-            allowedPlacements={['bottom-start', 'top-start']}
+            open={isDropdownOpen}
+            onOpenChange={setIsDropdownOpen}
+            placement="bottom-end"
             renderOverlay={() =>
               tabs.map((tab) => (
                 <DialTab
@@ -130,32 +213,25 @@ export const DialTabs: FC<DialTabsProps> = ({
                   active={tab.id === activeTab}
                   onClick={(id) => {
                     onClick(id);
-                    setIsMobileOpen(false);
+                    setIsDropdownOpen(false);
                   }}
-                  cssClass="w-full rounded-none h-11 items-center px-6"
+                  cssClass="w-full rounded-none h-[32px] items-center px-3 py-2"
                 />
               ))
             }
           >
-            <div className="flex gap-2 items-center h-11 cursor-pointer">
-              <DialTab
-                key={activeTab}
-                tab={activeTabModel}
-                active
-                onClick={onClick}
-                cssClass="rounded-none bg-transparent border-l-0 border-b-[2px] border-accent-primary h-full items-center px-0"
-              />
-              <DialIcon
-                icon={<IconChevronDown size={16} />}
-                className={classNames(
-                  'text-primary',
-                  isMobileOpen && 'rotate-180',
-                )}
-              />
-            </div>
+            <DialButton
+              iconBefore={<IconDotsVertical size={18} />}
+              cssClass={classNames(
+                'w-8 h-8 flex items-center justify-center rounded border',
+                isDropdownOpen
+                  ? 'bg-layer-4 border-transparent'
+                  : 'border-primary',
+              )}
+            />
           </DialDropdown>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
