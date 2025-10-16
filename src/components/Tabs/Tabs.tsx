@@ -173,7 +173,7 @@ export const DialTabs: FC<DialTabsProps> = ({
     </div>
   ) : (
     // Desktop
-    <div ref={containerRef} className="flex w-full">
+    <div ref={containerRef} className="flex w-full items-start">
       <div ref={scrollableRef} className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
