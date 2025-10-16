@@ -17,6 +17,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
 import { DialTab } from '@/components/Tab/Tab';
 import { DialButton } from '@/components/Button/Button';
+import { DESKTOP_TABS_GAP_PX } from './constants';
 
 export interface DialTabsProps {
   tabs: TabModel[];
@@ -118,13 +119,15 @@ export const DialTabs: FC<DialTabsProps> = ({
     const offsetRight = offsetLeft + activeEl.offsetWidth;
     const visibleStart = scrollEl.scrollLeft;
     const visibleEnd = visibleStart + scrollEl.clientWidth;
-    const tabsGapPx = 12;
 
     if (offsetLeft < visibleStart) {
-      scrollEl.scrollTo({ left: offsetLeft - tabsGapPx, behavior: 'smooth' });
+      scrollEl.scrollTo({
+        left: offsetLeft - DESKTOP_TABS_GAP_PX,
+        behavior: 'smooth',
+      });
     } else if (offsetRight > visibleEnd) {
       scrollEl.scrollTo({
-        left: offsetRight - scrollEl.clientWidth + tabsGapPx,
+        left: offsetRight - scrollEl.clientWidth + DESKTOP_TABS_GAP_PX,
         behavior: 'smooth',
       });
     }
@@ -134,7 +137,6 @@ export const DialTabs: FC<DialTabsProps> = ({
   if (jsonEditorEnabled) return null;
 
   return isTablet ? (
-    // Mobile View
     <div className="h-11 flex items-center bg-layer-3 px-4">
       <DialDropdown
         trigger={[DropdownTrigger.Click]}
