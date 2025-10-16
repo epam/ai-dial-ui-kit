@@ -49,19 +49,6 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   containerCssClass,
   selectCssClass,
   error,
-  emptyStateTitle = 'No options available',
-  options,
-  multiple,
-  value,
-  defaultValue,
-  placeholder,
-  searchable,
-  selectAll,
-  selectAllLabel,
-  disabled,
-  closable,
-  onClose,
-  onChange,
   elementId,
   description,
   ...restSelectProps
@@ -76,23 +63,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       captionDescription={captionDescription}
       cssClass={containerCssClass}
     >
-      <DialSelect
-        options={options}
-        multiple={multiple}
-        value={value ?? undefined}
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        searchable={searchable}
-        selectAll={selectAll}
-        selectAllLabel={selectAllLabel}
-        emptyStateTitle={emptyStateTitle}
-        disabled={disabled}
-        closable={closable}
-        onClose={onClose}
-        onChange={onChange}
-        cssClass={selectCssClass}
-        {...restSelectProps}
-      />
+      <DialSelect cssClass={selectCssClass} {...restSelectProps} />
     </DialFormItem>
   );
 };
