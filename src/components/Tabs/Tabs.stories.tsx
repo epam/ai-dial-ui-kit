@@ -45,7 +45,7 @@ const meta: Meta<typeof DialTabs> = {
     docs: {
       description: {
         component:
-          'A responsive tabs component that switches between horizontal and dropdown (mobile) layouts. Supports horizontal and vertical orientations and integrates with JSON editor states.',
+          'A responsive and overflow-aware tabs component that adapts between horizontal and dropdown (mobile) layouts based on screen size and available space. When there are too many tabs to fit in one line, the component automatically adds a dropdown button for accessing hidden tabs and enables smooth horizontal scrolling.',
       },
     },
   },
