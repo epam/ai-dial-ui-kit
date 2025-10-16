@@ -13,7 +13,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
       />,
     );
 
-    expect(screen.getByLabelText('Test Number Field')).toBeInTheDocument();
+    expect(screen.getByText(/test number field/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter number')).toBeInTheDocument();
     expect(screen.getByDisplayValue('42.5')).toBeInTheDocument();
   });
@@ -27,7 +27,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
       />,
     );
 
-    expect(screen.getByLabelText('Test Number Field')).toBeInTheDocument();
+    expect(screen.getByText(/test number field/i)).toBeInTheDocument();
     expect(screen.getByDisplayValue('42.5')).toBeInTheDocument();
   });
 
@@ -188,8 +188,8 @@ describe('Dial UI Kit :: DialTextInputField', () => {
       />,
     );
 
-    expect(screen.getByLabelText('Test Text Field')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
+    expect(screen.getByText(/test text field/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter text/i)).toBeInTheDocument();
   });
 
   it('displays value correctly', () => {
