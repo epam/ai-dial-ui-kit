@@ -58,6 +58,7 @@ export { DialAutocompleteInput } from './components/AutocompleteInput/Autocomple
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
 export { DialSelect } from './components/Select/Select';
+export { DialSelectField } from './components/SelectField/SelectField';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
