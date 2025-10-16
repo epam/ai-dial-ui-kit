@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
-import { DialTooltip } from '../Tooltip/Tooltip';
-import { DialIcon } from '../Icon/Icon';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { DialIcon } from '@/components/Icon/Icon';
 import { IconInfoCircle } from '@tabler/icons-react';
 
 export interface DialFieldLabelProps {

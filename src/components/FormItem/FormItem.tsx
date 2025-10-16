@@ -2,7 +2,7 @@ import { useCallback, type FC, type ReactNode } from 'react';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 
-import { DialFieldLabel } from '../Field/Field';
+import { DialFieldLabel } from '@/components/Field/Field';
 import { FormItemOrientation } from '@/types/form-item';
 import { containerBaseClasses, orientationClassMap } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';

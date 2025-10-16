@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import { DialPasswordInput } from './PasswordInput';
 import { DialErrorText } from '../ErrorText/ErrorText';
-import { DialFieldLabel } from '../Field/Field';
+import { DialFieldLabel } from '@/components/Field/Field';
 import type { DialInputFieldBaseProps } from '../InputField/InputField';
 
 export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
