@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialIcon } from '@/components/Icon/Icon';
 import { IconInfoCircle } from '@tabler/icons-react';
 
 export interface DialFieldLabelProps {
-  fieldTitle?: string | React.ReactNode;
+  fieldTitle?: string | ReactNode;
   htmlFor: string;
   optional?: boolean;
   optionalText?: string;

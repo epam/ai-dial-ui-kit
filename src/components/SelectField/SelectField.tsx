@@ -6,7 +6,7 @@ import {
 } from '@/components/FormItem/FormItem';
 import { DialSelect, type DialSelectProps } from '@/components/Select/Select';
 
-import type { DialFieldLabelProps } from '../Field/Field';
+import type { DialFieldLabelProps } from '@/components/Field/Field';
 
 export interface DialSelectFieldProps
   extends Omit<DialSelectProps, 'cssClass'>,

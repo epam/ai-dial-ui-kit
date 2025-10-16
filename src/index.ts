@@ -79,6 +79,7 @@ export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
 export type { TabModel } from './models/tab';
+export type { DropdownItem } from './models/dropdown';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
