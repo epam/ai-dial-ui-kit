@@ -97,6 +97,16 @@ export const Vertical: Story = {
   },
 };
 
+export const WithJsonEditor: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: sampleTabs,
+    activeTab: 'details',
+    orientation: TabOrientation.Vertical,
+    jsonEditorEnabled: true,
+  },
+};
+
 export const ManyHorizontalTabs: Story = {
   render: InteractiveTabs,
   args: {
