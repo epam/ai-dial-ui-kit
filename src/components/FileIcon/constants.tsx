@@ -34,6 +34,7 @@ import Ini from '@/assets/icons/file/ini.svg?react';
 import Json from '@/assets/icons/file/json.svg?react';
 import Md from '@/assets/icons/file/md.svg?react';
 import Py from '@/assets/icons/file/py.svg?react';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export type ExtensionKey =
   | '.bmp'
@@ -73,18 +74,13 @@ export interface BaseFileIconOpts {
   className?: string;
 }
 
-export const baseIconProps: Required<Pick<IconProps, 'size' | 'stroke'>> = {
-  size: 24,
-  stroke: 1.5,
-};
-
 const tabler = (
   Icon: (p: IconProps) => ReactNode,
   opts: BaseFileIconOpts,
 ): ReactNode => (
   <Icon
-    size={opts.size ?? baseIconProps.size}
-    stroke={opts.stroke ?? baseIconProps.stroke}
+    size={opts.size ?? BASE_ICON_PROPS.size}
+    stroke={opts.stroke ?? BASE_ICON_PROPS.stroke}
     className={opts.className}
   />
 );
@@ -94,13 +90,12 @@ const svgr = (
   opts: BaseFileIconOpts,
 ): ReactNode => (
   <Svg
-    width={Number(opts.size ?? baseIconProps.size)}
-    height={Number(opts.size ?? baseIconProps.size)}
+    width={Number(opts.size ?? BASE_ICON_PROPS.size)}
+    height={Number(opts.size ?? BASE_ICON_PROPS.size)}
     className={opts.className}
   />
 );
 
-/** Map of extension to icon factory */
 export const fileIconFactories: Record<
   string,
   (opts: BaseFileIconOpts) => ReactNode

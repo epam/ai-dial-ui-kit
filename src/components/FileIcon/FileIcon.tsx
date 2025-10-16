@@ -3,11 +3,8 @@ import type { FC } from 'react';
 import type { ReactNode } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import {
-  baseIconProps,
-  fileIconFactories,
-  type BaseFileIconOpts,
-} from './constants';
+import { fileIconFactories, type BaseFileIconOpts } from './constants';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileIconProps {
   extension: string;
@@ -39,8 +36,8 @@ export interface DialFileIconProps {
  */
 export const DialFileIcon: FC<DialFileIconProps> = ({
   extension,
-  size = baseIconProps.size,
-  stroke = baseIconProps.stroke,
+  size = BASE_ICON_PROPS.size,
+  stroke = BASE_ICON_PROPS.stroke,
   cssClass,
   decorative = false,
   label,

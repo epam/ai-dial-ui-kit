@@ -37,7 +37,6 @@ describe('Dial UI Kit :: DialPasswordInputField', () => {
     );
 
     const input = screen.getByLabelText('Password') as HTMLInputElement;
-    screen.logTestingPlaygroundURL();
     const showBtn = screen.queryByRole('button', { name: /show/i });
     if (showBtn) fireEvent.click(showBtn);
     expect(input.type).toBe('text');
