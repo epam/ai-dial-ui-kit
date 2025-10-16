@@ -13,6 +13,7 @@ export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { DialDraggableItem } from './components/DraggableItem/DraggableItem';
+export { DialFileIcon } from './components/FileIcon/FileIcon';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
