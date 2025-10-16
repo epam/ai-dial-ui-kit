@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type FC } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FC,
+} from 'react';
 
 import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
@@ -19,13 +26,15 @@ export interface DialTabsProps {
 }
 
 /**
- * A responsive tabs component that adapts between horizontal and dropdown (mobile) layouts
- * based on screen size. Supports both horizontal and vertical orientations and can integrate
- * with JSON editor states to toggle visibility when needed.
+ * A responsive and overflow-aware tabs component that adapts between horizontal and dropdown (mobile) layouts
+ * based on screen size and available space. When there are too many tabs to fit in one line,
+ * the component automatically adds a dropdown button for accessing hidden tabs and enables smooth horizontal scrolling.
  *
- * When viewed on larger screens, tabs are displayed horizontally or vertically based on the
- * {@link TabOrientation} prop. On smaller screens, the component automatically switches to
- * a dropdown menu for better usability.
+ * Supports both horizontal and vertical orientations and can integrate with JSON editor states to toggle
+ * visibility when needed. Automatically keeps the active tab in view when navigating through scrollable tabs.
+ *
+ * On larger screens, tabs are displayed horizontally or vertically according to the {@link TabOrientation} prop.
+ * On smaller screens, tabs collapse into a dropdown menu for better usability.
  *
  * @example
  * ```tsx
@@ -46,6 +55,12 @@ export interface DialTabsProps {
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
  * @param [jsonEditorEnabled=false] - If true, hides the tab UI to integrate with JSON editor layouts.
  * @param [orientation=TabOrientation.Horizontal] - The layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ *
+ * @remarks
+ * - Automatically detects overflow using a `ResizeObserver` and toggles a dropdown button when tabs exceed
+ *   available width.
+ * - Smoothly scrolls the tab row to keep the active tab visible.
+ * - Switches to a dedicated dropdown interface on mobile and tablet screens via the `useIsTabletScreen` hook.
  */
 export const DialTabs: FC<DialTabsProps> = ({
   tabs,
@@ -54,68 +69,61 @@ export const DialTabs: FC<DialTabsProps> = ({
   jsonEditorEnabled,
   orientation = TabOrientation.Horizontal,
 }) => {
-  // TODO: Tabs might have additional mobile versions (e.g., chat, mindmap). We need to support these later or allow flexible customization for the mobile view.
-  const [isMobileDropdownOpen, setIsMobileDropDownOpen] = useState(false);
+  // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const isTablet = useIsTabletScreen();
   const isHorizontal = orientation === TabOrientation.Horizontal;
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
-  const activeTabRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollableRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLDivElement>(null);
 
-  const staticTabsClassnames = classNames('flex', {
-    hidden: jsonEditorEnabled,
-  });
-
-  const tabsScrollClassnames = classNames(
-    'flex gap-3',
-    isHorizontal
-      ? 'flex-row flex-nowrap overflow-x-auto'
-      : 'flex-col flex-wrap',
+  const staticTabsClass = useMemo(
+    () => classNames('flex', { hidden: jsonEditorEnabled }),
+    [jsonEditorEnabled],
   );
 
-  const staticDropDownContainerClassNames = classNames(
-    'h-11 flex items-center bg-layer-3',
-    {
-      hidden: jsonEditorEnabled,
-    },
-  );
-
-  const [tabsClassNames, setTabsClassNames] = useState(
-    classNames(staticTabsClassnames, 'hidden'),
-  );
-  const [mobileTabsClassNames, setMobileTabsClassNames] = useState(
-    classNames(staticDropDownContainerClassNames, 'hidden'),
-  );
-
-  useEffect(() => {
-    setTabsClassNames(
+  const scrollContainerClass = useMemo(
+    () =>
       classNames(
-        staticTabsClassnames,
-        isTablet || jsonEditorEnabled ? 'hidden' : '',
+        'flex gap-3',
+        isHorizontal
+          ? 'flex-row flex-nowrap overflow-x-auto'
+          : 'flex-col flex-wrap',
       ),
-    );
+    [isHorizontal],
+  );
 
-    setMobileTabsClassNames(
+  const dropdownContainerClass = useMemo(
+    () =>
+      classNames('h-11 flex items-center bg-layer-3', {
+        hidden: jsonEditorEnabled,
+      }),
+    [jsonEditorEnabled],
+  );
+
+  const desktopTabsClass = useMemo(
+    () =>
+      classNames(staticTabsClass, (isTablet || jsonEditorEnabled) && 'hidden'),
+    [isTablet, jsonEditorEnabled, staticTabsClass],
+  );
+
+  const mobileTabsClass = useMemo(
+    () =>
       classNames(
-        staticDropDownContainerClassNames,
-        !isTablet || jsonEditorEnabled ? 'hidden' : '',
+        dropdownContainerClass,
+        (!isTablet || jsonEditorEnabled) && 'hidden',
       ),
-    );
-  }, [
-    isTablet,
-    jsonEditorEnabled,
-    staticTabsClassnames,
-    staticDropDownContainerClassNames,
-  ]);
+    [isTablet, jsonEditorEnabled, dropdownContainerClass],
+  );
 
   const activeTabModel = tabs.find((t) => t.id === activeTab)!;
 
   const checkOverflow = useCallback(() => {
-    const el = scrollableContainerRef.current;
+    const el = scrollableRef.current;
     if (!el) return;
     setShowDropdown(el.scrollWidth > el.clientWidth);
   }, []);
@@ -123,23 +131,20 @@ export const DialTabs: FC<DialTabsProps> = ({
   useEffect(() => {
     checkOverflow();
     const observer = new ResizeObserver(checkOverflow);
-    if (scrollableContainerRef.current) {
-      observer.observe(scrollableContainerRef.current);
-    }
+    const scrollableEl = scrollableRef.current;
+    if (scrollableEl) observer.observe(scrollableEl);
     return () => observer.disconnect();
   }, [tabs, checkOverflow]);
 
   useEffect(() => {
-    const active = activeTabRef.current;
-    const scrollEl = scrollableContainerRef.current;
-    if (!active || !scrollEl) return;
+    const activeEl = activeTabRef.current;
+    const scrollEl = scrollableRef.current;
+    if (!activeEl || !scrollEl) return;
 
-    const offsetLeft = active.offsetLeft;
-    const offsetRight = offsetLeft + active.offsetWidth;
-
+    const offsetLeft = activeEl.offsetLeft;
+    const offsetRight = offsetLeft + activeEl.offsetWidth;
     const visibleStart = scrollEl.scrollLeft;
     const visibleEnd = visibleStart + scrollEl.clientWidth;
-
     const tabsGapPx = 12;
 
     if (offsetLeft < visibleStart) {
@@ -154,8 +159,9 @@ export const DialTabs: FC<DialTabsProps> = ({
 
   return (
     <>
-      <div ref={containerRef} className={tabsClassNames}>
-        <div ref={scrollableContainerRef} className={tabsScrollClassnames}>
+      {/* Desktop / Tablet View */}
+      <div ref={containerRef} className={desktopTabsClass}>
+        <div ref={scrollableRef} className={scrollContainerClass}>
           {tabs.map((tab) => (
             <div
               key={tab.id}
@@ -170,6 +176,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             </div>
           ))}
         </div>
+
         {showDropdown && (
           <div className="flex items-center ml-2">
             <DialDropdown
@@ -207,12 +214,13 @@ export const DialTabs: FC<DialTabsProps> = ({
         )}
       </div>
 
-      <div className={mobileTabsClassNames}>
+      {/* Mobile View */}
+      <div className={mobileTabsClass}>
         <div className="h-full px-4">
           <DialDropdown
             trigger={[DropdownTrigger.Click]}
             open={isMobileDropdownOpen}
-            onOpenChange={setIsMobileDropDownOpen}
+            onOpenChange={setIsMobileDropdownOpen}
             placement="bottom-start"
             allowedPlacements={['bottom-start', 'top-start']}
             renderOverlay={() =>
@@ -223,7 +231,7 @@ export const DialTabs: FC<DialTabsProps> = ({
                   active={tab.id === activeTab}
                   onClick={(id) => {
                     onClick(id);
-                    setIsMobileDropDownOpen(false);
+                    setIsMobileDropdownOpen(false);
                   }}
                   cssClass="w-full rounded-none h-11 items-center px-6"
                 />
@@ -241,7 +249,7 @@ export const DialTabs: FC<DialTabsProps> = ({
               <DialIcon
                 icon={<IconChevronDown size={16} />}
                 className={classNames(
-                  'text-primary',
+                  'text-primary transition-transform',
                   isMobileDropdownOpen && 'rotate-180',
                 )}
               />
