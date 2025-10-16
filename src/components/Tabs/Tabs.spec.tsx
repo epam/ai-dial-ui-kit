@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { DialTabs } from './Tabs';
 import { TabOrientation } from '@/types/tab';
+import * as useIsTabletScreenHook from '@/hooks/use-is-tablet-screen';
 
 const tabsMock = [
   { id: 'tab1', name: 'Tab1' },
@@ -29,6 +30,7 @@ describe('Dial UI Kit :: DialTabs', () => {
   });
 
   afterAll(() => {
+    vi.restoreAllMocks();
     globalThis.ResizeObserver = originalResizeObserver;
   });
 
@@ -52,5 +54,52 @@ describe('Dial UI Kit :: DialTabs', () => {
     );
     expect(screen.getAllByText('Tab1').length).toBe(1);
     expect(screen.getAllByText('Tab2').length).toBe(1);
+  });
+
+  test('shows dropdown button when when mobile view', () => {
+    const onClick = vi.fn();
+
+    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(true);
+
+    const { container } = render(
+      <DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />,
+    );
+
+    const chevronIcon = container.querySelector('.tabler-icon-chevron-down');
+    expect(chevronIcon).toBeInTheDocument();
+  });
+
+  test('handles tab click in mobile view', () => {
+    const onClick = vi.fn();
+
+    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(true);
+
+    render(<DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />);
+
+    const tab = screen.getByRole('tab');
+    expect(tab).toBeInTheDocument();
+
+    fireEvent.click(tab);
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledWith('tab1');
+  });
+
+  test('handles tab click in desktop view', () => {
+    const onClick = vi.fn();
+
+    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(false);
+
+    render(<DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />);
+
+    const tab2 = screen
+      .getAllByRole('tab')
+      .find((el) => el.textContent === 'Tab2');
+    expect(tab2).toBeInTheDocument();
+
+    fireEvent.click(tab2!);
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledWith('tab2');
   });
 });
