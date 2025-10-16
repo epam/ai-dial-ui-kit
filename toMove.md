@@ -9,6 +9,7 @@
 | TextAreaField         | +       | +    |
 | Tooltip               | +       | +    |
 | Switch                | +       | +    |
+| CollapsableItem       |+        |      |
 | Dropdown              | +       |      |
 | Checkbox              | +       |      |
 | InputModal            | +       |      |
