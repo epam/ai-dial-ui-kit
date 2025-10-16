@@ -130,7 +130,7 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-10 text-primary">
       <div className="flex flex-col gap-10 w-[600px] text-primary">
         <div>
-          <h4 className="text-lg font-semibold mb-2">Horizontal</h4>
+          <h3 className="dial-h3 font-semibold mb-2">Horizontal</h3>
           <InteractiveTabs
             tabs={sampleTabs}
             activeTab="settings"
@@ -139,7 +139,7 @@ export const AllVariants: Story = {
           />
         </div>
         <div>
-          <h4 className="text-lg font-semibold mb-2">Vertical</h4>
+          <h3 className="dial-h3 font-semibold mb-2">Vertical</h3>
           <InteractiveTabs
             tabs={sampleTabs}
             activeTab="details"
@@ -148,7 +148,7 @@ export const AllVariants: Story = {
           />
         </div>
         <div>
-          <h4 className="text-lg font-semibold mb-2">Many horizontal tabs</h4>
+          <h3 className="dial-h3 font-semibold mb-2">Many horizontal tabs</h3>
           <InteractiveTabs
             tabs={manySampleTabs}
             activeTab="details"

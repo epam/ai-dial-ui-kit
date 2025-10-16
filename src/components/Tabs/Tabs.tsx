@@ -91,7 +91,7 @@ export const DialTabs: FC<DialTabsProps> = ({
         'flex gap-3',
         isHorizontal
           ? 'flex-row flex-nowrap overflow-x-auto'
-          : 'flex-col flex-wrap',
+          : 'flex-col flex-wrap w-full',
       ),
     [isHorizontal],
   );
@@ -179,18 +179,20 @@ export const DialTabs: FC<DialTabsProps> = ({
     </div>
   ) : (
     // Desktop
-    <div ref={containerRef} className="flex">
+    <div ref={containerRef} className="flex w-full">
       <div ref={scrollableRef} className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
             key={tab.id}
             ref={activeTab === tab.id ? activeTabRef : undefined}
+            className="w-full"
           >
             <DialTab
               tab={tab}
               active={activeTab === tab.id}
               onClick={onClick}
               horizontal={isHorizontal}
+              cssClass="w-full"
             />
           </div>
         ))}
