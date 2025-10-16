@@ -18,6 +18,12 @@ interface Props {
  */
 export const DialShowIcon: FC<Props> = ({ onClick }) => {
   return (
-    <IconEye {...BASE_ICON_PROPS} className="text-primary" onClick={onClick} />
+    <IconEye
+      {...BASE_ICON_PROPS}
+      className="text-primary"
+      onClick={onClick}
+      role="button"
+      aria-label="show"
+    />
   );
 };

@@ -5,7 +5,7 @@ import { EDITOR_THEMES } from '@/types/editor';
 import { Editor, type Monaco, type OnValidate } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 
-export interface Props {
+export interface DialJsonEditorProps {
   value?: string | undefined;
   currentTheme: string;
   themesConfig?: Record<EDITOR_THEMES, editor.IStandaloneThemeData>;
@@ -25,7 +25,7 @@ export interface Props {
  * @param [onValidateJSON] - Callback fired when JSON validation occurs
  * @param [options] - Additional Monaco editor options
  */
-export const DialJsonEditor: FC<Props> = ({
+export const DialJsonEditor: FC<DialJsonEditorProps> = ({
   value,
   onChange,
   onValidateJSON,
