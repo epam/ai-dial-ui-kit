@@ -8,6 +8,7 @@ import { DialTextarea } from '@/components/Textarea/Textarea';
 
 export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
   onChange?: (value: string) => void;
+  disableTooltip?: boolean;
 }
 
 /**
