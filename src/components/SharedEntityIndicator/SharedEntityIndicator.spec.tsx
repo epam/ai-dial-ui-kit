@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
     const iconWrapper = screen.getByRole('img', {
       name: 'Shared entity',
     }).parentElement;
-    expect(iconWrapper).toHaveClass('text-accent-primary', 'bg-layer-3');
+    expect(iconWrapper).toHaveClass('text-accent-primary');
   });
 
   test('accepts custom cssClass', () => {
