@@ -29,7 +29,7 @@ import {
 
 import { DialSearch } from '@/components/Search/Search';
 import type { SelectOption } from '@/models/select';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialMultiSelectTags } from './MultiSelectTags';
 
