@@ -25,6 +25,7 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 // Buttons
 export { DialButton } from './components/Button/Button';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
+export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -59,6 +60,7 @@ export { DialAutocompleteInputValue } from './components/AutocompleteInput/Autoc
 export { DialTagInput } from './components/TagInput/TagInput';
 export { DialSelect } from './components/Select/Select';
 export { DialSelectField } from './components/SelectField/SelectField';
+export { DialLoadFileAreaField } from './components/LoadFileArea/LoadFileAreaField';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
