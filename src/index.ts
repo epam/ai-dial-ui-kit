@@ -15,6 +15,7 @@ export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisToolti
 export { DialDraggableItem } from './components/DraggableItem/DraggableItem';
 export { DialFileIcon } from './components/FileIcon/FileIcon';
 export { DialFormItem } from './components/FormItem/FormItem';
+export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
