@@ -56,4 +56,20 @@ describe('Dial UI Kit :: DialSelectField', () => {
     );
     expect(screen.getByText('Helper caption')).toBeInTheDocument();
   });
+
+  test('renders readonly state with selected option label', () => {
+    render(
+      <DialSelectField
+        elementId="ro"
+        fieldTitle="Readonly"
+        readonly
+        value="WS"
+        options={[
+          { value: 'SSE', label: 'Server-Sent Events (SSE)' },
+          { value: 'WS', label: 'WebSocket' },
+        ]}
+      />,
+    );
+    expect(screen.getByText('WebSocket')).toBeInTheDocument();
+  });
 });
