@@ -20,7 +20,7 @@ import { DialErrorText } from '@/components/ErrorText/ErrorText';
 export interface DialEmptyFileAreaProps {
   emptyTextFirstLine?: string;
   emptyTextSecondLine?: string;
-  emptyButtonLabel: string;
+  emptyButtonLabel?: string;
   acceptTypes: string;
   maxFilesCount?: number;
   isMultiple?: boolean;
@@ -155,11 +155,13 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           {emptyTextSecondLine && (
             <p className="mb-0.5"> {emptyTextSecondLine}</p>
           )}
-          <DialButton
-            variant={ButtonVariant.Tertiary}
-            title={emptyButtonLabel}
-            onClick={() => fileInputRef.current?.click()}
-          />
+          {emptyButtonLabel && (
+            <DialButton
+              variant={ButtonVariant.Tertiary}
+              title={emptyButtonLabel}
+              onClick={() => fileInputRef.current?.click()}
+            />
+          )}
         </label>
         <input
           multiple={isMultiple}
