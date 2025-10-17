@@ -26,11 +26,12 @@ import {
   selectOptionDisabledClasses,
   selectChevronIcon,
 } from './constants';
-import { DialTag } from '@/components/Tag/Tag';
+
 import { DialSearch } from '@/components/Search/Search';
 import type { SelectOption } from '@/models/select';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialMultiSelectTags } from './MultiSelectTags';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -218,21 +219,11 @@ export const DialSelect: FC<DialSelectProps> = ({
   const renderTags = useCallback(() => {
     if (!multiple || selectedValues.length === 0) return null;
     return (
-      <div className="flex flex-wrap w-full items-center gap-1">
-        {selectedValues.map((v) => {
-          const label = options.find((o) => o.value === v)?.label ?? v;
-          const icon = options.find((o) => o.value === v)?.icon;
-          return (
-            <DialTag
-              key={v}
-              tag={label}
-              remove={(e) => handleRemoveTag(e, v)}
-              iconBefore={icon ? <DialIcon icon={icon} /> : null}
-              cssClass="max-w-full"
-            />
-          );
-        })}
-      </div>
+      <DialMultiSelectTags
+        options={options}
+        selectedValues={selectedValues}
+        handleRemoveTag={handleRemoveTag}
+      />
     );
   }, [multiple, options, selectedValues, handleRemoveTag]);
 

@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useCallback, type FC } from 'react';
 
 import {
   DialFormItem,
@@ -7,11 +7,12 @@ import {
 import { DialSelect, type DialSelectProps } from '@/components/Select/Select';
 
 import type { DialFieldLabelProps } from '@/components/Field/Field';
+import { DialMultiSelectTags } from '../Select/MultiSelectTags';
 
 export interface DialSelectFieldProps
   extends Omit<DialSelectProps, 'cssClass'>,
     Omit<DialFieldLabelProps, 'htmlFor'>,
-    Omit<DialFormItemProps, 'label' | 'children'> {
+    Omit<DialFormItemProps, 'label' | 'children' | 'value'> {
   selectCssClass?: string;
   containerCssClass?: string;
 }
@@ -51,8 +52,35 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   error,
   elementId,
   description,
+  readonly,
+  value,
+  defaultEmptyText,
   ...restSelectProps
 }) => {
+  const getReadonlyValue = useCallback(() => {
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+      return defaultEmptyText ?? 'None';
+    }
+
+    if (Array.isArray(value)) {
+      return (
+        <DialMultiSelectTags
+          options={restSelectProps.options}
+          selectedValues={value}
+        />
+      );
+    } else {
+      const selectedOption = restSelectProps.options?.find(
+        (option) => option.value === value,
+      );
+      return (
+        <span aria-readonly={true} className="text-primary">
+          {selectedOption?.label || value}
+        </span>
+      );
+    }
+  }, [value, restSelectProps.options, defaultEmptyText]);
+
   return (
     <DialFormItem
       elementId={elementId}
@@ -62,8 +90,15 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       error={error}
       captionDescription={captionDescription}
       cssClass={containerCssClass}
+      readonly={readonly}
+      value={getReadonlyValue()}
+      defaultEmptyText={defaultEmptyText}
     >
-      <DialSelect cssClass={selectCssClass} {...restSelectProps} />
+      <DialSelect
+        cssClass={selectCssClass}
+        value={value}
+        {...restSelectProps}
+      />
     </DialFormItem>
   );
 };

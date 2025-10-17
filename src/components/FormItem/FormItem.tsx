@@ -21,6 +21,9 @@ export interface DialFormItemProps {
   errorCssClass?: string;
   children: ReactNode;
   captionDescription?: string;
+  readonly?: boolean;
+  value?: ReactNode | string;
+  defaultEmptyText?: string;
 }
 
 /**
@@ -72,6 +75,9 @@ export interface DialFormItemProps {
  * @param [labelCssClass] - Additional CSS classes to apply to the label element
  * @param [errorCssClass] - Additional CSS classes to apply to the error message element
  * @param [captionDescription] - Additional caption description text, displayed below the form control.
+ * @param [readonly=false] - Whether the form control is read-only (displays value as text, no input element)
+ * @param [value] - The current value of the form control
+ * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
  * @param children - The form control element(s) to render inside the DialFormItem
  */
 export const DialFormItem: FC<DialFormItemProps> = ({
@@ -87,6 +93,9 @@ export const DialFormItem: FC<DialFormItemProps> = ({
   labelCssClass,
   errorCssClass,
   captionDescription,
+  readonly,
+  value,
+  defaultEmptyText,
   children,
 }) => {
   const labelId = `${elementId}-label`;
@@ -127,6 +136,18 @@ export const DialFormItem: FC<DialFormItemProps> = ({
     );
   }, [error, errorCssClass, errorId]);
 
+  const renderReadonlyValue = useCallback(() => {
+    if (!value) {
+      return <span aria-readonly="true">{defaultEmptyText ?? 'None'}</span>;
+    }
+
+    if (typeof value === 'string' || typeof value === 'number') {
+      return <span aria-readonly="true">{value}</span>;
+    }
+
+    return value;
+  }, [value, defaultEmptyText]);
+
   return (
     <div
       role="group"
@@ -158,7 +179,11 @@ export const DialFormItem: FC<DialFormItemProps> = ({
       )}
 
       <div className="min-w-0 w-full">
-        {children}
+        {readonly ? (
+          <div className="dial-input px-3 py-2">{renderReadonlyValue()}</div>
+        ) : (
+          children
+        )}
         {captionDescription && (
           <div
             id={captionDescriptionId}

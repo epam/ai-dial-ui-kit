@@ -20,6 +20,9 @@ const meta = {
     disabled: { control: 'boolean' },
     selectCssClass: { control: 'text' },
     containerCssClass: { control: 'text' },
+    readonly: { control: 'boolean' },
+    defaultEmptyText: { control: 'text' },
+    value: { control: 'object' },
   },
   args: {
     elementId: 'transport',
@@ -78,6 +81,32 @@ export const WithError: Story = {
   args: { error: 'Selection required' },
   render: (args) => (
     <div className="w-[320px]">
+      <DialSelectField {...args} />
+    </div>
+  ),
+};
+
+export const Readonly: Story = {
+  args: {
+    readonly: true,
+    value: 'WS',
+  },
+  render: (args) => (
+    <div className="w-[320px]">
+      <DialSelectField {...args} />
+    </div>
+  ),
+};
+
+export const ReadonlyMultiple: Story = {
+  args: {
+    readonly: true,
+    multiple: true,
+    value: ['SSE', 'LP'],
+    defaultEmptyText: 'No transports selected',
+  },
+  render: (args) => (
+    <div className="w-[420px]">
       <DialSelectField {...args} />
     </div>
   ),
