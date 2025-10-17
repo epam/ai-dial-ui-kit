@@ -63,11 +63,6 @@ const meta: Meta<typeof DialTabs> = {
       options: Object.values(TabOrientation),
       description: 'Orientation of the tabs (horizontal or vertical).',
     },
-    jsonEditorEnabled: {
-      control: 'boolean',
-      description:
-        'Hides the tab UI when the JSON editor mode is active (used for special contexts).',
-    },
     onClick: {
       action: 'tabClicked',
       description:
@@ -103,7 +98,6 @@ export const WithJsonEditor: Story = {
     tabs: sampleTabs,
     activeTab: 'details',
     orientation: TabOrientation.Vertical,
-    jsonEditorEnabled: true,
   },
 };
 
