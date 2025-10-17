@@ -1,7 +1,7 @@
 import { type FC, type MouseEvent } from 'react';
-import { DialButton } from '@epam/ai-dial-ui-kit';
 import { IconTrashX } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialButton } from '@/components/Button/Button';
 
 interface DialRemoveButtonProps {
   iconClass?: string;
