@@ -13,6 +13,7 @@ export interface DialFileIconProps {
   cssClass?: string;
   decorative?: boolean;
   label?: string;
+  indicator?: ReactNode;
 }
 
 /**
@@ -33,6 +34,7 @@ export interface DialFileIconProps {
  * @param [cssClass] - Additional classes on the container
  * @param [decorative=false] - Whether the icon should be hidden from assistive technologies
  * @param [label] - Accessible label when not decorative; defaults to "<EXT> file icon"
+ * @param [indicator] - Optional indicator element to display alongside the icon
  */
 export const DialFileIcon: FC<DialFileIconProps> = ({
   extension,
@@ -41,6 +43,7 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
   cssClass,
   decorative = false,
   label,
+  indicator,
 }) => {
   const normalized = (() => {
     const raw = extension.trim().toLowerCase();
@@ -59,12 +62,15 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
 
   return (
     <span
-      className={classNames('inline-flex', cssClass)}
+      className={classNames('inline-flex relative', cssClass)}
       {...(decorative
         ? { 'aria-hidden': true }
         : { role: 'img', 'aria-label': computedLabel })}
     >
       <DialIcon icon={icon} className="inline-block align-middle" />
+      {indicator && (
+        <span className="absolute bottom-0 left-0">{indicator}</span>
+      )}
     </span>
   );
 };
