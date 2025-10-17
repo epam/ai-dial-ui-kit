@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileIcon, type DialFileIconProps } from './FileIcon';
 import { supportedExtensions } from './constants';
-import { DialSharedEntityIndicator } from '../SharedEntityIndicator/SharedEntityIndicator';
+import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 
 const meta = {
   title: 'FileManager/DialFileIcon',
