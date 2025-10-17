@@ -42,7 +42,11 @@ export const DialFilledInput: FC<DialFilledInputProps> = ({
 
   const getIcon = () => (
     <div className="mr-2">
-      {isInvalid ? <IconExclamationCircle {...BASE_ICON_PROPS} /> : iconBefore}
+      {isInvalid ? (
+        <IconExclamationCircle {...BASE_ICON_PROPS} className="text-error" />
+      ) : (
+        iconBefore
+      )}
     </div>
   );
 
