@@ -23,13 +23,51 @@ export interface DialEmptyFileAreaProps {
   emptyButtonLabel?: string;
   acceptTypes: string;
   maxFilesCount?: number;
-  isMultiple?: boolean;
+  multiple?: boolean;
   fileFormatError?: string;
   fileCountError?: string;
   getIsFileFormatError?: (fileItems: File[] | DataTransferItem[]) => boolean;
   onChange: (files: File[]) => void;
 }
 
+/**
+ * A drag-and-drop file upload area component that allows users to upload files
+ * either by dragging them into the drop zone or selecting them via the file picker.
+ * Displays customizable helper text, an upload button, and validation messages for file format
+ * or maximum file count errors. Integrates with `react-dnd` for drag-and-drop behavior.
+ *
+ * @example
+ * ```tsx
+ * <DialEmptyFileArea
+ *   onChange={(files) => console.log('Selected files:', files)}
+ *   emptyTextFirstLine="Drag & drop files here"
+ *   emptyTextSecondLine="or click below to select files"
+ *   emptyButtonLabel="Choose files"
+ *   acceptTypes="application/pdf, application/txt, image/svg+xml"
+ *   maxFilesCount={3}
+ *   multiple
+ *   fileFormatError="Only PNG and JPG files are allowed"
+ *   fileCountError="You can upload up to 3 files"
+ *   getIsFileFormatError={(files) =>
+ *     files.some(file => !file.name.endsWith('.png') && !file.name.endsWith('.jpg'))
+ *   }
+ * />
+ * ```
+ *
+ * @param {DialEmptyFileAreaProps} props - The properties for the empty file area component.
+ * @param {(files: File[]) => void} props.onChange - Callback fired when valid files are selected or dropped.
+ * @param {string} [props.emptyTextFirstLine] - Text displayed as the first line inside the drop area.
+ * @param {string} [props.emptyTextSecondLine] - Text displayed as the second line inside the drop area.
+ * @param {string} [props.emptyButtonLabel] - Label for the upload button shown below the text.
+ * @param {string} [props.acceptTypes] - Comma-separated list of accepted file MIME types (e.g., "application/pdf").
+ * @param {number} [props.maxFilesCount] - Maximum allowed number of files that can be uploaded at once.
+ * @param {boolean} [props.multiple=false] - Whether multiple file uploads are allowed.
+ * @param {string} [props.fileFormatError] - Error message shown when an invalid file format is detected.
+ * @param {string} [props.fileCountError] - Error message shown when the selected files exceed the limit.
+ * @param {(files: File[] | DataTransferItem[]) => boolean} [props.getIsFileFormatError] - Optional validation function that returns `true` if selected files have invalid formats.
+ *
+ * @returns {JSX.Element} The rendered drag-and-drop upload area with file validation feedback.
+ */
 export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   onChange,
   emptyTextFirstLine,
@@ -37,7 +75,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   emptyButtonLabel,
   acceptTypes,
   maxFilesCount,
-  isMultiple,
+  multiple,
   fileFormatError,
   fileCountError,
   getIsFileFormatError,
@@ -164,7 +202,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           )}
         </label>
         <input
-          multiple={isMultiple}
+          multiple={multiple}
           id="file"
           type="file"
           ref={fileInputRef}

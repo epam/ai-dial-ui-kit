@@ -12,7 +12,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
         emptyTextFirstLine="empty"
         emptyButtonLabel="Browse"
         onChange={vi.fn()}
-        isMultiple={true}
+        multiple={true}
         acceptTypes="image/png"
       />,
     );

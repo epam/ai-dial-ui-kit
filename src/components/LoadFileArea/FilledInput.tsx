@@ -10,6 +10,28 @@ interface DialFilledInputProps extends DialInputProps {
   onClick?: () => void;
 }
 
+/**
+ * A styled input component that wraps `DialInput` and provides built-in
+ * error handling and icon display.
+ *
+ * - Displays an error icon (`IconExclamationCircle`) when the input is invalid.
+ * - Supports an optional `errorText` tooltip shown on hover when invalid.
+ *
+ * @example
+ * <DialFilledInput
+ *   value={username}
+ *   onChange={handleChange}
+ *   invalid={!username}
+ *   errorText="Username is required"
+ *   iconBefore={<UserIcon />}
+ * />
+ *
+ * @component
+ * @param {DialFilledInputProps} props - The properties for the filled input component.
+ * @param {string} [props.errorText] - Optional text to display in a tooltip when the input is invalid.
+ * @param {() => void} [props.onClick] - Optional click handler for the input container.
+ * @returns {JSX.Element} The rendered filled input component.
+ */
 export const DialFilledInput: FC<DialFilledInputProps> = ({
   iconBefore,
   cssClass,

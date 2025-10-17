@@ -38,7 +38,7 @@ const meta: Meta<typeof DialLoadFileAreaField> = {
       control: 'text',
       description: 'Accepted MIME types (e.g. image/*, .pdf)',
     },
-    isMultiple: {
+    multiple: {
       control: 'boolean',
       description: 'Allows multiple file selection',
     },
@@ -91,7 +91,7 @@ export const Empty: Story = {
     fieldTitle: 'Documents',
     elementId: 'upload-docs',
     acceptTypes: 'application/pdf, application/txt, image/svg+xml',
-    isMultiple: true,
+    multiple: true,
     maxFilesCount: 5,
     deleteAllButtonLabel: 'Delete all',
     addButtonLabel: 'Add files',

@@ -17,6 +17,41 @@ export interface DialLoadFileAreaProps extends DialEmptyFileAreaProps {
   removeButtonAriaLabel?: string;
 }
 
+/**
+ * A drag-and-drop file upload area component that allows users to upload files
+ * either by dragging them into the area or by selecting them through the file picker.
+ * Displays helpful text, button prompts, and validation errors for file format or count limits.
+ *
+ * @example
+ * ```tsx
+ * <DialEmptyFileArea
+ *   onChange={(files) => console.log(files)}
+ *   emptyTextFirstLine="Drag & drop your files here"
+ *   emptyTextSecondLine="or click the button below to upload"
+ *   emptyButtonLabel="Upload files"
+ *   acceptTypes="application/pdf, application/txt, image/svg+xml"
+ *   maxFilesCount={5}
+ *   isMultiple
+ *   fileFormatError="Unsupported file format"
+ *   fileCountError="You can upload up to 5 files only"
+ *   getIsFileFormatError={(files) => files.some(file => !file.name.endsWith('.jpg') && !file.name.endsWith('.png'))}
+ * />
+ * ```
+ *
+ * @param {DialEmptyFileAreaProps} props - The properties for the empty file area component.
+ * @param {(files: File[]) => void} props.onChange - Callback fired when valid files are selected or dropped.
+ * @param {string} [props.emptyTextFirstLine] - Optional text displayed as the first line in the empty area.
+ * @param {string} [props.emptyTextSecondLine] - Optional text displayed as the second line in the empty area.
+ * @param {string} [props.emptyButtonLabel] - Label text for the upload button.
+ * @param {string} [props.acceptTypes] - Comma-separated list of accepted file MIME types (e.g., "application/pdf").
+ * @param {number} [props.maxFilesCount] - Maximum allowed number of files to upload at once.
+ * @param {boolean} [props.multiple=false] - Whether multiple file uploads are allowed.
+ * @param {string} [props.fileFormatError] - Error message displayed when an invalid file format is detected.
+ * @param {string} [props.fileCountError] - Error message displayed when the file count exceeds the limit.
+ * @param {(files: File[]) => boolean} [props.getIsFileFormatError] - Optional validation callback that checks whether selected files have valid formats.
+ *
+ * @returns {JSX.Element} The rendered drag-and-drop file upload area with optional validation feedback.
+ */
 export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
   const {
     files,
