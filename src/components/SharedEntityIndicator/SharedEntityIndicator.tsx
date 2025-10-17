@@ -20,9 +20,7 @@ export interface DialSharedEntityIndicatorProps {
  * @example
  * ```tsx
  * <DialSharedEntityIndicator />
- * <DialSharedEntityIndicator variant={SharedEntityIndicatorVariant.Muted} />
  * <DialSharedEntityIndicator size={12} label="Opens in new window" />
- * <DialSharedEntityIndicator closable onClose={() => console.log('closed')} />
  * ```
  *
  * @param [label="Shared entity"] - Accessible label for assistive tech
