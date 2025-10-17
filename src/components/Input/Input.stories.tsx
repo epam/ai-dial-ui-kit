@@ -247,6 +247,13 @@ export const WithAllExtraParts: Story = {
   },
 };
 
+export const WithTooltipText: Story = {
+  args: {
+    value: 'example value',
+    tooltipText: 'Tooltip text',
+  },
+};
+
 export const AllVariantsWithIcons: Story = {
   render: () => (
     <div className="p-8 max-w-[1200px]">

@@ -4,7 +4,7 @@ import type { FC, ReactNode } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialTagProps {

@@ -17,6 +17,7 @@ export interface DialInputProps extends InputBaseProps {
   containerCssClass?: string;
   cssClass?: string;
   hideBorder?: boolean;
+  tooltipText?: string;
   tooltipTriggerClassName?: string;
   onChange?: (value: string) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
@@ -56,6 +57,7 @@ export interface DialInputProps extends InputBaseProps {
  * @param [prefix] - Text to display inside the input on the left
  * @param [suffix] - Text to display inside the input on the right
  * @param [textBeforeInput] - Text to display before the input in a separate field
+ * @param [tooltipText] - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
  * @param [tooltipTriggerClassName] - Additional CSS classes to apply to the tooltip
  * @param [textAfterInput] - Text to display after the input in a separate field
  */
@@ -82,6 +84,7 @@ export const DialInput: FC<DialInputProps> = ({
   textAfterInput,
   onBlur,
   defaultValue,
+  tooltipText,
 }) => {
   const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
     (e.target as HTMLInputElement).blur();
@@ -147,7 +150,7 @@ export const DialInput: FC<DialInputProps> = ({
       <DialIcon icon={iconBefore} />
 
       <DialTooltip
-        tooltip={value}
+        tooltip={tooltipText || value}
         triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
       >
         <input
