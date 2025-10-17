@@ -3,7 +3,7 @@ import { IconTrashX } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialButton } from '@/components/Button/Button';
 
-interface DialRemoveButtonProps {
+export interface DialRemoveButtonProps {
   iconClass?: string;
   cssClass?: string;
   ariaLabel?: string;
