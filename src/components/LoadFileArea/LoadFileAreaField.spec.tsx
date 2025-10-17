@@ -59,21 +59,6 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
     expect(onChangeFile).toHaveBeenCalledWith([]);
   });
 
-  // test('Should call file input click when add button is clicked', () => {
-  //   render(
-  //     <DialLoadFileAreaField
-  //       fieldTitle="Files"
-  //       elementId="file-input"
-  //       files={[new File([''], 'file1.png', { type: 'image/png' })]}
-  //       onChange={vi.fn()}
-  //       acceptTypes="image/png"
-  //       emptyTextFirstLine="empty"
-  //       emptyButtonLabel="Browse"
-  //     />,
-  //   );
-  //   expect(screen.getByText('Files: 1')).toBeInTheDocument();
-  // });
-
   test('Should show tooltip with errorText by hovering on invalid file', async () => {
     const user = userEvent.setup();
 

@@ -191,7 +191,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
         >
           {emptyTextFirstLine && <p className="mb-1">{emptyTextFirstLine}</p>}
           {emptyTextSecondLine && (
-            <p className="mb-0.5"> {emptyTextSecondLine}</p>
+            <p className="mb-0.5">{emptyTextSecondLine}</p>
           )}
           {emptyButtonLabel && (
             <DialButton
