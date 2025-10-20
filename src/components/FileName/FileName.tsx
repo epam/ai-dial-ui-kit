@@ -1,8 +1,8 @@
 import { mergeClasses } from '@/utils/merge-classes';
 import type { FC } from 'react';
-import { DialFileIcon } from '../FileIcon/FileIcon';
-import { DialSharedEntityIndicator } from '../SharedEntityIndicator/SharedEntityIndicator';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialFileIcon } from '@/components/FileIcon/FileIcon';
+import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialFileNameProps {
   name: string;
@@ -11,7 +11,7 @@ export interface DialFileNameProps {
 }
 
 /**
- * Component to display a file name with an optional file icon and shared indicator.
+ * Component to display a file name with a file icon and shared indicator.
  * Handles long names with ellipsis and tooltip.
  *
  * @example

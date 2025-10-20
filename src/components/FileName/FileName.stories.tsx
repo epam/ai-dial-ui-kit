@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileName, type DialFileNameProps } from './FileName';
 
 const meta = {
-  title: 'Components/FileName',
+  title: 'FileManager/FileName',
   component: DialFileName,
   parameters: { layout: 'centered' },
   argTypes: {
@@ -52,5 +52,8 @@ export const LongName: Story = {
 };
 
 export const WithCustomClass: Story = {
-  args: { name: 'photo.png', cssClass: 'gap-2 p-2 rounded' },
+  args: {
+    name: 'photo.png',
+    cssClass: 'bg-layer-2 border-2 border-accent-primary p-2 rounded-xl',
+  },
 };
