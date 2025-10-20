@@ -49,7 +49,7 @@ export interface DialSearchProps {
 export const DialSearch: FC<DialSearchProps> = ({
   elementId,
   value,
-  placeholder,
+  placeholder = 'Search...',
   disabled,
   readonly,
   invalid,
