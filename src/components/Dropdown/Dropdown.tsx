@@ -113,8 +113,8 @@ export interface DialDropdownProps {
  * @param [listClassName] - Additional CSS classes applied to the floating overlay
  * @param [outsidePressIgnoreRef] - Ref to an element that should not trigger outside press behavior
  * @param [outsideClosable=true] - Whether clicks outside the overlay should close it
- * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position (not implemented)
- * @param [matchReferenceWidth=false] - Whether to match the reference element's width (not implemented)
+ * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position
+ * @param [matchReferenceWidth=false] - Whether to match the reference element's width
  */
 export const DialDropdown: FC<DialDropdownProps> = ({
   children,
