@@ -20,6 +20,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useMemo,
   useState,
   type FC,
   type MouseEvent,
@@ -67,6 +68,8 @@ export interface DialDropdownProps {
   listClassName?: string;
   outsidePressIgnoreRef?: RefObject<HTMLElement | null>;
   outsideClosable?: boolean;
+  anchorToMouse?: boolean;
+  matchReferenceWidth?: boolean;
 }
 
 /**
@@ -110,6 +113,8 @@ export interface DialDropdownProps {
  * @param [listClassName] - Additional CSS classes applied to the floating overlay
  * @param [outsidePressIgnoreRef] - Ref to an element that should not trigger outside press behavior
  * @param [outsideClosable=true] - Whether clicks outside the overlay should close it
+ * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position
+ * @param [matchReferenceWidth=false] - Whether to match the reference element's width
  */
 export const DialDropdown: FC<DialDropdownProps> = ({
   children,
@@ -128,6 +133,8 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   outsidePressIgnoreRef,
   outsideClosable = true,
   allowedPlacements,
+  anchorToMouse = false,
+  matchReferenceWidth = true,
 }) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
@@ -142,6 +149,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   );
 
   const listId = useId();
+  const useAuto = placement === undefined;
 
   const getRefWidth = (el: ReferenceElement | null): number => {
     if (!el) return 0;
@@ -151,8 +159,6 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     ).getBoundingClientRect?.();
     return rect?.width ?? 0;
   };
-
-  const useAuto = placement === undefined;
 
   const { refs, floatingStyles, context } = useFloating({
     placement,
@@ -177,15 +183,20 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           const refWidth = getRefWidth(elements.reference);
 
           floating.style.setProperty(
-            '--reference-width',
-            `${Math.round(refWidth)}px`,
-          );
-          floating.style.setProperty(
             '--fui-available-height',
             `${Math.floor(availableHeight)}px`,
           );
+          floating.style.setProperty(
+            '--reference-width',
+            matchReferenceWidth ? `${Math.round(refWidth)}px` : '0px',
+          );
 
-          floating.style.minWidth = `${Math.round(refWidth)}px`;
+          if (matchReferenceWidth) {
+            floating.style.minWidth = `${Math.round(refWidth)}px`;
+          } else {
+            floating.style.removeProperty('min-width');
+          }
+
           floating.style.maxWidth = `${Math.floor(availableWidth)}px`;
           floating.style.maxHeight = `${Math.floor(availableHeight)}px`;
         },
@@ -229,89 +240,129 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     role,
   ]);
 
-  const onContextMenu = (e: MouseEvent) => {
-    if (!trigger.includes(DropdownTrigger.ContextMenu) || disabled) return;
-    e.preventDefault();
-    setOpen(true);
-  };
+  const setPositionFromPointer = useCallback(
+    (clientX: number, clientY: number) => {
+      refs.setPositionReference({
+        getBoundingClientRect: () =>
+          ({
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            top: clientY,
+            left: clientX,
+            right: clientX,
+            bottom: clientY,
+          }) as DOMRect,
+      });
+    },
+    [refs],
+  );
+
+  const onContextMenu = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      if (!trigger.includes(DropdownTrigger.ContextMenu) || disabled) return;
+      e.preventDefault();
+      if (anchorToMouse) {
+        setPositionFromPointer(e.clientX, e.clientY);
+      }
+      setOpen(true);
+    },
+    [anchorToMouse, disabled, setOpen, setPositionFromPointer, trigger],
+  );
+
+  const onPointerDown = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      if (!anchorToMouse || disabled) return;
+      setPositionFromPointer(e.clientX, e.clientY);
+    },
+    [anchorToMouse, disabled, setPositionFromPointer],
+  );
 
   useEffect(() => {
     if (disabled && isOpen) setOpen(false);
   }, [disabled, isOpen, setOpen]);
 
-  const handleItemClick = (item: DropdownItem) => (e: MouseEvent) => {
-    if (item.disabled) return;
-    item.onClick?.({ key: item.key, domEvent: e });
-    menu?.onClick?.({ key: item.key, domEvent: e });
-    setOpen(false);
-  };
+  const handleItemClick = useCallback(
+    (item: DropdownItem) => (e: MouseEvent<HTMLButtonElement>) => {
+      if (item.disabled) return;
+      item.onClick?.({ key: item.key, domEvent: e });
+      menu?.onClick?.({ key: item.key, domEvent: e });
+      setOpen(false);
+    },
+    [menu, setOpen],
+  );
 
-  const overlayContent: ReactNode = renderOverlay
-    ? renderOverlay()
-    : menu && (
-        <>
-          {menu.header && (
-            <>
-              {typeof menu.header === 'function' ? menu.header() : menu.header}
-            </>
-          )}
+  const overlayContent: ReactNode = useMemo(() => {
+    if (renderOverlay) return renderOverlay();
+    if (!menu) return null;
 
-          <div role="none" className="py-1">
-            {menu.items.map((it) => {
-              if (it.type === DropdownItemType.Divider) {
-                return (
-                  <div
-                    key={it.key}
-                    role="separator"
-                    className={dropdownDividerClasses}
-                  />
-                );
-              }
+    return (
+      <>
+        {menu.header && (
+          <>{typeof menu.header === 'function' ? menu.header() : menu.header}</>
+        )}
+
+        <div role="none" className="py-1">
+          {menu.items.map((it) => {
+            if (it.type === DropdownItemType.Divider) {
               return (
-                <button
+                <div
                   key={it.key}
-                  role="menuitem"
-                  type="button"
-                  aria-disabled={!!it.disabled}
-                  className={classNames(
-                    dropdownItemBaseClasses,
-                    it.disabled && dropdownItemDisabledClasses,
-                    it.danger && dropdownItemDangerClasses,
-                  )}
-                  disabled={it.disabled}
-                  onClick={handleItemClick(it)}
-                >
-                  {it.icon && (
-                    <span
-                      className={classNames(
-                        it.danger && 'text-error',
-                        it.disabled && 'text-secondary',
-                      )}
-                    >
-                      <DialIcon icon={it.icon} />
-                    </span>
-                  )}
+                  role="separator"
+                  className={dropdownDividerClasses}
+                />
+              );
+            }
+            return (
+              <button
+                key={it.key}
+                role="menuitem"
+                type="button"
+                aria-disabled={!!it.disabled}
+                className={classNames(
+                  dropdownItemBaseClasses,
+                  it.disabled && dropdownItemDisabledClasses,
+                  it.danger && dropdownItemDangerClasses,
+                )}
+                disabled={it.disabled}
+                onClick={handleItemClick(it)}
+              >
+                {it.icon && (
                   <span
                     className={classNames(
-                      'flex-1 truncate text-left',
                       it.danger && 'text-error',
                       it.disabled && 'text-secondary',
                     )}
                   >
-                    {it.label}
+                    <DialIcon icon={it.icon} />
                   </span>
-                </button>
-              );
-            })}
-          </div>
+                )}
+                <span
+                  className={classNames(
+                    'flex-1 truncate text-left',
+                    it.danger && 'text-error',
+                    it.disabled && 'text-secondary',
+                  )}
+                >
+                  {it.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-          {menu.footer && (
-            <>
-              {typeof menu.footer === 'function' ? menu.footer() : menu.footer}
-            </>
-          )}
-        </>
-      );
+        {menu.footer && (
+          <>{typeof menu.footer === 'function' ? menu.footer() : menu.footer}</>
+        )}
+      </>
+    );
+  }, [handleItemClick, menu, renderOverlay]);
+
+  const referenceProps = getReferenceProps({
+    onContextMenu,
+    onMouseDown: onPointerDown,
+  });
 
   return (
     <>
@@ -325,8 +376,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-controls={listId}
-        onContextMenu={onContextMenu}
-        {...getReferenceProps()}
+        {...referenceProps}
       >
         {children}
       </span>
@@ -343,7 +393,11 @@ export const DialDropdown: FC<DialDropdownProps> = ({
               id={listId}
               ref={refs.setFloating}
               style={floatingStyles}
-              className={classNames(dropdownListBaseClasses, listClassName)}
+              className={classNames(
+                dropdownListBaseClasses,
+                !matchReferenceWidth && 'w-max',
+                listClassName,
+              )}
               {...getFloatingProps()}
             >
               {closable && (
@@ -357,7 +411,6 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                   />
                 </div>
               )}
-
               {overlayContent}
             </div>
           </FloatingFocusManager>
