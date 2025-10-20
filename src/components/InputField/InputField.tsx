@@ -23,7 +23,7 @@ export interface DialInputFieldBaseProps
 
 export interface DialInputFieldProps extends DialInputFieldBaseProps {
   type: string;
-  onChange?: (value: string | number) => void;
+  onChange?: (value?: string | number | null) => void;
   min?: number;
   max?: number;
 }
@@ -106,7 +106,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
 };
 
 export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
-  onChange?: (value: number | string) => void;
+  onChange?: (value?: number | string | null) => void;
   min?: number;
   max?: number;
 }
@@ -152,7 +152,9 @@ export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
   max,
   ...props
 }) => {
-  const getInputValue = (inputValue: string | number): string | number => {
+  const getInputValue = (
+    inputValue?: string | number | null,
+  ): string | number => {
     return String(inputValue)?.match(lessThanOnePattern)
       ? String(inputValue)?.replace(leadingZerosPattern, '0')
       : Number(inputValue);
@@ -171,7 +173,7 @@ export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
 };
 
 export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
-  onChange?: (value: string) => void;
+  onChange?: (value: string | null) => void;
 }
 
 /**
@@ -213,7 +215,7 @@ export const DialTextInputField: FC<DialTextInputFieldProps> = ({
   return (
     <DialInputField
       type="text"
-      onChange={(v) => onChange?.(v as string)}
+      onChange={(v) => onChange?.(v as string | null)}
       {...props}
     />
   );
