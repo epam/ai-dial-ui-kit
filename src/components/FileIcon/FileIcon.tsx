@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import type { ReactNode } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { fileIconFactories, type BaseFileIconOpts } from './constants';
+import { fileIconFactories } from './constants';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileIconProps {
@@ -52,10 +52,10 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
 
   const factory = fileIconFactories[normalized] ?? fileIconFactories.default;
 
-  const icon: ReactNode = factory({
+  const icon = factory({
     size,
     stroke,
-  } as BaseFileIconOpts);
+  });
 
   const computedLabel =
     label ?? `${normalized.slice(1).toUpperCase()} file icon`;
@@ -69,7 +69,7 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
     >
       <DialIcon icon={icon} className="inline-block align-middle" />
       {indicator && (
-        <span className="absolute bottom-0 left-0">{indicator}</span>
+        <span className="absolute -bottom-0.5 -left-0.5">{indicator}</span>
       )}
     </span>
   );
