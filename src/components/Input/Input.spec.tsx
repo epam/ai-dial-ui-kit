@@ -1,4 +1,4 @@
-import { fireEvent, screen, render } from '@testing-library/react';
+import { fireEvent, screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, test, vi } from 'vitest';
@@ -310,5 +310,50 @@ describe('Dial UI Kit :: DialInput', () => {
     await user.type(input, '9');
 
     expect(input.value).toBe('150');
+  });
+});
+
+test('shows tooltip with value on hover', async () => {
+  const user = userEvent.setup();
+
+  render(
+    <DialInput
+      elementId="test-input"
+      value="Input value"
+      placeholder="tooltip-test-value"
+    />,
+  );
+
+  const input = screen.getByPlaceholderText(
+    'tooltip-test-value',
+  ) as HTMLInputElement;
+
+  await user.hover(input);
+
+  await waitFor(() => {
+    expect(screen.getByText('Input value')).toBeInTheDocument();
+  });
+});
+
+test('shows tooltip with tooltipText on hover', async () => {
+  const user = userEvent.setup();
+
+  render(
+    <DialInput
+      elementId="test-input"
+      value="Input value"
+      tooltipText="Tooltip text"
+      placeholder="tooltip-test-value"
+    />,
+  );
+
+  const input = screen.getByPlaceholderText(
+    'tooltip-test-value',
+  ) as HTMLInputElement;
+
+  await user.hover(input);
+
+  await waitFor(() => {
+    expect(screen.getByText('Tooltip text')).toBeInTheDocument();
   });
 });

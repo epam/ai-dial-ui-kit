@@ -23,7 +23,6 @@ export interface DialTabsProps {
   tabs: TabModel[];
   activeTab: string;
   onClick: (id: string) => void;
-  jsonEditorEnabled?: boolean;
   orientation?: TabOrientation;
 }
 
@@ -55,7 +54,6 @@ export interface DialTabsProps {
  * @param tabs - Array of tab models to render. Each tab should include an `id` and `label`.
  * @param activeTab - The identifier of the currently active tab.
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
- * @param [jsonEditorEnabled=false] - If true, hides the tab UI to integrate with JSON editor layouts.
  * @param [orientation=TabOrientation.Horizontal] - The layout direction of the tabs. Uses the {@link TabOrientation} enum.
  *
  * @remarks
@@ -68,7 +66,6 @@ export const DialTabs: FC<DialTabsProps> = ({
   tabs,
   activeTab,
   onClick,
-  jsonEditorEnabled,
   orientation = TabOrientation.Horizontal,
 }) => {
   // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
@@ -133,9 +130,6 @@ export const DialTabs: FC<DialTabsProps> = ({
     }
   }, [activeTab]);
 
-  // Hide completely when JSON editor is enabled
-  if (jsonEditorEnabled) return null;
-
   return isTablet ? (
     <div className="h-11 flex items-center bg-layer-3 px-4">
       <DialDropdown
@@ -179,7 +173,7 @@ export const DialTabs: FC<DialTabsProps> = ({
     </div>
   ) : (
     // Desktop
-    <div ref={containerRef} className="flex w-full">
+    <div ref={containerRef} className="flex w-full items-start">
       <div ref={scrollableRef} className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
