@@ -527,4 +527,63 @@ describe('Dial UI Kit :: Dropdown', () => {
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
+
+  test('anchorToMouse + ContextMenu opens on right click', () => {
+    render(
+      <DialDropdown
+        anchorToMouse
+        trigger={[DropdownTrigger.ContextMenu]}
+        menu={{ items }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    fireEvent.contextMenu(screen.getByRole('button', { name: /open/i }));
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('anchorToMouse + Click opens on left click', () => {
+    render(
+      <DialDropdown
+        anchorToMouse
+        trigger={[DropdownTrigger.Click]}
+        menu={{ items }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('calls onOpenChange on open and close', () => {
+    const onOpenChange = vi.fn();
+    render(
+      <DialDropdown onOpenChange={onOpenChange} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Profile' }));
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  test('matchReferenceWidth=false -> menu has w-max and no inline min-width', () => {
+    render(
+      <DialDropdown matchReferenceWidth={false} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    openByClick();
+    const menuEl = screen.getByRole('menu');
+    expect(menuEl).toHaveClass('w-max');
+    expect(menuEl.getAttribute('style') || '').not.toMatch(/min-width:/i);
+    expect(menuEl.style.minWidth).toBe('');
+  });
 });
