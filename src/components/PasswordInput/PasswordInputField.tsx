@@ -6,7 +6,7 @@ import { DialFieldLabel } from '@/components/Field/Field';
 import type { DialInputFieldBaseProps } from '@/components/InputField/InputField';
 
 export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
-  onChange?: (value: string) => void;
+  onChange?: (value?: string | null) => void;
 }
 /**
  * A password input field component with label, error text, and show/hide functionality.
