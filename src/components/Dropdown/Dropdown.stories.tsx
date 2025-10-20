@@ -97,6 +97,8 @@ const meta = {
     placement: { control: { type: 'select' }, options: PLACEMENTS },
     disabled: { control: { type: 'boolean' } },
     closable: { control: { type: 'boolean' } },
+    anchorToMouse: { control: { type: 'boolean' } },
+    matchReferenceWidth: { control: { type: 'boolean' } },
     cssClass: { control: { type: 'text' } },
     listClassName: { control: { type: 'text' } },
     open: { control: false },
@@ -111,6 +113,8 @@ const meta = {
     trigger: [DropdownTrigger.Click],
     disabled: false,
     closable: false,
+    anchorToMouse: false,
+    matchReferenceWidth: true,
     children: <TriggerBtn />,
     menu: { items },
   },
@@ -133,6 +137,7 @@ export const SpecWidthHugContent: Story = {
   name: 'Width hugs content (spec-like)',
   args: {
     placement: 'bottom-start',
+    matchReferenceWidth: false,
     menu: { items: specItems },
   },
 };
@@ -328,4 +333,69 @@ const FooterActionsExample = (args: DialDropdownProps) => {
 
 export const WithFooterActionsControlled: Story = {
   render: (args) => <FooterActionsExample {...args} />,
+};
+
+export const ContextMenuAtCursor: Story = {
+  name: 'Context menu anchored to cursor',
+  args: {
+    trigger: [DropdownTrigger.ContextMenu],
+    anchorToMouse: true,
+    matchReferenceWidth: false,
+    menu: { items: specItems },
+  },
+  render: (args) => (
+    <DialDropdown {...args}>
+      <div className="h-48 w-[520px] p-4 text-primary border border-secondary flex items-center justify-center">
+        Right-click anywhere in this area
+      </div>
+    </DialDropdown>
+  ),
+};
+
+export const ClickNearCursor: Story = {
+  name: 'Click anchored to cursor',
+  args: {
+    trigger: [DropdownTrigger.Click],
+    anchorToMouse: true,
+    matchReferenceWidth: false,
+    menu: { items: specItems },
+  },
+  render: (args) => (
+    <DialDropdown {...args}>
+      <DialButton
+        variant={ButtonVariant.Primary}
+        title="Click me (opens near cursor)"
+      />
+    </DialDropdown>
+  ),
+};
+
+export const CompareWidthModes: Story = {
+  name: 'Compare: matchReferenceWidth=true vs false',
+  args: {},
+  render: (args) => (
+    <div className="flex gap-6">
+      <DialDropdown {...args} matchReferenceWidth>
+        <DialButton
+          variant={ButtonVariant.Secondary}
+          title="Match trigger width"
+        />
+      </DialDropdown>
+      <DialDropdown
+        {...args}
+        matchReferenceWidth={false}
+        renderOverlay={() => (
+          <div className="p-3 whitespace-nowrap">
+            Very long, unwrapped overlay content that should define its own
+            width
+          </div>
+        )}
+      >
+        <DialButton
+          variant={ButtonVariant.Secondary}
+          title="Hug content width"
+        />
+      </DialDropdown>
+    </div>
+  ),
 };
