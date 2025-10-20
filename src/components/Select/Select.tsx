@@ -40,6 +40,7 @@ export interface DialSelectProps {
   defaultValue?: string | string[];
   placeholder?: string;
   searchable?: boolean;
+  searchPlaceholder?: string;
   selectAll?: boolean;
   selectAllLabel?: string;
   emptyStateTitle?: string;
@@ -73,22 +74,23 @@ export interface DialSelectProps {
  *
  * Multiple mode uses checkboxes (including Select All with indeterminate state).
  *
- * @property options - Array of options to select from.
- * @property multiple - Whether multiple selections are allowed.
- * @property value - Controlled selected value(s).
- * @property defaultValue - Uncontrolled initial selected value(s).
- * @property placeholder - Placeholder text when no selection is made.
- * @property searchable - Whether to show a search input to filter options.
- * @property selectAll - Whether to show a "Select All" checkbox in multiple mode.
- * @property selectAllLabel - Label for the "Select All" checkbox.
- * @property emptyStateTitle - Title text when there are no options to display.
- * @property emptyStateDescription - Optional description text when there are no options.
- * @property emptyStateIcon - Optional icon to display when there are no options.
- * @property disabled - Whether the select is disabled.
- * @property cssClass - Additional CSS classes to apply to the select trigger.
- * @property closable - Whether to show a close button in the dropdown header.
- * @property onClose - Callback when the dropdown is closed via the close button.
- * @property onChange - Callback when the selection changes.
+ * @param options - Array of options to select from.
+ * @param [multiple] - Whether multiple selections are allowed.
+ * @param [value] - Controlled selected value(s).
+ * @param [defaultValue] - Uncontrolled initial selected value(s).
+ * @param [placeholder] - Placeholder text when no selection is made.
+ * @param [searchable] - Whether to show a search input to filter options.
+ * @param [searchPlaceholder] - Search Placeholder text shown when search input is empty
+ * @param [selectAll] - Whether to show a "Select All" checkbox in multiple mode.
+ * @param [selectAllLabel] - Label for the "Select All" checkbox.
+ * @param [emptyStateTitle] - Title text when there are no options to display.
+ * @param [emptyStateDescription] - Optional description text when there are no options.
+ * @param [emptyStateIcon] - Optional icon to display when there are no options.
+ * @param [disabled] - Whether the select is disabled.
+ * @param [cssClass] - Additional CSS classes to apply to the select trigger.
+ * @param [closable] - Whether to show a close button in the dropdown header.
+ * @param [onClose] - Callback when the dropdown is closed via the close button.
+ * @param [onChange] - Callback when the selection changes.
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -97,6 +99,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   defaultValue,
   placeholder = 'Select...',
   searchable = false,
+  searchPlaceholder,
   selectAll = false,
   selectAllLabel = 'Select all',
   emptyStateTitle = 'No options available',
@@ -270,6 +273,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
                 <DialSearch
+                  placeholder={searchPlaceholder}
                   onChange={setQuery}
                   value={query}
                   elementId={`search-${listId}`}
