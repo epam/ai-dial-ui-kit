@@ -106,7 +106,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
 };
 
 export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
-  onChange?: (value?: number | string | null) => void;
+  onChange?: (value?: number | string) => void;
   min?: number;
   max?: number;
 }
