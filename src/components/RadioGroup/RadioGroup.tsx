@@ -1,21 +1,26 @@
-import classNames from 'classnames';
 import type { FC } from 'react';
 
+import { DialFormItem } from '@/components/FormItem/FormItem';
+import { DialRadioButton } from '@/components/RadioButton/RadioButton';
+import type { RadioButtonWithContent } from '@/models/radio';
+import type { RadioGroupOrientation } from '@/types/radio-group';
+import { mergeClasses } from '@/utils/merge-classes';
 import {
   optionsWrapperBaseClasses,
   orientationClassMap,
   selectedContentClasses,
 } from './constants';
-import { DialRadioButton } from '@/components/RadioButton/RadioButton';
-import type { RadioGroupOrientation } from '@/types/radio-group';
-import type { RadioButtonWithContent } from '@/models/radio';
-import { DialFormItem } from '@/components/FormItem/FormItem';
 
 export interface DialRadioGroupProps {
   fieldTitle?: string;
   elementId: string;
   radioCssClass?: string;
   labelCssClass?: string;
+  containerCssClass?: string;
+  selectedItemCssClass?: string;
+  selectedLabelCssClass?: string;
+  radioGroupCssClass?: string;
+  inputContainerCssClass?: string;
   disabled?: boolean;
   radioButtons: RadioButtonWithContent[];
   activeRadioButton: string;
@@ -47,7 +52,12 @@ export interface DialRadioGroupProps {
  * @param [fieldTitle] - Optional label rendered by `DialField`
  * @param elementId - Name for the underlying radio group; also used for input `name`
  * @param [radioCssClass] - Additional classes applied to each radio input
+ * @param [inputContainerCssClass] - Additional classes applied to each radio input's container
  * @param [labelCssClass] - Additional classes applied to each radio label
+ * @param [containerCssClass] - Additional classes applied to the outer container
+ * @param [selectedItemCssClass] - Additional classes applied to the selected option's content container
+ * @param [selectedLabelCssClass] - Additional classes applied to the selected option's label
+ * @param [radioGroupCssClass] - Additional classes applied to the radio group container
  * @param [disabled] - Disables all child radios when set
  * @param radioButtons - Array of options with ids, labels, and optional content
  * @param activeRadioButton - The id of the currently selected radio
@@ -57,6 +67,11 @@ export interface DialRadioGroupProps {
 export const DialRadioGroup: FC<DialRadioGroupProps> = ({
   fieldTitle,
   radioCssClass,
+  containerCssClass,
+  selectedItemCssClass,
+  selectedLabelCssClass,
+  radioGroupCssClass,
+  inputContainerCssClass,
   labelCssClass,
   disabled,
   elementId,
@@ -70,31 +85,46 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
       elementId={elementId}
       label={fieldTitle}
       labelCssClass={labelCssClass}
+      cssClass={containerCssClass}
     >
       <div
         role="radiogroup"
         aria-label={fieldTitle}
         aria-disabled={disabled || undefined}
-        className={classNames(
+        className={mergeClasses(
           optionsWrapperBaseClasses,
           orientationClassMap[orientation],
+          radioGroupCssClass,
         )}
       >
         {radioButtons.map((radio) => (
-          <div key={radio.id} className="flex flex-col">
+          <div
+            key={radio.id}
+            className={mergeClasses('flex flex-col', inputContainerCssClass)}
+          >
             <DialRadioButton
               name={elementId}
               value={radio.id}
               inputId={radio.id}
               disabled={disabled}
               cssClass={radioCssClass}
-              labelCssClass={labelCssClass}
+              labelCssClass={mergeClasses(
+                labelCssClass,
+                radio.id === activeRadioButton && selectedLabelCssClass,
+              )}
               title={radio.name}
               checked={radio.id === activeRadioButton}
               onChange={() => onChange(radio.id)}
             />
             {radio.id === activeRadioButton && radio.content ? (
-              <div className={selectedContentClasses}>{radio.content}</div>
+              <div
+                className={mergeClasses(
+                  selectedContentClasses,
+                  selectedItemCssClass,
+                )}
+              >
+                {radio.content}
+              </div>
             ) : null}
           </div>
         ))}
