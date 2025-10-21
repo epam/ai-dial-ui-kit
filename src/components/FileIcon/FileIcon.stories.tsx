@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileIcon, type DialFileIconProps } from './FileIcon';
 import { supportedExtensions } from './constants';
-import { IconArrowUpRight } from '@tabler/icons-react';
+import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 
 const meta = {
   title: 'FileManager/DialFileIcon',
@@ -55,15 +55,7 @@ export const AllVariants: Story = {
 export const WithIndicator: Story = {
   render: (args) => (
     <div className="w-12 h-12 flex items-center justify-center bg-layer-3">
-      <DialFileIcon
-        {...args}
-        indicator={
-          <IconArrowUpRight
-            size={10}
-            className="text-accent-primary bg-layer-3"
-          />
-        }
-      />
+      <DialFileIcon {...args} indicator={<DialSharedEntityIndicator />} />
     </div>
   ),
   args: {
