@@ -28,6 +28,7 @@ const meta = {
     error: { control: 'text' },
     labelVisuallyHidden: { control: 'boolean' },
     cssClass: { control: 'text' },
+    childrenCssClass: { control: 'text' },
     labelCssClass: { control: 'text' },
     errorCssClass: { control: 'text' },
     captionDescription: { control: 'text' },

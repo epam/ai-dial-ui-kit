@@ -17,6 +17,7 @@ export interface DialFormItemProps {
   orientation?: FormItemOrientation;
   labelVisuallyHidden?: boolean;
   cssClass?: string;
+  childrenCssClass?: string;
   labelCssClass?: string;
   errorCssClass?: string;
   children: ReactNode;
@@ -72,6 +73,7 @@ export interface DialFormItemProps {
  * @param [orientation='vertical'] - Layout orientation, either 'vertical' (label above control) or 'horizontal' (label to the left)
  * @param [labelVisuallyHidden=false] - Whether to visually hide the label (still accessible to screen readers)
  * @param [cssClass] - Additional CSS classes to apply to the container div
+ * @param [childrenCssClass] - Additional CSS classes to apply to the children container div
  * @param [labelCssClass] - Additional CSS classes to apply to the label element
  * @param [errorCssClass] - Additional CSS classes to apply to the error message element
  * @param [captionDescription] - Additional caption description text, displayed below the form control.
@@ -92,6 +94,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
   cssClass,
   labelCssClass,
   errorCssClass,
+  childrenCssClass,
   captionDescription,
   readonly,
   value,
@@ -178,7 +181,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
         </div>
       )}
 
-      <div className="min-w-0 w-full">
+      <div className={mergeClasses('min-w-0 w-full', childrenCssClass)}>
         {readonly ? (
           <div className="dial-input px-3 py-2">{renderReadonlyValue()}</div>
         ) : (
