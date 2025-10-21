@@ -18,7 +18,6 @@ export interface DialFile extends DialModifiedEntity {
   nextToken?: string;
   extension?: string;
   id?: string;
-  etag?: string;
   permissions?: DialFilePermission[];
 }
 

@@ -87,9 +87,11 @@ export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
 export type { DialModifiedEntity } from './models/base-entity';
 export type { DialFile } from './models/file';
-export type { DialFileNodeType } from './models/file';
-export type { DialFilePermission } from './models/file';
-export type { DialFileResourceType } from './models/file';
+export type {
+  DialFileNodeType,
+  DialFilePermission,
+  DialFileResourceType,
+} from './models/file';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
