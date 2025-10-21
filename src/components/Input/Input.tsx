@@ -160,7 +160,10 @@ export const DialInput: FC<DialInputProps> = ({
           placeholder={placeholder}
           value={defaultValue ? undefined : (value ?? '')}
           disabled={disabled}
-          className={classNames('border-0 bg-transparent w-full', cssClass)}
+          className={classNames(
+            'border-0 bg-transparent w-full truncate',
+            cssClass,
+          )}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
