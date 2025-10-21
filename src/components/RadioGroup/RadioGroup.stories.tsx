@@ -49,6 +49,15 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
+    groupLabelCssClass: {
+      control: { type: 'text' },
+      description:
+        'Optional classes applied to the group label. If not provided, labelCssClass will be used.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
+    },
     containerCssClass: {
       control: { type: 'text' },
       description: 'Additional classes applied to the outer container',
@@ -344,24 +353,27 @@ const AllCssClassesExample = (
   );
 
   return (
-    <DialRadioGroup
-      {...args}
-      activeRadioButton={activeRadioButton}
-      selectedLabelCssClass={
-        activeRadioButton === 'premium'
-          ? 'dial-h1 text-warning'
-          : 'dial-h1 text-accent-tertiary'
-      }
-      selectedItemCssClass={
-        activeRadioButton === 'premium'
-          ? 'mt-2 p-3 bg-layer-1 border border-accent-primary rounded-md text-warning'
-          : undefined
-      }
-      onChange={(id) => {
-        setActiveRadioButton(id);
-        args.onChange?.(id);
-      }}
-    />
+    <div className="h-[500px] w-[400px]">
+      <DialRadioGroup
+        {...args}
+        activeRadioButton={activeRadioButton}
+        selectedLabelCssClass={
+          activeRadioButton === 'premium'
+            ? 'dial-h1 text-warning'
+            : 'dial-h1 text-accent-tertiary'
+        }
+        selectedInputContainerCssClass={
+          activeRadioButton === 'premium' ? 'flex-1' : undefined
+        }
+        selectedItemCssClass={
+          activeRadioButton === 'premium' ? 'flex-1' : undefined
+        }
+        onChange={(id) => {
+          setActiveRadioButton(id);
+          args.onChange?.(id);
+        }}
+      />
+    </div>
   );
 };
 export const AllCssClasses: Story = {
@@ -369,7 +381,7 @@ export const AllCssClasses: Story = {
     docs: {
       description: {
         story:
-          'Demonstration of all available CSS customization options. Shows containerCssClass, labelCssClass, radioGroupCssClass, inputContainerCssClass, radioCssClass, selectedLabelCssClass and selectedItemCssClass in action.',
+          'Demonstration of all available CSS customization options. Shows containerCssClass, labelCssClass, radioGroupCssClass, inputContainerCssClass, radioCssClass, selectedLabelCssClass and selectedItemCssClass in action. Height is fixed to 500px to show how it can fill available space.',
       },
     },
   },
@@ -380,10 +392,12 @@ export const AllCssClasses: Story = {
     orientation: RadioGroupOrientation.Column,
     activeRadioButton: 'premium',
     containerCssClass:
-      'p-6 bg-layer-2 border-2 border-dashed border-accent-primary rounded-lg',
-    labelCssClass: 'dial-h1 text-accent-tertiary',
+      'p-2 bg-layer-2 border-2 border-dashed border-accent-primary rounded-lg h-full',
+    labelCssClass: 'dial-small text-accent-tertiary',
+    groupLabelCssClass: 'dial-h1 text-accent-secondary',
+    formItemChildrenCssClass: 'h-full',
     radioGroupCssClass:
-      'bg-layer-1 p-4 rounded-md shadow border border-primary',
+      'flex flex-col h-full bg-layer-1 p-4 rounded-md shadow border border-primary',
     inputContainerCssClass:
       'mb-3 p-3 bg-layer-0 rounded-md border-l-4 border-accent-primary',
     radioCssClass:
@@ -415,24 +429,6 @@ export const AllCssClasses: Story = {
               <li>• Unlimited projects</li>
               <li>• Priority support</li>
               <li>• Advanced features</li>
-            </ul>
-          </div>
-        ),
-      },
-      {
-        id: 'enterprise',
-        name: 'Enterprise Plan',
-        content: (
-          <div className="dial-small">
-            <div className="dial-small-semi text-accent-tertiary">
-              Custom pricing
-            </div>
-            <div className="text-secondary">For large organizations</div>
-            <ul className="mt-1 dial-tiny text-secondary">
-              <li>• Everything in Premium</li>
-              <li>• Dedicated support</li>
-              <li>• Custom integrations</li>
-              <li>• SLA guarantee</li>
             </ul>
           </div>
         ),

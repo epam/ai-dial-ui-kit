@@ -14,18 +14,22 @@ import {
 export interface DialRadioGroupProps {
   fieldTitle?: string;
   elementId: string;
-  radioCssClass?: string;
-  labelCssClass?: string;
-  containerCssClass?: string;
-  selectedItemCssClass?: string;
-  selectedLabelCssClass?: string;
-  radioGroupCssClass?: string;
-  inputContainerCssClass?: string;
   disabled?: boolean;
   radioButtons: RadioButtonWithContent[];
   activeRadioButton: string;
   orientation: RadioGroupOrientation;
   onChange: (radioId: string) => void;
+  // Optional CSS class names
+  radioCssClass?: string;
+  groupLabelCssClass?: string;
+  labelCssClass?: string;
+  containerCssClass?: string;
+  formItemChildrenCssClass?: string;
+  selectedItemCssClass?: string;
+  selectedLabelCssClass?: string;
+  radioGroupCssClass?: string;
+  inputContainerCssClass?: string;
+  selectedInputContainerCssClass?: string;
 }
 
 /**
@@ -53,6 +57,9 @@ export interface DialRadioGroupProps {
  * @param elementId - Name for the underlying radio group; also used for input `name`
  * @param [radioCssClass] - Additional classes applied to each radio input
  * @param [inputContainerCssClass] - Additional classes applied to each radio input's container
+ * @param [selectedInputContainerCssClass] - Additional classes applied to the selected radio input's container
+ * @param [groupLabelCssClass] - Optional classes applied to the group label. If not provided, `labelCssClass` will be used.
+ * @param [formItemChildrenCssClass] - Additional classes applied to the DialFormItem's children container
  * @param [labelCssClass] - Additional classes applied to each radio label
  * @param [containerCssClass] - Additional classes applied to the outer container
  * @param [selectedItemCssClass] - Additional classes applied to the selected option's content container
@@ -72,6 +79,9 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
   selectedLabelCssClass,
   radioGroupCssClass,
   inputContainerCssClass,
+  selectedInputContainerCssClass,
+  groupLabelCssClass,
+  formItemChildrenCssClass,
   labelCssClass,
   disabled,
   elementId,
@@ -84,8 +94,9 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
     <DialFormItem
       elementId={elementId}
       label={fieldTitle}
-      labelCssClass={labelCssClass}
+      labelCssClass={groupLabelCssClass ? groupLabelCssClass : labelCssClass}
       cssClass={containerCssClass}
+      childrenCssClass={formItemChildrenCssClass}
     >
       <div
         role="radiogroup"
@@ -100,7 +111,11 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
         {radioButtons.map((radio) => (
           <div
             key={radio.id}
-            className={mergeClasses('flex flex-col', inputContainerCssClass)}
+            className={mergeClasses(
+              'flex flex-col',
+              inputContainerCssClass,
+              radio.id === activeRadioButton && selectedInputContainerCssClass,
+            )}
           >
             <DialRadioButton
               name={elementId}
