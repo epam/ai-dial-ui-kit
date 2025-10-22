@@ -9,10 +9,15 @@ import type {
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import type { InputBaseProps } from '@/models/field-control-props';
+import type {
+  InputBaseProps,
+  NumberInputBaseProps,
+} from '@/models/field-control-props';
 import { handleKeyDown } from './utils';
 
-export interface DialInputProps extends InputBaseProps {
+export interface DialInputProps
+  extends InputBaseProps,
+    Partial<NumberInputBaseProps> {
   type?: string;
   containerCssClass?: string;
   cssClass?: string;
@@ -37,29 +42,18 @@ export interface DialInputProps extends InputBaseProps {
  * />
  * ```
  *
- * @param elementId - Unique identifier for the input element
- * @param [value] - The current value of the input
- * @param [defaultValue] - The initial value of the input
- * @param [onChange] - Callback function called when the input value changes
- * @param [onBlur] - Callback function called when the input blurs
- * @param [iconBefore] - Icon or element to display before the input
- * @param [iconAfter] - Icon or element to display after the input
- * @param [placeholder] - Placeholder text displayed when input is empty
- * @param [containerCssClass] - Additional CSS classes to apply to the container div
- * @param [cssClass] - Additional CSS classes to apply to the input element
- * @param [type="text"] - The type of input (text, password, email, etc.)
- * @param [disabled=false] - Whether the input is disabled
- * @param [readonly=false] - Whether the input is read-only (prevents onChange from firing)
- * @param [invalid=false] - Whether the input has validation errors (applies error styling)
- * @param [hideBorder=false] - Whether to hide the input border styling
- * @param [min] - Minimum value for number inputs
- * @param [max] - Maximum value for number inputs
- * @param [prefix] - Text to display inside the input on the left
- * @param [suffix] - Text to display inside the input on the right
- * @param [textBeforeInput] - Text to display before the input in a separate field
- * @param [tooltipText] - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
- * @param [tooltipTriggerClassName] - Additional CSS classes to apply to the tooltip
- * @param [textAfterInput] - Text to display after the input in a separate field
+ * @params Component properties extending:
+ * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ *
+ * @param type - The HTML input type (text, password, email, number, etc.)
+ * @param containerCssClass - Additional CSS classes to apply to the container div
+ * @param cssClass - Additional CSS classes to apply to the input element
+ * @param hideBorder - Whether to hide the input border styling
+ * @param tooltipText - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
+ * @param tooltipTriggerClassName - Additional CSS classes to apply to the tooltip
+ * @param onChange - Callback function called when the input value changes
+ * @param onBlur - Callback function called when the input blurs
  */
 export const DialInput: FC<DialInputProps> = ({
   iconBefore,
@@ -78,6 +72,7 @@ export const DialInput: FC<DialInputProps> = ({
   onChange,
   min,
   max,
+  isOnlyInteger,
   prefix,
   suffix,
   textBeforeInput,
@@ -93,7 +88,7 @@ export const DialInput: FC<DialInputProps> = ({
     type === 'number' || min !== undefined || max !== undefined;
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    handleKeyDown(e, type, min, max);
+    handleKeyDown(e, type, min, max, isOnlyInteger);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +99,11 @@ export const DialInput: FC<DialInputProps> = ({
 
       // If it's not a valid number (except for partial inputs like "-" or ".")
       if (isNaN(numericValue) && newValue !== '-' && newValue !== '.') {
+        return;
+      }
+
+      // Forbid "." for integer-only inputs
+      if (newValue.includes('.') && isOnlyInteger) {
         return;
       }
 
@@ -147,7 +147,10 @@ export const DialInput: FC<DialInputProps> = ({
         </div>
       )}
       {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
-      <DialIcon icon={iconBefore} />
+      <DialIcon
+        icon={iconBefore}
+        className={classNames(!!iconBefore && 'mr-2')}
+      />
 
       <DialTooltip
         tooltip={tooltipText || value}
@@ -174,7 +177,10 @@ export const DialInput: FC<DialInputProps> = ({
         />
       </DialTooltip>
 
-      <DialIcon icon={iconAfter} />
+      <DialIcon
+        icon={iconAfter}
+        className={classNames(!!iconAfter && 'ml-2')}
+      />
       {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
       {textAfterInput && (
         <div className="ml-2">

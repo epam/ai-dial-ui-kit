@@ -1,7 +1,11 @@
+import {
+  inputBaseArgTypes,
+  numberInputBaseArgTypes,
+} from '@/constants/storybook/input';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { IconEye, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialInput, type DialInputProps } from './Input';
-import { IconSearch, IconEye } from '@tabler/icons-react';
 
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -10,7 +14,7 @@ const InteractiveInput = (args: DialInputProps) => {
     <DialInput
       {...args}
       value={value}
-      onChange={(newValue) => setValue(newValue)}
+      onChange={(newValue) => setValue(newValue ?? '')}
       // eslint-disable-next-line no-console
       onBlur={({ target }) => console.log(target.value)}
     />
@@ -30,18 +34,12 @@ const meta = {
     },
   },
   argTypes: {
-    elementId: {
-      control: { type: 'text' },
-      description: 'Unique identifier for the input element',
-    },
+    ...inputBaseArgTypes,
+    ...numberInputBaseArgTypes,
     type: {
       control: { type: 'select' },
       options: ['text', 'password', 'email', 'number', 'search'],
       description: 'Input type',
-    },
-    value: {
-      control: { type: 'text' },
-      description: 'Input value',
     },
     placeholder: {
       control: { type: 'text' },
@@ -55,53 +53,9 @@ const meta = {
       control: { type: 'text' },
       description: 'Additional CSS classes for the input element',
     },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is disabled',
-    },
-    readonly: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is read-only',
-    },
-    invalid: {
-      control: { type: 'boolean' },
-      description: 'Whether the input has an error state',
-    },
     hideBorder: {
       control: { type: 'boolean' },
       description: 'Whether to hide the input border',
-    },
-    iconBefore: {
-      control: false,
-      description: 'Icon or element to display before the input',
-    },
-    iconAfter: {
-      control: false,
-      description: 'Icon or element to display after the input',
-    },
-    min: {
-      control: { type: 'number' },
-      description: 'Minimum value for number inputs',
-    },
-    max: {
-      control: { type: 'number' },
-      description: 'Maximum value for number inputs',
-    },
-    prefix: {
-      control: { type: 'text' },
-      description: 'Text to display inside the input on the left',
-    },
-    suffix: {
-      control: { type: 'text' },
-      description: 'Text to display inside the input on the right',
-    },
-    textBeforeInput: {
-      control: { type: 'text' },
-      description: 'Text to display before the input in a separate field',
-    },
-    textAfterInput: {
-      control: { type: 'text' },
-      description: 'Text to display after the input in a separate field',
     },
     onChange: {
       control: false,

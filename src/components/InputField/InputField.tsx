@@ -1,17 +1,20 @@
 import type { FC } from 'react';
 
+import { DialFormItem } from '@/components/FormItem/FormItem';
 import { DialInput } from '@/components/Input/Input';
 import type {
   FieldControlProps,
   InputBaseProps,
+  NumberInputBaseProps,
 } from '@/models/field-control-props';
-import { DialFormItem } from '@/components/FormItem/FormItem';
+import type { DialFormItemBaseProps } from '@/models/form-item';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;
 
 export interface DialInputFieldBaseProps
   extends FieldControlProps,
+    DialFormItemBaseProps,
     InputBaseProps {
   value?: string | number;
   defaultEmptyText?: string;
@@ -21,11 +24,11 @@ export interface DialInputFieldBaseProps
   containerCssClass?: string;
 }
 
-export interface DialInputFieldProps extends DialInputFieldBaseProps {
+export interface DialInputFieldProps
+  extends DialInputFieldBaseProps,
+    Partial<NumberInputBaseProps> {
   type: string;
   onChange?: (value?: string | number) => void;
-  min?: number;
-  max?: number;
 }
 
 /**
@@ -41,74 +44,73 @@ export interface DialInputFieldProps extends DialInputFieldBaseProps {
  *   value="john_doe"
  *   onChange={(value) => setUsername(value as string)}
  * />
+ * ```
  *
- * @param elementId - Unique identifier for the input element
+ * @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
+ * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ *
  * @param type - The HTML input type (text, email, password, number, etc.)
- * @param [fieldTitle] - The label text to display above the input
- * @param [placeholder] - Placeholder text shown when input is empty
- * @param [value] - The current value of the input (string or number)
- * @param [onChange] - Callback function called when the input value changes, receives the new value
- * @param [optional=false] - Whether the field is optional (displays "(Optional)" indicator)
- * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
- * @param [readonly=false] - Whether the input is read-only (displays value as text, no input element)
- * @param [invalid=false] - Whether the input has validation errors (applies error styling)
- * @param [errorText] - Error message text to display below the input
- * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBefore] - Icon or element to display before the input
- * @param [iconAfter] - Icon or element to display after the input
- * @param [elementCssClass] - Additional CSS classes to apply to the input element
- * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
- * @param [containerCssClass] - Additional CSS classes to apply to the outer container
- * @param [min] - Minimum allowed value for number inputs
- * @param [max] - Maximum allowed value for number inputs
- * @param [prefix] - Text to display inside the input on the left
- * @param [suffix] - Text to display inside the input on the right
- * @param [textAfterInput] - Text to display after the input
- * @param [textBeforeInput] - Text to display before the input
+ * @param onChange - Callback function called when the input value changes, receives the new value
+ * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
+ * @param errorText - Error message text to display below the input
+ * @param elementCssClass - Additional CSS classes to apply to the input element
+ * @param elementContainerCssClass - Additional CSS classes to apply to the input container
+ * @param containerCssClass - Additional CSS classes to apply to the outer container
  */
 const DialInputField: FC<DialInputFieldProps> = ({
+  // form item props
+  label,
+  optional,
+  optionalText,
+  description,
+  error,
+  captionDescription,
+  readonly,
+  orientation,
+
+  // other props
+  elementId,
   fieldTitle,
   errorText,
-  optional,
   elementCssClass,
   elementContainerCssClass,
-  elementId,
   containerCssClass,
-  readonly,
   defaultEmptyText,
-  min,
-  max,
   ...props
 }) => {
   return (
     <DialFormItem
-      error={errorText}
-      elementId={elementId}
-      label={fieldTitle}
+      label={label ?? fieldTitle}
+      error={error ?? errorText}
+      optionalText={optionalText}
       optional={optional}
+      description={description}
+      captionDescription={captionDescription}
+      readonly={readonly}
+      orientation={orientation}
+      elementId={elementId}
       cssClass={containerCssClass}
+      defaultEmptyText={defaultEmptyText}
+      value={props.value}
     >
-      {readonly ? (
-        <span>{props.value || (defaultEmptyText ?? 'None')}</span>
-      ) : (
-        <DialInput
-          elementId={elementId}
-          cssClass={elementCssClass}
-          containerCssClass={elementContainerCssClass}
-          invalid={errorText != null}
-          min={min}
-          max={max}
-          {...props}
-        />
-      )}
+      <DialInput
+        elementId={elementId}
+        cssClass={elementCssClass}
+        containerCssClass={elementContainerCssClass}
+        invalid={errorText != null}
+        {...props}
+      />
     </DialFormItem>
   );
 };
 
-export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
+export interface DialNumberInputFieldProps
+  extends DialInputFieldBaseProps,
+    Partial<NumberInputBaseProps> {
   onChange?: (value?: number | string) => void;
-  min?: number;
-  max?: number;
 }
 
 /**
@@ -125,34 +127,23 @@ export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param elementId - Unique identifier for the input element
- * @param [fieldTitle] - The label text to display above the input
- * @param [placeholder] - Placeholder text shown when input is empty
- * @param [value] - The current numeric value of the input
- * @param [onChange] - Callback function called when the input value changes.
- *                   Returns either a number (for most values) or a string (for decimal values < 1 with leading zeros)
- * @param [optional=false] - Whether the field is optional
- * @param [disabled=false] - Whether the input is disabled
- * @param [readonly=false] - Whether the input is read-only
- * @param [invalid=false] - Whether the input has validation errors (applies error styling)
- * @param [errorText] - Error message text to display below the input
- * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBefore] - Icon or element to display before the input
- * @param [iconAfter] - Icon or element to display after the input
- * @param [elementCssClass] - Additional CSS classes to apply to the input element
- * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
- * @param [containerCssClass] - Additional CSS classes to apply to the DialNumberInputField container
- * @param [min] - Minimum allowed value for the number input
- * @param [max] - Maximum allowed value for the number input
+ * @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
+ * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ *
+ * @param onChange - Callback function called when the input value changes.
+ *                        Returns either a number (for most values) or a string (for decimal values < 1 with leading zeros)
  */
 export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
   onChange,
-  value,
-  min,
-  max,
   ...props
 }) => {
   const getInputValue = (inputValue?: string | number): string | number => {
+    if (inputValue === '-') {
+      return inputValue;
+    }
     return String(inputValue)?.match(lessThanOnePattern)
       ? String(inputValue)?.replace(leadingZerosPattern, '0')
       : Number(inputValue);
@@ -162,9 +153,6 @@ export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
     <DialInputField
       type="number"
       onChange={(inputValue) => onChange?.(getInputValue(inputValue))}
-      value={value}
-      min={min}
-      max={max}
       {...props}
     />
   );
@@ -189,22 +177,12 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  *
- * @param elementId - Unique identifier for the input element
- * @param [fieldTitle] - The label text to display above the input
- * @param [placeholder] - Placeholder text shown when input is empty
- * @param [value] - The current text value of the input
- * @param [onChange] - Callback function called when the input value changes, receives the new string value
- * @param [optional=false] - Whether the field is optional (displays "(Optional)" indicator)
- * @param [disabled=false] - Whether the input is disabled and cannot be interacted with
- * @param [readonly=false] - Whether the input is read-only (displays value as text, no input element)
- * @param [invalid=false] - Whether the input has validation errors (applies error styling)
- * @param [errorText] - Error message text to display below the input
- * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
- * @param [iconBefore] - Icon or element to display before the input
- * @param [iconAfter] - Icon or element to display after the input
- * @param [elementCssClass] - Additional CSS classes to apply to the input element
- * @param [elementContainerCssClass] - Additional CSS classes to apply to the input container
- * @param [containerCssClass] - Additional CSS classes to apply to the outer container
+ * @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
+ * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ *
+ * @param onChange - Callback function called when the input value changes, receives the new string value
  */
 export const DialTextInputField: FC<DialTextInputFieldProps> = ({
   onChange,

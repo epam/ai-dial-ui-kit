@@ -6,6 +6,7 @@ import { DialInput } from '@/components/Input/Input';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { DialSelect } from '@/components/Select/Select';
 import { FormItemOrientation } from '@/types/form-item';
+import { dialFormItemBaseArgTypes } from '@/constants/storybook/form-item';
 
 interface Option {
   label: string;
@@ -15,23 +16,41 @@ interface Option {
 const meta = {
   title: 'Form/FormItem',
   component: DialFormItem,
-  parameters: { layout: 'centered' },
-  argTypes: {
-    orientation: {
-      control: { type: 'radio' },
-      options: [FormItemOrientation.Vertical, FormItemOrientation.Horizontal],
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'FormItem is a wrapper component that allows to add labels, descriptions, captions, error messages, optional field indicators, and both vertical and horizontal layouts.',
+      },
     },
-    label: { control: 'text' },
-    optional: { control: 'boolean' },
-    optionalText: { control: 'text' },
-    description: { control: 'text' },
-    error: { control: 'text' },
-    labelVisuallyHidden: { control: 'boolean' },
-    cssClass: { control: 'text' },
-    childrenCssClass: { control: 'text' },
-    labelCssClass: { control: 'text' },
-    errorCssClass: { control: 'text' },
-    captionDescription: { control: 'text' },
+  },
+  argTypes: {
+    elementId: {
+      control: { type: 'text' as const },
+      description: 'The unique identifier for the form element',
+    },
+    labelVisuallyHidden: {
+      control: { type: 'boolean' as const },
+      description: 'Whether to visually hide the label',
+    },
+    cssClass: {
+      control: { type: 'text' as const },
+      description: 'Additional CSS classes for the form item container',
+    },
+    childrenCssClass: {
+      control: { type: 'text' as const },
+      description: 'Additional CSS classes for the children wrapper',
+    },
+    labelCssClass: {
+      control: { type: 'text' as const },
+      description: 'Additional CSS classes for the label',
+    },
+    errorCssClass: {
+      control: { type: 'text' as const },
+      description: 'Additional CSS classes for the error message',
+    },
+    ...dialFormItemBaseArgTypes,
   },
   args: {
     elementId: 'field',
