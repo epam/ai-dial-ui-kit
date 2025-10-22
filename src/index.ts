@@ -17,6 +17,7 @@ export { DialFileIcon } from './components/FileIcon/FileIcon';
 export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
+export { DialFolderName } from './components/FolderName/FolderName';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
