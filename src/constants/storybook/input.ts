@@ -4,7 +4,6 @@ import type {
   NumberInputBaseProps,
 } from '@/models/field-control-props';
 import type { ArgTypes } from '@storybook/react';
-import { dialFormItemBaseArgTypes } from './form-item';
 
 export const fieldControlArgTypes: Partial<ArgTypes<FieldControlProps>> = {
   fieldTitle: {
