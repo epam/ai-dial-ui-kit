@@ -1,5 +1,4 @@
 import {
-  type AgGridEvent,
   CellApiModule,
   CellStyleModule,
   ClientSideRowModelModule,
@@ -21,7 +20,6 @@ import {
   RowSelectionModule,
   RowStyleModule,
   TextFilterModule,
-  type ColumnState,
   EventApiModule,
   themeBalham,
   type RowClassParams,
@@ -53,7 +51,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
   rowData?: T[];
   additionalGridOptions?: GridOptions<T>;
-  storageKey?: string;
   onGridReady?: (gridApi: GridApi<T>) => void;
   getContextMenuItems?: (row: T) => DropdownItem[];
   cssClass?: string;
@@ -73,7 +70,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
  * - Dark theme styling with CSS variable integration
  * - Optional row selection with checkboxes
  * - Context menu integration via DialDropdown
- * - Persistent column state (sorting, filtering, column order) in localStorage
  * - Text overflow handling with tooltips via DialEllipsisTooltip
  * - Controlled or uncontrolled selection modes
  * - Automatic column sizing and responsive behavior
@@ -128,7 +124,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
  * @param [columnDefs] - Array of column definitions (ag-Grid ColDef format)
  * @param [rowData] - Array of data objects to display in the grid
  * @param [additionalGridOptions] - Additional ag-Grid GridOptions to merge with defaults
- * @param [storageKey] - LocalStorage key for persisting grid state (column order, filters, sorting)
  * @param [onGridReady] - Callback invoked when the grid is fully initialized, receives GridApi instance
  * @param [getContextMenuItems] - Function returning context menu items for a given row
  * @param [cssClass] - Additional CSS classes to apply to the grid container
@@ -144,7 +139,6 @@ export const DialGrid = <T extends object>({
   columnDefs,
   rowData,
   additionalGridOptions,
-  storageKey,
   onGridReady: gridReadyCb,
   getContextMenuItems,
   cssClass,
@@ -201,44 +195,6 @@ export const DialGrid = <T extends object>({
     }),
     [alternateOddRowColors],
   );
-
-  const onStateChanged = useCallback(
-    (e: AgGridEvent) => {
-      if (!storageKey) return;
-      const model = {
-        columns: e.api.getColumnState(),
-        filters: e.api.getFilterModel(),
-      };
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(model));
-      } catch {
-        /* ignore quota errors */
-      }
-    },
-    [storageKey],
-  );
-
-  const restoreState = (e: GridReadyEvent, defaultSorts: ColumnState[]) => {
-    if (!storageKey) {
-      e.api.applyColumnState({ state: defaultSorts });
-      return;
-    }
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (!raw) {
-        e.api.applyColumnState({ state: defaultSorts });
-        return;
-      }
-      const parsed = JSON.parse(raw) as {
-        columns?: ColumnState[];
-        filters?: Record<string, unknown>;
-      };
-      if (parsed.filters) e.api.setFilterModel(parsed.filters);
-      if (parsed.columns) e.api.applyColumnState({ state: parsed.columns });
-    } catch {
-      e.api.applyColumnState({ state: defaultSorts });
-    }
-  };
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
     e.api.sizeColumnsToFit();
@@ -412,20 +368,12 @@ export const DialGrid = <T extends object>({
   );
 
   const onGridReady = (e: GridReadyEvent) => {
-    const defaultSorts =
-      computedColumnDefs
-        .filter((col) => col.sort)
-        .map((col) => ({ colId: col.field, sort: col.sort })) ?? [];
-    const colsNoSort = computedColumnDefs.map((c) => ({
-      ...c,
+    const colsNoSort = computedColumnDefs.map((column) => ({
+      ...column,
       sort: undefined,
     }));
 
     e.api.updateGridOptions({ columnDefs: colsNoSort, rowData });
-
-    if (defaultSorts) {
-      restoreState(e, defaultSorts as ColumnState[]);
-    }
 
     e.api.sizeColumnsToFit();
 
@@ -475,8 +423,6 @@ export const DialGrid = <T extends object>({
           columnDefs={computedColumnDefs}
           defaultColDef={defaultColDef}
           onGridSizeChanged={onGridSizeChanged}
-          onFilterChanged={onStateChanged}
-          onSortChanged={onStateChanged}
           onGridReady={onGridReady}
           suppressCellFocus={true}
           rowData={rowData}

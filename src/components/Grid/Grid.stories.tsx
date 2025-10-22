@@ -138,7 +138,6 @@ const meta = {
     columnDefs: { control: false },
     rowData: { control: false },
     additionalGridOptions: { control: false },
-    storageKey: { control: 'text' },
     onGridReady: { action: 'ready' },
     getContextMenuItems: { control: false },
     cssClass: { control: 'text' },
@@ -154,7 +153,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Base: Story = {
   args: {
-    storageKey: 'storybook-base-grid',
     selectedRowIds: undefined,
     onSelectionChange: undefined,
   },
@@ -162,7 +160,6 @@ export const Base: Story = {
 
 export const ManyRows: Story = {
   args: {
-    storageKey: 'storybook-many-rows-grid',
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     rowData: Array.from({ length: 60 }).map((_, i) => ({
@@ -184,7 +181,6 @@ export const ManyRows: Story = {
 
 export const WithoutContextMenu: Story = {
   args: {
-    storageKey: 'storybook-no-context-grid',
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     getContextMenuItems: undefined,
@@ -193,7 +189,6 @@ export const WithoutContextMenu: Story = {
 
 export const NoFilters: Story = {
   args: {
-    storageKey: 'storybook-no-filters-grid',
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     withSelectionColumn: false,
@@ -250,7 +245,6 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
       <div style={{ flex: 1, minHeight: 300 }}>
         <DialGrid<Row>
           {...(args as DialGridProps<Row>)}
-          storageKey="storybook-controlled-grid"
           selectedRowIds={selectedIds}
           onSelectionChange={handleSelectionChange}
         />
@@ -286,7 +280,6 @@ export const ControlledSelection: Story = {
 
 export const AlternativeOddRowColors: Story = {
   args: {
-    storageKey: 'storybook-alternate-odd-rows-grid',
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     alternateOddRowColors: true,

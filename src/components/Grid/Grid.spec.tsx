@@ -118,29 +118,6 @@ describe('Dial UI Kit :: DialGrid', () => {
     expect(newIds.size).toBe(1);
   });
 
-  test('persists grid state when storageKey is provided', async () => {
-    const mockLocalStorage = {
-      getItem: vi.fn().mockReturnValue(null),
-      setItem: vi.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: mockLocalStorage,
-      writable: true,
-    });
-
-    render(
-      <DialGrid<TestRow>
-        columnDefs={testColumns}
-        rowData={testRows}
-        storageKey="test-grid-state"
-      />,
-    );
-
-    await screen.findByText('Alice');
-
-    expect(mockLocalStorage.getItem).toHaveBeenCalledWith('test-grid-state');
-  });
-
   test('applies custom CSS class to grid container', async () => {
     render(
       <DialGrid<TestRow>
