@@ -24,3 +24,5 @@ export const GRID_THEME_COLORS = {
     textAlign: 'center',
   },
 };
+
+export const ROW_HEIGHT = 40;

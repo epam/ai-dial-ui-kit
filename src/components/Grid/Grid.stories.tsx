@@ -4,7 +4,7 @@ import { DialGrid, type DialGridProps } from './Grid';
 import type { DropdownItem } from '@/models/dropdown';
 import type { ColDef } from 'ag-grid-community';
 import { DialFileName } from '@/components/FileName/FileName';
-import { DialButton } from '../Button/Button';
+import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 import { DropdownItemType } from '@/types/dropdown';
 import {

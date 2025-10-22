@@ -45,7 +45,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 
-import { gridBaseClasses, GRID_THEME_COLORS } from './constants';
+import { gridBaseClasses, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 
@@ -175,7 +175,7 @@ export const DialGrid = <T extends object>({
     EventApiModule,
   ]);
 
-  const [rowHeight, setRowHeight] = useState<number>(40);
+  const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
 
   const a11yId = useId();
@@ -242,7 +242,7 @@ export const DialGrid = <T extends object>({
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
     e.api.sizeColumnsToFit();
-    setRowHeight(40);
+    setRowHeight(ROW_HEIGHT);
   }, []);
 
   const getRowClass = useCallback(
@@ -464,7 +464,7 @@ export const DialGrid = <T extends object>({
       >
         <AgGridReact<T>
           rowModelType="clientSide"
-          headerHeight={40}
+          headerHeight={ROW_HEIGHT}
           rowHeight={rowHeight}
           cellSelection={false}
           getRowClass={getRowClass}
