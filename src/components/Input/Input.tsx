@@ -19,7 +19,7 @@ export interface DialInputProps extends InputBaseProps {
   hideBorder?: boolean;
   tooltipText?: string;
   tooltipTriggerClassName?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value?: string) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
 }
 
@@ -118,7 +118,7 @@ export const DialInput: FC<DialInputProps> = ({
       }
     }
 
-    onChange?.(newValue);
+    onChange?.(!newValue ? void 0 : newValue);
   };
 
   return (
@@ -160,7 +160,10 @@ export const DialInput: FC<DialInputProps> = ({
           placeholder={placeholder}
           value={defaultValue ? undefined : (value ?? '')}
           disabled={disabled}
-          className={classNames('border-0 bg-transparent w-full', cssClass)}
+          className={classNames(
+            'border-0 bg-transparent w-full truncate',
+            cssClass,
+          )}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onWheel={handleWheel}
