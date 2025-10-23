@@ -22,23 +22,23 @@ const meta: Meta<typeof DialFoldersTree> = {
     docs: {
       description: {
         component:
-          'A visual-only tree view component for displaying nested folders. It accepts folder data and interaction callbacks via props, without relying on any external context.',
+          'A hierarchical tree view for folders and files with selection, loading, and context menu support.',
       },
     },
   },
   argTypes: {
-    onFolderClick: {
-      action: 'toggleFolder',
-      description: 'Callback fired when a folder is toggled open or closed.',
+    onItemClick: {
+      action: 'onItemClick',
+      description: 'Callback fired when an item is clicked.',
     },
     showFiles: {
       control: 'boolean',
-      description: 'Whether to show files in the tree view.',
+      description: 'Whether to display files in addition to folders.',
       defaultValue: false,
     },
     getContextMenuItems: {
       description:
-        'Function to get context menu items for a given file/folder node.',
+        'Function that provides context menu items for a given folder or file.',
     },
   },
 };
@@ -46,7 +46,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const mockFolders = [
+const mockFolders: DialFile[] = [
   {
     name: 'Root Folder',
     path: '/root',
@@ -107,7 +107,7 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Copy', node.name);
     },
   },
   {
@@ -117,7 +117,7 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Cut', node.name);
     },
   },
   {
@@ -127,7 +127,7 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Paste', node.name);
     },
   },
   {
@@ -137,7 +137,7 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Download', node.name);
     },
   },
   {
@@ -147,7 +147,7 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Delete', node.name);
     },
   },
   {
@@ -157,59 +157,57 @@ const getMenu = (node: DialFile): DropdownItem[] => [
     onClick: (info) => {
       info.domEvent.stopPropagation();
       // eslint-disable-next-line no-console
-      console.log(node.name);
+      console.log('Rename', node.name);
     },
   },
 ];
 
 export const Default: Story = {
   args: {
-    folders: mockFolders,
-    expandedFolders: new Set(),
+    items: mockFolders,
+    expandedPaths: new Set(),
     showFiles: false,
     getContextMenuItems: getMenu,
   },
   render: (args) => {
     const Wrapper = () => {
+      const [expanded, setExpanded] = useState(new Set<string>());
+      const [loading, setLoading] = useState(new Set<string>());
       const [loaded, setLoaded] = useState(new Set<string>());
-      const [expanded, setExpanded] = useState(args.expandedFolders);
-      const [loadingPaths, setLoadingPaths] = useState(
-        args.loadingPaths ?? new Set<string>(),
-      );
+
+      const handleItemClick = (item: DialFile) => {
+        const newExpanded = new Set(expanded);
+
+        if (newExpanded.has(item.path)) {
+          newExpanded.delete(item.path);
+        } else {
+          newExpanded.add(item.path);
+
+          if (!loaded.has(item.path)) {
+            const newLoading = new Set(loading).add(item.path);
+            setLoading(newLoading);
+
+            setTimeout(() => {
+              const doneLoading = new Set(newLoading);
+              doneLoading.delete(item.path);
+              setLoading(doneLoading);
+              setLoaded(new Set(loaded).add(item.path));
+              setExpanded(newExpanded);
+            }, 750);
+            return;
+          }
+        }
+
+        setExpanded(newExpanded);
+      };
 
       return (
         <div className="w-[400px] h-[400px] border rounded p-4 bg-background">
           <DialFoldersTree
             {...args}
-            expandedFolders={expanded}
-            loadingPaths={loadingPaths}
-            onFolderClick={(folder) => {
-              const newExpanded = new Set(expanded);
-
-              if (newExpanded.has(folder.path)) {
-                newExpanded.delete(folder.path);
-                setExpanded(newExpanded);
-              } else {
-                newExpanded.add(folder.path);
-
-                if (loaded.has(folder.path)) {
-                  setExpanded(newExpanded);
-                } else {
-                  setLoadingPaths((val) => val.add(folder.path));
-                  setTimeout(() => {
-                    setExpanded(newExpanded);
-                    setLoaded((val) => val.add(folder.path));
-                    if (newExpanded.has(folder.path)) {
-                      setLoadingPaths((val) => {
-                        val.delete(folder.path);
-                        return val;
-                      });
-                    }
-                  }, 750);
-                }
-              }
-            }}
-            getContextMenuItems={getMenu}
+            expandedPaths={expanded}
+            loadingPaths={loading}
+            onItemClick={handleItemClick}
           />
         </div>
       );
@@ -221,8 +219,8 @@ export const Default: Story = {
 
 export const WithExpandedFolders: Story = {
   args: {
-    folders: mockFolders,
-    expandedFolders: new Set(['/root', '/root/Documents', '/root/Videos']),
+    items: mockFolders,
+    expandedPaths: new Set(['/root', '/root/Documents', '/root/Videos']),
     showFiles: false,
     getContextMenuItems: getMenu,
   },
@@ -230,8 +228,8 @@ export const WithExpandedFolders: Story = {
 
 export const WithFilesVisible: Story = {
   args: {
-    folders: mockFolders,
-    expandedFolders: new Set(['/root', '/root/Images']),
+    items: mockFolders,
+    expandedPaths: new Set(['/root', '/root/Images']),
     showFiles: true,
     getContextMenuItems: getMenu,
   },
@@ -239,8 +237,8 @@ export const WithFilesVisible: Story = {
 
 export const EmptyState: Story = {
   args: {
-    folders: [],
-    expandedFolders: new Set(),
+    items: [],
+    expandedPaths: new Set(),
     showFiles: false,
     renderEmptyState: (
       <div className="text-secondary text-center py-10 italic">

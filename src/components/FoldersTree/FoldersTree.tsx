@@ -13,29 +13,69 @@ import classNames from 'classnames';
 import { CARET_ICON_PROPS } from './constants';
 
 export interface DialFoldersTreeProps {
-  folders: DialFile[];
-  expandedFolders?: Set<string>;
+  items: DialFile[];
+  expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
   renderEmptyState?: React.ReactNode;
   showFiles?: boolean;
-  onFolderClick?: (node: DialFile) => void;
-  getContextMenuItems?: (node: DialFile) => DropdownItem[];
+  onItemClick?: (item: DialFile) => void;
+  getContextMenuItems?: (item: DialFile) => DropdownItem[];
 }
 
+/**
+ * DialFoldersTree — A hierarchical folder tree component with nested expand/collapse support and optional file display.
+ *
+ * Provides a fully interactive, recursive folder structure with:
+ * - Expandable/collapsible items
+ * - Optional file visibility
+ * - Loading state indicators for specific paths
+ * - Context menu integration via DialDropdown
+ * - Visual selection highlighting
+ * - Recursive rendering with indentation and icons
+ * - Empty state rendering when no data is available
+ *
+ * @example
+ * ```tsx
+ * const getContextMenuItems = (node: DialFile): DropdownItem[] => [
+ *   { key: 'rename', label: 'Rename' },
+ *   { key: 'delete', label: 'Delete' },
+ * ];
+ *
+ * <DialFoldersTree
+ *   items={items}
+ *   getContextMenuItems={getContextMenuItems}
+ *   showFiles
+ *   onItemsClick={(item) => console.log('Selected:', item.path)}
+ * />
+ * ```
+ *
+ * @param [items] - Array of folder and file nodes to display in the tree
+ * @param [expandedPaths] - Set of folder paths that should be expanded
+ * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder)
+ * @param [renderEmptyState] - React node to render when the folder list is empty
+ * @param [showFiles=false] - Whether to show files in addition to folders
+ * @param [onItemClick] - Callback fired when a folder is clicked (receives the corresponding node)
+ * @param [getContextMenuItems] - Function returning context menu items for a given node
+ *
+ * @remarks
+ * - Folder and file data must follow the `DialFile` model.
+ * - The `expandedFolders` and `loadingPaths` props are externally controlled; the component itself only tracks selection state internally.
+ * - Context menus can be attached to both folders and files, depending on `getContextMenuItems`.
+ */
 export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
-  folders,
-  expandedFolders = new Set(),
+  items,
+  expandedPaths = new Set(),
   loadingPaths = new Set(),
   renderEmptyState,
   showFiles,
-  onFolderClick,
+  onItemClick,
   getContextMenuItems,
 }) => {
-  const [selectedFolderPath, setSelectedFolderPath] = useState('');
+  const [selectedItemPath, setSelectedItemPath] = useState('');
 
   const handleFolderClick = (node: DialFile) => {
-    setSelectedFolderPath(node.path);
-    onFolderClick?.(node);
+    setSelectedItemPath(node.path);
+    onItemClick?.(node);
   };
 
   const renderTree = (nodes: DialFile[], level: number) => {
@@ -53,8 +93,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         items.length > 0 &&
         items.some((n) => n.nodeType === DialFileNodeType.FOLDER || showFiles);
 
-      const isExpanded = expandedFolders.has(path);
-      const isSelected = selectedFolderPath === path;
+      const isExpanded = expandedPaths.has(path);
+      const isSelected = selectedItemPath === path;
       const isLoading = loadingPaths.has(path);
 
       const selectedClass = isSelected
@@ -126,7 +166,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
   return (
     <div className="flex-1 w-full h-full overflow-y-auto">
-      {renderTree(folders, 0)}
+      {renderTree(items, 0)}
     </div>
   );
 };

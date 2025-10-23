@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialFoldersTree } from './FoldersTree';
 import { DialFileNodeType } from '@/models/file';
 
-const mockFolders = [
+const mockItems = [
   {
     name: 'Root',
     path: '/root',
@@ -34,9 +34,7 @@ const getMenu = vi.fn(() => [
 
 describe('Dial UI Kit :: DialFoldersTree', () => {
   test('renders folders', () => {
-    render(
-      <DialFoldersTree folders={mockFolders} getContextMenuItems={getMenu} />,
-    );
+    render(<DialFoldersTree items={mockItems} getContextMenuItems={getMenu} />);
     expect(screen.getByText('Root')).toBeInTheDocument();
     expect(screen.queryByText('Subfolder')).not.toBeInTheDocument();
   });
@@ -45,8 +43,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
     const onToggleFolder = vi.fn();
     render(
       <DialFoldersTree
-        folders={mockFolders}
-        onFolderClick={onToggleFolder}
+        items={mockItems}
+        onItemClick={onToggleFolder}
         getContextMenuItems={getMenu}
       />,
     );
@@ -59,8 +57,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   test('shows subfolders when expanded', () => {
     render(
       <DialFoldersTree
-        folders={mockFolders}
-        expandedFolders={new Set(['/root'])}
+        items={mockItems}
+        expandedPaths={new Set(['/root'])}
         getContextMenuItems={getMenu}
       />,
     );
@@ -70,8 +68,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   test('shows files when showFiles is true', () => {
     render(
       <DialFoldersTree
-        folders={mockFolders}
-        expandedFolders={new Set(['/root', '/root/Subfolder'])}
+        items={mockItems}
+        expandedPaths={new Set(['/root', '/root/Subfolder'])}
         showFiles
         getContextMenuItems={getMenu}
       />,
@@ -82,8 +80,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   test('does not show files when showFiles is false', () => {
     render(
       <DialFoldersTree
-        folders={mockFolders}
-        expandedFolders={new Set(['/root', '/root/Subfolder'])}
+        items={mockItems}
+        expandedPaths={new Set(['/root', '/root/Subfolder'])}
         showFiles={false}
         getContextMenuItems={getMenu}
       />,
@@ -94,7 +92,7 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   test('renders empty state', () => {
     render(
       <DialFoldersTree
-        folders={[]}
+        items={[]}
         renderEmptyState={<div data-testid="empty">No folders</div>}
       />,
     );
@@ -104,8 +102,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   test('calls getContextMenuItems for each node', () => {
     render(
       <DialFoldersTree
-        folders={mockFolders}
-        expandedFolders={new Set(['/root'])}
+        items={mockItems}
+        expandedPaths={new Set(['/root'])}
         getContextMenuItems={getMenu}
       />,
     );
