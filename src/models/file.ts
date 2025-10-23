@@ -8,7 +8,6 @@ export interface DialFile extends DialModifiedEntity {
   parentPath?: string | null;
   resourceType?: DialFileResourceType;
   url?: string;
-  children?: DialFile[];
   items?: DialFile[];
   path: string;
   name?: string;
