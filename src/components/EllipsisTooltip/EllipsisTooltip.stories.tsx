@@ -137,7 +137,7 @@ function DynamicResizeExample(args: DialEllipsisTooltipProps) {
 }
 
 export const DynamicResize: Story = {
-  render: (args) => <DynamicResizeExample {...args} />,
+  render: DynamicResizeExample,
   args: {
     text: 'Resize me with the button — when narrow, I truncate; when wide, I do not.',
   },

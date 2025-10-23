@@ -1,9 +1,9 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test, vi } from 'vitest';
 import { DialNumberInputField, DialTextInputField } from './InputField';
 
 describe('Dial UI Kit :: DialNumberInputField', () => {
-  it('renders with basic props', () => {
+  test('renders with basic props', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -18,7 +18,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.getByDisplayValue('42.5')).toBeInTheDocument();
   });
 
-  it('renders with value', () => {
+  test('renders with value', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -31,7 +31,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.getByDisplayValue('42.5')).toBeInTheDocument();
   });
 
-  it('shows optional indicator when optional is true', () => {
+  test('shows optional indicator when optional is true', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -43,7 +43,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.getByText('(Optional)')).toBeInTheDocument();
   });
 
-  it('displays error text when provided', () => {
+  test('displays error text when provided', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -55,7 +55,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.getByText('This field is required')).toBeInTheDocument();
   });
 
-  it('calls onChange with processed number value', () => {
+  test('calls onChange with processed number value', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
@@ -71,7 +71,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(onChange).toHaveBeenCalledWith(123.45);
   });
 
-  it('renders readonly with value', () => {
+  test('renders readonly with value', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -85,7 +85,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument();
   });
 
-  it('applies disabled state correctly', () => {
+  test('applies disabled state correctly', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -97,7 +97,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(screen.getByRole('spinbutton')).toBeDisabled();
   });
 
-  it('applies min and max attributes correctly', () => {
+  test('applies min and max attributes correctly', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -112,7 +112,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(input).toHaveAttribute('max', '100');
   });
 
-  it('applies only min attribute when max is not provided', () => {
+  test('applies only min attribute when max is not provided', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -126,7 +126,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(input).not.toHaveAttribute('max');
   });
 
-  it('does not apply min/max attributes when not provided', () => {
+  test('does not apply min/max attributes when not provided', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
@@ -139,7 +139,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(input).not.toHaveAttribute('max');
   });
 
-  it('handles decimal values with min and max constraints', () => {
+  test('handles decimal values with min and max constraints', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
@@ -159,7 +159,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     expect(onChange).toHaveBeenCalledWith(50.5);
   });
 
-  it('handles leading zeros properly with min/max constraints', () => {
+  test('handles leading zeros properly with min/max constraints', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
@@ -179,7 +179,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
 });
 
 describe('Dial UI Kit :: DialTextInputField', () => {
-  it('renders with basic props', () => {
+  test('renders with basic props', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -192,7 +192,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByPlaceholderText(/enter text/i)).toBeInTheDocument();
   });
 
-  it('displays value correctly', () => {
+  test('displays value correctly', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -204,7 +204,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByDisplayValue('Sample text')).toBeInTheDocument();
   });
 
-  it('shows optional indicator when optional is true', () => {
+  test('shows optional indicator when optional is true', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -216,7 +216,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByText('(Optional)')).toBeInTheDocument();
   });
 
-  it('displays error text when provided', () => {
+  test('displays error text when provided', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -228,7 +228,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByText('Invalid input')).toBeInTheDocument();
   });
 
-  it('calls onChange with string value', () => {
+  test('calls onChange with string value', () => {
     const onChange = vi.fn();
     render(
       <DialTextInputField
@@ -244,7 +244,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(onChange).toHaveBeenCalledWith('Hello world');
   });
 
-  it('renders as readonly with default empty text', () => {
+  test('renders as readonly with default empty text', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -258,7 +258,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('renders readonly with value', () => {
+  test('renders readonly with value', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -272,7 +272,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('applies disabled state correctly', () => {
+  test('applies disabled state correctly', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -284,7 +284,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByRole('textbox')).toBeDisabled();
   });
 
-  it('renders with icons', () => {
+  test('renders with icons', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -298,7 +298,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(screen.getByTestId('after-icon')).toBeInTheDocument();
   });
 
-  it('applies custom CSS classes', () => {
+  test('applies custom CSS classes', () => {
     render(
       <DialTextInputField
         elementId="test-text"
@@ -312,7 +312,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(container).toBeInTheDocument();
   });
 
-  it('renders with prefix and suffix', () => {
+  test('renders with prefix and suffix', () => {
     const { container } = render(
       <DialTextInputField
         elementId="test-text"
@@ -326,7 +326,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     expect(container.textContent).toContain('USD');
   });
 
-  it('renders with text before and after input', () => {
+  test('renders with text before and after input', () => {
     render(
       <DialTextInputField
         elementId="test-text"

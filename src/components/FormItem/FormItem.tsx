@@ -3,26 +3,21 @@ import { useCallback, type FC, type ReactNode } from 'react';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 
 import { DialFieldLabel } from '@/components/Field/Field';
-import { FormItemOrientation } from '@/types/form-item';
+import {
+  FormItemOrientation,
+  type DialFormItemBaseProps,
+} from '@/types/form-item';
 import { containerBaseClasses, orientationClassMap } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
-export interface DialFormItemProps {
+export interface DialFormItemProps extends DialFormItemBaseProps {
   elementId: string;
-  label?: string | ReactNode;
-  optional?: boolean;
-  optionalText?: string;
-  description?: string;
-  error?: string | ReactNode | boolean;
-  orientation?: FormItemOrientation;
   labelVisuallyHidden?: boolean;
   cssClass?: string;
   childrenCssClass?: string;
   labelCssClass?: string;
   errorCssClass?: string;
   children: ReactNode;
-  captionDescription?: string;
-  readonly?: boolean;
   value?: ReactNode | string;
   defaultEmptyText?: string;
 }
@@ -64,23 +59,18 @@ export interface DialFormItemProps {
  * </DialFormItem>
  * ```
  *
+ * @params - Component properties extending:
+ * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, orientation, etc.)
+ *
  * @param elementId - Unique identifier for the form control element (used for accessibility)
- * @param [label] - The label text or ReactNode to display above the form control
- * @param [optional=false] - Whether the field is optional (displays "(Optional)" indicator)
- * @param [optionalText="(Optional)"] - Custom text for optional indicator
- * @param [description] - Additional description text, displayed below the label.
- * @param [error] - Error message text or ReactNode to display below the form control (replaces description when present)
- * @param [orientation='vertical'] - Layout orientation, either 'vertical' (label above control) or 'horizontal' (label to the left)
- * @param [labelVisuallyHidden=false] - Whether to visually hide the label (still accessible to screen readers)
- * @param [cssClass] - Additional CSS classes to apply to the container div
- * @param [childrenCssClass] - Additional CSS classes to apply to the children container div
- * @param [labelCssClass] - Additional CSS classes to apply to the label element
- * @param [errorCssClass] - Additional CSS classes to apply to the error message element
- * @param [captionDescription] - Additional caption description text, displayed below the form control.
- * @param [readonly=false] - Whether the form control is read-only (displays value as text, no input element)
- * @param [value] - The current value of the form control
- * @param [defaultEmptyText="None"] - Text to display when readonly and value is empty
+ * @param labelVisuallyHidden - Whether to visually hide the label (still accessible to screen readers, default: false)
+ * @param cssClass - Additional CSS classes to apply to the container div
+ * @param childrenCssClass - Additional CSS classes to apply to the children container div
+ * @param labelCssClass - Additional CSS classes to apply to the label element
+ * @param errorCssClass - Additional CSS classes to apply to the error message element
  * @param children - The form control element(s) to render inside the DialFormItem
+ * @param value - The current value of the form control (for readonly mode)
+ * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
  */
 export const DialFormItem: FC<DialFormItemProps> = ({
   elementId,

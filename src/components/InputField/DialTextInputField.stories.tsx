@@ -2,6 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconNetwork, IconSearch, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialTextInputField, type DialTextInputFieldProps } from './InputField';
+import {
+  fieldControlArgTypes,
+  inputBaseArgTypes,
+} from '@/constants/storybook/input';
+import { dialFormItemBaseArgTypes } from '@/constants/storybook/form-item';
 
 const InteractiveTextInputField = (args: DialTextInputFieldProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -11,7 +16,7 @@ const InteractiveTextInputField = (args: DialTextInputFieldProps) => {
       <DialTextInputField
         {...args}
         value={value}
-        onChange={(newValue) => setValue(newValue)}
+        onChange={(newValue) => setValue(newValue || '')}
       />
     </div>
   );
@@ -31,38 +36,9 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
-      control: { type: 'text' },
-      description: 'The title/label text to display for the field',
-    },
-    elementId: {
-      control: { type: 'text' },
-      description: 'The unique identifier for the input element',
-    },
-    optional: {
-      control: { type: 'boolean' },
-      description: 'Whether the field is optional (displays "(Optional)" text)',
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text displayed when input is empty',
-    },
-    value: {
-      control: { type: 'text' },
-      description: 'The current value of the input',
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is disabled',
-    },
-    readonly: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is read-only',
-    },
-    invalid: {
-      control: { type: 'boolean' },
-      description: 'Whether the input has validation errors',
-    },
+    ...dialFormItemBaseArgTypes,
+    ...fieldControlArgTypes,
+    ...inputBaseArgTypes,
     errorText: {
       control: { type: 'text' },
       description: 'Error message text to display below the input',
@@ -70,30 +46,6 @@ const meta = {
     defaultEmptyText: {
       control: { type: 'text' },
       description: 'Text to display when readonly and value is empty',
-    },
-    iconBefore: {
-      control: false,
-      description: 'Icon or element to display before the input',
-    },
-    iconAfter: {
-      control: false,
-      description: 'Icon or element to display after the input',
-    },
-    prefix: {
-      control: { type: 'text' },
-      description: 'Text to display inside the input on the left',
-    },
-    suffix: {
-      control: { type: 'text' },
-      description: 'Text to display inside the input on the right',
-    },
-    textBeforeInput: {
-      control: { type: 'text' },
-      description: 'Text to display before the input in a separate field',
-    },
-    textAfterInput: {
-      control: { type: 'text' },
-      description: 'Text to display after the input in a separate field',
     },
   },
   args: {

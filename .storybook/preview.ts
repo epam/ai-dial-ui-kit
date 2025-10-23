@@ -5,7 +5,7 @@ const preview: Preview = {
   parameters: {
     backgrounds: {
       options: {
-        dark: { name: 'Dark', value: '#333' },
+        dark: { name: 'Dark', value: 'var(--bg-layer-1, #090D13)' },
         light: { name: 'Light', value: '#fff' },
       },
     },
