@@ -51,7 +51,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
   rowData?: T[];
   additionalGridOptions?: GridOptions<T>;
-  onGridReady?: (gridApi: GridApi<T>) => void;
   getContextMenuItems?: (row: T) => DropdownItem[];
   cssClass?: string;
   ariaLabel?: string;
@@ -61,7 +60,26 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   getRowId?: (row: T) => string;
   alternateOddRowColors?: boolean;
+  filterPlaceholder?: string;
 }
+
+ModuleRegistry.registerModules([
+  ClientSideRowModelModule,
+  ColumnAutoSizeModule,
+  CellStyleModule,
+  TextFilterModule,
+  NumberFilterModule,
+  RowSelectionModule,
+  GridStateModule,
+  RowApiModule,
+  RenderApiModule,
+  RowDragModule,
+  ColumnApiModule,
+  CellApiModule,
+  InfiniteRowModelModule,
+  RowStyleModule,
+  EventApiModule,
+]);
 
 /**
  * DialGrid — A feature-rich data grid wrapper built on ag-Grid with dark theme support.
@@ -124,7 +142,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
  * @param [columnDefs] - Array of column definitions (ag-Grid ColDef format)
  * @param [rowData] - Array of data objects to display in the grid
  * @param [additionalGridOptions] - Additional ag-Grid GridOptions to merge with defaults
- * @param [onGridReady] - Callback invoked when the grid is fully initialized, receives GridApi instance
  * @param [getContextMenuItems] - Function returning context menu items for a given row
  * @param [cssClass] - Additional CSS classes to apply to the grid container
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
@@ -134,12 +151,12 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
+ * @param [filterPlaceholder='Enter value'] - Placeholder text for column filter inputs
  */
 export const DialGrid = <T extends object>({
   columnDefs,
   rowData,
   additionalGridOptions,
-  onGridReady: gridReadyCb,
   getContextMenuItems,
   cssClass,
   ariaLabel = 'Data grid',
@@ -150,25 +167,8 @@ export const DialGrid = <T extends object>({
   getRowId = (row: T) =>
     String((row as Record<string, unknown>).id || JSON.stringify(row)),
   alternateOddRowColors = false,
+  filterPlaceholder = 'Enter value',
 }: DialGridProps<T>) => {
-  ModuleRegistry.registerModules([
-    ClientSideRowModelModule,
-    ColumnAutoSizeModule,
-    CellStyleModule,
-    TextFilterModule,
-    NumberFilterModule,
-    RowSelectionModule,
-    GridStateModule,
-    RowApiModule,
-    RenderApiModule,
-    RowDragModule,
-    ColumnApiModule,
-    CellApiModule,
-    InfiniteRowModelModule,
-    RowStyleModule,
-    EventApiModule,
-  ]);
-
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
 
@@ -359,12 +359,12 @@ export const DialGrid = <T extends object>({
       floatingFilter: true,
       filter: 'agTextColumnFilter',
       filterParams: {
-        filterPlaceholder: 'Enter value',
+        filterPlaceholder: filterPlaceholder,
         buttons: ['reset'],
       },
       comparator: baseColumnComparator.bind(this),
     }),
-    [],
+    [filterPlaceholder],
   );
 
   const onGridReady = (e: GridReadyEvent) => {
@@ -378,7 +378,7 @@ export const DialGrid = <T extends object>({
     e.api.sizeColumnsToFit();
 
     setGridApi(e.api);
-    gridReadyCb?.(e.api);
+    additionalGridOptions?.onGridReady?.(e);
   };
 
   useEffect(() => {
@@ -386,14 +386,6 @@ export const DialGrid = <T extends object>({
       gridApi.redrawRows();
     }
   }, [gridApi, currentSelectedIds]);
-
-  useEffect(() => {
-    const colsNoSort = computedColumnDefs.map((c) => ({
-      ...c,
-      sort: undefined,
-    }));
-    gridApi?.updateGridOptions({ columnDefs: colsNoSort, rowData });
-  }, [computedColumnDefs, gridApi, rowData]);
 
   return (
     <div

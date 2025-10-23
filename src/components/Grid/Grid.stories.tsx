@@ -138,7 +138,6 @@ const meta = {
     columnDefs: { control: false },
     rowData: { control: false },
     additionalGridOptions: { control: false },
-    onGridReady: { action: 'ready' },
     getContextMenuItems: { control: false },
     cssClass: { control: 'text' },
     ariaLabel: { control: 'text' },

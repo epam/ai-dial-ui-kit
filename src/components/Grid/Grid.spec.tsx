@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialGrid', () => {
       <DialGrid<TestRow>
         columnDefs={testColumns}
         rowData={testRows}
-        onGridReady={onGridReady}
+        additionalGridOptions={{ onGridReady }}
       />,
     );
 
