@@ -7,7 +7,7 @@ import type {
   InputBaseProps,
   NumberInputBaseProps,
 } from '@/models/field-control-props';
-import type { DialFormItemBaseProps } from '@/models/form-item';
+import type { DialFormItemBaseProps } from '@/types/form-item';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;
@@ -50,7 +50,7 @@ export interface DialInputFieldProps
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param type - The HTML input type (text, email, password, number, etc.)
  * @param onChange - Callback function called when the input value changes, receives the new value
@@ -131,7 +131,7 @@ export interface DialNumberInputFieldProps
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param onChange - Callback function called when the input value changes.
  *                        Returns either a number (for most values) or a string (for decimal values < 1 with leading zeros)

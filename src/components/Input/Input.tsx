@@ -44,7 +44,7 @@ export interface DialInputProps
  *
  * @params Component properties extending:
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max, isOnlyInteger) - partial
+ * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param type - The HTML input type (text, password, email, number, etc.)
  * @param containerCssClass - Additional CSS classes to apply to the container div
@@ -72,7 +72,6 @@ export const DialInput: FC<DialInputProps> = ({
   onChange,
   min,
   max,
-  isOnlyInteger,
   prefix,
   suffix,
   textBeforeInput,
@@ -88,7 +87,7 @@ export const DialInput: FC<DialInputProps> = ({
     type === 'number' || min !== undefined || max !== undefined;
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    handleKeyDown(e, type, min, max, isOnlyInteger);
+    handleKeyDown(e, type, min, max);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,11 +98,6 @@ export const DialInput: FC<DialInputProps> = ({
 
       // If it's not a valid number (except for partial inputs like "-" or ".")
       if (isNaN(numericValue) && newValue !== '-' && newValue !== '.') {
-        return;
-      }
-
-      // Forbid "." for integer-only inputs
-      if (newValue.includes('.') && isOnlyInteger) {
         return;
       }
 

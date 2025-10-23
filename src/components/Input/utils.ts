@@ -20,7 +20,6 @@ export const handleKeyDown = (
   type?: string,
   min?: number,
   max?: number,
-  isOnlyInteger?: boolean,
 ) => {
   const isNumericInput =
     type === 'number' || min !== undefined || max !== undefined;
@@ -49,8 +48,7 @@ export const handleKeyDown = (
   if (
     e.key === '.' &&
     type === 'number' &&
-    !e.currentTarget.value.includes('.') &&
-    !isOnlyInteger
+    !e.currentTarget.value.includes('.')
   ) {
     return;
   }

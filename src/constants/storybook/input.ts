@@ -84,9 +84,4 @@ export const numberInputBaseArgTypes: Partial<ArgTypes<NumberInputBaseProps>> =
       control: { type: 'number' as const },
       description: 'Maximum allowed value for the number input',
     },
-    isOnlyInteger: {
-      control: { type: 'boolean' as const },
-      description:
-        'Whether to restrict input to integers only (no decimal values)',
-    },
   };

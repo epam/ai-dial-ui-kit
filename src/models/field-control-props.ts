@@ -49,10 +49,8 @@ export interface InputBaseProps {
  *
  * @param min - Minimum allowed value for the number input
  * @param max - Maximum allowed value for the number input
- * @param isOnlyInteger - Whether to restrict input to integers only (no decimal values)
  */
 export interface NumberInputBaseProps {
   min?: number;
   max?: number;
-  isOnlyInteger?: boolean;
 }
