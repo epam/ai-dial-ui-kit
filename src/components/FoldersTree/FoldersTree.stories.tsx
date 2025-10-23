@@ -27,7 +27,7 @@ const meta: Meta<typeof DialFoldersTree> = {
     },
   },
   argTypes: {
-    onToggleFolder: {
+    onFolderClick: {
       action: 'toggleFolder',
       description: 'Callback fired when a folder is toggled open or closed.',
     },
@@ -183,7 +183,7 @@ export const Default: Story = {
             {...args}
             expandedFolders={expanded}
             loadingPaths={loadingPaths}
-            onToggleFolder={(folder) => {
+            onFolderClick={(folder) => {
               const newExpanded = new Set(expanded);
 
               if (newExpanded.has(folder.path)) {

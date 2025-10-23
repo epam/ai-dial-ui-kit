@@ -46,7 +46,7 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
     render(
       <DialFoldersTree
         folders={mockFolders}
-        onToggleFolder={onToggleFolder}
+        onFolderClick={onToggleFolder}
         getContextMenuItems={getMenu}
       />,
     );
