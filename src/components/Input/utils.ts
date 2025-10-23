@@ -12,6 +12,7 @@ const ALLOWED_INPUT_KEYS = [
   'Escape',
   'Home',
   'End',
+  'Insert',
 ];
 
 export const handleKeyDown = (
@@ -29,11 +30,16 @@ export const handleKeyDown = (
     return;
   }
 
-  // Allow minus sign only at the beginning and if min allows negative numbers
+  // Allow common keyboard shortcuts (Ctrl+A, Ctrl+C, Ctrl+V, etc.)
+  if (e.ctrlKey || e.metaKey) {
+    return;
+  }
+
+  // Allow minus sign only at the beginning and if not already present
   if (
     e.key === '-' &&
-    e.currentTarget.selectionStart === 0 &&
-    (min === undefined || min < 0)
+    (e.currentTarget.selectionStart ?? 0) === 0 &&
+    !e.currentTarget.value.includes('-')
   ) {
     return;
   }
