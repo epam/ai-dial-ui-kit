@@ -69,32 +69,37 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                 'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-layer-3 rounded group w-full',
                 selectedClass,
               )}
-              onClick={() => handleFolderClick(node as DialFile)}
             >
-              <DialDropdown
-                trigger={[DropdownTrigger.ContextMenu]}
-                cssClass="w-full"
-                anchorToMouse
-                menu={{ items: menuItems }}
+              <div
+                onClick={() => handleFolderClick(node as DialFile)}
+                className="w-full"
               >
-                <div className="flex-1 flex flex-row truncate items-center">
-                  {!isFolder ? (
-                    <DialFileName name={name!} />
-                  ) : (
-                    <>
-                      <IconCaretRightFilled
-                        {...CARET_ICON_PROPS}
-                        className={classNames(
-                          'flex-shrink-0',
-                          isExpanded && 'rotate-90 transition-all',
-                          !hasValidItems && 'text-transparent',
-                        )}
-                      />
-                      <DialFolderName name={name!} />
-                    </>
-                  )}
-                </div>
-              </DialDropdown>
+                <DialDropdown
+                  trigger={[DropdownTrigger.ContextMenu]}
+                  cssClass="w-full"
+                  anchorToMouse
+                  menu={{ items: menuItems }}
+                >
+                  <div className="flex-1 flex flex-row truncate items-center">
+                    {!isFolder ? (
+                      <DialFileName name={name!} />
+                    ) : (
+                      <>
+                        <IconCaretRightFilled
+                          {...CARET_ICON_PROPS}
+                          className={classNames(
+                            'flex-shrink-0',
+                            isExpanded && 'rotate-90 transition-all',
+                            !hasValidItems && 'text-transparent',
+                          )}
+                        />
+                        <DialFolderName name={name!} />
+                      </>
+                    )}
+                  </div>
+                </DialDropdown>
+              </div>
+
               {menuItems.length > 0 && (
                 <DialDropdown
                   placement="bottom-start"

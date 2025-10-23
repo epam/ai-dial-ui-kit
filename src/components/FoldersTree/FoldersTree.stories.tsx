@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { DialFileNodeType } from '@/models/file';
+import { DialFileNodeType, type DialFile } from '@/models/file';
 import { DialFoldersTree } from './FoldersTree';
 import type { DropdownItem } from '@/models/dropdown';
 import {
@@ -99,36 +99,66 @@ const mockFolders = [
   },
 ];
 
-const getMenu = (): DropdownItem[] => [
+const getMenu = (node: DialFile): DropdownItem[] => [
   {
     key: 'copy',
     label: 'Copy',
     icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
   {
     key: 'cut',
     label: 'Cut',
     icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
   {
     key: 'paste',
     label: 'Paste',
     icon: <IconClipboardCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
   {
     key: 'download',
     label: 'Download',
     icon: <IconDownload {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
   {
     key: 'delete',
     label: 'Delete',
     icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
   {
     key: 'rename',
     label: 'Rename',
     icon: <IconPencil {...BASE_ICON_PROPS} className="text-secondary" />,
+    onClick: (info) => {
+      info.domEvent.stopPropagation();
+      // eslint-disable-next-line no-console
+      console.log(node.name);
+    },
   },
 ];
 
