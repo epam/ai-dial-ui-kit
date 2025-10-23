@@ -35,11 +35,7 @@ const getMenu = vi.fn(() => [
 describe('Dial UI Kit :: DialFoldersTree', () => {
   test('renders folders', () => {
     render(
-      <DialFoldersTree
-        folders={mockFolders}
-        expandedFolders={new Set()}
-        getContextMenuItems={getMenu}
-      />,
+      <DialFoldersTree folders={mockFolders} getContextMenuItems={getMenu} />,
     );
     expect(screen.getByText('Root')).toBeInTheDocument();
     expect(screen.queryByText('Subfolder')).not.toBeInTheDocument();
@@ -50,7 +46,6 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
     render(
       <DialFoldersTree
         folders={mockFolders}
-        expandedFolders={new Set()}
         onToggleFolder={onToggleFolder}
         getContextMenuItems={getMenu}
       />,
@@ -100,7 +95,6 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
     render(
       <DialFoldersTree
         folders={[]}
-        expandedFolders={new Set()}
         renderEmptyState={<div data-testid="empty">No folders</div>}
       />,
     );

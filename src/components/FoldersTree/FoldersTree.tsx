@@ -14,7 +14,9 @@ import { CARET_ICON_PROPS } from './constants';
 
 export interface DialFoldersTreeProps {
   folders: DialFile[];
-  expandedFolders: Set<string>;
+  expandedFolders?: Set<string>;
+  editedPaths?: Set<string>;
+  loadingPaths?: Set<string>;
   renderEmptyState?: React.ReactNode;
   showFiles?: boolean;
   onToggleFolder?: (folder: DialFile) => void;
@@ -23,7 +25,9 @@ export interface DialFoldersTreeProps {
 
 export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   folders,
-  expandedFolders,
+  expandedFolders = new Set(),
+  // editedPaths = new Set(),
+  loadingPaths = new Set(),
   onToggleFolder,
   renderEmptyState,
   showFiles,
@@ -53,6 +57,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       const isExpanded = expandedFolders.has(path);
       const isSelected = selectedFolderPath === path;
+      // const isEdited = editedPaths.has(path);
+      const isLoading = loadingPaths.has(path);
 
       const selectedClass = isSelected
         ? 'bg-accent-primary-alpha border-l-2 border-l-accent-primary rounded'
@@ -93,7 +99,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                             !hasValidItems && 'text-transparent',
                           )}
                         />
-                        <DialFolderName name={name!} />
+                        <DialFolderName name={name!} loading={isLoading} />
                       </>
                     )}
                   </div>

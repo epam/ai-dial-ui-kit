@@ -171,18 +171,43 @@ export const Default: Story = {
   },
   render: (args) => {
     const Wrapper = () => {
+      const [loaded, setLoaded] = useState(new Set<string>());
       const [expanded, setExpanded] = useState(args.expandedFolders);
+      const [loadingPaths, setLoadingPaths] = useState(
+        args.loadingPaths ?? new Set<string>(),
+      );
 
       return (
         <div className="w-[400px] h-[400px] border rounded p-4 bg-background">
           <DialFoldersTree
             {...args}
             expandedFolders={expanded}
+            loadingPaths={loadingPaths}
             onToggleFolder={(folder) => {
               const newExpanded = new Set(expanded);
-              if (newExpanded.has(folder.path)) newExpanded.delete(folder.path);
-              else newExpanded.add(folder.path);
-              setExpanded(newExpanded);
+
+              if (newExpanded.has(folder.path)) {
+                newExpanded.delete(folder.path);
+                setExpanded(newExpanded);
+              } else {
+                newExpanded.add(folder.path);
+
+                if (loaded.has(folder.path)) {
+                  setExpanded(newExpanded);
+                } else {
+                  setLoadingPaths((val) => val.add(folder.path));
+                  setTimeout(() => {
+                    setExpanded(newExpanded);
+                    setLoaded((val) => val.add(folder.path));
+                    if (newExpanded.has(folder.path)) {
+                      setLoadingPaths((val) => {
+                        val.delete(folder.path);
+                        return val;
+                      });
+                    }
+                  }, 750);
+                }
+              }
             }}
             getContextMenuItems={getMenu}
           />
