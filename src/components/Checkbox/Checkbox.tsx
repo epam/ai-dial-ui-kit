@@ -84,7 +84,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
-          <DialEllipsisTooltip text={label} />
+          <DialEllipsisTooltip text={label} cssClass="text-primary" />
         ) : (
           label
         ))}

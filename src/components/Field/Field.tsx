@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import type { FC, ReactNode } from 'react';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 import { IconInfoCircle } from '@tabler/icons-react';
+import type { FC, ReactNode } from 'react';
 
 export interface DialFieldLabelProps {
   fieldTitle?: string | ReactNode;
@@ -39,7 +39,7 @@ export const DialFieldLabel: FC<DialFieldLabelProps> = ({
 }) => {
   return fieldTitle ? (
     <label
-      className={classNames(
+      className={mergeClasses(
         'dial-tiny text-secondary flex gap-1',
         cssClass,
         !cssClass?.includes('mb') && 'mb-2',
