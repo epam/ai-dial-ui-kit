@@ -235,6 +235,15 @@ export const WithFilesVisible: Story = {
   },
 };
 
+export const WithLoaders: Story = {
+  args: {
+    items: mockFolders,
+    expandedPaths: new Set(['/root', '/root/Images']),
+    loadingPaths: new Set(['/root/Documents']),
+    getContextMenuItems: getMenu,
+  },
+};
+
 export const EmptyState: Story = {
   args: {
     items: [],
