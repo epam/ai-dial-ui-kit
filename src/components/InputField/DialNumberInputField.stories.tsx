@@ -5,6 +5,11 @@ import {
   DialNumberInputField,
   type DialNumberInputFieldProps,
 } from './InputField';
+import {
+  fieldControlArgTypes,
+  inputBaseArgTypes,
+} from '@/constants/storybook/input';
+import { dialFormItemBaseArgTypes } from '@/constants/storybook/form-item';
 
 const InteractiveNumberInputField = (args: DialNumberInputFieldProps) => {
   const [value, setValue] = useState(args.value);
@@ -20,6 +25,9 @@ const InteractiveNumberInputField = (args: DialNumberInputFieldProps) => {
   );
 };
 
+const baseArgTypes = { ...inputBaseArgTypes };
+delete baseArgTypes.value;
+
 const meta = {
   title: 'Form/NumberInputField',
   component: DialNumberInputField,
@@ -34,37 +42,12 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
-      control: { type: 'text' },
-      description: 'The title/label text to display for the field',
-    },
-    elementId: {
-      control: { type: 'text' },
-      description: 'The unique identifier for the input element',
-    },
-    optional: {
-      control: { type: 'boolean' },
-      description: 'Whether the field is optional (displays "(Optional)" text)',
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text displayed when input is empty',
-    },
+    ...dialFormItemBaseArgTypes,
+    ...fieldControlArgTypes,
+    ...inputBaseArgTypes,
     value: {
       control: { type: 'number' },
       description: 'The current value of the input',
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is disabled',
-    },
-    readonly: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is read-only',
-    },
-    invalid: {
-      control: { type: 'boolean' },
-      description: 'Whether the input has validation errors',
     },
     errorText: {
       control: { type: 'text' },

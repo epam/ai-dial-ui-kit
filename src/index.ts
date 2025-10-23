@@ -17,6 +17,7 @@ export { DialFileIcon } from './components/FileIcon/FileIcon';
 export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
+export { DialFolderName } from './components/FolderName/FolderName';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -87,6 +88,13 @@ export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
 export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
+export type { DialModifiedEntity } from './models/base-entity';
+export type { DialFile } from './models/file';
+export type {
+  DialFileNodeType,
+  DialFilePermission,
+  DialFileResourceType,
+} from './models/file';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';

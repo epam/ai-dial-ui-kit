@@ -20,7 +20,8 @@ export const dropdownItemBaseClasses = classNames(
 
 export const dropdownItemDisabledClasses = 'opacity-75 !cursor-not-allowed';
 export const dropdownItemDangerClasses = 'text-error';
-export const dropdownDividerClasses = 'my-1 border-t border-hover';
+export const dropdownDividerClasses =
+  'my-1 border-t border-hover border-secondary';
 
 export const dropdownGap = 8;
 
