@@ -2,8 +2,8 @@ import { IconCheck, IconMinus } from '@tabler/icons-react';
 import classNames from 'classnames';
 import { type ChangeEvent, type FC, useCallback } from 'react';
 
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialCheckboxProps {
   id: string;
@@ -84,9 +84,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
-          <DialTooltip tooltip={label} triggerClassName="flex-1 min-w-0">
-            <span className="text-primary w-full truncate">{label}</span>
-          </DialTooltip>
+          <DialEllipsisTooltip text={label} cssClass="text-primary" />
         ) : (
           label
         ))}

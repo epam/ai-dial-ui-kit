@@ -3,9 +3,9 @@ import { describe, expect, test } from 'vitest';
 import { DialLoader } from './Loader';
 
 describe('Dial UI Kit :: DialLoader', () => {
-  test('renders with role=status and default aria-label', () => {
+  test('renders with role=img and default aria-label', () => {
     render(<DialLoader />);
-    const el = screen.getByRole('status', { name: 'Loading' });
+    const el = screen.getByRole('img', { name: 'Loading' });
     expect(el).toBeInTheDocument();
   });
 
@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialLoader', () => {
 
   test('respects custom aria label', () => {
     render(<DialLoader ariaLabel="Busy" />);
-    expect(screen.getByRole('status', { name: 'Busy' })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Busy' })).toBeInTheDocument();
   });
 
   test('respects custom size via svg attributes', () => {
