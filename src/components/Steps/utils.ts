@@ -14,7 +14,7 @@ export const getStepClass = (step: Step, currentStepId: string) => {
 
   switch (step.status) {
     case StepStatus.VALID:
-      return 'border-primary text-white';
+      return 'border-primary text-primary';
     case StepStatus.ERROR:
       return 'border-red-900 text-error';
     default:
