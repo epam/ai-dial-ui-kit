@@ -156,7 +156,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
             <div
               style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
               className={mergeClasses(
-                'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-layer-3 rounded group w-full',
+                'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px]',
                 selectedClass,
               )}
             >
@@ -194,7 +194,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                   menu={{ items: menuItems }}
                 >
                   <DialIcon
-                    className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2"
+                    className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
                     icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
                   />
                 </DialDropdown>
