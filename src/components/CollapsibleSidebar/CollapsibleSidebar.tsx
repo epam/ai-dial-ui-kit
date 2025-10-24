@@ -2,8 +2,8 @@ import { useState, type FC, type ReactNode } from 'react';
 
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
 import classNames from 'classnames';
-import { BASE_ICON_PROPS, BASE_ICON_SIZE } from '@/constants/icon';
 import { DialButton } from '@/components/Button/Button';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialCollapsibleSidebarProps {
   children: ReactNode;
@@ -13,6 +13,7 @@ export interface DialCollapsibleSidebarProps {
   containerCssClass?: string;
   iconSize?: number;
   additionalButtons?: ReactNode;
+  iconStroke?: number;
 }
 
 const CLOSED_WIDTH = 60;
@@ -40,7 +41,8 @@ const CLOSED_WIDTH = 60;
  * @param title - The title displayed when the bar is collapsed
  * @param [titleCssClass] - Additional CSS classes applied to the title element
  * @param [containerCssClass] - Additional CSS classes applied to the container element
- * @param [iconSize] - The size of the toggle icons. Defaults to {@link BASE_ICON_SIZE}
+ * @param [iconSize = 32] - The size of the toggle icons. Defaults to 32
+ * @param [iconStroke = 1.5] - The stroke width of the toggle icons. Defaults to 1.5
  * @param [additionalButtons] - Additional buttons or elements displayed next to the toggle button when expanded
  */
 export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
@@ -48,7 +50,8 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   children,
   width,
   title,
-  iconSize = BASE_ICON_SIZE,
+  iconSize = 32,
+  iconStroke = 1.5,
   titleCssClass,
   additionalButtons,
 }) => {
@@ -56,7 +59,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   const [isOpened, setIsOpened] = useState(true);
 
   const titleClass = classNames([
-    `transform rotate-180 [writing-mode:tb-rl]`,
+    `transform rotate-180 [writing-mode:tb-rl] p-4`,
     isOpened && 'hidden',
     titleCssClass,
   ]);
@@ -74,36 +77,32 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   return (
     <div
       className={classNames([
-        'rounded p-4 flex flex-col justify-between overflow-y-auto flex-shrink-0',
+        'rounded flex flex-col justify-between overflow-y-auto flex-shrink-0',
         containerCssClass,
       ])}
       style={{ width: `${containerWidth}px` }}
     >
       <div
         className={classNames([
-          'flex-1 min-h-0 overflow-auto',
+          'flex-1 p-4 min-h-0 overflow-auto',
           !isOpened && 'hidden',
         ])}
       >
         {children}
       </div>
       <div className={titleClass}>{title}</div>
-      <div className={buttonClass}>
+      <div
+        className={mergeClasses('border-t stroke-primary h-12', buttonClass)}
+      >
         {isOpened && additionalButtons}
         <DialButton
           cssClass={'hover:text-icon-accent-primary'}
           onClick={changeVisibility}
           iconBefore={
             isOpened ? (
-              <IconChevronsLeft
-                size={iconSize}
-                stroke={BASE_ICON_PROPS.stroke}
-              />
+              <IconChevronsLeft size={iconSize} stroke={iconStroke} />
             ) : (
-              <IconChevronsRight
-                size={iconSize}
-                stroke={BASE_ICON_PROPS.stroke}
-              />
+              <IconChevronsRight size={iconSize} stroke={iconStroke} />
             )
           }
         />

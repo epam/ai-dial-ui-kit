@@ -47,7 +47,7 @@ export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/Radi
 export { DialFormPopup } from './components/FormPopup/FormPopup';
 
 //File Manager Navigation Panel
-export { DialFileManagerNavigationPanel } from './components/FileManagerNavigationPanel/FileManagerNavigationPanel';
+export { DialFileManagerNavigationPanel } from './components/FileManager/components/FileManagerNavigationPanel/FileManagerNavigationPanel';
 
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
