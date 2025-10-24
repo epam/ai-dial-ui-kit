@@ -43,7 +43,7 @@ export interface DialTabsProps {
  *   tabs={[
  *     { id: 'overview', label: 'Overview' },
  *     { id: 'details', label: 'Details' },
- *     { id: 'settings', label: 'Settings' },
+ *     { id: 'settings', label: 'Settings', invalid: true },
  *   ]}
  *   activeTab="overview"
  *   onClick={(id) => setActiveTab(id)}
