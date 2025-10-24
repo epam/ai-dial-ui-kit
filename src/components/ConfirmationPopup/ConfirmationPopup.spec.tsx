@@ -125,4 +125,22 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     render(<DialConfirmationPopup {...baseProps} cssClass="ring-1" />);
     expect(screen.getByRole('dialog')).toHaveClass('ring-1');
   });
+
+  test('falls back to onClose when onCancel is not provided', () => {
+    const onClose = vi.fn();
+    const onConfirm = vi.fn();
+
+    render(
+      <DialConfirmationPopup
+        open
+        title="Confirm?"
+        cancelLabel="Cancel dialog"
+        onClose={onClose}
+        onConfirm={onConfirm}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /cancel dialog/i }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
 });

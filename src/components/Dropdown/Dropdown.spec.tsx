@@ -19,6 +19,9 @@ const openByClick = () => {
   fireEvent.click(screen.getByRole('button', { name: /open/i }));
 };
 
+const readPosition = (el: HTMLElement) =>
+  el.style.transform || `${el.style.left}|${el.style.top}`;
+
 describe('Dial UI Kit :: Dropdown', () => {
   test('renders & toggles aria-expanded on open/close', () => {
     const { container } = render(
@@ -585,5 +588,67 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(menuEl).toHaveClass('w-max');
     expect(menuEl.getAttribute('style') || '').not.toMatch(/min-width:/i);
     expect(menuEl.style.minWidth).toBe('');
+  });
+
+  test('changes menu position based on clientX/clientY from pointerdown', async () => {
+    const { container } = render(
+      <DialDropdown
+        anchorToMouse
+        trigger={[DropdownTrigger.Click]}
+        menu={{ items }}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    const wrapper = container.querySelector('[aria-haspopup="menu"]')!;
+
+    fireEvent.mouseDown(wrapper, { clientX: 10, clientY: 20 });
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+
+    const menu1 = await screen.findByRole('menu');
+    await waitFor(() => expect(readPosition(menu1)).not.toBe(''));
+    const pos1 = readPosition(menu1);
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Profile' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument(),
+    );
+
+    fireEvent.mouseDown(wrapper, { clientX: 150, clientY: 250 });
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+
+    const menu2 = await screen.findByRole('menu');
+    await waitFor(() => expect(readPosition(menu2)).not.toBe(''));
+    const pos2 = readPosition(menu2);
+
+    expect(pos1).not.toBe(pos2);
+  });
+
+  test('does not change position when anchorToMouse=false (covers early return)', async () => {
+    const { container } = render(
+      <DialDropdown trigger={[DropdownTrigger.Click]} menu={{ items }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    const wrapper = container.querySelector('[aria-haspopup="menu"]')!;
+
+    fireEvent.mouseDown(wrapper, { clientX: 10, clientY: 20 });
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+    const menu1 = await screen.findByRole('menu');
+    const pos1 = readPosition(menu1);
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Profile' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument(),
+    );
+
+    fireEvent.mouseDown(wrapper, { clientX: 200, clientY: 100 });
+    fireEvent.click(screen.getByRole('button', { name: /open/i }));
+    const menu2 = await screen.findByRole('menu');
+    const pos2 = readPosition(menu2);
+
+    expect(pos1).toBe(pos2);
   });
 });
