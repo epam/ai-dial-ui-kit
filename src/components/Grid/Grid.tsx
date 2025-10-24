@@ -1,29 +1,15 @@
 import {
-  CellApiModule,
-  CellStyleModule,
-  ClientSideRowModelModule,
   type ColDef,
   colorSchemeDark,
-  ColumnApiModule,
-  ColumnAutoSizeModule,
   type GridApi,
   type GridOptions,
   type GridReadyEvent,
   type GridSizeChangedEvent,
-  GridStateModule,
   type ICellRendererParams,
   ModuleRegistry,
-  NumberFilterModule,
-  RenderApiModule,
-  RowApiModule,
-  RowDragModule,
-  RowSelectionModule,
-  RowStyleModule,
-  TextFilterModule,
-  EventApiModule,
   themeBalham,
   type RowClassParams,
-  InfiniteRowModelModule,
+  AllCommunityModule,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
@@ -63,23 +49,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   filterPlaceholder?: string;
 }
 
-ModuleRegistry.registerModules([
-  ClientSideRowModelModule,
-  ColumnAutoSizeModule,
-  CellStyleModule,
-  TextFilterModule,
-  NumberFilterModule,
-  RowSelectionModule,
-  GridStateModule,
-  RowApiModule,
-  RenderApiModule,
-  RowDragModule,
-  ColumnApiModule,
-  CellApiModule,
-  InfiniteRowModelModule,
-  RowStyleModule,
-  EventApiModule,
-]);
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 /**
  * DialGrid — A feature-rich data grid wrapper built on ag-Grid with dark theme support.

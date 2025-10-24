@@ -78,4 +78,19 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     expect(screen.getByLabelText('icon')).toBeInTheDocument();
     expect(screen.getByText('Folder')).toBeInTheDocument();
   });
+
+  test('renders non-string title as-is (no tooltip wrapper)', () => {
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          title={<strong role="test">Custom</strong>}
+          href="#"
+        />
+      </ul>,
+    );
+
+    const title = screen.getByRole('test');
+    expect(title).toBeInTheDocument();
+    expect(title).not.toHaveAttribute('aria-label');
+  });
 });
