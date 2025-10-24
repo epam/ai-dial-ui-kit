@@ -5,11 +5,13 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { IconFolder } from '@tabler/icons-react';
+import { DialLoader } from '@/components/Loader/Loader';
 
 export interface DialFolderNameProps {
   name: string;
   cssClass?: string;
   shared?: boolean;
+  loading?: boolean;
 }
 
 /**
@@ -29,14 +31,24 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
   cssClass,
   shared = false,
+  loading = false,
 }) => {
+  const getIcon = () => {
+    if (loading) {
+      return <DialLoader />;
+    }
+    return (
+      <DialIcon
+        icon={<IconFolder {...BASE_ICON_PROPS} />}
+        className="inline-block align-middle"
+      />
+    );
+  };
+
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', cssClass)}>
       <span className={'inline-flex relative text-secondary'} role="img">
-        <DialIcon
-          icon={<IconFolder {...BASE_ICON_PROPS} />}
-          className="inline-block align-middle"
-        />
+        {getIcon()}
         {shared && (
           <span className="absolute -bottom-0.5 -left-0.5">
             <DialSharedEntityIndicator />
