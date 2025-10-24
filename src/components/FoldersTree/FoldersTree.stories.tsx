@@ -174,9 +174,13 @@ export const Default: Story = {
       const [expanded, setExpanded] = useState(new Set<string>());
       const [loading, setLoading] = useState(new Set<string>());
       const [loaded, setLoaded] = useState(new Set<string>());
+      const [selected, setSelected] = useState(new Set<string>());
 
       const handleItemClick = (item: DialFile) => {
         const newExpanded = new Set(expanded);
+        selected.clear();
+        selected.add(item.path);
+        setSelected(selected);
 
         if (newExpanded.has(item.path)) {
           newExpanded.delete(item.path);
@@ -207,6 +211,7 @@ export const Default: Story = {
             {...args}
             expandedPaths={expanded}
             loadingPaths={loading}
+            selectedPaths={selected}
             onItemClick={handleItemClick}
           />
         </div>
@@ -249,10 +254,6 @@ export const EmptyState: Story = {
     items: [],
     expandedPaths: new Set(),
     showFiles: false,
-    renderEmptyState: (
-      <div className="text-secondary text-center py-10 italic">
-        No folders available
-      </div>
-    ),
+    emptyStateTitle: 'No folders available',
   },
 };

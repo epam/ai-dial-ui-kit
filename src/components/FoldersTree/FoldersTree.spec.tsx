@@ -90,13 +90,8 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
   });
 
   test('renders empty state', () => {
-    render(
-      <DialFoldersTree
-        items={[]}
-        renderEmptyState={<div data-testid="empty">No folders</div>}
-      />,
-    );
-    expect(screen.getByTestId('empty')).toBeInTheDocument();
+    render(<DialFoldersTree items={[]} emptyStateTitle="No folders" />);
+    expect(screen.getByText('No folders')).toBeInTheDocument();
   });
 
   test('calls getContextMenuItems for each node', () => {

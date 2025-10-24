@@ -5,7 +5,7 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { IconFolder } from '@tabler/icons-react';
-import { DialLoader } from '../Loader/Loader';
+import { DialLoader } from '@/components/Loader/Loader';
 
 export interface DialFolderNameProps {
   name: string;
