@@ -67,6 +67,7 @@ export { DialLoadFileAreaField } from './components/LoadFileArea/LoadFileAreaFie
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
+export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 // Types
 export { AlertVariant } from './types/alert';
