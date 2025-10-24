@@ -1,15 +1,12 @@
 import { useMemo, useState, type FC } from 'react';
 
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
-import { DialButton } from '@/components/Button/Button';
+import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 import type { DropdownItem } from '@/models/dropdown';
-import { ButtonVariant } from '@/types/button';
 import { buttonChevronDown, buttonChevronUp } from './constants';
 
-export interface DialButtonDropdownProps {
+export interface DialButtonDropdownProps extends DialButtonProps {
   items: DropdownItem[];
-  variant: ButtonVariant;
-  title: string;
 }
 
 /**
