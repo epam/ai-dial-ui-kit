@@ -209,7 +209,7 @@ export const DialTabs: FC<DialTabsProps> = ({
                     onClick(id);
                     setIsDropdownOpen(false);
                   }}
-                  cssClass="w-full rounded-none h-[32px] px-3 py-2"
+                  cssClass="w-full rounded-none h-[32px] items-center px-3 py-2"
                 />
               ))
             }
