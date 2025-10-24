@@ -128,4 +128,21 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     const icons = screen.getAllByLabelText('icon');
     expect(icons.length).toBe(2);
   });
+
+  test('returns child as-is when it is not a valid React element', () => {
+    render(
+      <DialBreadcrumb>
+        <DialBreadcrumbItem title="A" />
+        {42}
+        <DialBreadcrumbItem title="B" />
+      </DialBreadcrumb>,
+    );
+    const number = screen.getByText('42');
+
+    expect(number).toBeInTheDocument();
+
+    expect(number.closest('li')).toBeNull();
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+  });
 });

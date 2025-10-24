@@ -1,0 +1,119 @@
+.ag-root-wrapper {
+  .ag-root-wrapper-body {
+    @apply h-auto;
+  }
+
+  .ag-filter-wrapper {
+    .ag-input-field-input.ag-text-field-input {
+      @apply pl-5;
+    }
+  }
+
+  @apply overflow-x-auto;
+  .ag-header {
+    .ag-header-cell.align-right {
+      .ag-header-cell-label {
+        @apply justify-end;
+      }
+    }
+
+    .ag-header-cell {
+      .header-checkbox-container {
+        @apply w-full h-full flex items-center justify-center;
+      }
+    }
+
+    .ag-header-viewport,
+    .ag-pinned-left-header {
+      .ag-floating-filter {
+        input {
+          @apply m-0 p-0 px-2;
+          height: 24px !important;
+        }
+      }
+    }
+  }
+
+  .ag-cell {
+    @apply flex items-center;
+    &.ag-grid-no-border,
+    &.ag-cell-focus {
+      @apply border-0;
+    }
+
+    &.align-right {
+      @apply justify-end;
+    }
+  }
+
+  .ag-error-row {
+    @apply bg-error;
+    #editable-cell-renderer {
+      @apply border-error;
+    }
+    &.ag-error-border {
+      @apply border border-error;
+      @apply cursor-pointer;
+    }
+    &.ag-row-hover:not(.ag-full-width-row):before {
+      @apply bg-transparent;
+    }
+  }
+  .ag-new-row {
+    @apply bg-success;
+    &.ag-new-border {
+      @apply border border-accent-secondary;
+      @apply cursor-pointer;
+    }
+    &.ag-row-hover:not(.ag-full-width-row):before {
+      @apply bg-transparent;
+    }
+  }
+  .ag-changed-row {
+    @apply bg-info;
+    &.ag-changed-border {
+      @apply border border-accent-primary;
+      @apply cursor-pointer;
+    }
+    &.ag-row-hover:not(.ag-full-width-row):before {
+      @apply bg-transparent;
+    }
+  }
+  .ag-empty-row {
+    &.ag-row-hover:not(.ag-full-width-row):before {
+      @apply bg-transparent;
+    }
+  }
+}
+
+.with-selection-column {
+  .ag-row .dial-row-select {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .ag-row-hover .dial-row-select,
+  .ag-row-selected .dial-row-select {
+    opacity: 1;
+  }
+
+  .header-checkbox-container .dial-header-select.unchecked {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .ag-header-cell:hover
+    .header-checkbox-container
+    .dial-header-select.unchecked,
+  .header-checkbox-container .dial-header-select.checked,
+  .header-checkbox-container .dial-header-select.indeterminate {
+    opacity: 1;
+  }
+}
+
+.ag-layout-auto-height {
+  .ag-center-cols-container,
+  .ag-center-cols-viewport {
+    @apply min-h-0;
+  }
+}

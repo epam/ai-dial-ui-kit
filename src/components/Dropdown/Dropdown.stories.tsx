@@ -170,7 +170,7 @@ const ControlledExample = (args: DialDropdownProps) => {
 
 export const ControlledOpen: Story = {
   args: {},
-  render: (args) => <ControlledExample {...args} />,
+  render: ControlledExample,
 };
 
 export const AllPlacements: Story = {
@@ -332,7 +332,7 @@ const FooterActionsExample = (args: DialDropdownProps) => {
 };
 
 export const WithFooterActionsControlled: Story = {
-  render: (args) => <FooterActionsExample {...args} />,
+  render: FooterActionsExample,
 };
 
 export const ContextMenuAtCursor: Story = {

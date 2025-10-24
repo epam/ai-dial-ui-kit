@@ -43,7 +43,7 @@ export interface DialTabsProps {
  *   tabs={[
  *     { id: 'overview', label: 'Overview' },
  *     { id: 'details', label: 'Details' },
- *     { id: 'settings', label: 'Settings' },
+ *     { id: 'settings', label: 'Settings', invalid: true },
  *   ]}
  *   activeTab="overview"
  *   onClick={(id) => setActiveTab(id)}
@@ -101,7 +101,7 @@ export const DialTabs: FC<DialTabsProps> = ({
 
   useEffect(() => {
     checkOverflow();
-    const observer = new ResizeObserver(checkOverflow);
+    const observer = new ResizeObserver(() => checkOverflow());
     const scrollableEl = scrollableRef.current;
     if (scrollableEl) observer.observe(scrollableEl);
     return () => observer.disconnect();
@@ -209,7 +209,7 @@ export const DialTabs: FC<DialTabsProps> = ({
                     onClick(id);
                     setIsDropdownOpen(false);
                   }}
-                  cssClass="w-full rounded-none h-[32px] items-center px-3 py-2"
+                  cssClass="w-full rounded-none h-[32px] px-3 py-2"
                 />
               ))
             }

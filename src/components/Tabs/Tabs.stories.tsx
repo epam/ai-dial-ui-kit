@@ -16,6 +16,7 @@ const manySampleTabs: TabModel[] = [
   ...sampleTabs.map((t) => ({
     id: t.id + '_copy',
     name: t.name + ' Copy',
+    invalid: t.id === 'overview',
   })),
 ];
 
@@ -119,6 +120,18 @@ export const ManyVerticalTabs: Story = {
   },
 };
 
+export const WithInvalidTab: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: sampleTabs.map((tab) => ({
+      ...tab,
+      invalid: tab.id === 'details',
+    })),
+    activeTab: 'details',
+    orientation: TabOrientation.Horizontal,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-10 text-primary">
@@ -142,7 +155,9 @@ export const AllVariants: Story = {
           />
         </div>
         <div>
-          <h3 className="dial-h3 font-semibold mb-2">Many horizontal tabs</h3>
+          <h3 className="dial-h3 font-semibold mb-2">
+            Many horizontal tabs and one is invalid
+          </h3>
           <InteractiveTabs
             tabs={manySampleTabs}
             activeTab="details"

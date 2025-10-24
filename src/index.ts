@@ -46,6 +46,9 @@ export { DialConfirmationPopup } from './components/ConfirmationPopup/Confirmati
 export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/RadioGroupPopupField';
 export { DialFormPopup } from './components/FormPopup/FormPopup';
 
+//File Manager Navigation Panel
+export { DialFileManagerNavigationPanel } from './components/FileManagerNavigationPanel/FileManagerNavigationPanel';
+
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
@@ -67,6 +70,7 @@ export { DialLoadFileAreaField } from './components/LoadFileArea/LoadFileAreaFie
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
+export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 // Types
 export { AlertVariant } from './types/alert';

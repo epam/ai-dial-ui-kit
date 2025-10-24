@@ -151,8 +151,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   const listId = useId();
   const useAuto = placement === undefined;
 
-  const getRefWidth = (el: ReferenceElement | null): number => {
-    if (!el) return 0;
+  const getRefWidth = (el: ReferenceElement): number => {
     if ('clientWidth' in el) return (el as Element).clientWidth;
     const rect = (
       el as { getBoundingClientRect?: () => DOMRect }
