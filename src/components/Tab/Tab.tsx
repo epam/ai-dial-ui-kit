@@ -48,7 +48,7 @@ export const DialTab: FC<DialTabProps> = ({
   onClick,
 }) => {
   const baseClasses =
-    'rounded px-3 py-2 flex flex-row gap-2 h-[32px] cursor-pointer dial-small leading-4 hover:text-accent-primary';
+    'rounded px-3 pt-2 pb-[6px] flex flex-row gap-2 h-[32px] cursor-pointer dial-small leading-4 hover:text-accent-primary';
 
   const tabClassNames = mergeClasses(
     baseClasses,
@@ -57,7 +57,7 @@ export const DialTab: FC<DialTabProps> = ({
       'bg-layer-1 text-secondary pointer-events-none': disabled,
       'bg-accent-primary-alpha text-primary': active && !disabled,
       'text-primary': !active && !disabled,
-      'pb-[6px] border-b-2 border-b-accent-primary':
+      'pb-1 border-b-2 border-b-accent-primary':
         active && horizontal && !disabled,
       'border-l-2 border-l-accent-primary': active && !horizontal && !disabled,
     },
@@ -76,7 +76,7 @@ export const DialTab: FC<DialTabProps> = ({
         contentClassName="max-w-[200px]"
         cssClass="max-w-[200px]"
       />
-      {invalid && (
+      {(invalid || tab.invalid) && (
         <div className="text-error">
           <IconExclamationCircle {...BASE_ICON_PROPS} />
         </div>
