@@ -169,7 +169,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                 >
                   <div className="flex-1 flex flex-row truncate items-center">
                     {!isFolder ? (
-                      <DialFileName name={name!} />
+                      <DialFileName name={name} />
                     ) : (
                       <>
                         <IconCaretRightFilled
@@ -180,7 +180,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                             !hasValidItems && 'text-transparent',
                           )}
                         />
-                        <DialFolderName name={name!} loading={isLoading} />
+                        <DialFolderName name={name} loading={isLoading} />
                       </>
                     )}
                   </div>

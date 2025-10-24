@@ -10,7 +10,7 @@ export interface DialFile extends DialModifiedEntity {
   url?: string;
   items?: DialFile[];
   path: string;
-  name?: string;
+  name: string;
   folderId: string;
   author?: string;
   nextToken?: string;
