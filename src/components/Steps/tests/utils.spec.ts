@@ -23,7 +23,7 @@ describe('getStepClass', () => {
   it('returns correct class for non-current step with VALID status', () => {
     expect(
       getStepClass({ ...baseStep, status: StepStatus.VALID }, 'other'),
-    ).toBe('border-primary text-white');
+    ).toBe('border-primary text-primary');
   });
   it('returns correct class for non-current step with ERROR status', () => {
     expect(
