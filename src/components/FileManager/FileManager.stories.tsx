@@ -4,7 +4,7 @@ import { DialFileManager, type DialFileManagerProps } from './FileManager';
 import { itemsMock } from './__mocks__/files';
 
 const meta = {
-  title: 'Components/FileManager/Skeleton',
+  title: 'FileManager/FileManager',
   component: DialFileManager,
   parameters: { layout: 'fullscreen' },
   argTypes: {

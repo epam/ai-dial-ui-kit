@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFolderName, type DialFolderNameProps } from './FolderName';
 
 const meta = {
-  title: 'FileManager/FolderName',
+  title: 'FileManager/components/FolderName',
   component: DialFolderName,
   parameters: { layout: 'centered' },
   argTypes: {

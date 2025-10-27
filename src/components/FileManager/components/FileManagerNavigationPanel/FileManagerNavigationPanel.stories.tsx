@@ -6,7 +6,7 @@ import {
 } from './FileManagerNavigationPanel';
 
 const meta = {
-  title: 'FileManager/FileManagerNavigationPanel',
+  title: 'FileManager/components/FileManagerNavigationPanel',
   component: DialFileManagerNavigationPanel,
   parameters: { layout: 'fullscreen' },
   argTypes: {
