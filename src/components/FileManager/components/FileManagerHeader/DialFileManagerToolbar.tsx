@@ -92,7 +92,9 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
 }) => {
   return (
     <div className="flex justify-between gap-4 items-center overflow-x-auto">
-      <DialTabs tabs={tabs} activeTab={activeTab} onClick={onTabChange} />
+      <div className="flex-1 min-w-0">
+        <DialTabs tabs={tabs} activeTab={activeTab} onClick={onTabChange} />
+      </div>
 
       <div className="flex gap-4 flex-shrink-0 items-center">
         <DialSwitch

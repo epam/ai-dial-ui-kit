@@ -118,7 +118,7 @@ export const WithoutCreateButton: Story = {
       const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
 
       return (
-        <div className="w-[700px] p-4 border rounded-lg bg-background">
+        <div className="w-[800px] p-4 border rounded-lg bg-background">
           <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
