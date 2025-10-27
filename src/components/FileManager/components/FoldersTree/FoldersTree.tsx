@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import { useState, type FC, type ReactNode } from 'react';
 import { IconCaretRightFilled, IconDotsVertical } from '@tabler/icons-react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import { BASE_ICON_PROPS } from '@/constants/icon';
@@ -17,7 +17,7 @@ export interface DialFoldersTreeProps {
   items: DialFile[];
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
-  selectedPaths?: Set<string>;
+  selectedPath?: string;
   showFiles?: boolean;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
@@ -88,7 +88,7 @@ export interface DialFoldersTreeProps {
  * @param [items] - Array of folder and file nodes to display in the tree.
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
- * @param [selectedPaths] - Set of paths representing currently selected folders or files.
+ * @param [selectedPath] - Path representing the currently selected folder or file.
  * @param [showFiles=false] - Whether to show files in addition to folders.
  * @param [emptyStateTitle='No Folders'] - Title text displayed when there are no items.
  * @param [emptyStateDescription] - Optional description text for the empty state.
@@ -104,30 +104,36 @@ export interface DialFoldersTreeProps {
  */
 export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   items,
-  showFiles,
+  showFiles = false,
   expandedPaths = new Set(),
   loadingPaths = new Set(),
-  selectedPaths = new Set(),
+  selectedPath,
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
   emptyStateIcon,
   onItemClick,
   getContextMenuItems,
 }) => {
+  const [expandedItems, setExpandedItems] =
+    useState<Set<string>>(expandedPaths);
   const handleFolderClick = (node: DialFile) => {
     onItemClick?.(node);
+    if (expandedItems.has(node.path)) {
+      setExpandedItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(node.path);
+        return newSet;
+      });
+    } else {
+      setExpandedItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.add(node.path);
+        return newSet;
+      });
+    }
   };
 
   const renderTree = (nodes: DialFile[], level: number) => {
-    if (!nodes?.length)
-      return (
-        <DialNoDataContent
-          title={emptyStateTitle}
-          description={emptyStateDescription}
-          icon={emptyStateIcon}
-        />
-      );
-
     return nodes.map((node) => {
       const { path, nodeType, name, items } = node;
 
@@ -140,8 +146,9 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         items.length > 0 &&
         items.some((n) => n.nodeType === DialFileNodeType.FOLDER || showFiles);
 
-      const isExpanded = expandedPaths.has(path);
-      const isSelected = selectedPaths.has(path);
+      const isExpanded = expandedItems.has(path);
+      const isSelected = selectedPath === path;
+
       const isLoading = loadingPaths.has(path);
 
       const selectedClass = isSelected
@@ -210,7 +217,15 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
   return (
     <div className="flex-1 w-full h-full overflow-y-auto">
-      {renderTree(items, 0)}
+      {items.length > 0 ? (
+        renderTree(items, 0)
+      ) : (
+        <DialNoDataContent
+          title={emptyStateTitle}
+          description={emptyStateDescription}
+          icon={emptyStateIcon}
+        />
+      )}
     </div>
   );
 };

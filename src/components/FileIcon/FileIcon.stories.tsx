@@ -4,7 +4,7 @@ import { supportedExtensions } from './constants';
 import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 
 const meta = {
-  title: 'FileManager/DialFileIcon',
+  title: 'FileManager/components/DialFileIcon',
   component: DialFileIcon,
   parameters: { layout: 'centered' },
   argTypes: {

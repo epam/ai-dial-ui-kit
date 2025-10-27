@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileName, type DialFileNameProps } from './FileName';
 
 const meta = {
-  title: 'FileManager/FileName',
+  title: 'FileManager/components/FileName',
   component: DialFileName,
   parameters: { layout: 'centered' },
   argTypes: {

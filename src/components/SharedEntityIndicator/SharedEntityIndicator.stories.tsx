@@ -5,7 +5,7 @@ import {
 } from './SharedEntityIndicator';
 
 const meta = {
-  title: 'FileManager/SharedEntityIndicator',
+  title: 'FileManager/components/SharedEntityIndicator',
   component: DialSharedEntityIndicator,
   parameters: { layout: 'centered' },
   argTypes: {
