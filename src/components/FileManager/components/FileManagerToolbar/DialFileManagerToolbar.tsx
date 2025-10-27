@@ -8,10 +8,11 @@ import { ButtonVariant } from '@/types/button';
 import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import type { DialFileManagerTabs } from '@/types/file-manager';
 
 export interface DialFileManagerToolbarProps {
-  tabs: TabModel[];
-  activeTab: string;
+  tabs?: TabModel[];
+  activeTab?: string;
   areHiddenFilesVisible: boolean;
   hiddenFilesSwitcherLabel?: string;
   isCreateButtonVisible?: boolean;
@@ -19,9 +20,9 @@ export interface DialFileManagerToolbarProps {
   createButtonDropdownItems?: DropdownItem[];
   createButtonLabel?: string;
   refreshButtonLabel?: string;
-  onTabChange: (id: string) => void;
-  onToggleHiddenFiles: (value: boolean) => void;
-  onRefresh: () => void;
+  onTabChange?: (id: DialFileManagerTabs) => void;
+  onToggleHiddenFiles?: (value: boolean) => void;
+  onRefresh?: () => void;
 }
 
 /**
@@ -91,9 +92,15 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   refreshButtonLabel = 'Refresh',
 }) => {
   return (
-    <div className="flex justify-between gap-4 items-center overflow-x-auto">
+    <div className="flex w-full justify-between gap-4 items-center overflow-x-auto">
       <div className="flex-1 min-w-0">
-        <DialTabs tabs={tabs} activeTab={activeTab} onClick={onTabChange} />
+        {tabs && activeTab && onTabChange && (
+          <DialTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onClick={(id: string) => onTabChange(id as DialFileManagerTabs)}
+          />
+        )}
       </div>
 
       <div className="flex gap-4 flex-shrink-0 items-center">

@@ -38,6 +38,10 @@ import {
   normalizeToLowerCase,
   collectAllDescendants,
 } from './utils';
+import {
+  DialFileManagerToolbar,
+  type DialFileManagerToolbarProps,
+} from './components/FileManagerToolbar/DialFileManagerToolbar';
 
 interface GridRow {
   id: string;
@@ -85,13 +89,12 @@ export interface DialFileManagerProps {
   items?: DialFile[];
 
   treeOptions?: FileTreeOptions;
-
+  toolbarOptions?: DialFileManagerToolbarProps;
   navigationPanelOptions?: NavigationPanelOptions;
-
-  /** Grid options; rowData and columnDefs are prepared here */
   gridOptions?: GridOptions;
 
   onPathChange?: (nextPath?: string) => void;
+  onTableFileClick?: (file: GridRow) => void;
 }
 
 /**
@@ -133,8 +136,10 @@ export interface DialFileManagerProps {
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
+ * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
+ * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  */
 export const DialFileManager: FC<DialFileManagerProps> = ({
   path,
@@ -143,7 +148,9 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   treeOptions,
   navigationPanelOptions,
   gridOptions,
+  toolbarOptions,
   onPathChange,
+  onTableFileClick,
 }) => {
   const [currentPath, setCurrentPath] = useState<string | undefined>(path);
 
@@ -277,15 +284,29 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     [navigationPanelOptions],
   );
 
+  const onTableRowClick = useCallback(
+    (row: GridRow) => {
+      if (row.nodeType === DialFileNodeType.FOLDER) {
+        setCurrentPath(row.path);
+        onPathChange?.(row.path);
+      } else {
+        onTableFileClick?.(row);
+      }
+    },
+    [onPathChange, onTableFileClick],
+  );
+
   return (
     <section className={mergeClasses(containerBaseClasses, cssClass)}>
-      <div
-        className={toolbarBaseClasses}
-        role="toolbar"
-        aria-label="File Manager Toolbar"
-      >
-        Toolbar
-      </div>
+      {toolbarOptions && (
+        <div
+          className={toolbarBaseClasses}
+          role="toolbar"
+          aria-label="File Manager Toolbar"
+        >
+          <DialFileManagerToolbar {...toolbarOptions} />
+        </div>
+      )}
 
       <div className={mainGridClasses}>
         <aside
@@ -328,6 +349,14 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
               rowData={gridRows}
               getRowId={(row) => row.path}
               {...forwardedGridOptions}
+              additionalGridOptions={{
+                ...forwardedGridOptions.additionalGridOptions,
+                onRowClicked: (event) => {
+                  if (event.data) {
+                    onTableRowClick(event.data);
+                  }
+                },
+              }}
             />
           </section>
         </div>
