@@ -34,34 +34,38 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   titleCssClass,
 }) => {
   const containerClasses = mergeClasses(breadcrumbItemBaseClasses, cssClass);
-  const interactive = !!href && !isLast && !disabled;
+  const interactive = (!!href || !!onClick) && !isLast && !disabled;
+
+  const contentClassNames = interactive
+    ? mergeClasses(
+        breadcrumbLinkBaseClasses,
+        breadcrumbLinkInteractiveClasses,
+        titleCssClass,
+      )
+    : mergeClasses(
+        breadcrumbLinkBaseClasses,
+        breadcrumbCurrentClasses,
+        disabled ? 'pointer-events-none opacity-75' : '',
+        titleCssClass,
+      );
 
   const Content =
-    typeof title === 'string' ? <DialEllipsisTooltip text={title} /> : title;
+    typeof title === 'string' ? (
+      <DialEllipsisTooltip cssClass={contentClassNames} text={title} />
+    ) : (
+      title
+    );
 
   return (
     <li className={containerClasses}>
       {interactive ? (
-        <a
-          className={mergeClasses(
-            breadcrumbLinkBaseClasses,
-            breadcrumbLinkInteractiveClasses,
-            titleCssClass,
-          )}
-          href={href}
-          onClick={onClick}
-        >
+        <a href={href} onClick={onClick} className={contentClassNames}>
           {iconBefore}
           {Content}
         </a>
       ) : (
         <span
-          className={mergeClasses(
-            breadcrumbLinkBaseClasses,
-            breadcrumbCurrentClasses,
-            disabled && 'pointer-events-none opacity-75',
-            titleCssClass,
-          )}
+          className={contentClassNames}
           aria-current={isLast ? 'page' : undefined}
           aria-disabled={disabled ? 'true' : undefined}
         >

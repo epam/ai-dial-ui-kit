@@ -1,0 +1,326 @@
+import {
+  DialFileNodeType,
+  DialFileResourceType,
+  DialFilePermission,
+  type DialFile,
+} from '@/models/file';
+
+/**
+ * Helper to build a very deep nested folder chain:
+ * /All files/<rootName>/Level 01/.../Level NN
+ * Adds a couple of files at various depths to emulate real structures.
+ */
+function buildDeepBranch(
+  parent: { id: string; path: string },
+  rootName: string,
+  levels: number,
+  startIndex = 1,
+): DialFile {
+  const rootId = `deep-${rootName.toLowerCase().replace(/\s+/g, '-')}`;
+  const deepRoot: DialFile = {
+    id: rootId,
+    name: rootName,
+    path: `${parent.path}/${rootName}`,
+    nodeType: DialFileNodeType.FOLDER,
+    folderId: parent.id,
+    updatedAt: '2025-01-15',
+    items: [],
+  };
+
+  let current = deepRoot;
+  let parentId = rootId;
+
+  for (let i = startIndex; i < startIndex + levels; i++) {
+    const id = `${rootId}-l${String(i).padStart(2, '0')}`;
+    const name = `Level ${String(i).padStart(2, '0')}`;
+    const path = `${current.path}/${name}`;
+
+    const folderNode: DialFile = {
+      id,
+      name,
+      path,
+      nodeType: DialFileNodeType.FOLDER,
+      folderId: parentId,
+      updatedAt: `2025-01-${String(15 + Math.floor(i / 2)).padStart(2, '0')}`,
+      items: [],
+    };
+
+    // Insert a file at some depths (3, 6, 9, 12, 15...) to increase complexity
+    if (i % 3 === 0) {
+      folderNode.items!.push({
+        id: `${id}-readme`,
+        name: `readme-l${String(i).padStart(2, '0')}.md`,
+        path: `${path}/readme-l${String(i).padStart(2, '0')}.md`,
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'md',
+        contentType: 'text/markdown',
+        folderId: id,
+        updatedAt: `2025-01-${String(16 + Math.floor(i / 2)).padStart(2, '0')}`,
+        permissions: [DialFilePermission.READ],
+      });
+    }
+    if (i % 5 === 0) {
+      folderNode.items!.push({
+        id: `${id}-asset`,
+        name: `asset-l${String(i).padStart(2, '0')}.png`,
+        path: `${path}/asset-l${String(i).padStart(2, '0')}.png`,
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'png',
+        contentType: 'image/png',
+        folderId: id,
+        updatedAt: `2025-01-${String(17 + Math.floor(i / 2)).padStart(2, '0')}`,
+        permissions: [DialFilePermission.READ, DialFilePermission.SHARE],
+      });
+    }
+
+    current.items!.push(folderNode);
+    current = folderNode;
+    parentId = id;
+  }
+
+  return deepRoot;
+}
+
+/** A reasonably broad tree + a very deep nested branch for stress-testing. */
+export const itemsMock: DialFile[] = [
+  {
+    id: 'root',
+    name: 'All files',
+    path: '/All files',
+    nodeType: DialFileNodeType.FOLDER,
+    folderId: 'root',
+    updatedAt: '2025-01-01',
+    items: [
+      // ─────────── Design (trimmed but still realistic)
+      {
+        id: 'design',
+        name: 'Design',
+        path: '/All files/Design',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-03',
+        items: [
+          {
+            id: 'design-icons',
+            name: 'Icons',
+            path: '/All files/Design/Icons',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'design',
+            updatedAt: '2025-01-05',
+            items: [
+              {
+                id: 'icons-svg',
+                name: 'SVG',
+                path: '/All files/Design/Icons/SVG',
+                nodeType: DialFileNodeType.FOLDER,
+                folderId: 'design-icons',
+                updatedAt: '2025-01-06',
+                items: [
+                  {
+                    id: 'icons-svg-24',
+                    name: '24px',
+                    path: '/All files/Design/Icons/SVG/24px',
+                    nodeType: DialFileNodeType.FOLDER,
+                    folderId: 'icons-svg',
+                    updatedAt: '2025-01-06',
+                    items: [
+                      {
+                        id: 'ico-alert',
+                        name: 'alert.svg',
+                        path: '/All files/Design/Icons/SVG/24px/alert.svg',
+                        nodeType: DialFileNodeType.ITEM,
+                        resourceType: DialFileResourceType.FILE,
+                        extension: 'svg',
+                        contentType: 'image/svg+xml',
+                        folderId: 'icons-svg-24',
+                        updatedAt: '2025-01-10',
+                      },
+                      {
+                        id: 'ico-settings',
+                        name: 'settings.svg',
+                        path: '/All files/Design/Icons/SVG/24px/settings.svg',
+                        nodeType: DialFileNodeType.ITEM,
+                        resourceType: DialFileResourceType.FILE,
+                        extension: 'svg',
+                        contentType: 'image/svg+xml',
+                        folderId: 'icons-svg-24',
+                        updatedAt: '2025-01-10',
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                id: 'icons-png',
+                name: 'PNG',
+                path: '/All files/Design/Icons/PNG',
+                nodeType: DialFileNodeType.FOLDER,
+                folderId: 'design-icons',
+                updatedAt: '2025-01-06',
+                items: [
+                  {
+                    id: 'png-hero',
+                    name: 'hero.png',
+                    path: '/All files/Design/Icons/PNG/hero.png',
+                    nodeType: DialFileNodeType.ITEM,
+                    resourceType: DialFileResourceType.FILE,
+                    extension: 'png',
+                    contentType: 'image/png',
+                    folderId: 'icons-png',
+                    updatedAt: '2025-01-06',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'design-mockups',
+            name: 'Mockups',
+            path: '/All files/Design/Mockups',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'design',
+            updatedAt: '2025-01-11',
+            items: [
+              {
+                id: 'mock-home',
+                name: 'homepage.fig',
+                path: '/All files/Design/Mockups/homepage.fig',
+                nodeType: DialFileNodeType.ITEM,
+                resourceType: DialFileResourceType.FILE,
+                extension: 'fig',
+                contentType: 'application/octet-stream',
+                folderId: 'design-mockups',
+                updatedAt: '2025-01-12',
+              },
+            ],
+          },
+        ],
+      },
+
+      // ─────────── Media (trimmed)
+      {
+        id: 'media',
+        name: 'Media',
+        path: '/All files/Media',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-04',
+        items: [
+          {
+            id: 'media-photos',
+            name: 'Photos',
+            path: '/All files/Media/Photos',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'media',
+            updatedAt: '2025-01-08',
+            items: [
+              {
+                id: 'photos-2025',
+                name: '2025',
+                path: '/All files/Media/Photos/2025',
+                nodeType: DialFileNodeType.FOLDER,
+                folderId: 'media-photos',
+                updatedAt: '2025-01-14',
+                items: [
+                  {
+                    id: 'photo-team',
+                    name: 'team.jpg',
+                    path: '/All files/Media/Photos/2025/team.jpg',
+                    nodeType: DialFileNodeType.ITEM,
+                    resourceType: DialFileResourceType.FILE,
+                    extension: 'jpg',
+                    contentType: 'image/jpeg',
+                    folderId: 'photos-2025',
+                    updatedAt: '2025-01-14',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'media-video',
+            name: 'Video',
+            path: '/All files/Media/Video',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'media',
+            updatedAt: '2025-01-09',
+            items: [
+              {
+                id: 'video-promo',
+                name: 'promo.mp4',
+                path: '/All files/Media/Video/promo.mp4',
+                nodeType: DialFileNodeType.ITEM,
+                resourceType: DialFileResourceType.FILE,
+                extension: 'mp4',
+                contentType: 'video/mp4',
+                folderId: 'media-video',
+                updatedAt: '2025-01-09',
+              },
+            ],
+          },
+        ],
+      },
+
+      // ─────────── Some simple folders
+      {
+        id: 'f1',
+        name: 'Folder 1',
+        path: '/All files/Folder 1',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-01',
+        items: [
+          {
+            id: 'f1-notes',
+            name: 'notes.txt',
+            path: '/All files/Folder 1/notes.txt',
+            nodeType: DialFileNodeType.ITEM,
+            resourceType: DialFileResourceType.FILE,
+            extension: 'txt',
+            contentType: 'text/plain',
+            folderId: 'f1',
+            updatedAt: '2025-01-02',
+          },
+        ],
+      },
+      {
+        id: 'f2',
+        name: 'Folder 2',
+        path: '/All files/Folder 2',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-02',
+        items: [
+          {
+            id: 'f2-a',
+            name: 'Sub A',
+            path: '/All files/Folder 2/Sub A',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'f2',
+            updatedAt: '2025-01-02',
+            items: [
+              {
+                id: 'f2-a-1',
+                name: 'doc-a1.pdf',
+                path: '/All files/Folder 2/Sub A/doc-a1.pdf',
+                nodeType: DialFileNodeType.ITEM,
+                resourceType: DialFileResourceType.FILE,
+                extension: 'pdf',
+                contentType: 'application/pdf',
+                folderId: 'f2-a',
+                updatedAt: '2025-01-03',
+              },
+            ],
+          },
+        ],
+      },
+
+      // ─────────── Very deep nested branches (NEW)
+      buildDeepBranch({ id: 'root', path: '/All files' }, 'Deep Nest', 14),
+      buildDeepBranch({ id: 'root', path: '/All files' }, 'Ultra Depth', 18),
+      buildDeepBranch({ id: 'root', path: '/All files' }, 'Labyrinth', 22),
+    ],
+  },
+];

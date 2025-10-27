@@ -174,12 +174,11 @@ export const Default: Story = {
       const [expanded, setExpanded] = useState(new Set<string>());
       const [loading, setLoading] = useState(new Set<string>());
       const [loaded, setLoaded] = useState(new Set<string>());
-      const [selected, setSelected] = useState(new Set<string>());
+      const [selected, setSelected] = useState<string | undefined>();
 
       const handleItemClick = (item: DialFile) => {
         const newExpanded = new Set(expanded);
-        selected.clear();
-        selected.add(item.path);
+        setSelected(item.path);
         setSelected(selected);
 
         if (newExpanded.has(item.path)) {
@@ -211,7 +210,7 @@ export const Default: Story = {
             {...args}
             expandedPaths={expanded}
             loadingPaths={loading}
-            selectedPaths={selected}
+            selectedPath={selected}
             onItemClick={handleItemClick}
           />
         </div>

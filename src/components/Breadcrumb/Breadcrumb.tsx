@@ -62,8 +62,8 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   const content = pathItems?.length
     ? pathItems.map((item, index) => (
         <DialBreadcrumbItem
-          key={`item-${index}`}
           {...item}
+          key={`item-${index}`}
           isLast={index === pathItems.length - 1}
           separator={separator}
           titleCssClass={titleCssClass}
