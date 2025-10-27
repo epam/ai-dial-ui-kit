@@ -17,7 +17,7 @@ export interface DialButtonDropdownProps extends DialButtonProps {
  * <DialButtonDropdown
  *   title="Click me"
  *   variant={ButtonVariant.Secondary}
- *   items=[{ key: 'profile', label: 'Profile' }, { key: 'logout', label: 'Logout' }]
+ *   items={[{ key: 'profile', label: 'Profile' }, { key: 'logout', label: 'Logout' }]}
  * />
  * ```
  *

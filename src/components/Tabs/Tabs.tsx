@@ -41,9 +41,9 @@ export interface DialTabsProps {
  * ```tsx
  * <DialTabs
  *   tabs={[
- *     { id: 'overview', label: 'Overview' },
- *     { id: 'details', label: 'Details' },
- *     { id: 'settings', label: 'Settings', invalid: true },
+ *     { id: 'overview', name: 'Overview' },
+ *     { id: 'details', name: 'Details' },
+ *     { id: 'settings', name: 'Settings', invalid: true },
  *   ]}
  *   activeTab="overview"
  *   onClick={(id) => setActiveTab(id)}
