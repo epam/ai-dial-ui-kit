@@ -7,6 +7,7 @@ import type { TabModel } from '@/models/tab';
 import { ButtonVariant } from '@/types/button';
 import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
 import type { DropdownItem } from '@/models/dropdown';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileManagerHeaderProps {
   tabs: TabModel[];
@@ -107,7 +108,7 @@ export const DialFileManagerHeader: FC<DialFileManagerHeaderProps> = ({
           title={refreshButtonLabel}
           onClick={onRefresh}
           variant={ButtonVariant.Secondary}
-          iconBefore={<IconRefresh />}
+          iconBefore={<IconRefresh {...BASE_ICON_PROPS} />}
         />
 
         {isCreateButtonVisible && (
