@@ -317,7 +317,7 @@ export const itemsMock: DialFile[] = [
         ],
       },
 
-      // ─────────── Very deep nested branches (NEW)
+      // ─────────── Very deep nested branches
       buildDeepBranch({ id: 'root', path: '/All files' }, 'Deep Nest', 14),
       buildDeepBranch({ id: 'root', path: '/All files' }, 'Ultra Depth', 18),
       buildDeepBranch({ id: 'root', path: '/All files' }, 'Labyrinth', 22),
