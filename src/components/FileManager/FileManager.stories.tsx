@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialFileManager, type DialFileManagerProps } from './FileManager';
 import { itemsMock } from './__mocks__/files';
+import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -31,6 +32,9 @@ const meta = {
     },
     navigationPanelOptions: {
       searchable: true,
+    },
+    toolbarOptions: {
+      areHiddenFilesVisible: false,
     },
   },
 } satisfies Meta<DialFileManagerProps>;
@@ -93,4 +97,37 @@ export const WithFilesInTree: Story = {
 
 export const CustomClasses: Story = {
   args: { cssClass: 'bg-layer-4 h-[640px]' },
+};
+
+const WithTabsControlledComponent = (args: DialFileManagerProps) => {
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        toolbarOptions={{
+          ...args.toolbarOptions,
+          tabs: tabs,
+          activeTab: activeTab,
+          onTabChange: handleTabChange,
+          areHiddenFilesVisible: false,
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithTabsControlled: Story = {
+  render: WithTabsControlledComponent,
+};
+
+export const HandleTableFileClick: Story = {
+  args: {
+    onTableFileClick: (file) => alert(`File clicked: ${file.name}`),
+  },
 };

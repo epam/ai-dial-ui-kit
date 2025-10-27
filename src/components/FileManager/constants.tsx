@@ -2,7 +2,7 @@ export const containerBaseClasses =
   'w-full h-full grid grid-rows-[auto_1fr] gap-3 p-3 overflow-hidden min-w-0 bg-layer-2';
 
 export const toolbarBaseClasses =
-  'w-full min-h-10 rounded border border-dashed bg-layer-3 px-3 py-2 text-secondary flex items-center gap-2';
+  'w-full py-2 text-secondary flex items-center gap-2';
 
 export const mainGridClasses =
   'flex min-h-0 min-w-0 h-full gap-3 overflow-hidden';

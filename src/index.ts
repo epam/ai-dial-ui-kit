@@ -46,8 +46,9 @@ export { DialConfirmationPopup } from './components/ConfirmationPopup/Confirmati
 export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/RadioGroupPopupField';
 export { DialFormPopup } from './components/FormPopup/FormPopup';
 
-//File Manager Navigation Panel
+//File Manager
 export { DialFileManagerNavigationPanel } from './components/FileManager/components/FileManagerNavigationPanel/FileManagerNavigationPanel';
+export { DialFileManager } from './components/FileManager/FileManager';
 
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor
@@ -84,6 +85,10 @@ export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
+export { DialFileManagerTabs } from './types/file-manager';
+
+// Hooks
+export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
 
 // Models
 export { StepStatus } from './models/step';
