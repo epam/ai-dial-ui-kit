@@ -35,7 +35,6 @@ import { DialFolderName } from '@/components/FolderName/FolderName';
 import {
   findFolderForPath,
   normalizeExtensionWithoutDot,
-  formatBytes,
   normalizeToLowerCase,
   collectAllDescendants,
 } from './utils';
@@ -69,6 +68,15 @@ export interface GridOptions
   columnDefs?: ColDef<GridRow>[];
   filterable?: boolean;
 }
+
+const formatBytes = (bytes?: number): string => {
+  if (!bytes || bytes <= 0) return '-';
+  const kilobyte = 1024;
+  const megabyte = kilobyte * 1024;
+  if (bytes >= megabyte) return `${(bytes / megabyte).toFixed(1)} MB`;
+  if (bytes >= kilobyte) return `${(bytes / kilobyte).toFixed(0)} KB`;
+  return `${bytes} B`;
+};
 
 export interface DialFileManagerProps {
   path?: string;

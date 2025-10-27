@@ -28,15 +28,6 @@ export const findFolderForPath = (
   return findNodeByPath(root, parentPath) ?? root[0];
 };
 
-export const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '-';
-  const kilobyte = 1024;
-  const megabyte = kilobyte * 1024;
-  if (bytes >= megabyte) return `${(bytes / megabyte).toFixed(1)} MB`;
-  if (bytes >= kilobyte) return `${(bytes / kilobyte).toFixed(0)} KB`;
-  return `${bytes} B`;
-};
-
 export const normalizeToLowerCase = (input?: string): string =>
   (input ?? '').toLowerCase();
 
