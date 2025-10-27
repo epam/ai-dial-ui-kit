@@ -51,32 +51,37 @@ interface GridRow {
   extension?: string;
 }
 
+export interface FileTreeOptions
+  extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
+  width?: number;
+  title?: string;
+  containerCssClass?: string;
+  additionalButtons?: ReactNode;
+}
+
+export type NavigationPanelOptions = Omit<
+  DialFileManagerNavigationPanelProps,
+  'path' | 'makeHref' | 'onItemClick'
+>;
+
+export interface GridOptions
+  extends Omit<DialGridProps<GridRow>, 'rowData' | 'columnDefs'> {
+  columnDefs?: ColDef<GridRow>[];
+  filterable?: boolean;
+}
+
 export interface DialFileManagerProps {
   path?: string;
   cssClass?: string;
 
   items?: DialFile[];
 
-  treeOptions?: Omit<
-    DialFoldersTreeProps,
-    'items' | 'selectedPath' | 'onItemClick'
-  > & {
-    width?: number;
-    title?: string;
-    containerCssClass?: string;
-    additionalButtons?: ReactNode;
-  };
+  treeOptions?: FileTreeOptions;
 
-  navigationPanelOptions?: Omit<
-    DialFileManagerNavigationPanelProps,
-    'path' | 'makeHref'
-  >;
+  navigationPanelOptions?: NavigationPanelOptions;
 
   /** Grid options; rowData and columnDefs are prepared here */
-  gridOptions?: Omit<DialGridProps<GridRow>, 'rowData' | 'columnDefs'> & {
-    columnDefs?: ColDef<GridRow>[];
-    filterable?: boolean;
-  };
+  gridOptions?: GridOptions;
 
   onPathChange?: (nextPath?: string) => void;
 }
@@ -141,7 +146,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   const [searchValue, setSearchValue] = useState<string>('');
   useEffect(() => {
     const external = navigationPanelOptions?.value;
-    if (external !== undefined && external !== null) {
+    if (external != null) {
       setSearchValue(String(external));
     }
   }, [navigationPanelOptions?.value]);

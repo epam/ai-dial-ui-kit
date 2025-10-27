@@ -284,3 +284,13 @@ export const AlternativeOddRowColors: Story = {
     alternateOddRowColors: true,
   },
 };
+
+export const ClickableRows: Story = {
+  args: {
+    selectedRowIds: undefined,
+    onSelectionChange: undefined,
+    additionalGridOptions: {
+      onRowClicked: (row) => alert(`Clicked on row with ID: ${row.data?.id}`),
+    },
+  },
+};
