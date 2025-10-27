@@ -9,7 +9,7 @@ import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
-export interface DialFileManagerHeaderProps {
+export interface DialFileManagerToolbarProps {
   tabs: TabModel[];
   activeTab: string;
   areHiddenFilesVisible: boolean;
@@ -25,7 +25,7 @@ export interface DialFileManagerHeaderProps {
 }
 
 /**
- * DialFileManagerHeader — A configurable header component for file manager views.
+ * DialFileManagerToolbar — A configurable toolbar component for file manager views.
  *
  * Provides a clean and functional toolbar for file management pages with:
  * - Tab navigation for switching between different sections or views
@@ -42,7 +42,7 @@ export interface DialFileManagerHeaderProps {
  *   { id: 'favorites', name: 'Favorites' },
  * ];
  *
- * <DialFileManagerHeader
+ * <DialFileManagerToolbar
  *   tabs={tabs}
  *   activeTab="all"
  *   areHiddenFilesVisible={false}
@@ -76,7 +76,7 @@ export interface DialFileManagerHeaderProps {
  * - The refresh and create actions are aligned on the right for intuitive placement.
  * - When `createButtonDropdownItems` is empty, the create button behaves as a single-action button.
  */
-export const DialFileManagerHeader: FC<DialFileManagerHeaderProps> = ({
+export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   tabs,
   activeTab,
   onTabChange,

@@ -1,22 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { DialFileManagerHeader } from './FileManagerHeader';
+import { DialFileManagerToolbar } from './DialFileManagerToolbar';
 import type { TabModel } from '@/models/tab';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonVariant } from '@/types/button';
 import { IconFile, IconFileZip, IconFolder } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
-const meta: Meta<typeof DialFileManagerHeader> = {
-  title: 'FileManager/FileManagerHeader',
-  component: DialFileManagerHeader,
-  tags: ['layout', 'header', 'file-manager'],
+const meta: Meta<typeof DialFileManagerToolbar> = {
+  title: 'FileManager/FileManagerToolbar',
+  component: DialFileManagerToolbar,
+  tags: ['layout', 'toolbar', 'file-manager'],
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component:
-          'A header component for a file manager. Contains navigation tabs, a switch for hidden files, refresh button, and an optional create button with dropdown.',
+          'A toolbar component for a file manager. Contains navigation tabs, a switch for hidden files, refresh button, and an optional create button with dropdown.',
       },
     },
   },
@@ -65,7 +65,7 @@ export const Default: Story = {
 
       return (
         <div className="w-[800px] p-4 border rounded-lg bg-background">
-          <DialFileManagerHeader
+          <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -92,7 +92,7 @@ export const WithSecondaryCreateButton: Story = {
 
       return (
         <div className="w-[800px] p-4 border rounded-lg bg-background">
-          <DialFileManagerHeader
+          <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -119,7 +119,7 @@ export const WithoutCreateButton: Story = {
 
       return (
         <div className="w-[700px] p-4 border rounded-lg bg-background">
-          <DialFileManagerHeader
+          <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}

@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { DialFileManagerHeader } from './FileManagerHeader';
+import { DialFileManagerToolbar } from './DialFileManagerToolbar';
 import type { DialTabsProps } from '@/components/Tabs/Tabs';
 import type { DialSwitchProps } from '@/components/Switch/Switch';
 import type { DialButtonProps } from '@/components/Button/Button';
@@ -53,7 +53,7 @@ vi.mock('@tabler/icons-react', () => ({
   IconRefresh: () => <svg data-testid="refresh-icon" />,
 }));
 
-describe('Dial UI Kit :: DialFileManagerHeader', () => {
+describe('Dial UI Kit :: DialFileManagerToolbar', () => {
   const mockTabs = [
     { id: 'tab1', name: 'Tab 1' },
     { id: 'tab2', name: 'Tab 2' },
@@ -61,7 +61,7 @@ describe('Dial UI Kit :: DialFileManagerHeader', () => {
 
   it('renders tabs passed via props', () => {
     render(
-      <DialFileManagerHeader
+      <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={false}
@@ -78,7 +78,7 @@ describe('Dial UI Kit :: DialFileManagerHeader', () => {
   it('manages hidden files switch state via props', () => {
     const onToggleHiddenFiles = vi.fn();
     render(
-      <DialFileManagerHeader
+      <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={true}
@@ -97,7 +97,7 @@ describe('Dial UI Kit :: DialFileManagerHeader', () => {
 
   it('shows create button only when isCreateButtonVisible is true', () => {
     const { queryByTestId, rerender } = render(
-      <DialFileManagerHeader
+      <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={false}
@@ -111,7 +111,7 @@ describe('Dial UI Kit :: DialFileManagerHeader', () => {
     expect(queryByTestId('create-button')).toBeNull();
 
     rerender(
-      <DialFileManagerHeader
+      <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={false}
@@ -129,7 +129,7 @@ describe('Dial UI Kit :: DialFileManagerHeader', () => {
   it('calls onRefresh when clicking refresh button', () => {
     const onRefresh = vi.fn();
     render(
-      <DialFileManagerHeader
+      <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={false}
