@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { FC } from 'react';
+import { useMemo, type FC } from 'react';
 import type { ICellRendererParams } from 'ag-grid-community';
 
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
@@ -46,7 +46,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
 }) => {
   const date = convertToDate(value);
 
-  const content = (() => {
+  const content = useMemo(() => {
     if (!date) return emptyPlaceholder;
 
     const formatted = new Intl.DateTimeFormat(locale, {
@@ -57,7 +57,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
     });
 
     return formatted.format(date);
-  })();
+  }, [date, emptyPlaceholder, locale, timeZone]);
 
   const iso = date ? date.toISOString() : undefined;
 
