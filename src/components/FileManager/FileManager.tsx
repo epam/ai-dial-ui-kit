@@ -42,6 +42,7 @@ import {
   DialFileManagerToolbar,
   type DialFileManagerToolbarProps,
 } from './components/FileManagerToolbar/DialFileManagerToolbar';
+import { DialDateCellRenderer } from '../Grid/renderers/DateCellRenderer';
 
 interface GridRow {
   id: string;
@@ -242,6 +243,11 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
         headerName: 'Modified Date',
         width: 168,
         suppressSizeToFit: true,
+        cellRenderer: DialDateCellRenderer,
+        cellRendererParams: {
+          locale: 'en-US',
+          emptyPlaceholder: '—',
+        },
       },
       {
         field: 'size',
