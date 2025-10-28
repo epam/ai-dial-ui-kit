@@ -35,12 +35,6 @@ export const TimestampMs: Story = {
   },
 };
 
-export const TimestampSeconds: Story = {
-  args: {
-    value: 1752969600,
-  },
-};
-
 export const DifferentLocale: Story = {
   args: {
     locale: 'fr-FR',
