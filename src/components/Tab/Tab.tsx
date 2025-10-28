@@ -4,7 +4,6 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { IconExclamationCircle } from '@tabler/icons-react';
 import type { FC } from 'react';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
-import classNames from 'classnames';
 
 export interface DialTabProps {
   tab: TabModel;
