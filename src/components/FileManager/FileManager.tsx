@@ -12,11 +12,11 @@ import {
   containerBaseClasses,
   mainGridClasses,
   toolbarBaseClasses,
-  treePlaceholderClasses,
+  treeBaseClasses,
   contentGridClasses,
   sidebarWidth,
   sidebarTitleDefault,
-  gridPlaceholderClasses,
+  gridBaseClasses,
 } from './constants';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile } from '@/models/file';
@@ -169,7 +169,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   const {
     width = sidebarWidth,
     title = sidebarTitleDefault,
-    containerCssClass = treePlaceholderClasses,
+    containerCssClass = treeBaseClasses,
     additionalButtons,
     ...forwardedTreeProps
   } = treeOptions ?? {};
@@ -236,9 +236,8 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
             <DialFileName name={params.data.name} />
           ),
       },
-      { field: 'updatedAt', headerName: 'Modified', width: 180 },
-      { field: 'size', headerName: 'Size', width: 120 },
-      { field: 'author', headerName: 'Author', width: 160 },
+      { field: 'updatedAt', headerName: 'Modified Date', maxWidth: 168 },
+      { field: 'size', headerName: 'Size', maxWidth: 120 },
     ];
   }, []);
 
@@ -342,7 +341,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
           <section
             role="region"
             aria-label="File Manager Grid View"
-            className={gridPlaceholderClasses}
+            className={gridBaseClasses}
           >
             <DialGrid<GridRow>
               columnDefs={columnDefs}

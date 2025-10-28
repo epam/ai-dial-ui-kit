@@ -58,6 +58,7 @@ function buildDeepBranch(
         folderId: id,
         updatedAt: `2025-01-${String(16 + Math.floor(i / 2)).padStart(2, '0')}`,
         permissions: [DialFilePermission.READ],
+        contentLength: 1024,
       });
     }
     if (i % 5 === 0) {
@@ -69,6 +70,7 @@ function buildDeepBranch(
         resourceType: DialFileResourceType.FILE,
         extension: 'png',
         contentType: 'image/png',
+        contentLength: 204800,
         folderId: id,
         updatedAt: `2025-01-${String(17 + Math.floor(i / 2)).padStart(2, '0')}`,
         permissions: [DialFilePermission.READ, DialFilePermission.SHARE],
@@ -136,6 +138,7 @@ export const itemsMock: DialFile[] = [
                         contentType: 'image/svg+xml',
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
+                        contentLength: 5120,
                       },
                       {
                         id: 'ico-settings',
@@ -147,6 +150,7 @@ export const itemsMock: DialFile[] = [
                         contentType: 'image/svg+xml',
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
+                        contentLength: 61440 * 1000,
                       },
                     ],
                   },

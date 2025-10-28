@@ -116,6 +116,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 }) => {
   const [expandedItems, setExpandedItems] =
     useState<Set<string>>(expandedPaths);
+
   const handleFolderClick = (node: DialFile) => {
     onItemClick?.(node);
     if (expandedItems.has(node.path)) {
