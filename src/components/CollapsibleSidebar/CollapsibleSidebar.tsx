@@ -89,7 +89,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   ]);
 
   const buttonClass = classNames([
-    'flex flex-row gap-2 cursor-pointer text-secondary',
+    'flex flex-row gap-2 cursor-pointer text-secondary px-6 py-2',
     opened ? 'justify-end' : 'justify-center',
   ]);
 
