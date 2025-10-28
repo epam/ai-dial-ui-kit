@@ -229,6 +229,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
         field: 'name',
         headerName: 'Name',
         flex: 1,
+        minWidth: 200,
         cellRenderer: (params: { data: GridRow }) =>
           params.data?.nodeType === DialFileNodeType.FOLDER ? (
             <DialFolderName name={params.data.name} />
@@ -236,8 +237,18 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
             <DialFileName name={params.data.name} />
           ),
       },
-      { field: 'updatedAt', headerName: 'Modified Date', maxWidth: 168 },
-      { field: 'size', headerName: 'Size', maxWidth: 120 },
+      {
+        field: 'updatedAt',
+        headerName: 'Modified Date',
+        width: 168,
+        suppressSizeToFit: true,
+      },
+      {
+        field: 'size',
+        headerName: 'Size',
+        width: 120,
+        suppressSizeToFit: true,
+      },
     ];
   }, []);
 

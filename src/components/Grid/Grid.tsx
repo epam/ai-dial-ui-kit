@@ -303,7 +303,7 @@ export const DialGrid = <T extends object>({
       headerName: '',
       width: 40,
       minWidth: 40,
-      maxWidth: 40,
+      suppressSizeToFit: true,
       lockPosition: true,
       sortable: false,
       resizable: false,
