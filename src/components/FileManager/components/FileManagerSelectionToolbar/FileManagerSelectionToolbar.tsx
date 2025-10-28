@@ -177,13 +177,14 @@ export const DialFileManagerSelectionToolbar: FC<
             </DialDropdown>
           )}
 
-          {visibleActions.map(({ key, icon, title, onClick }) => (
+          {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
             <DialButton
               key={key}
               iconBefore={icon}
               title={title}
               variant={ButtonVariant.Secondary}
               hideTitleOnMobile
+              disable={disabled}
               onClick={(domEvent) => onClick?.({ key, domEvent })}
             />
           ))}

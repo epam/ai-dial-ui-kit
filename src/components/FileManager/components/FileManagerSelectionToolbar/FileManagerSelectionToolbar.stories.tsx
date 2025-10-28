@@ -68,6 +68,7 @@ const mockActions: DialActionDropdownItem[] = [
     key: 'delete',
     title: 'Delete',
     label: 'Delete',
+    disabled: true,
     icon: <IconTrashX {...BASE_ICON_PROPS} />,
     onClick: () => alert('Delete clicked'),
   },
