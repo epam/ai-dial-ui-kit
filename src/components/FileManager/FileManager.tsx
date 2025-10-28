@@ -42,7 +42,7 @@ import {
   DialFileManagerToolbar,
   type DialFileManagerToolbarProps,
 } from './components/FileManagerToolbar/DialFileManagerToolbar';
-import { DialDateCellRenderer } from '../Grid/renderers/DateCellRenderer';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 interface GridRow {
   id: string;
