@@ -19,7 +19,7 @@ export const DialStep: FC<DialStepProps> = ({
   onChangeStep,
 }) => {
   const stepClass =
-    'h-[32px] flex flex-1 min-w-[180px] items-center dial-tiny border-t-2 cursor-pointer dial-step';
+    'h-[32px] flex flex-1 min-w-[180px] items-center dial-tiny cursor-pointer dial-step';
   const circleClass =
     'w-[22px] h-[22px] flex justify-center items-center mr-2 rounded-full text-white';
 
