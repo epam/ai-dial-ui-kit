@@ -6,6 +6,7 @@ import {
 import { DialButton } from '@/components/Button/Button';
 import { IconSettings } from '@tabler/icons-react';
 import { ButtonVariant } from '@/types/button';
+import { useState } from 'react';
 
 const BarContent = (
   <div className="flex flex-col gap-4">
@@ -151,5 +152,39 @@ export const AllVariants: Story = {
         ))}
       </div>
     );
+  },
+};
+
+const ControlledExternalComponent = (args: DialCollapsibleSidebarProps) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex gap-4 p-4 h-[300px]">
+      <DialCollapsibleSidebar
+        {...args}
+        isOpened={open}
+        onToggle={(next) => setOpen(next)}
+        containerCssClass="text-primary"
+        title="Filters"
+      >
+        {BarContent}
+      </DialCollapsibleSidebar>
+      <div className="flex flex-col gap-2">
+        <DialButton
+          title={open ? 'Close from outside' : 'Open from outside'}
+          onClick={() => setOpen((v) => !v)}
+        />
+        <p className="text-secondary text-sm">
+          State: {open ? 'Open' : 'Closed'}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export const ControlledExternal: Story = {
+  render: ControlledExternalComponent,
+  args: {
+    width: 320,
+    title: 'Filters',
   },
 };
