@@ -161,10 +161,18 @@ export const DialFileManagerSelectionToolbar: FC<
 
         <div className="flex flex-1 w-full gap-3 items-center justify-end">
           {hiddenActions.length > 0 && (
-            <DialDropdown menu={{ items: hiddenActions }}>
+            <DialDropdown
+              menu={{ items: hiddenActions }}
+              allowedPlacements={['bottom', 'bottom-start']}
+            >
               <DialButton
-                iconBefore={<IconDotsVertical {...BASE_ICON_PROPS} />}
-                variant={ButtonVariant.Tertiary}
+                cssClass="h-[38px]"
+                iconBefore={
+                  <IconDotsVertical
+                    {...BASE_ICON_PROPS}
+                    className="text-secondary hover:text-accent-primary"
+                  />
+                }
               />
             </DialDropdown>
           )}
