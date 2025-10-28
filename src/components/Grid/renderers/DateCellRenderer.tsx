@@ -44,7 +44,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   emptyPlaceholder = '—',
   cssClass,
 }) => {
-  const date = convertToDate(value ?? null);
+  const date = convertToDate(value);
 
   const content = (() => {
     if (!date) return emptyPlaceholder;
@@ -72,7 +72,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   );
 };
 
-function convertToDate(input: AgGridValue | null): Date | null {
+function convertToDate(input?: AgGridValue | null): Date | null {
   if (!input) return null;
 
   if (input instanceof Date) {
