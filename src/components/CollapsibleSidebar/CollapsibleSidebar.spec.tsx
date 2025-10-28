@@ -70,4 +70,26 @@ describe('Dial UI Kit :: DialCollapsibleSidebar', () => {
     expect(root).toHaveStyle({ width: '60px' });
     expect(screen.getByText('RightIcon')).toBeInTheDocument();
   });
+
+  test('Controlled: clicking toggle calls onToggle and does not change own state', () => {
+    const onToggle = vi.fn();
+    render(
+      <DialCollapsibleSidebar
+        width={220}
+        title="Ctl"
+        isOpened={false}
+        onToggle={onToggle}
+      >
+        <div>Hidden</div>
+      </DialCollapsibleSidebar>,
+    );
+
+    expect(screen.getByText('RightIcon')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onToggle).toHaveBeenCalledWith(true, expect.any(Object));
+
+    expect(screen.getByText('RightIcon')).toBeInTheDocument();
+  });
 });
