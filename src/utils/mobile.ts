@@ -14,5 +14,18 @@
 export const isMediumScreen = () =>
   typeof window !== 'undefined' && window.innerWidth < 1024;
 
+/**
+ * Checks if the current viewport width is within the "small" (mobile) screen range.
+ *
+ * Specifically, it returns `true` if the window width is less than 640 pixels.
+ * Safely handles server-side rendering by verifying that `window` is defined.
+ *
+ * @returns {boolean} `true` if the viewport width is less than 640px, otherwise `false`.
+ *
+ * @example
+ * if (isSmallScreen()) {
+ *   console.log('Mobile screen detected');
+ * }
+ */
 export const isSmallScreen = () =>
   typeof window !== 'undefined' && window.innerWidth < 640;
