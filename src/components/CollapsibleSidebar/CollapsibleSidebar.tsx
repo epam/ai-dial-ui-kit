@@ -1,4 +1,11 @@
-import { useState, type FC, type ReactNode } from 'react';
+import {
+  useEffect,
+  useState,
+  type FC,
+  type ReactNode,
+  type MouseEvent,
+  useMemo,
+} from 'react';
 
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
 import classNames from 'classnames';
@@ -14,6 +21,9 @@ export interface DialCollapsibleSidebarProps {
   iconSize?: number;
   additionalButtons?: ReactNode;
   iconStroke?: number;
+
+  isOpened?: boolean;
+  onToggle?: (nextOpened: boolean, e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const CLOSED_WIDTH = 60;
@@ -44,6 +54,8 @@ const CLOSED_WIDTH = 60;
  * @param [iconSize = 32] - The size of the toggle icons. Defaults to 32
  * @param [iconStroke = 1.5] - The stroke width of the toggle icons. Defaults to 1.5
  * @param [additionalButtons] - Additional buttons or elements displayed next to the toggle button when expanded
+ * @param [isOpened] - When provided, the component becomes controlled by this value
+ * @param [onToggle] - Fired when user clicks the toggle in controlled mode, with the next state
  */
 export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   containerCssClass,
@@ -54,24 +66,44 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   iconStroke = 1.5,
   titleCssClass,
   additionalButtons,
+  isOpened,
+  onToggle,
 }) => {
   const [containerWidth, setContainerWidth] = useState(width);
-  const [isOpened, setIsOpened] = useState(true);
+  const [internalOpened, setInternalOpened] = useState(true);
+
+  const controlled = useMemo(() => typeof isOpened === 'boolean', [isOpened]);
+
+  const opened = controlled ? isOpened : internalOpened;
+
+  useEffect(() => {
+    if (controlled) {
+      setContainerWidth(isOpened ? width : CLOSED_WIDTH);
+    }
+  }, [controlled, isOpened, width]);
 
   const titleClass = classNames([
     `transform rotate-180 [writing-mode:tb-rl] p-4`,
-    isOpened && 'hidden',
+    opened && 'hidden',
     titleCssClass,
   ]);
 
   const buttonClass = classNames([
-    'flex flex-row gap-2 cursor-pointer text-secondary',
-    isOpened ? 'justify-end' : 'justify-center',
+    'flex flex-row gap-2 cursor-pointer text-secondary px-6 py-2',
+    opened ? 'justify-end' : 'justify-center',
   ]);
 
-  const changeVisibility = () => {
-    setContainerWidth(isOpened ? CLOSED_WIDTH : width);
-    setIsOpened(!isOpened);
+  const changeVisibility = (e: MouseEvent<HTMLButtonElement>) => {
+    const next = !opened;
+
+    if (controlled) {
+      setContainerWidth(next ? width : CLOSED_WIDTH);
+      onToggle?.(next, e);
+      return;
+    }
+
+    setContainerWidth(next ? width : CLOSED_WIDTH);
+    setInternalOpened(next);
   };
 
   return (
@@ -85,7 +117,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       <div
         className={classNames([
           'flex-1 p-4 min-h-0 overflow-auto',
-          !isOpened && 'hidden',
+          !opened && 'hidden',
         ])}
       >
         {children}
@@ -94,12 +126,12 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       <div
         className={mergeClasses('border-t stroke-primary h-12', buttonClass)}
       >
-        {isOpened && additionalButtons}
+        {opened && additionalButtons}
         <DialButton
           cssClass={'hover:text-icon-accent-primary'}
           onClick={changeVisibility}
           iconBefore={
-            isOpened ? (
+            opened ? (
               <IconChevronsLeft size={iconSize} stroke={iconStroke} />
             ) : (
               <IconChevronsRight size={iconSize} stroke={iconStroke} />
