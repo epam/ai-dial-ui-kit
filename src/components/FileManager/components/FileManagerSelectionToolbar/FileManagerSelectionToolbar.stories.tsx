@@ -17,7 +17,7 @@ import {
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
 const meta: Meta<typeof DialFileManagerSelectionToolbar> = {
-  title: 'FileManager/FileManagerSelectionToolbar',
+  title: 'FileManager/components/FileManagerSelectionToolbar',
   component: DialFileManagerSelectionToolbar,
   tags: ['layout', 'toolbar', 'file-manager'],
   parameters: {
