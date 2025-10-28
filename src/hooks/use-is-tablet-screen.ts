@@ -1,4 +1,4 @@
-import { isMediumScreen } from '@/utils/mobile';
+import { isMediumScreen, isSmallScreen } from '@/utils/mobile';
 import { useEffect, useState } from 'react';
 
 /**
@@ -25,4 +25,16 @@ export const useIsTabletScreen = () => {
   }, []);
 
   return isTabletScreen;
+};
+
+export const useIsMobileScreen = () => {
+  const [isMobileScreen, setIsMobileScreen] = useState(isSmallScreen());
+
+  useEffect(() => {
+    const resizeListener = () => setIsMobileScreen(isSmallScreen());
+    window.addEventListener('resize', resizeListener);
+    return () => window.removeEventListener('resize', resizeListener);
+  }, []);
+
+  return isMobileScreen;
 };
