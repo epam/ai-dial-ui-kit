@@ -30,11 +30,11 @@ const meta: Meta<typeof DialFileManagerSelectionToolbar> = {
     },
   },
   argTypes: {
-    selectedLabel: {
+    selectionLabel: {
       control: 'text',
       description: 'Label showing how many items are selected.',
     },
-    onClearSelections: {
+    onClearSelection: {
       action: 'onClearSelections',
       description: 'Callback fired when the clear selection button is clicked.',
     },
@@ -120,8 +120,8 @@ const extraMockActions = [
 
 export const Default: Story = {
   args: {
-    selectedLabel: '3 items selected',
-    onClearSelections: () => alert('Selections cleared'),
+    selectionLabel: '3 items selected',
+    onClearSelection: () => alert('Selections cleared'),
     actions: mockActions,
   },
   render: (args) => <DialFileManagerSelectionToolbar {...args} />,
@@ -129,8 +129,8 @@ export const Default: Story = {
 
 export const ManyActions: Story = {
   args: {
-    selectedLabel: '1 item selected',
-    onClearSelections: () => alert('Selections cleared'),
+    selectionLabel: '1 item selected',
+    onClearSelection: () => alert('Selections cleared'),
     actions: [...mockActions, ...extraMockActions],
   },
   render: (args) => <DialFileManagerSelectionToolbar {...args} />,

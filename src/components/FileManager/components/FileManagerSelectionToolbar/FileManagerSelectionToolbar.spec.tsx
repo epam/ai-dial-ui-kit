@@ -64,8 +64,8 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
     const onClear = vi.fn();
     render(
       <DialFileManagerSelectionToolbar
-        selectedLabel="3 files selected"
-        onClearSelections={onClear}
+        selectionLabel="3 files selected"
+        onClearSelection={onClear}
         actions={actions}
       />,
     );
@@ -80,8 +80,8 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
   it('renders all action buttons', () => {
     render(
       <DialFileManagerSelectionToolbar
-        selectedLabel="3 files selected"
-        onClearSelections={vi.fn()}
+        selectionLabel="3 files selected"
+        onClearSelection={vi.fn()}
         actions={actions}
       />,
     );
@@ -96,8 +96,8 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
   it('calls action onClick handler when action button is clicked', () => {
     render(
       <DialFileManagerSelectionToolbar
-        selectedLabel="3 files selected"
-        onClearSelections={vi.fn()}
+        selectionLabel="3 files selected"
+        onClearSelection={vi.fn()}
         actions={actions}
       />,
     );
@@ -111,8 +111,8 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
   it('renders icons inside buttons', () => {
     render(
       <DialFileManagerSelectionToolbar
-        selectedLabel="3 files selected"
-        onClearSelections={vi.fn()}
+        selectionLabel="3 files selected"
+        onClearSelection={vi.fn()}
         actions={actions}
       />,
     );

@@ -13,8 +13,8 @@ export interface DialActionDropdownItem extends DropdownItem {
 }
 
 export interface DialFileManagerSelectionToolbarProps {
-  selectedLabel: string;
-  onClearSelections: () => void;
+  selectionLabel: string;
+  onClearSelection: () => void;
   actions: DialActionDropdownItem[];
 }
 
@@ -43,8 +43,8 @@ export interface DialFileManagerSelectionToolbarProps {
  * @example
  * ```tsx
  * <DialFileManagerSelectionToolbar
- *   selectedLabel="3 files selected"
- *   onClearSelections={() => console.log('Cleared')}
+ *   selectionLabel="3 files selected"
+ *   onClearSelection={() => console.log('Cleared')}
  *   actions={[
  *     { key: 'download', title: 'Download', icon: <IconDownload />, onClick: () => {} },
  *     { key: 'delete', title: 'Delete', icon: <IconTrash />, onClick: () => {} },
@@ -53,8 +53,8 @@ export interface DialFileManagerSelectionToolbarProps {
  * ```
  *
  * @param {object} props
- * @param {string} props.selectedLabel - Label showing current selection status (e.g., "3 files selected").
- * @param {() => void} props.onClearSelections - Callback invoked when the clear selection button is clicked.
+ * @param {string} props.selectionLabel - Label showing current selection status (e.g., "3 files selected").
+ * @param {() => void} props.onClearSelection - Callback invoked when the clear selection button is clicked.
  * @param {DialActionDropdownItem[]} props.actions - List of available toolbar actions.
  *   Each action defines a title, icon, key, and optional click handler.
  *
@@ -62,7 +62,7 @@ export interface DialFileManagerSelectionToolbarProps {
  */
 export const DialFileManagerSelectionToolbar: FC<
   DialFileManagerSelectionToolbarProps
-> = ({ selectedLabel, onClearSelections, actions }) => {
+> = ({ selectionLabel, onClearSelection, actions }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const leftSectionRef = useRef<HTMLDivElement | null>(null);
@@ -149,8 +149,8 @@ export const DialFileManagerSelectionToolbar: FC<
       >
         <div ref={leftSectionRef}>
           <DialButton
-            title={selectedLabel}
-            onClick={onClearSelections}
+            title={selectionLabel}
+            onClick={onClearSelection}
             textCssClass="text-accent-primary whitespace-nowrap"
             variant={ButtonVariant.Tertiary}
             iconBefore={
