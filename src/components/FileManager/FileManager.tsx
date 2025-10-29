@@ -37,11 +37,14 @@ import {
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
   collectAllDescendants,
+  isHiddenDotFile,
 } from './utils';
 import {
   DialFileManagerToolbar,
   type DialFileManagerToolbarProps,
 } from './components/FileManagerToolbar/DialFileManagerToolbar';
+import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
+import { useCollapseTree } from './hooks/use-collapse-tree';
 
 interface GridRow {
   id: string;
@@ -60,6 +63,7 @@ export interface FileTreeOptions
   title?: string;
   containerCssClass?: string;
   additionalButtons?: ReactNode;
+  collapsed?: boolean;
 }
 
 export type NavigationPanelOptions = Omit<
@@ -82,6 +86,11 @@ const formatBytes = (bytes?: number): string => {
   return `${bytes} B`;
 };
 
+export type ToolbarOptions = Omit<
+  DialFileManagerToolbarProps,
+  'areHiddenFilesVisible' | 'onToggleHiddenFiles'
+>;
+
 export interface DialFileManagerProps {
   path?: string;
   cssClass?: string;
@@ -89,7 +98,7 @@ export interface DialFileManagerProps {
   items?: DialFile[];
 
   treeOptions?: FileTreeOptions;
-  toolbarOptions?: DialFileManagerToolbarProps;
+  toolbarOptions?: ToolbarOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
 
@@ -153,6 +162,18 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   onTableFileClick,
 }) => {
   const [currentPath, setCurrentPath] = useState<string | undefined>(path);
+  const { areHiddenFilesVisible, toggleHiddenFilesVisibility } =
+    useShowHiddenFiles();
+
+  const { isTreeCollapsed, toggleTreeCollapse } = useCollapseTree(
+    treeOptions?.collapsed ?? false,
+  );
+
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const handleSelectionChange = (newSelectedIds: Set<string>) => {
+    setSelectedIds(newSelectedIds);
+  };
 
   useEffect(() => {
     setCurrentPath(path);
@@ -187,9 +208,15 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
 
     const directChildren = currentFolder?.items ?? [];
-    const searchSourceNodes: DialFile[] = query
+    let searchSourceNodes: DialFile[] = query
       ? collectAllDescendants(currentFolder)
       : directChildren;
+
+    if (!areHiddenFilesVisible) {
+      searchSourceNodes = searchSourceNodes.filter(
+        (node) => !isHiddenDotFile(node),
+      );
+    }
 
     const mappedRows = searchSourceNodes.map((node) => ({
       id: node.id ?? node.path,
@@ -221,7 +248,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
           extensionLower.includes(token),
       );
     });
-  }, [currentFolder, effectiveSearchValue]);
+  }, [currentFolder, effectiveSearchValue, areHiddenFilesVisible]);
 
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
@@ -269,20 +296,27 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     }));
   }, [baseColumns, filterable]);
 
-  const handleTreeItemClick = useCallback(
-    (item: DialFile) => {
-      setCurrentPath(item.path);
-      onPathChange?.(item.path);
+  const handlePathChange = useCallback(
+    (nextPath?: string) => {
+      setCurrentPath(nextPath);
+      onPathChange?.(nextPath);
+      setSelectedIds(new Set());
     },
     [onPathChange],
   );
 
+  const handleTreeItemClick = useCallback(
+    (item: DialFile) => {
+      handlePathChange(item.path);
+    },
+    [handlePathChange],
+  );
+
   const handleBreadcrumbItemClick = useCallback(
     (href?: string) => {
-      setCurrentPath(href);
-      onPathChange?.(href);
+      handlePathChange(href);
     },
-    [onPathChange],
+    [handlePathChange],
   );
 
   const handleSearchChange = useCallback(
@@ -297,13 +331,12 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   const onTableRowClick = useCallback(
     (row: GridRow) => {
       if (row.nodeType === DialFileNodeType.FOLDER) {
-        setCurrentPath(row.path);
-        onPathChange?.(row.path);
+        handlePathChange(row.path);
       } else {
         onTableFileClick?.(row);
       }
     },
-    [onPathChange, onTableFileClick],
+    [handlePathChange, onTableFileClick],
   );
 
   return (
@@ -314,7 +347,11 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
-          <DialFileManagerToolbar {...toolbarOptions} />
+          <DialFileManagerToolbar
+            {...toolbarOptions}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={toggleHiddenFilesVisibility}
+          />
         </div>
       )}
 
@@ -329,12 +366,15 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
             title={title}
             containerCssClass={containerCssClass}
             additionalButtons={additionalButtons}
+            isOpened={isTreeCollapsed}
+            onToggle={toggleTreeCollapse}
           >
             <DialFoldersTree
               {...forwardedTreeProps}
               items={items}
               selectedPath={currentPath}
               onItemClick={handleTreeItemClick}
+              areHiddenFilesVisible={areHiddenFilesVisible}
             />
           </DialCollapsibleSidebar>
         </aside>
@@ -361,12 +401,18 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,
-                onRowClicked: (event) => {
+                onCellClicked: (event) => {
+                  if (event.colDef.colId === '__select') {
+                    return;
+                  }
+
                   if (event.data) {
                     onTableRowClick(event.data);
                   }
                 },
               }}
+              selectedRowIds={selectedIds}
+              onSelectionChange={handleSelectionChange}
             />
           </section>
         </div>
