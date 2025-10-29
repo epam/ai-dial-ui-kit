@@ -49,3 +49,8 @@ export const collectAllDescendants = (folder?: DialFile): DialFile[] => {
   walk(folder);
   return result;
 };
+
+export const isHiddenDotFile = (node: DialFile) => {
+  const name = node.name ?? node.path.split('/').pop() ?? '';
+  return name.startsWith('.');
+};
