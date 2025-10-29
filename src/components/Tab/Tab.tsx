@@ -77,7 +77,7 @@ export const DialTab: FC<DialTabProps> = ({
         cssClass="max-w-[200px]"
       />
       {(invalid || tab.invalid) && (
-        <div className="text-error">
+        <div className="text-error pl-1">
           <IconExclamationCircle {...BASE_ICON_PROPS} />
         </div>
       )}

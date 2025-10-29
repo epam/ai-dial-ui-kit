@@ -36,6 +36,11 @@ export interface DialSelectFieldProps
  *   onChange={(v) => setTransport(v as string)}
  * />
  *
+ * @params - Component properties extending:
+ * - {@link DialSelectProps} for select options and props, except for cssClass
+ * - {@link DialFormItemProps} for form item props, except for htmlFor
+ * - {@link DialFieldLabelProps} for label props, except for label, children, value
+ *
  * @param selectCssClass CSS class for the select element
  * @param containerCssClass CSS class for the form item container
  * @param emptyStateTitle Title to show when there are no options
