@@ -49,7 +49,7 @@ describe('Dial UI Kit :: DialCollapsibleSidebar', () => {
     );
 
     const root = container.firstElementChild as HTMLElement;
-    expect(root).toHaveStyle({ width: '60px' });
+    expect(root).toHaveStyle({ width: '48px' });
     expect(screen.getByText('RightIcon')).toBeInTheDocument();
 
     rerender(
@@ -67,7 +67,7 @@ describe('Dial UI Kit :: DialCollapsibleSidebar', () => {
       </DialCollapsibleSidebar>,
     );
 
-    expect(root).toHaveStyle({ width: '60px' });
+    expect(root).toHaveStyle({ width: '48px' });
     expect(screen.getByText('RightIcon')).toBeInTheDocument();
   });
 

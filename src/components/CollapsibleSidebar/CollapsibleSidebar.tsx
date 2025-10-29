@@ -14,7 +14,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialCollapsibleSidebarProps {
   children: ReactNode;
-  width: number;
+  width?: number;
   title: string;
   titleCssClass?: string;
   containerCssClass?: string;
@@ -26,7 +26,7 @@ export interface DialCollapsibleSidebarProps {
   onToggle?: (nextOpened: boolean, e: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const CLOSED_WIDTH = 60;
+const CLOSED_WIDTH = 48;
 
 /**
  * A collapsible horizontal bar component that allows toggling between an expanded and collapsed state.
@@ -47,7 +47,7 @@ const CLOSED_WIDTH = 60;
  * ```
  *
  * @param children - The content to display inside the collapsible bar when expanded
- * @param width - The width of the bar when expanded
+ * @param [width = 280] - The width of the bar when expanded
  * @param title - The title displayed when the bar is collapsed
  * @param [titleCssClass] - Additional CSS classes applied to the title element
  * @param [containerCssClass] - Additional CSS classes applied to the container element
@@ -60,9 +60,9 @@ const CLOSED_WIDTH = 60;
 export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   containerCssClass,
   children,
-  width,
+  width = 280,
   title,
-  iconSize = 32,
+  iconSize = 24,
   iconStroke = 1.5,
   titleCssClass,
   additionalButtons,
@@ -83,13 +83,13 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   }, [controlled, isOpened, width]);
 
   const titleClass = classNames([
-    `transform rotate-180 [writing-mode:tb-rl] p-4`,
+    `transform rotate-180 [writing-mode:tb-rl] py-4 px-3`,
     opened && 'hidden',
     titleCssClass,
   ]);
 
   const buttonClass = classNames([
-    'flex flex-row gap-2 cursor-pointer text-secondary px-6 py-2',
+    'flex flex-row gap-2 cursor-pointer text-secondary p-2 px-4',
     opened ? 'justify-end' : 'justify-center',
   ]);
 
@@ -128,7 +128,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       >
         {opened && additionalButtons}
         <DialButton
-          cssClass={'hover:text-icon-accent-primary'}
+          cssClass={'hover:text-icon-accent-primary p-1'}
           onClick={changeVisibility}
           iconBefore={
             opened ? (
