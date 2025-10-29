@@ -12,7 +12,7 @@ export interface DialActionDropdownItem extends DropdownItem {
   title: string;
 }
 
-export interface DialFileManagerSelectionToolbarProps {
+export interface DialFileManagerBulkActionsToolbarProps {
   selectionLabel: string;
   onClearSelection: () => void;
   actions: DialActionDropdownItem[];
@@ -60,8 +60,8 @@ export interface DialFileManagerSelectionToolbarProps {
  *
  * @returns {JSX.Element} A responsive toolbar that adjusts visible actions based on available width.
  */
-export const DialFileManagerSelectionToolbar: FC<
-  DialFileManagerSelectionToolbarProps
+export const DialFileManagerBulkActionsToolbar: FC<
+  DialFileManagerBulkActionsToolbarProps
 > = ({ selectionLabel, onClearSelection, actions }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);

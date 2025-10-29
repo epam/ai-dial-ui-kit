@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterAll, beforeAll } from 'vitest';
-import { DialFileManagerSelectionToolbar } from './FileManagerSelectionToolbar';
+import { DialFileManagerBulkActionsToolbar } from './FileManagerBulkActionsToolbar';
 import type { DialButtonProps } from '@/components/Button/Button';
 import type { DialDropdownProps } from '@/components/Dropdown/Dropdown';
 import type { DropdownItem } from '@/models/dropdown';
@@ -29,7 +29,7 @@ vi.mock('@/hooks/use-is-tablet-screen', () => ({
   useIsMobileScreen: vi.fn(() => false),
 }));
 
-describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
+describe('Dial UI Kit :: DialFileManagerBulkActionsToolbar', () => {
   let originalResizeObserver: typeof ResizeObserver;
 
   beforeAll(() => {
@@ -63,7 +63,7 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
   it('renders selected label button and calls onClearSelection', () => {
     const onClear = vi.fn();
     render(
-      <DialFileManagerSelectionToolbar
+      <DialFileManagerBulkActionsToolbar
         selectionLabel="3 files selected"
         onClearSelection={onClear}
         actions={actions}
@@ -79,7 +79,7 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
 
   it('renders all action buttons', () => {
     render(
-      <DialFileManagerSelectionToolbar
+      <DialFileManagerBulkActionsToolbar
         selectionLabel="3 files selected"
         onClearSelection={vi.fn()}
         actions={actions}
@@ -95,7 +95,7 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
 
   it('calls action onClick handler when action button is clicked', () => {
     render(
-      <DialFileManagerSelectionToolbar
+      <DialFileManagerBulkActionsToolbar
         selectionLabel="3 files selected"
         onClearSelection={vi.fn()}
         actions={actions}
@@ -110,7 +110,7 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
 
   it('renders icons inside buttons', () => {
     render(
-      <DialFileManagerSelectionToolbar
+      <DialFileManagerBulkActionsToolbar
         selectionLabel="3 files selected"
         onClearSelection={vi.fn()}
         actions={actions}
