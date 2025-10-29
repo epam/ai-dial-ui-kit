@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { DialFileManager, type DialFileManagerProps } from './FileManager';
 import { itemsMock } from './__mocks__/files';
 import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
+import { ButtonVariant } from '@/types/button';
+import { DialButton } from '@/components/Button/Button';
+import { DialPopup } from '@/components/Popup/Popup';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -33,9 +36,7 @@ const meta = {
     navigationPanelOptions: {
       searchable: true,
     },
-    toolbarOptions: {
-      areHiddenFilesVisible: false,
-    },
+    toolbarOptions: {},
   },
 } satisfies Meta<DialFileManagerProps>;
 
@@ -115,7 +116,6 @@ const WithTabsControlledComponent = (args: DialFileManagerProps) => {
           tabs: tabs,
           activeTab: activeTab,
           onTabChange: handleTabChange,
-          areHiddenFilesVisible: false,
         }}
         gridOptions={{
           ...args.gridOptions,
@@ -134,4 +134,47 @@ export const HandleTableFileClick: Story = {
   args: {
     onTableFileClick: (file) => alert(`File clicked: ${file.name}`),
   },
+};
+
+const PopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        title="Toggle File Manager"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        cssClass="w-[1000px] !h-[600px]"
+      >
+        <DialFileManager
+          {...args}
+          gridOptions={{ ...args.gridOptions, filterable: false }}
+          toolbarOptions={{
+            ...args.toolbarOptions,
+            tabs: tabs,
+            activeTab: activeTab,
+            onTabChange: handleTabChange,
+          }}
+          treeOptions={{
+            ...args.treeOptions,
+            collapsed: false,
+          }}
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const InPopup: Story = {
+  render: PopupComponent,
 };

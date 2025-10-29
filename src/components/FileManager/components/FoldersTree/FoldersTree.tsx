@@ -12,6 +12,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
+import { isHiddenDotFile } from '../../utils';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
@@ -24,6 +25,7 @@ export interface DialFoldersTreeProps {
   emptyStateIcon?: ReactNode;
   onItemClick?: (item: DialFile) => void;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
+  areHiddenFilesVisible?: boolean;
 }
 
 /**
@@ -95,6 +97,7 @@ export interface DialFoldersTreeProps {
  * @param [emptyStateIcon] - Optional icon to display in the empty state.
  * @param [onItemClick] - Callback fired when a folder or file is clicked (receives the corresponding `DialFile` node).
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
+ * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
  *
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
@@ -113,6 +116,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateIcon,
   onItemClick,
   getContextMenuItems,
+  areHiddenFilesVisible = false,
 }) => {
   const [expandedItems, setExpandedItems] =
     useState<Set<string>>(expandedPaths);
@@ -139,6 +143,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const { path, nodeType, name, items } = node;
 
       const isFolder = nodeType === DialFileNodeType.FOLDER;
+
+      if (!areHiddenFilesVisible && isHiddenDotFile(node)) return null;
 
       if (!isFolder && !showFiles) return;
 
