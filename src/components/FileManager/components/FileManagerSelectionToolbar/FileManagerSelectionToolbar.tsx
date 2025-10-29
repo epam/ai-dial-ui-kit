@@ -69,6 +69,9 @@ export const DialFileManagerSelectionToolbar: FC<
   const [visibleCount, setVisibleCount] = useState(actions.length);
   const isMobile = useIsMobileScreen();
 
+  // Note: We intentionally slice from the end because actions are measured right-to-left.
+  // The rightmost (last) actions stay visible, while the leftmost (first) ones move into the dropdown.
+  // This preserves correct visual order in both the toolbar and the dropdown.
   const hiddenActions = actions.slice(0, actions.length - visibleCount);
   const visibleActions = actions.slice(actions.length - visibleCount);
 
