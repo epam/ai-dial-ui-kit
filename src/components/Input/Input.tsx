@@ -24,6 +24,7 @@ export interface DialInputProps
   hideBorder?: boolean;
   tooltipText?: string;
   tooltipTriggerClassName?: string;
+  hideTooltip?: boolean;
   onChange?: (value?: string) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
 }
@@ -52,6 +53,7 @@ export interface DialInputProps
  * @param hideBorder - Whether to hide the input border styling
  * @param tooltipText - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
  * @param tooltipTriggerClassName - Additional CSS classes to apply to the tooltip
+ * @param hideTooltip - Whether to hide the tooltip
  * @param onChange - Callback function called when the input value changes
  * @param onBlur - Callback function called when the input blurs
  */
@@ -79,6 +81,7 @@ export const DialInput: FC<DialInputProps> = ({
   onBlur,
   defaultValue,
   tooltipText,
+  hideTooltip = false,
 }) => {
   const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
     (e.target as HTMLInputElement).blur();
@@ -147,7 +150,7 @@ export const DialInput: FC<DialInputProps> = ({
       />
 
       <DialTooltip
-        tooltip={tooltipText || value}
+        tooltip={hideTooltip ? undefined : tooltipText || value}
         triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
       >
         <input

@@ -82,7 +82,7 @@ const PLACEMENTS: Placement[] = [
 ];
 
 const meta = {
-  title: 'Overlay/Dropdown',
+  title: 'Dropdown/Dropdown',
   component: DialDropdown,
   parameters: { layout: 'centered', themes: {} },
   argTypes: {
