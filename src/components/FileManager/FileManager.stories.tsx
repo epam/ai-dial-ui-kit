@@ -117,6 +117,10 @@ const WithTabsControlledComponent = (args: DialFileManagerProps) => {
           onTabChange: handleTabChange,
           areHiddenFilesVisible: false,
         }}
+        gridOptions={{
+          ...args.gridOptions,
+          filterable: false,
+        }}
       />
     </div>
   );
