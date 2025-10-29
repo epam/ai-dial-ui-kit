@@ -373,6 +373,12 @@ export const DialSelect: FC<DialSelectProps> = ({
                     <div className="flex items-center gap-2 w-full">
                       {opt.icon && <DialIcon icon={opt.icon} />}
                       <DialEllipsisTooltip text={opt.label} />
+
+                      {opt.description && (
+                        <div className="text-secondary dial-small">
+                          {opt.description}
+                        </div>
+                      )}
                     </div>
                   </button>
                 );
