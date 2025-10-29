@@ -52,6 +52,10 @@ import type { DropdownItem } from '@/models/dropdown';
 import { DialFileManagerActions } from '@/types/file-manager';
 import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import {
+  DialFileManagerBulkActionsToolbar,
+  type DialFileManagerBulkActionsToolbarProps,
+} from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 
 interface GridRow {
   id: string;
@@ -104,6 +108,11 @@ export type ToolbarOptions = Omit<
   'areHiddenFilesVisible' | 'onToggleHiddenFiles'
 >;
 
+export type BulkActionsToolbarOptions = Omit<
+  DialFileManagerBulkActionsToolbarProps,
+  'onClearSelection'
+>;
+
 export interface DialFileManagerProps {
   path?: string;
   cssClass?: string;
@@ -114,6 +123,7 @@ export interface DialFileManagerProps {
   toolbarOptions?: ToolbarOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
+  bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -159,10 +169,13 @@ export interface DialFileManagerProps {
  * @param [path] - Absolute path of the current location (e.g., "/All files/Design/Icons")
  * @param [cssClass] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
+ *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
  * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag
+ * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
+ *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
@@ -177,6 +190,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   navigationPanelOptions,
   gridOptions,
   toolbarOptions,
+  bulkActionsToolbarOptions,
   onPathChange,
   onTableFileClick,
   onCopyFiles,
@@ -328,13 +342,17 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     }));
   }, [baseColumns, filterable]);
 
+  const onClearSelection = useCallback(() => {
+    setSelectedIds(new Set());
+  }, []);
+
   const handlePathChange = useCallback(
     (nextPath?: string) => {
       setCurrentPath(nextPath);
       onPathChange?.(nextPath);
-      setSelectedIds(new Set());
+      onClearSelection();
     },
-    [onPathChange],
+    [onPathChange, onClearSelection],
   );
 
   const handleTreeItemClick = useCallback(
@@ -412,8 +430,16 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   );
 
   return (
-    <section className={mergeClasses(containerBaseClasses, cssClass)}>
-      {toolbarOptions && (
+    <section
+      className={mergeClasses(
+        containerBaseClasses,
+        {
+          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+        },
+        cssClass,
+      )}
+    >
+      {toolbarOptions && selectedIds.size === 0 && (
         <div
           className={toolbarBaseClasses}
           role="toolbar"
@@ -423,6 +449,20 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
             {...toolbarOptions}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
+          />
+        </div>
+      )}
+
+      {selectedIds.size > 0 && bulkActionsToolbarOptions && (
+        <div
+          className={toolbarBaseClasses}
+          role="toolbar"
+          aria-label="File Manager Toolbar"
+        >
+          <DialFileManagerBulkActionsToolbar
+            {...bulkActionsToolbarOptions}
+            onClearSelection={onClearSelection}
+            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
           />
         </div>
       )}
