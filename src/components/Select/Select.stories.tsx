@@ -30,8 +30,9 @@ const baseOptions: SelectOption[] = [
     value: 'another-long-option',
     label:
       'Another long option to test overflow. It should be truncated appropriately',
+    description: 'another long option description',
   },
-  { value: 'option-1', label: 'Option 1' },
+  { value: 'option-1', label: 'Option 1', description: 'Option 1 description' },
   { value: 'option-2', label: 'Option 2' },
   { value: 'option-3', label: 'Option 3' },
   { value: 'option-4', label: 'Option 4' },

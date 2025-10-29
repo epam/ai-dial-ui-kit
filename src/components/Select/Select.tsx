@@ -345,6 +345,12 @@ export const DialSelect: FC<DialSelectProps> = ({
                         }
                         ariaLabel={opt.label}
                       />
+
+                      {opt.description && (
+                        <div className="text-secondary dial-small">
+                          {opt.description}
+                        </div>
+                      )}
                     </div>
                   );
                 }
