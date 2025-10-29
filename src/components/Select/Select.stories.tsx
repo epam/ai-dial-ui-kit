@@ -52,6 +52,7 @@ const meta = {
     options: { control: { type: 'object' } },
     multiple: { control: { type: 'boolean' } },
     value: { control: { type: 'object' } },
+    prefix: { control: { type: 'text' } },
     defaultValue: { control: { type: 'object' } },
     placeholder: { control: { type: 'text' } },
     searchable: { control: { type: 'boolean' } },
@@ -109,6 +110,7 @@ export const WithSelectAll: Story = {
 
 export const Searchable: Story = {
   args: {
+    prefix: 'Filter:',
     searchable: true,
   },
 };
