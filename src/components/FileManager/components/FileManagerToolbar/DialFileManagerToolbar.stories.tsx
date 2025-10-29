@@ -8,7 +8,7 @@ import { IconFile, IconFileZip, IconFolder } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
 const meta: Meta<typeof DialFileManagerToolbar> = {
-  title: 'FileManager/FileManagerToolbar',
+  title: 'FileManager/components/FileManagerToolbar',
   component: DialFileManagerToolbar,
   tags: ['layout', 'toolbar', 'file-manager'],
   parameters: {
