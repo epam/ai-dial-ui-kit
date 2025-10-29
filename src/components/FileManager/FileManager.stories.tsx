@@ -169,6 +169,35 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ...args.treeOptions,
             collapsed: false,
           }}
+          bulkActionsToolbarOptions={{
+            selectionLabel: 'items selected',
+            actions: [
+              {
+                key: 'cut',
+                title: 'Cut',
+                label: 'Cut',
+                onClick: () => alert('Cut clicked'),
+              },
+              {
+                key: 'copy',
+                title: 'Copy',
+                label: 'Copy',
+                onClick: () => alert('Copy clicked'),
+              },
+              {
+                key: 'delete',
+                title: 'Delete',
+                label: 'Delete',
+                onClick: () => alert('Delete clicked'),
+              },
+              {
+                key: 'download',
+                title: 'Download',
+                label: 'Download',
+                onClick: () => alert('Download clicked'),
+              },
+            ],
+          }}
         />
       </DialPopup>
     </div>

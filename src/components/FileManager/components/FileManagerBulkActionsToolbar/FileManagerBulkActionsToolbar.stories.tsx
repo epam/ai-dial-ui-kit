@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
-  DialFileManagerSelectionToolbar,
+  DialFileManagerBulkActionsToolbar,
   type DialActionDropdownItem,
-} from './FileManagerSelectionToolbar';
+} from './FileManagerBulkActionsToolbar';
 import {
   IconArrowMoveRight,
   IconCopy,
@@ -16,9 +16,9 @@ import {
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
-const meta: Meta<typeof DialFileManagerSelectionToolbar> = {
-  title: 'FileManager/components/FileManagerSelectionToolbar',
-  component: DialFileManagerSelectionToolbar,
+const meta: Meta<typeof DialFileManagerBulkActionsToolbar> = {
+  title: 'FileManager/components/FileManagerBulkActionsToolbar',
+  component: DialFileManagerBulkActionsToolbar,
   tags: ['layout', 'toolbar', 'file-manager'],
   parameters: {
     layout: 'fullscreen',
@@ -125,7 +125,7 @@ export const Default: Story = {
     onClearSelection: () => alert('Selections cleared'),
     actions: mockActions,
   },
-  render: (args) => <DialFileManagerSelectionToolbar {...args} />,
+  render: (args) => <DialFileManagerBulkActionsToolbar {...args} />,
 };
 
 export const ManyActions: Story = {
@@ -134,5 +134,5 @@ export const ManyActions: Story = {
     onClearSelection: () => alert('Selections cleared'),
     actions: [...mockActions, ...extraMockActions],
   },
-  render: (args) => <DialFileManagerSelectionToolbar {...args} />,
+  render: (args) => <DialFileManagerBulkActionsToolbar {...args} />,
 };
