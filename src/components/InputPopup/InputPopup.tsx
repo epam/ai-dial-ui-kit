@@ -103,7 +103,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
             (errorText || invalid) && 'dial-input-error',
           )}
         >
-          <DialTooltip tooltip={String(value)}>
+          <DialTooltip tooltip={value == null ? undefined : String(value)}>
             {value || !placeholder ? (
               <span className={valueCssClasses}>{value}</span>
             ) : (
