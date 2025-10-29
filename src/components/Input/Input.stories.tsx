@@ -65,6 +65,18 @@ const meta = {
       control: false,
       description: 'Callback function called when the input blurs',
     },
+    tooltipText: {
+      control: { type: 'text' },
+      description: 'The text to display inside the tooltip',
+    },
+    tooltipTriggerClassName: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply to the tooltip trigger',
+    },
+    hideTooltip: {
+      control: { type: 'boolean' },
+      description: 'Whether to hide the tooltip',
+    },
   },
   args: {
     elementId: 'story-input',
@@ -205,6 +217,13 @@ export const WithTooltipText: Story = {
   args: {
     value: 'example value',
     tooltipText: 'Tooltip text',
+  },
+};
+
+export const HiddenTooltip: Story = {
+  args: {
+    value: 'example value',
+    hideTooltip: true,
   },
 };
 
