@@ -146,6 +146,8 @@ export const DialFileManagerSelectionToolbar: FC<
       <div
         ref={containerRef}
         className="rounded bg-layer-0 p-2 flex justify-between items-center w-full"
+        role="toolbar"
+        aria-label="File bulk actions"
       >
         <div ref={leftSectionRef}>
           <DialButton

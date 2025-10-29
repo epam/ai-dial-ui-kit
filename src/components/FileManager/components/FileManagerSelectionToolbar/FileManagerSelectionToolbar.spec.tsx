@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialFileManagerSelectionToolbar', () => {
     { key: 'share', title: 'Share', onClick: vi.fn() },
   ];
 
-  it('renders selected label button and calls onClearSelections', () => {
+  it('renders selected label button and calls onClearSelection', () => {
     const onClear = vi.fn();
     render(
       <DialFileManagerSelectionToolbar
