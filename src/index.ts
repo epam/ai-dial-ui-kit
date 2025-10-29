@@ -89,7 +89,10 @@ export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
-export { DialFileManagerTabs } from './types/file-manager';
+export {
+  DialFileManagerTabs,
+  DialFileManagerActions,
+} from './types/file-manager';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';

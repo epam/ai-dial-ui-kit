@@ -168,7 +168,27 @@ const PopupComponent = (args: DialFileManagerProps) => {
           treeOptions={{
             ...args.treeOptions,
             collapsed: false,
+            actionLabels: {
+              ...args.treeOptions?.actionLabels,
+              copy: 'Copy',
+              cut: 'Cut',
+              paste: 'Paste',
+            },
           }}
+          onCopyFiles={(files, destination) =>
+            alert(
+              `Copying files: ${files
+                .map((f) => f)
+                .join(', ')} to ${destination}`,
+            )
+          }
+          onMoveToFiles={(files, destination) =>
+            alert(
+              `Moving files: ${files
+                .map((f) => f)
+                .join(', ')} to ${destination}`,
+            )
+          }
         />
       </DialPopup>
     </div>

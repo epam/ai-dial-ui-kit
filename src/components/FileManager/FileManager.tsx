@@ -43,8 +43,15 @@ import {
   DialFileManagerToolbar,
   type DialFileManagerToolbarProps,
 } from './components/FileManagerToolbar/DialFileManagerToolbar';
+
 import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
 import { useCollapseTree } from './hooks/use-collapse-tree';
+import { useFileClipboard } from './hooks/use-file-clipboard';
+
+import type { DropdownItem } from '@/models/dropdown';
+import { DialFileManagerActions } from '@/types/file-manager';
+import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 interface GridRow {
   id: string;
@@ -64,6 +71,12 @@ export interface FileTreeOptions
   containerCssClass?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;
+  actionLabels?: {
+    [DialFileManagerActions.Copy]?: string;
+    [DialFileManagerActions.Cut]?: string;
+    [DialFileManagerActions.Paste]?: string;
+    [DialFileManagerActions.Rename]?: string;
+  };
 }
 
 export type NavigationPanelOptions = Omit<
@@ -104,6 +117,9 @@ export interface DialFileManagerProps {
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
+
+  onCopyFiles?: (files: string[], destination: string) => void;
+  onMoveToFiles?: (files: string[], destination: string) => void;
 }
 
 /**
@@ -149,6 +165,9 @@ export interface DialFileManagerProps {
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
+ *
+ * @param [onCopyFiles] - Callback fired when files copy-paste
+ * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
  */
 export const DialFileManager: FC<DialFileManagerProps> = ({
   path,
@@ -160,6 +179,8 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
   toolbarOptions,
   onPathChange,
   onTableFileClick,
+  onCopyFiles,
+  onMoveToFiles,
 }) => {
   const [currentPath, setCurrentPath] = useState<string | undefined>(path);
   const { areHiddenFilesVisible, toggleHiddenFilesVisibility } =
@@ -203,6 +224,17 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     () => findFolderForPath(items, currentPath) ?? items[0],
     [items, currentPath],
   );
+
+  const {
+    state: clipboard,
+    copy: onCopy,
+    cut: onCut,
+    paste: onPaste,
+  } = useFileClipboard({
+    getDestination: () => currentFolder?.path ?? '/',
+    onCopyFiles,
+    onMoveToFiles,
+  });
 
   const gridRows: GridRow[] = useMemo(() => {
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
@@ -339,6 +371,46 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     [handlePathChange, onTableFileClick],
   );
 
+  const getTreeContextMenuItems = useCallback(
+    (file: DialFile) => {
+      const items: DropdownItem[] = [];
+      if (treeOptions?.actionLabels) {
+        if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
+          items.push({
+            key: 'copy',
+            label: treeOptions.actionLabels[DialFileManagerActions.Copy],
+            icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+            onClick: () => onCopy([file.path]),
+          });
+        }
+        if (treeOptions.actionLabels[DialFileManagerActions.Cut]) {
+          items.push({
+            key: 'cut',
+            label: treeOptions.actionLabels[DialFileManagerActions.Cut],
+            icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
+            onClick: () => onCut([file.path]),
+          });
+        }
+        if (treeOptions.actionLabels[DialFileManagerActions.Paste]) {
+          items.push({
+            key: 'paste',
+            label: treeOptions.actionLabels[DialFileManagerActions.Paste],
+            disabled: !clipboard.hasItems,
+            icon: (
+              <IconClipboardCopy
+                {...BASE_ICON_PROPS}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onPaste(),
+          });
+        }
+      }
+      return items;
+    },
+    [onCopy, treeOptions?.actionLabels, onCut, onPaste, clipboard.hasItems],
+  );
+
   return (
     <section className={mergeClasses(containerBaseClasses, cssClass)}>
       {toolbarOptions && (
@@ -375,6 +447,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
               selectedPath={currentPath}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
+              getContextMenuItems={getTreeContextMenuItems}
             />
           </DialCollapsibleSidebar>
         </aside>
