@@ -47,9 +47,10 @@ export const DialTab: FC<DialTabProps> = ({
   horizontal,
   onClick,
 }) => {
-  const baseClasses =
-    'rounded border-b-2 border-l-2 border-transparent pr-3 pt-2 pb-[6px] pl-[10px] items-center flex flex-row gap-2 h-[32px] cursor-pointer dial-small leading-4 hover:text-accent-primary';
-
+  const baseClasses = mergeClasses(
+    'rounded h-[32px] items-center flex flex-row border-transparent cursor-pointer dial-small leading-4 hover:text-accent-primary',
+    { 'border-b-2 px-4': horizontal, 'border-l-2 px-3': !horizontal },
+  );
   const tabClassNames = mergeClasses(
     baseClasses,
     {
@@ -57,8 +58,8 @@ export const DialTab: FC<DialTabProps> = ({
       'bg-layer-1 text-secondary pointer-events-none': disabled,
       'bg-accent-primary-alpha text-primary': active && !disabled,
       'text-primary': !active && !disabled,
-      'border-b-2 border-b-accent-primary': active && horizontal && !disabled,
-      'border-l-2 border-l-accent-primary': active && !horizontal && !disabled,
+      'border-b-accent-primary': active && horizontal && !disabled,
+      'border-l-accent-primary': active && !horizontal && !disabled,
     },
     cssClass,
   );
