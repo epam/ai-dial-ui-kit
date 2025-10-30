@@ -52,7 +52,7 @@ interface UseFlexibleActionsOptions<T> {
  * // Example usage inside a toolbar component:
  * const { visibleActions, hiddenActions, refs } = useFlexibleActions({
  *   actions,
- *   direction: 'reverse',
+ *   direction: FlexibleActionsDirection.Reverse,
  *   dependencies: [isMobile],
  * });
  *
@@ -125,7 +125,7 @@ export function useFlexibleActions<T extends { key: string }>({
         let total = 0;
         let count = 0;
 
-        if (direction === 'reverse') {
+        if (direction === FlexibleActionsDirection.Reverse) {
           for (let i = widths.length - 1; i >= 0; i--) {
             total += widths[i] + actionsGap;
             if (total > availableWidth) break;
@@ -155,12 +155,12 @@ export function useFlexibleActions<T extends { key: string }>({
   }, [actions.length, direction, ...dependencies]);
 
   const hiddenActions =
-    direction === 'reverse'
+    direction === FlexibleActionsDirection.Reverse
       ? actions.slice(0, actions.length - visibleCount)
       : actions.slice(visibleCount);
 
   const visibleActions =
-    direction === 'reverse'
+    direction === FlexibleActionsDirection.Reverse
       ? actions.slice(actions.length - visibleCount)
       : actions.slice(0, visibleCount);
 
