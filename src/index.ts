@@ -97,6 +97,10 @@ export {
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
 
+// Context and Provider
+export { FileManagerProvider } from './components/FileManager/FileManagerProvider';
+export { useFileManagerContext } from './components/FileManager/hooks/use-file-manager-context';
+
 // Models
 export { StepStatus } from './models/step';
 export type { Step } from './models/step';
