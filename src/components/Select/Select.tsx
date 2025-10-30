@@ -252,7 +252,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             text={
               prefix
                 ? `${prefix} ${singleSelectedOption.label}`
-                : singleSelectedOption.value
+                : singleSelectedOption.label
             }
           />
         </>
