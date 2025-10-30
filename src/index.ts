@@ -110,7 +110,7 @@ export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
 export type { DialModifiedEntity } from './models/base-entity';
 export type { DialFile } from './models/file';
-export type {
+export {
   DialFileNodeType,
   DialFilePermission,
   DialFileResourceType,
