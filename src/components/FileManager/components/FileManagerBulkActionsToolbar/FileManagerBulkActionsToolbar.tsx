@@ -6,7 +6,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import { ButtonVariant } from '@/types/button';
 import { IconX, IconDotsVertical } from '@tabler/icons-react';
 import { ACTIONS_GAP, CONTAINER_PADDING, MORE_BUTTON_WIDTH } from './constants';
-import { useIsMobileScreen } from '@/hooks/use-is-tablet-screen';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 
 export interface DialActionDropdownItem extends DropdownItem {
   title: string;

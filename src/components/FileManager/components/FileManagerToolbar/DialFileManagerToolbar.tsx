@@ -15,8 +15,8 @@ import type { DropdownItem } from '@/models/dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileManagerTabs } from '@/types/file-manager';
 import { SmallScreenThreshold } from '@/types/tab';
-import { useIsMobileScreen } from '@/hooks/use-is-tablet-screen';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 
 export interface DialFileManagerToolbarProps {
   tabs?: TabModel[];

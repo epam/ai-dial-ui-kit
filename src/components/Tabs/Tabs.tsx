@@ -10,7 +10,6 @@ import {
 import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
 import { SmallScreenThreshold, TabOrientation } from '@/types/tab';
-import { useScreenType } from '@/hooks/use-is-tablet-screen';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -20,6 +19,7 @@ import { DialButton } from '@/components/Button/Button';
 import { DESKTOP_TABS_GAP_PX } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 import { ScreenType } from '@/types/screen';
+import { useScreenType } from '@/hooks/use-screen-type';
 
 export interface DialTabsProps {
   tabs: TabModel[];
