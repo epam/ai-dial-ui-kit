@@ -37,6 +37,7 @@ export interface DialSelectProps {
   options: SelectOption[];
   multiple?: boolean;
   value?: string | string[];
+  prefix?: string;
   defaultValue?: string | string[];
   placeholder?: string;
   searchable?: boolean;
@@ -77,6 +78,7 @@ export interface DialSelectProps {
  * @param options - Array of options to select from.
  * @param [multiple] - Whether multiple selections are allowed.
  * @param [value] - Controlled selected value(s).
+ * @param [prefix] - Prefix for selected value(s).
  * @param [defaultValue] - Uncontrolled initial selected value(s).
  * @param [placeholder] - Placeholder text when no selection is made.
  * @param [searchable] - Whether to show a search input to filter options.
@@ -97,6 +99,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   multiple = false,
   value,
   defaultValue,
+  prefix,
   placeholder = 'Select...',
   searchable = false,
   searchPlaceholder,
@@ -245,13 +248,26 @@ export const DialSelect: FC<DialSelectProps> = ({
           {singleSelectedOption.icon && (
             <DialIcon icon={singleSelectedOption.icon} />
           )}
-          <DialEllipsisTooltip text={singleSelectedOption.label} />
+          <DialEllipsisTooltip
+            text={
+              prefix
+                ? `${prefix} ${singleSelectedOption.label}`
+                : singleSelectedOption.label
+            }
+          />
         </>
       );
     }
 
     return <span className="text-secondary truncate">{placeholder}</span>;
-  }, [hasSelection, multiple, placeholder, renderTags, singleSelectedOption]);
+  }, [
+    hasSelection,
+    multiple,
+    prefix,
+    placeholder,
+    renderTags,
+    singleSelectedOption,
+  ]);
 
   return (
     <DialDropdown
