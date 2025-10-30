@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { DialFileManager, type DialFileManagerProps } from './FileManager';
+import {
+  DialFileManager,
+  DialFileManagerView,
+  type DialFileManagerProps,
+} from './FileManager';
+import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
 import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { ButtonVariant } from '@/types/button';
@@ -158,9 +163,9 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
-          gridOptions={{ ...args.gridOptions, filterable: false }}
+          gridOptions={{ ...(args.gridOptions ?? {}), filterable: false }}
           toolbarOptions={{
-            ...args.toolbarOptions,
+            ...(args.toolbarOptions ?? {}),
             tabs: tabs,
             activeTab: activeTab,
             onTabChange: handleTabChange,
@@ -195,10 +200,10 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ],
           }}
           treeOptions={{
-            ...args.treeOptions,
+            ...(args.treeOptions ?? {}),
             collapsed: false,
             actionLabels: {
-              ...args.treeOptions?.actionLabels,
+              ...(args.treeOptions?.actionLabels ?? {}),
               copy: 'Copy',
               cut: 'Cut',
               paste: 'Paste',
@@ -226,4 +231,20 @@ const PopupComponent = (args: DialFileManagerProps) => {
 
 export const InPopup: Story = {
   render: PopupComponent,
+};
+
+export const WithCustomProvider: Story = {
+  render: (args) => (
+    <div className="h-[640px] flex flex-col gap-3">
+      <FileManagerProvider {...args} items={itemsMock}>
+        <div className="bg-layer-3 px-4 py-2 text-secondary">
+          My app wants to show its own toolbar here (uses same context)
+        </div>
+        <DialFileManagerView />
+        <div className="bg-layer-3 px-4 py-2 text-secondary">
+          Footer actions / secondary info
+        </div>
+      </FileManagerProvider>
+    </div>
+  ),
 };
