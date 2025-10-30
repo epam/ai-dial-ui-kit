@@ -264,7 +264,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          'Rendered from arrays: all button variants (Primary, Secondary, Tertiary, Danger) across all states.',
+          'All button variants (Primary, Secondary, Tertiary, Danger) across all states.',
       },
     },
   },
