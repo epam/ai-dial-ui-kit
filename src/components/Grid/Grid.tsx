@@ -32,7 +32,7 @@ import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { gridBaseClasses, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
-import { DialNoDataContent } from '../NoDataContent/NoDataContent';
+import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { IconZoomCancel } from '@tabler/icons-react';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
