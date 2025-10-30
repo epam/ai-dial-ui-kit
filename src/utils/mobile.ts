@@ -1,3 +1,5 @@
+import { ScreenType } from '@/types/screen';
+
 /**
  * Checks if the current viewport width is within the "medium" (tablet) screen range.
  *
@@ -29,3 +31,31 @@ export const isMediumScreen = () =>
  */
 export const isSmallScreen = () =>
   typeof window !== 'undefined' && window.innerWidth < 640;
+
+/**
+ * Determines the current screen type based on the viewport width.
+ *
+ * Categorizes the screen into one of three types defined by `ScreenType`:
+ * - `ScreenType.Desktop` for widths **≥ 1024px**
+ * - `ScreenType.Tablet` for widths **between 640px and 1023px**
+ * - `ScreenType.Mobile` for widths **< 640px**
+ *
+ * If executed in a non-browser environment (where `window` is undefined),
+ * it returns `ScreenType.Undefined`.
+ *
+ * @returns {ScreenType} The detected screen type (`Desktop`, `Tablet`, `Mobile`, or `Undefined`).
+ *
+ * @example
+ * const screenType = getScreenType();
+ * if (screenType === ScreenType.Mobile) {
+ *   console.log('Mobile layout activated');
+ * }
+ */
+export const getScreenType = (): ScreenType => {
+  if (typeof window === 'undefined') return ScreenType.Undefined;
+
+  const width = window.innerWidth;
+  if (width >= 1024) return ScreenType.Desktop;
+  if (width < 640) return ScreenType.Mobile;
+  return ScreenType.Tablet;
+};

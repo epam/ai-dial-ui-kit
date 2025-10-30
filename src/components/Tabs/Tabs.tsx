@@ -9,8 +9,8 @@ import {
 
 import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
-import { TabOrientation } from '@/types/tab';
-import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
+import { SmallScreenThreshold, TabOrientation } from '@/types/tab';
+import { useScreenType } from '@/hooks/use-is-tablet-screen';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -18,24 +18,33 @@ import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
 import { DialTab } from '@/components/Tab/Tab';
 import { DialButton } from '@/components/Button/Button';
 import { DESKTOP_TABS_GAP_PX } from './constants';
+import { mergeClasses } from '@/utils/merge-classes';
+import { ScreenType } from '@/types/screen';
 
 export interface DialTabsProps {
   tabs: TabModel[];
   activeTab: string;
   onClick: (id: string) => void;
   orientation?: TabOrientation;
+  smallScreenThreshold?: SmallScreenThreshold;
+  smallScreenContainerCssClass?: string;
+  smallScreenDropdownItemCssClass?: string;
 }
 
 /**
- * A responsive and overflow-aware tabs component that adapts between horizontal and dropdown (mobile) layouts
- * based on screen size and available space. When there are too many tabs to fit in one line,
- * the component automatically adds a dropdown button for accessing hidden tabs and enables smooth horizontal scrolling.
+ * A responsive and overflow-aware tabs component that automatically adapts its layout
+ * between a scrollable tab bar and a dropdown menu on smaller screens.
  *
- * Supports both horizontal and vertical orientations and can integrate with JSON editor states to toggle
- * visibility when needed. Automatically keeps the active tab in view when navigating through scrollable tabs.
+ * When there are too many tabs to fit in a single line, it introduces a dropdown button
+ * for accessing hidden tabs and ensures smooth horizontal scrolling. The component also
+ * automatically keeps the active tab in view.
  *
- * On larger screens, tabs are displayed horizontally or vertically according to the {@link TabOrientation} prop.
- * On smaller screens, tabs collapse into a dropdown menu for better usability.
+ * Supports both horizontal and vertical orientations and dynamically adjusts layout
+ * based on screen size and available space.
+ *
+ * On larger screens, tabs are displayed according to the `orientation` prop
+ * (horizontal or vertical). On smaller screens (mobile or tablet), the tabs collapse
+ * into a dropdown menu for better usability.
  *
  * @example
  * ```tsx
@@ -51,29 +60,44 @@ export interface DialTabsProps {
  * />
  * ```
  *
- * @param tabs - Array of tab models to render. Each tab should include an `id` and `label`.
+ * @param tabs - Array of tab models to render. Each tab must include an `id` and a display `name`.
  * @param activeTab - The identifier of the currently active tab.
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
- * @param [orientation=TabOrientation.Horizontal] - The layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ * @param [orientation=TabOrientation.Horizontal] - Layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ * @param [smallScreenThreshold=SmallScreenThreshold.Tablet] - Defines the screen size threshold
+ *   below which tabs collapse into a dropdown. Uses the {@link SmallScreenThreshold} enum.
+ *   When set to `Tablet`, both mobile and tablet screens will trigger dropdown mode.
+ * @param [smallScreenContainerCssClass] - Optional CSS class applied to the dropdown container
+ *   in small-screen (collapsed) mode.
+ * @param [smallScreenDropdownItemCssClass] - Optional CSS class applied to individual dropdown
+ *   items in small-screen mode.
  *
  * @remarks
- * - Automatically detects overflow using a `ResizeObserver` and toggles a dropdown button when tabs exceed
- *   available width.
- * - Smoothly scrolls the tab row to keep the active tab visible.
- * - Switches to a dedicated dropdown interface on mobile and tablet screens via the `useIsTabletScreen` hook.
+ * - Automatically detects horizontal overflow via `ResizeObserver` and shows a dropdown when needed.
+ * - Smoothly scrolls to keep the active tab visible when navigating.
+ * - Switches layout responsively based on `smallScreenThreshold`.
  */
 export const DialTabs: FC<DialTabsProps> = ({
   tabs,
   activeTab,
   onClick,
   orientation = TabOrientation.Horizontal,
+  smallScreenThreshold = SmallScreenThreshold.Tablet,
+  smallScreenContainerCssClass,
+  smallScreenDropdownItemCssClass,
 }) => {
   // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const isTablet = useIsTabletScreen();
+  const screenType = useScreenType();
+
+  const isSmallScreen =
+    screenType === ScreenType.Mobile ||
+    (smallScreenThreshold === SmallScreenThreshold.Tablet &&
+      screenType === ScreenType.Tablet);
+
   const isHorizontal = orientation === TabOrientation.Horizontal;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -130,8 +154,13 @@ export const DialTabs: FC<DialTabsProps> = ({
     }
   }, [activeTab]);
 
-  return isTablet ? (
-    <div className="h-11 flex items-center bg-layer-3 px-4">
+  return isSmallScreen ? (
+    <div
+      className={mergeClasses(
+        'h-11 flex items-center bg-layer-3 px-4',
+        smallScreenContainerCssClass,
+      )}
+    >
       <DialDropdown
         trigger={[DropdownTrigger.Click]}
         open={isMobileDropdownOpen}
@@ -148,7 +177,10 @@ export const DialTabs: FC<DialTabsProps> = ({
                 onClick(id);
                 setIsMobileDropdownOpen(false);
               }}
-              cssClass="w-full rounded-none h-11 items-center px-6"
+              cssClass={mergeClasses(
+                'w-full rounded-none h-11 items-center px-6',
+                smallScreenDropdownItemCssClass,
+              )}
             />
           ))
         }
@@ -159,7 +191,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             tab={activeTabModel}
             active
             onClick={onClick}
-            cssClass="rounded-none bg-transparent border-l-0 border-b-[2px] border-accent-primary h-full items-center px-0"
+            cssClass="rounded-none bg-transparent border-l-0 border-b-0 h-full items-center px-0"
           />
           <DialIcon
             icon={<IconChevronDown size={16} />}

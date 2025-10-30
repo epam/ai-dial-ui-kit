@@ -184,6 +184,7 @@ export const DialFileManagerBulkActionsToolbar: FC<
 
           {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
             <DialButton
+              cssClass="!p-[9px]"
               key={key}
               iconBefore={icon}
               title={title}
