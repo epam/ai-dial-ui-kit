@@ -216,11 +216,7 @@ export const AllVariants: Story = {
           {variants.map((v) => (
             <div
               key={v.key}
-              className={
-                v.key === 'danger'
-                  ? 'text-center font-semibold text-red-600'
-                  : 'text-primary text-center font-semibold'
-              }
+              className={'text-primary text-center font-semibold'}
             >
               {v.label}
             </div>
