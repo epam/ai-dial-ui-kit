@@ -32,6 +32,8 @@ import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { gridBaseClasses, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
+import { DialNoDataContent } from '../NoDataContent/NoDataContent';
+import { IconZoomCancel } from '@tabler/icons-react';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -47,6 +49,8 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   getRowId?: (row: T) => string;
   alternateOddRowColors?: boolean;
   filterPlaceholder?: string;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -122,6 +126,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
  * @param [filterPlaceholder='Enter value'] - Placeholder text for column filter inputs
+ * @param [emptyStateTitle] - Optional title text displayed when the grid has no rows to show.
+ * @param [emptyStateDescription] - Optional description text displayed below the empty state title,
+ *   providing additional context or instructions (e.g., “No data found” or “Try adjusting your filters”).
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -138,6 +145,8 @@ export const DialGrid = <T extends object>({
     String((row as Record<string, unknown>).id || JSON.stringify(row)),
   alternateOddRowColors = false,
   filterPlaceholder = 'Enter value',
+  emptyStateTitle = 'No results found',
+  emptyStateDescription = "Sorry, we couldn't find any results for your search.",
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -358,6 +367,21 @@ export const DialGrid = <T extends object>({
     }
   }, [gridApi, currentSelectedIds]);
 
+  const emptyStateRenderer = useCallback(
+    () => (
+      <DialNoDataContent
+        title={emptyStateTitle}
+        description={emptyStateDescription}
+        containerCssClass="gap-3"
+        titleCssClass="mt-2 !text-lg"
+        icon={
+          <IconZoomCancel size={100} stroke={0.5} className="text-secondary" />
+        }
+      />
+    ),
+    [emptyStateTitle, emptyStateDescription],
+  );
+
   return (
     <div
       className={classNames(
@@ -388,6 +412,7 @@ export const DialGrid = <T extends object>({
           onGridSizeChanged={onGridSizeChanged}
           onGridReady={onGridReady}
           suppressCellFocus={true}
+          noRowsOverlayComponent={emptyStateRenderer}
           rowData={rowData}
           {...additionalGridOptions}
         />
