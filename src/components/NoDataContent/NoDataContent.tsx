@@ -1,11 +1,16 @@
 import type { FC, ReactNode } from 'react';
 import { IconClipboardX } from '@tabler/icons-react';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialNoDataContentProps {
   icon?: ReactNode;
   title: string;
   description?: string;
+  containerCssClass?: string;
+  titleCssClass?: string;
+  descriptionCssClass?: string;
 }
+
 /**
  * A component for displaying a message and icon when there is no data to show.
  *
@@ -25,12 +30,30 @@ export const DialNoDataContent: FC<DialNoDataContentProps> = ({
   icon,
   title,
   description,
+  containerCssClass,
+  titleCssClass,
+  descriptionCssClass,
 }) => {
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center text-secondary">
+    <div
+      className={mergeClasses(
+        'h-full w-full flex flex-col items-center justify-center text-secondary',
+        containerCssClass,
+      )}
+    >
       {icon || <IconClipboardX width={60} height={60} />}
-      <span className="dial-small mt-2 text-primary">{title}</span>
-      {description && <span className="mt-1 text-primary">{description}</span>}
+      <span
+        className={mergeClasses('dial-small mt-2 text-primary', titleCssClass)}
+      >
+        {title}
+      </span>
+      {description && (
+        <span
+          className={mergeClasses('mt-1 text-primary', descriptionCssClass)}
+        >
+          {description}
+        </span>
+      )}
     </div>
   );
 };
