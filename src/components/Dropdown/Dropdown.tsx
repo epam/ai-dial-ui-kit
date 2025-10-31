@@ -377,12 +377,13 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     if (!isOpen) return;
 
     const refEl = refs.reference.current;
-    const targetEl =
-      refEl instanceof Element
-        ? refEl
-        : pointedElementRef.current instanceof Element
-          ? pointedElementRef.current
-          : null;
+    let targetEl: Element | null = null;
+
+    if (refEl instanceof Element) {
+      targetEl = refEl;
+    } else if (pointedElementRef.current instanceof Element) {
+      targetEl = pointedElementRef.current;
+    }
 
     if (!targetEl) return;
 
