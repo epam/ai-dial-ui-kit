@@ -17,9 +17,11 @@ export interface DialInputPopupProps {
   disabled?: boolean;
   valueCssClasses?: string;
   inputCssClasses?: string;
+  placeholder?: string;
   elementId?: string;
   errorText?: string;
-  emptyValueText: string;
+  invalid?: boolean;
+  emptyValueText?: string;
 }
 
 /**
@@ -46,6 +48,7 @@ export interface DialInputPopupProps {
  *
  * @param [open] - The current state of the modal, indicating whether it is opened or closed.
  * @param [selectedValue] - The currently selected value(s). Can be a string for a single value or an array of strings for multiple values.
+ * @param [placeholder] - Placeholder text displayed when no value is selected.
  * @param children - The content to render inside the modal when it is opened.
  * @param onOpen - A callback function triggered when the modal open button is clicked.
  * @param [disabled=false] - Whether the input is disabled, preventing user interaction.
@@ -53,7 +56,8 @@ export interface DialInputPopupProps {
  * @param [inputCssClasses] - Additional CSS classes applied to the input container.
  * @param [elementId] - A unique identifier for the input element, useful for accessibility and testing.
  * @param [errorText] - An optional error message displayed below the input when an error state is present.
- * @param emptyValueText - The text displayed when no value is selected.
+ * @param [invalid] - Whether the input is in an invalid state, affecting styling. Applyed automatically if errorText is provided.
+ * @param [emptyValueText] - The text displayed when no value is selected and placeholder is not provided.
  */
 export const DialInputPopup: FC<DialInputPopupProps> = ({
   children,
@@ -65,14 +69,20 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   onOpen,
   elementId,
   errorText,
+  invalid,
   emptyValueText,
+  placeholder,
 }) => {
   const hasMultipleValues =
     Array.isArray(selectedValue) && selectedValue.length > 0;
   const hasSingleValue =
     typeof selectedValue === 'string' && !!selectedValue.trim();
   const value =
-    hasMultipleValues || hasSingleValue ? selectedValue : emptyValueText;
+    hasMultipleValues || hasSingleValue
+      ? selectedValue
+      : placeholder
+        ? undefined
+        : emptyValueText;
 
   const handleClick = disabled ? undefined : onOpen;
 
@@ -90,11 +100,15 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
             'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
             inputCssClasses,
             disabled && 'dial-input-disable',
-            errorText && 'dial-input-error',
+            (errorText || invalid) && 'dial-input-error',
           )}
         >
-          <DialTooltip tooltip={String(value)}>
-            <span className={valueCssClasses}>{value}</span>
+          <DialTooltip tooltip={value == null ? undefined : String(value)}>
+            {value || !placeholder ? (
+              <span className={valueCssClasses}>{value}</span>
+            ) : (
+              <span className="text-secondary">{placeholder}</span>
+            )}
           </DialTooltip>
           {!disabled && (
             <div className="flex-shrink-0">
@@ -123,7 +137,10 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           disabled && 'dial-input-disable',
         )}
       >
-        <DialAutocompleteInputValue selectedItems={value as string[]} />
+        <DialAutocompleteInputValue
+          placeholder={placeholder}
+          selectedItems={value as string[]}
+        />
         {!disabled && (
           <div className="ml-1">
             <DialIcon

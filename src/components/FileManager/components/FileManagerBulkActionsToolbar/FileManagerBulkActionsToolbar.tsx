@@ -1,18 +1,20 @@
-import { useEffect, useLayoutEffect, useRef, useState, type FC } from 'react';
+import type { FC } from 'react';
 import { DialButton } from '@/components/Button/Button';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonVariant } from '@/types/button';
 import { IconX, IconDotsVertical } from '@tabler/icons-react';
-import { ACTIONS_GAP, CONTAINER_PADDING, MORE_BUTTON_WIDTH } from './constants';
-import { useIsMobileScreen } from '@/hooks/use-is-tablet-screen';
+import { ACTIONS_GAP, CONTAINER_PADDING } from './constants';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import { useFlexibleActions } from '@/hooks/use-flexible-actions';
+import { FlexibleActionsDirection } from '@/types/flexible-actions';
 
 export interface DialActionDropdownItem extends DropdownItem {
   title: string;
 }
 
-export interface DialFileManagerSelectionToolbarProps {
+export interface DialFileManagerBulkActionsToolbarProps {
   selectionLabel: string;
   onClearSelection: () => void;
   actions: DialActionDropdownItem[];
@@ -60,74 +62,22 @@ export interface DialFileManagerSelectionToolbarProps {
  *
  * @returns {JSX.Element} A responsive toolbar that adjusts visible actions based on available width.
  */
-export const DialFileManagerSelectionToolbar: FC<
-  DialFileManagerSelectionToolbarProps
+export const DialFileManagerBulkActionsToolbar: FC<
+  DialFileManagerBulkActionsToolbarProps
 > = ({ selectionLabel, onClearSelection, actions }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const measureRef = useRef<HTMLDivElement | null>(null);
-  const leftSectionRef = useRef<HTMLDivElement | null>(null);
-  const [visibleCount, setVisibleCount] = useState(actions.length);
   const isMobile = useIsMobileScreen();
 
-  // Note: We intentionally slice from the end because actions are measured right-to-left.
-  // The rightmost (last) actions stay visible, while the leftmost (first) ones move into the dropdown.
-  // This preserves correct visual order in both the toolbar and the dropdown.
-  const hiddenActions = actions.slice(0, actions.length - visibleCount);
-  const visibleActions = actions.slice(actions.length - visibleCount);
-
-  const actionWidthsRef = useRef<number[]>([]);
-
-  useLayoutEffect(() => {
-    if (!measureRef.current) return;
-
-    const children = Array.from(measureRef.current.children) as HTMLElement[];
-    actionWidthsRef.current = children.map((child) =>
-      Math.ceil(child.getBoundingClientRect().width),
-    );
-  }, [actions, isMobile]);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    let frameId: number | null = null;
-
-    const measureVisible = () => {
-      if (frameId) cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(() => {
-        const container = containerRef.current!;
-        const leftWidth = leftSectionRef.current?.offsetWidth ?? 0;
-
-        const containerWidth = container.getBoundingClientRect().width;
-        const availableWidth =
-          containerWidth -
-          leftWidth -
-          MORE_BUTTON_WIDTH -
-          ACTIONS_GAP * 2 -
-          CONTAINER_PADDING * 2;
-
-        const widths = actionWidthsRef.current;
-        let total = 0;
-        let count = 0;
-
-        for (let i = widths.length - 1; i >= 0; i--) {
-          total += widths[i] + ACTIONS_GAP;
-          if (total > availableWidth) break;
-          count++;
-        }
-
-        setVisibleCount(count);
-      });
-    };
-
-    const resizeObserver = new ResizeObserver(measureVisible);
-    resizeObserver.observe(containerRef.current);
-    measureVisible();
-
-    return () => {
-      if (frameId) cancelAnimationFrame(frameId);
-      resizeObserver.disconnect();
-    };
-  }, [actions.length, isMobile]);
+  const {
+    refs: { containerRef, leftSectionRef, measureRef },
+    visibleActions,
+    hiddenActions,
+  } = useFlexibleActions({
+    actions,
+    direction: FlexibleActionsDirection.Reverse,
+    dependencies: [isMobile],
+    actionsGap: ACTIONS_GAP,
+    containerPadding: CONTAINER_PADDING,
+  });
 
   return (
     <>
@@ -184,6 +134,7 @@ export const DialFileManagerSelectionToolbar: FC<
 
           {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
             <DialButton
+              cssClass="!p-[9px]"
               key={key}
               iconBefore={icon}
               title={title}
