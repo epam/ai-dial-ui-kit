@@ -93,6 +93,7 @@ export {
   DialFileManagerTabs,
   DialFileManagerActions,
 } from './types/file-manager';
+export { FlexibleActionsDirection } from './types/flexible-actions';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
