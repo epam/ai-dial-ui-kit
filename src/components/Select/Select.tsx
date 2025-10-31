@@ -32,10 +32,12 @@ import type { SelectOption } from '@/models/select';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialMultiSelectTags } from './MultiSelectTags';
+import { SelectSize } from '@/types/select';
 
 export interface DialSelectProps {
   options: SelectOption[];
   multiple?: boolean;
+  size?: SelectSize;
   value?: string | string[];
   prefix?: string;
   defaultValue?: string | string[];
@@ -99,6 +101,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   multiple = false,
   value,
   defaultValue,
+  size = SelectSize.Md,
   prefix,
   placeholder = 'Select...',
   searchable = false,
@@ -412,6 +415,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         className={mergeClasses(
           selectTriggerBaseClasses,
           disabled && 'opacity-75 !cursor-not-allowed',
+          size === SelectSize.Sm ? 'min-h-[25px] px-1.5 py-1' : 'min-h-[38px]',
           cssClass,
         )}
         onClick={() => !disabled && setOpen((v) => !v)}
