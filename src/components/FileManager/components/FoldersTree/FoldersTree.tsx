@@ -184,24 +184,25 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                   className="absolute size-full left-0 top-0"
                   onClick={() => handleFolderClick(node)}
                 />
-                <div>
-                  <div className="flex-1 flex flex-row truncate items-center w-fit">
-                    {!isFolder ? (
-                      <DialFileName name={name} />
-                    ) : (
-                      <>
-                        <IconCaretRightFilled
-                          {...CARET_ICON_PROPS}
-                          className={classNames(
-                            'flex-shrink-0',
-                            isExpanded && 'rotate-90 transition-all',
-                            !hasValidItems && 'text-transparent',
-                          )}
-                        />
-                        <DialFolderName name={name} loading={isLoading} />
-                      </>
-                    )}
-                  </div>
+                <div
+                  className="flex flex-row truncate items-center w-fit"
+                  onClick={() => handleFolderClick(node)}
+                >
+                  {!isFolder ? (
+                    <DialFileName name={name} />
+                  ) : (
+                    <>
+                      <IconCaretRightFilled
+                        {...CARET_ICON_PROPS}
+                        className={classNames(
+                          'flex-shrink-0',
+                          isExpanded && 'rotate-90 transition-all',
+                          !hasValidItems && 'text-transparent',
+                        )}
+                      />
+                      <DialFolderName name={name} loading={isLoading} />
+                    </>
+                  )}
                 </div>
 
                 {menuItems.length > 0 && (
