@@ -166,22 +166,26 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
-          <div className="flex flex-col">
-            <div
-              style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
-              className={mergeClasses(
-                'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px]',
-                selectedClass,
-              )}
+          <div className="flex flex-col min-w-fit w-full">
+            <DialDropdown
+              trigger={[DropdownTrigger.ContextMenu]}
+              cssClass="w-full"
+              anchorToMouse
+              menu={{ items: menuItems }}
             >
-              <div onClick={() => handleFolderClick(node)} className="w-full">
-                <DialDropdown
-                  trigger={[DropdownTrigger.ContextMenu]}
-                  cssClass="w-full"
-                  anchorToMouse
-                  menu={{ items: menuItems }}
-                >
-                  <div className="flex-1 flex flex-row truncate items-center">
+              <div
+                style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
+                className={mergeClasses(
+                  'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
+                  selectedClass,
+                )}
+              >
+                <div
+                  className="absolute size-full left-0 top-0"
+                  onClick={() => handleFolderClick(node)}
+                />
+                <div>
+                  <div className="flex-1 flex flex-row truncate items-center w-fit">
                     {!isFolder ? (
                       <DialFileName name={name} />
                     ) : (
@@ -198,22 +202,25 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       </>
                     )}
                   </div>
-                </DialDropdown>
-              </div>
+                </div>
 
-              {menuItems.length > 0 && (
-                <DialDropdown
-                  placement="bottom-start"
-                  allowedPlacements={['top-start', 'top-end']}
-                  menu={{ items: menuItems }}
-                >
-                  <DialIcon
-                    className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
-                    icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
-                  />
-                </DialDropdown>
-              )}
-            </div>
+                {menuItems.length > 0 && (
+                  <div className="flex-1 flex justify-end">
+                    <DialDropdown
+                      placement="bottom-start"
+                      allowedPlacements={['top-start', 'top-end']}
+                      menu={{ items: menuItems }}
+                      cssClass="sticky right-0"
+                    >
+                      <DialIcon
+                        className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
+                        icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
+                      />
+                    </DialDropdown>
+                  </div>
+                )}
+              </div>
+            </DialDropdown>
 
             {isExpanded && items && renderTree(items, level + 1)}
           </div>
