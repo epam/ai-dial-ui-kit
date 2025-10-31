@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialButton, type DialButtonProps } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { ButtonVariant } from '@/types/button';
+import { Fragment } from 'react/jsx-runtime';
 
 const meta = {
   title: 'Form/Button',
@@ -95,6 +96,13 @@ export const TertiaryButton: Story = {
   },
 };
 
+export const DangerButton: Story = {
+  args: {
+    title: 'Danger Button',
+    variant: ButtonVariant.Danger,
+  },
+};
+
 export const WithBothIcons: Story = {
   args: {
     title: 'Action',
@@ -180,176 +188,83 @@ export const Active: Story = {
 };
 
 export const AllVariants: Story = {
-  render: () => (
-    <div className="p-4 max-w-[1000px]">
-      <div className="grid grid-cols-4 gap-8">
-        {/* Header */}
-        <div></div>
-        <div className="text-primary text-center font-semibold">Primary</div>
-        <div className="text-primary text-center font-semibold">Secondary</div>
-        <div className="text-primary text-center font-semibold">Tertiary</div>
+  render: () => {
+    const variants = [
+      { key: 'primary', label: 'Primary', variant: ButtonVariant.Primary },
+      {
+        key: 'secondary',
+        label: 'Secondary',
+        variant: ButtonVariant.Secondary,
+      },
+      { key: 'tertiary', label: 'Tertiary', variant: ButtonVariant.Tertiary },
+      { key: 'danger', label: 'Danger', variant: ButtonVariant.Danger },
+    ];
 
-        <div className="text-primary text-right pr-4 py-2">Default</div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Primary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Secondary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Tertiary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
+    const states = [
+      { key: 'default', label: 'Default' },
+      { key: 'hover', label: 'Hover' },
+      { key: 'focus', label: 'Focus' },
+      { key: 'active', label: 'Active' },
+      { key: 'disable', label: 'Disable' },
+    ];
 
-        {/* Hover State */}
-        <div className="text-primary text-right pr-4 py-2">Hover</div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Primary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Secondary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Tertiary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
+    return (
+      <div className="p-4 max-w-[1200px]">
+        <div className="grid grid-cols-5 gap-8">
+          {/* header row */}
+          <div></div>
+          {variants.map((v) => (
+            <div
+              key={v.key}
+              className={'text-primary text-center font-semibold'}
+            >
+              {v.label}
+            </div>
+          ))}
 
-        {/* Focus State */}
-        <div className="text-primary text-right pr-4 py-2">Focus</div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Primary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Secondary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Tertiary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
+          {states.map((state) => (
+            <Fragment key={state.key}>
+              <div className="text-primary text-right pr-4 py-2">
+                {state.label}
+              </div>
+              {variants.map((v) => {
+                const commonProps = {
+                  title: 'Button label',
+                  variant: v.variant,
+                  iconBefore: <IconArrowLeft size={16} />,
+                  iconAfter: <IconArrowRight size={16} />,
+                };
 
-        {/* Active State */}
-        <div className="text-primary text-right pr-4 py-2">Active</div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Primary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Secondary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Tertiary}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-
-        {/* Disabled State */}
-        <div className="text-primary text-right pr-4 py-2">Disable</div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Primary}
-            disable={true}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Secondary}
-            disable={true}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
-        </div>
-        <div className="flex justify-center">
-          <DialButton
-            title="Button label"
-            variant={ButtonVariant.Tertiary}
-            disable={true}
-            iconBefore={<IconArrowLeft size={16} />}
-            iconAfter={<IconArrowRight size={16} />}
-          />
+                return (
+                  <div
+                    key={v.key}
+                    className={`flex justify-center ${
+                      state.key !== 'default' ? `state-${state.key}` : ''
+                    }`}
+                  >
+                    <DialButton
+                      {...commonProps}
+                      disable={state.key === 'disable'}
+                    />
+                  </div>
+                );
+              })}
+            </Fragment>
+          ))}
         </div>
       </div>
-    </div>
-  ),
+    );
+  },
   parameters: {
     pseudo: {
-      hover: [
-        'div:nth-child(10) button',
-        'div:nth-child(11) button',
-        'div:nth-child(12) button',
-      ],
-      focus: [
-        'div:nth-child(14) button',
-        'div:nth-child(15) button',
-        'div:nth-child(16) button',
-      ],
-      active: [
-        'div:nth-child(18) button',
-        'div:nth-child(19) button',
-        'div:nth-child(20) button',
-      ],
+      hover: ['.state-hover button'],
+      focus: ['.state-focus button'],
+      active: ['.state-active button'],
     },
     docs: {
       description: {
         story:
-          'A comprehensive view of all button variants and states. This story displays Primary, Secondary, and Tertiary buttons across Default, Hover, Focus, Active, and Disabled states.',
+          'All button variants (Primary, Secondary, Tertiary, Danger) across all states.',
       },
     },
   },
