@@ -21,6 +21,7 @@ import {
   useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
   type FC,
   type MouseEvent,
@@ -139,6 +140,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? !!open : uncontrolledOpen;
+  const pointedElementRef = useRef<Element | null>(null);
 
   const setOpen = useCallback(
     (next: boolean) => {
@@ -264,6 +266,10 @@ export const DialDropdown: FC<DialDropdownProps> = ({
       e.preventDefault();
       if (anchorToMouse) {
         setPositionFromPointer(e.clientX, e.clientY);
+        pointedElementRef.current = document.elementFromPoint(
+          e.clientX,
+          e.clientY,
+        );
       }
       setOpen(true);
     },
@@ -274,6 +280,10 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     (e: MouseEvent<HTMLDivElement>) => {
       if (!anchorToMouse || disabled) return;
       setPositionFromPointer(e.clientX, e.clientY);
+      pointedElementRef.current = document.elementFromPoint(
+        e.clientX,
+        e.clientY,
+      );
     },
     [anchorToMouse, disabled, setPositionFromPointer],
   );
@@ -362,6 +372,31 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     onContextMenu,
     onMouseDown: onPointerDown,
   });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const refEl = refs.reference.current;
+    const targetEl =
+      refEl instanceof Element
+        ? refEl
+        : pointedElementRef.current instanceof Element
+          ? pointedElementRef.current
+          : null;
+
+    if (!targetEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) setOpen(false);
+      },
+      { root: null, threshold: 0 },
+    );
+
+    observer.observe(targetEl);
+
+    return () => observer.disconnect();
+  }, [isOpen, refs.reference, setOpen]);
 
   return (
     <>
