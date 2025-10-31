@@ -90,6 +90,7 @@ export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { DialFileManagerTabs } from './types/file-manager';
+export { FlexibleActionsDirection } from './types/flexible-actions';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
