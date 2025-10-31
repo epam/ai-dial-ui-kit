@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
-import { SelectSize } from '../../types/select';
+import { SelectSize, SelectVariant } from '@/types/select';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -112,6 +112,13 @@ export const WithSelectAll: Story = {
 export const Small: Story = {
   args: {
     size: SelectSize.Sm,
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    size: SelectSize.Sm,
+    variant: SelectVariant.Secondary,
   },
 };
 
