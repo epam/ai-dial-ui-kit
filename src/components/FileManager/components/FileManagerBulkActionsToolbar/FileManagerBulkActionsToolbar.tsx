@@ -6,7 +6,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import { ButtonVariant } from '@/types/button';
 import { IconX, IconDotsVertical } from '@tabler/icons-react';
 import { ACTIONS_GAP, CONTAINER_PADDING } from './constants';
-import { useIsMobileScreen } from '@/hooks/use-is-tablet-screen';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { useFlexibleActions } from '@/hooks/use-flexible-actions';
 import { FlexibleActionsDirection } from '@/types/flexible-actions';
 
@@ -134,6 +134,7 @@ export const DialFileManagerBulkActionsToolbar: FC<
 
           {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
             <DialButton
+              cssClass="!p-[9px]"
               key={key}
               iconBefore={icon}
               title={title}

@@ -2,7 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { DialTabs } from './Tabs';
 import { TabOrientation } from '@/types/tab';
-import * as useIsTabletScreenHook from '@/hooks/use-is-tablet-screen';
+import * as useScreenTypeHook from '@/hooks/use-screen-type';
+import { ScreenType } from '@/types/screen';
 
 const tabsMock = [
   { id: 'tab1', name: 'Tab1' },
@@ -59,7 +60,9 @@ describe('Dial UI Kit :: DialTabs', () => {
   test('shows dropdown button when when mobile view', () => {
     const onClick = vi.fn();
 
-    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(true);
+    vi.spyOn(useScreenTypeHook, 'useScreenType').mockReturnValue(
+      ScreenType.Tablet,
+    );
 
     const { container } = render(
       <DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />,
@@ -72,7 +75,9 @@ describe('Dial UI Kit :: DialTabs', () => {
   test('handles tab click in mobile view', () => {
     const onClick = vi.fn();
 
-    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(true);
+    vi.spyOn(useScreenTypeHook, 'useScreenType').mockReturnValue(
+      ScreenType.Tablet,
+    );
 
     render(<DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />);
 
@@ -88,7 +93,9 @@ describe('Dial UI Kit :: DialTabs', () => {
   test('handles tab click in desktop view', () => {
     const onClick = vi.fn();
 
-    vi.spyOn(useIsTabletScreenHook, 'useIsTabletScreen').mockReturnValue(false);
+    vi.spyOn(useScreenTypeHook, 'useScreenType').mockReturnValue(
+      ScreenType.Desktop,
+    );
 
     render(<DialTabs tabs={tabsMock} activeTab="tab1" onClick={onClick} />);
 

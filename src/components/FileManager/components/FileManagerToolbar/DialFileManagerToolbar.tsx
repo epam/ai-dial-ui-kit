@@ -1,20 +1,30 @@
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { DialTabs } from '@/components/Tabs/Tabs';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { DialButton } from '@/components/Button/Button';
-import { IconRefresh } from '@tabler/icons-react';
+import {
+  IconDotsVertical,
+  IconEye,
+  IconEyeOff,
+  IconRefresh,
+} from '@tabler/icons-react';
 import type { TabModel } from '@/models/tab';
 import { ButtonVariant } from '@/types/button';
 import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
-import type { DialFileManagerTabs } from '@/types/file-manager';
+import { DialFileManagerTabs } from '@/types/file-manager';
+import { SmallScreenThreshold } from '@/types/tab';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 
 export interface DialFileManagerToolbarProps {
   tabs?: TabModel[];
   activeTab?: string;
   areHiddenFilesVisible: boolean;
   hiddenFilesSwitcherLabel?: string;
+  showHiddenFilesLabel?: string;
+  hideHiddenFilesLabel?: string;
   isCreateButtonVisible?: boolean;
   createButtonVariant?: ButtonVariant;
   createButtonDropdownItems?: DropdownItem[];
@@ -26,18 +36,16 @@ export interface DialFileManagerToolbarProps {
 }
 
 /**
- * DialFileManagerToolbar — A configurable toolbar component for file manager views.
+ * DialFileManagerToolbar — A configurable, responsive toolbar component for file management views.
  *
- * Provides a clean and functional toolbar for file management pages with:
- * - Tab navigation for switching between different sections or views
- * - Hidden files toggle via `DialSwitch`
- * - Refresh button with icon
- * - Optional "Create" button or dropdown for file/folder creation
- * - Fully responsive horizontal layout
+ * Provides a flexible toolbar interface for file managers or similar UIs, supporting:
+ * - Tab navigation for switching between file sections or views
+ * - A toggle for showing or hiding hidden files
+ * - A refresh button for reloading content
+ * - An optional "Create" button or dropdown for creating new files or folders
  *
  * @example
  * ```tsx
- * // Basic usage
  * const tabs: TabModel[] = [
  *   { id: 'all', name: 'All Files' },
  *   { id: 'favorites', name: 'Favorites' },
@@ -48,8 +56,8 @@ export interface DialFileManagerToolbarProps {
  *   activeTab="all"
  *   areHiddenFilesVisible={false}
  *   onTabChange={(id) => console.log('Switched to tab:', id)}
- *   onToggleHiddenFiles={(visible) => console.log('Hidden files:', visible)}
- *   onRefresh={() => console.log('Refreshing...')}
+ *   onToggleHiddenFiles={(visible) => console.log('Hidden files visible:', visible)}
+ *   onRefresh={() => console.log('Refreshed')}
  *   isCreateButtonVisible
  *   createButtonDropdownItems={[
  *     { key: 'folder', label: 'New Folder' },
@@ -58,24 +66,27 @@ export interface DialFileManagerToolbarProps {
  * />
  * ```
  *
- * @param [tabs] - Array of tabs to display, each defined by a `TabModel` (id and label).
- * @param [activeTab] - ID of the currently active tab.
- * @param [onTabChange] - Callback fired when the user selects a different tab.
- * @param [areHiddenFilesVisible] - Indicates whether hidden files are currently visible.
- * @param [onToggleHiddenFiles] - Callback fired when the hidden files toggle is switched.
- * @param [hiddenFilesSwitcherLabel='Hidden files'] - Label text for the hidden files toggle switch.
+ * @param [tabs] - List of tab definitions to display, each represented by a `TabModel` containing `id` and `name`.
+ * @param [activeTab] - The ID of the currently active tab.
+ * @param areHiddenFilesVisible - Whether hidden files are currently visible.
+ * @param [hiddenFilesSwitcherLabel='Hidden files'] - Label for the hidden files toggle control.
+ * @param [showHiddenFilesLabel='Show hidden'] - Label shown when hidden files are not visible.
+ * @param [hideHiddenFilesLabel='Hide hidden'] - Label shown when hidden files are visible.
+ * @param [onTabChange] - Callback fired when the user switches between tabs. Receives the selected tab ID.
+ * @param [onToggleHiddenFiles] - Callback fired when the hidden files visibility is toggled. Receives the new visibility state.
  * @param [onRefresh] - Callback fired when the refresh button is clicked.
- * @param [refreshButtonLabel='Refresh'] - Label for the refresh button.
- * @param [isCreateButtonVisible] - Whether the create button or dropdown should be visible.
+ * @param [refreshButtonLabel='Refresh'] - Text label for the refresh button.
+ * @param [isCreateButtonVisible] - Whether the "Create" button or dropdown should be displayed.
  * @param [createButtonVariant=ButtonVariant.Secondary] - Visual style variant for the create button.
- * @param [createButtonDropdownItems=[]] - Dropdown menu items for the create button (used when multiple creation options are available).
- * @param [createButtonLabel='Create'] - Label for the create button.
+ * @param [createButtonDropdownItems=[]] - Dropdown items available under the create button. If empty, a single create button is shown instead.
+ * @param [createButtonLabel='Create'] - Label text for the create button.
  *
  * @remarks
- * - The component is layout-flexible and designed for use inside file or asset management toolbars.
- * - Tabs are rendered using `DialTabs`, and actions use `DialButton`, `DialSwitch`, and `DialButtonDropdown`.
- * - The refresh and create actions are aligned on the right for intuitive placement.
- * - When `createButtonDropdownItems` is empty, the create button behaves as a single-action button.
+ * - Tabs are rendered via `DialTabs`.
+ * - The hidden files toggle uses `DialSwitch`.
+ * - The refresh and create actions use `DialButton` or dropdown variants for consistency.
+ * - The toolbar automatically adapts its layout for different screen sizes.
+ * - When `createButtonDropdownItems` is provided, the create button becomes a dropdown menu.
  */
 export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   tabs,
@@ -89,44 +100,127 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   createButtonDropdownItems = [],
   createButtonLabel = 'Create',
   hiddenFilesSwitcherLabel = 'Hidden files',
+  showHiddenFilesLabel = 'Show hidden files',
+  hideHiddenFilesLabel = 'Hide hidden files',
   refreshButtonLabel = 'Refresh',
 }) => {
-  return (
-    <div className="flex w-full justify-between gap-4 items-center overflow-x-auto">
-      <div className="flex-1 min-w-0">
-        {tabs && activeTab && onTabChange && (
-          <DialTabs
-            tabs={tabs}
-            activeTab={activeTab}
-            onClick={(id: string) => onTabChange(id as DialFileManagerTabs)}
-          />
-        )}
-      </div>
+  const isMobile = useIsMobileScreen();
 
-      <div className="flex gap-4 flex-shrink-0 items-center">
-        <DialSwitch
-          switchId="hidden-files-switch"
-          title={hiddenFilesSwitcherLabel}
-          isOn={areHiddenFilesVisible}
-          onChange={onToggleHiddenFiles}
+  const dropdownItems = useMemo(() => {
+    const items: DropdownItem[] = [
+      {
+        key: 'hidden-files-switch',
+        label: areHiddenFilesVisible
+          ? hideHiddenFilesLabel
+          : showHiddenFilesLabel,
+        icon: areHiddenFilesVisible ? (
+          <IconEyeOff {...BASE_ICON_PROPS} className="text-secondary" />
+        ) : (
+          <IconEye {...BASE_ICON_PROPS} className="text-secondary" />
+        ),
+        onClick: () => onToggleHiddenFiles?.(!areHiddenFilesVisible),
+      },
+    ];
+
+    if (isCreateButtonVisible) {
+      items.push({
+        key: 'refresh-button',
+        label: refreshButtonLabel,
+        icon: <IconRefresh {...BASE_ICON_PROPS} className="text-secondary" />,
+        onClick: () => onRefresh?.(),
+      });
+    }
+
+    return items;
+  }, [
+    areHiddenFilesVisible,
+    hideHiddenFilesLabel,
+    showHiddenFilesLabel,
+    refreshButtonLabel,
+    onRefresh,
+    onToggleHiddenFiles,
+    isCreateButtonVisible,
+  ]);
+
+  const renderTabs = () =>
+    tabs && activeTab && onTabChange ? (
+      <DialTabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onClick={(id: string) => onTabChange(id as DialFileManagerTabs)}
+        smallScreenThreshold={SmallScreenThreshold.Tablet}
+        smallScreenContainerCssClass="w-fit bg-transparent h-[38px]"
+        smallScreenDropdownItemCssClass="px-3 h-[38px]"
+      />
+    ) : null;
+
+  const renderDesktopActions = () => (
+    <>
+      <DialSwitch
+        switchId="hidden-files-switch"
+        title={hiddenFilesSwitcherLabel}
+        isOn={areHiddenFilesVisible}
+        onChange={onToggleHiddenFiles}
+      />
+
+      <div className="h-6 border-l border-primary" />
+
+      <DialButton
+        title={refreshButtonLabel}
+        onClick={onRefresh}
+        variant={ButtonVariant.Secondary}
+        iconBefore={<IconRefresh {...BASE_ICON_PROPS} />}
+      />
+
+      {isCreateButtonVisible && (
+        <DialButtonDropdown
+          title={createButtonLabel}
+          variant={createButtonVariant}
+          items={createButtonDropdownItems}
         />
+      )}
+    </>
+  );
 
-        <div className="h-6 border-l border-primary" />
+  const renderMobileActions = () => (
+    <>
+      <DialDropdown
+        menu={{ items: dropdownItems }}
+        allowedPlacements={['bottom', 'bottom-start']}
+      >
+        <DialButton
+          cssClass="h-[38px]"
+          iconBefore={
+            <IconDotsVertical
+              {...BASE_ICON_PROPS}
+              className="text-secondary hover:text-accent-primary"
+            />
+          }
+        />
+      </DialDropdown>
 
+      {isCreateButtonVisible ? (
+        <DialButtonDropdown
+          title={createButtonLabel}
+          variant={createButtonVariant}
+          items={createButtonDropdownItems}
+        />
+      ) : (
         <DialButton
           title={refreshButtonLabel}
           onClick={onRefresh}
           variant={ButtonVariant.Secondary}
           iconBefore={<IconRefresh {...BASE_ICON_PROPS} />}
         />
+      )}
+    </>
+  );
 
-        {isCreateButtonVisible && (
-          <DialButtonDropdown
-            title={createButtonLabel}
-            variant={createButtonVariant}
-            items={createButtonDropdownItems}
-          />
-        )}
+  return (
+    <div className="flex w-full justify-between gap-4 items-center overflow-x-auto">
+      <div className="flex-1 min-w-0">{renderTabs()}</div>
+      <div className="flex gap-4 flex-shrink-0 items-center">
+        {isMobile ? renderMobileActions() : renderDesktopActions()}
       </div>
     </div>
   );
