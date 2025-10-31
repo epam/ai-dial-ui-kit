@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react';
-import { describe, it, expect, vi, afterAll, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { DialFileManagerBulkActionsToolbar } from './FileManagerBulkActionsToolbar';
 import type { DialButtonProps } from '@/components/Button/Button';
 import type { DialDropdownProps } from '@/components/Dropdown/Dropdown';
@@ -30,30 +30,6 @@ vi.mock('@/hooks/use-is-tablet-screen', () => ({
 }));
 
 describe('Dial UI Kit :: DialFileManagerBulkActionsToolbar', () => {
-  let originalResizeObserver: typeof ResizeObserver;
-
-  beforeAll(() => {
-    originalResizeObserver = globalThis.ResizeObserver;
-
-    class ResizeObserverMock implements ResizeObserver {
-      callback: ResizeObserverCallback;
-      constructor(callback: ResizeObserverCallback) {
-        this.callback = callback;
-      }
-      observe = vi.fn();
-      unobserve = vi.fn();
-      disconnect = vi.fn();
-    }
-
-    globalThis.ResizeObserver =
-      ResizeObserverMock as unknown as typeof ResizeObserver;
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-    globalThis.ResizeObserver = originalResizeObserver;
-  });
-
   const actions = [
     { key: 'download', title: 'Download', onClick: vi.fn() },
     { key: 'delete', title: 'Delete', onClick: vi.fn() },
