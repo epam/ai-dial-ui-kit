@@ -12,7 +12,7 @@ const meta: Meta<typeof DialFileManagerToolbar> = {
   component: DialFileManagerToolbar,
   tags: ['layout', 'toolbar', 'file-manager'],
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
     docs: {
       description: {
         component:
@@ -64,7 +64,7 @@ export const Default: Story = {
       const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
 
       return (
-        <div className="w-[800px] p-4 border rounded-lg bg-background">
+        <div className="p-4 border rounded-lg bg-background">
           <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
@@ -91,7 +91,7 @@ export const WithSecondaryCreateButton: Story = {
       const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(true);
 
       return (
-        <div className="w-[800px] p-4 border rounded-lg bg-background">
+        <div className="p-4 border rounded-lg bg-background">
           <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
@@ -118,7 +118,7 @@ export const WithoutCreateButton: Story = {
       const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
 
       return (
-        <div className="w-[800px] p-4 border rounded-lg bg-background">
+        <div className="p-4 border rounded-lg bg-background">
           <DialFileManagerToolbar
             tabs={mockTabs}
             activeTab={activeTab}
