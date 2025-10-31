@@ -294,3 +294,11 @@ export const ClickableRows: Story = {
     },
   },
 };
+
+export const EmptyState: Story = {
+  args: {
+    selectedRowIds: undefined,
+    onSelectionChange: undefined,
+    rowData: [],
+  },
+};
