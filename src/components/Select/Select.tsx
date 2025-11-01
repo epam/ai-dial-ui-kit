@@ -53,6 +53,8 @@ export interface DialSelectProps {
   disabled?: boolean;
   cssClass?: string;
   closable?: boolean;
+  header?: ReactNode | (() => ReactNode);
+  footer?: ReactNode | (() => ReactNode);
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
 }
@@ -116,6 +118,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   disabled = false,
   cssClass,
   closable = false,
+  header,
+  footer,
   onClose,
   onChange,
 }) => {
@@ -290,6 +294,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           aria-multiselectable={multiple || undefined}
           className={selectOverlayBaseClasses}
         >
+          {header && <>{typeof header === 'function' ? header() : header}</>}
           {(searchable || closable) && (
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
@@ -406,6 +411,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               })
             )}
           </div>
+          {footer && <>{typeof footer === 'function' ? footer() : footer}</>}
         </div>
       )}
     >

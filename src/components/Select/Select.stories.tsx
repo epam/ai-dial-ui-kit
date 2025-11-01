@@ -115,6 +115,26 @@ export const Small: Story = {
   },
 };
 
+export const WithHeaderAndFooter: Story = {
+  name: 'With header and footer',
+  args: {
+    header: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    footer: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small text-primary font-medium">
+          Footer content
+        </span>
+      </div>
+    ),
+  },
+};
+
 export const Secondary: Story = {
   args: {
     size: SelectSize.Sm,
