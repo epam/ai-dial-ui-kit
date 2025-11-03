@@ -34,7 +34,7 @@ import {
   type DialFileManagerBulkActionsToolbarProps,
 } from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import type { DropdownItem } from '@/models/dropdown';
-import { DialFileManagerActions } from '@/types/file-manager';
+import { DialFileManagerActions, type CopiedItem } from '@/types/file-manager';
 import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
@@ -42,11 +42,6 @@ import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 
 type GridRow = FileManagerGridRow;
-
-interface CopiedItem {
-  from: string;
-  to: string;
-}
 
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
