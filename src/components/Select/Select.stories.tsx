@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
+import { SelectSize, SelectVariant } from '@/types/select';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -105,6 +106,39 @@ export const WithSelectAll: Story = {
   args: {
     multiple: true,
     selectAll: true,
+  },
+};
+
+export const Small: Story = {
+  args: {
+    size: SelectSize.Sm,
+  },
+};
+
+export const WithHeaderAndFooter: Story = {
+  name: 'With header and footer',
+  args: {
+    header: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    footer: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small text-primary font-medium">
+          Footer content
+        </span>
+      </div>
+    ),
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    size: SelectSize.Sm,
+    variant: SelectVariant.Secondary,
   },
 };
 

@@ -1,31 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { DialTagInput } from './TagInput';
 
 describe('Dial UI Kit :: DialTagInput', () => {
-  let originalResizeObserver: typeof ResizeObserver;
-
-  beforeAll(() => {
-    originalResizeObserver = globalThis.ResizeObserver;
-
-    class ResizeObserverMock implements ResizeObserver {
-      callback: ResizeObserverCallback;
-      constructor(callback: ResizeObserverCallback) {
-        this.callback = callback;
-      }
-      observe = vi.fn();
-      unobserve = vi.fn();
-      disconnect = vi.fn();
-    }
-
-    globalThis.ResizeObserver =
-      ResizeObserverMock as unknown as typeof ResizeObserver;
-  });
-
-  afterAll(() => {
-    globalThis.ResizeObserver = originalResizeObserver;
-  });
-
   test('Should render correctly', () => {
     render(<DialTagInput elementId="test-tag" />);
     expect(screen.getByRole('textbox')).toBeInTheDocument();
