@@ -43,6 +43,11 @@ import type { FileManagerGridRow } from './FileManagerContext';
 
 type GridRow = FileManagerGridRow;
 
+interface CopiedItem {
+  from: string;
+  to: string;
+}
+
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
@@ -94,8 +99,8 @@ export interface DialFileManagerProps {
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
-  onCopyFiles?: (files: string[], destination: string) => void;
-  onMoveToFiles?: (files: string[], destination: string) => void;
+  onCopyFiles?: (items: CopiedItem[]) => void;
+  onMoveToFiles?: (items: CopiedItem[]) => void;
 }
 
 /**
