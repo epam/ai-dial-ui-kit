@@ -43,10 +43,10 @@ interface UseFlexibleActionsOptions<T> {
  * @property {T[]} hiddenActions - Actions that do not fit and should be rendered inside a dropdown.
  *
  * @property {Object} refs - A set of refs used for layout measurement.
- * @property {React.RefObject<HTMLDivElement>} refs.containerRef - Ref for the outer container. Must wrap the entire toolbar area.
- * @property {React.RefObject<HTMLDivElement>} refs.measureRef - Ref for a hidden measurement container (used to measure action widths).
- * @property {React.RefObject<HTMLDivElement>} refs.leftSectionRef - Ref for the left fixed section (optional).
- * @property {React.RefObject<HTMLDivElement>} refs.rightSectionRef - Ref for the right fixed section (optional).
+ * @property {RefObject<HTMLDivElement>} refs.containerRef - Ref for the outer container. Must wrap the entire toolbar area.
+ * @property {RefObject<HTMLDivElement>} refs.measureRef - Ref for a hidden measurement container (used to measure action widths).
+ * @property {RefObject<HTMLDivElement>} refs.leftSectionRef - Ref for the left fixed section (optional).
+ * @property {RefObject<HTMLDivElement>} refs.rightSectionRef - Ref for the right fixed section (optional).
  *
  * @example
  * // Example usage inside a toolbar component:
