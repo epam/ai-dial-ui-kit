@@ -209,18 +209,18 @@ const PopupComponent = (args: DialFileManagerProps) => {
               paste: 'Paste',
             },
           }}
-          onCopyFiles={(files, destination) =>
+          onCopyFiles={(items) =>
             alert(
-              `Copying files: ${files
-                .map((f) => f)
-                .join(', ')} to ${destination}`,
+              `Copying files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
             )
           }
-          onMoveToFiles={(files, destination) =>
+          onMoveToFiles={(items) =>
             alert(
-              `Moving files: ${files
-                .map((f) => f)
-                .join(', ')} to ${destination}`,
+              `Moving files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
             )
           }
         />
