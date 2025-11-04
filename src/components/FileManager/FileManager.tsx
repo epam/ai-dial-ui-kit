@@ -40,7 +40,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
-import { DialDateCellRenderer } from '../Grid/renderers/DateCellRenderer';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 type GridRow = FileManagerGridRow;
 

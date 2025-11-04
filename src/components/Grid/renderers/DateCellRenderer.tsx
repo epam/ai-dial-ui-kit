@@ -3,7 +3,11 @@ import { useMemo, type FC } from 'react';
 import type { ICellRendererParams } from 'ag-grid-community';
 
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
-import { dateCellBaseClasses, DEFAULT_LOCALE } from './constants';
+import {
+  dateCellBaseClasses,
+  DEFAULT_DATE_FORMAT_OPTIONS,
+  DEFAULT_LOCALE,
+} from './constants';
 import { convertToDate } from './utils';
 
 export type DateValue = string | number | Date;
@@ -41,15 +45,7 @@ export interface DialDateCellRendererProps
 export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   value,
   locale = DEFAULT_LOCALE,
-  options = {
-    year: 'numeric',
-    month: 'numeric',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZone: 'UTC',
-  },
+  options = DEFAULT_DATE_FORMAT_OPTIONS,
   emptyPlaceholder = '—',
   cssClass,
 }) => {
