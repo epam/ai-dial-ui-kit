@@ -73,7 +73,6 @@ const columns: ColDef<Row>[] = [
     cellRenderer: DialDateCellRenderer,
     cellRendererParams: {
       locale: 'en-US',
-      timeZone: 'UTC',
       emptyPlaceholder: '—',
       cssClass: 'h-full',
     },
