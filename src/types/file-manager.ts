@@ -11,7 +11,7 @@ export enum DialFileManagerActions {
   Rename = 'rename',
 }
 
-export interface CopiedItem {
+export interface DialCopiedItem {
   sourceUrl: string;
   destinationUrl: string;
   overwrite?: boolean;

@@ -1,12 +1,12 @@
 import type { DialFile } from '@/index';
-import type { CopiedItem } from '@/types/file-manager';
+import type { DialCopiedItem } from '@/types/file-manager';
 import { useCallback, useMemo, useState } from 'react';
 
 export interface UseFileClipboardOptions {
   getDestination: () => string;
   getDestinationFiles: () => DialFile[];
-  onCopyFiles?: (items: CopiedItem[]) => void;
-  onMoveToFiles?: (items: CopiedItem[]) => void;
+  onCopyFiles?: (items: DialCopiedItem[]) => void;
+  onMoveToFiles?: (items: DialCopiedItem[]) => void;
 }
 
 /**
@@ -48,7 +48,7 @@ const getCopiedItems = (
   destinationUrl: string,
   items: string[],
   destinationFiles: DialFile[],
-): CopiedItem[] => {
+): DialCopiedItem[] => {
   const existingNames = new Set(destinationFiles.map(getFileName));
   return items.map((path) => {
     const originalName = path.split('/').pop() ?? 'untitled';

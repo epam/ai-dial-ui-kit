@@ -34,7 +34,10 @@ import {
   type DialFileManagerBulkActionsToolbarProps,
 } from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import type { DropdownItem } from '@/models/dropdown';
-import { DialFileManagerActions, type CopiedItem } from '@/types/file-manager';
+import {
+  DialFileManagerActions,
+  type DialCopiedItem,
+} from '@/types/file-manager';
 import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
@@ -94,8 +97,8 @@ export interface DialFileManagerProps {
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
-  onCopyFiles?: (items: CopiedItem[]) => void;
-  onMoveToFiles?: (items: CopiedItem[]) => void;
+  onCopyFiles?: (items: DialCopiedItem[]) => void;
+  onMoveToFiles?: (items: DialCopiedItem[]) => void;
 }
 
 /**
