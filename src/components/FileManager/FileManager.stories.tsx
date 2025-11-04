@@ -163,7 +163,16 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
-          gridOptions={{ ...(args.gridOptions ?? {}), filterable: false }}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+            dateLocale: 'en-US',
+            dateOptions: {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+            },
+          }}
           toolbarOptions={{
             ...(args.toolbarOptions ?? {}),
             tabs: tabs,

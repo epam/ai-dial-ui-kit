@@ -16,6 +16,7 @@ import {
   IconTrashX,
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialDateCellRenderer } from './renderers/DateCellRenderer';
 
 interface Row {
   id: string;
@@ -47,6 +48,13 @@ const rows: Row[] = [
     size: '4 KB',
     author: 'mary',
   },
+  {
+    id: '4',
+    name: 'Folder B',
+    updateTime: '',
+    size: '-',
+    author: 'system',
+  },
 ];
 
 const columns: ColDef<Row>[] = [
@@ -58,7 +66,17 @@ const columns: ColDef<Row>[] = [
       <DialFileName name={param.data.name} cssClass="h-full" />
     ),
   },
-  { field: 'updateTime', headerName: 'Modified', width: 180 },
+  {
+    field: 'updateTime',
+    headerName: 'Modified',
+    width: 180,
+    cellRenderer: DialDateCellRenderer,
+    cellRendererParams: {
+      locale: 'en-US',
+      emptyPlaceholder: '—',
+      cssClass: 'h-full',
+    },
+  },
   { field: 'size', headerName: 'Size', width: 120 },
   { field: 'author', headerName: 'Author', width: 160 },
   {
