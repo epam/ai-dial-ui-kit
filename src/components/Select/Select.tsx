@@ -105,7 +105,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   value,
   defaultValue,
   variant = SelectVariant.Primary,
-  size = SelectSize.Md,
+  size = SelectSize.Lg,
   prefix,
   placeholder = 'Select...',
   searchable = false,
@@ -423,9 +423,9 @@ export const DialSelect: FC<DialSelectProps> = ({
         className={mergeClasses(
           selectTriggerBaseClasses,
           disabled && 'opacity-75 !cursor-not-allowed',
-          size === SelectSize.Sm
-            ? 'min-h-[25px] px-1.5 py-1'
-            : 'min-h-[38px] px-3 py-2',
+          size === SelectSize.Sm && 'min-h-[25px] px-1.5 py-1',
+          size === SelectSize.Md && 'min-h-[32px] px-2 py-1',
+          size === SelectSize.Lg && 'min-h-[38px] px-3 py-2',
           variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
           cssClass,
         )}

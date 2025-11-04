@@ -115,6 +115,12 @@ export const Small: Story = {
   },
 };
 
+export const Medium: Story = {
+  args: {
+    size: SelectSize.Md,
+  },
+};
+
 export const WithHeaderAndFooter: Story = {
   name: 'With header and footer',
   args: {
