@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useCurrentPath } from './use-current-path';
+import { useCurrentPath } from '@/components/FileManager/hooks/use-current-path';
 
 describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
   it('initializes with provided path', () => {

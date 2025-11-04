@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useDialFileManagerTabs } from './use-file-manager-tabs';
+import { useDialFileManagerTabs } from '@/components/FileManager/hooks/use-file-manager-tabs';
 import { DialFileManagerTabs } from '@/types/file-manager';
 
 describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {

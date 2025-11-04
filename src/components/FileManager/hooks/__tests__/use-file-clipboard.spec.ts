@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useFileClipboard } from './use-file-clipboard';
+import { useFileClipboard } from '@/components/FileManager/hooks/use-file-clipboard';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 
