@@ -172,7 +172,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   };
 
   const handleRemoveTag = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>, val: string) => {
+    (event: MouseEvent<HTMLButtonElement>, val: string) => {
       event.stopPropagation();
       if (!multiple) {
         setSelection('');

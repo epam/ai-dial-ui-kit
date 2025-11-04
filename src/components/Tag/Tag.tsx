@@ -1,6 +1,6 @@
 import { TagVariant } from '@/types/tag';
 import { IconX } from '@tabler/icons-react';
-import type { FC, ReactNode } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react';
 import { TAG_VARIANTS_CONFIG } from './constants';
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -10,7 +10,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 export interface DialTagProps {
   tag: string;
   cssClass?: string;
-  remove?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  remove?: (event: MouseEvent<HTMLButtonElement>) => void;
   variant?: TagVariant;
   iconBefore?: ReactNode;
   bordered?: boolean;

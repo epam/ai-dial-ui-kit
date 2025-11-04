@@ -3,22 +3,23 @@ import {
   FloatingPortal,
   useMergeRefs,
 } from '@floating-ui/react';
-import { type HTMLProps, forwardRef } from 'react';
 import classNames from 'classnames';
+import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
 import { useTooltipContext } from '@/components/Tooltip/TooltipContext';
 
+export interface Props extends HTMLProps<HTMLDivElement> {
+  style?: CSSProperties;
+}
 /**
  * The content area of a tooltip that displays the tooltip information
  *
  * @param children - The content to display inside the tooltip
  * @param [style] - Additional inline styles for the tooltip content
  */
-export const DialTooltipContent = forwardRef<
-  HTMLDivElement,
-  HTMLProps<HTMLDivElement>
->(function TooltipContent({ style, ...props }, propRef) {
+export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
   const context = useTooltipContext();
+  const propRef = useRef(null);
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
   if (!context.open) {
@@ -50,4 +51,4 @@ export const DialTooltipContent = forwardRef<
       </div>
     </FloatingPortal>
   );
-});
+};

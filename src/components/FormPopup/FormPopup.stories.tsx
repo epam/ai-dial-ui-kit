@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, type ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFormPopup, type DialFormPopupProps } from './FormPopup';
 import { DialInput } from '@/components/Input/Input';
@@ -32,9 +32,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const FormExample = (
-  args: DialFormPopupProps & { children?: React.ReactNode },
-) => {
+const FormExample = (args: DialFormPopupProps & { children?: ReactNode }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
