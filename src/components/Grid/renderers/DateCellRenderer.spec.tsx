@@ -34,9 +34,8 @@ describe('Dial UI Kit :: DialDateCellRenderer (MMM dd, yyyy)', () => {
 
   test('forwards cssClass to wrapper', () => {
     render(<DialDateCellRenderer value="2025-07-20" cssClass="custom-class" />);
-    screen.logTestingPlaygroundURL();
     expect(
-      screen.getByText(/7\/20\/2025, 02:00:00 am/i).parentNode,
+      screen.getByText(/7\/20\/2025, 02:00:00 AM/i).parentNode,
     ).toHaveClass('custom-class');
   });
 });
