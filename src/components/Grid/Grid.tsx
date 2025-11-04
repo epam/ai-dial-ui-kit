@@ -325,7 +325,6 @@ export const DialGrid = <T extends object>({
       borderless: true,
       cellRenderer: renderSelectCell,
       headerComponent: renderHeaderSelectCell,
-      headerStyle: { borderRight: 'none' },
     }),
     [renderSelectCell, renderHeaderSelectCell],
   );
