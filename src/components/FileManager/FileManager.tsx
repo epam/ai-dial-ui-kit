@@ -1,5 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, useMemo } from 'react';
+import { type FC, type ReactNode, useMemo } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -34,7 +34,10 @@ import {
   type DialFileManagerBulkActionsToolbarProps,
 } from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import type { DropdownItem } from '@/models/dropdown';
-import { DialFileManagerActions, type CopiedItem } from '@/types/file-manager';
+import {
+  DialFileManagerActions,
+  type DialCopiedItem,
+} from '@/types/file-manager';
 import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
@@ -49,7 +52,7 @@ export interface FileTreeOptions
   width?: number;
   title?: string;
   containerCssClass?: string;
-  additionalButtons?: React.ReactNode;
+  additionalButtons?: ReactNode;
   collapsed?: boolean;
   actionLabels?: {
     [DialFileManagerActions.Copy]?: string;
@@ -97,8 +100,8 @@ export interface DialFileManagerProps {
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
-  onCopyFiles?: (items: CopiedItem[]) => void;
-  onMoveToFiles?: (items: CopiedItem[]) => void;
+  onCopyFiles?: (items: DialCopiedItem[]) => void;
+  onMoveToFiles?: (items: DialCopiedItem[]) => void;
 }
 
 /**

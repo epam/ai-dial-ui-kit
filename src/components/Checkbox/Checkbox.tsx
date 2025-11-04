@@ -1,13 +1,13 @@
 import { IconCheck, IconMinus } from '@tabler/icons-react';
 import classNames from 'classnames';
-import { type ChangeEvent, type FC, useCallback } from 'react';
+import { type ChangeEvent, type FC, type ReactNode, useCallback } from 'react';
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialCheckboxProps {
   id: string;
-  label?: string | React.ReactNode;
+  label?: string | ReactNode;
   checked: boolean;
   disabled?: boolean;
   indeterminate?: boolean;

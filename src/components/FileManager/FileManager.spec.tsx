@@ -3,8 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test } from 'vitest';
 import { DialFileManager } from './FileManager';
 import { itemsMock } from './__mocks__/files';
+import type { ReactElement } from 'react';
 
-const renderWithinSizedShell = (ui: React.ReactElement) =>
+const renderWithinSizedShell = (ui: ReactElement) =>
   render(<div style={{ height: 640, width: 1100 }}>{ui}</div>);
 
 const getGridRegion = () =>

@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { FC, MouseEventHandler, ReactNode } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   breadcrumbItemBaseClasses,
@@ -13,7 +13,7 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 export interface DialBreadcrumbItemProps {
   title: ReactNode;
   href?: string;
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   iconBefore?: ReactNode;
   cssClass?: string;
