@@ -93,6 +93,7 @@ export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,
+  type DialCopiedItem,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 
