@@ -4,14 +4,15 @@ import type { ICellRendererParams } from 'ag-grid-community';
 
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { dateCellBaseClasses, DEFAULT_LOCALE } from './constants';
+import { convertToDate } from './utils';
 
-type AgGridValue = string | number | Date;
+export type DateValue = string | number | Date;
 
 export interface DialDateCellRendererProps
-  extends Partial<ICellRendererParams<Record<string, unknown>, AgGridValue>> {
-  value?: AgGridValue | null;
+  extends Partial<ICellRendererParams<Record<string, unknown>, DateValue>> {
+  value?: DateValue | null;
   locale?: string;
-  timeZone?: string;
+  options?: Intl.DateTimeFormatOptions;
   emptyPlaceholder?: string;
   cssClass?: string;
 }
@@ -25,22 +26,30 @@ export interface DialDateCellRendererProps
  * @example
  * ```tsx
  * // ag-Grid colDef
- * { field: 'createdAt', cellRenderer: DateCellRenderer, cellRendererParams: { timeZone: 'UTC' } }
+ * { field: 'createdAt', cellRenderer: DateCellRenderer, cellRendererParams: { options: { timeZone: 'UTC' } } }
  *
  * // Direct usage
- * <DateCellRenderer value="2025-07-20T00:00:00Z" timeZone="UTC" />
- * <DateCellRenderer value={1752969600000} timeZone="UTC" /> // milliseconds
+ * <DateCellRenderer value="2025-07-20T00:00:00Z" options={{ timeZone: 'UTC' }} />
+ * <DateCellRenderer value={1752969600000} options={{ timeZone: 'UTC' }} /> // milliseconds
  * ```
  *
  * @param [locale='en-US'] - Locale fixed to U.S. English by default to enforce "Jul 20, 2025".
- * @param [timeZone] - Optional IANA time zone for stable day rendering (e.g., 'UTC').
+ * @param [options={ year: 'numeric', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' }] - Options for date formatting (e.g., timeZone).
  * @param [emptyPlaceholder='—'] - Placeholder when value is empty/invalid.
  * @param [cssClass] - Additional classes merged into the wrapper.
  */
 export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   value,
   locale = DEFAULT_LOCALE,
-  timeZone,
+  options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC',
+  },
   emptyPlaceholder = '—',
   cssClass,
 }) => {
@@ -49,15 +58,10 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   const content = useMemo(() => {
     if (!date) return emptyPlaceholder;
 
-    const formatted = new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-      ...(timeZone ? { timeZone } : {}),
-    });
+    const formatted = new Intl.DateTimeFormat(locale, options);
 
     return formatted.format(date);
-  }, [date, emptyPlaceholder, locale, timeZone]);
+  }, [date, emptyPlaceholder, locale, options]);
 
   const iso = date ? date.toISOString() : undefined;
 
@@ -71,30 +75,3 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
     />
   );
 };
-
-function convertToDate(input?: AgGridValue | null): Date | null {
-  if (!input) return null;
-
-  if (input instanceof Date) {
-    return isFinite(input.getTime()) ? input : null;
-  }
-
-  if (typeof input === 'number') {
-    const date = new Date(input);
-    return isFinite(date.getTime()) ? date : null;
-  }
-
-  if (typeof input === 'string') {
-    const trimmed = input.trim();
-
-    if (/^-?\d+$/.test(trimmed)) {
-      const asNum = Number(trimmed);
-      return convertToDate(asNum);
-    }
-
-    const d = new Date(trimmed);
-    return isFinite(d.getTime()) ? d : null;
-  }
-
-  return null;
-}

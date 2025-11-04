@@ -19,7 +19,7 @@ export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/Sh
 export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
 
-//Grid
+// Grid
 export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
 
 // Navigation

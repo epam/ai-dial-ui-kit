@@ -11,16 +11,15 @@ const meta = {
   argTypes: {
     value: { control: 'text' },
     locale: { control: 'text' },
-    timeZone: { control: 'text' },
+    options: { control: 'object' },
     emptyPlaceholder: { control: 'text' },
     cssClass: { control: 'text' },
   },
   args: {
     value: '2025-07-20T00:00:00Z',
     locale: 'en-US',
-    timeZone: 'UTC',
     emptyPlaceholder: '—',
-    cssClass: 'max-w-[120px]',
+    cssClass: 'max-w-[180px]',
   },
 } satisfies Meta<DialDateCellRendererProps>;
 
@@ -38,12 +37,24 @@ export const TimestampMs: Story = {
 export const DifferentLocale: Story = {
   args: {
     locale: 'fr-FR',
+    options: {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    },
   },
 };
 
 export const Ellipsis: Story = {
   args: {
     cssClass: 'max-w-[80px]',
+    options: {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    },
   },
 };
 
