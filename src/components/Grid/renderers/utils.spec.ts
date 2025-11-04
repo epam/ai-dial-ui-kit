@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { convertToDate } from './utils';
 
-describe('convertToDate', () => {
+describe('Dial UI Kit :: convertToDate', () => {
   it('returns null for undefined and null', () => {
     expect(convertToDate(undefined)).toBeNull();
     expect(convertToDate(null as unknown as any)).toBeNull();
