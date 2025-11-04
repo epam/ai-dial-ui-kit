@@ -1,5 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, useMemo } from 'react';
+import { type FC, type ReactNode, useMemo } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -51,7 +51,7 @@ export interface FileTreeOptions
   width?: number;
   title?: string;
   containerCssClass?: string;
-  additionalButtons?: React.ReactNode;
+  additionalButtons?: ReactNode;
   collapsed?: boolean;
   actionLabels?: {
     [DialFileManagerActions.Copy]?: string;

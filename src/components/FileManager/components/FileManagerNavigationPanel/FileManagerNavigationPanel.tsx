@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useMemo, type FC } from 'react';
+import { useMemo, type FC, type MouseEvent } from 'react';
 
 import {
   DialBreadcrumb,
@@ -125,7 +125,7 @@ export const DialFileManagerNavigationPanel: FC<
           title: segment,
           href,
           onClick: onItemClick
-            ? (e: React.MouseEvent<HTMLAnchorElement>) => {
+            ? (e: MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
                 onItemClick(href);
               }

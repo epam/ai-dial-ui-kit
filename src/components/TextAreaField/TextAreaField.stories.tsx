@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   type DialTextAreaFieldProps,
   DialTextAreaField,
@@ -8,7 +8,7 @@ import {
 const InteractiveTextAreaField = (
   args: DialTextAreaFieldProps & {
     divCssClass?: string;
-    additionalElements?: React.ReactNode;
+    additionalElements?: ReactNode;
   },
 ) => {
   const [value, setValue] = useState(args.value || '');

@@ -1,5 +1,5 @@
 import type { DropdownItemType } from '@/types/dropdown';
-import type { ReactNode } from 'react';
+import type { ReactNode, MouseEvent } from 'react';
 
 export interface DropdownItem {
   key: string;
@@ -10,6 +10,6 @@ export interface DropdownItem {
   type?: DropdownItemType;
   onClick?: (info: {
     key: string;
-    domEvent: React.MouseEvent<Element, MouseEvent>;
+    domEvent: MouseEvent<Element, MouseEvent>;
   }) => void;
 }
