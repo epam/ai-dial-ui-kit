@@ -325,6 +325,7 @@ export const DialGrid = <T extends object>({
       borderless: true,
       cellRenderer: renderSelectCell,
       headerComponent: renderHeaderSelectCell,
+      headerStyle: { borderRight: 'none' },
     }),
     [renderSelectCell, renderHeaderSelectCell],
   );
@@ -421,6 +422,7 @@ export const DialGrid = <T extends object>({
           onGridSizeChanged={onGridSizeChanged}
           onGridReady={onGridReady}
           suppressCellFocus={true}
+          suppressDragLeaveHidesColumns={true}
           noRowsOverlayComponent={emptyStateRenderer}
           rowData={rowData}
           {...additionalGridOptions}
