@@ -1,70 +1,22 @@
 import type { DialFile } from '@/index';
 import type { CopiedItem } from '@/types/file-manager';
 import { useCallback, useMemo, useState } from 'react';
+import { getCopiedItems } from '../utils';
 
 export interface UseFileClipboardOptions {
   getDestination: () => string;
-  getDestinationFiles: () => DialFile[];
+  getAllFiles: () => DialFile[];
   onCopyFiles?: (items: CopiedItem[]) => void;
   onMoveToFiles?: (items: CopiedItem[]) => void;
 }
 
 /**
- * Resolves filename conflicts by adding (1), (2), etc.
- * Example: "file.txt" -> "file (1).txt" -> "file (2).txt"
+ * Finds the destination folder by path in the file tree
  */
-const resolveNameConflict = (
-  originalName: string,
-  existingNames: Set<string>,
-): string => {
-  if (!existingNames.has(originalName)) {
-    return originalName;
-  }
-
-  const lastDotIndex = originalName.lastIndexOf('.');
-  const hasExtension = lastDotIndex > 0;
-
-  const baseName = hasExtension
-    ? originalName.substring(0, lastDotIndex)
-    : originalName;
-  const extension = hasExtension ? originalName.substring(lastDotIndex) : '';
-
-  let counter = 1;
-  let newName: string;
-
-  do {
-    newName = `${baseName} (${counter})${extension}`;
-    counter++;
-  } while (existingNames.has(newName));
-
-  return newName;
-};
-
-const getFileName = (file: DialFile): string => {
-  return file.name;
-};
-
-const getCopiedItems = (
-  destinationUrl: string,
-  items: string[],
-  destinationFiles: DialFile[],
-): CopiedItem[] => {
-  const existingNames = new Set(destinationFiles.map(getFileName));
-  return items.map((path) => {
-    const originalName = path.split('/').pop() ?? 'untitled';
-    const resolvedName = resolveNameConflict(originalName, existingNames);
-    existingNames.add(resolvedName);
-
-    return {
-      sourceUrl: path,
-      destinationUrl: `${destinationUrl}/${resolvedName}`,
-    };
-  });
-};
 
 export const useFileClipboard = ({
   getDestination,
-  getDestinationFiles,
+  getAllFiles,
   onCopyFiles,
   onMoveToFiles,
 }: UseFileClipboardOptions) => {
@@ -88,13 +40,13 @@ export const useFileClipboard = ({
 
   const paste = useCallback(() => {
     const destination = getDestination();
-    const destinationFiles = getDestinationFiles();
+    const allFiles = getAllFiles();
 
     if (copied.size > 0) {
       const resolvedItems = getCopiedItems(
         destination,
         Array.from(copied),
-        destinationFiles,
+        allFiles,
       );
       onCopyFiles?.(resolvedItems);
       setCopied(new Set());
@@ -102,20 +54,13 @@ export const useFileClipboard = ({
       const resolvedItems = getCopiedItems(
         destination,
         Array.from(cut),
-        destinationFiles,
+        allFiles,
       );
 
       onMoveToFiles?.(resolvedItems);
       setCut(new Set());
     }
-  }, [
-    copied,
-    cut,
-    getDestination,
-    getDestinationFiles,
-    onCopyFiles,
-    onMoveToFiles,
-  ]);
+  }, [copied, cut, getDestination, getAllFiles, onCopyFiles, onMoveToFiles]);
 
   const state = useMemo(
     () => ({

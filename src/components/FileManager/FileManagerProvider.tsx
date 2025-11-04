@@ -107,9 +107,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     paste: onPaste,
   } = useFileClipboard({
     getDestination: () => currentFolder?.path ?? '/',
-    getDestinationFiles: () => currentFolder?.items ?? [],
     onCopyFiles,
     onMoveToFiles,
+    getAllFiles: () => items,
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
