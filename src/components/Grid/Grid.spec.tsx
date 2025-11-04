@@ -132,4 +132,22 @@ describe('Dial UI Kit :: DialGrid', () => {
     const container = screen.getByRole('region');
     expect(container).toHaveClass('my-custom-grid-class');
   });
+
+  test('renders empty state when rowData is empty', async () => {
+    const emptyStateTitle = 'No results found';
+    const emptyStateDescription =
+      "Sorry, we couldn't find any results for your search.";
+
+    render(
+      <DialGrid<TestRow>
+        columnDefs={testColumns}
+        rowData={[]}
+        emptyStateTitle={emptyStateTitle}
+        emptyStateDescription={emptyStateDescription}
+      />,
+    );
+
+    expect(await screen.findByText(emptyStateTitle)).toBeInTheDocument();
+    expect(await screen.findByText(emptyStateDescription)).toBeInTheDocument();
+  });
 });

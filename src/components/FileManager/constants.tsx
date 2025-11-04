@@ -18,5 +18,5 @@ export const treeBaseClasses =
 export const gridBaseClasses =
   'flex-1 w-full rounded text-secondary overflow-auto min-h-0 min-w-0';
 
-export const sidebarWidth = 360;
+export const sidebarWidth = 280;
 export const sidebarTitleDefault = 'Files';

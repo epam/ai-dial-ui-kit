@@ -51,6 +51,9 @@ vi.mock('@/components/ButtonDropdown/ButtonDropdown', () => ({
 
 vi.mock('@tabler/icons-react', () => ({
   IconRefresh: () => <svg data-testid="refresh-icon" />,
+  IconChevronRight: () => <svg data-testid="chevron-right-icon" />,
+  IconEyeOff: () => <svg data-testid="eye-off-icon" />,
+  IconEye: () => <svg data-testid="eye-icon" />,
 }));
 
 describe('Dial UI Kit :: DialFileManagerToolbar', () => {

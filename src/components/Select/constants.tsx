@@ -1,7 +1,7 @@
 import { IconChevronDown, IconCheck } from '@tabler/icons-react';
 
 export const selectTriggerBaseClasses =
-  'dial-input flex px-3 py-2 w-full items-center justify-between gap-2 dial-small min-h-[38px]';
+  'dial-input flex w-full items-center justify-between gap-2 dial-small';
 
 export const selectOverlayBaseClasses = 'w-full rounded';
 

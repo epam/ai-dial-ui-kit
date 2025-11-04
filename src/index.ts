@@ -82,16 +82,29 @@ export { ButtonVariant } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
-export { DropdownType } from './types/dropdown';
+export {
+  DropdownType,
+  DropdownTrigger,
+  DropdownItemType,
+} from './types/dropdown';
 export { SearchSize } from './types/search';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
-export { DialFileManagerTabs } from './types/file-manager';
+export { SelectSize, SelectVariant } from './types/select';
+export {
+  DialFileManagerTabs,
+  DialFileManagerActions,
+} from './types/file-manager';
+export { FlexibleActionsDirection } from './types/flexible-actions';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
+
+// Context and Provider
+export { FileManagerProvider } from './components/FileManager/FileManagerProvider';
+export { useFileManagerContext } from './components/FileManager/hooks/use-file-manager-context';
 
 // Models
 export { StepStatus } from './models/step';
@@ -102,7 +115,7 @@ export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
 export type { DialModifiedEntity } from './models/base-entity';
 export type { DialFile } from './models/file';
-export type {
+export {
   DialFileNodeType,
   DialFilePermission,
   DialFileResourceType,

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
+import { SelectSize, SelectVariant } from '@/types/select';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -30,8 +31,9 @@ const baseOptions: SelectOption[] = [
     value: 'another-long-option',
     label:
       'Another long option to test overflow. It should be truncated appropriately',
+    description: 'another long option description',
   },
-  { value: 'option-1', label: 'Option 1' },
+  { value: 'option-1', label: 'Option 1', description: 'Option 1 description' },
   { value: 'option-2', label: 'Option 2' },
   { value: 'option-3', label: 'Option 3' },
   { value: 'option-4', label: 'Option 4' },
@@ -51,6 +53,7 @@ const meta = {
     options: { control: { type: 'object' } },
     multiple: { control: { type: 'boolean' } },
     value: { control: { type: 'object' } },
+    prefix: { control: { type: 'text' } },
     defaultValue: { control: { type: 'object' } },
     placeholder: { control: { type: 'text' } },
     searchable: { control: { type: 'boolean' } },
@@ -106,8 +109,42 @@ export const WithSelectAll: Story = {
   },
 };
 
+export const Small: Story = {
+  args: {
+    size: SelectSize.Sm,
+  },
+};
+
+export const WithHeaderAndFooter: Story = {
+  name: 'With header and footer',
+  args: {
+    header: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    footer: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small text-primary font-medium">
+          Footer content
+        </span>
+      </div>
+    ),
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    size: SelectSize.Sm,
+    variant: SelectVariant.Secondary,
+  },
+};
+
 export const Searchable: Story = {
   args: {
+    prefix: 'Filter:',
     searchable: true,
   },
 };

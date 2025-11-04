@@ -12,6 +12,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
+import { isHiddenDotFile } from '../../utils';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
@@ -24,6 +25,7 @@ export interface DialFoldersTreeProps {
   emptyStateIcon?: ReactNode;
   onItemClick?: (item: DialFile) => void;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
+  areHiddenFilesVisible?: boolean;
 }
 
 /**
@@ -95,6 +97,7 @@ export interface DialFoldersTreeProps {
  * @param [emptyStateIcon] - Optional icon to display in the empty state.
  * @param [onItemClick] - Callback fired when a folder or file is clicked (receives the corresponding `DialFile` node).
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
+ * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
  *
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
@@ -113,6 +116,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateIcon,
   onItemClick,
   getContextMenuItems,
+  areHiddenFilesVisible = false,
 }) => {
   const [expandedItems, setExpandedItems] =
     useState<Set<string>>(expandedPaths);
@@ -140,6 +144,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       const isFolder = nodeType === DialFileNodeType.FOLDER;
 
+      if (!areHiddenFilesVisible && isHiddenDotFile(node)) return null;
+
       if (!isFolder && !showFiles) return;
 
       const hasValidItems =
@@ -160,54 +166,62 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
-          <div className="flex flex-col">
-            <div
-              style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
-              className={mergeClasses(
-                'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px]',
-                selectedClass,
-              )}
+          <div className="flex flex-col min-w-fit w-full">
+            <DialDropdown
+              trigger={[DropdownTrigger.ContextMenu]}
+              cssClass="w-full"
+              anchorToMouse
+              menu={{ items: menuItems }}
             >
-              <div onClick={() => handleFolderClick(node)} className="w-full">
-                <DialDropdown
-                  trigger={[DropdownTrigger.ContextMenu]}
-                  cssClass="w-full"
-                  anchorToMouse
-                  menu={{ items: menuItems }}
+              <div
+                style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
+                className={mergeClasses(
+                  'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
+                  selectedClass,
+                )}
+              >
+                <div
+                  className="absolute size-full left-0 top-0"
+                  onClick={() => handleFolderClick(node)}
+                />
+                <div
+                  className="flex flex-row truncate items-center w-fit"
+                  onClick={() => handleFolderClick(node)}
                 >
-                  <div className="flex-1 flex flex-row truncate items-center">
-                    {!isFolder ? (
-                      <DialFileName name={name} />
-                    ) : (
-                      <>
-                        <IconCaretRightFilled
-                          {...CARET_ICON_PROPS}
-                          className={classNames(
-                            'flex-shrink-0',
-                            isExpanded && 'rotate-90 transition-all',
-                            !hasValidItems && 'text-transparent',
-                          )}
-                        />
-                        <DialFolderName name={name} loading={isLoading} />
-                      </>
-                    )}
-                  </div>
-                </DialDropdown>
-              </div>
+                  {!isFolder ? (
+                    <DialFileName name={name} />
+                  ) : (
+                    <>
+                      <IconCaretRightFilled
+                        {...CARET_ICON_PROPS}
+                        className={classNames(
+                          'flex-shrink-0',
+                          isExpanded && 'rotate-90 transition-all',
+                          !hasValidItems && 'text-transparent',
+                        )}
+                      />
+                      <DialFolderName name={name} loading={isLoading} />
+                    </>
+                  )}
+                </div>
 
-              {menuItems.length > 0 && (
-                <DialDropdown
-                  placement="bottom-start"
-                  allowedPlacements={['top-start', 'top-end']}
-                  menu={{ items: menuItems }}
-                >
-                  <DialIcon
-                    className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
-                    icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
-                  />
-                </DialDropdown>
-              )}
-            </div>
+                {menuItems.length > 0 && (
+                  <div className="flex-1 flex justify-end">
+                    <DialDropdown
+                      placement="bottom-start"
+                      allowedPlacements={['top-start', 'top-end']}
+                      menu={{ items: menuItems }}
+                      cssClass="sticky right-0"
+                    >
+                      <DialIcon
+                        className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
+                        icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
+                      />
+                    </DialDropdown>
+                  </div>
+                )}
+              </div>
+            </DialDropdown>
 
             {isExpanded && items && renderTree(items, level + 1)}
           </div>

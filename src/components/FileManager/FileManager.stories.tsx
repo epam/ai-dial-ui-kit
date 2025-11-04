@@ -1,8 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { DialFileManager, type DialFileManagerProps } from './FileManager';
+import {
+  DialFileManager,
+  DialFileManagerView,
+  type DialFileManagerProps,
+} from './FileManager';
+import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
 import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
+import { ButtonVariant } from '@/types/button';
+import { DialButton } from '@/components/Button/Button';
+import { DialPopup } from '@/components/Popup/Popup';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -33,9 +41,7 @@ const meta = {
     navigationPanelOptions: {
       searchable: true,
     },
-    toolbarOptions: {
-      areHiddenFilesVisible: false,
-    },
+    toolbarOptions: {},
   },
 } satisfies Meta<DialFileManagerProps>;
 
@@ -115,7 +121,6 @@ const WithTabsControlledComponent = (args: DialFileManagerProps) => {
           tabs: tabs,
           activeTab: activeTab,
           onTabChange: handleTabChange,
-          areHiddenFilesVisible: false,
         }}
         gridOptions={{
           ...args.gridOptions,
@@ -134,4 +139,112 @@ export const HandleTableFileClick: Story = {
   args: {
     onTableFileClick: (file) => alert(`File clicked: ${file.name}`),
   },
+};
+
+const PopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        title="Toggle File Manager"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        cssClass="w-[1000px] !h-[600px]"
+      >
+        <DialFileManager
+          {...args}
+          gridOptions={{ ...(args.gridOptions ?? {}), filterable: false }}
+          toolbarOptions={{
+            ...(args.toolbarOptions ?? {}),
+            tabs: tabs,
+            activeTab: activeTab,
+            onTabChange: handleTabChange,
+          }}
+          bulkActionsToolbarOptions={{
+            selectionLabel: 'items selected',
+            actions: [
+              {
+                key: 'cut',
+                title: 'Cut',
+                label: 'Cut',
+                onClick: () => alert('Cut clicked'),
+              },
+              {
+                key: 'copy',
+                title: 'Copy',
+                label: 'Copy',
+                onClick: () => alert('Copy clicked'),
+              },
+              {
+                key: 'delete',
+                title: 'Delete',
+                label: 'Delete',
+                onClick: () => alert('Delete clicked'),
+              },
+              {
+                key: 'download',
+                title: 'Download',
+                label: 'Download',
+                onClick: () => alert('Download clicked'),
+              },
+            ],
+          }}
+          treeOptions={{
+            ...(args.treeOptions ?? {}),
+            collapsed: false,
+            actionLabels: {
+              ...(args.treeOptions?.actionLabels ?? {}),
+              copy: 'Copy',
+              cut: 'Cut',
+              paste: 'Paste',
+            },
+          }}
+          onCopyFiles={(items) =>
+            alert(
+              `Copying files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
+            )
+          }
+          onMoveToFiles={(items) =>
+            alert(
+              `Moving files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
+            )
+          }
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const InPopup: Story = {
+  render: PopupComponent,
+};
+
+export const WithCustomProvider: Story = {
+  render: (args) => (
+    <div className="h-[640px] flex flex-col gap-3">
+      <FileManagerProvider {...args} items={itemsMock}>
+        <div className="bg-layer-3 px-4 py-2 text-secondary">
+          My app wants to show its own toolbar here (uses same context)
+        </div>
+        <DialFileManagerView />
+        <div className="bg-layer-3 px-4 py-2 text-secondary">
+          Footer actions / secondary info
+        </div>
+      </FileManagerProvider>
+    </div>
+  ),
 };

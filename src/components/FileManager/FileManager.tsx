@@ -1,12 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import {
-  type FC,
-  type ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
+import { type FC, useMemo } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -33,34 +26,37 @@ import { DialGrid, type DialGridProps } from '@/components/Grid/Grid';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 import {
-  findFolderForPath,
-  normalizeExtensionWithoutDot,
-  normalizeToLowerCase,
-  collectAllDescendants,
-} from './utils';
-import {
   DialFileManagerToolbar,
   type DialFileManagerToolbarProps,
 } from './components/FileManagerToolbar/DialFileManagerToolbar';
-import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import {
+  DialFileManagerBulkActionsToolbar,
+  type DialFileManagerBulkActionsToolbarProps,
+} from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
+import type { DropdownItem } from '@/models/dropdown';
+import { DialFileManagerActions, type CopiedItem } from '@/types/file-manager';
+import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
+import { BASE_ICON_PROPS } from '@/constants/icon';
+import { FileManagerProvider } from './FileManagerProvider';
+import { useFileManagerContext } from './hooks/use-file-manager-context';
+import type { FileManagerGridRow } from './FileManagerContext';
+import { DialDateCellRenderer } from '../Grid/renderers/DateCellRenderer';
 
-interface GridRow {
-  id: string;
-  name: string;
-  updatedAt?: string;
-  size?: string;
-  author?: string;
-  path: string;
-  nodeType: DialFileNodeType;
-  extension?: string;
-}
+type GridRow = FileManagerGridRow;
 
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
   title?: string;
   containerCssClass?: string;
-  additionalButtons?: ReactNode;
+  additionalButtons?: React.ReactNode;
+  collapsed?: boolean;
+  actionLabels?: {
+    [DialFileManagerActions.Copy]?: string;
+    [DialFileManagerActions.Cut]?: string;
+    [DialFileManagerActions.Paste]?: string;
+    [DialFileManagerActions.Rename]?: string;
+  };
 }
 
 export type NavigationPanelOptions = Omit<
@@ -74,14 +70,15 @@ export interface GridOptions
   filterable?: boolean;
 }
 
-const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '-';
-  const kilobyte = 1024;
-  const megabyte = kilobyte * 1024;
-  if (bytes >= megabyte) return `${(bytes / megabyte).toFixed(1)} MB`;
-  if (bytes >= kilobyte) return `${(bytes / kilobyte).toFixed(0)} KB`;
-  return `${bytes} B`;
-};
+export type ToolbarOptions = Omit<
+  DialFileManagerToolbarProps,
+  'areHiddenFilesVisible' | 'onToggleHiddenFiles'
+>;
+
+export type BulkActionsToolbarOptions = Omit<
+  DialFileManagerBulkActionsToolbarProps,
+  'onClearSelection'
+>;
 
 export interface DialFileManagerProps {
   path?: string;
@@ -90,12 +87,16 @@ export interface DialFileManagerProps {
   items?: DialFile[];
 
   treeOptions?: FileTreeOptions;
-  toolbarOptions?: DialFileManagerToolbarProps;
+  toolbarOptions?: ToolbarOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
+  bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
+
+  onCopyFiles?: (items: CopiedItem[]) => void;
+  onMoveToFiles?: (items: CopiedItem[]) => void;
 }
 
 /**
@@ -106,6 +107,7 @@ export interface DialFileManagerProps {
  * - The grid shows children of the current folder. When a search query is present, it scans all nested descendants.
  * - Pluggable tree, navigation panel, and grid behaviors via `treeOptions`, `navigationPanelOptions`, and `gridOptions`.
  * - Optional filters toggle via `gridOptions.filterable` (default `true`).
+ * - Supports bulk actions toolbar when items are selected.
  *
  * @example
  * ```tsx
@@ -130,42 +132,77 @@ export interface DialFileManagerProps {
  *   items={files}
  *   treeOptions={{ width: 300, title: 'Explorer', showFiles: true }}
  * />
+ *
+ * // With explicit provider (advanced apps)
+ * <FileManagerProvider items={files} path="/All files">
+ *   <MyCustomHeader />
+ *   <DialFileManagerView />  // internal view
+ *   <MyCustomFooter />
+ * </FileManagerProvider>
  * ```
  *
- * @param [path] - Absolute path of the current location (e.g., "/All files/Design/Icons")
+ * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
  * @param [cssClass] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
+ *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
  * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag
+ * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
+ *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
+ *
+ * @param [onCopyFiles] - Callback fired when files copy-paste
+ * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
  */
-export const DialFileManager: FC<DialFileManagerProps> = ({
-  path,
-  cssClass,
-  items = [],
-  treeOptions,
-  navigationPanelOptions,
-  gridOptions,
-  toolbarOptions,
-  onPathChange,
-  onTableFileClick,
-}) => {
-  const [currentPath, setCurrentPath] = useState<string | undefined>(path);
+export const DialFileManager: FC<DialFileManagerProps> = (props) => {
+  return (
+    <FileManagerProvider {...props}>
+      <DialFileManagerView />
+    </FileManagerProvider>
+  );
+};
 
-  useEffect(() => {
-    setCurrentPath(path);
-  }, [path]);
+/**
+ * Internal view-only component.
+ * Reads all data from FileManagerContext and renders the actual layout.
+ * This is what apps can reuse if they want to control the provider manually.
+ */
+export const DialFileManagerView: FC = () => {
+  const {
+    cssClass,
+    items,
+    treeOptions,
+    navigationPanelOptions,
+    gridOptions,
+    toolbarOptions,
+    bulkActionsToolbarOptions,
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  useEffect(() => {
-    const external = navigationPanelOptions?.value;
-    if (external != null) {
-      setSearchValue(String(external));
-    }
-  }, [navigationPanelOptions?.value]);
+    areHiddenFilesVisible,
+    toggleHiddenFilesVisibility,
+
+    isTreeCollapsed,
+    toggleTreeCollapse,
+
+    currentPath,
+    gridRows,
+    selectedIds,
+    setSelectedIds,
+    clearSelection,
+
+    effectiveSearchValue,
+    handleBreadcrumbItemClick,
+    handleSearchChange,
+    handleTreeItemClick,
+    handleTableRowClick,
+
+    onCopy,
+    onCut,
+    onPaste,
+    clipboard,
+  } = useFileManagerContext();
 
   const {
     width = sidebarWidth,
@@ -175,54 +212,11 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     ...forwardedTreeProps
   } = treeOptions ?? {};
 
-  const effectiveSearchValue = String(
-    navigationPanelOptions?.value ?? searchValue ?? '',
-  ).trim();
-
-  const currentFolder = useMemo(
-    () => findFolderForPath(items, currentPath) ?? items[0],
-    [items, currentPath],
-  );
-
-  const gridRows: GridRow[] = useMemo(() => {
-    const query = normalizeToLowerCase(effectiveSearchValue).trim();
-
-    const directChildren = currentFolder?.items ?? [];
-    const searchSourceNodes: DialFile[] = query
-      ? collectAllDescendants(currentFolder)
-      : directChildren;
-
-    const mappedRows = searchSourceNodes.map((node) => ({
-      id: node.id ?? node.path,
-      name: node.name ?? node.path.split('/').pop() ?? '',
-      updatedAt: node.updatedAt,
-      size:
-        node.nodeType === DialFileNodeType.ITEM
-          ? formatBytes(node.contentLength)
-          : '-',
-      author: node.author,
-      path: node.path,
-      nodeType: node.nodeType,
-      extension: node.extension,
-    }));
-
-    if (!query) return mappedRows;
-
-    const queryTokens = query.split(/\s+/).filter(Boolean);
-
-    return mappedRows.filter((row) => {
-      const nameLower = normalizeToLowerCase(row.name);
-      const authorLower = normalizeToLowerCase(row.author);
-      const extensionLower = normalizeExtensionWithoutDot(row.extension);
-
-      return queryTokens.every(
-        (token) =>
-          nameLower.includes(token) ||
-          authorLower.includes(token) ||
-          extensionLower.includes(token),
-      );
-    });
-  }, [currentFolder, effectiveSearchValue]);
+  const {
+    columnDefs: userColumnDefs,
+    filterable = true,
+    ...forwardedGridOptions
+  } = gridOptions ?? {};
 
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
@@ -258,14 +252,7 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     ];
   }, []);
 
-  const {
-    columnDefs: userColumnDefs,
-    filterable = true,
-    ...forwardedGridOptions
-  } = gridOptions ?? {};
-
   const baseColumns = userColumnDefs ?? defaultColumns;
-
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
     if (filterable) return baseColumns;
     return baseColumns.map((col) => ({
@@ -275,52 +262,82 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
     }));
   }, [baseColumns, filterable]);
 
-  const handleTreeItemClick = useCallback(
-    (item: DialFile) => {
-      setCurrentPath(item.path);
-      onPathChange?.(item.path);
-    },
-    [onPathChange],
-  );
-
-  const handleBreadcrumbItemClick = useCallback(
-    (href?: string) => {
-      setCurrentPath(href);
-      onPathChange?.(href);
-    },
-    [onPathChange],
-  );
-
-  const handleSearchChange = useCallback(
-    (value?: string) => {
-      const next = String(value ?? '');
-      setSearchValue(next);
-      navigationPanelOptions?.onSearchChange?.(next);
-    },
-    [navigationPanelOptions],
-  );
-
-  const onTableRowClick = useCallback(
-    (row: GridRow) => {
-      if (row.nodeType === DialFileNodeType.FOLDER) {
-        setCurrentPath(row.path);
-        onPathChange?.(row.path);
-      } else {
-        onTableFileClick?.(row);
+  const getTreeContextMenuItems = (file: DialFile): DropdownItem[] => {
+    const items: DropdownItem[] = [];
+    if (treeOptions?.actionLabels) {
+      if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
+        items.push({
+          key: 'copy',
+          label: treeOptions.actionLabels[DialFileManagerActions.Copy],
+          icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => onCopy([file.path]),
+        });
       }
-    },
-    [onPathChange, onTableFileClick],
-  );
+      if (treeOptions.actionLabels[DialFileManagerActions.Cut]) {
+        items.push({
+          key: 'cut',
+          label: treeOptions.actionLabels[DialFileManagerActions.Cut],
+          icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => onCut([file.path]),
+        });
+      }
+      if (treeOptions.actionLabels[DialFileManagerActions.Paste]) {
+        items.push({
+          key: 'paste',
+          label: treeOptions.actionLabels[DialFileManagerActions.Paste],
+          disabled: !clipboard.hasItems,
+          icon: (
+            <IconClipboardCopy
+              {...BASE_ICON_PROPS}
+              className="text-secondary"
+            />
+          ),
+          onClick: () => onPaste(),
+        });
+      }
+    }
+    return items;
+  };
+
+  const handleSelectionChange = (newSelectedIds: Set<string>) => {
+    setSelectedIds(newSelectedIds);
+  };
 
   return (
-    <section className={mergeClasses(containerBaseClasses, cssClass)}>
-      {toolbarOptions && (
+    <section
+      className={mergeClasses(
+        containerBaseClasses,
+        {
+          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+        },
+        cssClass,
+      )}
+    >
+      {toolbarOptions && selectedIds.size === 0 && (
         <div
           className={toolbarBaseClasses}
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
-          <DialFileManagerToolbar {...toolbarOptions} />
+          <DialFileManagerToolbar
+            {...toolbarOptions}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={toggleHiddenFilesVisibility}
+          />
+        </div>
+      )}
+
+      {selectedIds.size > 0 && bulkActionsToolbarOptions && (
+        <div
+          className={toolbarBaseClasses}
+          role="toolbar"
+          aria-label="File Manager Toolbar"
+        >
+          <DialFileManagerBulkActionsToolbar
+            {...bulkActionsToolbarOptions}
+            onClearSelection={clearSelection}
+            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
+          />
         </div>
       )}
 
@@ -335,12 +352,16 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
             title={title}
             containerCssClass={containerCssClass}
             additionalButtons={additionalButtons}
+            isOpened={isTreeCollapsed}
+            onToggle={toggleTreeCollapse}
           >
             <DialFoldersTree
               {...forwardedTreeProps}
               items={items}
               selectedPath={currentPath}
               onItemClick={handleTreeItemClick}
+              areHiddenFilesVisible={areHiddenFilesVisible}
+              getContextMenuItems={getTreeContextMenuItems}
             />
           </DialCollapsibleSidebar>
         </aside>
@@ -367,12 +388,17 @@ export const DialFileManager: FC<DialFileManagerProps> = ({
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,
-                onRowClicked: (event) => {
+                onCellClicked: (event) => {
+                  if (event.colDef.colId === '__select') {
+                    return;
+                  }
                   if (event.data) {
-                    onTableRowClick(event.data);
+                    handleTableRowClick(event.data);
                   }
                 },
               }}
+              selectedRowIds={selectedIds}
+              onSelectionChange={handleSelectionChange}
             />
           </section>
         </div>

@@ -32,11 +32,15 @@ import type { SelectOption } from '@/models/select';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialMultiSelectTags } from './MultiSelectTags';
+import { SelectSize, SelectVariant } from '@/types/select';
 
 export interface DialSelectProps {
   options: SelectOption[];
   multiple?: boolean;
+  size?: SelectSize;
+  variant?: SelectVariant;
   value?: string | string[];
+  prefix?: string;
   defaultValue?: string | string[];
   placeholder?: string;
   searchable?: boolean;
@@ -49,6 +53,8 @@ export interface DialSelectProps {
   disabled?: boolean;
   cssClass?: string;
   closable?: boolean;
+  header?: ReactNode | (() => ReactNode);
+  footer?: ReactNode | (() => ReactNode);
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
 }
@@ -77,6 +83,7 @@ export interface DialSelectProps {
  * @param options - Array of options to select from.
  * @param [multiple] - Whether multiple selections are allowed.
  * @param [value] - Controlled selected value(s).
+ * @param [prefix] - Prefix for selected value(s).
  * @param [defaultValue] - Uncontrolled initial selected value(s).
  * @param [placeholder] - Placeholder text when no selection is made.
  * @param [searchable] - Whether to show a search input to filter options.
@@ -97,6 +104,9 @@ export const DialSelect: FC<DialSelectProps> = ({
   multiple = false,
   value,
   defaultValue,
+  variant = SelectVariant.Primary,
+  size = SelectSize.Md,
+  prefix,
   placeholder = 'Select...',
   searchable = false,
   searchPlaceholder,
@@ -108,6 +118,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   disabled = false,
   cssClass,
   closable = false,
+  header,
+  footer,
   onClose,
   onChange,
 }) => {
@@ -245,13 +257,26 @@ export const DialSelect: FC<DialSelectProps> = ({
           {singleSelectedOption.icon && (
             <DialIcon icon={singleSelectedOption.icon} />
           )}
-          <DialEllipsisTooltip text={singleSelectedOption.label} />
+          <DialEllipsisTooltip
+            text={
+              prefix
+                ? `${prefix} ${singleSelectedOption.label}`
+                : singleSelectedOption.label
+            }
+          />
         </>
       );
     }
 
     return <span className="text-secondary truncate">{placeholder}</span>;
-  }, [hasSelection, multiple, placeholder, renderTags, singleSelectedOption]);
+  }, [
+    hasSelection,
+    multiple,
+    prefix,
+    placeholder,
+    renderTags,
+    singleSelectedOption,
+  ]);
 
   return (
     <DialDropdown
@@ -269,6 +294,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           aria-multiselectable={multiple || undefined}
           className={selectOverlayBaseClasses}
         >
+          {header && <>{typeof header === 'function' ? header() : header}</>}
           {(searchable || closable) && (
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
@@ -345,6 +371,12 @@ export const DialSelect: FC<DialSelectProps> = ({
                         }
                         ariaLabel={opt.label}
                       />
+
+                      {opt.description && (
+                        <div className="text-secondary dial-small">
+                          {opt.description}
+                        </div>
+                      )}
                     </div>
                   );
                 }
@@ -367,12 +399,19 @@ export const DialSelect: FC<DialSelectProps> = ({
                     <div className="flex items-center gap-2 w-full">
                       {opt.icon && <DialIcon icon={opt.icon} />}
                       <DialEllipsisTooltip text={opt.label} />
+
+                      {opt.description && (
+                        <div className="text-secondary dial-small">
+                          {opt.description}
+                        </div>
+                      )}
                     </div>
                   </button>
                 );
               })
             )}
           </div>
+          {footer && <>{typeof footer === 'function' ? footer() : footer}</>}
         </div>
       )}
     >
@@ -384,6 +423,10 @@ export const DialSelect: FC<DialSelectProps> = ({
         className={mergeClasses(
           selectTriggerBaseClasses,
           disabled && 'opacity-75 !cursor-not-allowed',
+          size === SelectSize.Sm
+            ? 'min-h-[25px] px-1.5 py-1'
+            : 'min-h-[38px] px-3 py-2',
+          variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
           cssClass,
         )}
         onClick={() => !disabled && setOpen((v) => !v)}

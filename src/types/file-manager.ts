@@ -3,3 +3,16 @@ export enum DialFileManagerTabs {
   Shared = 'shared',
   Organization = 'organization',
 }
+
+export enum DialFileManagerActions {
+  Copy = 'copy',
+  Cut = 'cut',
+  Paste = 'paste',
+  Rename = 'rename',
+}
+
+export interface CopiedItem {
+  sourceUrl: string;
+  destinationUrl: string;
+  overwrite?: boolean;
+}
