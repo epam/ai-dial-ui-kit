@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface UseEditableItemOptions {
+export interface UseEditableItemOptions {
   value: string;
   isEditing: boolean;
   validate?: (value: string) => string | null;
@@ -9,6 +9,61 @@ interface UseEditableItemOptions {
   restoreOnCancel?: boolean;
 }
 
+interface UseEditableItemResult {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  value: string;
+  onChange: (newValue?: string) => void;
+  invalid: boolean;
+  invalidMessage: string;
+}
+
+/**
+ * A React hook that manages the behavior of an inline-editable text input.
+ * It provides validation handling, cancel/restore logic, auto-focus behavior,
+ * keyboard shortcuts, and outside-click detection.
+ *
+ * @param {Object} options - Hook configuration options.
+ * @param {string} options.value - Initial value for the editable input.
+ * @param {boolean} options.isEditing - Whether the item is currently in edit mode.
+ * @param {(value: string) => string | null} [options.validate] - Optional validation function returning an error message or `null` if valid.
+ * @param {(value: string) => void} [options.onSave] - Callback invoked when saving a valid value.
+ * @param {() => void} [options.onCancel] - Callback invoked when canceling editing.
+ * @param {boolean} [options.restoreOnCancel=true] - Whether to restore the original value on cancel.
+ *
+ * @returns {Object} An object containing state and handlers for editable input.
+ * @returns {React.RefObject<HTMLInputElement>} return.inputRef - Ref to the editable input element.
+ * @returns {string} return.value - Current input value.
+ * @returns {(newValue?: string) => void} return.onChange - Change handler for the input value.
+ * @returns {boolean} return.invalid - Whether the current value is invalid.
+ * @returns {string} return.invalidMessage - Validation error message, if any.
+ *
+ * @example
+ * ```tsx
+ * const {
+ *   inputRef,
+ *   value,
+ *   onChange,
+ *   invalid,
+ *   invalidMessage
+ * } = useEditableItem({
+ *   value: 'example.txt',
+ *   isEditing,
+ *   validate: (v) => v.trim() ? null : 'Name cannot be empty',
+ *   onSave: (v) => console.log('Saved', v),
+ *   onCancel: () => console.log('Canceled'),
+ * });
+ *
+ * return (
+ *   <input
+ *     ref={inputRef}
+ *     value={value}
+ *     onChange={(e) => onChange(e.target.value)}
+ *     aria-invalid={invalid}
+ *   />
+ *   {invalid && <span>{invalidMessage}</span>}
+ * );
+ * ```
+ */
 export function useEditableItem({
   value: initialValue,
   isEditing,
@@ -16,93 +71,77 @@ export function useEditableItem({
   validate,
   onSave,
   onCancel,
-}: UseEditableItemOptions) {
+}: UseEditableItemOptions): UseEditableItemResult {
   const [value, setValue] = useState(initialValue);
   const [invalid, setInvalid] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (isEditing) {
-      setValue(initialValue);
-      setInvalid(false);
-      setInvalidMessage('');
-      requestAnimationFrame(() => inputRef.current?.focus());
-    }
-  }, [isEditing, initialValue]);
-
-  const onChange = (newValue?: string) => {
-    const updated = newValue ?? '';
-    setValue(updated);
-
-    if (validate) {
-      const err = validate(updated);
-      if (err) {
-        setInvalid(true);
-        setInvalidMessage(err);
-      } else {
+  /** Validate and update invalid state */
+  const runValidation = useCallback(
+    (val: string): boolean => {
+      if (!validate) {
         setInvalid(false);
         setInvalidMessage('');
+        return true;
       }
-    } else if (invalid) {
+
+      const error = validate(val);
+      if (error) {
+        setInvalid(true);
+        setInvalidMessage(error);
+        return false;
+      }
+
       setInvalid(false);
       setInvalidMessage('');
-    }
-  };
+      return true;
+    },
+    [validate],
+  );
 
+  /** Handle value change */
+  const onChange = useCallback(
+    (newValue?: string) => {
+      const updated = newValue ?? '';
+      setValue(updated);
+      runValidation(updated);
+    },
+    [runValidation],
+  );
+
+  /** Attempt to save current value if valid */
   const trySave = useCallback(() => {
-    const err = validate?.(value);
-    if (err) {
-      setInvalid(true);
-      setInvalidMessage(err);
+    if (runValidation(value)) {
+      onSave?.(value);
+    } else {
       inputRef.current?.focus();
-      return;
     }
-    onSave?.(value);
-  }, [onSave, validate, value]);
+  }, [runValidation, onSave, value]);
 
+  /** Cancel editing, optionally restoring the original value */
   const tryCancel = useCallback(() => {
     if (restoreOnCancel) {
       setValue(initialValue);
     }
-
     setInvalid(false);
     setInvalidMessage('');
     onCancel?.();
   }, [initialValue, onCancel, restoreOnCancel]);
 
+  /** Reset and focus input when entering edit mode */
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      const el = inputRef.current;
-      el.focus();
-      el.select();
-    }
-  }, [isEditing]);
+    if (!isEditing) return;
+    setValue(initialValue);
+    setInvalid(false);
+    setInvalidMessage('');
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    });
+  }, [isEditing, initialValue]);
 
-  useEffect(() => {
-    const el = inputRef.current;
-    if (!isEditing || !el) return;
-
-    const handleBlur = (e: FocusEvent) => {
-      const err = validate?.(value);
-      if (err) {
-        setInvalid(true);
-        setInvalidMessage(err);
-        e.preventDefault();
-        el.focus();
-        return;
-      }
-
-      if (value !== initialValue) {
-        e.preventDefault();
-        el.focus();
-      }
-    };
-
-    el.addEventListener('blur', handleBlur, true);
-    return () => el.removeEventListener('blur', handleBlur, true);
-  }, [isEditing, validate, value, initialValue, trySave]);
-
+  /** Save or cancel via keyboard */
   useEffect(() => {
     const el = inputRef.current;
     if (!isEditing || !el) return;
@@ -121,20 +160,18 @@ export function useEditableItem({
     return () => el.removeEventListener('keydown', handleKey);
   }, [isEditing, trySave, tryCancel]);
 
+  /** Save when clicking outside, or re-focus if invalid */
   useEffect(() => {
     if (!isEditing) return;
 
     const handleOutside = (e: MouseEvent | TouchEvent) => {
       const el = inputRef.current;
-      if (el && !el.contains(e.target as Node)) {
-        const err = validate?.(value);
-        if (err) {
-          setInvalid(true);
-          setInvalidMessage(err);
-          el.focus();
-        } else {
-          trySave();
-        }
+      if (!el || el.contains(e.target as Node)) return;
+
+      if (runValidation(value)) {
+        trySave();
+      } else {
+        el.focus();
       }
     };
 
@@ -144,13 +181,7 @@ export function useEditableItem({
       document.removeEventListener('mousedown', handleOutside);
       document.removeEventListener('touchstart', handleOutside);
     };
-  }, [isEditing, value, trySave, validate]);
+  }, [isEditing, value, runValidation, trySave]);
 
-  return {
-    inputRef,
-    value,
-    onChange,
-    invalid,
-    invalidMessage,
-  };
+  return { inputRef, value, onChange, invalid, invalidMessage };
 }
