@@ -421,6 +421,7 @@ export const DialGrid = <T extends object>({
           onGridSizeChanged={onGridSizeChanged}
           onGridReady={onGridReady}
           suppressCellFocus={true}
+          suppressDragLeaveHidesColumns={true}
           noRowsOverlayComponent={emptyStateRenderer}
           rowData={rowData}
           {...additionalGridOptions}
