@@ -1,11 +1,14 @@
 import type { FC } from 'react';
-import { DialItemInput, type DialItemInputProps } from '../ItemInput/ItemInput';
+import {
+  DialItemNameInput,
+  type DialItemNameInputProps,
+} from '@/components/ItemNameInput/ItemNameInput';
 import { useEditableItem } from '../../hooks/use-editable-item';
 import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 
-export interface DialEditableItemNameProps extends DialItemInputProps {
+export interface DialEditableItemNameProps extends DialItemNameInputProps {
   name: string;
   type: DialItemType;
   elementId: string;
@@ -45,7 +48,7 @@ export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
   }
 
   return (
-    <DialItemInput
+    <DialItemNameInput
       type={type}
       name={value}
       elementId={elementId}

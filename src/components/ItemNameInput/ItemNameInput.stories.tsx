@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialItemInput, type DialItemInputProps } from './ItemInput';
+import {
+  DialItemNameInput,
+  type DialItemNameInputProps,
+} from './ItemNameInput';
 import { DialItemType } from '@/types/item';
 
-const meta: Meta<typeof DialItemInput> = {
-  title: 'FileManager/components/ItemInput',
-  component: DialItemInput,
+const meta: Meta<typeof DialItemNameInput> = {
+  title: 'FileManager/components/ItemNameInput',
+  component: DialItemNameInput,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -21,7 +24,7 @@ const meta: Meta<typeof DialItemInput> = {
 
 export default meta;
 
-type Story = StoryObj<typeof DialItemInput>;
+type Story = StoryObj<typeof DialItemNameInput>;
 
 export const Default: Story = {
   args: {
@@ -30,7 +33,7 @@ export const Default: Story = {
     elementId: 'input-1',
     iconLabel: 'File',
     iconSize: 20,
-  } as DialItemInputProps,
+  } as DialItemNameInputProps,
 };
 
 export const Folder: Story = {
@@ -41,7 +44,7 @@ export const Folder: Story = {
     shared: true,
     iconLabel: 'Folder',
     iconSize: 20,
-  } as DialItemInputProps,
+  } as DialItemNameInputProps,
 };
 
 export const Invalid: Story = {
@@ -53,7 +56,7 @@ export const Invalid: Story = {
     inputInvalid: true,
     inputInvalidMessage:
       'This name already exists at this location. Please choose a different name.',
-  } as DialItemInputProps,
+  } as DialItemNameInputProps,
 };
 
 export const Loading: Story = {
@@ -64,5 +67,5 @@ export const Loading: Story = {
     loading: true,
     iconLabel: 'Loading',
     iconSize: 20,
-  } as DialItemInputProps,
+  } as DialItemNameInputProps,
 };

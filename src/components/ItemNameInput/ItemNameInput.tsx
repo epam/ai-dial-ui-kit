@@ -6,7 +6,7 @@ import { IconAlertCircleFilled } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
-export interface DialItemInputProps {
+export interface DialItemNameInputProps {
   type: DialItemType;
   name: string;
   shared?: boolean;
@@ -35,7 +35,7 @@ export interface DialItemInputProps {
  *
  * @example
  * ```tsx
- * <DialItemInput
+ * <DialItemNameInput
  *   type={DialItemType.File}
  *   name="report.pdf"
  *   elementId="file-input-1"
@@ -43,7 +43,7 @@ export interface DialItemInputProps {
  *   onChange={(value) => console.log('New name:', value)}
  * />
  *
- * <DialItemInput
+ * <DialItemNameInput
  *   type={DialItemType.Folder}
  *   name="Project A"
  *   elementId="folder-input-2"
@@ -69,7 +69,7 @@ export interface DialItemInputProps {
  * @param {Ref<HTMLInputElement>} [props.inputRef] - Ref to access the underlying input element.
  * @param {(value: string) => void} [props.onChange] - Callback fired when input value changes.
  */
-export const DialItemInput: FC<DialItemInputProps> = ({
+export const DialItemNameInput: FC<DialItemNameInputProps> = ({
   name,
   type,
   elementId,
