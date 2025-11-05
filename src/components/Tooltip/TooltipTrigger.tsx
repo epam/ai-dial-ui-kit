@@ -35,10 +35,10 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
     children.ref !== undefined;
 
   const childrenRef = isRefInChildren
-    ? (children.ref as Ref<HTMLElement>)
+    ? (children.ref as Ref<Element>)
     : undefined;
 
-  const refsToMerge = [context.refs.setReference, propRef];
+  const refsToMerge: Ref<Element>[] = [context.refs.setReference, propRef];
   if (asValidChild && childrenRef) {
     refsToMerge.push(childrenRef);
   }
