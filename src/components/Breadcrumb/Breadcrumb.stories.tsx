@@ -56,30 +56,49 @@ export const DisabledItem: Story = {
   },
 };
 
-export const Scrollable: Story = {
-  render: () => (
-    <div className="w-[280px] border border-primary p-2 bg-layer-2">
-      <DialBreadcrumb
-        pathItems={[
-          { title: 'First Level Navigation', href: '#' },
-          { title: 'Second Level Navigation', href: '#' },
-          { title: 'Third Level Navigation', href: '#' },
-          { title: 'Fourth Level Navigation', href: '#' },
-          { title: 'Fifth Level Navigation', href: '#' },
-          { title: 'Current Page Name' },
-        ]}
-      />
-    </div>
-  ),
-};
-
 export const CompositionAPI: Story = {
   name: 'Composition API (<DialBreadcrumbItem/>)',
   render: () => (
     <DialBreadcrumb>
-      <DialBreadcrumbItem title="Home" href="#" />
-      <DialBreadcrumbItem title="Section" href="#" />
-      <DialBreadcrumbItem title="Current Page" />
+      <DialBreadcrumbItem
+        title="Home"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Home');
+        }}
+      />
+      <DialBreadcrumbItem
+        title="Section"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Section');
+        }}
+      />
+      <DialBreadcrumbItem
+        title="Design System"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Design System');
+        }}
+      />
+      <DialBreadcrumbItem
+        title="Components"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Components');
+        }}
+      />
+      <DialBreadcrumbItem
+        title="Current Page"
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Current Page');
+        }}
+      />
     </DialBreadcrumb>
   ),
 };
@@ -113,15 +132,27 @@ export const WithFolderIcons: Story = {
         title="Projects"
         href="#"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Projects folder');
+        }}
       />
       <DialBreadcrumbItem
         title="2025"
         href="#"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked 2025 folder');
+        }}
       />
       <DialBreadcrumbItem
         title="Design System"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Clicked Design System folder');
+        }}
       />
     </DialBreadcrumb>
   ),
