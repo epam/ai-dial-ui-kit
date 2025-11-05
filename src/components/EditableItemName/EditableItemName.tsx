@@ -3,7 +3,7 @@ import {
   DialItemNameInput,
   type DialItemNameInputProps,
 } from '@/components/ItemNameInput/ItemNameInput';
-import { useEditableItem } from '../../hooks/use-editable-item';
+import { useEditableItem } from '@/hooks/use-editable-item';
 import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
@@ -20,6 +20,39 @@ export interface DialEditableItemNameProps extends DialItemNameInputProps {
   onCancel?: () => void;
 }
 
+/**
+ * A component that renders a file or folder name with optional edit mode.
+ *
+ * When `editing` is `false`, it displays a read-only name via:
+ * - `DialFolderName` for folders
+ * - `DialFileName` for files
+ *
+ * When `editing` is `true`, it renders an editable input using `DialItemNameInput`,
+ * driven by validation and change logic from the `useEditableItem` hook.
+ *
+ * @example
+ * ```tsx
+ * import { DialEditableItemName } from '@/components/DialEditableItemName/DialEditableItemName';
+ * import { DialItemType } from '@/types/item';
+ *
+ * function Example() {
+ *   return (
+ *     <DialEditableItemName
+ *       name="Project"
+ *       type={DialItemType.Folder}
+ *       elementId="folder-123"
+ *       editing={true}
+ *       validate={(value) => (value.trim() ? null : 'Name cannot be empty')}
+ *       onSave={(newName) => console.log('Saved:', newName)}
+ *       onCancel={() => console.log('Canceled')}
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @param props - Component props.
+ * @returns Rendered file or folder name element (editable or static).
+ */
 export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
   name,
   type,
