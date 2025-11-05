@@ -42,9 +42,9 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
     return cloneElement(
       children,
       context.getReferenceProps({
-        ref,
-        ...props,
         ...(children.props as HTMLProps<Element>),
+        ...props,
+        ref,
       }),
     );
   }
