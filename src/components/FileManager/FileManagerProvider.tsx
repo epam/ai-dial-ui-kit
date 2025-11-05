@@ -18,6 +18,7 @@ import {
 import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
 import { useCollapseTree } from './hooks/use-collapse-tree';
 import { useFileClipboard } from './hooks/use-file-clipboard';
+import { useCurrentPath } from './hooks/use-current-path';
 import {
   FileManagerContext,
   type FileManagerContextValue,
@@ -68,10 +69,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onCopyFiles,
   onMoveToFiles,
 }) => {
-  const [currentPath, setCurrentPath] = useState<string | undefined>(path);
-  useEffect(() => {
-    setCurrentPath(path);
-  }, [path]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
+    path,
+    onPathChange,
+    onSelectionClear: clearSelection,
+  });
 
   const { areHiddenFilesVisible, toggleHiddenFilesVisibility } =
     useShowHiddenFiles();
@@ -79,9 +84,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const { isTreeCollapsed, toggleTreeCollapse } = useCollapseTree(
     treeOptions?.collapsed ?? false,
   );
-
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
 
   const [searchValue, setSearchValue] = useState<string>('');
   useEffect(() => {
@@ -153,15 +155,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       );
     });
   }, [currentFolder, effectiveSearchValue, areHiddenFilesVisible]);
-
-  const handlePathChange = useCallback(
-    (nextPath?: string) => {
-      setCurrentPath(nextPath);
-      onPathChange?.(nextPath);
-      clearSelection();
-    },
-    [onPathChange, clearSelection],
-  );
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {

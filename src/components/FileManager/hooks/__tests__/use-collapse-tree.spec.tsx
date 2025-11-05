@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useCollapseTree } from './use-collapse-tree';
+import { useCollapseTree } from '@/components/FileManager/hooks/use-collapse-tree';
 
 describe('Dial UI Kit :: FileManager :: useCollapseTree', () => {
   it('returns initial state (true)', () => {
