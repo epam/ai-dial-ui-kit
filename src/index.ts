@@ -18,6 +18,9 @@ export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
+export { DialItemIcon } from './components/ItemIcon/ItemIcon';
+export { DialItemNameInput } from './components/ItemNameInput/ItemNameInput';
+export { DialEditableItemName } from './components/EditableItemName/EditableItemName';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -95,9 +98,11 @@ export {
   DialFileManagerActions,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
+export { DialItemType } from './types/item';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
+export { useEditableItem } from './hooks/use-editable-item';
 
 // Context and Provider
 export { FileManagerProvider } from './components/FileManager/FileManagerProvider';
