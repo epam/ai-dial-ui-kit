@@ -40,6 +40,7 @@ export interface DialFoldersTreeProps {
  * - Expandable and collapsible items
  * - Optional file visibility
  * - Loading state indicators for specific paths
+ * - Inline name editing support for folders or files
  * - Multi-item selection highlighting
  * - Context menu integration via `DialDropdown`
  * - Recursive rendering with indentation and icons
@@ -67,13 +68,21 @@ export interface DialFoldersTreeProps {
  *
  * // With expanded and selected items
  * const expandedPaths = new Set(['/documents']);
- * const selectedPaths = new Set(['/documents/file.txt']);
  *
  * <DialFoldersTree
  *   items={items}
  *   expandedPaths={expandedPaths}
- *   selectedPaths={selectedPaths}
+ *   selectedPath="/documents/file.txt"
  *   onItemClick={(item) => console.log('Clicked:', item.path)}
+ * />
+ *
+ * // With inline editing and validation
+ * <DialFoldersTree
+ *   items={items}
+ *   editedPath="/documents"
+ *   onEditValidate={(value) => (value.trim() ? null : 'Name cannot be empty')}
+ *   onEditSave={(newValue) => console.log('Saved new name:', newValue)}
+ *   onEditCancel={() => console.log('Edit cancelled')}
  * />
  *
  * // With custom empty state and context menu
@@ -95,17 +104,22 @@ export interface DialFoldersTreeProps {
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
  * @param [selectedPath] - Path representing the currently selected folder or file.
+ * @param [editedPath] - Path of the folder or file currently being edited.
  * @param [showFiles=false] - Whether to show files in addition to folders.
  * @param [emptyStateTitle='No Folders'] - Title text displayed when there are no items.
  * @param [emptyStateDescription] - Optional description text for the empty state.
  * @param [emptyStateIcon] - Optional icon to display in the empty state.
  * @param [onItemClick] - Callback fired when a folder or file is clicked (receives the corresponding `DialFile` node).
+ * @param [onEditSave] - Callback fired when editing is confirmed with a valid name (receives the new name).
+ * @param [onEditCancel] - Callback fired when editing is cancelled.
+ * @param [onEditValidate] - Function to validate the new name during editing. Should return an error string or `null` if valid.
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
  * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
  *
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
- * - The `expandedPaths`, `loadingPaths`, and `selectedPaths` props are externally controlled; the component itself does not manage them internally.
+ * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `editedPath` props are externally controlled.
+ * - Inline editing is fully customizable using `onEditSave`, `onEditCancel`, and `onEditValidate`.
  * - Context menus can be attached to both folders and files using `getContextMenuItems`.
  * - Use `showFiles={false}` to render only folders for a simplified tree.
  */
@@ -213,7 +227,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       />
                     )}
                     <DialEditableItemName
-                      elementId={`${path}-item`}
+                      elementId={`${path}-tree-item`}
                       name={name}
                       type={isFolder ? DialItemType.Folder : DialItemType.File}
                       loading={isLoading}

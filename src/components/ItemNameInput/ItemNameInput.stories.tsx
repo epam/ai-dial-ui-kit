@@ -8,7 +8,6 @@ import { DialItemType } from '@/types/item';
 const meta: Meta<typeof DialItemNameInput> = {
   title: 'FileManager/components/ItemNameInput',
   component: DialItemNameInput,
-  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

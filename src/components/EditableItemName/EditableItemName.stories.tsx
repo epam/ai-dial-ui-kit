@@ -6,9 +6,8 @@ import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 
 const meta: Meta<typeof DialEditableItemName> = {
-  title: 'Components/EditableItemName',
+  title: 'FileManager/components/EditableItemName',
   component: DialEditableItemName,
-  tags: ['autodocs'],
   argTypes: {
     type: {
       control: 'radio',
