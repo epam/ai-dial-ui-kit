@@ -19,7 +19,6 @@ export const GRID_THEME_COLORS = {
   fontFamily: {
     googleFont: 'var(--theme-font, var(--font-inter))',
   },
-  headerColumnBorderHeight: '0',
   cellStyle: {
     textAlign: 'center',
   },
