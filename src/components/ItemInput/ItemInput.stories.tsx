@@ -3,7 +3,7 @@ import { DialItemInput, type DialItemInputProps } from './ItemInput';
 import { DialItemType } from '@/types/item';
 
 const meta: Meta<typeof DialItemInput> = {
-  title: 'Components/ItemInput',
+  title: 'FileManager/components/ItemInput',
   component: DialItemInput,
   tags: ['autodocs'],
   parameters: {

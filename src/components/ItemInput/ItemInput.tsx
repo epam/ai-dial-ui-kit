@@ -1,5 +1,5 @@
 import type { FC, ReactNode, Ref } from 'react';
-import { DialItemIcon } from '../ItemIcon/ItemIcon';
+import { DialItemIcon } from '@/components/ItemIcon/ItemIcon';
 import type { DialItemType } from '@/types/item';
 import { DialInput } from '@/components/Input/Input';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
@@ -24,6 +24,51 @@ export interface DialItemInputProps {
   onChange?: (value?: string) => void;
 }
 
+/**
+ * Combines a file/folder icon with an editable text input.
+ *
+ * Used for renaming or labeling file/folder entities within the File Manager.
+ * Displays:
+ * - The item icon (with optional loading/shared state)
+ * - An inline text input
+ * - A validation tooltip when `inputInvalid` is `true`
+ *
+ * @example
+ * ```tsx
+ * <DialItemInput
+ *   type={DialItemType.File}
+ *   name="report.pdf"
+ *   elementId="file-input-1"
+ *   shared
+ *   onChange={(value) => console.log('New name:', value)}
+ * />
+ *
+ * <DialItemInput
+ *   type={DialItemType.Folder}
+ *   name="Project A"
+ *   elementId="folder-input-2"
+ *   inputInvalid
+ *   inputInvalidMessage="Invalid name"
+ * />
+ * ```
+ *
+ * @param {Object} props
+ * @param {DialItemType} props.type - The type of item (file or folder).
+ * @param {string} props.name - Current name of the entity.
+ * @param {string} props.elementId - Unique ID for the input element.
+ * @param {boolean} [props.shared=false] - Whether the entity is shared.
+ * @param {boolean} [props.loading=false] - Whether the icon is loading.
+ * @param {number} [props.iconSize] - Optional size override for the icon.
+ * @param {number} [props.iconStroke] - Optional stroke width override for the icon.
+ * @param {string} [props.iconCssClass] - Optional CSS class for the icon.
+ * @param {string} [props.iconLabel] - Optional accessible label for the icon.
+ * @param {ReactNode} [props.iconIndicator] - Optional indicator to render over the icon.
+ * @param {boolean} [props.inputInvalid=false] - Marks the input as invalid.
+ * @param {string} [props.inputInvalidMessage] - Tooltip message shown when invalid.
+ * @param {ReactNode} [props.inputIconAfter] - Optional icon shown after the input (defaults to an error icon).
+ * @param {Ref<HTMLInputElement>} [props.inputRef] - Ref to access the underlying input element.
+ * @param {(value: string) => void} [props.onChange] - Callback fired when input value changes.
+ */
 export const DialItemInput: FC<DialItemInputProps> = ({
   name,
   type,
