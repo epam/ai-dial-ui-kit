@@ -288,11 +288,11 @@ export const Default: Story = {
             expandedPaths={expanded}
             loadingPaths={loading}
             selectedPath={selected}
-            editedPath={renaming}
+            renamedPath={renaming}
             onItemClick={handleItemClick}
-            onEditSave={handleRenameSave}
-            onEditCancel={handleRenameCancel}
-            onEditValidate={handleRenameValidation}
+            onRenameSave={handleRenameSave}
+            onRenameCancel={handleRenameCancel}
+            onRenameValidate={handleRenameValidation}
             getContextMenuItems={getMenu}
           />
         </div>
