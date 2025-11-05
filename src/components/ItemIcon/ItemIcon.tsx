@@ -18,6 +18,42 @@ export interface DialItemIconProps
   loading?: boolean;
 }
 
+/**
+ * Renders an icon representing either a file or folder entity in the Dial system.
+ *
+ * Displays:
+ * - A file icon based on its extension (via `DialFileIcon`)
+ * - A folder icon (via `IconFolder`)
+ * - A loading spinner if `loading` is true
+ * - A shared indicator if the entity is marked as shared
+ *
+ * @example
+ * ```tsx
+ * <DialItemIcon
+ *   name="document.pdf"
+ *   type={DialItemType.File}
+ *   shared
+ * />
+ *
+ * <DialItemIcon
+ *   name="My Folder"
+ *   type={DialItemType.Folder}
+ *   loading
+ * />
+ * ```
+ *
+ * @param {Object} props
+ * @param {string} props.name - The name of the file or folder (used to determine extension for files).
+ * @param {DialItemType} props.type - The type of the item (`file` or `folder`).
+ * @param {boolean} [props.shared=false] - Whether the item is shared.
+ * @param {boolean} [props.loading=false] - Whether to display the loading state.
+ * @param {number} [props.size] - Optional icon size override.
+ * @param {number} [props.stroke] - Optional icon stroke width override.
+ * @param {string} [props.cssClass] - Optional CSS class for styling.
+ * @param {boolean} [props.decorative] - Whether the icon is decorative (for accessibility).
+ * @param {string} [props.label] - Accessible label for screen readers.
+ * @param {ReactNode} [props.indicator] - Optional indicator to display over the icon.
+ */
 export const DialItemIcon: FC<DialItemIconProps> = ({
   name,
   type,

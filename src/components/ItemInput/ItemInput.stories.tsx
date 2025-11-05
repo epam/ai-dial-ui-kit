@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconFile, IconFolder } from '@tabler/icons-react';
 import { DialItemInput, type DialItemInputProps } from './ItemInput';
 import { DialItemType } from '@/types/item';
 
