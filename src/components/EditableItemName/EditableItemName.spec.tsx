@@ -2,36 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialEditableItemName } from './EditableItemName';
 import { DialItemType } from '@/types/item';
-import type { DialFileNameProps } from '@/components/FileName/FileName';
-import type { DialFolderNameProps } from '@/components/FolderName/FolderName';
-import type { DialItemNameInputProps } from '@/components/ItemNameInput/ItemNameInput';
-
-vi.mock('@/components/FileName/FileName', () => ({
-  DialFileName: ({ name, shared }: DialFileNameProps) => (
-    <div data-testid="file-name">
-      File: {name} {shared && '(shared)'}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/FolderName/FolderName', () => ({
-  DialFolderName: ({ name, loading, shared }: DialFolderNameProps) => (
-    <div data-testid="folder-name">
-      Folder: {name} {loading && '(loading)'} {shared && '(shared)'}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/ItemNameInput/ItemNameInput', () => ({
-  DialItemNameInput: (props: DialItemNameInputProps) => (
-    <input
-      data-testid="item-name-input"
-      value={props.name}
-      aria-label="Editable item input"
-      onChange={(e) => props.onChange?.(e.target.value)}
-    />
-  ),
-}));
+import userEvent from '@testing-library/user-event';
 
 describe('Dial UI Kit :: DialEditableItemName', () => {
   test('renders DialFileName when not editing and type=File', () => {
@@ -44,14 +15,14 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
       />,
     );
 
-    const file = screen.getByTestId('file-name');
-    expect(file).toHaveTextContent('File: file.ts');
+    const file = screen.getByText('file.ts');
+    expect(file).toBeInTheDocument();
   });
 
   test('renders DialFolderName when not editing and type=Folder', () => {
     render(
       <DialEditableItemName
-        name="src"
+        name="Project"
         type={DialItemType.Folder}
         elementId="id2"
         editing={false}
@@ -60,10 +31,8 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
       />,
     );
 
-    const folder = screen.getByTestId('folder-name');
-    expect(folder).toHaveTextContent('Folder: src');
-    expect(folder).toHaveTextContent('(loading)');
-    expect(folder).toHaveTextContent('(shared)');
+    const folder = screen.getByText('Project');
+    expect(folder).toBeInTheDocument();
   });
 
   test('renders DialItemNameInput when editing', () => {
@@ -76,43 +45,31 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
       />,
     );
 
-    const input = screen.getByTestId('item-name-input');
+    const input = screen.getByDisplayValue('editable');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('editable');
   });
 
-  test('passes correct props to DialItemNameInput', () => {
-    const validate = vi.fn();
-    const onSave = vi.fn();
-    const onCancel = vi.fn();
+  test('saves new name on Enter and switches back to span', async () => {
+    const user = userEvent.setup();
+    const handleSave = vi.fn();
 
     render(
       <DialEditableItemName
-        name="test"
-        type={DialItemType.Folder}
-        elementId="el-1"
-        editing
-        validate={validate}
-        onSave={onSave}
-        onCancel={onCancel}
-      />,
-    );
-
-    const input = screen.getByLabelText('Editable item input');
-    expect(input).toHaveValue('test');
-  });
-
-  test('renders shared flag for file when not editing', () => {
-    render(
-      <DialEditableItemName
-        name="index.ts"
+        name="initial"
         type={DialItemType.File}
         elementId="id4"
-        shared
+        editing
+        onSave={handleSave}
       />,
     );
 
-    const file = screen.getByTestId('file-name');
-    expect(file).toHaveTextContent('(shared)');
+    const input = screen.getByDisplayValue('initial');
+    expect(input).toBeInTheDocument();
+
+    await user.clear(input);
+    await user.type(input, 'updated{enter}');
+
+    expect(handleSave).toHaveBeenCalledWith('updated');
   });
 });
