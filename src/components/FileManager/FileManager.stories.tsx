@@ -207,6 +207,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               copy: 'Copy',
               cut: 'Cut',
               paste: 'Paste',
+              rename: 'Rename',
             },
           }}
           onCopyFiles={(files, destination) =>

@@ -4,6 +4,7 @@ import type {
   FC,
   FocusEvent,
   KeyboardEvent,
+  Ref,
   WheelEvent,
 } from 'react';
 
@@ -25,6 +26,7 @@ export interface DialInputProps
   tooltipText?: string;
   tooltipTriggerClassName?: string;
   hideTooltip?: boolean;
+  inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
 }
@@ -82,6 +84,7 @@ export const DialInput: FC<DialInputProps> = ({
   defaultValue,
   tooltipText,
   hideTooltip = false,
+  inputRef,
 }) => {
   const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
     (e.target as HTMLInputElement).blur();
@@ -154,6 +157,7 @@ export const DialInput: FC<DialInputProps> = ({
         triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
       >
         <input
+          ref={inputRef}
           type={type}
           autoComplete="off"
           id={elementId}

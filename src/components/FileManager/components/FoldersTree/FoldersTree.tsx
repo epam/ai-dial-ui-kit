@@ -6,24 +6,28 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger } from '@/types/dropdown';
-import { DialFolderName } from '@/components/FolderName/FolderName';
-import { DialFileName } from '@/components/FileName/FileName';
 import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { isHiddenDotFile } from '../../utils';
+import { DialEditableItemName } from '../../../EditableItemName/EditableItemName';
+import { DialItemType } from '@/types/item';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
   selectedPath?: string;
+  editedPath?: string;
   showFiles?: boolean;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
   onItemClick?: (item: DialFile) => void;
+  onEditSave?: (value: string) => void;
+  onEditCancel?: () => void;
+  onEditValidate?: (value: string, item: DialFile) => string | null;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
 }
@@ -114,9 +118,13 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
   emptyStateIcon,
+  areHiddenFilesVisible = false,
+  editedPath,
   onItemClick,
   getContextMenuItems,
-  areHiddenFilesVisible = false,
+  onEditSave,
+  onEditCancel,
+  onEditValidate,
 }) => {
   const [expandedItems, setExpandedItems] =
     useState<Set<string>>(expandedPaths);
@@ -155,8 +163,11 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       const isExpanded = expandedItems.has(path);
       const isSelected = selectedPath === path;
-
       const isLoading = loadingPaths.has(path);
+      const isEditing = editedPath === path;
+
+      const validateHandler =
+        onEditValidate && ((value: string) => onEditValidate(value, node));
 
       const selectedClass = isSelected
         ? 'bg-accent-primary-alpha border-l-2 border-l-accent-primary rounded'
@@ -176,22 +187,22 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
               <div
                 style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
                 className={mergeClasses(
-                  'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
+                  'py-1 gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
                   selectedClass,
                 )}
               >
+                {!isEditing && (
+                  <div
+                    className="absolute size-full left-0 top-0"
+                    onClick={() => handleFolderClick(node)}
+                  />
+                )}
                 <div
-                  className="absolute size-full left-0 top-0"
-                  onClick={() => handleFolderClick(node)}
-                />
-                <div
-                  className="flex flex-row truncate items-center w-fit"
-                  onClick={() => handleFolderClick(node)}
+                  className="flex flex-row truncate items-center w-fit h-6"
+                  onClick={() => !isEditing && handleFolderClick(node)}
                 >
-                  {!isFolder ? (
-                    <DialFileName name={name} />
-                  ) : (
-                    <>
+                  <>
+                    {isFolder && (
                       <IconCaretRightFilled
                         {...CARET_ICON_PROPS}
                         className={classNames(
@@ -200,12 +211,21 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                           !hasValidItems && 'text-transparent',
                         )}
                       />
-                      <DialFolderName name={name} loading={isLoading} />
-                    </>
-                  )}
+                    )}
+                    <DialEditableItemName
+                      elementId={`${path}-item`}
+                      name={name}
+                      type={isFolder ? DialItemType.Folder : DialItemType.File}
+                      loading={isLoading}
+                      editing={isEditing}
+                      onSave={onEditSave}
+                      onCancel={onEditCancel}
+                      validate={validateHandler}
+                    />
+                  </>
                 </div>
 
-                {menuItems.length > 0 && (
+                {menuItems.length > 0 && !isEditing && (
                   <div className="flex-1 flex justify-end">
                     <DialDropdown
                       placement="bottom-start"

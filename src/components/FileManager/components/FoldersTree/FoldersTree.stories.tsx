@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import { DialFoldersTree } from './FoldersTree';
 import type { DropdownItem } from '@/models/dropdown';
@@ -99,75 +99,83 @@ const mockFolders: DialFile[] = [
   },
 ];
 
-const getMenu = (node: DialFile): DropdownItem[] => [
-  {
-    key: 'copy',
-    label: 'Copy',
-    icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Copy', node.name);
+const getMenuFunction =
+  ({ onRename }: { onRename?: (path: string) => void }) =>
+  (node: DialFile): DropdownItem[] => [
+    {
+      key: 'copy',
+      label: 'Copy',
+      icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+        // eslint-disable-next-line no-console
+        console.log('Copy', node.name);
+      },
     },
-  },
-  {
-    key: 'cut',
-    label: 'Cut',
-    icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Cut', node.name);
+    {
+      key: 'cut',
+      label: 'Cut',
+      icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+        // eslint-disable-next-line no-console
+        console.log('Cut', node.name);
+      },
     },
-  },
-  {
-    key: 'paste',
-    label: 'Paste',
-    icon: <IconClipboardCopy {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Paste', node.name);
+    {
+      key: 'paste',
+      label: 'Paste',
+      icon: (
+        <IconClipboardCopy {...BASE_ICON_PROPS} className="text-secondary" />
+      ),
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+        // eslint-disable-next-line no-console
+        console.log('Paste', node.name);
+      },
     },
-  },
-  {
-    key: 'download',
-    label: 'Download',
-    icon: <IconDownload {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Download', node.name);
+    {
+      key: 'download',
+      label: 'Download',
+      icon: <IconDownload {...BASE_ICON_PROPS} className="text-secondary" />,
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+        // eslint-disable-next-line no-console
+        console.log('Download', node.name);
+      },
     },
-  },
-  {
-    key: 'delete',
-    label: 'Delete',
-    icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Delete', node.name);
+    {
+      key: 'delete',
+      label: 'Delete',
+      icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+        // eslint-disable-next-line no-console
+        console.log('Delete', node.name);
+      },
     },
-  },
-  {
-    key: 'rename',
-    label: 'Rename',
-    icon: <IconPencil {...BASE_ICON_PROPS} className="text-secondary" />,
-    onClick: (info) => {
-      info.domEvent.stopPropagation();
-      // eslint-disable-next-line no-console
-      console.log('Rename', node.name);
+    {
+      key: 'rename',
+      label: 'Rename',
+      icon: <IconPencil {...BASE_ICON_PROPS} className="text-secondary" />,
+      onClick: (info) => {
+        info.domEvent.stopPropagation();
+
+        if (onRename) {
+          onRename(node.path);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('Rename', node.name);
+        }
+      },
     },
-  },
-];
+  ];
 
 export const Default: Story = {
   args: {
     items: mockFolders,
     expandedPaths: new Set(),
     showFiles: false,
-    getContextMenuItems: getMenu,
   },
   render: (args) => {
     const Wrapper = () => {
@@ -175,6 +183,69 @@ export const Default: Story = {
       const [loading, setLoading] = useState(new Set<string>());
       const [loaded, setLoaded] = useState(new Set<string>());
       const [selected, setSelected] = useState<string | undefined>();
+      const [renaming, setRenaming] = useState<string | undefined>();
+      const [items, setItems] = useState<DialFile[]>(mockFolders);
+
+      const handleRenameStart = useCallback((path: string) => {
+        setRenaming(path);
+      }, []);
+
+      const updateItemNameByPath = useCallback(
+        (items: DialFile[], path: string, newName: string): DialFile[] => {
+          return items.map((item) => {
+            if (item.path === path) {
+              return { ...item, name: newName };
+            }
+            if (item.items) {
+              return {
+                ...item,
+                items: updateItemNameByPath(item.items, path, newName),
+              };
+            }
+            return item;
+          });
+        },
+        [],
+      );
+
+      const handleRenameSave = useCallback(
+        (value: string) => {
+          if (renaming) {
+            setItems((prevItems) =>
+              updateItemNameByPath(prevItems, renaming, value),
+            );
+            setRenaming(undefined);
+          }
+        },
+        [renaming, setItems, updateItemNameByPath],
+      );
+
+      const handleRenameCancel = useCallback(() => setRenaming(undefined), []);
+
+      const handleRenameValidation = useCallback(
+        (value: string, item: DialFile) => {
+          if (!value) {
+            return 'Item name should not be empty';
+          }
+
+          const isFolder = item.nodeType === DialFileNodeType.FOLDER;
+
+          if (isFolder) {
+            const isValid = /^[a-zA-Z0-9_]+$/.test(value);
+            if (!isValid) {
+              return 'Folder name contains special symbols. Only letters, numbers, and underscores are allowed.';
+            }
+            return null;
+          } else {
+            const fileNamePattern = /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)?$/;
+            if (!fileNamePattern.test(value)) {
+              return 'File name is invalid. Only one dot is allowed (for extension), and only letters, numbers, and underscores are allowed in the name and extension.';
+            }
+            return null;
+          }
+        },
+        [],
+      );
 
       const handleItemClick = (item: DialFile) => {
         const newExpanded = new Set(expanded);
@@ -204,14 +275,25 @@ export const Default: Story = {
         setExpanded(newExpanded);
       };
 
+      const getMenu = getMenuFunction({
+        onRename: handleRenameStart,
+      });
+
       return (
         <div className="w-[400px] h-[400px] border rounded p-4 bg-background">
           <DialFoldersTree
             {...args}
+            showFiles
+            items={items}
             expandedPaths={expanded}
             loadingPaths={loading}
             selectedPath={selected}
+            editedPath={renaming}
             onItemClick={handleItemClick}
+            onEditSave={handleRenameSave}
+            onEditCancel={handleRenameCancel}
+            onEditValidate={handleRenameValidation}
+            getContextMenuItems={getMenu}
           />
         </div>
       );
@@ -226,7 +308,7 @@ export const WithExpandedFolders: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Documents', '/root/Videos']),
     showFiles: false,
-    getContextMenuItems: getMenu,
+    getContextMenuItems: getMenuFunction({}),
   },
 };
 
@@ -235,7 +317,7 @@ export const WithFilesVisible: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Images']),
     showFiles: true,
-    getContextMenuItems: getMenu,
+    getContextMenuItems: getMenuFunction({}),
   },
 };
 
@@ -244,7 +326,7 @@ export const WithLoaders: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Images']),
     loadingPaths: new Set(['/root/Documents']),
-    getContextMenuItems: getMenu,
+    getContextMenuItems: getMenuFunction({}),
   },
 };
 
