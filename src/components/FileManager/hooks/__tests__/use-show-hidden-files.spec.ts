@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useShowHiddenFiles } from './use-show-hidden-files';
+import { useShowHiddenFiles } from '@/components/FileManager/hooks/use-show-hidden-files';
 
 describe('Dial UI Kit :: FileManager :: useShowHiddenFiles', () => {
   it('returns false by default', () => {

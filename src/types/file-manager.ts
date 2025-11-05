@@ -10,3 +10,9 @@ export enum DialFileManagerActions {
   Paste = 'paste',
   Rename = 'rename',
 }
+
+export interface DialCopiedItem {
+  sourceUrl: string;
+  destinationUrl: string;
+  overwrite?: boolean;
+}

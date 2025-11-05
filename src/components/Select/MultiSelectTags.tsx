@@ -1,7 +1,7 @@
 import { DialTag } from '@/components/Tag/Tag';
 import { DialIcon } from '@/components/Icon/Icon';
 import type { SelectOption } from '@/models/select';
-import type { MouseEvent } from 'react';
+import type { FC, MouseEvent } from 'react';
 
 export interface DialMultiSelectTagsProps {
   options: SelectOption[];
@@ -12,7 +12,7 @@ export interface DialMultiSelectTagsProps {
   ) => void;
 }
 
-export const DialMultiSelectTags: React.FC<DialMultiSelectTagsProps> = ({
+export const DialMultiSelectTags: FC<DialMultiSelectTagsProps> = ({
   options,
   selectedValues,
   handleRemoveTag,

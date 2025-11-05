@@ -1,24 +1,30 @@
+import { useTooltipContext } from '@/components/Tooltip/TooltipContext';
 import { useMergeRefs } from '@floating-ui/react';
 import {
+  type FC,
   type HTMLProps,
   type Ref,
   cloneElement,
-  forwardRef,
   isValidElement,
+  useRef,
 } from 'react';
-import { useTooltipContext } from '@/components/Tooltip/TooltipContext';
 
+interface TooltipTriggerProps extends HTMLProps<HTMLElement> {
+  asChild?: boolean;
+}
 /**
  * The trigger element for a tooltip that can be clicked or hovered
  *
  * @param children - The element that will trigger the tooltip
  * @param [asChild=false] - Whether to render as a child element instead of wrapping in a span
  */
-export const DialTooltipTrigger = forwardRef<
-  HTMLElement,
-  HTMLProps<HTMLElement> & { asChild?: boolean }
->(function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
+export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
+  children,
+  asChild = false,
+  ...props
+}) => {
   const context = useTooltipContext();
+  const propRef = useRef(null);
 
   const asValidChild = asChild && isValidElement(children);
 
@@ -60,4 +66,4 @@ export const DialTooltipTrigger = forwardRef<
       {children}
     </span>
   );
-});
+};

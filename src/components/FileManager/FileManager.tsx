@@ -1,5 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, useMemo } from 'react';
+import { type FC, type ReactNode, useMemo } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -34,12 +34,16 @@ import {
   type DialFileManagerBulkActionsToolbarProps,
 } from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import type { DropdownItem } from '@/models/dropdown';
-import { DialFileManagerActions } from '@/types/file-manager';
+import {
+  DialFileManagerActions,
+  type DialCopiedItem,
+} from '@/types/file-manager';
 import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 type GridRow = FileManagerGridRow;
 
@@ -48,7 +52,7 @@ export interface FileTreeOptions
   width?: number;
   title?: string;
   containerCssClass?: string;
-  additionalButtons?: React.ReactNode;
+  additionalButtons?: ReactNode;
   collapsed?: boolean;
   actionLabels?: {
     [DialFileManagerActions.Copy]?: string;
@@ -67,6 +71,8 @@ export interface GridOptions
   extends Omit<DialGridProps<GridRow>, 'rowData' | 'columnDefs'> {
   columnDefs?: ColDef<GridRow>[];
   filterable?: boolean;
+  dateLocale?: Intl.LocalesArgument;
+  dateOptions?: Intl.DateTimeFormatOptions;
 }
 
 export type ToolbarOptions = Omit<
@@ -94,8 +100,8 @@ export interface DialFileManagerProps {
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
-  onCopyFiles?: (files: string[], destination: string) => void;
-  onMoveToFiles?: (files: string[], destination: string) => void;
+  onCopyFiles?: (items: DialCopiedItem[]) => void;
+  onMoveToFiles?: (items: DialCopiedItem[]) => void;
 }
 
 /**
@@ -147,7 +153,7 @@ export interface DialFileManagerProps {
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
  * @param [toolbarOptions] - Options for the file manager toolbar
- * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag
+ * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag and date locale/options
  * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
  *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
@@ -214,6 +220,8 @@ export const DialFileManagerView: FC = () => {
   const {
     columnDefs: userColumnDefs,
     filterable = true,
+    dateLocale,
+    dateOptions,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -236,6 +244,12 @@ export const DialFileManagerView: FC = () => {
         headerName: 'Modified Date',
         width: 168,
         suppressSizeToFit: true,
+        cellRenderer: DialDateCellRenderer,
+        cellRendererParams: {
+          locale: dateLocale,
+          emptyPlaceholder: '—',
+          options: dateOptions,
+        },
       },
       {
         field: 'size',
@@ -244,7 +258,7 @@ export const DialFileManagerView: FC = () => {
         suppressSizeToFit: true,
       },
     ];
-  }, []);
+  }, [dateLocale, dateOptions]);
 
   const baseColumns = userColumnDefs ?? defaultColumns;
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {

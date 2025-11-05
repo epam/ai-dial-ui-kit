@@ -22,6 +22,9 @@ export { DialItemIcon } from './components/ItemIcon/ItemIcon';
 export { DialItemNameInput } from './components/ItemNameInput/ItemNameInput';
 export { DialEditableItemName } from './components/EditableItemName/EditableItemName';
 
+// Grid
+export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
+
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
 export { DialTab } from './components/Tab/Tab';
@@ -96,6 +99,7 @@ export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,
+  type DialCopiedItem,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';

@@ -163,7 +163,16 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
-          gridOptions={{ ...(args.gridOptions ?? {}), filterable: false }}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+            dateLocale: 'en-US',
+            dateOptions: {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+            },
+          }}
           toolbarOptions={{
             ...(args.toolbarOptions ?? {}),
             tabs: tabs,
@@ -210,18 +219,18 @@ const PopupComponent = (args: DialFileManagerProps) => {
               rename: 'Rename',
             },
           }}
-          onCopyFiles={(files, destination) =>
+          onCopyFiles={(items) =>
             alert(
-              `Copying files: ${files
-                .map((f) => f)
-                .join(', ')} to ${destination}`,
+              `Copying files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
             )
           }
-          onMoveToFiles={(files, destination) =>
+          onMoveToFiles={(items) =>
             alert(
-              `Moving files: ${files
-                .map((f) => f)
-                .join(', ')} to ${destination}`,
+              `Moving files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${items[0].destinationUrl}`,
             )
           }
         />

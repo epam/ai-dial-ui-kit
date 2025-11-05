@@ -35,11 +35,5 @@
     "declarationDir": "dist/types"
   },
   "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "storybook-static",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts"
-  ]
+  "exclude": ["node_modules", "dist", "storybook-static", "src/**/*.test.ts"]
 }
