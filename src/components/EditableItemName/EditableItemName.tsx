@@ -67,10 +67,10 @@ export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
   const { value, invalid, invalidMessage, onChange, inputRef } =
     useEditableItem({
       value: name,
-      validate,
-      onSave,
       isEditing: editing,
+      onValidate: validate,
       onCancel,
+      onSave,
     });
 
   if (!editing) {
