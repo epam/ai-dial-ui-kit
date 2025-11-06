@@ -1,3 +1,5 @@
+import type { DialFileNodeType } from '@/models/file';
+
 export enum DialFileManagerTabs {
   MyFiles = 'my_files',
   Shared = 'shared',
@@ -15,4 +17,5 @@ export interface DialCopiedItem {
   sourceUrl: string;
   destinationUrl: string;
   overwrite?: boolean;
+  nodeType: DialFileNodeType;
 }
