@@ -12,7 +12,14 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { createContext, useContext, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 const ARROW_HEIGHT = 7;
 const GAP = 2;
@@ -84,6 +91,20 @@ export const useTooltip = ({
   const role = useRole(data.context, { role: 'tooltip' });
 
   const interactions = useInteractions([hover, focus, dismiss, role]);
+
+  useEffect(() => {
+    if (!open) return;
+    const el = data.refs.reference.current;
+    if (!(el instanceof Element)) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) setOpen(false);
+      },
+      { root: null, threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [open, data.refs.reference, setOpen]);
 
   return useMemo(
     () => ({
