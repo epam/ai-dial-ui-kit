@@ -19,7 +19,13 @@ describe('Dial UI Kit :: DialTab', () => {
 
   test('applies disabled styles and disables click', () => {
     const onClick = vi.fn();
-    render(<DialTab tab={baseTab} active={false} disabled onClick={onClick} />);
+    render(
+      <DialTab
+        tab={{ ...baseTab, disabled: true }}
+        active={false}
+        onClick={onClick}
+      />,
+    );
     const btn = screen.getByRole('tab');
     expect(btn.className).toMatch(/pointer-events-none/);
     fireEvent.click(btn);
@@ -29,7 +35,11 @@ describe('Dial UI Kit :: DialTab', () => {
 
   test('shows exclamation icon if invalid', () => {
     const { container } = render(
-      <DialTab tab={baseTab} active={false} invalid onClick={vi.fn()} />,
+      <DialTab
+        tab={{ ...baseTab, invalid: true }}
+        active={false}
+        onClick={vi.fn()}
+      />,
     );
     expect(
       container.querySelector('.tabler-icon-exclamation-circle'),
@@ -117,7 +127,9 @@ describe('Dial UI Kit :: DialTab', () => {
   });
 
   test('disabled applies text-secondary and bg-layer-1 and removes active styles', () => {
-    render(<DialTab tab={baseTab} active disabled onClick={vi.fn()} />);
+    render(
+      <DialTab tab={{ ...baseTab, disabled: true }} active onClick={vi.fn()} />,
+    );
     const btn = screen.getByRole('tab');
     expect(btn.className).toMatch(/text-secondary/);
     expect(btn.className).toMatch(/bg-layer-1/);
@@ -128,7 +140,11 @@ describe('Dial UI Kit :: DialTab', () => {
 
   test('invalid state wraps icon with text-error class (via prop)', () => {
     const { container } = render(
-      <DialTab tab={baseTab} active={false} invalid onClick={vi.fn()} />,
+      <DialTab
+        tab={{ ...baseTab, invalid: true }}
+        active={false}
+        onClick={vi.fn()}
+      />,
     );
     expect(container.querySelector('.text-error')).toBeInTheDocument();
   });
