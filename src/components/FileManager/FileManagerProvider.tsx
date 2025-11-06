@@ -25,6 +25,7 @@ import {
   type FileManagerGridRow,
 } from './FileManagerContext';
 import type { DialFileManagerProps } from './FileManager';
+import { useItemRenaming } from './hooks/use-item-renaming';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -68,6 +69,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onTableFileClick,
   onCopyFiles,
   onMoveToFiles,
+  onRename,
+  onRenameSave,
+  onRenameCancel,
+  onRenameValidate,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
@@ -84,6 +89,19 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const { isTreeCollapsed, toggleTreeCollapse } = useCollapseTree(
     treeOptions?.collapsed ?? false,
   );
+
+  const {
+    renamedPath,
+    renameHandler,
+    renameSaveHandler,
+    renameCancelHandler,
+    renameValidateHandler,
+  } = useItemRenaming({
+    onRename,
+    onRenameSave,
+    onRenameCancel,
+    onRenameValidate,
+  });
 
   const [searchValue, setSearchValue] = useState<string>('');
   useEffect(() => {
@@ -223,6 +241,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCopy,
     onCut,
     onPaste,
+
+    renamedPath,
+    onRename: renameHandler,
+    onRenameSave: renameSaveHandler,
+    onRenameCancel: renameCancelHandler,
+    onRenameValidate: renameValidateHandler,
 
     handlePathChange,
     handleTreeItemClick,

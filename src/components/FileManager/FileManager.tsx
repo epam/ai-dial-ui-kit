@@ -38,7 +38,12 @@ import {
   DialFileManagerActions,
   type DialCopiedItem,
 } from '@/types/file-manager';
-import { IconClipboardCopy, IconCopy, IconCut } from '@tabler/icons-react';
+import {
+  IconClipboardCopy,
+  IconCopy,
+  IconCut,
+  IconPencilMinus,
+} from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
@@ -102,6 +107,11 @@ export interface DialFileManagerProps {
 
   onCopyFiles?: (items: DialCopiedItem[]) => void;
   onMoveToFiles?: (items: DialCopiedItem[]) => void;
+
+  onRename?: (itemPath: string) => void;
+  onRenameSave?: (value: string) => void;
+  onRenameCancel?: () => void;
+  onRenameValidate?: (value: string, item: DialFile) => string | null;
 }
 
 /**
@@ -207,6 +217,12 @@ export const DialFileManagerView: FC = () => {
     onCut,
     onPaste,
     clipboard,
+
+    renamedPath,
+    onRename,
+    onRenameSave,
+    onRenameCancel,
+    onRenameValidate,
   } = useFileManagerContext();
 
   const {
@@ -303,6 +319,16 @@ export const DialFileManagerView: FC = () => {
           onClick: () => onPaste(),
         });
       }
+      if (treeOptions.actionLabels[DialFileManagerActions.Rename]) {
+        items.push({
+          key: 'rename',
+          label: treeOptions.actionLabels[DialFileManagerActions.Rename],
+          icon: (
+            <IconPencilMinus {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onRename(file.path),
+        });
+      }
     }
     return items;
   };
@@ -370,6 +396,10 @@ export const DialFileManagerView: FC = () => {
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
+              renamedPath={renamedPath}
+              onRenameSave={onRenameSave}
+              onRenameCancel={onRenameCancel}
+              onRenameValidate={onRenameValidate}
             />
           </DialCollapsibleSidebar>
         </aside>
