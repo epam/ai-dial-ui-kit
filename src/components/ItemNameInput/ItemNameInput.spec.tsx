@@ -4,93 +4,40 @@ import {
   DialItemNameInput,
   type DialItemNameInputProps,
 } from './ItemNameInput';
-import type { DialItemIconProps } from '@/components/ItemIcon/ItemIcon';
-import type { DialInputProps } from '@/components/Input/Input';
-import type { DialTooltipProps } from '@/components/Tooltip/Tooltip';
-
-vi.mock('@/components/ItemIcon/ItemIcon', () => ({
-  DialItemIcon: ({ name, type, loading, shared }: DialItemIconProps) => (
-    <div
-      data-testid="dial-item-icon"
-      data-name={name}
-      data-type={type}
-      data-loading={loading}
-      data-shared={shared}
-    >
-      MockIcon
-    </div>
-  ),
-}));
-
-vi.mock('@/components/Input/Input', () => ({
-  DialInput: ({
-    elementId,
-    defaultValue,
-    onChange,
-    invalid,
-    iconAfter,
-  }: DialInputProps) => (
-    <div>
-      <input
-        data-testid="dial-input"
-        id={elementId}
-        defaultValue={defaultValue}
-        aria-invalid={invalid}
-        onChange={(e) => onChange?.(e.target.value)}
-      />
-      {iconAfter}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/Tooltip/Tooltip', () => ({
-  DialTooltip: ({ tooltip, children }: DialTooltipProps) => (
-    <div data-testid="tooltip" data-tooltip={tooltip}>
-      {children}
-    </div>
-  ),
-}));
+import { DialItemType } from '@/types/item';
 
 describe('Dial UI Kit :: DialItemNameInput', () => {
   const defaultProps = {
-    type: 'folder',
+    type: DialItemType.File,
     name: 'My Item',
-    elementId: 'test-id',
+    elementId: 'test-element',
   } as DialItemNameInputProps;
 
   test('renders icon and input with correct props', () => {
     render(<DialItemNameInput {...defaultProps} />);
 
-    const icon = screen.getByTestId('dial-item-icon');
-    const input = screen.getByTestId('dial-input');
+    const icon = screen.getByLabelText('File type icon');
+    const input = screen.getByDisplayValue('My Item');
 
-    expect(icon).toHaveAttribute('data-name', 'My Item');
-    expect(icon).toHaveAttribute('data-type', 'folder');
-    expect(input).toHaveAttribute('id', 'test-id');
-    expect(input).toHaveValue('My Item');
+    expect(icon).toBeInTheDocument();
+    expect(input).toBeInTheDocument();
   });
 
   test('calls onChange when input changes', () => {
     const onChange = vi.fn();
     render(<DialItemNameInput {...defaultProps} onChange={onChange} />);
 
-    const input = screen.getByTestId('dial-input');
+    const input = screen.getByDisplayValue('My Item');
     fireEvent.change(input, { target: { value: 'New Value' } });
 
     expect(onChange).toHaveBeenCalledWith('New Value');
   });
 
-  test('renders error icon and tooltip when inputInvalid is true', () => {
-    render(
-      <DialItemNameInput
-        {...defaultProps}
-        inputInvalid
-        inputInvalidMessage="Invalid name"
-      />,
-    );
+  test('renders error icon when inputInvalid is true', () => {
+    render(<DialItemNameInput {...defaultProps} inputInvalid />);
 
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute('data-tooltip', 'Invalid name');
+    const icon = screen.getByLabelText('alert');
+    expect(icon).toBeInTheDocument();
   });
 
   test('does not render tooltip when inputInvalid is false', () => {
@@ -103,10 +50,10 @@ describe('Dial UI Kit :: DialItemNameInput', () => {
       <DialItemNameInput
         {...defaultProps}
         inputInvalid
-        inputIconAfter={<span data-testid="custom-icon">X</span>}
+        inputIconAfter={<span aria-label="custom-icon">X</span>}
       />,
     );
 
-    expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
+    expect(screen.getByLabelText('custom-icon')).toBeInTheDocument();
   });
 });

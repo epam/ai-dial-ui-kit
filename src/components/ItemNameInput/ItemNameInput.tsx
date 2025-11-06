@@ -95,6 +95,7 @@ export const DialItemNameInput: FC<DialItemNameInputProps> = ({
           <IconAlertCircleFilled
             {...BASE_ICON_PROPS}
             className="text-icon-error"
+            aria-label="alert"
           />
         )}
       </DialTooltip>
