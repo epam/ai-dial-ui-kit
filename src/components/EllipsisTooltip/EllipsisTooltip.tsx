@@ -98,7 +98,6 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
     <DialTooltipContainer {...tooltipProps}>
       <DialTooltipTrigger
         asChild
-        ref={ref}
         onMouseEnter={scheduleCompute}
         onFocusCapture={scheduleCompute}
       >
@@ -110,6 +109,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
           aria-label={isTruncated ? fullText : undefined}
           onMouseEnter={scheduleCompute}
           onFocus={scheduleCompute}
+          ref={ref}
         >
           {text}
         </span>
