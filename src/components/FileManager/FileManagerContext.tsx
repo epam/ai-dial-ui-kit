@@ -57,7 +57,7 @@ export interface FileManagerContextValue {
   };
   onCopy: (files: string[]) => void;
   onCut: (files: string[]) => void;
-  onPaste: () => void;
+  onPaste: (overwrite?: boolean) => void;
 
   handlePathChange: (nextPath?: string) => void;
   handleTreeItemClick: (item: DialFile) => void;

@@ -1,10 +1,12 @@
-import type { DialFile } from '@/index';
+import type { DialFile } from '@/models/file';
+import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/types/file-manager';
 import { useCallback, useMemo, useState } from 'react';
 
 export interface UseFileClipboardOptions {
   getDestination: () => string;
   getDestinationFiles: () => DialFile[];
+  getSourceFiles: () => DialFile[];
   onCopyFiles?: (items: DialCopiedItem[]) => void;
   onMoveToFiles?: (items: DialCopiedItem[]) => void;
 }
@@ -44,20 +46,48 @@ const getFileName = (file: DialFile): string => {
   return file.name;
 };
 
+const findFileByPath = (
+  files: DialFile[],
+  path: string,
+): DialFile | undefined => {
+  for (const file of files) {
+    if (file.path === path) {
+      return file;
+    }
+    if (file.items) {
+      const found = findFileByPath(file.items, path);
+      if (found) return found;
+    }
+  }
+  return undefined;
+};
+
 const getCopiedItems = (
   destinationUrl: string,
   items: string[],
   destinationFiles: DialFile[],
+  sourceFiles: DialFile[],
+  overwrite = false,
 ): DialCopiedItem[] => {
   const existingNames = new Set(destinationFiles.map(getFileName));
+
   return items.map((path) => {
     const originalName = path.split('/').pop() ?? 'untitled';
-    const resolvedName = resolveNameConflict(originalName, existingNames);
-    existingNames.add(resolvedName);
+    const sourceFile = findFileByPath(sourceFiles, path);
+
+    const finalName = overwrite
+      ? originalName
+      : resolveNameConflict(originalName, existingNames);
+
+    if (!overwrite) {
+      existingNames.add(finalName);
+    }
 
     return {
       sourceUrl: path,
-      destinationUrl: `${destinationUrl}/${resolvedName}`,
+      destinationUrl: `${destinationUrl}/${finalName}`,
+      overwrite,
+      nodeType: sourceFile?.nodeType ?? DialFileNodeType.ITEM,
     };
   });
 };
@@ -65,6 +95,7 @@ const getCopiedItems = (
 export const useFileClipboard = ({
   getDestination,
   getDestinationFiles,
+  getSourceFiles,
   onCopyFiles,
   onMoveToFiles,
 }: UseFileClipboardOptions) => {
@@ -86,36 +117,45 @@ export const useFileClipboard = ({
     setCut(new Set());
   }, []);
 
-  const paste = useCallback(() => {
-    const destination = getDestination();
-    const destinationFiles = getDestinationFiles();
+  const paste = useCallback(
+    (overwrite = false) => {
+      const destination = getDestination();
+      const destinationFiles = getDestinationFiles();
+      const sourceFiles = getSourceFiles();
 
-    if (copied.size > 0) {
-      const resolvedItems = getCopiedItems(
-        destination,
-        Array.from(copied),
-        destinationFiles,
-      );
-      onCopyFiles?.(resolvedItems);
-      setCopied(new Set());
-    } else if (cut.size > 0) {
-      const resolvedItems = getCopiedItems(
-        destination,
-        Array.from(cut),
-        destinationFiles,
-      );
+      if (copied.size > 0) {
+        const resolvedItems = getCopiedItems(
+          destination,
+          Array.from(copied),
+          destinationFiles,
+          sourceFiles,
+          overwrite,
+        );
+        onCopyFiles?.(resolvedItems);
+        setCopied(new Set());
+      } else if (cut.size > 0) {
+        const resolvedItems = getCopiedItems(
+          destination,
+          Array.from(cut),
+          destinationFiles,
+          sourceFiles,
+          overwrite,
+        );
 
-      onMoveToFiles?.(resolvedItems);
-      setCut(new Set());
-    }
-  }, [
-    copied,
-    cut,
-    getDestination,
-    getDestinationFiles,
-    onCopyFiles,
-    onMoveToFiles,
-  ]);
+        onMoveToFiles?.(resolvedItems);
+        setCut(new Set());
+      }
+    },
+    [
+      copied,
+      cut,
+      getDestination,
+      getDestinationFiles,
+      getSourceFiles,
+      onCopyFiles,
+      onMoveToFiles,
+    ],
+  );
 
   const state = useMemo(
     () => ({
