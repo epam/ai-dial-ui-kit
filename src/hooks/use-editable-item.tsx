@@ -159,22 +159,26 @@ export function useEditableItem({
   useEffect(() => {
     if (!isEditing) return;
 
-    const handleOutside = (e: MouseEvent | TouchEvent) => {
-      const el = inputRef.current;
-      if (!el || el.contains(e.target as Node)) return;
+    const el = inputRef.current;
+    if (!el) return;
 
-      if (validate(value)) {
-        save();
-      } else {
-        el.focus();
+    const handleBlur = (e: FocusEvent) => {
+      const nextTarget = e.relatedTarget as Node | null;
+      const stillInside = nextTarget && el.contains(nextTarget);
+
+      if (!stillInside) {
+        if (validate(value)) {
+          save();
+        } else {
+          el.focus();
+        }
       }
     };
 
-    document.addEventListener('mousedown', handleOutside);
-    document.addEventListener('touchstart', handleOutside);
+    el.addEventListener('blur', handleBlur);
+
     return () => {
-      document.removeEventListener('mousedown', handleOutside);
-      document.removeEventListener('touchstart', handleOutside);
+      el.removeEventListener('blur', handleBlur);
     };
   }, [isEditing, value, validate, save]);
 
