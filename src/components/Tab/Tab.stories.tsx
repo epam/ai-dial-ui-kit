@@ -61,7 +61,7 @@ export const Inactive: Story = {
 
 export const Disabled: Story = {
   args: {
-    tab: { id: 'settings', name: 'Settings', disabled: true},
+    tab: { id: 'settings', name: 'Settings', disabled: true },
     active: false,
     horizontal: true,
     onClick: () => null,
