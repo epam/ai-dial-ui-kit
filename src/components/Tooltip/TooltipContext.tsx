@@ -94,16 +94,22 @@ export const useTooltip = ({
 
   useEffect(() => {
     if (!open) return;
-    const el = data.refs.reference.current;
-    if (!(el instanceof Element)) return;
-    const io = new IntersectionObserver(
+    const element = data.refs.reference.current;
+
+    if (!(element instanceof Element)) return;
+
+    const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) setOpen(false);
+        if (!entry.isIntersecting) {
+          setOpen(false);
+        }
       },
       { root: null, threshold: 0 },
     );
-    io.observe(el);
-    return () => io.disconnect();
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
   }, [open, data.refs.reference, setOpen]);
 
   return useMemo(
