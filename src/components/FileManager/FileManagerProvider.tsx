@@ -35,7 +35,7 @@ const formatBytes = (bytes?: number): string => {
   const MB = KB * 1024;
   if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
   if (bytes >= KB) return `${(bytes / KB).toFixed(0)} KB`;
-  return `${bytes} B`;
+  return `${bytes} bytes`;
 };
 
 export interface FileManagerProviderProps
