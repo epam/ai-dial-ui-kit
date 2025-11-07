@@ -75,9 +75,18 @@ export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
 
   if (!editing) {
     if (type === DialItemType.Folder) {
-      return <DialFolderName name={name} loading={loading} shared={shared} />;
+      return (
+        <DialFolderName
+          name={name}
+          loading={loading}
+          shared={shared}
+          cssClass="max-w-[428px] truncate"
+        />
+      );
     }
-    return <DialFileName name={name} shared={shared} />;
+    return (
+      <DialFileName name={name} shared={shared} cssClass="max-w-[428px]" />
+    );
   }
 
   return (

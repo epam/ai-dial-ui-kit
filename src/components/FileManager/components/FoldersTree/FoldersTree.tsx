@@ -207,12 +207,12 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
               >
                 {!isRenaming && (
                   <div
-                    className="absolute size-full left-0 top-0"
+                    className="absolute size-full left-0 top-0 z-0"
                     onClick={() => handleFolderClick(node)}
                   />
                 )}
                 <div
-                  className="flex flex-row truncate items-center w-fit h-6"
+                  className="relative flex flex-row truncate items-center w-fit h-6"
                   onClick={() => !isRenaming && handleFolderClick(node)}
                 >
                   <>
