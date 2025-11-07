@@ -27,14 +27,6 @@ const meta: Meta<typeof DialTab> = {
       control: 'boolean',
       description: 'Marks the tab as active.',
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the tab so it is non-interactive.',
-    },
-    invalid: {
-      control: 'boolean',
-      description: 'Marks the tab as invalid, showing an error icon.',
-    },
     horizontal: {
       control: 'boolean',
       description: 'Determines horizontal vs vertical orientation.',
@@ -69,9 +61,8 @@ export const Inactive: Story = {
 
 export const Disabled: Story = {
   args: {
-    tab: { id: 'settings', name: 'Settings' },
+    tab: { id: 'settings', name: 'Settings', disabled: true },
     active: false,
-    disabled: true,
     horizontal: true,
     onClick: () => null,
   },
@@ -79,9 +70,8 @@ export const Disabled: Story = {
 
 export const Invalid: Story = {
   args: {
-    tab: { id: 'analytics', name: 'Analytics' },
+    tab: { id: 'analytics', name: 'Analytics', invalid: true },
     active: false,
-    invalid: true,
     horizontal: true,
     onClick: () => null,
   },

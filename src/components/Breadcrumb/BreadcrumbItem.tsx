@@ -7,6 +7,8 @@ import {
   breadcrumbCurrentClasses,
   breadcrumbSeparatorClasses,
   defaultSeparator,
+  breadcrumbItemVisibleClasses,
+  breadcrumbItemLastClasses,
 } from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
@@ -33,27 +35,33 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   iconBefore,
   titleCssClass,
 }) => {
-  const containerClasses = mergeClasses(breadcrumbItemBaseClasses, cssClass);
+  const containerClasses = mergeClasses(
+    breadcrumbItemBaseClasses,
+    isLast ? breadcrumbItemLastClasses : breadcrumbItemVisibleClasses,
+    cssClass,
+  );
   const interactive = (!!href || !!onClick) && !isLast && !disabled;
 
   const contentClassNames = interactive
-    ? mergeClasses(
-        breadcrumbLinkBaseClasses,
-        breadcrumbLinkInteractiveClasses,
-        titleCssClass,
-      )
+    ? mergeClasses(breadcrumbLinkBaseClasses, breadcrumbLinkInteractiveClasses)
     : mergeClasses(
         breadcrumbLinkBaseClasses,
         breadcrumbCurrentClasses,
         disabled ? 'pointer-events-none opacity-75' : '',
-        titleCssClass,
       );
 
   const Content =
     typeof title === 'string' ? (
-      <DialEllipsisTooltip cssClass={contentClassNames} text={title} />
+      <DialEllipsisTooltip cssClass={titleCssClass} text={title} />
     ) : (
-      title
+      <span
+        className={mergeClasses(
+          'flex-1 min-w-0 max-w-full truncate',
+          titleCssClass,
+        )}
+      >
+        {title}
+      </span>
     );
 
   return (
