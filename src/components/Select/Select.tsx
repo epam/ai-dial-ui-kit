@@ -73,7 +73,7 @@ export interface DialSelectProps {
  *
  * Search:
  * - `searchable`: shows a plain input in the overlay header that filters options.
- * - `inlineSearch` (new, single mode only): the trigger renders a plain input; typing filters options;
+ * - `inlineSearch` (single mode only): the trigger renders a plain input; typing filters options;
  *   when closed, the input shows the selected label.
  *
  * @example
@@ -89,7 +89,7 @@ export interface DialSelectProps {
  * @param [size=SelectSize.Md] - Size of the control.
  * @param [variant=SelectVariant.Primary] - Visual variant.
  * @param [value] - Controlled selected value(s).
- * @param [prefix] - Prefix for selected value (single).
+ * @param [prefix] - Prefix for selected value(s).
  * @param [defaultValue] - Uncontrolled initial selected value(s).
  * @param [placeholder="Select..."] - Placeholder text when no selection is made.
  * @param [searchable=false] - Show a search field in the overlay header.
