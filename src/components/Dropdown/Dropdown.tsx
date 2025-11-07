@@ -293,7 +293,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   }, [disabled, isOpen, setOpen]);
 
   const handleItemClick = useCallback(
-    (item: DropdownItem) => (e: MouseEvent<HTMLButtonElement>) => {
+    (item: DropdownItem) => (e: MouseEvent) => {
       if (item.disabled) return;
       item.onClick?.({ key: item.key, domEvent: e });
       menu?.onClick?.({ key: item.key, domEvent: e });
