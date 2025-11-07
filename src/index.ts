@@ -98,9 +98,11 @@ export {
   type DialCopiedItem,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
+export { DialItemType } from './types/item';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
+export { useEditableItem } from './hooks/use-editable-item';
 
 // Context and Provider
 export { FileManagerProvider } from './components/FileManager/FileManagerProvider';

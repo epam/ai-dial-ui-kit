@@ -450,6 +450,27 @@ export const itemsMock: DialFile[] = [
           },
         ],
       },
+      {
+        id: 'long-f1',
+        name: 'This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
+        path: '/All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-01',
+        items: [
+          {
+            id: 'long-f1-notes',
+            name: 'This is a very long file name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI.txt',
+            path: '/All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI/This is a very long file name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI.txt',
+            nodeType: DialFileNodeType.ITEM,
+            resourceType: DialFileResourceType.FILE,
+            extension: 'txt',
+            contentType: 'text/plain',
+            folderId: 'f1',
+            updatedAt: '2025-01-02',
+          },
+        ],
+      },
 
       // ─────────── Very deep nested branches
       buildDeepBranch({ id: 'root', path: '/All files' }, 'Deep Nest', 14),

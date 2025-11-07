@@ -6,24 +6,28 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger } from '@/types/dropdown';
-import { DialFolderName } from '@/components/FolderName/FolderName';
-import { DialFileName } from '@/components/FileName/FileName';
 import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { isHiddenDotFile } from '../../utils';
+import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
+import { DialItemType } from '@/types/item';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
   selectedPath?: string;
+  renamedPath?: string;
   showFiles?: boolean;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
   onItemClick?: (item: DialFile) => void;
+  onRenameSave?: (value: string) => void;
+  onRenameCancel?: () => void;
+  onRenameValidate?: (value: string, item: DialFile) => string | null;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
 }
@@ -36,6 +40,7 @@ export interface DialFoldersTreeProps {
  * - Expandable and collapsible items
  * - Optional file visibility
  * - Loading state indicators for specific paths
+ * - Inline renaming support for folders or files
  * - Multi-item selection highlighting
  * - Context menu integration via `DialDropdown`
  * - Recursive rendering with indentation and icons
@@ -63,13 +68,21 @@ export interface DialFoldersTreeProps {
  *
  * // With expanded and selected items
  * const expandedPaths = new Set(['/documents']);
- * const selectedPaths = new Set(['/documents/file.txt']);
  *
  * <DialFoldersTree
  *   items={items}
  *   expandedPaths={expandedPaths}
- *   selectedPaths={selectedPaths}
+ *   selectedPath="/documents/file.txt"
  *   onItemClick={(item) => console.log('Clicked:', item.path)}
+ * />
+ *
+ * // With inline renaming and validation
+ * <DialFoldersTree
+ *   items={items}
+ *   renamedPath="/documents"
+ *   onRenameValidate={(value) => (value.trim() ? null : 'Name cannot be empty')}
+ *   onRenameSave={(newValue) => console.log('Saved new name:', newValue)}
+ *   onRenameCancel={() => console.log('Edit cancelled')}
  * />
  *
  * // With custom empty state and context menu
@@ -91,17 +104,22 @@ export interface DialFoldersTreeProps {
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
  * @param [selectedPath] - Path representing the currently selected folder or file.
+ * @param [renamedPath] - Path of the folder or file currently being edited.
  * @param [showFiles=false] - Whether to show files in addition to folders.
  * @param [emptyStateTitle='No Folders'] - Title text displayed when there are no items.
  * @param [emptyStateDescription] - Optional description text for the empty state.
  * @param [emptyStateIcon] - Optional icon to display in the empty state.
  * @param [onItemClick] - Callback fired when a folder or file is clicked (receives the corresponding `DialFile` node).
+ * @param [onRenameSave] - Callback fired when editing is confirmed with a valid name (receives the new name).
+ * @param [onRenameCancel] - Callback fired when editing is cancelled.
+ * @param [onRenameValidate] - Function to validate the new name during editing. Should return an error string or `null` if valid.
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
  * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
  *
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
- * - The `expandedPaths`, `loadingPaths`, and `selectedPaths` props are externally controlled; the component itself does not manage them internally.
+ * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
+ * - Inline renaming is fully customizable using `onRenameSave`, `onRenameCancel`, and `onRenameValidate`.
  * - Context menus can be attached to both folders and files using `getContextMenuItems`.
  * - Use `showFiles={false}` to render only folders for a simplified tree.
  */
@@ -114,9 +132,13 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
   emptyStateIcon,
+  areHiddenFilesVisible = false,
+  renamedPath,
   onItemClick,
   getContextMenuItems,
-  areHiddenFilesVisible = false,
+  onRenameSave,
+  onRenameCancel,
+  onRenameValidate,
 }) => {
   const [expandedItems, setExpandedItems] =
     useState<Set<string>>(expandedPaths);
@@ -155,8 +177,11 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       const isExpanded = expandedItems.has(path);
       const isSelected = selectedPath === path;
-
       const isLoading = loadingPaths.has(path);
+      const isRenaming = renamedPath === path;
+
+      const validateHandler =
+        onRenameValidate && ((value: string) => onRenameValidate(value, node));
 
       const selectedClass = isSelected
         ? 'bg-accent-primary-alpha border-l-2 border-l-accent-primary rounded'
@@ -176,22 +201,22 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
               <div
                 style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
                 className={mergeClasses(
-                  'py-[6px] pr-[6px] gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
+                  'py-1 gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group w-full mb-[2px] relative',
                   selectedClass,
                 )}
               >
+                {!isRenaming && (
+                  <div
+                    className="absolute size-full left-0 top-0 z-0"
+                    onClick={() => handleFolderClick(node)}
+                  />
+                )}
                 <div
-                  className="absolute size-full left-0 top-0"
-                  onClick={() => handleFolderClick(node)}
-                />
-                <div
-                  className="flex flex-row truncate items-center w-fit"
-                  onClick={() => handleFolderClick(node)}
+                  className="relative flex flex-row truncate items-center w-fit h-6"
+                  onClick={() => !isRenaming && handleFolderClick(node)}
                 >
-                  {!isFolder ? (
-                    <DialFileName name={name} />
-                  ) : (
-                    <>
+                  <>
+                    {isFolder && (
                       <IconCaretRightFilled
                         {...CARET_ICON_PROPS}
                         className={classNames(
@@ -200,12 +225,21 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                           !hasValidItems && 'text-transparent',
                         )}
                       />
-                      <DialFolderName name={name} loading={isLoading} />
-                    </>
-                  )}
+                    )}
+                    <DialFileManagerItemName
+                      elementId={`${path}-tree-item`}
+                      name={name}
+                      type={isFolder ? DialItemType.Folder : DialItemType.File}
+                      loading={isLoading}
+                      editing={isRenaming}
+                      onSave={onRenameSave}
+                      onCancel={onRenameCancel}
+                      validate={validateHandler}
+                    />
+                  </>
                 </div>
 
-                {menuItems.length > 0 && (
+                {menuItems.length > 0 && !isRenaming && (
                   <div className="flex-1 flex justify-end">
                     <DialDropdown
                       placement="bottom-start"

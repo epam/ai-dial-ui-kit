@@ -60,6 +60,12 @@ export interface FileManagerContextValue {
   onCut: (files: string[]) => void;
   onPaste: (overwrite?: boolean) => void;
 
+  renamedPath?: string;
+  onRename: (file: string) => void;
+  onRenameSave: (value: string) => void;
+  onRenameCancel: () => void;
+  onRenameValidate: (value: string, item: DialFile) => string | null;
+
   handlePathChange: (nextPath?: string) => void;
   handleTreeItemClick: (item: DialFile) => void;
   handleBreadcrumbItemClick: (href?: string) => void;

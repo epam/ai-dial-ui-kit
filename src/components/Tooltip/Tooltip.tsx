@@ -6,7 +6,7 @@ import type { DialTooltipContainerOptions } from '@/components/Tooltip/TooltipCo
 import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
 import classNames from 'classnames';
 
-export interface Props extends DialTooltipContainerOptions {
+export interface DialTooltipProps extends DialTooltipContainerOptions {
   hideTooltip?: boolean;
   tooltip: ReactNode;
   children: ReactNode;
@@ -35,7 +35,7 @@ export interface Props extends DialTooltipContainerOptions {
  * @param [open] - Controlled open state for the tooltip
  * @param [onOpenChange] - Callback fired when the tooltip open state changes
  */
-export const DialTooltip: FC<Props> = ({
+export const DialTooltip: FC<DialTooltipProps> = ({
   hideTooltip,
   tooltip,
   children,

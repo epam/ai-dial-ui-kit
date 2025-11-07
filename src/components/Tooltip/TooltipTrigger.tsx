@@ -25,6 +25,9 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
 }) => {
   const context = useTooltipContext();
   const propRef = useRef(null);
+
+  const asValidChild = asChild && isValidElement(children);
+
   const isRefInChildren =
     children &&
     typeof children === 'object' &&
@@ -32,13 +35,18 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
     children.ref !== undefined;
 
   const childrenRef = isRefInChildren
-    ? (children.ref as Ref<unknown>)
+    ? (children.ref as Ref<Element>)
     : undefined;
 
-  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+  const refsToMerge: Ref<Element>[] = [context.refs.setReference, propRef];
+  if (asValidChild && childrenRef) {
+    refsToMerge.push(childrenRef);
+  }
+
+  const ref = useMergeRefs(refsToMerge);
 
   // `asChild` allows the user to pass any element as the anchor
-  if (asChild && isValidElement(children)) {
+  if (asValidChild) {
     return cloneElement(
       children,
       context.getReferenceProps({

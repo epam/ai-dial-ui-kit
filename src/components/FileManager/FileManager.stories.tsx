@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   DialFileManager,
   DialFileManagerView,
@@ -11,6 +11,7 @@ import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { ButtonVariant } from '@/types/button';
 import { DialButton } from '@/components/Button/Button';
 import { DialPopup } from '@/components/Popup/Popup';
+import { DialFileNodeType, type DialFile } from '@/models/file';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -149,6 +150,70 @@ const PopupComponent = (args: DialFileManagerProps) => {
     organization: 'Organization',
   });
 
+  const [items, setItems] = useState<DialFile[]>(itemsMock);
+  const [renaming, setRenaming] = useState<string | undefined>();
+
+  const updateItemNameByPath = useCallback(
+    (items: DialFile[], path: string, newName: string): DialFile[] => {
+      return items.map((item) => {
+        if (item.path === path) {
+          return { ...item, name: newName };
+        }
+        if (item.items) {
+          return {
+            ...item,
+            items: updateItemNameByPath(item.items, path, newName),
+          };
+        }
+        return item;
+      });
+    },
+    [],
+  );
+
+  const handleRename = useCallback((path: string) => {
+    setRenaming(path);
+  }, []);
+
+  const handleRenameSave = useCallback(
+    (value: string) => {
+      if (renaming) {
+        setItems((prevItems) =>
+          updateItemNameByPath(prevItems, renaming, value),
+        );
+        setRenaming(undefined);
+      }
+    },
+    [renaming, setItems, updateItemNameByPath],
+  );
+
+  const handleRenameCancel = useCallback(() => setRenaming(undefined), []);
+
+  const handleRenameValidation = useCallback(
+    (value: string, item: DialFile) => {
+      if (!value) {
+        return 'Item name should not be empty';
+      }
+
+      const isFolder = item.nodeType === DialFileNodeType.FOLDER;
+
+      if (isFolder) {
+        const isValid = /^[a-zA-Z0-9_]+$/.test(value);
+        if (!isValid) {
+          return 'Folder name contains special symbols. Only letters, numbers, and underscores are allowed.';
+        }
+        return null;
+      } else {
+        const fileNamePattern = /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)?$/;
+        if (!fileNamePattern.test(value)) {
+          return 'File name is invalid. Only one dot is allowed (for extension), and only letters, numbers, and underscores are allowed in the name and extension.';
+        }
+        return null;
+      }
+    },
+    [],
+  );
+
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
       <DialButton
@@ -163,6 +228,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
+          items={items}
           gridOptions={{
             ...(args.gridOptions ?? {}),
             filterable: false,
@@ -216,6 +282,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               copy: 'Copy',
               cut: 'Cut',
               paste: 'Paste',
+              rename: 'Rename',
             },
           }}
           onCopyFiles={(items) =>
@@ -232,6 +299,10 @@ const PopupComponent = (args: DialFileManagerProps) => {
                 .join(', ')} to ${items[0].destinationUrl}`,
             )
           }
+          onRename={handleRename}
+          onRenameSave={handleRenameSave}
+          onRenameCancel={handleRenameCancel}
+          onRenameValidate={handleRenameValidation}
         />
       </DialPopup>
     </div>
