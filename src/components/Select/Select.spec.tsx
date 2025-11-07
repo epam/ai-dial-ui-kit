@@ -122,4 +122,72 @@ describe('Dial UI Kit :: DialSelect', () => {
       'true',
     );
   });
+
+  test('inlineSearch: mouseDown does not toggle, click opens and focuses input', async () => {
+    renderSelect({ inlineSearch: true });
+
+    const trigger =
+      screen
+        .getAllByRole('button')
+        .find((b) => b.getAttribute('aria-haspopup') === 'listbox') ??
+      screen.getByRole('button');
+
+    fireEvent.mouseDown(trigger);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    const inlineInput = screen.getByPlaceholderText('Select...');
+    await vi.waitFor(() => expect(inlineInput).toHaveFocus());
+  });
+
+  test('inlineSearch: typing in inline input filters options', () => {
+    renderSelect({ inlineSearch: true });
+
+    const trigger =
+      screen
+        .getAllByRole('button')
+        .find((b) => b.getAttribute('aria-haspopup') === 'listbox') ??
+      screen.getByRole('button');
+
+    fireEvent.click(trigger);
+    const inlineInput = screen.getByPlaceholderText('Select...');
+    fireEvent.change(inlineInput, { target: { value: 'Option 2' } });
+
+    expect(
+      screen.getByRole('option', { name: 'Option 2' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('option', { name: 'Option 1' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('option', { name: 'Disabled option' }),
+    ).not.toBeInTheDocument();
+  });
+
+  test('inlineSearch: clear button clears selection and keeps dropdown open', () => {
+    renderSelect({ inlineSearch: true, defaultValue: 'opt-1' });
+
+    const trigger =
+      screen
+        .getAllByRole('button')
+        .find((b) => b.getAttribute('aria-haspopup') === 'listbox') ??
+      screen.getByRole('button');
+
+    fireEvent.click(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    const clearBtn = screen.getByRole('button', { name: 'Clear selection' });
+    fireEvent.click(clearBtn);
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    expect(trigger).not.toHaveTextContent('Option 1');
+
+    const inlineInput = screen.getByPlaceholderText('Select...');
+    expect((inlineInput as HTMLInputElement).value).toBe('');
+  });
 });

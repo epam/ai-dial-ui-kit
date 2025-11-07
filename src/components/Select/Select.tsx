@@ -9,6 +9,7 @@ import {
   useId,
   useMemo,
   useState,
+  useRef,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
@@ -57,6 +58,7 @@ export interface DialSelectProps {
   footer?: ReactNode | (() => ReactNode);
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
+  inlineSearch?: boolean;
 }
 
 /**
@@ -67,37 +69,44 @@ export interface DialSelectProps {
  * - In the list, the selected option is indicated by a LEFT border and tinted background
  *   (no check icon).
  *
+ * Multiple mode uses checkboxes (including Select All with indeterminate state).
+ *
+ * Search:
+ * - `searchable`: shows a plain input in the overlay header that filters options.
+ * - `inlineSearch` (single mode only): the trigger renders a plain input; typing filters options;
+ *   when closed, the input shows the selected label.
+ *
  * @example
  * ```tsx
- * <DialSelect
- *   options={[
- *     { value: 'option-1', label: 'Option 1' },
- *     { value: 'option-2', label: 'Option 2' },
- *   ]}
- *   multiple
- * />
+ * <DialSelect options={[{ value: 'option-1', label: 'Option 1' }]} />
+ * <DialSelect searchable options={[{ value: 'a', label: 'Alpha' }, { value: 'b', label: 'Beta' }]} />
+ * <DialSelect multiple selectAll options={[{ value: '1', label: 'One' }, { value: '2', label: 'Two' }]} />
+ * <DialSelect inlineSearch options={[{ value: 'r', label: 'Relax-Name' }, { value: 'rep2', label: 'rep2' }]} />
  * ```
- *
- * Multiple mode uses checkboxes (including Select All with indeterminate state).
  *
  * @param options - Array of options to select from.
  * @param [multiple] - Whether multiple selections are allowed.
+ * @param [size=SelectSize.Md] - Size of the control.
+ * @param [variant=SelectVariant.Primary] - Visual variant.
  * @param [value] - Controlled selected value(s).
  * @param [prefix] - Prefix for selected value(s).
  * @param [defaultValue] - Uncontrolled initial selected value(s).
- * @param [placeholder] - Placeholder text when no selection is made.
- * @param [searchable] - Whether to show a search input to filter options.
- * @param [searchPlaceholder] - Search Placeholder text shown when search input is empty
- * @param [selectAll] - Whether to show a "Select All" checkbox in multiple mode.
- * @param [selectAllLabel] - Label for the "Select All" checkbox.
- * @param [emptyStateTitle] - Title text when there are no options to display.
- * @param [emptyStateDescription] - Optional description text when there are no options.
- * @param [emptyStateIcon] - Optional icon to display when there are no options.
- * @param [disabled] - Whether the select is disabled.
- * @param [cssClass] - Additional CSS classes to apply to the select trigger.
- * @param [closable] - Whether to show a close button in the dropdown header.
- * @param [onClose] - Callback when the dropdown is closed via the close button.
- * @param [onChange] - Callback when the selection changes.
+ * @param [placeholder="Select..."] - Placeholder text when no selection is made.
+ * @param [searchable=false] - Show a search field in the overlay header.
+ * @param [searchPlaceholder] - Placeholder for the search input (overlay/inline).
+ * @param [selectAll=false] - Show a "Select All" checkbox in multiple mode.
+ * @param [selectAllLabel="Select all"] - Label for the "Select All" checkbox.
+ * @param [emptyStateTitle="No options available"] - Title text when there are no options.
+ * @param [emptyStateDescription] - Description text when there are no options.
+ * @param [emptyStateIcon] - Icon to display when there are no options.
+ * @param [disabled=false] - Disable the control.
+ * @param [cssClass] - Additional CSS classes for the trigger.
+ * @param [closable=false] - Show a close button in the dropdown header.
+ * @param [header] - Custom node/function rendered above the options.
+ * @param [footer] - Custom node/function rendered below the options.
+ * @param [onClose] - Called when the dropdown close button is clicked.
+ * @param [onChange] - Called when the selection changes.
+ * @param [inlineSearch=false] - Render a plain input inside trigger (single mode only).
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -122,10 +131,12 @@ export const DialSelect: FC<DialSelectProps> = ({
   footer,
   onClose,
   onChange,
+  inlineSearch = false,
 }) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const listId = useId();
+  const inlineSearchInputRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = useState<
@@ -220,6 +231,18 @@ export const DialSelect: FC<DialSelectProps> = ({
 
   const hasSelection = selectedValues.length > 0;
 
+  useEffect(() => {
+    if (open && inlineSearch && !multiple && !disabled) {
+      requestAnimationFrame(() => {
+        const el = inlineSearchInputRef.current;
+        if (!el) return;
+        el.focus();
+        const len = el.value?.length ?? 0;
+        el.setSelectionRange?.(len, len);
+      });
+    }
+  }, [open, inlineSearch, multiple, disabled]);
+
   const singleSelectedValue =
     !multiple && hasSelection ? selectedValues[0] : undefined;
 
@@ -277,6 +300,8 @@ export const DialSelect: FC<DialSelectProps> = ({
     renderTags,
     singleSelectedOption,
   ]);
+
+  const inlineInputValue = open ? query : (singleSelectedOption?.label ?? '');
 
   return (
     <DialDropdown
@@ -349,6 +374,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                   return (
                     <div
                       key={opt.value}
+                      role="option"
+                      aria-selected={selected}
+                      aria-disabled={!!opt.disabled}
                       className={classNames(
                         selectOptionBaseClasses,
                         selected && selectOptionSelectedClasses,
@@ -429,11 +457,56 @@ export const DialSelect: FC<DialSelectProps> = ({
           variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
           cssClass,
         )}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onMouseDown={(e) => {
+          if (disabled) return;
+          if (inlineSearch && !multiple) {
+            e.preventDefault();
+          }
+        }}
+        onClick={() => {
+          if (disabled) return;
+          setOpen((v) => !v);
+
+          if (inlineSearch && !multiple) {
+            inlineSearchInputRef.current?.focus();
+          }
+        }}
       >
-        <div className="flex min-w-0 items-center gap-2 text-primary">
-          {renderSelectedValue()}
-        </div>
+        {inlineSearch && !multiple ? (
+          <div className="flex min-w-0 items-center gap-2 text-primary flex-1">
+            <input
+              id={`inline-${listId}`}
+              type="text"
+              placeholder={searchPlaceholder ?? placeholder}
+              value={inlineInputValue}
+              onChange={(e) => setQuery(e.currentTarget.value)}
+              onFocus={() => !disabled && setOpen(true)}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-transparent outline-none w-full dial-small"
+              ref={inlineSearchInputRef}
+              disabled={disabled}
+              aria-disabled={disabled}
+            />
+            {singleSelectedOption && !disabled && (
+              <DialButton
+                ariaLabel="Clear selection"
+                iconBefore={<IconX size={16} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelection('');
+                  setQuery('');
+                  setOpen(true);
+                }}
+              />
+            )}
+          </div>
+        ) : (
+          <div className="flex min-w-0 items-center gap-2 text-primary">
+            {renderSelectedValue()}
+          </div>
+        )}
+
         <DialIcon
           icon={selectChevronIcon}
           className={classNames('text-primary', open && 'rotate-180')}

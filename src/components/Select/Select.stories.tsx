@@ -149,6 +149,14 @@ export const Searchable: Story = {
   },
 };
 
+export const InlineSearch: Story = {
+  name: 'Inline search',
+  args: {
+    inlineSearch: true,
+    searchPlaceholder: 'Display name',
+  },
+};
+
 export const CustomTriggerClass: Story = {
   args: {
     cssClass: 'min-h-[48px] p-8',
