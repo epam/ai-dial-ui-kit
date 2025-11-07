@@ -17,6 +17,7 @@ export interface DialSearchProps {
   containerCssClass?: string;
   onChange?: (value: string) => void;
   size?: SearchSize;
+  allowClear?: boolean;
 }
 
 /**
@@ -45,6 +46,7 @@ export interface DialSearchProps {
  * @param [containerCssClass] - Additional CSS classes applied to the container
  * @param [onChange] - Callback fired when the input value changes
  * @param [size=SearchSize.Base] - The size of the search input. Uses the {@link SearchSize} enum.
+ * @param [allowClear=true] - Whether to show a clear button when there is a value
  */
 export const DialSearch: FC<DialSearchProps> = ({
   elementId,
@@ -57,6 +59,7 @@ export const DialSearch: FC<DialSearchProps> = ({
   containerCssClass,
   onChange,
   size = SearchSize.Base,
+  allowClear = true,
 }) => {
   const [query, setQuery] = useState(value || '');
 
@@ -117,7 +120,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         }
       />
 
-      {query && !readonly && !disabled && (
+      {query && !readonly && !disabled && allowClear && (
         <DialIcon
           className="text-primary cursor-pointer"
           icon={

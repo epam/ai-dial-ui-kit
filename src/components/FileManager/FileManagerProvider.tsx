@@ -86,9 +86,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const { areHiddenFilesVisible, toggleHiddenFilesVisibility } =
     useShowHiddenFiles();
 
-  const { isTreeCollapsed, toggleTreeCollapse } = useCollapseTree(
-    treeOptions?.collapsed ?? false,
-  );
+  const { isTreeCollapsed, toggleTreeCollapse, setIsTreeCollapsed } =
+    useCollapseTree({
+      collapsed: treeOptions?.collapsed,
+      onCollapseChange: treeOptions?.onCollapseChange,
+    });
 
   const {
     renamedPath,
@@ -237,6 +239,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     isTreeCollapsed,
     toggleTreeCollapse,
+    setIsTreeCollapsed,
 
     selectedIds,
     setSelectedIds,

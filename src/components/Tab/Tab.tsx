@@ -8,7 +8,6 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 export interface DialTabProps {
   tab: TabModel;
   active: boolean;
-  disabled?: boolean;
   invalid?: boolean;
   horizontal?: boolean;
   cssClass?: string;
@@ -30,10 +29,8 @@ export interface DialTabProps {
  * />
  * ```
  *
- * @param tab - The tab model containing its `id` and `name`.
+ * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`].
  * @param active - Whether the tab is currently active.
- * @param [disabled=false] - Whether the tab is disabled and non-interactive.
- * @param [invalid=false] - Whether the tab is marked as invalid, displaying an error icon.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
  * @param [cssClass] - Additional CSS classes applied to the tab element.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
@@ -41,7 +38,6 @@ export interface DialTabProps {
 export const DialTab: FC<DialTabProps> = ({
   tab,
   active,
-  disabled,
   invalid,
   cssClass,
   horizontal,
@@ -55,11 +51,11 @@ export const DialTab: FC<DialTabProps> = ({
     baseClasses,
     {
       'bg-layer-4': horizontal,
-      'bg-layer-1 text-secondary pointer-events-none': disabled,
-      'bg-accent-primary-alpha text-primary': active && !disabled,
-      'text-primary': !active && !disabled,
-      'border-b-accent-primary': active && horizontal && !disabled,
-      'border-l-accent-primary': active && !horizontal && !disabled,
+      'bg-layer-1 text-secondary pointer-events-none': tab.disabled,
+      'bg-accent-primary-alpha text-primary': active && !tab.disabled,
+      'text-primary': !active && !tab.disabled,
+      'border-b-accent-primary': active && horizontal && !tab.disabled,
+      'border-l-accent-primary': active && !horizontal && !tab.disabled,
     },
     cssClass,
   );
@@ -69,7 +65,7 @@ export const DialTab: FC<DialTabProps> = ({
       role="tab"
       className={tabClassNames}
       onClick={() => onClick(tab.id)}
-      disabled={disabled}
+      disabled={tab.disabled}
     >
       <DialEllipsisTooltip
         text={tab.name}

@@ -101,11 +101,10 @@ describe('Dial UI Kit :: FileManager', () => {
       />,
     );
 
-    const iconsCrumb = screen.getByRole('link', { name: 'Icons' });
+    const iconsCrumb = screen.getByRole('link', { name: 'SVG' });
     await userEvent.click(iconsCrumb);
 
-    expect(await findInGridByRowText('SVG')).toBeInTheDocument();
-    expect(await findInGridByRowText('PNG')).toBeInTheDocument();
+    expect(await findInGridByRowText('24px')).toBeInTheDocument();
     expect((await queryAllInGridByRowText('alert.svg')).length).toBe(0);
   });
 

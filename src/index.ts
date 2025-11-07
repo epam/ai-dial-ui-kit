@@ -24,7 +24,6 @@ export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRender
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
-export { DialTab } from './components/Tab/Tab';
 export { DialBreadcrumb } from './components/Breadcrumb/Breadcrumb';
 export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 

@@ -328,3 +328,31 @@ export const WithCustomProvider: Story = {
     </div>
   ),
 };
+
+const TreeCollapsedControlledComponent = (args: DialFileManagerProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  return (
+    <div className="h-[640px] flex flex-col gap-4">
+      <div className="flex gap-2 items-center p-4">
+        <DialButton
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          variant={ButtonVariant.Primary}
+          title={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
+        />
+      </div>
+      <DialFileManager
+        {...args}
+        treeOptions={{
+          ...args.treeOptions,
+          collapsed: isCollapsed,
+          onCollapseChange: setIsCollapsed,
+        }}
+      />
+    </div>
+  );
+};
+
+export const TreeCollapsedControlled: Story = {
+  render: TreeCollapsedControlledComponent,
+};

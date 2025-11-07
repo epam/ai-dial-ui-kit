@@ -42,6 +42,7 @@ export interface FileManagerContextValue {
 
   isTreeCollapsed: boolean;
   toggleTreeCollapse: () => void;
+  setIsTreeCollapsed: (value: boolean) => void;
 
   selectedIds: Set<string>;
   setSelectedIds: (next: Set<string>) => void;

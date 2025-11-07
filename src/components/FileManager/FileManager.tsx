@@ -59,6 +59,7 @@ export interface FileTreeOptions
   containerCssClass?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;
+  onCollapseChange?: (collapsed: boolean) => void;
   actionLabels?: {
     [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Cut]?: string;

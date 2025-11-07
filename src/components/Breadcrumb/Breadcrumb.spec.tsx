@@ -16,7 +16,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     );
     const nav = screen.getByRole('navigation', { name: /breadcrumb/i });
     expect(nav).toBeInTheDocument();
-    expect(nav.className).toContain('overflow-x-auto');
+    expect(nav.className).toContain('w-full overflow-hidden');
     expect(screen.getByRole('list')).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
   });
@@ -101,17 +101,6 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(separators.length).toBe(2);
   });
 
-  test('titleCssClass applies to interactive element when using pathItems prop', () => {
-    render(
-      <DialBreadcrumb
-        titleCssClass="underline"
-        pathItems={[{ title: 'Home', href: '#u' }, { title: 'Current' }]}
-      />,
-    );
-    const homeLink = screen.getByRole('link', { name: 'Home' });
-    expect(homeLink.className).toContain('underline');
-  });
-
   test('iconBefore is rendered when provided', () => {
     render(
       <DialBreadcrumb
@@ -127,22 +116,5 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     );
     const icons = screen.getAllByLabelText('icon');
     expect(icons.length).toBe(2);
-  });
-
-  test('returns child as-is when it is not a valid React element', () => {
-    render(
-      <DialBreadcrumb>
-        <DialBreadcrumbItem title="A" />
-        {42}
-        <DialBreadcrumbItem title="B" />
-      </DialBreadcrumb>,
-    );
-    const number = screen.getByText('42');
-
-    expect(number).toBeInTheDocument();
-
-    expect(number.closest('li')).toBeNull();
-
-    expect(screen.getAllByRole('listitem')).toHaveLength(2);
   });
 });

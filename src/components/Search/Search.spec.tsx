@@ -52,4 +52,20 @@ describe('Dial UI Kit :: DialSearch', () => {
 
     expect(onChange).toHaveBeenCalledWith('');
   });
+
+  it('does not show Clear button when allowClear is false', () => {
+    render(
+      <DialSearch
+        elementId="search5"
+        placeholder="Search placeholder"
+        value="initial value"
+        allowClear={false}
+      />,
+    );
+
+    const clearButton = screen.queryByRole('button', {
+      name: /clear search/i,
+    });
+    expect(clearButton).not.toBeInTheDocument();
+  });
 });
