@@ -104,6 +104,17 @@ export const Disabled: Story = {
   },
 };
 
+export const WithoutClearButton: Story = {
+  render: InteractiveSearch,
+  args: {
+    elementId: 'search-no-clear',
+    placeholder: 'Search',
+    value: 'Cannot clear me',
+    size: SearchSize.Base,
+    allowClear: false,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => {
     const sizes = [SearchSize.Small, SearchSize.Base] as const;
