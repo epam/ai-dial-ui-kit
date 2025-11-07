@@ -1,37 +1,57 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
-import { DialItemIcon } from './ItemIcon';
+import { DialFileManagerItemIcon } from './FileManagerItemIcon';
 import { DialItemType } from '@/types/item';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
-describe('Dial UI Kit :: DialItemIcon', () => {
+describe('Dial UI Kit :: DialFileManagerItemIcon', () => {
   test('renders file icon with proper accessible label', () => {
-    render(<DialItemIcon name="document.pdf" type={DialItemType.File} />);
+    render(
+      <DialFileManagerItemIcon name="document.pdf" type={DialItemType.File} />,
+    );
     const el = screen.getByRole('img', { name: /File type icon/i });
     expect(el).toBeInTheDocument();
   });
 
   test('renders folder icon with role="img"', () => {
-    render(<DialItemIcon name="My Folder" type={DialItemType.Folder} />);
+    render(
+      <DialFileManagerItemIcon name="My Folder" type={DialItemType.Folder} />,
+    );
     const el = screen.getByRole('img');
     expect(el).toBeInTheDocument();
   });
 
   test('renders shared indicator for file', () => {
-    render(<DialItemIcon name="shared.pdf" type={DialItemType.File} shared />);
+    render(
+      <DialFileManagerItemIcon
+        name="shared.pdf"
+        type={DialItemType.File}
+        shared
+      />,
+    );
     const indicators = screen.getAllByRole('img');
     expect(indicators.length).toBeGreaterThan(0);
   });
 
   test('renders shared indicator for folder', () => {
-    render(<DialItemIcon name="My Folder" type={DialItemType.Folder} shared />);
+    render(
+      <DialFileManagerItemIcon
+        name="My Folder"
+        type={DialItemType.Folder}
+        shared
+      />,
+    );
     const el = screen.getByLabelText('Shared entity');
     expect(el).toBeInTheDocument();
   });
 
   test('renders loader when loading is true', () => {
     render(
-      <DialItemIcon name="loading.docx" type={DialItemType.File} loading />,
+      <DialFileManagerItemIcon
+        name="loading.docx"
+        type={DialItemType.File}
+        loading
+      />,
     );
     const loader = screen.getByLabelText('Loading');
     expect(loader).toBeInTheDocument();
@@ -39,7 +59,10 @@ describe('Dial UI Kit :: DialItemIcon', () => {
 
   test('uses default size and stroke for folder icon if not provided', () => {
     const { container } = render(
-      <DialItemIcon name="Default Folder" type={DialItemType.Folder} />,
+      <DialFileManagerItemIcon
+        name="Default Folder"
+        type={DialItemType.Folder}
+      />,
     );
     const svg = container.querySelector('svg');
     expect(svg).toBeTruthy();
@@ -52,7 +75,7 @@ describe('Dial UI Kit :: DialItemIcon', () => {
 
   test('accepts custom size and stroke for folder icon', () => {
     const { container } = render(
-      <DialItemIcon
+      <DialFileManagerItemIcon
         name="Custom Folder"
         type={DialItemType.Folder}
         size={32}
@@ -68,13 +91,15 @@ describe('Dial UI Kit :: DialItemIcon', () => {
   test('returns null when unknown type is provided', () => {
     const { container } = render(
       // @ts-expect-error testing invalid type handling
-      <DialItemIcon name="unknown" type="unknown" />,
+      <DialFileManagerItemIcon name="unknown" type="unknown" />,
     );
     expect(container.firstChild).toBeNull();
   });
 
   test('renders file icon even when extension is missing', () => {
-    render(<DialItemIcon name="noextension" type={DialItemType.File} />);
+    render(
+      <DialFileManagerItemIcon name="noextension" type={DialItemType.File} />,
+    );
     const el = screen.getByRole('img', { name: /File type icon/i });
     expect(el).toBeInTheDocument();
   });

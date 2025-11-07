@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { DialEditableItemName } from './EditableItemName';
+import { DialFileManagerItemName } from './FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import userEvent from '@testing-library/user-event';
 
-describe('Dial UI Kit :: DialEditableItemName', () => {
+describe('Dial UI Kit :: DialFileManagerItemName', () => {
   test('renders DialFileName when not editing and type=File', () => {
     render(
-      <DialEditableItemName
+      <DialFileManagerItemName
         name="file.ts"
         type={DialItemType.File}
         elementId="id1"
@@ -21,7 +21,7 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
 
   test('renders DialFolderName when not editing and type=Folder', () => {
     render(
-      <DialEditableItemName
+      <DialFileManagerItemName
         name="Project"
         type={DialItemType.Folder}
         elementId="id2"
@@ -37,7 +37,7 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
 
   test('renders DialItemNameInput when editing', () => {
     render(
-      <DialEditableItemName
+      <DialFileManagerItemName
         name="editable"
         type={DialItemType.File}
         elementId="id3"
@@ -55,7 +55,7 @@ describe('Dial UI Kit :: DialEditableItemName', () => {
     const handleSave = vi.fn();
 
     render(
-      <DialEditableItemName
+      <DialFileManagerItemName
         name="initial"
         type={DialItemType.File}
         elementId="id4"

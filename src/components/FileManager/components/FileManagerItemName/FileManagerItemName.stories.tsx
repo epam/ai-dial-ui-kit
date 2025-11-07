@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { DialItemType } from '@/types/item';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialEditableItemName } from './EditableItemName';
+import { DialFileManagerItemName } from './FileManagerItemName';
 import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 
-const meta: Meta<typeof DialEditableItemName> = {
-  title: 'FileManager/components/EditableItemName',
-  component: DialEditableItemName,
+const meta: Meta<typeof DialFileManagerItemName> = {
+  title: 'FileManager/components/FileManagerItemName',
+  component: DialFileManagerItemName,
   argTypes: {
     type: {
       control: 'radio',
@@ -20,7 +20,7 @@ const meta: Meta<typeof DialEditableItemName> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof DialEditableItemName>;
+type Story = StoryObj<typeof DialFileManagerItemName>;
 
 const EditableWrapper = (props: Story['args']) => {
   const [name, setName] = useState(props?.name ?? '');
@@ -28,7 +28,7 @@ const EditableWrapper = (props: Story['args']) => {
 
   return (
     <div className="flex flex-col items-start gap-6">
-      <DialEditableItemName
+      <DialFileManagerItemName
         {...props}
         elementId={props?.elementId ?? 'editable-item'}
         type={props?.type ?? DialItemType.File}

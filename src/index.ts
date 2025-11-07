@@ -18,9 +18,6 @@ export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
-export { DialItemIcon } from './components/ItemIcon/ItemIcon';
-export { DialItemNameInput } from './components/ItemNameInput/ItemNameInput';
-export { DialEditableItemName } from './components/EditableItemName/EditableItemName';
 
 // Grid
 export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
@@ -55,6 +52,9 @@ export { DialFormPopup } from './components/FormPopup/FormPopup';
 //File Manager
 export { DialFileManagerNavigationPanel } from './components/FileManager/components/FileManagerNavigationPanel/FileManagerNavigationPanel';
 export { DialFileManager } from './components/FileManager/FileManager';
+export { DialFileManagerItemIcon } from './components/FileManager/components/FileManagerItemIcon/FileManagerItemIcon';
+export { DialFileManagerItemNameInput } from './components/FileManager/components/FileManagerItemNameInput/FileManagerItemNameInput';
+export { DialFileManagerItemName } from './components/FileManager/components/FileManagerItemName/FileManagerItemName';
 
 // Not SSR safe, todo: figure out how to make them not break other SSE-safe components
 // // JSON Editor

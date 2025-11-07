@@ -10,7 +10,7 @@ import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/Sh
 import { IconFolder } from '@tabler/icons-react';
 import { DialLoader } from '@/components/Loader/Loader';
 
-export interface DialItemIconProps
+export interface DialFileManagerItemIconProps
   extends Omit<DialFileIconProps, 'extension'> {
   type: DialItemType;
   name: string;
@@ -29,13 +29,13 @@ export interface DialItemIconProps
  *
  * @example
  * ```tsx
- * <DialItemIcon
+ * <DialFileManagerItemIcon
  *   name="document.pdf"
  *   type={DialItemType.File}
  *   shared
  * />
  *
- * <DialItemIcon
+ * <DialFileManagerItemIcon
  *   name="My Folder"
  *   type={DialItemType.Folder}
  *   loading
@@ -54,7 +54,7 @@ export interface DialItemIconProps
  * @param {string} [props.label] - Accessible label for screen readers.
  * @param {ReactNode} [props.indicator] - Optional indicator to display over the icon.
  */
-export const DialItemIcon: FC<DialItemIconProps> = ({
+export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   name,
   type,
   shared = false,

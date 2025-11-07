@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { isHiddenDotFile } from '../../utils';
-import { DialEditableItemName } from '../../../EditableItemName/EditableItemName';
+import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 
 export interface DialFoldersTreeProps {
@@ -226,7 +226,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                         )}
                       />
                     )}
-                    <DialEditableItemName
+                    <DialFileManagerItemName
                       elementId={`${path}-tree-item`}
                       name={name}
                       type={isFolder ? DialItemType.Folder : DialItemType.File}

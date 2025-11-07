@@ -1,12 +1,12 @@
 import type { FC, ReactNode, Ref } from 'react';
-import { DialItemIcon } from '@/components/ItemIcon/ItemIcon';
+import { DialFileManagerItemIcon } from '@/components/FileManager/components/FileManagerItemIcon/FileManagerItemIcon';
 import type { DialItemType } from '@/types/item';
 import { DialInput } from '@/components/Input/Input';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
-export interface DialItemNameInputProps {
+export interface DialFileManagerItemNameInputProps {
   type: DialItemType;
   name: string;
   shared?: boolean;
@@ -35,7 +35,7 @@ export interface DialItemNameInputProps {
  *
  * @example
  * ```tsx
- * <DialItemNameInput
+ * <DialFileManagerItemNameInput
  *   type={DialItemType.File}
  *   name="report.pdf"
  *   elementId="file-input-1"
@@ -43,7 +43,7 @@ export interface DialItemNameInputProps {
  *   onChange={(value) => console.log('New name:', value)}
  * />
  *
- * <DialItemNameInput
+ * <DialFileManagerItemNameInput
  *   type={DialItemType.Folder}
  *   name="Project A"
  *   elementId="folder-input-2"
@@ -69,7 +69,9 @@ export interface DialItemNameInputProps {
  * @param {Ref<HTMLInputElement>} [props.inputRef] - Ref to access the underlying input element.
  * @param {(value: string) => void} [props.onChange] - Callback fired when input value changes.
  */
-export const DialItemNameInput: FC<DialItemNameInputProps> = ({
+export const DialFileManagerItemNameInput: FC<
+  DialFileManagerItemNameInputProps
+> = ({
   name,
   type,
   elementId,
@@ -104,7 +106,7 @@ export const DialItemNameInput: FC<DialItemNameInputProps> = ({
 
   return (
     <div className="flex gap-2 items-center">
-      <DialItemIcon
+      <DialFileManagerItemIcon
         name={name}
         type={type}
         label={iconLabel}

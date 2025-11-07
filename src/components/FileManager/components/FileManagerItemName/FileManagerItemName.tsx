@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import {
-  DialItemNameInput,
-  type DialItemNameInputProps,
-} from '@/components/ItemNameInput/ItemNameInput';
+  DialFileManagerItemNameInput,
+  type DialFileManagerItemNameInputProps,
+} from '@/components/FileManager/components/FileManagerItemNameInput/FileManagerItemNameInput';
 import { useEditableItem } from '@/hooks/use-editable-item';
 import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 
-export interface DialEditableItemNameProps extends DialItemNameInputProps {
+export interface DialFileManagerItemNameProps
+  extends DialFileManagerItemNameInputProps {
   name: string;
   type: DialItemType;
   elementId: string;
@@ -32,12 +33,12 @@ export interface DialEditableItemNameProps extends DialItemNameInputProps {
  *
  * @example
  * ```tsx
- * import { DialEditableItemName } from '@/components/DialEditableItemName/DialEditableItemName';
+ * import { DialFileManagerItemName } from '@/components/DialFileManagerItemName/DialFileManagerItemName';
  * import { DialItemType } from '@/types/item';
  *
  * function Example() {
  *   return (
- *     <DialEditableItemName
+ *     <DialFileManagerItemName
  *       name="Project"
  *       type={DialItemType.Folder}
  *       elementId="folder-123"
@@ -53,7 +54,7 @@ export interface DialEditableItemNameProps extends DialItemNameInputProps {
  * @param props - Component props.
  * @returns Rendered file or folder name element (editable or static).
  */
-export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
+export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   name,
   type,
   elementId,
@@ -90,7 +91,7 @@ export const DialEditableItemName: FC<DialEditableItemNameProps> = ({
   }
 
   return (
-    <DialItemNameInput
+    <DialFileManagerItemNameInput
       type={type}
       name={value}
       elementId={elementId}

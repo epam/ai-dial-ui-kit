@@ -1,20 +1,20 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import {
-  DialItemNameInput,
-  type DialItemNameInputProps,
-} from './ItemNameInput';
+  DialFileManagerItemNameInput,
+  type DialFileManagerItemNameInputProps,
+} from './FileManagerItemNameInput';
 import { DialItemType } from '@/types/item';
 
-describe('Dial UI Kit :: DialItemNameInput', () => {
+describe('Dial UI Kit :: DialFileManagerItemNameInput', () => {
   const defaultProps = {
     type: DialItemType.File,
     name: 'My Item',
     elementId: 'test-element',
-  } as DialItemNameInputProps;
+  } as DialFileManagerItemNameInputProps;
 
   test('renders icon and input with correct props', () => {
-    render(<DialItemNameInput {...defaultProps} />);
+    render(<DialFileManagerItemNameInput {...defaultProps} />);
 
     const icon = screen.getByLabelText('File type icon');
     const input = screen.getByDisplayValue('My Item');
@@ -25,7 +25,9 @@ describe('Dial UI Kit :: DialItemNameInput', () => {
 
   test('calls onChange when input changes', () => {
     const onChange = vi.fn();
-    render(<DialItemNameInput {...defaultProps} onChange={onChange} />);
+    render(
+      <DialFileManagerItemNameInput {...defaultProps} onChange={onChange} />,
+    );
 
     const input = screen.getByDisplayValue('My Item');
     fireEvent.change(input, { target: { value: 'New Value' } });
@@ -34,20 +36,22 @@ describe('Dial UI Kit :: DialItemNameInput', () => {
   });
 
   test('renders error icon when inputInvalid is true', () => {
-    render(<DialItemNameInput {...defaultProps} inputInvalid />);
+    render(<DialFileManagerItemNameInput {...defaultProps} inputInvalid />);
 
     const icon = screen.getByLabelText('alert');
     expect(icon).toBeInTheDocument();
   });
 
   test('does not render tooltip when inputInvalid is false', () => {
-    render(<DialItemNameInput {...defaultProps} inputInvalid={false} />);
+    render(
+      <DialFileManagerItemNameInput {...defaultProps} inputInvalid={false} />,
+    );
     expect(screen.queryByTestId('tooltip')).toBeNull();
   });
 
   test('renders custom inputIconAfter when provided', () => {
     render(
-      <DialItemNameInput
+      <DialFileManagerItemNameInput
         {...defaultProps}
         inputInvalid
         inputIconAfter={<span aria-label="custom-icon">X</span>}

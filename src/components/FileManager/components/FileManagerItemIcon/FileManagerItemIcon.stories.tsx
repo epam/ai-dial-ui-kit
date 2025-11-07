@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialItemIcon, type DialItemIconProps } from './ItemIcon';
+import {
+  DialFileManagerItemIcon,
+  type DialFileManagerItemIconProps,
+} from './FileManagerItemIcon';
 import { DialItemType } from '@/types/item';
 
 const meta = {
-  title: 'FileManager/components/ItemIcon',
-  component: DialItemIcon,
+  title: 'FileManager/components/FileManagerItemIcon',
+  component: DialFileManagerItemIcon,
   parameters: { layout: 'centered' },
   argTypes: {
     type: {
@@ -29,7 +32,7 @@ const meta = {
     stroke: 1.5,
     decorative: false,
   },
-} satisfies Meta<DialItemIconProps>;
+} satisfies Meta<DialFileManagerItemIconProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -76,11 +79,15 @@ export const AllVariants: Story = {
   render: (args) => (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <div className="flex flex-col items-center gap-1">
-        <DialItemIcon {...args} name="photo.jpg" type={DialItemType.File} />
+        <DialFileManagerItemIcon
+          {...args}
+          name="photo.jpg"
+          type={DialItemType.File}
+        />
         <span className="dial-tiny text-secondary">File</span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <DialItemIcon
+        <DialFileManagerItemIcon
           {...args}
           name="Shared Folder"
           type={DialItemType.Folder}
@@ -89,7 +96,7 @@ export const AllVariants: Story = {
         <span className="dial-tiny text-secondary">Shared Folder</span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <DialItemIcon
+        <DialFileManagerItemIcon
           {...args}
           name="Report.pdf"
           type={DialItemType.File}
@@ -98,7 +105,7 @@ export const AllVariants: Story = {
         <span className="dial-tiny text-secondary">Shared File</span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <DialItemIcon
+        <DialFileManagerItemIcon
           {...args}
           name="Loading.docx"
           type={DialItemType.File}
