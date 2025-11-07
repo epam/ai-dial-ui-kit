@@ -1,4 +1,4 @@
-import { IconChevronDown, IconCheck } from '@tabler/icons-react';
+import { IconChevronDown } from '@tabler/icons-react';
 
 export const selectTriggerBaseClasses =
   'dial-input flex w-full items-center justify-between gap-2 dial-small';
@@ -16,4 +16,3 @@ export const selectOptionSingleSelectedClasses =
 export const selectOptionDisabledClasses = 'opacity-75';
 
 export const selectChevronIcon = <IconChevronDown size={16} />;
-export const selectCheckIcon = <IconCheck size={16} />;
