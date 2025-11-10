@@ -8,8 +8,5 @@ export interface DropdownItem {
   disabled?: boolean;
   danger?: boolean;
   type?: DropdownItemType;
-  onClick?: (info: {
-    key: string;
-    domEvent: MouseEvent<Element, MouseEvent>;
-  }) => void;
+  onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
 }
