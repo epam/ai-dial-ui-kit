@@ -131,7 +131,11 @@ export const DialFormItem: FC<DialFormItemProps> = ({
 
   const renderReadonlyValue = useCallback(() => {
     if (!value) {
-      return <span aria-readonly="true">{defaultEmptyText ?? 'None'}</span>;
+      return (
+        <span className="flex min-h-4" aria-readonly="true">
+          {defaultEmptyText ?? 'None'}
+        </span>
+      );
     }
 
     if (typeof value === 'string' || typeof value === 'number') {
