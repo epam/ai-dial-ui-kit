@@ -140,10 +140,13 @@ export const DialNumberInputField: FC<DialNumberInputFieldProps> = ({
   onChange,
   ...props
 }) => {
-  const getInputValue = (inputValue?: string | number): string | number => {
-    if (inputValue === '-') {
+  const getInputValue = (
+    inputValue?: string | number,
+  ): string | number | undefined => {
+    if (!inputValue || inputValue === '-') {
       return inputValue;
     }
+
     return String(inputValue)?.match(lessThanOnePattern)
       ? String(inputValue)?.replace(leadingZerosPattern, '0')
       : Number(inputValue);
