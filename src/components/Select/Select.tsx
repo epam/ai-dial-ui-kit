@@ -287,6 +287,11 @@ export const DialSelect: FC<DialSelectProps> = ({
                 : singleSelectedOption.label
             }
           />
+          {singleSelectedOption?.description && (
+            <div className="text-secondary dial-small">
+              {singleSelectedOption.description}
+            </div>
+          )}
         </>
       );
     }
@@ -488,6 +493,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               disabled={disabled}
               aria-disabled={disabled}
             />
+
             {singleSelectedOption && !disabled && (
               <DialButton
                 ariaLabel="Clear selection"
