@@ -37,3 +37,7 @@ export enum DialFilePermission {
   WRITE = 'WRITE',
   SHARE = 'SHARE',
 }
+
+export interface DialRootFolder extends DialFile {
+  breadcrumbLabel: string;
+}

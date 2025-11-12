@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { DialFile } from '@/models/file';
+import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
   FileTreeOptions,
@@ -24,6 +24,7 @@ export interface FileManagerGridRow {
 export interface FileManagerContextValue {
   cssClass?: string;
   items: DialFile[];
+  rootItem?: DialRootFolder;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;

@@ -11,7 +11,11 @@ import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { ButtonVariant } from '@/types/button';
 import { DialButton } from '@/components/Button/Button';
 import { DialPopup } from '@/components/Popup/Popup';
-import { DialFileNodeType, type DialFile } from '@/models/file';
+import {
+  DialFileNodeType,
+  type DialFile,
+  type DialRootFolder,
+} from '@/models/file';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -355,4 +359,46 @@ const TreeCollapsedControlledComponent = (args: DialFileManagerProps) => {
 
 export const TreeCollapsedControlled: Story = {
   render: TreeCollapsedControlledComponent,
+};
+
+const WithRootItemComponent = (args: DialFileManagerProps) => {
+  const rootItem: DialRootFolder = {
+    id: 'root',
+    folderId: 'root',
+    path: '/All files',
+    name: 'All files',
+    breadcrumbLabel: 'My Workspace',
+    nodeType: DialFileNodeType.FOLDER,
+    items: itemsMock,
+  };
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        rootItem={rootItem}
+        path="/All files/Design/Icons"
+        treeOptions={{
+          ...args.treeOptions,
+          expandedPaths: new Set<string>([
+            '/All files',
+            '/All files/Design',
+            '/All files/Design/Icons',
+          ]),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithRootItem: Story = {
+  render: WithRootItemComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with rootItem that replaces the root path in breadcrumb. For example, "/All files" is shown as "My Workspace".',
+      },
+    },
+  },
 };
