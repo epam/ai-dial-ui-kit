@@ -287,6 +287,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               cut: 'Cut',
               paste: 'Paste',
               rename: 'Rename',
+              delete: 'Delete',
             },
           }}
           onCopyFiles={(items) =>
@@ -301,6 +302,11 @@ const PopupComponent = (args: DialFileManagerProps) => {
               `Moving files: ${items
                 .map((f) => f.sourceUrl)
                 .join(', ')} to ${items[0].destinationUrl}`,
+            )
+          }
+          onDeleteFiles={(items, sourceFolder) =>
+            alert(
+              `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.name).join(', ')}`,
             )
           }
           onRename={handleRename}

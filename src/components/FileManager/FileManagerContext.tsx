@@ -8,6 +8,7 @@ import type {
   ToolbarOptions,
   BulkActionsToolbarOptions,
   DialFileManagerProps,
+  DeleteConfirmationOptions,
 } from './FileManager';
 
 export interface FileManagerGridRow {
@@ -30,6 +31,7 @@ export interface FileManagerContextValue {
   gridOptions?: GridOptions;
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
+  deleteConfirmationOptions?: DeleteConfirmationOptions;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
@@ -66,6 +68,12 @@ export interface FileManagerContextValue {
   onRenameSave: (value: string) => void;
   onRenameCancel: () => void;
   onRenameValidate: (value: string, item: DialFile) => string | null;
+
+  openDeleteConfirmation: (items: DialFile[]) => void;
+  closeDeleteConfirmation: () => void;
+  confirmDelete: () => void;
+  deleteConfirmationOpen: boolean;
+  itemsToDelete: DialFile[];
 
   handlePathChange: (nextPath?: string) => void;
   handleTreeItemClick: (item: DialFile) => void;

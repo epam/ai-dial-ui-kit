@@ -43,12 +43,14 @@ import {
   IconCopy,
   IconCut,
   IconPencilMinus,
+  IconTrashX,
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
 
 type GridRow = FileManagerGridRow;
 
@@ -65,7 +67,15 @@ export interface FileTreeOptions
     [DialFileManagerActions.Cut]?: string;
     [DialFileManagerActions.Paste]?: string;
     [DialFileManagerActions.Rename]?: string;
+    [DialFileManagerActions.Delete]?: string;
   };
+}
+
+export interface DeleteConfirmationOptions {
+  cancelLabel?: string;
+  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  confirmLabel?: string;
+  contentRenderer?: (fileNames: string[]) => ReactNode;
 }
 
 export type NavigationPanelOptions = Omit<
@@ -103,12 +113,14 @@ export interface DialFileManagerProps {
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
+  deleteConfirmationOptions?: DeleteConfirmationOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
   onCopyFiles?: (items: DialCopiedItem[]) => void;
   onMoveToFiles?: (items: DialCopiedItem[]) => void;
+  onDeleteFiles?: (items: DialFile[], sourceFolder: string) => void;
 
   onRename?: (itemPath: string) => void;
   onRenameSave?: (value: string) => void;
@@ -168,12 +180,14 @@ export interface DialFileManagerProps {
  * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag and date locale/options
  * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
+ * @param [deleteConfirmationOptions] - Options for the delete confirmation popup
  *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
  * @param [onCopyFiles] - Callback fired when files copy-paste
  * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
+ * @param [onDeleteFiles] - Callback fired when files are deleted
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -198,6 +212,7 @@ export const DialFileManagerView: FC = () => {
     gridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
+    deleteConfirmationOptions,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -221,7 +236,11 @@ export const DialFileManagerView: FC = () => {
     onCut,
     onPaste,
     clipboard,
-
+    openDeleteConfirmation,
+    closeDeleteConfirmation,
+    confirmDelete,
+    deleteConfirmationOpen,
+    itemsToDelete,
     renamedPath,
     onRename,
     onRenameSave,
@@ -331,6 +350,14 @@ export const DialFileManagerView: FC = () => {
             <IconPencilMinus {...BASE_ICON_PROPS} className="text-secondary" />
           ),
           onClick: () => onRename(file.path),
+        });
+      }
+      if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
+        items.push({
+          key: 'delete',
+          label: treeOptions.actionLabels[DialFileManagerActions.Delete],
+          icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => openDeleteConfirmation([file]),
         });
       }
     }
@@ -447,6 +474,16 @@ export const DialFileManagerView: FC = () => {
           </section>
         </div>
       </div>
+      <FileManagerDeleteConfirmationPopup
+        open={deleteConfirmationOpen}
+        itemsToDelete={itemsToDelete}
+        onClose={closeDeleteConfirmation}
+        onConfirm={confirmDelete}
+        cancelLabel={deleteConfirmationOptions?.cancelLabel}
+        confirmLabel={deleteConfirmationOptions?.confirmLabel}
+        titleRenderer={deleteConfirmationOptions?.titleRenderer}
+        contentRenderer={deleteConfirmationOptions?.contentRenderer}
+      />
     </section>
   );
 };
