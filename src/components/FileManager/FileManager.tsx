@@ -12,7 +12,7 @@ import {
   gridBaseClasses,
 } from './constants';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
-import type { DialFile } from '@/models/file';
+import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import {
   DialFoldersTree,
@@ -106,6 +106,7 @@ export interface DialFileManagerProps {
   cssClass?: string;
 
   items?: DialFile[];
+  rootItem?: DialRootFolder;
 
   treeOptions?: FileTreeOptions;
   toolbarOptions?: ToolbarOptions;
@@ -172,6 +173,7 @@ export interface DialFileManagerProps {
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
  * @param [cssClass] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
+ * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
@@ -204,6 +206,7 @@ export const DialFileManagerView: FC = () => {
   const {
     cssClass,
     items,
+    rootItem,
     treeOptions,
     navigationPanelOptions,
     gridOptions,
@@ -438,6 +441,8 @@ export const DialFileManagerView: FC = () => {
             path={currentPath}
             onItemClick={handleBreadcrumbItemClick}
             makeHref={(segments) => '/' + segments.join('/')}
+            rootItemPath={rootItem?.path}
+            rootItemLabel={rootItem?.breadcrumbLabel}
             value={effectiveSearchValue}
             onSearchChange={handleSearchChange}
           />

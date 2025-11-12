@@ -61,6 +61,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   children,
   cssClass,
   items = [],
+  rootItem,
   path,
   treeOptions,
   navigationPanelOptions,
@@ -236,6 +237,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const value: FileManagerContextValue = {
     cssClass,
     items,
+    rootItem,
     treeOptions,
     navigationPanelOptions,
     gridOptions,
