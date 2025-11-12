@@ -50,8 +50,7 @@ import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
-import { DialConfirmationPopup } from '@/components/ConfirmationPopup/ConfirmationPopup';
-import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
+import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
 
 type GridRow = FileManagerGridRow;
 
@@ -470,69 +469,16 @@ export const DialFileManagerView: FC = () => {
           </section>
         </div>
       </div>
-      <DialConfirmationPopup
+      <FileManagerDeleteConfirmationPopup
         open={deleteConfirmationOpen}
-        title={
-          deleteConfirmationOptions?.titleRenderer?.(
-            itemsToDelete.map((item) => item.name),
-          ) || 'Confirm Deleting Items'
-        }
-        confirmLabel={deleteConfirmationOptions?.confirmLabel || 'Delete'}
-        cancelLabel={deleteConfirmationOptions?.cancelLabel || 'Cancel'}
-        variant={ConfirmationPopupVariant.Danger}
+        itemsToDelete={itemsToDelete}
         onClose={closeDeleteConfirmation}
         onConfirm={confirmDelete}
-      >
-        {deleteConfirmationOptions?.contentRenderer?.(
-          itemsToDelete.map((item) => item.name),
-        ) || (
-          <div className="px-6 py-3 dial-small">
-            <p className="text-secondary">
-              {itemsToDelete.length === 1 ? (
-                <>
-                  Do you want to delete file or folder{' '}
-                  <span className="text-primary">
-                    "{itemsToDelete[0].name}"
-                  </span>
-                  ?
-                </>
-              ) : (
-                <>
-                  Do you want to delete the following{' '}
-                  <span className="text-primary">{itemsToDelete.length}</span>{' '}
-                  item{itemsToDelete.length !== 1 ? 's' : ''}?
-                </>
-              )}
-            </p>
-            {itemsToDelete.length > 1 && (
-              <>
-                {itemsToDelete.length <= 10 ? (
-                  <ul className="space-y-1 text-primary">
-                    {itemsToDelete.map((item) => (
-                      <li key={item.path} className="truncate">
-                        {item.name}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <>
-                    <ul className="space-y-1 text-primary">
-                      {itemsToDelete.slice(0, 10).map((item) => (
-                        <li key={item.path} className="truncate">
-                          {item.name}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="text-secondary italic">
-                      ... and {itemsToDelete.length - 10} more
-                    </p>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        )}
-      </DialConfirmationPopup>
+        cancelLabel={deleteConfirmationOptions?.cancelLabel}
+        confirmLabel={deleteConfirmationOptions?.confirmLabel}
+        titleRenderer={deleteConfirmationOptions?.titleRenderer}
+        contentRenderer={deleteConfirmationOptions?.contentRenderer}
+      />
     </section>
   );
 };
