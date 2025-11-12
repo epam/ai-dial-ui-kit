@@ -19,6 +19,7 @@ import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
 import { useCollapseTree } from './hooks/use-collapse-tree';
 import { useFileClipboard } from './hooks/use-file-clipboard';
 import { useCurrentPath } from './hooks/use-current-path';
+import { useFileDelete } from './hooks/use-file-delete';
 import {
   FileManagerContext,
   type FileManagerContextValue,
@@ -52,6 +53,7 @@ export interface FileManagerProviderProps
  * - tree collapsed state
  * - selection
  * - clipboard (copy / cut / paste)
+ * - delete confirmation state
  * - computed grid rows
  *
  */
@@ -62,6 +64,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   path,
   treeOptions,
   navigationPanelOptions,
+  deleteConfirmationOptions,
   gridOptions,
   toolbarOptions,
   bulkActionsToolbarOptions,
@@ -69,6 +72,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onTableFileClick,
   onCopyFiles,
   onMoveToFiles,
+  onDeleteFiles,
   onRename,
   onRenameSave,
   onRenameCancel,
@@ -133,6 +137,17 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getSourceFiles: () => items,
     onCopyFiles,
     onMoveToFiles,
+  });
+
+  const {
+    deleteConfirmationOpen,
+    itemsToDelete,
+    openDeleteConfirmation,
+    closeDeleteConfirmation,
+    confirmDelete,
+  } = useFileDelete({
+    onDeleteFiles,
+    getCurrentPath: () => currentFolder?.path ?? '/',
   });
 
   const onPaste = useCallback(
@@ -226,6 +241,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     gridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
+    deleteConfirmationOptions,
 
     currentPath,
     setCurrentPath,
@@ -258,6 +274,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,
     onRenameValidate: renameValidateHandler,
+
+    openDeleteConfirmation,
+    closeDeleteConfirmation,
+    confirmDelete,
+    deleteConfirmationOpen,
+    itemsToDelete,
 
     handlePathChange,
     handleTreeItemClick,

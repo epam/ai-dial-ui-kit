@@ -11,6 +11,7 @@ export enum DialFileManagerActions {
   Cut = 'cut',
   Paste = 'paste',
   Rename = 'rename',
+  Delete = 'delete',
 }
 
 export interface DialCopiedItem {

@@ -43,12 +43,15 @@ import {
   IconCopy,
   IconCut,
   IconPencilMinus,
+  IconTrashX,
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { DialConfirmationPopup } from '@/components/ConfirmationPopup/ConfirmationPopup';
+import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 
 type GridRow = FileManagerGridRow;
 
@@ -65,7 +68,15 @@ export interface FileTreeOptions
     [DialFileManagerActions.Cut]?: string;
     [DialFileManagerActions.Paste]?: string;
     [DialFileManagerActions.Rename]?: string;
+    [DialFileManagerActions.Delete]?: string;
   };
+}
+
+export interface DeleteConfirmationOptions {
+  cancelLabel?: string;
+  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  confirmLabel?: string;
+  contentRenderer?: (fileNames: string[]) => ReactNode;
 }
 
 export type NavigationPanelOptions = Omit<
@@ -102,12 +113,14 @@ export interface DialFileManagerProps {
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
+  deleteConfirmationOptions?: DeleteConfirmationOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
   onCopyFiles?: (items: DialCopiedItem[]) => void;
   onMoveToFiles?: (items: DialCopiedItem[]) => void;
+  onDeleteFiles?: (items: DialFile[], sourceFolder: string) => void;
 
   onRename?: (itemPath: string) => void;
   onRenameSave?: (value: string) => void;
@@ -166,12 +179,14 @@ export interface DialFileManagerProps {
  * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag and date locale/options
  * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
+ * @param [deleteConfirmationOptions] - Options for the delete confirmation popup
  *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
  * @param [onCopyFiles] - Callback fired when files copy-paste
  * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
+ * @param [onDeleteFiles] - Callback fired when files are deleted
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -195,6 +210,7 @@ export const DialFileManagerView: FC = () => {
     gridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
+    deleteConfirmationOptions,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -218,7 +234,11 @@ export const DialFileManagerView: FC = () => {
     onCut,
     onPaste,
     clipboard,
-
+    openDeleteConfirmation,
+    closeDeleteConfirmation,
+    confirmDelete,
+    deleteConfirmationOpen,
+    itemsToDelete,
     renamedPath,
     onRename,
     onRenameSave,
@@ -330,6 +350,14 @@ export const DialFileManagerView: FC = () => {
           onClick: () => onRename(file.path),
         });
       }
+      if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
+        items.push({
+          key: 'delete',
+          label: treeOptions.actionLabels[DialFileManagerActions.Delete],
+          icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => openDeleteConfirmation([file]),
+        });
+      }
     }
     return items;
   };
@@ -339,109 +367,175 @@ export const DialFileManagerView: FC = () => {
   };
 
   return (
-    <section
-      className={mergeClasses(
-        containerBaseClasses,
-        {
-          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
-        },
-        cssClass,
-      )}
-    >
-      {toolbarOptions && selectedIds.size === 0 && (
-        <div
-          className={toolbarBaseClasses}
-          role="toolbar"
-          aria-label="File Manager Toolbar"
-        >
-          <DialFileManagerToolbar
-            {...toolbarOptions}
-            areHiddenFilesVisible={areHiddenFilesVisible}
-            onToggleHiddenFiles={toggleHiddenFilesVisibility}
-          />
-        </div>
-      )}
-
-      {selectedIds.size > 0 && bulkActionsToolbarOptions && (
-        <div
-          className={toolbarBaseClasses}
-          role="toolbar"
-          aria-label="File Manager Toolbar"
-        >
-          <DialFileManagerBulkActionsToolbar
-            {...bulkActionsToolbarOptions}
-            onClearSelection={clearSelection}
-            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
-          />
-        </div>
-      )}
-
-      <div className={mainGridClasses}>
-        <aside
-          role="region"
-          aria-label="File Manager Tree Navigation"
-          className="min-h-0 min-w-0 h-full flex-none"
-        >
-          <DialCollapsibleSidebar
-            width={width}
-            title={title}
-            containerCssClass={containerCssClass}
-            additionalButtons={additionalButtons}
-            isOpened={isTreeCollapsed}
-            onToggle={toggleTreeCollapse}
+    <>
+      <section
+        className={mergeClasses(
+          containerBaseClasses,
+          {
+            'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+          },
+          cssClass,
+        )}
+      >
+        {toolbarOptions && selectedIds.size === 0 && (
+          <div
+            className={toolbarBaseClasses}
+            role="toolbar"
+            aria-label="File Manager Toolbar"
           >
-            <DialFoldersTree
-              {...forwardedTreeProps}
-              items={items}
-              selectedPath={currentPath}
-              onItemClick={handleTreeItemClick}
+            <DialFileManagerToolbar
+              {...toolbarOptions}
               areHiddenFilesVisible={areHiddenFilesVisible}
-              getContextMenuItems={getTreeContextMenuItems}
-              renamedPath={renamedPath}
-              onRenameSave={onRenameSave}
-              onRenameCancel={onRenameCancel}
-              onRenameValidate={onRenameValidate}
+              onToggleHiddenFiles={toggleHiddenFilesVisibility}
             />
-          </DialCollapsibleSidebar>
-        </aside>
+          </div>
+        )}
 
-        <div className={contentGridClasses}>
-          <DialFileManagerNavigationPanel
-            {...(navigationPanelOptions ?? {})}
-            path={currentPath}
-            onItemClick={handleBreadcrumbItemClick}
-            makeHref={(segments) => '/' + segments.join('/')}
-            value={effectiveSearchValue}
-            onSearchChange={handleSearchChange}
-          />
-
-          <section
-            role="region"
-            aria-label="File Manager Grid View"
-            className={gridBaseClasses}
+        {selectedIds.size > 0 && bulkActionsToolbarOptions && (
+          <div
+            className={toolbarBaseClasses}
+            role="toolbar"
+            aria-label="File Manager Toolbar"
           >
-            <DialGrid<GridRow>
-              columnDefs={columnDefs}
-              rowData={gridRows}
-              getRowId={(row) => row.path}
-              {...forwardedGridOptions}
-              additionalGridOptions={{
-                ...forwardedGridOptions.additionalGridOptions,
-                onCellClicked: (event) => {
-                  if (event.colDef.colId === '__select') {
-                    return;
-                  }
-                  if (event.data) {
-                    handleTableRowClick(event.data);
-                  }
-                },
-              }}
-              selectedRowIds={selectedIds}
-              onSelectionChange={handleSelectionChange}
+            <DialFileManagerBulkActionsToolbar
+              {...bulkActionsToolbarOptions}
+              onClearSelection={clearSelection}
+              selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
             />
-          </section>
+          </div>
+        )}
+
+        <div className={mainGridClasses}>
+          <aside
+            role="region"
+            aria-label="File Manager Tree Navigation"
+            className="min-h-0 min-w-0 h-full flex-none"
+          >
+            <DialCollapsibleSidebar
+              width={width}
+              title={title}
+              containerCssClass={containerCssClass}
+              additionalButtons={additionalButtons}
+              isOpened={isTreeCollapsed}
+              onToggle={toggleTreeCollapse}
+            >
+              <DialFoldersTree
+                {...forwardedTreeProps}
+                items={items}
+                selectedPath={currentPath}
+                onItemClick={handleTreeItemClick}
+                areHiddenFilesVisible={areHiddenFilesVisible}
+                getContextMenuItems={getTreeContextMenuItems}
+                renamedPath={renamedPath}
+                onRenameSave={onRenameSave}
+                onRenameCancel={onRenameCancel}
+                onRenameValidate={onRenameValidate}
+              />
+            </DialCollapsibleSidebar>
+          </aside>
+
+          <div className={contentGridClasses}>
+            <DialFileManagerNavigationPanel
+              {...(navigationPanelOptions ?? {})}
+              path={currentPath}
+              onItemClick={handleBreadcrumbItemClick}
+              makeHref={(segments) => '/' + segments.join('/')}
+              value={effectiveSearchValue}
+              onSearchChange={handleSearchChange}
+            />
+
+            <section
+              role="region"
+              aria-label="File Manager Grid View"
+              className={gridBaseClasses}
+            >
+              <DialGrid<GridRow>
+                columnDefs={columnDefs}
+                rowData={gridRows}
+                getRowId={(row) => row.path}
+                {...forwardedGridOptions}
+                additionalGridOptions={{
+                  ...forwardedGridOptions.additionalGridOptions,
+                  onCellClicked: (event) => {
+                    if (event.colDef.colId === '__select') {
+                      return;
+                    }
+                    if (event.data) {
+                      handleTableRowClick(event.data);
+                    }
+                  },
+                }}
+                selectedRowIds={selectedIds}
+                onSelectionChange={handleSelectionChange}
+              />
+            </section>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <DialConfirmationPopup
+        open={deleteConfirmationOpen}
+        title={
+          deleteConfirmationOptions?.titleRenderer?.(
+            itemsToDelete.map((item) => item.name),
+          ) || 'Confirm Deleting Items'
+        }
+        confirmLabel={deleteConfirmationOptions?.confirmLabel || 'Delete'}
+        cancelLabel={deleteConfirmationOptions?.cancelLabel || 'Cancel'}
+        variant={ConfirmationPopupVariant.Danger}
+        onClose={closeDeleteConfirmation}
+        onConfirm={confirmDelete}
+      >
+        {deleteConfirmationOptions?.contentRenderer?.(
+          itemsToDelete.map((item) => item.name),
+        ) || (
+          <div className="px-6 py-3 dial-small">
+            <p className="text-secondary">
+              {itemsToDelete.length === 1 ? (
+                <>
+                  Do you want to delete file or folder{' '}
+                  <span className="text-primary">
+                    "{itemsToDelete[0].name}"
+                  </span>
+                  ?
+                </>
+              ) : (
+                <>
+                  Do you want to delete the following{' '}
+                  <span className="text-primary">{itemsToDelete.length}</span>{' '}
+                  item{itemsToDelete.length !== 1 ? 's' : ''}?
+                </>
+              )}
+            </p>
+            {itemsToDelete.length > 1 && (
+              <>
+                {itemsToDelete.length <= 10 ? (
+                  <ul className="space-y-1 text-primary">
+                    {itemsToDelete.map((item) => (
+                      <li key={item.path} className="truncate">
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <>
+                    <ul className="space-y-1 text-primary">
+                      {itemsToDelete.slice(0, 10).map((item) => (
+                        <li key={item.path} className="truncate">
+                          {item.name}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-secondary italic">
+                      ... and {itemsToDelete.length - 10} more
+                    </p>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </DialConfirmationPopup>
+    </>
   );
 };
