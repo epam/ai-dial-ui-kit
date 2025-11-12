@@ -34,6 +34,8 @@ export interface DialFileManagerNavigationPanelProps
   cssClass?: string;
   breadcrumbCssClass?: string;
   onItemClick?: (href?: string) => void;
+  rootItemPath?: string;
+  rootItemLabel?: string;
 
   searchable?: boolean;
   value?: string | number | null;
@@ -93,6 +95,8 @@ export const DialFileManagerNavigationPanel: FC<
 
   path,
   makeHref,
+  rootItemPath,
+  rootItemLabel,
 
   cssClass,
   breadcrumbCssClass,
@@ -116,7 +120,7 @@ export const DialFileManagerNavigationPanel: FC<
         .filter(Boolean);
       if (!segments.length) return [{ title: '/' }];
 
-      return segments.map((segment, index) => {
+      const items = segments.map((segment, index) => {
         const acc = segments.slice(0, index + 1);
         const href =
           typeof makeHref === 'function' ? makeHref(acc, index) : undefined;
@@ -132,7 +136,36 @@ export const DialFileManagerNavigationPanel: FC<
             : undefined,
         };
       });
-    }, [path, makeHref, onItemClick]);
+
+      if (rootItemPath && rootItemLabel) {
+        const rootPathSegments = rootItemPath.split('/').filter(Boolean);
+        const currentPathSegments = path.split('/').filter(Boolean);
+
+        const isRootPath = rootPathSegments.every(
+          (segment, idx) => currentPathSegments[idx] === segment,
+        );
+
+        if (isRootPath && items.length > 0) {
+          const remainingItems = items.slice(rootPathSegments.length);
+
+          return [
+            {
+              title: rootItemLabel,
+              href: rootItemPath,
+              onClick: onItemClick
+                ? (e: MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    onItemClick(rootItemPath);
+                  }
+                : undefined,
+            },
+            ...remainingItems,
+          ];
+        }
+      }
+
+      return items;
+    }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
 
   return (
     <div className={classNames(panelBaseClasses, cssClass)}>
