@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   DialFileManager,
   DialFileManagerView,
@@ -361,31 +361,35 @@ export const TreeCollapsedControlled: Story = {
   render: TreeCollapsedControlledComponent,
 };
 
-const WithRootItemComponent = (args: DialFileManagerProps) => {
-  const rootItem: DialRootFolder = {
-    id: 'root',
-    folderId: 'root',
-    path: '/All files',
-    name: 'All files',
-    breadcrumbLabel: 'My Workspace',
-    nodeType: DialFileNodeType.FOLDER,
-    items: itemsMock,
-  };
+const rootItem: DialRootFolder = {
+  id: 'root',
+  folderId: 'root',
+  path: '/All files',
+  name: 'All files',
+  breadcrumbLabel: 'My Workspace',
+  nodeType: DialFileNodeType.FOLDER,
+  items: itemsMock,
+};
 
+const WithRootItemComponent = (args: DialFileManagerProps) => {
+  const treeOptions = useMemo(
+    () => ({
+      ...args.treeOptions,
+      expandedPaths: new Set<string>([
+        '/All files',
+        '/All files/Design',
+        '/All files/Design/Icons',
+      ]),
+    }),
+    [args.treeOptions],
+  );
   return (
     <div className="h-[640px]">
       <DialFileManager
         {...args}
         rootItem={rootItem}
         path="/All files/Design/Icons"
-        treeOptions={{
-          ...args.treeOptions,
-          expandedPaths: new Set<string>([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-          ]),
-        }}
+        treeOptions={treeOptions}
       />
     </div>
   );
