@@ -367,112 +367,109 @@ export const DialFileManagerView: FC = () => {
   };
 
   return (
-    <>
-      <section
-        className={mergeClasses(
-          containerBaseClasses,
-          {
-            'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
-          },
-          cssClass,
-        )}
-      >
-        {toolbarOptions && selectedIds.size === 0 && (
-          <div
-            className={toolbarBaseClasses}
-            role="toolbar"
-            aria-label="File Manager Toolbar"
-          >
-            <DialFileManagerToolbar
-              {...toolbarOptions}
-              areHiddenFilesVisible={areHiddenFilesVisible}
-              onToggleHiddenFiles={toggleHiddenFilesVisibility}
-            />
-          </div>
-        )}
-
-        {selectedIds.size > 0 && bulkActionsToolbarOptions && (
-          <div
-            className={toolbarBaseClasses}
-            role="toolbar"
-            aria-label="File Manager Toolbar"
-          >
-            <DialFileManagerBulkActionsToolbar
-              {...bulkActionsToolbarOptions}
-              onClearSelection={clearSelection}
-              selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
-            />
-          </div>
-        )}
-
-        <div className={mainGridClasses}>
-          <aside
-            role="region"
-            aria-label="File Manager Tree Navigation"
-            className="min-h-0 min-w-0 h-full flex-none"
-          >
-            <DialCollapsibleSidebar
-              width={width}
-              title={title}
-              containerCssClass={containerCssClass}
-              additionalButtons={additionalButtons}
-              isOpened={isTreeCollapsed}
-              onToggle={toggleTreeCollapse}
-            >
-              <DialFoldersTree
-                {...forwardedTreeProps}
-                items={items}
-                selectedPath={currentPath}
-                onItemClick={handleTreeItemClick}
-                areHiddenFilesVisible={areHiddenFilesVisible}
-                getContextMenuItems={getTreeContextMenuItems}
-                renamedPath={renamedPath}
-                onRenameSave={onRenameSave}
-                onRenameCancel={onRenameCancel}
-                onRenameValidate={onRenameValidate}
-              />
-            </DialCollapsibleSidebar>
-          </aside>
-
-          <div className={contentGridClasses}>
-            <DialFileManagerNavigationPanel
-              {...(navigationPanelOptions ?? {})}
-              path={currentPath}
-              onItemClick={handleBreadcrumbItemClick}
-              makeHref={(segments) => '/' + segments.join('/')}
-              value={effectiveSearchValue}
-              onSearchChange={handleSearchChange}
-            />
-
-            <section
-              role="region"
-              aria-label="File Manager Grid View"
-              className={gridBaseClasses}
-            >
-              <DialGrid<GridRow>
-                columnDefs={columnDefs}
-                rowData={gridRows}
-                getRowId={(row) => row.path}
-                {...forwardedGridOptions}
-                additionalGridOptions={{
-                  ...forwardedGridOptions.additionalGridOptions,
-                  onCellClicked: (event) => {
-                    if (event.colDef.colId === '__select') {
-                      return;
-                    }
-                    if (event.data) {
-                      handleTableRowClick(event.data);
-                    }
-                  },
-                }}
-                selectedRowIds={selectedIds}
-                onSelectionChange={handleSelectionChange}
-              />
-            </section>
-          </div>
+    <section
+      className={mergeClasses(
+        containerBaseClasses,
+        {
+          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+        },
+        cssClass,
+      )}
+    >
+      {toolbarOptions && selectedIds.size === 0 && (
+        <div
+          className={toolbarBaseClasses}
+          role="toolbar"
+          aria-label="File Manager Toolbar"
+        >
+          <DialFileManagerToolbar
+            {...toolbarOptions}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={toggleHiddenFilesVisibility}
+          />
         </div>
-      </section>
+      )}
 
+      {selectedIds.size > 0 && bulkActionsToolbarOptions && (
+        <div
+          className={toolbarBaseClasses}
+          role="toolbar"
+          aria-label="File Manager Toolbar"
+        >
+          <DialFileManagerBulkActionsToolbar
+            {...bulkActionsToolbarOptions}
+            onClearSelection={clearSelection}
+            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
+          />
+        </div>
+      )}
+
+      <div className={mainGridClasses}>
+        <aside
+          role="region"
+          aria-label="File Manager Tree Navigation"
+          className="min-h-0 min-w-0 h-full flex-none"
+        >
+          <DialCollapsibleSidebar
+            width={width}
+            title={title}
+            containerCssClass={containerCssClass}
+            additionalButtons={additionalButtons}
+            isOpened={isTreeCollapsed}
+            onToggle={toggleTreeCollapse}
+          >
+            <DialFoldersTree
+              {...forwardedTreeProps}
+              items={items}
+              selectedPath={currentPath}
+              onItemClick={handleTreeItemClick}
+              areHiddenFilesVisible={areHiddenFilesVisible}
+              getContextMenuItems={getTreeContextMenuItems}
+              renamedPath={renamedPath}
+              onRenameSave={onRenameSave}
+              onRenameCancel={onRenameCancel}
+              onRenameValidate={onRenameValidate}
+            />
+          </DialCollapsibleSidebar>
+        </aside>
+
+        <div className={contentGridClasses}>
+          <DialFileManagerNavigationPanel
+            {...(navigationPanelOptions ?? {})}
+            path={currentPath}
+            onItemClick={handleBreadcrumbItemClick}
+            makeHref={(segments) => '/' + segments.join('/')}
+            value={effectiveSearchValue}
+            onSearchChange={handleSearchChange}
+          />
+
+          <section
+            role="region"
+            aria-label="File Manager Grid View"
+            className={gridBaseClasses}
+          >
+            <DialGrid<GridRow>
+              columnDefs={columnDefs}
+              rowData={gridRows}
+              getRowId={(row) => row.path}
+              {...forwardedGridOptions}
+              additionalGridOptions={{
+                ...forwardedGridOptions.additionalGridOptions,
+                onCellClicked: (event) => {
+                  if (event.colDef.colId === '__select') {
+                    return;
+                  }
+                  if (event.data) {
+                    handleTableRowClick(event.data);
+                  }
+                },
+              }}
+              selectedRowIds={selectedIds}
+              onSelectionChange={handleSelectionChange}
+            />
+          </section>
+        </div>
+      </div>
       <DialConfirmationPopup
         open={deleteConfirmationOpen}
         title={
@@ -536,6 +533,6 @@ export const DialFileManagerView: FC = () => {
           </div>
         )}
       </DialConfirmationPopup>
-    </>
+    </section>
   );
 };
