@@ -96,13 +96,6 @@ const getCopiedItems = (
   });
 };
 
-const findParentFolder = (files: DialFile[], path: string): string => {
-  const segments = path.split('/').filter(Boolean);
-  if (segments.length <= 1) return '/';
-  segments.pop();
-  return '/' + segments.join('/');
-};
-
 export const useFileClipboard = ({
   getDestination,
   getDestinationFiles,
@@ -153,11 +146,7 @@ export const useFileClipboard = ({
           overwrite,
         );
 
-        const sourceFolders = new Set(
-          Array.from(cut).map((path) => findParentFolder(sourceFiles, path)),
-        );
-        const sourceFolder =
-          sourceFolders.size === 1 ? Array.from(sourceFolders)[0] : '';
+        const sourceFolder = sourceFiles.at(0)?.parentPath ?? '';
 
         onMoveToFiles?.(resolvedItems, sourceFolder, destination);
         setCut(new Set());

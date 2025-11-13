@@ -141,12 +141,14 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         name: 'm1',
         path: '/source/m1',
         nodeType: DialFileNodeType.FOLDER,
+        parentPath: '/source',
       } as DialFile,
       {
         id: '2',
         name: 'm2',
         path: '/source/m2',
         nodeType: DialFileNodeType.ITEM,
+        parentPath: '/source',
       } as DialFile,
     ];
 
@@ -465,6 +467,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         name: 'README',
         path: '/dest/README',
         nodeType: DialFileNodeType.ITEM,
+        parentPath: '/dest',
       } as DialFile,
     ];
     sourceFiles = [
@@ -472,6 +475,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '2',
         name: 'README',
         path: '/src/README',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
