@@ -20,3 +20,8 @@ export interface DialCopiedItem {
   overwrite?: boolean;
   nodeType: DialFileNodeType;
 }
+
+export interface DialDeletedItem {
+  sourceUrl: string;
+  nodeType: DialFileNodeType;
+}
