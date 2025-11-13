@@ -95,8 +95,13 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
       result.current.confirmDelete();
     });
 
+    const deletedItems = files.map((file) => ({
+      sourceUrl: file.path,
+      nodeType: file.nodeType,
+    }));
+
     expect(onDeleteFiles).toHaveBeenCalledTimes(1);
-    expect(onDeleteFiles).toHaveBeenCalledWith(files, '/folder');
+    expect(onDeleteFiles).toHaveBeenCalledWith(deletedItems, '/folder');
     expect(result.current.deleteConfirmationOpen).toBe(false);
     expect(result.current.itemsToDelete).toEqual([]);
   });
@@ -166,7 +171,12 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
       result.current.confirmDelete();
     });
 
-    expect(onDeleteFiles).toHaveBeenCalledWith(files, '/new');
+    const deletedItems = files.map((file) => ({
+      sourceUrl: file.path,
+      nodeType: file.nodeType,
+    }));
+
+    expect(onDeleteFiles).toHaveBeenCalledWith(deletedItems, '/new');
   });
 
   it('handles deletion of multiple files including folders', () => {
@@ -205,7 +215,12 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
       result.current.confirmDelete();
     });
 
-    expect(onDeleteFiles).toHaveBeenCalledWith(files, '/root');
+    const deletedItems = files.map((file) => ({
+      sourceUrl: file.path,
+      nodeType: file.nodeType,
+    }));
+
+    expect(onDeleteFiles).toHaveBeenCalledWith(deletedItems, '/root');
     expect(result.current.deleteConfirmationOpen).toBe(false);
   });
 

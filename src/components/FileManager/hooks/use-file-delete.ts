@@ -1,8 +1,9 @@
 import type { DialFile } from '@/models/file';
+import type { DialDeletedItem } from '@/types/file-manager';
 import { useState, useCallback } from 'react';
 
 export interface UseFileDeleteOptions {
-  onDeleteFiles?: (items: DialFile[], sourceFolder: string) => void;
+  onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
   getCurrentPath: () => string;
 }
 
@@ -26,7 +27,11 @@ export const useFileDelete = ({
   const confirmDelete = useCallback(() => {
     const currentPath = getCurrentPath();
     if (onDeleteFiles && itemsToDelete.length > 0) {
-      onDeleteFiles(itemsToDelete, currentPath);
+      const deletedItems: DialDeletedItem[] = itemsToDelete.map((file) => ({
+        sourceUrl: file.path,
+        nodeType: file.nodeType,
+      }));
+      onDeleteFiles(deletedItems, currentPath);
     }
     closeDeleteConfirmation();
   }, [itemsToDelete, onDeleteFiles, getCurrentPath, closeDeleteConfirmation]);
