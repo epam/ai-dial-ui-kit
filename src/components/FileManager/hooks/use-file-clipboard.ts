@@ -7,8 +7,12 @@ export interface UseFileClipboardOptions {
   getDestination: () => string;
   getDestinationFiles: () => DialFile[];
   getSourceFiles: () => DialFile[];
-  onCopyFiles?: (items: DialCopiedItem[]) => void;
-  onMoveToFiles?: (items: DialCopiedItem[]) => void;
+  onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
+  onMoveToFiles?: (
+    items: DialCopiedItem[],
+    sourceFolder: string,
+    destinationFolder: string,
+  ) => void;
 }
 
 /**
@@ -131,7 +135,7 @@ export const useFileClipboard = ({
           sourceFiles,
           overwrite,
         );
-        onCopyFiles?.(resolvedItems);
+        onCopyFiles?.(resolvedItems, destination);
         setCopied(new Set());
       } else if (cut.size > 0) {
         const resolvedItems = getCopiedItems(
@@ -142,7 +146,9 @@ export const useFileClipboard = ({
           overwrite,
         );
 
-        onMoveToFiles?.(resolvedItems);
+        const sourceFolder = sourceFiles.at(0)?.parentPath ?? '';
+
+        onMoveToFiles?.(resolvedItems, sourceFolder, destination);
         setCut(new Set());
       }
     },

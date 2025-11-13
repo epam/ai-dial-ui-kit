@@ -71,7 +71,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     expect(result.current.state.hasItems).toBe(false);
   });
 
-  it('paste with copied -> calls onCopyFiles with resolved items and clears copied', () => {
+  it('paste with copied -> calls onCopyFiles with destinationFolder', () => {
     const onCopyFiles = vi.fn();
     const onMoveToFiles = vi.fn();
     destinationFiles = [];
@@ -110,40 +110,45 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     });
 
     expect(onCopyFiles).toHaveBeenCalledTimes(1);
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/a',
-        destinationUrl: '/target-folder/a',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-      {
-        sourceUrl: '/b',
-        destinationUrl: '/target-folder/b',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/a',
+          destinationUrl: '/target-folder/a',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+        {
+          sourceUrl: '/b',
+          destinationUrl: '/target-folder/b',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/target-folder',
+    );
     expect(onMoveToFiles).not.toHaveBeenCalled();
     expect(result.current.state.copied.size).toBe(0);
     expect(result.current.state.hasItems).toBe(false);
   });
 
-  it('paste with cut -> calls onMoveToFiles with resolved items and clears cut', () => {
+  it('paste with cut -> calls onMoveToFiles with sourceFolder and destinationFolder', () => {
     const onCopyFiles = vi.fn();
     const onMoveToFiles = vi.fn();
     sourceFiles = [
       {
         id: '1',
         name: 'm1',
-        path: '/m1',
+        path: '/source/m1',
         nodeType: DialFileNodeType.FOLDER,
+        parentPath: '/source',
       } as DialFile,
       {
         id: '2',
         name: 'm2',
-        path: '/m2',
+        path: '/source/m2',
         nodeType: DialFileNodeType.ITEM,
+        parentPath: '/source',
       } as DialFile,
     ];
 
@@ -158,7 +163,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     act(() => {
-      result.current.cut(['/m1', '/m2']);
+      result.current.cut(['/source/m1', '/source/m2']);
     });
 
     act(() => {
@@ -167,23 +172,69 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     });
 
     expect(onMoveToFiles).toHaveBeenCalledTimes(1);
-    expect(onMoveToFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/m1',
-        destinationUrl: '/move-here/m1',
-        overwrite: false,
-        nodeType: DialFileNodeType.FOLDER,
-      },
-      {
-        sourceUrl: '/m2',
-        destinationUrl: '/move-here/m2',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onMoveToFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/source/m1',
+          destinationUrl: '/move-here/m1',
+          overwrite: false,
+          nodeType: DialFileNodeType.FOLDER,
+        },
+        {
+          sourceUrl: '/source/m2',
+          destinationUrl: '/move-here/m2',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/source',
+      '/move-here',
+    );
     expect(onCopyFiles).not.toHaveBeenCalled();
     expect(result.current.state.cut.size).toBe(0);
     expect(result.current.state.hasItems).toBe(false);
+  });
+
+  it('paste with cut from different folders -> calls onMoveToFiles with empty sourceFolder', () => {
+    const onMoveToFiles = vi.fn();
+    sourceFiles = [
+      {
+        id: '1',
+        name: 'file1',
+        path: '/folder1/file1',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+      {
+        id: '2',
+        name: 'file2',
+        path: '/folder2/file2',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestination,
+        getDestinationFiles,
+        getSourceFiles,
+        onMoveToFiles,
+      }),
+    );
+
+    act(() => {
+      result.current.cut(['/folder1/file1', '/folder2/file2']);
+    });
+
+    act(() => {
+      destination = '/target';
+      result.current.paste();
+    });
+
+    expect(onMoveToFiles).toHaveBeenCalledWith(
+      expect.any(Array),
+      '',
+      '/target',
+    );
   });
 
   it('paste with empty clipboard -> no-op (no callbacks)', () => {
@@ -259,14 +310,17 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste();
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/file.txt',
-        destinationUrl: '/dest/file (1).txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/file.txt',
+          destinationUrl: '/dest/file (1).txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 
   it('paste with multiple conflicts -> increments counter', () => {
@@ -312,14 +366,17 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste();
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/doc.pdf',
-        destinationUrl: '/dest/doc (2).pdf',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/doc.pdf',
+          destinationUrl: '/dest/doc (2).pdf',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 
   it('paste multiple files with conflicts', () => {
@@ -377,26 +434,29 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste();
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/a.txt',
-        destinationUrl: '/dest/a (1).txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-      {
-        sourceUrl: '/src/b.txt',
-        destinationUrl: '/dest/b (1).txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-      {
-        sourceUrl: '/src/c.txt',
-        destinationUrl: '/dest/c.txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/a.txt',
+          destinationUrl: '/dest/a (1).txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+        {
+          sourceUrl: '/src/b.txt',
+          destinationUrl: '/dest/b (1).txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+        {
+          sourceUrl: '/src/c.txt',
+          destinationUrl: '/dest/c.txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 
   it('handles files without extension', () => {
@@ -407,6 +467,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         name: 'README',
         path: '/dest/README',
         nodeType: DialFileNodeType.ITEM,
+        parentPath: '/dest',
       } as DialFile,
     ];
     sourceFiles = [
@@ -414,6 +475,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '2',
         name: 'README',
         path: '/src/README',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -436,14 +498,18 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste();
     });
 
-    expect(onMoveToFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/README',
-        destinationUrl: '/dest/README (1)',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onMoveToFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/README',
+          destinationUrl: '/dest/README (1)',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/src',
+      '/dest',
+    );
   });
 
   it('uses latest value from getDestination at paste time', () => {
@@ -477,14 +543,17 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     });
 
     expect(onCopyFiles).toHaveBeenCalledTimes(1);
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/late.txt',
-        destinationUrl: '/B/late.txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/late.txt',
+          destinationUrl: '/B/late.txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/B',
+    );
   });
 
   it('sequential operations: cut after copy replaces clipboard correctly', () => {
@@ -539,14 +608,17 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste(true);
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/file.txt',
-        destinationUrl: '/dest/file.txt',
-        overwrite: true,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/file.txt',
+          destinationUrl: '/dest/file.txt',
+          overwrite: true,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 
   it('paste with overwrite=false -> resolves name conflicts', () => {
@@ -586,14 +658,17 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste(false);
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/src/file.txt',
-        destinationUrl: '/dest/file (1).txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/src/file.txt',
+          destinationUrl: '/dest/file (1).txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 
   it('handles missing source file -> defaults to ITEM nodeType', () => {
@@ -618,13 +693,16 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.paste();
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith([
-      {
-        sourceUrl: '/missing/file.txt',
-        destinationUrl: '/dest/file.txt',
-        overwrite: false,
-        nodeType: DialFileNodeType.ITEM,
-      },
-    ]);
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        {
+          sourceUrl: '/missing/file.txt',
+          destinationUrl: '/dest/file.txt',
+          overwrite: false,
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ],
+      '/dest',
+    );
   });
 });

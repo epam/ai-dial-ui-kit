@@ -4,20 +4,21 @@ import { useState, useCallback } from 'react';
 
 export interface UseFileDeleteOptions {
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
-  getCurrentPath: () => string;
 }
 
-export const useFileDelete = ({
-  onDeleteFiles,
-  getCurrentPath,
-}: UseFileDeleteOptions) => {
+export const useFileDelete = ({ onDeleteFiles }: UseFileDeleteOptions) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<DialFile[]>([]);
+  const [parentFolderPath, setParentFolderPath] = useState<string>('');
 
-  const openDeleteConfirmation = useCallback((items: DialFile[]) => {
-    setItemsToDelete(items);
-    setDeleteConfirmationOpen(true);
-  }, []);
+  const openDeleteConfirmation = useCallback(
+    (items: DialFile[], parentFolderPath: string) => {
+      setItemsToDelete(items);
+      setParentFolderPath(parentFolderPath);
+      setDeleteConfirmationOpen(true);
+    },
+    [],
+  );
 
   const closeDeleteConfirmation = useCallback(() => {
     setDeleteConfirmationOpen(false);
@@ -25,16 +26,15 @@ export const useFileDelete = ({
   }, []);
 
   const confirmDelete = useCallback(() => {
-    const currentPath = getCurrentPath();
     if (onDeleteFiles && itemsToDelete.length > 0) {
       const deletedItems: DialDeletedItem[] = itemsToDelete.map((file) => ({
         sourceUrl: file.path,
         nodeType: file.nodeType,
       }));
-      onDeleteFiles(deletedItems, currentPath);
+      onDeleteFiles(deletedItems, parentFolderPath);
     }
     closeDeleteConfirmation();
-  }, [itemsToDelete, onDeleteFiles, getCurrentPath, closeDeleteConfirmation]);
+  }, [itemsToDelete, onDeleteFiles, closeDeleteConfirmation, parentFolderPath]);
 
   return {
     deleteConfirmationOpen,
