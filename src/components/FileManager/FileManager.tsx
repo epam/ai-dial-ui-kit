@@ -37,6 +37,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import {
   DialFileManagerActions,
   type DialCopiedItem,
+  type DialDeletedItem,
 } from '@/types/file-manager';
 import {
   IconClipboardCopy,
@@ -118,9 +119,13 @@ export interface DialFileManagerProps {
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
-  onCopyFiles?: (items: DialCopiedItem[]) => void;
-  onMoveToFiles?: (items: DialCopiedItem[]) => void;
-  onDeleteFiles?: (items: DialFile[], sourceFolder: string) => void;
+  onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
+  onMoveToFiles?: (
+    items: DialCopiedItem[],
+    sourceFolder: string,
+    destinationFolder: string,
+  ) => void;
+  onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
 
   onRename?: (itemPath: string) => void;
   onRenameSave?: (value: string) => void;
@@ -357,7 +362,7 @@ export const DialFileManagerView: FC = () => {
           key: 'delete',
           label: treeOptions.actionLabels[DialFileManagerActions.Delete],
           icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
-          onClick: () => openDeleteConfirmation([file]),
+          onClick: () => openDeleteConfirmation([file], file.parentPath ?? ''),
         });
       }
     }

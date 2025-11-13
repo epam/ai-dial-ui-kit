@@ -290,23 +290,23 @@ const PopupComponent = (args: DialFileManagerProps) => {
               delete: 'Delete',
             },
           }}
-          onCopyFiles={(items) =>
+          onCopyFiles={(items, destinationFolder) =>
             alert(
               `Copying files: ${items
                 .map((f) => f.sourceUrl)
-                .join(', ')} to ${items[0].destinationUrl}`,
+                .join(', ')} to ${destinationFolder}`,
             )
           }
-          onMoveToFiles={(items) =>
+          onMoveToFiles={(items, sourceFolder, destinationFolder) =>
             alert(
-              `Moving files: ${items
+              `Moving files from ${sourceFolder} to ${destinationFolder}: ${items
                 .map((f) => f.sourceUrl)
-                .join(', ')} to ${items[0].destinationUrl}`,
+                .join(', ')}`,
             )
           }
           onDeleteFiles={(items, sourceFolder) =>
             alert(
-              `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.name).join(', ')}`,
+              `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
             )
           }
           onRename={handleRename}

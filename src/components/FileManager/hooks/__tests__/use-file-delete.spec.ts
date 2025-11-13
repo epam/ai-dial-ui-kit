@@ -5,22 +5,15 @@ import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 
 describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
-  let currentPath = '/initial';
-  const getCurrentPath = () => currentPath;
-
-  beforeEach(() => {
-    currentPath = '/initial';
-  });
-
   it('initial state: deleteConfirmationOpen=false and itemsToDelete=[]', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     expect(result.current.deleteConfirmationOpen).toBe(false);
     expect(result.current.itemsToDelete).toEqual([]);
   });
 
   it('openDeleteConfirmation sets items and opens dialog', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     const files: DialFile[] = [
       {
@@ -36,9 +29,10 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
+    const parentFolderPath = '/folder';
 
     act(() => {
-      result.current.openDeleteConfirmation(files);
+      result.current.openDeleteConfirmation(files, parentFolderPath);
     });
 
     expect(result.current.deleteConfirmationOpen).toBe(true);
@@ -46,7 +40,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
   });
 
   it('closeDeleteConfirmation clears items and closes dialog', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     const files: DialFile[] = [
       {
@@ -58,7 +52,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     ];
 
     act(() => {
-      result.current.openDeleteConfirmation(files);
+      result.current.openDeleteConfirmation(files, '/');
     });
 
     expect(result.current.deleteConfirmationOpen).toBe(true);
@@ -73,9 +67,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
 
   it('confirmDelete calls onDeleteFiles with items and current path, then closes', () => {
     const onDeleteFiles = vi.fn();
-    const { result } = renderHook(() =>
-      useFileDelete({ getCurrentPath, onDeleteFiles }),
-    );
+    const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
 
     const files: DialFile[] = [
       {
@@ -85,10 +77,10 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
+    const parentFolderPath = '/folder';
 
     act(() => {
-      currentPath = '/folder';
-      result.current.openDeleteConfirmation(files);
+      result.current.openDeleteConfirmation(files, parentFolderPath);
     });
 
     act(() => {
@@ -108,9 +100,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
 
   it('confirmDelete does not call onDeleteFiles if no items to delete', () => {
     const onDeleteFiles = vi.fn();
-    const { result } = renderHook(() =>
-      useFileDelete({ getCurrentPath, onDeleteFiles }),
-    );
+    const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
 
     act(() => {
       result.current.confirmDelete();
@@ -121,7 +111,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
   });
 
   it('confirmDelete works without onDeleteFiles callback', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     const files: DialFile[] = [
       {
@@ -133,7 +123,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     ];
 
     act(() => {
-      result.current.openDeleteConfirmation(files);
+      result.current.openDeleteConfirmation(files, '/');
     });
 
     expect(() => {
@@ -146,44 +136,9 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     expect(result.current.itemsToDelete).toEqual([]);
   });
 
-  it('uses latest getCurrentPath value at confirm time', () => {
-    const onDeleteFiles = vi.fn();
-    const { result } = renderHook(() =>
-      useFileDelete({ getCurrentPath, onDeleteFiles }),
-    );
-
-    const files: DialFile[] = [
-      {
-        id: '1',
-        name: 'file.txt',
-        path: '/old/file.txt',
-        nodeType: DialFileNodeType.ITEM,
-      } as DialFile,
-    ];
-
-    act(() => {
-      currentPath = '/old';
-      result.current.openDeleteConfirmation(files);
-    });
-
-    act(() => {
-      currentPath = '/new';
-      result.current.confirmDelete();
-    });
-
-    const deletedItems = files.map((file) => ({
-      sourceUrl: file.path,
-      nodeType: file.nodeType,
-    }));
-
-    expect(onDeleteFiles).toHaveBeenCalledWith(deletedItems, '/new');
-  });
-
   it('handles deletion of multiple files including folders', () => {
     const onDeleteFiles = vi.fn();
-    const { result } = renderHook(() =>
-      useFileDelete({ getCurrentPath, onDeleteFiles }),
-    );
+    const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
 
     const files: DialFile[] = [
       {
@@ -206,9 +161,10 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
       } as DialFile,
     ];
 
+    const parentFolderPath = '/root';
+
     act(() => {
-      currentPath = '/root';
-      result.current.openDeleteConfirmation(files);
+      result.current.openDeleteConfirmation(files, parentFolderPath);
     });
 
     act(() => {
@@ -225,7 +181,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
   });
 
   it('sequential operations: open -> close -> open again', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     const files1: DialFile[] = [
       {
@@ -246,7 +202,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     ];
 
     act(() => {
-      result.current.openDeleteConfirmation(files1);
+      result.current.openDeleteConfirmation(files1, '/');
     });
 
     expect(result.current.itemsToDelete).toEqual(files1);
@@ -258,7 +214,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     expect(result.current.itemsToDelete).toEqual([]);
 
     act(() => {
-      result.current.openDeleteConfirmation(files2);
+      result.current.openDeleteConfirmation(files2, '/');
     });
 
     expect(result.current.itemsToDelete).toEqual(files2);
@@ -266,7 +222,7 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
   });
 
   it('openDeleteConfirmation replaces previous items', () => {
-    const { result } = renderHook(() => useFileDelete({ getCurrentPath }));
+    const { result } = renderHook(() => useFileDelete({}));
 
     const files1: DialFile[] = [
       {
@@ -293,13 +249,13 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     ];
 
     act(() => {
-      result.current.openDeleteConfirmation(files1);
+      result.current.openDeleteConfirmation(files1, '/');
     });
 
     expect(result.current.itemsToDelete).toEqual(files1);
 
     act(() => {
-      result.current.openDeleteConfirmation(files2);
+      result.current.openDeleteConfirmation(files2, '/');
     });
 
     expect(result.current.itemsToDelete).toEqual(files2);
@@ -308,12 +264,10 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
 
   it('openDeleteConfirmation with empty array', () => {
     const onDeleteFiles = vi.fn();
-    const { result } = renderHook(() =>
-      useFileDelete({ getCurrentPath, onDeleteFiles }),
-    );
+    const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
 
     act(() => {
-      result.current.openDeleteConfirmation([]);
+      result.current.openDeleteConfirmation([], '');
     });
 
     expect(result.current.deleteConfirmationOpen).toBe(true);

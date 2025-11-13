@@ -148,7 +148,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     confirmDelete,
   } = useFileDelete({
     onDeleteFiles,
-    getCurrentPath: () => currentFolder?.path ?? '/',
   });
 
   const onPaste = useCallback(

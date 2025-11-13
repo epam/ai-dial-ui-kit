@@ -7,8 +7,12 @@ export interface UseFileClipboardOptions {
   getDestination: () => string;
   getDestinationFiles: () => DialFile[];
   getSourceFiles: () => DialFile[];
-  onCopyFiles?: (items: DialCopiedItem[]) => void;
-  onMoveToFiles?: (items: DialCopiedItem[]) => void;
+  onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
+  onMoveToFiles?: (
+    items: DialCopiedItem[],
+    sourceFolder: string,
+    destinationFolder: string,
+  ) => void;
 }
 
 /**
@@ -92,6 +96,13 @@ const getCopiedItems = (
   });
 };
 
+const findParentFolder = (files: DialFile[], path: string): string => {
+  const segments = path.split('/').filter(Boolean);
+  if (segments.length <= 1) return '/';
+  segments.pop();
+  return '/' + segments.join('/');
+};
+
 export const useFileClipboard = ({
   getDestination,
   getDestinationFiles,
@@ -131,7 +142,7 @@ export const useFileClipboard = ({
           sourceFiles,
           overwrite,
         );
-        onCopyFiles?.(resolvedItems);
+        onCopyFiles?.(resolvedItems, destination);
         setCopied(new Set());
       } else if (cut.size > 0) {
         const resolvedItems = getCopiedItems(
@@ -142,7 +153,13 @@ export const useFileClipboard = ({
           overwrite,
         );
 
-        onMoveToFiles?.(resolvedItems);
+        const sourceFolders = new Set(
+          Array.from(cut).map((path) => findParentFolder(sourceFiles, path)),
+        );
+        const sourceFolder =
+          sourceFolders.size === 1 ? Array.from(sourceFolders)[0] : '';
+
+        onMoveToFiles?.(resolvedItems, sourceFolder, destination);
         setCut(new Set());
       }
     },
