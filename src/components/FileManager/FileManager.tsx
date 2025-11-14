@@ -43,6 +43,7 @@ import {
   IconClipboardCopy,
   IconCopy,
   IconCut,
+  IconDownload,
   IconPencilMinus,
   IconTrashX,
 } from '@tabler/icons-react';
@@ -68,6 +69,7 @@ export interface FileTreeOptions
     [DialFileManagerActions.Cut]?: string;
     [DialFileManagerActions.Paste]?: string;
     [DialFileManagerActions.Rename]?: string;
+    [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
   };
 }
@@ -126,6 +128,7 @@ export interface DialFileManagerProps {
     destinationFolder: string,
   ) => void;
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
+  onDownloadFiles?: (items: DialFile[]) => void;
 
   onRename?: (itemPath: string) => void;
   onRenameSave?: (value: string) => void;
@@ -241,6 +244,7 @@ export const DialFileManagerView: FC = () => {
     onCut,
     onPaste,
     clipboard,
+    downloadFiles,
     openDeleteConfirmation,
     closeDeleteConfirmation,
     confirmDelete,
@@ -331,6 +335,16 @@ export const DialFileManagerView: FC = () => {
           label: treeOptions.actionLabels[DialFileManagerActions.Cut],
           icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
           onClick: () => onCut([file.path]),
+        });
+      }
+      if (treeOptions.actionLabels[DialFileManagerActions.Download]) {
+        items.push({
+          key: 'download',
+          label: treeOptions.actionLabels[DialFileManagerActions.Download],
+          icon: (
+            <IconDownload {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => downloadFiles([file]),
         });
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Paste]) {
