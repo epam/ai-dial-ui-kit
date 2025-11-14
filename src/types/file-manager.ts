@@ -11,6 +11,7 @@ export enum DialFileManagerActions {
   Cut = 'cut',
   Paste = 'paste',
   Rename = 'rename',
+  Download = 'download',
   Delete = 'delete',
 }
 

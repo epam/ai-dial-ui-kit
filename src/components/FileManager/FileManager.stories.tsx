@@ -287,6 +287,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               cut: 'Cut',
               paste: 'Paste',
               rename: 'Rename',
+              download: 'Download',
               delete: 'Delete',
             },
           }}
@@ -307,6 +308,11 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onDeleteFiles={(items, sourceFolder) =>
             alert(
               `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
+            )
+          }
+          onDownloadFiles={(items) =>
+            alert(
+              `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
             )
           }
           onRename={handleRename}

@@ -20,6 +20,7 @@ import { useCollapseTree } from './hooks/use-collapse-tree';
 import { useFileClipboard } from './hooks/use-file-clipboard';
 import { useCurrentPath } from './hooks/use-current-path';
 import { useFileDelete } from './hooks/use-file-delete';
+import { useFileDownload } from './hooks/use-file-download';
 import {
   FileManagerContext,
   type FileManagerContextValue,
@@ -74,6 +75,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onCopyFiles,
   onMoveToFiles,
   onDeleteFiles,
+  onDownloadFiles,
   onRename,
   onRenameSave,
   onRenameCancel,
@@ -148,6 +150,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     confirmDelete,
   } = useFileDelete({
     onDeleteFiles,
+  });
+
+  const { downloadFiles } = useFileDownload({
+    onDownloadFiles,
   });
 
   const onPaste = useCallback(
@@ -269,6 +275,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCopy,
     onCut,
     onPaste,
+    downloadFiles,
 
     renamedPath,
     onRename: renameHandler,

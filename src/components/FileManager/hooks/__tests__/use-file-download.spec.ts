@@ -1,0 +1,173 @@
+import { describe, it, expect, vi } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useFileDownload } from '@/components/FileManager/hooks/use-file-download';
+import type { DialFile } from '@/models/file';
+import { DialFileNodeType } from '@/models/file';
+
+describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
+  const mockFile1: DialFile = {
+    id: '1',
+    name: 'document.pdf',
+    path: '/documents/document.pdf',
+    parentPath: '/documents',
+    folderId: '/documents',
+    nodeType: DialFileNodeType.ITEM,
+  };
+
+  const mockFile2: DialFile = {
+    id: '2',
+    name: 'image.png',
+    path: '/images/image.png',
+    folderId: '/images',
+    parentPath: '/images',
+    nodeType: DialFileNodeType.ITEM,
+  };
+
+  const mockFolder: DialFile = {
+    id: '3',
+    name: 'projects',
+    path: '/work/projects',
+    parentPath: '/work',
+    folderId: '/work/projects',
+    nodeType: DialFileNodeType.FOLDER,
+  };
+
+  it('returns downloadFiles function', () => {
+    const { result } = renderHook(() => useFileDownload({}));
+
+    expect(result.current.downloadFiles).toBeDefined();
+    expect(typeof result.current.downloadFiles).toBe('function');
+  });
+
+  it('calls onDownloadFiles with provided items', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    const files = [mockFile1, mockFile2];
+
+    act(() => {
+      result.current.downloadFiles(files);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles).toHaveBeenCalledWith(files);
+  });
+
+  it('does not call onDownloadFiles when items array is empty', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    act(() => {
+      result.current.downloadFiles([]);
+    });
+
+    expect(onDownloadFiles).not.toHaveBeenCalled();
+  });
+
+  it('does not throw when onDownloadFiles is not provided', () => {
+    const { result } = renderHook(() => useFileDownload({}));
+
+    expect(() => {
+      act(() => {
+        result.current.downloadFiles([mockFile1]);
+      });
+    }).not.toThrow();
+  });
+
+  it('handles downloading a single file', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    act(() => {
+      result.current.downloadFiles([mockFile1]);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles).toHaveBeenCalledWith([mockFile1]);
+  });
+
+  it('handles downloading multiple files', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    const files = [mockFile1, mockFile2];
+
+    act(() => {
+      result.current.downloadFiles(files);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles).toHaveBeenCalledWith(files);
+  });
+
+  it('handles downloading a folder', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    act(() => {
+      result.current.downloadFiles([mockFolder]);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles).toHaveBeenCalledWith([mockFolder]);
+  });
+
+  it('handles downloading mixed files and folders', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    const items = [mockFile1, mockFolder, mockFile2];
+
+    act(() => {
+      result.current.downloadFiles(items);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles).toHaveBeenCalledWith(items);
+  });
+
+  it('updates callback when onDownloadFiles changes', () => {
+    const onDownloadFiles1 = vi.fn();
+    const onDownloadFiles2 = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ callback }) => useFileDownload({ onDownloadFiles: callback }),
+      { initialProps: { callback: onDownloadFiles1 } },
+    );
+
+    act(() => {
+      result.current.downloadFiles([mockFile1]);
+    });
+
+    expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles2).not.toHaveBeenCalled();
+
+    rerender({ callback: onDownloadFiles2 });
+
+    act(() => {
+      result.current.downloadFiles([mockFile1]);
+    });
+
+    expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
+    expect(onDownloadFiles2).toHaveBeenCalledTimes(1);
+  });
+
+  it('sequential downloads call callback each time', () => {
+    const onDownloadFiles = vi.fn();
+    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+
+    act(() => {
+      result.current.downloadFiles([mockFile1]);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      result.current.downloadFiles([mockFile2]);
+    });
+
+    expect(onDownloadFiles).toHaveBeenCalledTimes(2);
+    expect(onDownloadFiles).toHaveBeenNthCalledWith(1, [mockFile1]);
+    expect(onDownloadFiles).toHaveBeenNthCalledWith(2, [mockFile2]);
+  });
+});

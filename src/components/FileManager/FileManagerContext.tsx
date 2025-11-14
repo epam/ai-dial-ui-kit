@@ -82,6 +82,7 @@ export interface FileManagerContextValue {
   handleTableRowClick: (row: FileManagerGridRow) => void;
 
   onTableFileClick?: DialFileManagerProps['onTableFileClick'];
+  downloadFiles: (items: DialFile[]) => void;
 }
 
 export const FileManagerContext = createContext<
