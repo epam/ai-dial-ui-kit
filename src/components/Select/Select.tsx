@@ -59,6 +59,7 @@ export interface DialSelectProps {
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
   inlineSearch?: boolean;
+  onFooterClick?: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
 /**
@@ -107,6 +108,7 @@ export interface DialSelectProps {
  * @param [onClose] - Called when the dropdown close button is clicked.
  * @param [onChange] - Called when the selection changes.
  * @param [inlineSearch=false] - Render a plain input inside trigger (single mode only).
+ * @param [onFooterClick] - Called when the footer element is clicked. When provided, automatically closes the dropdown.
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -132,6 +134,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   onClose,
   onChange,
   inlineSearch = false,
+  onFooterClick,
 }) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -444,7 +447,18 @@ export const DialSelect: FC<DialSelectProps> = ({
               })
             )}
           </div>
-          {footer && <>{typeof footer === 'function' ? footer() : footer}</>}
+          {footer && (
+            <div
+              onClick={(e) => {
+                onFooterClick?.(e);
+                if (onFooterClick) {
+                  setOpen(false);
+                }
+              }}
+            >
+              {typeof footer === 'function' ? footer() : footer}
+            </div>
+          )}
         </div>
       )}
     >
