@@ -106,10 +106,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     renameCancelHandler,
     renameValidateHandler,
   } = useItemRenaming({
+    items,
     onRename,
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    onMoveToFiles,
   });
 
   const [searchValue, setSearchValue] = useState<string>('');
