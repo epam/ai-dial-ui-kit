@@ -135,6 +135,53 @@ export const WithHeaderAndFooter: Story = {
   },
 };
 
+export const WithFooterClickClose: Story = {
+  name: 'With header and footer - close on footer click',
+  args: {
+    header: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    footer: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small text-primary font-medium">
+          Click footer to close
+        </span>
+      </div>
+    ),
+    onFooterClick: () => {
+      console.info('Footer clicked - dropdown will close');
+    },
+  },
+};
+
+export const WithFooterClickCallback: Story = {
+  name: 'With footer click callback',
+  args: {
+    header: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    footer: (
+      <button
+        type="button"
+        className="w-full px-3 py-2 border-t text-left hover:bg-layer-2 transition-colors"
+      >
+        <span className="dial-small text-primary font-medium">Apply</span>
+      </button>
+    ),
+    onFooterClick: (e) => {
+      console.info('Footer clicked', e);
+    },
+  },
+};
+
 export const Secondary: Story = {
   args: {
     size: SelectSize.Sm,
