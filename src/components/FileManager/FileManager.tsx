@@ -40,21 +40,35 @@ import {
   type DialDeletedItem,
 } from '@/types/file-manager';
 import {
-  IconClipboardCopy,
   IconCopy,
-  IconCut,
   IconDownload,
   IconPencilMinus,
   IconTrashX,
 } from '@tabler/icons-react';
+import CopyToIcon from '@/assets/icons/copy-to.svg?react';
+import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
+import {
+  DestinationFolderPopup,
+  type DestinationFolderPopupProps,
+} from './components/DestinationFolderPopup/DestinationFolderPopup';
 
 type GridRow = FileManagerGridRow;
+
+export type DialFileManagerDestinationFolderPopupOptions = Pick<
+  DestinationFolderPopupProps,
+  | 'setDestinationFolderPath'
+  | 'destinationFolderPath'
+  | 'addFolderLabel'
+  | 'copyLabel'
+  | 'moveLabel'
+  | 'hiddenFilesSwitcherLabel'
+>;
 
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
@@ -65,12 +79,12 @@ export interface FileTreeOptions
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
   actionLabels?: {
+    [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;
-    [DialFileManagerActions.Cut]?: string;
-    [DialFileManagerActions.Paste]?: string;
     [DialFileManagerActions.Rename]?: string;
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
+    [DialFileManagerActions.Move]?: string;
   };
 }
 
@@ -111,12 +125,16 @@ export interface DialFileManagerProps {
   items?: DialFile[];
   rootItem?: DialRootFolder;
 
+  showHiddenFiles?: boolean;
+  onShowHiddenFilesChange?: (value: boolean) => void;
+
   treeOptions?: FileTreeOptions;
   toolbarOptions?: ToolbarOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -221,6 +239,7 @@ export const DialFileManagerView: FC = () => {
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
+    destinationFolderPopupOptions,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -240,11 +259,18 @@ export const DialFileManagerView: FC = () => {
     handleTreeItemClick,
     handleTableRowClick,
 
-    onCopy,
-    onCut,
-    onPaste,
-    clipboard,
-    downloadFiles,
+    handleOpenDestinationFolderPopup,
+    handleCloseDestinationFolderPopup,
+    openDestinationFolderPopup,
+    destinationFolderMode,
+    handleSetCopiedFiles,
+    handleSetMovedFiles,
+    handleDuplicate,
+    handleCopyTo,
+    handleMoveTo,
+
+    handleDownloadFiles,
+
     openDeleteConfirmation,
     closeDeleteConfirmation,
     confirmDelete,
@@ -321,20 +347,46 @@ export const DialFileManagerView: FC = () => {
   const getTreeContextMenuItems = (file: DialFile): DropdownItem[] => {
     const items: DropdownItem[] = [];
     if (treeOptions?.actionLabels) {
+      if (treeOptions.actionLabels[DialFileManagerActions.Duplicate]) {
+        items.push({
+          key: 'duplicate',
+          label: treeOptions.actionLabels[DialFileManagerActions.Duplicate],
+          icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => handleDuplicate([file]),
+        });
+      }
       if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
         items.push({
           key: 'copy',
           label: treeOptions.actionLabels[DialFileManagerActions.Copy],
-          icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
-          onClick: () => onCopy([file.path]),
+          icon: (
+            <CopyToIcon
+              width={BASE_ICON_PROPS.size}
+              height={BASE_ICON_PROPS.size}
+              className="text-secondary"
+            />
+          ),
+          onClick: () => {
+            handleSetCopiedFiles([file]);
+            handleOpenDestinationFolderPopup('copy');
+          },
         });
       }
-      if (treeOptions.actionLabels[DialFileManagerActions.Cut]) {
+      if (treeOptions.actionLabels[DialFileManagerActions.Move]) {
         items.push({
-          key: 'cut',
-          label: treeOptions.actionLabels[DialFileManagerActions.Cut],
-          icon: <IconCut {...BASE_ICON_PROPS} className="text-secondary" />,
-          onClick: () => onCut([file.path]),
+          key: 'move',
+          label: treeOptions.actionLabels[DialFileManagerActions.Move],
+          icon: (
+            <MoveToIcon
+              width={BASE_ICON_PROPS.size}
+              height={BASE_ICON_PROPS.size}
+              className="text-secondary"
+            />
+          ),
+          onClick: () => {
+            handleSetMovedFiles([file]);
+            handleOpenDestinationFolderPopup('move');
+          },
         });
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Download]) {
@@ -344,21 +396,7 @@ export const DialFileManagerView: FC = () => {
           icon: (
             <IconDownload {...BASE_ICON_PROPS} className="text-secondary" />
           ),
-          onClick: () => downloadFiles([file]),
-        });
-      }
-      if (treeOptions.actionLabels[DialFileManagerActions.Paste]) {
-        items.push({
-          key: 'paste',
-          label: treeOptions.actionLabels[DialFileManagerActions.Paste],
-          disabled: !clipboard.hasItems,
-          icon: (
-            <IconClipboardCopy
-              {...BASE_ICON_PROPS}
-              className="text-secondary"
-            />
-          ),
-          onClick: () => onPaste(),
+          onClick: () => handleDownloadFiles([file]),
         });
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Rename]) {
@@ -502,6 +540,33 @@ export const DialFileManagerView: FC = () => {
         confirmLabel={deleteConfirmationOptions?.confirmLabel}
         titleRenderer={deleteConfirmationOptions?.titleRenderer}
         contentRenderer={deleteConfirmationOptions?.contentRenderer}
+      />
+      <DestinationFolderPopup
+        open={openDestinationFolderPopup}
+        onClose={handleCloseDestinationFolderPopup}
+        onConfirm={() => {
+          const destinationPath =
+            destinationFolderPopupOptions?.destinationFolderPath ?? '/';
+          if (destinationFolderMode === 'copy') {
+            handleCopyTo(destinationPath);
+          } else {
+            const sourcePath = currentPath ?? '/';
+            handleMoveTo(destinationPath, sourcePath);
+          }
+          handleCloseDestinationFolderPopup();
+        }}
+        mode={destinationFolderMode}
+        items={items}
+        rootItem={rootItem}
+        onPathChange={destinationFolderPopupOptions?.setDestinationFolderPath}
+        path={destinationFolderPopupOptions?.destinationFolderPath}
+        addFolderLabel={destinationFolderPopupOptions?.addFolderLabel}
+        copyLabel={destinationFolderPopupOptions?.copyLabel}
+        moveLabel={destinationFolderPopupOptions?.moveLabel}
+        hiddenFilesSwitcherLabel={
+          destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
+        }
+        gridOptions={{ columnDefs: columnDefs }}
       />
     </section>
   );

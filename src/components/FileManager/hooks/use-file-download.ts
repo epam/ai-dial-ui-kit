@@ -8,7 +8,7 @@ export interface UseFileDownloadOptions {
 export const useFileDownload = ({
   onDownloadFiles,
 }: UseFileDownloadOptions) => {
-  const downloadFiles = useCallback(
+  const handleDownloadFiles = useCallback(
     (items: DialFile[]) => {
       if (onDownloadFiles && items.length > 0) {
         onDownloadFiles(items);
@@ -18,6 +18,6 @@ export const useFileDownload = ({
   );
 
   return {
-    downloadFiles,
+    handleDownloadFiles,
   };
 };
