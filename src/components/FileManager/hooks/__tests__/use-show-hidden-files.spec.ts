@@ -9,12 +9,16 @@ describe('Dial UI Kit :: FileManager :: useShowHiddenFiles', () => {
   });
 
   it('respects provided initialState (true)', () => {
-    const { result } = renderHook(() => useShowHiddenFiles(true));
+    const { result } = renderHook(() =>
+      useShowHiddenFiles({ showHiddenFiles: true }),
+    );
     expect(result.current.areHiddenFilesVisible).toBe(true);
   });
 
   it('respects provided initialState (false)', () => {
-    const { result } = renderHook(() => useShowHiddenFiles(false));
+    const { result } = renderHook(() =>
+      useShowHiddenFiles({ showHiddenFiles: false }),
+    );
     expect(result.current.areHiddenFilesVisible).toBe(false);
   });
 
@@ -33,7 +37,9 @@ describe('Dial UI Kit :: FileManager :: useShowHiddenFiles', () => {
   });
 
   it('toggles correctly when starting from true', () => {
-    const { result } = renderHook(() => useShowHiddenFiles(true));
+    const { result } = renderHook(() =>
+      useShowHiddenFiles({ showHiddenFiles: true }),
+    );
 
     act(() => {
       result.current.toggleHiddenFilesVisibility();

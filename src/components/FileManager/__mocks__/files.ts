@@ -360,6 +360,43 @@ export const itemsMock: DialFile[] = [
         ],
       },
 
+      // ─────────── Hidden folder and files at root level
+      {
+        id: 'hidden-root-folder',
+        name: '.hidden-root-folder',
+        path: '/All files/.hidden-root-folder',
+        parentPath: '/All files',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-13',
+        items: [
+          {
+            id: 'inside-hidden-root',
+            name: 'inside-hidden-root.txt',
+            path: '/All files/.hidden-root-folder/inside-hidden-root.txt',
+            parentPath: '/All files/.hidden-root-folder',
+            nodeType: DialFileNodeType.ITEM,
+            resourceType: DialFileResourceType.FILE,
+            extension: 'txt',
+            contentType: 'text/plain',
+            folderId: 'hidden-root-folder',
+            updatedAt: '2025-01-13',
+          },
+          {
+            id: '.hidden-file-in-hidden-folder',
+            name: '.hidden-file-in-hidden-folder.txt',
+            path: '/All files/.hidden-root-folder/.hidden-file-in-hidden-folder.txt',
+            parentPath: '/All files/.hidden-root-folder',
+            nodeType: DialFileNodeType.ITEM,
+            resourceType: DialFileResourceType.FILE,
+            extension: 'txt',
+            contentType: 'text/plain',
+            folderId: 'hidden-root-folder',
+            updatedAt: '2025-01-13',
+          },
+        ],
+      },
+
       // ─────────── Media (trimmed)
       {
         id: 'media',

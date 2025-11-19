@@ -7,9 +7,9 @@ export enum DialFileManagerTabs {
 }
 
 export enum DialFileManagerActions {
+  Duplicate = 'duplicate',
   Copy = 'copy',
-  Cut = 'cut',
-  Paste = 'paste',
+  Move = 'move',
   Rename = 'rename',
   Download = 'download',
   Delete = 'delete',
