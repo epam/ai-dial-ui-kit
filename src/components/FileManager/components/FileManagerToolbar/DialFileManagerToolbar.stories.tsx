@@ -23,7 +23,6 @@ const meta: Meta<typeof DialFileManagerToolbar> = {
   argTypes: {
     onTabChange: { action: 'onTabChange' },
     onToggleHiddenFiles: { action: 'onToggleHiddenFiles' },
-    onRefresh: { action: 'onRefresh' },
   },
 };
 export default meta;
@@ -71,7 +70,6 @@ export const Default: Story = {
             onTabChange={setActiveTab}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={setAreHiddenFilesVisible}
-            onRefresh={() => alert('Refresh')}
             isCreateButtonVisible
             createButtonVariant={ButtonVariant.Primary}
             createButtonDropdownItems={mockCreateItems}
@@ -98,7 +96,6 @@ export const WithSecondaryCreateButton: Story = {
             onTabChange={setActiveTab}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={setAreHiddenFilesVisible}
-            onRefresh={() => alert('Refresh')}
             isCreateButtonVisible
             createButtonVariant={ButtonVariant.Secondary}
             createButtonDropdownItems={mockCreateItems}
@@ -125,7 +122,6 @@ export const WithoutCreateButton: Story = {
             onTabChange={setActiveTab}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={setAreHiddenFilesVisible}
-            onRefresh={() => alert('Refresh')}
           />
         </div>
       );
