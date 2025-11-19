@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagVariant } from '@/types/tag';
-import { DialTag } from '../Tag/Tag';
+import { DialTag } from '@/components/Tag/Tag';
 import { IconEye } from '@tabler/icons-react';
 
 const meta: Meta<typeof DialTag> = {

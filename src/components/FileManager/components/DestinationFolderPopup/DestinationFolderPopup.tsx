@@ -1,5 +1,8 @@
 import { DialPopup } from '@/components/Popup/Popup';
-import { DialFileManager, type DialFileManagerProps } from '../../FileManager';
+import {
+  DialFileManager,
+  type DialFileManagerProps,
+} from '@/components/FileManager/FileManager';
 import { PopupSize } from '@/types/popup';
 import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
