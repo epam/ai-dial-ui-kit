@@ -62,7 +62,12 @@ type GridRow = FileManagerGridRow;
 
 export type DialFileManagerDestinationFolderPopupOptions = Pick<
   DestinationFolderPopupProps,
-  'setDestinationFolderPath' | 'destinationFolderPath'
+  | 'setDestinationFolderPath'
+  | 'destinationFolderPath'
+  | 'addFolderLabel'
+  | 'copyLabel'
+  | 'moveLabel'
+  | 'hiddenFilesSwitcherLabel'
 >;
 
 export interface FileTreeOptions
@@ -555,6 +560,12 @@ export const DialFileManagerView: FC = () => {
         rootItem={rootItem}
         onPathChange={destinationFolderPopupOptions?.setDestinationFolderPath}
         path={destinationFolderPopupOptions?.destinationFolderPath}
+        addFolderLabel={destinationFolderPopupOptions?.addFolderLabel}
+        copyLabel={destinationFolderPopupOptions?.copyLabel}
+        moveLabel={destinationFolderPopupOptions?.moveLabel}
+        hiddenFilesSwitcherLabel={
+          destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
+        }
         gridOptions={{ columnDefs: columnDefs }}
       />
     </section>

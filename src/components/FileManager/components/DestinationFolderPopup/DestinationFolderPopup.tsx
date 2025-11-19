@@ -16,6 +16,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   destinationFolderPath?: string;
   copyLabel?: string;
   moveLabel?: string;
+  addFolderLabel?: string;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
 }
@@ -47,6 +48,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param [mode="copy"] - Operation mode: 'copy' or 'move'
  * @param [copyLabel="Copy"] - Label for the copy button
  * @param [moveLabel="Move"] - Label for the move button
+ * @param [addFolderLabel="Add folder"] - Label for the add folder button
  * @param [hiddenFilesSwitcherLabel="Show hidden files"] - Label for the hidden files toggle
  * @param items - Array of files to display in the File Manager
  * @param rootItem - Root folder item
@@ -59,6 +61,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   open,
   copyLabel = 'Copy',
   moveLabel = 'Move',
+  addFolderLabel = 'Add folder',
   mode = 'copy',
   hiddenFilesSwitcherLabel = 'Show hidden files',
   ...restProps
@@ -80,7 +83,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">
             <DialButton
-              title="Add folder"
+              title={addFolderLabel}
               variant={ButtonVariant.Tertiary}
               iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
             />
