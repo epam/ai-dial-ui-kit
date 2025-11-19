@@ -69,17 +69,16 @@ export const useItemRenaming = ({
   const renameSaveHandler = useCallback(
     (value: string) => {
       if (onMoveToFiles && renamedPath) {
-        const sourcePath = renamedPath;
-        const destinationPath = changeLastPathSegment(sourcePath, value);
-        const targetNode = findNodeByPath(items, sourcePath);
+        const destinationPath = changeLastPathSegment(renamedPath, value);
+        const targetNode = findNodeByPath(items, renamedPath);
 
         if (targetNode) {
           const affected = collectCopiedItems(
             targetNode,
-            sourcePath,
+            renamedPath,
             destinationPath,
           );
-          onMoveToFiles(affected, sourcePath, destinationPath);
+          onMoveToFiles(affected, renamedPath, destinationPath);
         }
       }
 
