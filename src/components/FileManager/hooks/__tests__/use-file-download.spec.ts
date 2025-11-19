@@ -32,11 +32,11 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     nodeType: DialFileNodeType.FOLDER,
   };
 
-  it('returns downloadFiles function', () => {
+  it('returns handleDownloadFiles function', () => {
     const { result } = renderHook(() => useFileDownload({}));
 
-    expect(result.current.downloadFiles).toBeDefined();
-    expect(typeof result.current.downloadFiles).toBe('function');
+    expect(result.current.handleDownloadFiles).toBeDefined();
+    expect(typeof result.current.handleDownloadFiles).toBe('function');
   });
 
   it('calls onDownloadFiles with provided items', () => {
@@ -46,7 +46,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const files = [mockFile1, mockFile2];
 
     act(() => {
-      result.current.downloadFiles(files);
+      result.current.handleDownloadFiles(files);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
@@ -58,7 +58,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
 
     act(() => {
-      result.current.downloadFiles([]);
+      result.current.handleDownloadFiles([]);
     });
 
     expect(onDownloadFiles).not.toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(() => {
       act(() => {
-        result.current.downloadFiles([mockFile1]);
+        result.current.handleDownloadFiles([mockFile1]);
       });
     }).not.toThrow();
   });
@@ -79,7 +79,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
 
     act(() => {
-      result.current.downloadFiles([mockFile1]);
+      result.current.handleDownloadFiles([mockFile1]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
@@ -93,7 +93,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const files = [mockFile1, mockFile2];
 
     act(() => {
-      result.current.downloadFiles(files);
+      result.current.handleDownloadFiles(files);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
@@ -105,7 +105,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
 
     act(() => {
-      result.current.downloadFiles([mockFolder]);
+      result.current.handleDownloadFiles([mockFolder]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
@@ -119,7 +119,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const items = [mockFile1, mockFolder, mockFile2];
 
     act(() => {
-      result.current.downloadFiles(items);
+      result.current.handleDownloadFiles(items);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
@@ -136,7 +136,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     );
 
     act(() => {
-      result.current.downloadFiles([mockFile1]);
+      result.current.handleDownloadFiles([mockFile1]);
     });
 
     expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
@@ -145,7 +145,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     rerender({ callback: onDownloadFiles2 });
 
     act(() => {
-      result.current.downloadFiles([mockFile1]);
+      result.current.handleDownloadFiles([mockFile1]);
     });
 
     expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
@@ -157,13 +157,13 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
 
     act(() => {
-      result.current.downloadFiles([mockFile1]);
+      result.current.handleDownloadFiles([mockFile1]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
 
     act(() => {
-      result.current.downloadFiles([mockFile2]);
+      result.current.handleDownloadFiles([mockFile2]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(2);

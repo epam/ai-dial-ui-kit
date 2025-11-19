@@ -9,7 +9,9 @@ import type {
   BulkActionsToolbarOptions,
   DialFileManagerProps,
   DeleteConfirmationOptions,
+  DialFileManagerDestinationFolderPopupOptions,
 } from './FileManager';
+import type { DestinationFolderMode } from './hooks/use-file-clipboard';
 
 export interface FileManagerGridRow {
   id: string;
@@ -32,6 +34,7 @@ export interface FileManagerContextValue {
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
@@ -54,14 +57,15 @@ export interface FileManagerContextValue {
   currentFolder?: DialFile;
   gridRows: FileManagerGridRow[];
 
-  clipboard: {
-    copied: Set<string>;
-    cut: Set<string>;
-    hasItems: boolean;
-  };
-  onCopy: (files: string[]) => void;
-  onCut: (files: string[]) => void;
-  onPaste: (overwrite?: boolean) => void;
+  handleCopyTo: (destinationFolder: string) => void;
+  handleMoveTo: (destinationFolder: string, sourceFolder: string) => void;
+  handleDuplicate: (files: DialFile[]) => void;
+  handleOpenDestinationFolderPopup: (mode: DestinationFolderMode) => void;
+  handleCloseDestinationFolderPopup: () => void;
+  openDestinationFolderPopup: boolean;
+  destinationFolderMode: DestinationFolderMode;
+  handleSetCopiedFiles: (files: DialFile[]) => void;
+  handleSetMovedFiles: (files: DialFile[]) => void;
 
   renamedPath?: string;
   onRename: (file: string) => void;
@@ -82,7 +86,7 @@ export interface FileManagerContextValue {
   handleTableRowClick: (row: FileManagerGridRow) => void;
 
   onTableFileClick?: DialFileManagerProps['onTableFileClick'];
-  downloadFiles: (items: DialFile[]) => void;
+  handleDownloadFiles: (items: DialFile[]) => void;
 }
 
 export const FileManagerContext = createContext<

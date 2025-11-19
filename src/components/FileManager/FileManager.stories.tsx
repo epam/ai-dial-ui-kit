@@ -156,6 +156,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
 
   const [items, setItems] = useState<DialFile[]>(itemsMock);
   const [renaming, setRenaming] = useState<string | undefined>();
+  const [destinationPath, setDestinationPath] = useState<string | undefined>();
 
   const updateItemNameByPath = useCallback(
     (items: DialFile[], path: string, newName: string): DialFile[] => {
@@ -233,6 +234,10 @@ const PopupComponent = (args: DialFileManagerProps) => {
         <DialFileManager
           {...args}
           items={items}
+          destinationFolderPopupOptions={{
+            destinationFolderPath: destinationPath,
+            setDestinationFolderPath: setDestinationPath,
+          }}
           gridOptions={{
             ...(args.gridOptions ?? {}),
             filterable: false,
@@ -281,11 +286,12 @@ const PopupComponent = (args: DialFileManagerProps) => {
           treeOptions={{
             ...(args.treeOptions ?? {}),
             collapsed: false,
+            expandedPaths: new Set<string>([rootItem.path]),
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
-              copy: 'Copy',
-              cut: 'Cut',
-              paste: 'Paste',
+              duplicate: 'Duplicate',
+              copy: 'Copy to',
+              move: 'Move to',
               rename: 'Rename',
               download: 'Download',
               delete: 'Delete',
@@ -319,6 +325,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onRenameSave={handleRenameSave}
           onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
+          rootItem={rootItem}
         />
       </DialPopup>
     </div>

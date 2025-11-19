@@ -1,11 +1,10 @@
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/types/file-manager';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface UseFileClipboardOptions {
-  getDestination: () => string;
-  getDestinationFiles: () => DialFile[];
+  getDestinationFiles: (path: string) => DialFile[];
   getSourceFiles: () => DialFile[];
   onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
   onMoveToFiles?: (
@@ -14,6 +13,8 @@ export interface UseFileClipboardOptions {
     destinationFolder: string,
   ) => void;
 }
+
+export type DestinationFolderMode = 'copy' | 'move';
 
 /**
  * Resolves filename conflicts by adding (1), (2), etc.
@@ -50,34 +51,16 @@ const getFileName = (file: DialFile): string => {
   return file.name;
 };
 
-const findFileByPath = (
-  files: DialFile[],
-  path: string,
-): DialFile | undefined => {
-  for (const file of files) {
-    if (file.path === path) {
-      return file;
-    }
-    if (file.items) {
-      const found = findFileByPath(file.items, path);
-      if (found) return found;
-    }
-  }
-  return undefined;
-};
-
 const getCopiedItems = (
   destinationUrl: string,
-  items: string[],
+  items: DialFile[],
   destinationFiles: DialFile[],
-  sourceFiles: DialFile[],
   overwrite = false,
 ): DialCopiedItem[] => {
   const existingNames = new Set(destinationFiles.map(getFileName));
 
-  return items.map((path) => {
-    const originalName = path.split('/').pop() ?? 'untitled';
-    const sourceFile = findFileByPath(sourceFiles, path);
+  return items.map((file) => {
+    const originalName = file.name;
 
     const finalName = overwrite
       ? originalName
@@ -88,89 +71,105 @@ const getCopiedItems = (
     }
 
     return {
-      sourceUrl: path,
+      sourceUrl: file.path,
       destinationUrl: `${destinationUrl}/${finalName}`,
       overwrite,
-      nodeType: sourceFile?.nodeType ?? DialFileNodeType.ITEM,
+      nodeType: file.nodeType ?? DialFileNodeType.ITEM,
     };
   });
 };
 
 export const useFileClipboard = ({
-  getDestination,
   getDestinationFiles,
-  getSourceFiles,
   onCopyFiles,
   onMoveToFiles,
 }: UseFileClipboardOptions) => {
-  const [copied, setCopied] = useState<Set<string>>(new Set());
-  const [cut, setCut] = useState<Set<string>>(new Set());
+  const [openDestinationFolderPopup, setOpenDestinationFolderPopup] =
+    useState<boolean>(false);
+  const [copiedFiles, setCopiedFiles] = useState<DialFile[]>([]);
+  const [movedFiles, setMovedFiles] = useState<DialFile[]>([]);
+  const [destinationFolderMode, setDestinationFolderMode] =
+    useState<DestinationFolderMode>('copy');
 
-  const copy = useCallback((files: string[]) => {
-    setCopied(new Set(files));
-    setCut(new Set());
-  }, []);
-
-  const cutFiles = useCallback((files: string[]) => {
-    setCut(new Set(files));
-    setCopied(new Set());
-  }, []);
-
-  const clear = useCallback(() => {
-    setCopied(new Set());
-    setCut(new Set());
-  }, []);
-
-  const paste = useCallback(
-    (overwrite = false) => {
-      const destination = getDestination();
-      const destinationFiles = getDestinationFiles();
-      const sourceFiles = getSourceFiles();
-
-      if (copied.size > 0) {
-        const resolvedItems = getCopiedItems(
-          destination,
-          Array.from(copied),
-          destinationFiles,
-          sourceFiles,
-          overwrite,
-        );
-        onCopyFiles?.(resolvedItems, destination);
-        setCopied(new Set());
-      } else if (cut.size > 0) {
-        const resolvedItems = getCopiedItems(
-          destination,
-          Array.from(cut),
-          destinationFiles,
-          sourceFiles,
-          overwrite,
-        );
-
-        const sourceFolder = sourceFiles.at(0)?.parentPath ?? '';
-
-        onMoveToFiles?.(resolvedItems, sourceFolder, destination);
-        setCut(new Set());
-      }
+  const handleCopyTo = useCallback(
+    (destinationFolder: string) => {
+      const destinationFiles = getDestinationFiles(destinationFolder);
+      const resolvedItems = getCopiedItems(
+        destinationFolder,
+        copiedFiles,
+        destinationFiles,
+        false,
+      );
+      onCopyFiles?.(resolvedItems, destinationFolder);
     },
-    [
-      copied,
-      cut,
-      getDestination,
-      getDestinationFiles,
-      getSourceFiles,
-      onCopyFiles,
-      onMoveToFiles,
-    ],
+    [getDestinationFiles, onCopyFiles, copiedFiles],
   );
 
-  const state = useMemo(
-    () => ({
-      copied,
-      cut,
-      hasItems: copied.size > 0 || cut.size > 0,
-    }),
-    [copied, cut],
+  const handleMoveTo = useCallback(
+    (destinationFolder: string, sourceFolder: string) => {
+      const destinationFiles = getDestinationFiles(destinationFolder);
+      const resolvedItems = getCopiedItems(
+        destinationFolder,
+        movedFiles,
+        destinationFiles,
+        true,
+      );
+      onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+    },
+    [getDestinationFiles, onMoveToFiles, movedFiles],
   );
 
-  return { state, copy, cut: cutFiles, paste, clear };
+  const handleDuplicate = useCallback(
+    (files: DialFile[]) => {
+      const destinationUrl = files.at(0)?.parentPath ?? '/';
+      const destinationFiles = getDestinationFiles(destinationUrl);
+      const resolvedItems = getCopiedItems(
+        destinationUrl,
+        files,
+        destinationFiles,
+        false,
+      );
+      onCopyFiles?.(resolvedItems, destinationUrl);
+    },
+    [onCopyFiles, getDestinationFiles],
+  );
+
+  const handleOpenDestinationFolderPopup = useCallback(
+    (mode: DestinationFolderMode) => {
+      setDestinationFolderMode(mode);
+      setOpenDestinationFolderPopup(true);
+    },
+    [],
+  );
+
+  const clearState = useCallback(() => {
+    setCopiedFiles([]);
+    setMovedFiles([]);
+  }, []);
+
+  const handleCloseDestinationFolderPopup = useCallback(() => {
+    setOpenDestinationFolderPopup(false);
+    clearState();
+  }, [clearState]);
+
+  const handleSetCopiedFiles = useCallback((files: DialFile[]) => {
+    setCopiedFiles(files);
+  }, []);
+
+  const handleSetMovedFiles = useCallback((files: DialFile[]) => {
+    setMovedFiles(files);
+  }, []);
+
+  return {
+    handleDuplicate,
+    handleCloseDestinationFolderPopup,
+    handleOpenDestinationFolderPopup,
+    handleCopyTo,
+    handleMoveTo,
+    openDestinationFolderPopup,
+    destinationFolderMode,
+    handleSetCopiedFiles,
+    handleSetMovedFiles,
+    clearState,
+  };
 };

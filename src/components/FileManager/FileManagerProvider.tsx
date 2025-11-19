@@ -64,12 +64,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   items = [],
   rootItem,
   path,
+  showHiddenFiles,
+  onShowHiddenFilesChange,
   treeOptions,
   navigationPanelOptions,
   deleteConfirmationOptions,
   gridOptions,
   toolbarOptions,
   bulkActionsToolbarOptions,
+  destinationFolderPopupOptions,
   onPathChange,
   onTableFileClick,
   onCopyFiles,
@@ -90,8 +93,29 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onSelectionClear: clearSelection,
   });
 
+  const [internalDestinationPath, setInternalDestinationPath] =
+    useState<string>();
+
+  const destinationFolderPath =
+    destinationFolderPopupOptions?.destinationFolderPath ??
+    internalDestinationPath;
+
+  const setDestinationFolderPath = useCallback(
+    (path?: string) => {
+      if (destinationFolderPopupOptions?.setDestinationFolderPath) {
+        destinationFolderPopupOptions.setDestinationFolderPath(path);
+      } else {
+        setInternalDestinationPath(path);
+      }
+    },
+    [destinationFolderPopupOptions],
+  );
+
   const { areHiddenFilesVisible, toggleHiddenFilesVisibility } =
-    useShowHiddenFiles();
+    useShowHiddenFiles({
+      showHiddenFiles,
+      onShowHiddenFilesChange,
+    });
 
   const { isTreeCollapsed, toggleTreeCollapse, setIsTreeCollapsed } =
     useCollapseTree({
@@ -130,17 +154,42 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   );
 
   const {
-    state: clipboard,
-    copy: onCopy,
-    cut: onCut,
-    paste: onPasteInternal,
+    handleCopyTo,
+    handleMoveTo,
+    handleDuplicate,
+    handleOpenDestinationFolderPopup,
+    handleCloseDestinationFolderPopup,
+    openDestinationFolderPopup,
+    handleSetCopiedFiles,
+    handleSetMovedFiles,
+    destinationFolderMode,
   } = useFileClipboard({
-    getDestination: () => currentFolder?.path ?? '/',
-    getDestinationFiles: () => currentFolder?.items ?? [],
+    getDestinationFiles: (path: string) => {
+      const folder = findFolderForPath(items, path);
+      return folder?.items ?? [];
+    },
     getSourceFiles: () => items,
     onCopyFiles,
     onMoveToFiles,
   });
+
+  useEffect(() => {
+    if (openDestinationFolderPopup && !destinationFolderPath) {
+      setDestinationFolderPath(currentPath ?? rootItem?.path ?? '/');
+    }
+  }, [
+    openDestinationFolderPopup,
+    destinationFolderPath,
+    currentPath,
+    rootItem?.path,
+    setDestinationFolderPath,
+  ]);
+
+  useEffect(() => {
+    if (!openDestinationFolderPopup) {
+      setDestinationFolderPath(undefined);
+    }
+  }, [openDestinationFolderPopup, setDestinationFolderPath]);
 
   const {
     deleteConfirmationOpen,
@@ -152,16 +201,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onDeleteFiles,
   });
 
-  const { downloadFiles } = useFileDownload({
+  const { handleDownloadFiles } = useFileDownload({
     onDownloadFiles,
   });
-
-  const onPaste = useCallback(
-    (overwrite = false) => {
-      onPasteInternal(overwrite);
-    },
-    [onPasteInternal],
-  );
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
@@ -249,6 +291,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
+    destinationFolderPopupOptions: {
+      destinationFolderPath,
+      setDestinationFolderPath,
+    },
 
     currentPath,
     setCurrentPath,
@@ -271,11 +317,17 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     currentFolder,
     gridRows,
 
-    clipboard,
-    onCopy,
-    onCut,
-    onPaste,
-    downloadFiles,
+    handleCopyTo,
+    handleMoveTo,
+    handleDuplicate,
+    handleSetCopiedFiles,
+    handleSetMovedFiles,
+    openDestinationFolderPopup,
+    handleCloseDestinationFolderPopup,
+    handleOpenDestinationFolderPopup,
+    destinationFolderMode,
+
+    handleDownloadFiles,
 
     renamedPath,
     onRename: renameHandler,
