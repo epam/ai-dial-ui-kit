@@ -2,12 +2,7 @@ import { type FC, useMemo } from 'react';
 import { DialTabs } from '@/components/Tabs/Tabs';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { DialButton } from '@/components/Button/Button';
-import {
-  IconDotsVertical,
-  IconEye,
-  IconEyeOff,
-  IconRefresh,
-} from '@tabler/icons-react';
+import { IconDotsVertical, IconEye, IconEyeOff } from '@tabler/icons-react';
 import type { TabModel } from '@/models/tab';
 import { ButtonVariant } from '@/types/button';
 import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
@@ -29,10 +24,8 @@ export interface DialFileManagerToolbarProps {
   createButtonVariant?: ButtonVariant;
   createButtonDropdownItems?: DropdownItem[];
   createButtonLabel?: string;
-  refreshButtonLabel?: string;
   onTabChange?: (id: DialFileManagerTabs) => void;
   onToggleHiddenFiles?: (value: boolean) => void;
-  onRefresh?: () => void;
 }
 
 /**
@@ -74,8 +67,6 @@ export interface DialFileManagerToolbarProps {
  * @param [hideHiddenFilesLabel='Hide hidden'] - Label shown when hidden files are visible.
  * @param [onTabChange] - Callback fired when the user switches between tabs. Receives the selected tab ID.
  * @param [onToggleHiddenFiles] - Callback fired when the hidden files visibility is toggled. Receives the new visibility state.
- * @param [onRefresh] - Callback fired when the refresh button is clicked.
- * @param [refreshButtonLabel='Refresh'] - Text label for the refresh button.
  * @param [isCreateButtonVisible] - Whether the "Create" button or dropdown should be displayed.
  * @param [createButtonVariant=ButtonVariant.Secondary] - Visual style variant for the create button.
  * @param [createButtonDropdownItems=[]] - Dropdown items available under the create button. If empty, a single create button is shown instead.
@@ -94,7 +85,6 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   onTabChange,
   areHiddenFilesVisible,
   onToggleHiddenFiles,
-  onRefresh,
   isCreateButtonVisible,
   createButtonVariant = ButtonVariant.Secondary,
   createButtonDropdownItems = [],
@@ -102,7 +92,6 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   hiddenFilesSwitcherLabel = 'Hidden files',
   showHiddenFilesLabel = 'Show hidden files',
   hideHiddenFilesLabel = 'Hide hidden files',
-  refreshButtonLabel = 'Refresh',
 }) => {
   const isMobile = useIsMobileScreen();
 
@@ -122,24 +111,12 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
       },
     ];
 
-    if (isCreateButtonVisible) {
-      items.push({
-        key: 'refresh-button',
-        label: refreshButtonLabel,
-        icon: <IconRefresh {...BASE_ICON_PROPS} className="text-secondary" />,
-        onClick: () => onRefresh?.(),
-      });
-    }
-
     return items;
   }, [
     areHiddenFilesVisible,
     hideHiddenFilesLabel,
     showHiddenFilesLabel,
-    refreshButtonLabel,
-    onRefresh,
     onToggleHiddenFiles,
-    isCreateButtonVisible,
   ]);
 
   const renderTabs = () =>
@@ -163,21 +140,15 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         onChange={onToggleHiddenFiles}
       />
 
-      <div className="h-6 border-l border-primary" />
-
-      <DialButton
-        title={refreshButtonLabel}
-        onClick={onRefresh}
-        variant={ButtonVariant.Secondary}
-        iconBefore={<IconRefresh {...BASE_ICON_PROPS} />}
-      />
-
       {isCreateButtonVisible && (
-        <DialButtonDropdown
-          title={createButtonLabel}
-          variant={createButtonVariant}
-          items={createButtonDropdownItems}
-        />
+        <>
+          <div className="h-6 border-l border-primary" />
+          <DialButtonDropdown
+            title={createButtonLabel}
+            variant={createButtonVariant}
+            items={createButtonDropdownItems}
+          />
+        </>
       )}
     </>
   );
@@ -205,14 +176,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
           variant={createButtonVariant}
           items={createButtonDropdownItems}
         />
-      ) : (
-        <DialButton
-          title={refreshButtonLabel}
-          onClick={onRefresh}
-          variant={ButtonVariant.Secondary}
-          iconBefore={<IconRefresh {...BASE_ICON_PROPS} />}
-        />
-      )}
+      ) : null}
     </>
   );
 

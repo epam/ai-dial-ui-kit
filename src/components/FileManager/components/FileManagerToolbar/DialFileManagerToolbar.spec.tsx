@@ -70,7 +70,6 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
         areHiddenFilesVisible={false}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={vi.fn()}
-        onRefresh={vi.fn()}
       />,
     );
 
@@ -87,7 +86,6 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
         areHiddenFilesVisible={true}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={onToggleHiddenFiles}
-        onRefresh={vi.fn()}
       />,
     );
 
@@ -106,7 +104,6 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
         areHiddenFilesVisible={false}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={vi.fn()}
-        onRefresh={vi.fn()}
         isCreateButtonVisible={false}
       />,
     );
@@ -120,29 +117,11 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
         areHiddenFilesVisible={false}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={vi.fn()}
-        onRefresh={vi.fn()}
         isCreateButtonVisible={true}
         createButtonDropdownItems={[{ key: '1', label: 'New File' }]}
       />,
     );
 
     expect(queryByTestId('create-button')).toBeInTheDocument();
-  });
-
-  it('calls onRefresh when clicking refresh button', () => {
-    const onRefresh = vi.fn();
-    render(
-      <DialFileManagerToolbar
-        tabs={mockTabs}
-        activeTab="tab1"
-        areHiddenFilesVisible={false}
-        onTabChange={vi.fn()}
-        onToggleHiddenFiles={vi.fn()}
-        onRefresh={onRefresh}
-      />,
-    );
-
-    fireEvent.click(screen.getByText('Refresh'));
-    expect(onRefresh).toHaveBeenCalledTimes(1);
   });
 });
