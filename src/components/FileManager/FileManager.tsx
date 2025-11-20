@@ -573,7 +573,7 @@ export const DialFileManagerView: FC = () => {
         hiddenFilesSwitcherLabel={
           destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
         }
-        gridOptions={{ columnDefs: columnDefs }}
+        gridOptions={{ columnDefs: columnDefs, loading: filesLoading }}
       />
     </section>
   );
