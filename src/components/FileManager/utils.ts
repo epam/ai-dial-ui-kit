@@ -1,6 +1,6 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
 
-const findNodeByPath = (
+export const findNodeByPath = (
   nodes: DialFile[] | undefined,
   path?: string,
 ): DialFile | undefined => {
