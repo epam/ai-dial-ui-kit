@@ -279,13 +279,18 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   const onPointerDown = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
       if (!anchorToMouse || disabled) return;
+
+      if (trigger.includes(DropdownTrigger.ContextMenu) && isOpen) {
+        setOpen(false);
+      }
+
       setPositionFromPointer(e.clientX, e.clientY);
       pointedElementRef.current = document.elementFromPoint(
         e.clientX,
         e.clientY,
       );
     },
-    [anchorToMouse, disabled, setPositionFromPointer],
+    [anchorToMouse, disabled, setPositionFromPointer, isOpen, trigger, setOpen],
   );
 
   useEffect(() => {

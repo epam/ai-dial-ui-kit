@@ -651,4 +651,25 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     expect(pos1).toBe(pos2);
   });
+
+  test('closes menu opened by context-menu trigger on side click', () => {
+    const { container } = render(
+      <DialDropdown
+        trigger={[DropdownTrigger.ContextMenu]}
+        menu={{ items }}
+        anchorToMouse
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+
+    const wrapper = container.querySelector('[aria-haspopup="menu"]')!;
+    const button = screen.getByRole('button', { name: /open/i });
+
+    fireEvent.contextMenu(button);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    fireEvent.mouseDown(wrapper);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
 });
