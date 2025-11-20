@@ -425,3 +425,16 @@ export const WithRootItem: Story = {
     },
   },
 };
+
+export const Loading: Story = {
+  args: {
+    filesLoading: true,
+    items: [],
+  },
+};
+
+export const LoadingWithData: Story = {
+  args: {
+    filesLoading: true,
+  },
+};

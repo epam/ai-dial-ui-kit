@@ -124,6 +124,7 @@ export interface DialFileManagerProps {
 
   items?: DialFile[];
   rootItem?: DialRootFolder;
+  filesLoading?: boolean;
 
   showHiddenFiles?: boolean;
   onShowHiddenFilesChange?: (value: boolean) => void;
@@ -169,6 +170,9 @@ export interface DialFileManagerProps {
  * // Minimal usage
  * <DialFileManager items={files} path="/All files" />
  *
+ * // With loading state
+ * <DialFileManager items={files} path="/All files" filesLoading={true} />
+ *
  * // With controlled search and disabled grid filters
  * const [query, setQuery] = useState('');
  * <DialFileManager
@@ -200,6 +204,7 @@ export interface DialFileManagerProps {
  * @param [cssClass] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
+ * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
  *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
@@ -233,6 +238,7 @@ export const DialFileManagerView: FC = () => {
     cssClass,
     items,
     rootItem,
+    filesLoading,
     treeOptions,
     navigationPanelOptions,
     gridOptions,
@@ -513,6 +519,7 @@ export const DialFileManagerView: FC = () => {
               columnDefs={columnDefs}
               rowData={gridRows}
               getRowId={(row) => row.path}
+              loading={filesLoading}
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,

@@ -52,6 +52,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   emptyStateIcon?: ReactNode;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
+  loading?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -67,6 +68,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * - Controlled or uncontrolled selection modes
  * - Automatic column sizing and responsive behavior
  * - Full accessibility support with ARIA attributes
+ * - Loading state with native AG-Grid overlay
  *
  * @example
  * ```tsx
@@ -85,7 +87,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * <DialGrid<Product>
  *   columnDefs={columns}
  *   rowData={products}
- *   storageKey="products-grid"
+ * />
+ *
+ * // With loading state
+ * <DialGrid<Product>
+ *   columnDefs={columns}
+ *   rowData={products}
+ *   loading={true}
  * />
  *
  * // With context menu
@@ -130,7 +138,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when the grid has no rows to show.
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title,
- *   providing additional context or instructions (e.g., “No data found” or “Try adjusting your filters”).
+ *   providing additional context or instructions (e.g., "No data found" or "Try adjusting your filters").
+ * @param [loading=false] - When true, shows AG-Grid's native loading overlay
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -150,6 +159,7 @@ export const DialGrid = <T extends object>({
   emptyStateIcon,
   emptyStateTitle = 'No results found',
   emptyStateDescription = "Sorry, we couldn't find any results for your search.",
+  loading = false,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -400,6 +410,7 @@ export const DialGrid = <T extends object>({
       )}
       aria-label={ariaLabel}
       role="region"
+      aria-busy={loading}
     >
       <div
         className="ag-theme-balham-dark h-full overflow-x-auto"
@@ -420,6 +431,7 @@ export const DialGrid = <T extends object>({
           defaultColDef={defaultColDef}
           onGridSizeChanged={onGridSizeChanged}
           onGridReady={onGridReady}
+          loading={loading}
           suppressCellFocus={true}
           suppressDragLeaveHidesColumns={true}
           noRowsOverlayComponent={emptyStateRenderer}

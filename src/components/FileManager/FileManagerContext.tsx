@@ -28,6 +28,7 @@ export interface FileManagerContextValue {
   cssClass?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
+  filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
