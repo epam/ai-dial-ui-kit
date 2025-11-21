@@ -1,76 +1,140 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-export interface UseGridSelectionProps<T> {
+export interface UseGridSelectionProps<T extends object> {
   selectedRowIds?: Set<string>;
+  selectedRows?: Map<string, T>;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
+  onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   rowData?: T[];
   getRowId: (row: T) => string;
 }
 
 export const useGridSelection = <T extends object>({
   selectedRowIds,
+  selectedRows,
   onSelectionChange,
-  rowData,
+  onSelectionChangeWithMap,
+  rowData = [],
   getRowId,
 }: UseGridSelectionProps<T>) => {
-  const [internalSelectedIds, setInternalSelectedIds] = useState<Set<string>>(
-    new Set(),
+  const [internalSelectedRows, setInternalSelectedRows] = useState<
+    Map<string, T>
+  >(new Map());
+
+  const currentSelectedRows = selectedRows ?? internalSelectedRows;
+  const currentSelectedIds = useMemo(
+    () => new Set(currentSelectedRows.keys()),
+    [currentSelectedRows],
   );
 
-  const currentSelectedIds = selectedRowIds ?? internalSelectedIds;
+  const isControlled =
+    selectedRowIds !== undefined || selectedRows !== undefined;
 
-  const handleSelectionChange = useCallback(
-    (newIds: Set<string>) => {
-      if (onSelectionChange && selectedRowIds !== undefined) {
-        const selectedRows = (rowData || []).filter((row) =>
-          newIds.has(getRowId(row)),
-        );
-
-        try {
-          onSelectionChange(newIds, selectedRows);
-        } catch {
-          // Ignore errors
+  useEffect(() => {
+    if (selectedRowIds !== undefined && !selectedRows) {
+      const newMap = new Map<string, T>();
+      rowData.forEach((row) => {
+        const id = getRowId(row);
+        if (selectedRowIds.has(id)) {
+          newMap.set(id, row);
         }
-      } else {
-        setInternalSelectedIds(newIds);
+      });
+
+      const hasChanges =
+        newMap.size !== internalSelectedRows.size ||
+        Array.from(newMap.keys()).some((key) => !internalSelectedRows.has(key));
+
+      if (hasChanges) {
+        setInternalSelectedRows(newMap);
       }
-    },
-    [onSelectionChange, selectedRowIds, rowData, getRowId],
-  );
+    }
+  }, [selectedRowIds, selectedRows, rowData, getRowId, internalSelectedRows]);
 
   const handleSelectionToggle = useCallback(
-    (rowId: string, checked: boolean) => {
-      const newSelectedIds = new Set(currentSelectedIds);
+    (row: T, checked: boolean) => {
+      const rowId = getRowId(row);
+      const newMap = new Map(currentSelectedRows);
+
       if (checked) {
-        newSelectedIds.add(rowId);
+        newMap.set(rowId, row);
       } else {
-        newSelectedIds.delete(rowId);
+        newMap.delete(rowId);
       }
-      handleSelectionChange(newSelectedIds);
+
+      if (!isControlled) {
+        setInternalSelectedRows(newMap);
+      }
+
+      if (onSelectionChangeWithMap) {
+        onSelectionChangeWithMap(newMap);
+      }
+
+      if (onSelectionChange) {
+        const ids = new Set(newMap.keys());
+        const rows = Array.from(newMap.values());
+        onSelectionChange(ids, rows);
+      }
     },
-    [currentSelectedIds, handleSelectionChange],
+    [
+      currentSelectedRows,
+      getRowId,
+      isControlled,
+      onSelectionChange,
+      onSelectionChangeWithMap,
+    ],
   );
 
-  const totalRowCount = rowData?.length || 0;
-  const selectedCount = currentSelectedIds.size;
-
   const headerCheckboxState = useMemo(() => {
-    if (selectedCount === 0) return 'unchecked';
-    if (selectedCount === totalRowCount) return 'checked';
-    return 'indeterminate';
-  }, [selectedCount, totalRowCount]);
+    if (!rowData.length) return 'unchecked';
+    const allSelected = rowData.every((row) =>
+      currentSelectedIds.has(getRowId(row)),
+    );
+    const someSelected = rowData.some((row) =>
+      currentSelectedIds.has(getRowId(row)),
+    );
 
-  const handleHeaderCheckboxChange = useCallback(() => {
-    if (headerCheckboxState === 'checked') {
-      handleSelectionChange(new Set());
-    } else {
-      const allIds = new Set((rowData || []).map(getRowId));
-      handleSelectionChange(allIds);
-    }
-  }, [headerCheckboxState, handleSelectionChange, rowData, getRowId]);
+    if (allSelected) return 'checked';
+    if (someSelected) return 'indeterminate';
+    return 'unchecked';
+  }, [rowData, currentSelectedIds, getRowId]);
+
+  const handleHeaderCheckboxChange = useCallback(
+    (checked?: boolean) => {
+      const newMap = new Map<string, T>();
+
+      if (checked) {
+        rowData.forEach((row) => {
+          const id = getRowId(row);
+          newMap.set(id, row);
+        });
+      }
+
+      if (!isControlled) {
+        setInternalSelectedRows(newMap);
+      }
+
+      if (onSelectionChangeWithMap) {
+        onSelectionChangeWithMap(newMap);
+      }
+
+      if (onSelectionChange) {
+        const ids = new Set(newMap.keys());
+        const rows = Array.from(newMap.values());
+        onSelectionChange(ids, rows);
+      }
+    },
+    [
+      rowData,
+      getRowId,
+      isControlled,
+      onSelectionChange,
+      onSelectionChangeWithMap,
+    ],
+  );
 
   return {
     currentSelectedIds,
+    currentSelectedRows,
     handleSelectionToggle,
     headerCheckboxState,
     handleHeaderCheckboxChange,

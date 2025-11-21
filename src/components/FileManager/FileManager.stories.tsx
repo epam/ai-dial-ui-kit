@@ -256,32 +256,13 @@ const PopupComponent = (args: DialFileManagerProps) => {
           }}
           bulkActionsToolbarOptions={{
             selectionLabel: 'items selected',
-            actions: [
-              {
-                key: 'cut',
-                title: 'Cut',
-                label: 'Cut',
-                onClick: () => alert('Cut clicked'),
-              },
-              {
-                key: 'copy',
-                title: 'Copy',
-                label: 'Copy',
-                onClick: () => alert('Copy clicked'),
-              },
-              {
-                key: 'delete',
-                title: 'Delete',
-                label: 'Delete',
-                onClick: () => alert('Delete clicked'),
-              },
-              {
-                key: 'download',
-                title: 'Download',
-                label: 'Download',
-                onClick: () => alert('Download clicked'),
-              },
-            ],
+            actionLabels: {
+              duplicate: 'Duplicate',
+              copy: 'Copy to',
+              move: 'Move to',
+              download: 'Download',
+              delete: 'Delete',
+            },
           }}
           treeOptions={{
             ...(args.treeOptions ?? {}),
@@ -297,30 +278,30 @@ const PopupComponent = (args: DialFileManagerProps) => {
               delete: 'Delete',
             },
           }}
-          onCopyFiles={(items, destinationFolder) =>
+          onCopyFiles={(items, destinationFolder) => {
             alert(
               `Copying files: ${items
                 .map((f) => f.sourceUrl)
                 .join(', ')} to ${destinationFolder}`,
-            )
-          }
-          onMoveToFiles={(items, sourceFolder, destinationFolder) =>
+            );
+          }}
+          onMoveToFiles={(items, sourceFolder, destinationFolder) => {
             alert(
               `Moving files from ${sourceFolder} to ${destinationFolder}: ${items
                 .map((f) => f.sourceUrl)
                 .join(', ')}`,
-            )
-          }
-          onDeleteFiles={(items, sourceFolder) =>
+            );
+          }}
+          onDeleteFiles={(items, sourceFolder) => {
             alert(
               `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
-            )
-          }
-          onDownloadFiles={(items) =>
+            );
+          }}
+          onDownloadFiles={(items) => {
             alert(
               `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
-            )
-          }
+            );
+          }}
           onRename={handleRename}
           onRenameSave={handleRenameSave}
           onRenameCancel={handleRenameCancel}

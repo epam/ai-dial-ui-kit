@@ -85,8 +85,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onRenameCancel,
   onRenameValidate,
 }) => {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+  const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
+    new Map(),
+  );
+
+  const selectedIds = useMemo(
+    () => new Set(selectedFiles.keys()),
+    [selectedFiles],
+  );
+  const clearSelection = useCallback(() => setSelectedFiles(new Map()), []);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
@@ -298,6 +305,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     destinationFolderPopupOptions: {
       destinationFolderPath,
       setDestinationFolderPath,
+      addFolderLabel: destinationFolderPopupOptions?.addFolderLabel,
+      copyLabel: destinationFolderPopupOptions?.copyLabel,
+      moveLabel: destinationFolderPopupOptions?.moveLabel,
+      hiddenFilesSwitcherLabel:
+        destinationFolderPopupOptions?.hiddenFilesSwitcherLabel,
     },
 
     currentPath,
@@ -315,7 +327,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     setIsTreeCollapsed,
 
     selectedIds,
-    setSelectedIds,
+    selectedFiles,
+    setSelectedFiles,
     clearSelection,
 
     currentFolder,

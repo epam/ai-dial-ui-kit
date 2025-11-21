@@ -45,7 +45,9 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   withSelectionColumn?: boolean;
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
   selectedRowIds?: Set<string>;
+  selectedRows?: Map<string, T>;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
+  onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
   alternateOddRowColors?: boolean;
   filterPlaceholder?: string;
@@ -151,7 +153,9 @@ export const DialGrid = <T extends object>({
   withSelectionColumn = true,
   wrapCustomCellRenderers = true,
   selectedRowIds,
+  selectedRows,
   onSelectionChange,
+  onSelectionChangeWithMap,
   getRowId = (row: T) =>
     String((row as Record<string, unknown>).id || JSON.stringify(row)),
   alternateOddRowColors = false,
@@ -173,7 +177,9 @@ export const DialGrid = <T extends object>({
     handleHeaderCheckboxChange,
   } = useGridSelection<T>({
     selectedRowIds,
+    selectedRows,
     onSelectionChange,
+    onSelectionChangeWithMap,
     rowData,
     getRowId,
   });
@@ -264,7 +270,9 @@ export const DialGrid = <T extends object>({
             checked={checked}
             cssClass="dial-row-select"
             onChange={(next) => {
-              handleSelectionToggle(rowId, !!next);
+              if (p.data) {
+                handleSelectionToggle(p.data, !!next);
+              }
             }}
           />
         </div>

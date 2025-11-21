@@ -1,5 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, type ReactNode, useMemo } from 'react';
+import { type FC, type ReactNode, useMemo, useCallback } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -12,6 +12,7 @@ import {
   gridBaseClasses,
   BASE_FILE_MANAGER_ICON_SIZE,
 } from './constants';
+import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
@@ -58,6 +59,7 @@ import {
   DestinationFolderPopup,
   type DestinationFolderPopupProps,
 } from './components/DestinationFolderPopup/DestinationFolderPopup';
+import { useBulkActions } from './hooks/use-bulk-actions';
 
 type GridRow = FileManagerGridRow;
 
@@ -116,8 +118,22 @@ export type ToolbarOptions = Omit<
 
 export type BulkActionsToolbarOptions = Omit<
   DialFileManagerBulkActionsToolbarProps,
-  'onClearSelection'
->;
+  'onClearSelection' | 'actions'
+> & {
+  actionLabels?: {
+    [DialFileManagerActions.Duplicate]?: string;
+    [DialFileManagerActions.Copy]?: string;
+    [DialFileManagerActions.Download]?: string;
+    [DialFileManagerActions.Delete]?: string;
+    [DialFileManagerActions.Move]?: string;
+  };
+};
+
+export interface CreateFolderValidationMessages {
+  emptyName?: string;
+  duplicateName?: string;
+  forbiddenChars?: string;
+}
 
 export interface DialFileManagerProps {
   path?: string;
@@ -154,6 +170,18 @@ export interface DialFileManagerProps {
   onRenameSave?: (value: string) => void;
   onRenameCancel?: () => void;
   onRenameValidate?: (value: string, item: DialFile) => string | null;
+
+  onCreateFolder?: (
+    folderPath: string,
+    file: File,
+    name: string,
+    bucket?: string,
+  ) => void;
+  onCreateFolderValidate?: (
+    name: string,
+    parentFolder: DialFile,
+  ) => string | null;
+  createFolderValidationMessages?: CreateFolderValidationMessages;
 }
 
 /**
@@ -257,7 +285,8 @@ export const DialFileManagerView: FC = () => {
     currentPath,
     gridRows,
     selectedIds,
-    setSelectedIds,
+    selectedFiles,
+    setSelectedFiles,
     clearSelection,
 
     effectiveSearchValue,
@@ -434,9 +463,48 @@ export const DialFileManagerView: FC = () => {
     return items;
   };
 
-  const handleSelectionChange = (newSelectedIds: Set<string>) => {
-    setSelectedIds(newSelectedIds);
-  };
+  const selectedGridRows = useMemo(() => {
+    const map = new Map<string, GridRow>();
+    selectedFiles.forEach((_file, id) => {
+      const gridRow = gridRows.find((row) => row.path === id);
+      if (gridRow) {
+        map.set(id, gridRow);
+      }
+    });
+    return map;
+  }, [selectedFiles, gridRows]);
+
+  const handleSelectionChange = useCallback(
+    (newSelectedGridRows: Map<string, GridRow>) => {
+      const newSelectedFiles = new Map<string, DialFile>();
+      newSelectedGridRows.forEach((_gridRow, id) => {
+        const file = findNodeByPath(items, id);
+        if (file) {
+          newSelectedFiles.set(id, file);
+        }
+      });
+      setSelectedFiles(newSelectedFiles);
+    },
+    [items, setSelectedFiles],
+  );
+
+  const bulkActions = useBulkActions({
+    selectedFiles,
+    actionLabels: bulkActionsToolbarOptions?.actionLabels,
+    onDuplicate: handleDuplicate,
+    onCopy: (files) => {
+      handleSetCopiedFiles(files);
+      handleOpenDestinationFolderPopup('copy');
+    },
+    onMove: (files) => {
+      handleSetMovedFiles(files);
+      handleOpenDestinationFolderPopup('move');
+    },
+    onDownload: handleDownloadFiles,
+    onRename,
+    onDelete: openDeleteConfirmation,
+    getCurrentFolderPath: () => currentPath ?? '/',
+  });
 
   return (
     <section
@@ -469,9 +537,9 @@ export const DialFileManagerView: FC = () => {
           aria-label="File Manager Toolbar"
         >
           <DialFileManagerBulkActionsToolbar
-            {...bulkActionsToolbarOptions}
-            onClearSelection={clearSelection}
             selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
+            onClearSelection={clearSelection}
+            actions={bulkActions}
           />
         </div>
       )}
@@ -539,12 +607,13 @@ export const DialFileManagerView: FC = () => {
                   }
                 },
               }}
-              selectedRowIds={selectedIds}
-              onSelectionChange={handleSelectionChange}
+              selectedRows={selectedGridRows}
+              onSelectionChangeWithMap={handleSelectionChange}
             />
           </section>
         </div>
       </div>
+
       <FileManagerDeleteConfirmationPopup
         open={deleteConfirmationOpen}
         itemsToDelete={itemsToDelete}
