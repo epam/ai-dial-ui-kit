@@ -3,11 +3,13 @@ import type { FC } from 'react';
 import { DialFileIcon } from '@/components/FileIcon/FileIcon';
 import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { BASE_ICON_SIZE } from '@/constants/icon';
 
 export interface DialFileNameProps {
   name: string;
   cssClass?: string;
   shared?: boolean;
+  iconSize?: number;
 }
 
 /**
@@ -22,11 +24,13 @@ export interface DialFileNameProps {
  * @param name - Full file name with or without extension
  * @param cssClass - Additional CSS classes for the root container
  * @param shared - Whether the file is shared
+ * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  */
 export const DialFileName: FC<DialFileNameProps> = ({
   name,
   cssClass,
   shared = false,
+  iconSize = BASE_ICON_SIZE,
 }) => {
   const extension = name.includes('.') ? name.split('.').pop() : null;
 
@@ -35,6 +39,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
       {extension && (
         <DialFileIcon
           extension={extension}
+          size={iconSize}
           cssClass="text-secondary"
           indicator={shared ? <DialSharedEntityIndicator /> : null}
           label="File type icon"
