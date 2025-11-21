@@ -13,7 +13,7 @@ import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { isHiddenDotFile } from '../../utils';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
-import { BASE_FILE_MANAGER_ITEM_ICON_SIZE } from '@/components/FileManager/constants';
+import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
@@ -236,7 +236,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       onSave={onRenameSave}
                       onCancel={onRenameCancel}
                       validate={validateHandler}
-                      iconSize={BASE_FILE_MANAGER_ITEM_ICON_SIZE}
+                      iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                     />
                   </>
                 </div>

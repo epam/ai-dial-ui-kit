@@ -10,7 +10,7 @@ import {
   sidebarWidth,
   sidebarTitleDefault,
   gridBaseClasses,
-  BASE_FILE_MANAGER_ITEM_ICON_SIZE,
+  BASE_FILE_MANAGER_ICON_SIZE,
 } from './constants';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
@@ -317,12 +317,12 @@ export const DialFileManagerView: FC = () => {
           params.data?.nodeType === DialFileNodeType.FOLDER ? (
             <DialFolderName
               name={params.data.name}
-              iconSize={BASE_FILE_MANAGER_ITEM_ICON_SIZE}
+              iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ) : (
             <DialFileName
               name={params.data.name}
-              iconSize={BASE_FILE_MANAGER_ITEM_ICON_SIZE}
+              iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ),
       },

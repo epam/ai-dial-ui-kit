@@ -21,4 +21,4 @@ export const gridBaseClasses =
 export const sidebarWidth = 280;
 export const sidebarTitleDefault = 'Files';
 
-export const BASE_FILE_MANAGER_ITEM_ICON_SIZE = 20;
+export const BASE_FILE_MANAGER_ICON_SIZE = 20;
