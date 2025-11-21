@@ -7,6 +7,7 @@ import { useEditableItem } from '@/hooks/use-editable-item';
 import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
+import { BASE_ICON_SIZE } from '@/constants/icon';
 
 export interface DialFileManagerItemNameProps
   extends DialFileManagerItemNameInputProps {
@@ -61,6 +62,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   editing = false,
   loading = false,
   shared = false,
+  iconSize = BASE_ICON_SIZE,
   validate,
   onSave,
   onCancel,
@@ -81,12 +83,18 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           name={name}
           loading={loading}
           shared={shared}
+          iconSize={iconSize}
           cssClass="max-w-[428px] truncate"
         />
       );
     }
     return (
-      <DialFileName name={name} shared={shared} cssClass="max-w-[428px]" />
+      <DialFileName
+        name={name}
+        shared={shared}
+        iconSize={iconSize}
+        cssClass="max-w-[428px]"
+      />
     );
   }
 
@@ -99,6 +107,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
       inputInvalidMessage={invalidMessage}
       inputRef={inputRef}
       onChange={onChange}
+      iconSize={iconSize}
     />
   );
 };

@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialIcon } from '@/components/Icon/Icon';
-import { BASE_ICON_PROPS } from '@/constants/icon';
+import { BASE_ICON_PROPS, BASE_ICON_SIZE } from '@/constants/icon';
 import { IconFolder } from '@tabler/icons-react';
 import { DialLoader } from '@/components/Loader/Loader';
 
@@ -12,6 +12,7 @@ export interface DialFolderNameProps {
   cssClass?: string;
   shared?: boolean;
   loading?: boolean;
+  iconSize?: number;
 }
 
 /**
@@ -25,21 +26,24 @@ export interface DialFolderNameProps {
  *
  * @param name - Folder name
  * @param cssClass - Additional CSS classes for the root container
- * @param shared - Whether the folder is shared
+ * @param shared - If true, shows shared indicator. Default: false.
+ * @param loading - If true, shows loading state. Default: false.
+ * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
   cssClass,
   shared = false,
   loading = false,
+  iconSize = BASE_ICON_SIZE,
 }) => {
   const getIcon = () => {
     if (loading) {
-      return <DialLoader />;
+      return <DialLoader size={iconSize} />;
     }
     return (
       <DialIcon
-        icon={<IconFolder {...BASE_ICON_PROPS} />}
+        icon={<IconFolder {...BASE_ICON_PROPS} size={iconSize} />}
         className="inline-block align-middle"
       />
     );
