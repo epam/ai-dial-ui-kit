@@ -12,6 +12,7 @@ import {
   gridBaseClasses,
   BASE_FILE_MANAGER_ICON_SIZE,
 } from './constants';
+import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
@@ -462,22 +463,6 @@ export const DialFileManagerView: FC = () => {
     return items;
   };
 
-  const findFileByPath = useCallback(
-    (items: DialFile[], path: string): DialFile | undefined => {
-      for (const item of items) {
-        if (item.path === path) {
-          return item;
-        }
-        if (item.items) {
-          const found = findFileByPath(item.items, path);
-          if (found) return found;
-        }
-      }
-      return undefined;
-    },
-    [],
-  );
-
   const selectedGridRows = useMemo(() => {
     const map = new Map<string, GridRow>();
     selectedFiles.forEach((_file, id) => {
@@ -493,14 +478,14 @@ export const DialFileManagerView: FC = () => {
     (newSelectedGridRows: Map<string, GridRow>) => {
       const newSelectedFiles = new Map<string, DialFile>();
       newSelectedGridRows.forEach((_gridRow, id) => {
-        const file = findFileByPath(items, id);
+        const file = findNodeByPath(items, id);
         if (file) {
           newSelectedFiles.set(id, file);
         }
       });
       setSelectedFiles(newSelectedFiles);
     },
-    [items, setSelectedFiles, findFileByPath],
+    [items, setSelectedFiles],
   );
 
   const bulkActions = useBulkActions({
