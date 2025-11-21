@@ -7,7 +7,7 @@ import { DialFileNodeType } from '@/models/file';
 describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
   let destinationFiles: DialFile[] = [];
   let sourceFiles: DialFile[] = [];
-  const getDestinationFiles = (path: string) => destinationFiles;
+  const getDestinationFiles = () => destinationFiles;
   const getSourceFiles = () => sourceFiles;
 
   beforeEach(() => {
