@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useFileUpload } from '@/components/FileManager/hooks/use-file-upload';
-import type {
-  UploadFileItem,
-  FileUploadValidationResult,
-} from '@/components/FileManager/hooks/use-file-upload';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 

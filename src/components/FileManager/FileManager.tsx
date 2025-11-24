@@ -40,6 +40,7 @@ import {
   DialFileManagerActions,
   type DialCopiedItem,
   type DialDeletedItem,
+  type DialUploadFileItem,
 } from '@/types/file-manager';
 import {
   IconCopy,
@@ -63,7 +64,6 @@ import { useBulkActions } from './hooks/use-bulk-actions';
 import { useGridContextMenu } from './hooks/use-grid-context-menu';
 import type {
   FileUploadValidationResult,
-  UploadFileItem,
   FileUploadValidationMessages,
 } from './hooks/use-file-upload';
 import classNames from 'classnames';
@@ -198,9 +198,12 @@ export interface DialFileManagerProps {
   ) => string | null;
   createFolderValidationMessages?: CreateFolderValidationMessages;
 
-  onUploadFiles?: (files: UploadFileItem[], destinationFolder: string) => void;
+  onUploadFiles?: (
+    files: DialUploadFileItem[],
+    destinationFolder: string,
+  ) => void;
   onValidateUpload?: (
-    files: UploadFileItem[],
+    files: DialUploadFileItem[],
     existingFiles: DialFile[],
     destinationFolder: string,
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;

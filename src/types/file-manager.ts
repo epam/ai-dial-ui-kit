@@ -26,3 +26,8 @@ export interface DialDeletedItem {
   sourceUrl: string;
   nodeType: DialFileNodeType;
 }
+
+export interface DialUploadFileItem {
+  fileContent: File;
+  name: string;
+}

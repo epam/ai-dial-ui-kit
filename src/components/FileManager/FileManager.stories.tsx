@@ -16,7 +16,7 @@ import {
   type DialFile,
   type DialRootFolder,
 } from '@/models/file';
-import type { UploadFileItem } from './hooks/use-file-upload';
+import type { DialUploadFileItem } from '@/types/file-manager';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -221,7 +221,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
   );
 
   const handleUploadFiles = useCallback(
-    (files: UploadFileItem[], destinationFolder: string) => {
+    (files: DialUploadFileItem[], destinationFolder: string) => {
       alert(
         `Uploaded ${files.length} file(s) to ${destinationFolder}:\n${files
           .map(

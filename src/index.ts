@@ -96,6 +96,7 @@ export {
   DialFileManagerActions,
   type DialCopiedItem,
   type DialDeletedItem,
+  type DialUploadFileItem,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';

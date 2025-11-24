@@ -1,14 +1,10 @@
 import { useCallback, useState, useEffect } from 'react';
 import type { DialFile } from '@/models/file';
+import type { DialUploadFileItem } from '@/types/file-manager';
 
 export interface FileUploadValidationResult {
   valid: boolean;
   message?: string;
-}
-
-export interface UploadFileItem {
-  fileContent: File;
-  name: string;
 }
 
 export interface FileUploadValidationMessages {
@@ -19,9 +15,12 @@ export interface FileUploadValidationMessages {
 }
 
 export interface UseFileUploadOptions {
-  onUploadFiles?: (files: UploadFileItem[], destinationFolder: string) => void;
+  onUploadFiles?: (
+    files: DialUploadFileItem[],
+    destinationFolder: string,
+  ) => void;
   onValidateUpload?: (
-    files: UploadFileItem[],
+    files: DialUploadFileItem[],
     existingFiles: DialFile[],
     destinationFolder: string,
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
@@ -79,7 +78,7 @@ export const useFileUpload = ({
   }, []);
 
   const checkForDuplicates = useCallback(
-    (files: UploadFileItem[], existingFiles: DialFile[]): string[] => {
+    (files: DialUploadFileItem[], existingFiles: DialFile[]): string[] => {
       const existingNames = new Set(
         existingFiles.map((f) => f.name.toLowerCase()),
       );
@@ -91,7 +90,7 @@ export const useFileUpload = ({
   );
 
   const checkFileSize = useCallback(
-    (files: UploadFileItem[]): string[] => {
+    (files: DialUploadFileItem[]): string[] => {
       if (!maxFileSize) return [];
       return files
         .filter((file) => file.fileContent.size > maxFileSize)
@@ -102,7 +101,7 @@ export const useFileUpload = ({
 
   const handleUpload = useCallback(
     async (
-      files: UploadFileItem[],
+      files: DialUploadFileItem[],
       destinationFolder: string,
       existingFiles: DialFile[],
     ) => {
@@ -219,7 +218,7 @@ export const useFileUpload = ({
 
       const files = Array.from(e.dataTransfer.files);
       if (files.length > 0) {
-        const uploadItems: UploadFileItem[] = files.map((file) => ({
+        const uploadItems: DialUploadFileItem[] = files.map((file) => ({
           fileContent: file,
           name: file.name,
         }));
