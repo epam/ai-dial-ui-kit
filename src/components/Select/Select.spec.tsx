@@ -5,6 +5,12 @@ import { DialSelect, type DialSelectProps } from './Select';
 const baseOptions = [
   { value: 'opt-1', label: 'Option 1' },
   { value: 'opt-2', label: 'Option 2' },
+  { value: 'opt-3', label: 'Option 3' },
+  { value: 'opt-4', label: 'Option 4' },
+  { value: 'opt-5', label: 'Option 5' },
+  { value: 'opt-6', label: 'Option 6' },
+  { value: 'opt-7', label: 'Option 7' },
+  { value: 'opt-8', label: 'Option 8' },
   { value: 'disabled', label: 'Disabled option', disabled: true },
 ];
 
