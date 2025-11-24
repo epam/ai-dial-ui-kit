@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useCallback,
+  type DragEvent,
 } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
@@ -311,7 +312,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: DragEvent) => {
       const destinationFolder = currentPath ?? '';
       const existingFiles = currentFolder?.items ?? [];
       handleFileDropBase(e, destinationFolder, existingFiles);

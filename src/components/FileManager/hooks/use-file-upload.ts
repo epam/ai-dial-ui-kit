@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, type DragEvent } from 'react';
 import type { DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/types/file-manager';
 
@@ -41,7 +41,7 @@ export const useFileUpload = ({
   useEffect(() => {
     let dragCounter = 0;
 
-    const handleWindowDragEnter = (e: DragEvent) => {
+    const handleWindowDragEnter = (e: globalThis.DragEvent) => {
       if (e.dataTransfer?.types.includes('Files')) {
         dragCounter++;
         setIsDraggingOverWindow(true);
@@ -60,7 +60,7 @@ export const useFileUpload = ({
       setIsDraggingOverWindow(false);
     };
 
-    const handleWindowDragOver = (e: DragEvent) => {
+    const handleWindowDragOver = (e: globalThis.DragEvent) => {
       e.preventDefault();
     };
 
@@ -166,7 +166,7 @@ export const useFileUpload = ({
     ],
   );
 
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
+  const handleDragEnter = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -175,7 +175,7 @@ export const useFileUpload = ({
     }
   }, []);
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
+  const handleDragLeave = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -193,7 +193,7 @@ export const useFileUpload = ({
     }
   }, []);
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -204,7 +204,7 @@ export const useFileUpload = ({
 
   const handleDrop = useCallback(
     async (
-      e: React.DragEvent,
+      e: DragEvent,
       destinationFolder: string,
       existingFiles: DialFile[],
     ) => {

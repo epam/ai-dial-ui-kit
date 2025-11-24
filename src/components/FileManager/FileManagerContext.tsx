@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, type DragEvent } from 'react';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
@@ -94,10 +94,10 @@ export interface FileManagerContextValue {
   isDragging: boolean;
   isDraggingOverWindow: boolean;
   uploadError?: string;
-  handleDragEnter: (e: React.DragEvent) => void;
-  handleDragLeave: (e: React.DragEvent) => void;
-  handleDragOver: (e: React.DragEvent) => void;
-  handleDrop: (e: React.DragEvent) => void;
+  handleDragEnter: (e: DragEvent) => void;
+  handleDragLeave: (e: DragEvent) => void;
+  handleDragOver: (e: DragEvent) => void;
+  handleDrop: (e: DragEvent) => void;
   clearUploadError: () => void;
 
   onUploadFiles?: DialFileManagerProps['onUploadFiles'];

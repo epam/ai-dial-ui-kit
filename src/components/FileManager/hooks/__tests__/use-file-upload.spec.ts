@@ -3,6 +3,7 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { useFileUpload } from '@/components/FileManager/hooks/use-file-upload';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import type { DragEvent } from 'react';
 
 describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   // Create a mock File with the specified size without consuming memory
@@ -111,7 +112,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         dataTransfer: {
           types: ['Files'],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragEnter(mockEvent);
@@ -131,7 +132,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         dataTransfer: {
           types: ['text/plain'],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragEnter(mockEvent);
@@ -151,7 +152,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         dataTransfer: {
           types: ['Files'],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragEnter(enterEvent);
@@ -172,7 +173,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         },
         clientX: -10,
         clientY: 50,
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragLeave(leaveEvent);
@@ -190,7 +191,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         dataTransfer: {
           types: ['Files'],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragEnter(enterEvent);
@@ -209,7 +210,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         },
         clientX: 50,
         clientY: 50,
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragLeave(leaveEvent);
@@ -230,7 +231,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           dropEffect: '',
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       act(() => {
         result.current.handleDragOver(mockEvent);
@@ -259,7 +260,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -286,7 +287,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['text/plain'],
           files: [],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -306,7 +307,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files: [],
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -330,7 +331,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -366,7 +367,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -392,7 +393,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -424,7 +425,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -457,7 +458,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -482,7 +483,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -505,7 +506,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -536,7 +537,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -564,7 +565,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -599,7 +600,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -629,7 +630,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -656,7 +657,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -693,7 +694,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -728,7 +729,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
@@ -761,7 +762,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(
@@ -796,7 +797,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
           types: ['Files'],
           files,
         },
-      } as unknown as React.DragEvent;
+      } as unknown as DragEvent;
 
       await act(async () => {
         await result.current.handleDrop(mockEvent, '/folder', []);
