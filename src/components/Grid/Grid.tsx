@@ -55,6 +55,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   loading?: boolean;
+  wrapperBorder?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -142,6 +143,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title,
  *   providing additional context or instructions (e.g., "No data found" or "Try adjusting your filters").
  * @param [loading=false] - When true, shows AG-Grid's native loading overlay
+ * @param [wrapperBorder=true] - Whether to apply a border around the grid container
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -164,6 +166,7 @@ export const DialGrid = <T extends object>({
   emptyStateTitle = 'No results found',
   emptyStateDescription = "Sorry, we couldn't find any results for your search.",
   loading = false,
+  wrapperBorder = true,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -184,14 +187,15 @@ export const DialGrid = <T extends object>({
     getRowId,
   });
 
-  const themeColors = useMemo(
+  const themeParams = useMemo(
     () => ({
       ...GRID_THEME_COLORS,
       oddRowBackgroundColor: alternateOddRowColors
         ? GRID_THEME_COLORS.oddRowBackgroundColor
         : GRID_THEME_COLORS.backgroundColor,
+      wrapperBorder: wrapperBorder,
     }),
-    [alternateOddRowColors],
+    [alternateOddRowColors, wrapperBorder],
   );
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
@@ -433,7 +437,7 @@ export const DialGrid = <T extends object>({
           getRowClass={getRowClass}
           theme={themeBalham
             .withPart(colorSchemeDark)
-            .withParams({ ...themeColors })}
+            .withParams({ ...themeParams })}
           autoSizeStrategy={{ type: 'fitGridWidth' }}
           columnDefs={computedColumnDefs}
           defaultColDef={defaultColDef}

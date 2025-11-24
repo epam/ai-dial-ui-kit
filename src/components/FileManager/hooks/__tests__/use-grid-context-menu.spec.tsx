@@ -73,12 +73,12 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     const menuItems = result.current(testFile);
     expect(menuItems).toHaveLength(6);
     expect(menuItems.map((item) => item.key)).toEqual([
-      DialFileManagerActions.Move,
-      DialFileManagerActions.Copy,
       DialFileManagerActions.Duplicate,
-      DialFileManagerActions.Rename,
+      DialFileManagerActions.Copy,
+      DialFileManagerActions.Move,
       DialFileManagerActions.Download,
       DialFileManagerActions.Delete,
+      DialFileManagerActions.Rename,
     ]);
   });
 
@@ -105,8 +105,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(menuItems).toHaveLength(3);
     expect(menuItems.map((item) => item.key)).toEqual([
       DialFileManagerActions.Copy,
-      DialFileManagerActions.Rename,
       DialFileManagerActions.Delete,
+      DialFileManagerActions.Rename,
     ]);
   });
 

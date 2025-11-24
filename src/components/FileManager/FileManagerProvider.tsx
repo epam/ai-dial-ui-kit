@@ -21,6 +21,7 @@ import { useFileClipboard } from './hooks/use-file-clipboard';
 import { useCurrentPath } from './hooks/use-current-path';
 import { useFileDelete } from './hooks/use-file-delete';
 import { useFileDownload } from './hooks/use-file-download';
+import { useFileUpload } from './hooks/use-file-upload';
 import {
   FileManagerContext,
   type FileManagerContextValue,
@@ -84,6 +85,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onRenameSave,
   onRenameCancel,
   onRenameValidate,
+  onUploadFiles,
+  onValidateUpload,
+  maxFileSize,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -291,6 +295,30 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     [handlePathChange, onTableFileClick],
   );
 
+  const {
+    isDragging,
+    isDraggingOverWindow,
+    uploadError,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop: handleFileDropBase,
+    clearError: clearUploadError,
+  } = useFileUpload({
+    onUploadFiles,
+    onValidateUpload,
+    maxFileSize,
+  });
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      const destinationFolder = currentPath ?? '';
+      const existingFiles = currentFolder?.items ?? [];
+      handleFileDropBase(e, destinationFolder, existingFiles);
+    },
+    [currentPath, currentFolder, handleFileDropBase],
+  );
+
   const value: FileManagerContextValue = {
     cssClass,
     items,
@@ -364,6 +392,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSearchChange,
     handleTableRowClick,
     onTableFileClick,
+
+    isDragging,
+    uploadError,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+    clearUploadError,
+    onUploadFiles,
+    onValidateUpload,
+    maxFileSize,
+    isDraggingOverWindow,
   };
 
   return (

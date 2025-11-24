@@ -61,6 +61,12 @@ import {
 } from './components/DestinationFolderPopup/DestinationFolderPopup';
 import { useBulkActions } from './hooks/use-bulk-actions';
 import { useGridContextMenu } from './hooks/use-grid-context-menu';
+import type {
+  FileUploadValidationResult,
+  UploadFileItem,
+  FileUploadValidationMessages,
+} from './hooks/use-file-upload';
+import classNames from 'classnames';
 
 type GridRow = FileManagerGridRow;
 
@@ -191,6 +197,15 @@ export interface DialFileManagerProps {
     parentFolder: DialFile,
   ) => string | null;
   createFolderValidationMessages?: CreateFolderValidationMessages;
+
+  onUploadFiles?: (files: UploadFileItem[], destinationFolder: string) => void;
+  onValidateUpload?: (
+    files: UploadFileItem[],
+    existingFiles: DialFile[],
+    destinationFolder: string,
+  ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
+  maxFileSize?: number;
+  uploadValidationMessages?: FileUploadValidationMessages;
 }
 
 /**
@@ -326,6 +341,16 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    isDragging,
+    isDraggingOverWindow,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+
+    onUploadFiles,
+    onValidateUpload,
+    maxFileSize,
   } = useFileManagerContext();
 
   const {
@@ -640,7 +665,11 @@ export const DialFileManagerView: FC = () => {
           <section
             role="region"
             aria-label="File Manager Grid View"
-            className={gridBaseClasses}
+            className={mergeClasses(gridBaseClasses)}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
           >
             <DialGrid<GridRow>
               columnDefs={columnDefs}
@@ -648,6 +677,12 @@ export const DialFileManagerView: FC = () => {
               getRowId={(row) => row.path}
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
+              cssClass={classNames(
+                isDragging ? 'border border-dashed border-accent-primary' : '',
+                isDraggingOverWindow && !isDragging
+                  ? 'border border-dashed border-primary'
+                  : '',
+              )}
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,
@@ -662,6 +697,7 @@ export const DialFileManagerView: FC = () => {
               }}
               selectedRows={selectedGridRows}
               onSelectionChangeWithMap={handleSelectionChange}
+              wrapperBorder={!isDragging && !isDraggingOverWindow}
             />
           </section>
         </div>
@@ -703,6 +739,9 @@ export const DialFileManagerView: FC = () => {
           destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
         }
         gridOptions={{ columnDefs: columnDefs, loading: filesLoading }}
+        onUploadFiles={onUploadFiles}
+        onValidateUpload={onValidateUpload}
+        maxFileSize={maxFileSize}
       />
     </section>
   );

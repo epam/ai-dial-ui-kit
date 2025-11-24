@@ -12,6 +12,7 @@ import type {
   DialFileManagerDestinationFolderPopupOptions,
 } from './FileManager';
 import type { DestinationFolderMode } from './hooks/use-file-clipboard';
+import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 
 export interface FileManagerGridRow {
   id: string;
@@ -89,6 +90,20 @@ export interface FileManagerContextValue {
 
   onTableFileClick?: DialFileManagerProps['onTableFileClick'];
   handleDownloadFiles: (items: DialFile[]) => void;
+
+  isDragging: boolean;
+  isDraggingOverWindow: boolean;
+  uploadError?: string;
+  handleDragEnter: (e: React.DragEvent) => void;
+  handleDragLeave: (e: React.DragEvent) => void;
+  handleDragOver: (e: React.DragEvent) => void;
+  handleDrop: (e: React.DragEvent) => void;
+  clearUploadError: () => void;
+
+  onUploadFiles?: DialFileManagerProps['onUploadFiles'];
+  onValidateUpload?: DialFileManagerProps['onValidateUpload'];
+  maxFileSize?: number;
+  uploadValidationMessages?: FileUploadValidationMessages;
 }
 
 export const FileManagerContext = createContext<
