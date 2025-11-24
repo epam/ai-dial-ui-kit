@@ -28,6 +28,7 @@ import {
   selectOptionSingleSelectedClasses,
   selectOptionDisabledClasses,
   selectChevronIcon,
+  dropdownMenuMaxHeight,
 } from './constants';
 
 import { DialSearch } from '@/components/Search/Search';
@@ -340,6 +341,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       onClose={onClose}
       placement="bottom-start"
       allowedPlacements={['bottom-start', 'top-start']}
+      maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
       renderOverlay={() => (
         <div
           id={listId}
@@ -348,7 +350,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           className={selectOverlayBaseClasses}
         >
           {header && <>{typeof header === 'function' ? header() : header}</>}
-          {(searchable || closable) && (
+          {(searchable || closable) && options.length > 8 && (
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
                 <DialSearch
@@ -385,7 +387,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             </div>
           )}
 
-          <div className="overflow-y-auto py-1">
+          <div className="overflow-y-auto py-1 max-h-[352px]">
             {filtered.length === 0 ? (
               <div className="px-2 py-3">
                 <DialNoDataContent
