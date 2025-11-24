@@ -60,6 +60,7 @@ import {
   type DestinationFolderPopupProps,
 } from './components/DestinationFolderPopup/DestinationFolderPopup';
 import { useBulkActions } from './hooks/use-bulk-actions';
+import { useGridContextMenu } from './hooks/use-grid-context-menu';
 
 type GridRow = FileManagerGridRow;
 
@@ -109,6 +110,14 @@ export interface GridOptions
   filterable?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
+  actionLabels?: {
+    [DialFileManagerActions.Duplicate]?: string;
+    [DialFileManagerActions.Copy]?: string;
+    [DialFileManagerActions.Rename]?: string;
+    [DialFileManagerActions.Download]?: string;
+    [DialFileManagerActions.Delete]?: string;
+    [DialFileManagerActions.Move]?: string;
+  };
 }
 
 export type ToolbarOptions = Omit<
@@ -550,6 +559,32 @@ export const DialFileManagerView: FC = () => {
     toolbarOptions,
   ]);
 
+  const gridContextMenu = useGridContextMenu({
+    actionLabels: gridOptions?.actionLabels,
+    onDuplicate: (file) => handleDuplicate([file]),
+    onCopy: (file) => {
+      handleSetCopiedFiles([file]);
+      handleOpenDestinationFolderPopup('copy');
+    },
+    onMove: (file) => {
+      handleSetMovedFiles([file]);
+      handleOpenDestinationFolderPopup('move');
+    },
+    onDownload: (file) => handleDownloadFiles([file]),
+    onRename,
+    onDelete: (file, parentFolderPath) =>
+      openDeleteConfirmation([file], parentFolderPath),
+  });
+
+  const getGridContextMenuItems = useCallback(
+    (row: GridRow) => {
+      const file = findNodeByPath(items, row.path);
+      if (!file) return [];
+      return gridContextMenu(file);
+    },
+    [items, gridContextMenu],
+  );
+
   return (
     <section
       className={mergeClasses(
@@ -612,6 +647,7 @@ export const DialFileManagerView: FC = () => {
               rowData={gridRows}
               getRowId={(row) => row.path}
               loading={filesLoading}
+              getContextMenuItems={getGridContextMenuItems}
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,

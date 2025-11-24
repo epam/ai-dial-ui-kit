@@ -247,6 +247,13 @@ const PopupComponent = (args: DialFileManagerProps) => {
               month: 'short',
               day: '2-digit',
             },
+            actionLabels: {
+              duplicate: 'Duplicate',
+              copy: 'Copy to',
+              move: 'Move to',
+              download: 'Download',
+              delete: 'Delete',
+            },
           }}
           toolbarOptions={{
             ...(args.toolbarOptions ?? {}),
