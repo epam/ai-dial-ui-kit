@@ -10,6 +10,8 @@ import {
   useMemo,
   useState,
   useRef,
+  useImperativeHandle,
+  type Ref,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
@@ -57,6 +59,7 @@ export interface DialSelectProps {
   closable?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
+  dismissRef?: Ref<unknown>;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
   inlineSearch?: boolean;
@@ -110,6 +113,7 @@ export interface DialSelectProps {
  * @param [onChange] - Called when the selection changes.
  * @param [inlineSearch=false] - Render a plain input inside trigger (single mode only).
  * @param [onFooterClick] - Called when the footer element is clicked. When provided, automatically closes the dropdown.
+ * @param [dismissRef] - Ref object to expose a `dismiss` method to programmatically close the select.
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -135,6 +139,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   onClose,
   onChange,
   inlineSearch = false,
+  dismissRef,
   onFooterClick,
 }) => {
   const [open, setOpen] = useState(false);
@@ -311,6 +316,12 @@ export const DialSelect: FC<DialSelectProps> = ({
   ]);
 
   const inlineInputValue = open ? query : (singleSelectedOption?.label ?? '');
+
+  useImperativeHandle(dismissRef, () => ({
+    dismiss: () => {
+      setOpen(false);
+    },
+  }));
 
   return (
     <DialDropdown
