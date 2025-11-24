@@ -506,17 +506,9 @@ export const DialFileManagerView: FC = () => {
     getCurrentFolderPath: () => currentPath ?? '/',
   });
 
-  return (
-    <section
-      className={mergeClasses(
-        containerBaseClasses,
-        {
-          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
-        },
-        cssClass,
-      )}
-    >
-      {toolbarOptions && selectedIds.size === 0 && (
+  const renderToolbar = useCallback(() => {
+    if (toolbarOptions && selectedIds.size === 0) {
+      return (
         <div
           className={toolbarBaseClasses}
           role="toolbar"
@@ -528,9 +520,11 @@ export const DialFileManagerView: FC = () => {
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
           />
         </div>
-      )}
+      );
+    }
 
-      {selectedIds.size > 0 && bulkActionsToolbarOptions && (
+    if (selectedIds.size > 0 && bulkActionsToolbarOptions) {
+      return (
         <div
           className={toolbarBaseClasses}
           role="toolbar"
@@ -542,8 +536,31 @@ export const DialFileManagerView: FC = () => {
             actions={bulkActions}
           />
         </div>
-      )}
+      );
+    }
+    // If no toolbar options are provided, render empty div to maintain layout consistency
+    return <div></div>;
+  }, [
+    bulkActionsToolbarOptions,
+    selectedIds,
+    clearSelection,
+    bulkActions,
+    areHiddenFilesVisible,
+    toggleHiddenFilesVisibility,
+    toolbarOptions,
+  ]);
 
+  return (
+    <section
+      className={mergeClasses(
+        containerBaseClasses,
+        {
+          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+        },
+        cssClass,
+      )}
+    >
+      {renderToolbar()}
       <div className={mainGridClasses}>
         <aside
           role="region"
