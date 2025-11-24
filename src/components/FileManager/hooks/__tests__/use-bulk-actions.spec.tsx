@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { useBulkActions } from './use-bulk-actions';
+import { useBulkActions } from '@/components/FileManager/hooks/use-bulk-actions';
 import { DialFileManagerActions } from '@/types/file-manager';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
