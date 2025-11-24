@@ -71,6 +71,7 @@ export interface DialDropdownProps {
   outsideClosable?: boolean;
   anchorToMouse?: boolean;
   matchReferenceWidth?: boolean;
+  maxDropdownHeight?: number | null;
 }
 
 /**
@@ -116,6 +117,7 @@ export interface DialDropdownProps {
  * @param [outsideClosable=true] - Whether clicks outside the overlay should close it
  * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position
  * @param [matchReferenceWidth=false] - Whether to match the reference element's width
+ * @param [maxDropdownHeight] - Maximum height of the dropdown menu; when omitted, no limit is applied
  */
 export const DialDropdown: FC<DialDropdownProps> = ({
   children,
@@ -136,6 +138,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   allowedPlacements,
   anchorToMouse = false,
   matchReferenceWidth = true,
+  maxDropdownHeight,
 }) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
@@ -199,7 +202,8 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           }
 
           floating.style.maxWidth = `${Math.floor(availableWidth)}px`;
-          floating.style.maxHeight = `${Math.floor(availableHeight)}px`;
+          const heightLimit = Math.floor(availableHeight);
+          floating.style.maxHeight = `${maxDropdownHeight ? Math.min(heightLimit, maxDropdownHeight) : heightLimit}px`;
         },
       }),
     ],
