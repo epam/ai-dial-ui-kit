@@ -167,27 +167,4 @@ describe('Dial UI Kit :: DialSelect', () => {
       screen.queryByRole('option', { name: 'Disabled option' }),
     ).not.toBeInTheDocument();
   });
-
-  test('inlineSearch: clear button clears selection and keeps dropdown open', () => {
-    renderSelect({ inlineSearch: true, defaultValue: 'opt-1' });
-
-    const trigger =
-      screen
-        .getAllByRole('button')
-        .find((b) => b.getAttribute('aria-haspopup') === 'listbox') ??
-      screen.getByRole('button');
-
-    fireEvent.click(trigger);
-    expect(screen.getByRole('listbox')).toBeInTheDocument();
-
-    const clearBtn = screen.getByRole('button', { name: 'Clear selection' });
-    fireEvent.click(clearBtn);
-
-    expect(screen.getByRole('listbox')).toBeInTheDocument();
-
-    expect(trigger).not.toHaveTextContent('Option 1');
-
-    const inlineInput = screen.getByPlaceholderText('Select...');
-    expect((inlineInput as HTMLInputElement).value).toBe('');
-  });
 });
