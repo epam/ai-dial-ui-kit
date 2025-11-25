@@ -218,6 +218,13 @@ export const DialSelect: FC<DialSelectProps> = ({
     [selectableFiltered, selectedValues],
   );
 
+  const handleClose = (value: boolean) => {
+    if (inlineSearch && !multiple && !value) {
+      handleToggle(query);
+    }
+    setOpen(value);
+  };
+
   const allSelectedInFiltered =
     selectableFiltered.length > 0 &&
     selectedInFilteredCount === selectableFiltered.length;
@@ -341,7 +348,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   return (
     <DialDropdown
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={handleClose}
       disabled={disabled}
       closable={closable}
       onClose={onClose}
@@ -393,87 +400,92 @@ export const DialSelect: FC<DialSelectProps> = ({
             </div>
           )}
 
-          <div className="overflow-y-auto py-1 max-h-[352px]">
-            {filtered.length === 0 ? (
-              <div className="px-2 py-3">
-                <DialNoDataContent
-                  icon={emptyStateIcon ?? <IconClipboardX size={24} />}
-                  title={emptyStateTitle}
-                  description={emptyStateDescription}
-                />
-              </div>
-            ) : (
-              filtered.map((opt) => {
-                const selected = selectedValues.includes(opt.value);
+          <div
+            className={classNames(
+              'overflow-y-auto max-h-[352px]',
+              inlineSearch && filtered.length === 0 ? '' : 'py-1',
+            )}
+          >
+            {filtered.length === 0
+              ? !inlineSearch && (
+                  <div className="px-2 py-3">
+                    <DialNoDataContent
+                      icon={emptyStateIcon ?? <IconClipboardX size={24} />}
+                      title={emptyStateTitle}
+                      description={emptyStateDescription}
+                    />
+                  </div>
+                )
+              : filtered.map((opt) => {
+                  const selected = selectedValues.includes(opt.value);
 
-                if (multiple) {
+                  if (multiple) {
+                    return (
+                      <div
+                        key={opt.value}
+                        role="option"
+                        aria-selected={selected}
+                        aria-disabled={!!opt.disabled}
+                        className={classNames(
+                          selectOptionBaseClasses,
+                          selected && selectOptionSelectedClasses,
+                          opt.disabled && selectOptionDisabledClasses,
+                          'w-full',
+                        )}
+                      >
+                        <DialCheckbox
+                          id={`${listId}-${opt.value}`}
+                          label={
+                            <span className="flex w-full flex-1 min-w-0 items-center gap-2 text-primary">
+                              {opt.icon && <DialIcon icon={opt.icon} />}
+                              <span className="truncate">{opt.label}</span>
+                            </span>
+                          }
+                          checked={selected}
+                          disabled={opt.disabled}
+                          onChange={() =>
+                            !opt.disabled && handleToggle(opt.value)
+                          }
+                          ariaLabel={opt.label}
+                        />
+
+                        {opt.description && (
+                          <div className="text-secondary dial-small">
+                            {opt.description}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
                   return (
-                    <div
+                    <button
                       key={opt.value}
                       role="option"
+                      type="button"
                       aria-selected={selected}
                       aria-disabled={!!opt.disabled}
+                      disabled={opt.disabled}
                       className={classNames(
                         selectOptionBaseClasses,
-                        selected && selectOptionSelectedClasses,
+                        selected && selectOptionSingleSelectedClasses,
                         opt.disabled && selectOptionDisabledClasses,
-                        'w-full',
                       )}
+                      onClick={() => !opt.disabled && handleToggle(opt.value)}
                     >
-                      <DialCheckbox
-                        id={`${listId}-${opt.value}`}
-                        label={
-                          <span className="flex w-full flex-1 min-w-0 items-center gap-2 text-primary">
-                            {opt.icon && <DialIcon icon={opt.icon} />}
-                            <span className="truncate">{opt.label}</span>
-                          </span>
-                        }
-                        checked={selected}
-                        disabled={opt.disabled}
-                        onChange={() =>
-                          !opt.disabled && handleToggle(opt.value)
-                        }
-                        ariaLabel={opt.label}
-                      />
+                      <div className="flex items-center gap-2 w-full">
+                        {opt.icon && <DialIcon icon={opt.icon} />}
+                        <DialEllipsisTooltip text={opt.label} />
 
-                      {opt.description && (
-                        <div className="text-secondary dial-small">
-                          {opt.description}
-                        </div>
-                      )}
-                    </div>
+                        {opt.description && (
+                          <div className="text-secondary dial-small">
+                            {opt.description}
+                          </div>
+                        )}
+                      </div>
+                    </button>
                   );
-                }
-
-                return (
-                  <button
-                    key={opt.value}
-                    role="option"
-                    type="button"
-                    aria-selected={selected}
-                    aria-disabled={!!opt.disabled}
-                    disabled={opt.disabled}
-                    className={classNames(
-                      selectOptionBaseClasses,
-                      selected && selectOptionSingleSelectedClasses,
-                      opt.disabled && selectOptionDisabledClasses,
-                    )}
-                    onClick={() => !opt.disabled && handleToggle(opt.value)}
-                  >
-                    <div className="flex items-center gap-2 w-full">
-                      {opt.icon && <DialIcon icon={opt.icon} />}
-                      <DialEllipsisTooltip text={opt.label} />
-
-                      {opt.description && (
-                        <div className="text-secondary dial-small">
-                          {opt.description}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })
-            )}
+                })}
           </div>
           {footer && (
             <div
