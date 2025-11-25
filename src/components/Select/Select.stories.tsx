@@ -189,6 +189,13 @@ export const Secondary: Story = {
   },
 };
 
+export const WithCustomSelectedValue: Story = {
+  args: {
+    customSelectedValue: 'Custom Selected Value',
+    value: 'custom-value',
+  },
+};
+
 export const Searchable: Story = {
   args: {
     prefix: 'Filter:',
