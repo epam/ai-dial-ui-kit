@@ -94,8 +94,6 @@ export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,
-  type DialCopiedItem,
-  type DialDeletedItem,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
@@ -122,6 +120,11 @@ export {
   DialFilePermission,
   DialFileResourceType,
 } from './models/file';
+export {
+  type DialCopiedItem,
+  type DialDeletedItem,
+  type DialUploadFileItem,
+} from './models/file-manager';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';

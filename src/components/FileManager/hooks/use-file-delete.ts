@@ -1,5 +1,5 @@
 import type { DialFile } from '@/models/file';
-import type { DialDeletedItem } from '@/types/file-manager';
+import type { DialDeletedItem } from '@/models/file-manager';
 import { useState, useCallback } from 'react';
 
 export interface UseFileDeleteOptions {
