@@ -6,6 +6,7 @@ import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export interface DialButtonProps {
+  type?: 'button' | 'submit' | 'reset';
   variant?: ButtonVariant;
   cssClass?: string;
   textCssClass?: string;
@@ -33,6 +34,7 @@ export interface DialButtonProps {
  * ```
  *
  * @param [title] - The text content of the button
+ * @param [type='button'] - The HTML button type attribute
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
  * @param [cssClass] - Additional CSS classes to apply to the button
  * @param [textCssClass] - Additional CSS classes to apply specifically to the button text
@@ -56,6 +58,7 @@ export const DialButton: FC<DialButtonProps> = ({
   iconBefore,
   hideTitleOnMobile,
   ariaLabel,
+  type = 'button',
 }) => {
   const btnTextClassNames = classNames(
     'dial-small-semi',
@@ -73,7 +76,7 @@ export const DialButton: FC<DialButtonProps> = ({
   return (
     <button
       ref={ref}
-      type="button"
+      type={type}
       className={btnClassNames}
       onClick={(e) => onClick?.(e)}
       disabled={disable}
