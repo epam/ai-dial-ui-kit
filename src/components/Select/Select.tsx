@@ -10,6 +10,8 @@ import {
   useMemo,
   useState,
   useRef,
+  useImperativeHandle,
+  type Ref,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
@@ -26,6 +28,7 @@ import {
   selectOptionSingleSelectedClasses,
   selectOptionDisabledClasses,
   selectChevronIcon,
+  dropdownMenuMaxHeight,
 } from './constants';
 
 import { DialSearch } from '@/components/Search/Search';
@@ -56,6 +59,7 @@ export interface DialSelectProps {
   closable?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
+  dismissRef?: Ref<unknown>;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
   inlineSearch?: boolean;
@@ -109,6 +113,7 @@ export interface DialSelectProps {
  * @param [onChange] - Called when the selection changes.
  * @param [inlineSearch=false] - Render a plain input inside trigger (single mode only).
  * @param [onFooterClick] - Called when the footer element is clicked. When provided, automatically closes the dropdown.
+ * @param [dismissRef] - Ref object to expose a `dismiss` method to programmatically close the select.
  */
 export const DialSelect: FC<DialSelectProps> = ({
   options,
@@ -134,6 +139,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   onClose,
   onChange,
   inlineSearch = false,
+  dismissRef,
   onFooterClick,
 }) => {
   const [open, setOpen] = useState(false);
@@ -311,6 +317,12 @@ export const DialSelect: FC<DialSelectProps> = ({
 
   const inlineInputValue = open ? query : (singleSelectedOption?.label ?? '');
 
+  useImperativeHandle(dismissRef, () => ({
+    dismiss: () => {
+      setOpen(false);
+    },
+  }));
+
   return (
     <DialDropdown
       open={open}
@@ -320,6 +332,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       onClose={onClose}
       placement="bottom-start"
       allowedPlacements={['bottom-start', 'top-start']}
+      maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
       renderOverlay={() => (
         <div
           id={listId}
@@ -328,7 +341,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           className={selectOverlayBaseClasses}
         >
           {header && <>{typeof header === 'function' ? header() : header}</>}
-          {(searchable || closable) && (
+          {(searchable || closable) && options.length > 8 && (
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
                 <DialSearch
@@ -365,7 +378,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             </div>
           )}
 
-          <div className="overflow-y-auto py-1">
+          <div className="overflow-y-auto py-1 max-h-[352px]">
             {filtered.length === 0 ? (
               <div className="px-2 py-3">
                 <DialNoDataContent

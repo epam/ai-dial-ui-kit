@@ -23,6 +23,6 @@ export const dropdownItemDangerClasses = 'text-error';
 export const dropdownDividerClasses =
   'my-1 border-t border-hover border-secondary';
 
-export const dropdownGap = 8;
+export const dropdownGap = 4;
 
 export const submenuCaretIcon = <IconChevronRight size={14} />;
