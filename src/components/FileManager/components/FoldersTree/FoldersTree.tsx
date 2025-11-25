@@ -1,4 +1,4 @@
-import { useState, type FC, type ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { IconCaretRightFilled, IconDotsVertical } from '@tabler/icons-react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import { BASE_ICON_PROPS } from '@/constants/icon';
@@ -14,6 +14,7 @@ import { isHiddenDotFile } from '../../utils';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
+import { useExpandedPaths } from './hooks/use-expanded-paths';
 
 export interface DialFoldersTreeProps {
   items: DialFile[];
@@ -31,6 +32,7 @@ export interface DialFoldersTreeProps {
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
+  onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
 }
 
 /**
@@ -127,7 +129,7 @@ export interface DialFoldersTreeProps {
 export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   items,
   showFiles = false,
-  expandedPaths = new Set(),
+  expandedPaths: externalExpandedPaths,
   loadingPaths = new Set(),
   selectedPath,
   emptyStateTitle = 'No Folders',
@@ -140,25 +142,16 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onRenameSave,
   onRenameCancel,
   onRenameValidate,
+  onExpandedPathsChange,
 }) => {
-  const [expandedItems, setExpandedItems] =
-    useState<Set<string>>(expandedPaths);
+  const { expandedPaths, togglePath } = useExpandedPaths({
+    expandedPaths: externalExpandedPaths ?? new Set(),
+    onExpandedPathsChange,
+  });
 
   const handleFolderClick = (node: DialFile) => {
     onItemClick?.(node);
-    if (expandedItems.has(node.path)) {
-      setExpandedItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(node.path);
-        return newSet;
-      });
-    } else {
-      setExpandedItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(node.path);
-        return newSet;
-      });
-    }
+    togglePath(node.path);
   };
 
   const renderTree = (nodes: DialFile[], level: number) => {
@@ -176,7 +169,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         items.length > 0 &&
         items.some((n) => n.nodeType === DialFileNodeType.FOLDER || showFiles);
 
-      const isExpanded = expandedItems.has(path);
+      const isExpanded = expandedPaths.has(path);
       const isSelected = selectedPath === path;
       const isLoading = loadingPaths.has(path);
       const isRenaming = renamedPath === path;
