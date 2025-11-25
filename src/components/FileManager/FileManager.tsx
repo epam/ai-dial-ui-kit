@@ -82,6 +82,8 @@ export interface FileTreeOptions
   additionalButtons?: ReactNode;
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
+  expandedPaths?: Set<string>;
+  onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;

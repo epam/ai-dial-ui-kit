@@ -28,6 +28,9 @@ import {
 } from './FileManagerContext';
 import type { DialFileManagerProps } from './FileManager';
 import { useItemRenaming } from './hooks/use-item-renaming';
+import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-paths';
+import { IconCopyMinus } from '@tabler/icons-react';
+import { DialButton } from '@/components/Button/Button';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -291,12 +294,31 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     [handlePathChange, onTableFileClick],
   );
 
+  const { expandedPaths, setExpandedPaths, collapseAll } = useExpandedPaths({
+    expandedPaths: treeOptions?.expandedPaths,
+    onExpandedPathsChange: treeOptions?.onExpandedPathsChange,
+  });
+
   const value: FileManagerContextValue = {
     cssClass,
     items,
     rootItem,
     filesLoading,
-    treeOptions,
+    treeOptions: {
+      ...treeOptions,
+      expandedPaths,
+      onExpandedPathsChange: setExpandedPaths,
+      additionalButtons: (
+        <>
+          {treeOptions?.additionalButtons}
+          <DialButton
+            cssClass="hover:text-icon-accent-primary p-1"
+            onClick={collapseAll}
+            iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
+          />
+        </>
+      ),
+    },
     navigationPanelOptions,
     gridOptions,
     toolbarOptions,
