@@ -1,5 +1,5 @@
 import type { DialFile } from '@/models/file';
-import type { DialCopiedItem } from '@/types/file-manager';
+import type { DialCopiedItem } from '@/models/file-manager';
 import { useCallback, useState } from 'react';
 import { findNodeByPath } from '@/components/FileManager/utils';
 

@@ -67,6 +67,9 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   addFolderLabel = 'Add folder',
   mode = 'copy',
   hiddenFilesSwitcherLabel = 'Show hidden files',
+  onUploadFiles,
+  onValidateUpload,
+  maxFileSize,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -130,6 +133,9 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           collapsed: true,
           expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
         }}
+        onUploadFiles={onUploadFiles}
+        onValidateUpload={onValidateUpload}
+        maxFileSize={maxFileSize}
       />
     </DialPopup>
   );

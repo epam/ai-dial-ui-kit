@@ -16,6 +16,7 @@ import {
   type DialFile,
   type DialRootFolder,
 } from '@/models/file';
+import type { DialUploadFileItem } from '@/models/file-manager';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -219,6 +220,19 @@ const PopupComponent = (args: DialFileManagerProps) => {
     [],
   );
 
+  const handleUploadFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string) => {
+      alert(
+        `Uploaded ${files.length} file(s) to ${destinationFolder}:\n${files
+          .map(
+            (f) => `${f.name} (${(f.fileContent.size / 1024).toFixed(2)} KB)`,
+          )
+          .join('\n')}`,
+      );
+    },
+    [],
+  );
+
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
       <DialButton
@@ -313,6 +327,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onRenameSave={handleRenameSave}
           onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
+          onUploadFiles={handleUploadFiles}
+          maxFileSize={10 * 1024 * 1024} // 10MB
           rootItem={rootItem}
         />
       </DialPopup>
@@ -322,6 +338,14 @@ const PopupComponent = (args: DialFileManagerProps) => {
 
 export const InPopup: Story = {
   render: PopupComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager in a popup with drag and drop upload support. Try dragging files from your computer into the grid area. Validates file names for forbidden characters, checks file size limits (max 10MB), and prevents hidden files (starting with dot) and reserved system names.',
+      },
+    },
+  },
 };
 
 export const WithCustomProvider: Story = {

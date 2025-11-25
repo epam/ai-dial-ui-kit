@@ -44,6 +44,7 @@ export interface DialSelectProps {
   size?: SelectSize;
   variant?: SelectVariant;
   value?: string | string[];
+  customSelectedValue?: string;
   prefix?: string;
   defaultValue?: string | string[];
   placeholder?: string;
@@ -94,6 +95,7 @@ export interface DialSelectProps {
  * @param [size=SelectSize.Md] - Size of the control.
  * @param [variant=SelectVariant.Primary] - Visual variant.
  * @param [value] - Controlled selected value(s).
+ * @param [customSelectedValue] - Custom string to render as the selected value in single mode.
  * @param [prefix] - Prefix for selected value(s).
  * @param [defaultValue] - Uncontrolled initial selected value(s).
  * @param [placeholder="Select..."] - Placeholder text when no selection is made.
@@ -123,6 +125,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   variant = SelectVariant.Primary,
   size = SelectSize.Md,
   prefix,
+  customSelectedValue,
   placeholder = 'Select...',
   searchable = false,
   searchPlaceholder,
@@ -305,11 +308,17 @@ export const DialSelect: FC<DialSelectProps> = ({
       );
     }
 
+    if (customSelectedValue && value) {
+      return customSelectedValue;
+    }
+
     return <span className="text-secondary truncate">{placeholder}</span>;
   }, [
     hasSelection,
     multiple,
+    customSelectedValue,
     prefix,
+    value,
     placeholder,
     renderTags,
     singleSelectedOption,
@@ -492,6 +501,11 @@ export const DialSelect: FC<DialSelectProps> = ({
         onMouseDown={(e) => {
           if (disabled) return;
           if (inlineSearch && !multiple) {
+            setQuery(
+              selectedValues.length === 1
+                ? (singleSelectedOption?.label ?? '')
+                : '',
+            );
             e.preventDefault();
           }
         }}
@@ -500,6 +514,11 @@ export const DialSelect: FC<DialSelectProps> = ({
           setOpen((v) => !v);
 
           if (inlineSearch && !multiple) {
+            setQuery(
+              selectedValues.length === 1
+                ? (singleSelectedOption?.label ?? '')
+                : '',
+            );
             inlineSearchInputRef.current?.focus();
           }
         }}
@@ -520,19 +539,6 @@ export const DialSelect: FC<DialSelectProps> = ({
               disabled={disabled}
               aria-disabled={disabled}
             />
-
-            {singleSelectedOption && !disabled && (
-              <DialButton
-                ariaLabel="Clear selection"
-                iconBefore={<IconX size={16} />}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelection('');
-                  setQuery('');
-                  setOpen(true);
-                }}
-              />
-            )}
           </div>
         ) : (
           <div className="flex min-w-0 items-center gap-2 text-primary">
@@ -540,10 +546,12 @@ export const DialSelect: FC<DialSelectProps> = ({
           </div>
         )}
 
-        <DialIcon
-          icon={selectChevronIcon}
-          className={classNames('text-primary', open && 'rotate-180')}
-        />
+        {!inlineSearch && (
+          <DialIcon
+            icon={selectChevronIcon}
+            className={classNames('text-primary', open && 'rotate-180')}
+          />
+        )}
       </button>
     </DialDropdown>
   );
