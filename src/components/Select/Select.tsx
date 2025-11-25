@@ -331,7 +331,9 @@ export const DialSelect: FC<DialSelectProps> = ({
     singleSelectedOption,
   ]);
 
-  const inlineInputValue = open ? query : (singleSelectedOption?.label ?? '');
+  const inlineInputValue = open
+    ? query
+    : (singleSelectedOption?.label ?? customSelectedValue ?? '');
 
   useImperativeHandle(dismissRef, () => ({
     dismiss: () => {
