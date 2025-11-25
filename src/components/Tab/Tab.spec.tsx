@@ -181,4 +181,10 @@ describe('Dial UI Kit :: DialTab', () => {
     const btn = screen.getByRole('tab');
     expect(btn.className).not.toMatch(/bg-accent-primary-alpha/);
   });
+
+  test('tab has height of 38px', () => {
+    render(<DialTab tab={baseTab} active={false} onClick={vi.fn()} />);
+    const tab = screen.getByRole('tab');
+    expect(tab.className).toMatch(/h-\[38px\]/);
+  });
 });
