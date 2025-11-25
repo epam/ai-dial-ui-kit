@@ -332,6 +332,12 @@ export const DialSelect: FC<DialSelectProps> = ({
     },
   }));
 
+  const setInlineSearchQuery = () => {
+    setQuery(
+      selectedValues.length === 1 ? (singleSelectedOption?.label ?? '') : '',
+    );
+  };
+
   return (
     <DialDropdown
       open={open}
@@ -501,11 +507,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         onMouseDown={(e) => {
           if (disabled) return;
           if (inlineSearch && !multiple) {
-            setQuery(
-              selectedValues.length === 1
-                ? (singleSelectedOption?.label ?? '')
-                : '',
-            );
+            setInlineSearchQuery();
             e.preventDefault();
           }
         }}
@@ -514,11 +516,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           setOpen((v) => !v);
 
           if (inlineSearch && !multiple) {
-            setQuery(
-              selectedValues.length === 1
-                ? (singleSelectedOption?.label ?? '')
-                : '',
-            );
+            setInlineSearchQuery();
             inlineSearchInputRef.current?.focus();
           }
         }}
@@ -532,8 +530,13 @@ export const DialSelect: FC<DialSelectProps> = ({
               value={inlineInputValue}
               onChange={(e) => setQuery(e.currentTarget.value)}
               onFocus={() => !disabled && setOpen(true)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => {
+                setInlineSearchQuery();
+                e.stopPropagation();
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
               className="bg-transparent outline-none w-full dial-small"
               ref={inlineSearchInputRef}
               disabled={disabled}
