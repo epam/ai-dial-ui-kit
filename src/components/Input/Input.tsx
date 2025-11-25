@@ -1,11 +1,12 @@
 import classNames from 'classnames';
-import type {
-  ChangeEvent,
-  FC,
-  FocusEvent,
-  KeyboardEvent,
-  Ref,
-  WheelEvent,
+import {
+  useEffect,
+  useRef,
+  type ChangeEvent,
+  type FC,
+  type FocusEvent,
+  type KeyboardEvent,
+  type Ref,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
@@ -15,6 +16,7 @@ import type {
   NumberInputBaseProps,
 } from '@/models/field-control-props';
 import { handleKeyDown } from './utils';
+import { useMergeRefs } from '@floating-ui/react';
 
 export interface DialInputProps
   extends InputBaseProps,
@@ -86,8 +88,24 @@ export const DialInput: FC<DialInputProps> = ({
   hideTooltip = false,
   inputRef,
 }) => {
-  const handleWheel = (e: WheelEvent<HTMLInputElement>) =>
-    (e.target as HTMLInputElement).blur();
+  const innerRef = useRef<HTMLInputElement | null>(null);
+  const ref = useMergeRefs([inputRef, innerRef]);
+
+  // disable mouse wheel changing input value
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+
+    const stopScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    el.addEventListener('wheel', stopScroll, { passive: false });
+
+    return () => {
+      el.removeEventListener('wheel', stopScroll);
+    };
+  }, []);
 
   const isNumericInput =
     type === 'number' || min !== undefined || max !== undefined;
@@ -157,7 +175,7 @@ export const DialInput: FC<DialInputProps> = ({
         triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
       >
         <input
-          ref={inputRef}
+          ref={ref}
           type={type}
           autoComplete="off"
           id={elementId}
@@ -170,7 +188,6 @@ export const DialInput: FC<DialInputProps> = ({
           )}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
-          onWheel={handleWheel}
           onBlur={onBlur}
           min={min}
           max={max}
