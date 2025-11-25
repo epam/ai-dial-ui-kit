@@ -46,18 +46,12 @@ export const useGridContextMenu = ({
         return items;
       }
 
-      if (actionLabels[DialFileManagerActions.Move]) {
+      if (actionLabels[DialFileManagerActions.Duplicate]) {
         items.push({
-          key: DialFileManagerActions.Move,
-          label: actionLabels[DialFileManagerActions.Move],
-          icon: (
-            <MoveToIcon
-              width={BASE_ICON_PROPS.size}
-              height={BASE_ICON_PROPS.size}
-              className="text-secondary"
-            />
-          ),
-          onClick: () => onMove(file),
+          key: DialFileManagerActions.Duplicate,
+          label: actionLabels[DialFileManagerActions.Duplicate],
+          icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => onDuplicate(file),
         });
       }
 
@@ -76,23 +70,18 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Duplicate]) {
+      if (actionLabels[DialFileManagerActions.Move]) {
         items.push({
-          key: DialFileManagerActions.Duplicate,
-          label: actionLabels[DialFileManagerActions.Duplicate],
-          icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
-          onClick: () => onDuplicate(file),
-        });
-      }
-
-      if (actionLabels[DialFileManagerActions.Rename]) {
-        items.push({
-          key: DialFileManagerActions.Rename,
-          label: actionLabels[DialFileManagerActions.Rename],
+          key: DialFileManagerActions.Move,
+          label: actionLabels[DialFileManagerActions.Move],
           icon: (
-            <IconPencilMinus {...BASE_ICON_PROPS} className="text-secondary" />
+            <MoveToIcon
+              width={BASE_ICON_PROPS.size}
+              height={BASE_ICON_PROPS.size}
+              className="text-secondary"
+            />
           ),
-          onClick: () => onRename(file.path),
+          onClick: () => onMove(file),
         });
       }
 
@@ -113,6 +102,17 @@ export const useGridContextMenu = ({
           label: actionLabels[DialFileManagerActions.Delete],
           icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
           onClick: () => onDelete(file, file.parentPath ?? ''),
+        });
+      }
+
+      if (actionLabels[DialFileManagerActions.Rename]) {
+        items.push({
+          key: DialFileManagerActions.Rename,
+          label: actionLabels[DialFileManagerActions.Rename],
+          icon: (
+            <IconPencilMinus {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onRename(file.path),
         });
       }
 
