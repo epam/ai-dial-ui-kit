@@ -129,7 +129,7 @@ export interface DialFoldersTreeProps {
 export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   items,
   showFiles = false,
-  expandedPaths: externalExpandedPaths = new Set(),
+  expandedPaths: externalExpandedPaths,
   loadingPaths = new Set(),
   selectedPath,
   emptyStateTitle = 'No Folders',
@@ -145,7 +145,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onExpandedPathsChange,
 }) => {
   const { expandedPaths, togglePath } = useExpandedPaths({
-    expandedPaths: externalExpandedPaths,
+    expandedPaths: externalExpandedPaths ?? new Set(),
     onExpandedPathsChange,
   });
 
