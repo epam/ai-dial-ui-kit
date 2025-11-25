@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, type DragEvent } from 'react';
 import type { DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/types/file-manager';
+import { FILES_DATA_TRANSFER_TYPE } from '../constants';
 
 export interface FileUploadValidationResult {
   valid: boolean;
@@ -28,6 +29,12 @@ export interface UseFileUploadOptions {
   validationMessages?: FileUploadValidationMessages;
 }
 
+const isDragEventWithFiles = (
+  e: Event,
+): e is Event & { dataTransfer: DataTransfer } => {
+  return 'dataTransfer' in e && e.dataTransfer !== null;
+};
+
 export const useFileUpload = ({
   onUploadFiles,
   onValidateUpload,
@@ -41,8 +48,11 @@ export const useFileUpload = ({
   useEffect(() => {
     let dragCounter = 0;
 
-    const handleWindowDragEnter = (e: globalThis.DragEvent) => {
-      if (e.dataTransfer?.types.includes('Files')) {
+    const handleWindowDragEnter = (e: Event) => {
+      if (
+        isDragEventWithFiles(e) &&
+        e.dataTransfer.types.includes(FILES_DATA_TRANSFER_TYPE)
+      ) {
         dragCounter++;
         setIsDraggingOverWindow(true);
       }
@@ -60,7 +70,7 @@ export const useFileUpload = ({
       setIsDraggingOverWindow(false);
     };
 
-    const handleWindowDragOver = (e: globalThis.DragEvent) => {
+    const handleWindowDragOver = (e: Event) => {
       e.preventDefault();
     };
 
