@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useItemRenaming } from '@/components/FileManager/hooks/use-item-renaming';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
-import type { DialCopiedItem } from '@/types/file-manager';
+import type { DialCopiedItem } from '@/models/file-manager';
 
 function buildTree(): DialFile[] {
   return [

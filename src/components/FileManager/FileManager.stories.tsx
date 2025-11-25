@@ -16,7 +16,7 @@ import {
   type DialFile,
   type DialRootFolder,
 } from '@/models/file';
-import type { DialUploadFileItem } from '@/types/file-manager';
+import type { DialUploadFileItem } from '@/models/file-manager';
 
 const meta = {
   title: 'FileManager/FileManager',

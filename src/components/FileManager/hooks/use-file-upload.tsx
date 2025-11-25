@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, type DragEvent } from 'react';
 import type { DialFile } from '@/models/file';
-import type { DialUploadFileItem } from '@/types/file-manager';
+import type { DialUploadFileItem } from '@/models/file-manager';
 import { FILES_DATA_TRANSFER_TYPE } from '../constants';
 
 export interface FileUploadValidationResult {

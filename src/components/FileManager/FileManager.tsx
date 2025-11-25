@@ -37,11 +37,10 @@ import {
 } from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import type { DropdownItem } from '@/models/dropdown';
 import {
-  DialFileManagerActions,
   type DialCopiedItem,
   type DialDeletedItem,
   type DialUploadFileItem,
-} from '@/types/file-manager';
+} from '@/models/file-manager';
 import {
   IconCopy,
   IconDownload,
@@ -67,6 +66,7 @@ import type {
   FileUploadValidationMessages,
 } from './hooks/use-file-upload';
 import classNames from 'classnames';
+import { DialFileManagerActions } from '@/types/file-manager';
 
 type GridRow = FileManagerGridRow;
 
