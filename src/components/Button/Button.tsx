@@ -6,7 +6,7 @@ import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export interface DialButtonProps {
-  type?: 'button' | 'submit';
+  type?: 'button' | 'submit' | 'reset';
   variant?: ButtonVariant;
   cssClass?: string;
   textCssClass?: string;
