@@ -109,7 +109,7 @@ export const DialTabs: FC<DialTabsProps> = ({
   const scrollContainerClass = useMemo(
     () =>
       classNames(
-        'flex gap-3',
+        'flex gap-2',
         isHorizontal
           ? 'flex-row flex-nowrap overflow-x-auto'
           : 'flex-col flex-wrap w-full',
