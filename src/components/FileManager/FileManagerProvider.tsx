@@ -278,7 +278,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const { newActions, isNewButtonVisible } = useNewActions({
     newActionLabels: toolbarOptions?.newActionLabels,
     onUploadFiles: openFileDialog,
-    onCreateFolder: startFolderCreation, // Pass startFolderCreation, not onCreateFolder
+    onCreateFolder: startFolderCreation,
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
