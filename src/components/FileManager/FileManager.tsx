@@ -64,12 +64,12 @@ import { useGridContextMenu } from './hooks/use-grid-context-menu';
 import type {
   FileUploadValidationResult,
   FileUploadValidationMessages,
-} from './hooks/use-file-upload';
+} from '@/components/FileManager/hooks/use-file-upload';
 import classNames from 'classnames';
 import { DialFileManagerActions } from '@/types/file-manager';
-import { DialFileManagerItemName } from './components/FileManagerItemName/FileManagerItemName';
+import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
-import type { FolderCreationValidationMessages } from './hooks/use-folder-creation';
+import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 
 type GridRow = FileManagerGridRow;
 
