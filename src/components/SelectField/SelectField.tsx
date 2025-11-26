@@ -102,6 +102,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       <DialSelect
         cssClass={selectCssClass}
         value={value}
+        elementId={elementId}
         {...restSelectProps}
       />
     </DialFormItem>
