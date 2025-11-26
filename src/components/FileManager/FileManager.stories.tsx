@@ -274,6 +274,11 @@ const PopupComponent = (args: DialFileManagerProps) => {
             tabs: tabs,
             activeTab: activeTab,
             onTabChange: handleTabChange,
+            newActionLabels: {
+              newFolder: 'New Folder',
+              uploadFiles: 'Upload Files',
+              uploadArchive: 'Upload Archive',
+            },
           }}
           bulkActionsToolbarOptions={{
             selectionLabel: 'items selected',

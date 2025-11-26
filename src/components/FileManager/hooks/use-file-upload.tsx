@@ -1,4 +1,10 @@
-import { useCallback, useState, useEffect, type DragEvent } from 'react';
+import {
+  useCallback,
+  useState,
+  useEffect,
+  type DragEvent,
+  useRef,
+} from 'react';
 import type { DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FILES_DATA_TRANSFER_TYPE } from '../constants';
@@ -44,6 +50,9 @@ export const useFileUpload = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggingOverWindow, setIsDraggingOverWindow] = useState(false);
   const [uploadError, setUploadError] = useState<string | undefined>();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const destinationFolderRef = useRef<string>('');
+  const existingFilesRef = useRef<DialFile[]>([]);
 
   useEffect(() => {
     let dragCounter = 0;
@@ -238,6 +247,53 @@ export const useFileUpload = ({
     [handleUpload],
   );
 
+  useEffect(() => {
+    const input = fileInputRef.current;
+    if (!input) return;
+
+    const handleChange = async () => {
+      if (!input.files?.length) return;
+
+      const files = Array.from(input.files);
+      const uploadItems: DialUploadFileItem[] = files.map((file) => ({
+        fileContent: file,
+        name: file.name,
+      }));
+
+      await handleUpload(
+        uploadItems,
+        destinationFolderRef.current,
+        existingFilesRef.current,
+      );
+
+      input.value = '';
+    };
+
+    input.addEventListener('change', handleChange);
+    return () => {
+      input.removeEventListener('change', handleChange);
+    };
+  }, [handleUpload]);
+
+  const openFileDialog = useCallback(
+    (destinationFolder: string, existingFiles: DialFile[]) => {
+      destinationFolderRef.current = destinationFolder;
+      existingFilesRef.current = existingFiles;
+
+      if (!fileInputRef.current) {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.style.display = 'none';
+        fileInputRef.current = input;
+        document.body.appendChild(input);
+      }
+
+      fileInputRef.current.click();
+    },
+    [],
+  );
+
   const clearError = useCallback(() => {
     setUploadError(undefined);
   }, []);
@@ -251,5 +307,8 @@ export const useFileUpload = ({
     handleDragOver,
     handleDrop,
     clearError,
+    handleUpload,
+    openFileDialog,
+    fileInputRef,
   };
 };

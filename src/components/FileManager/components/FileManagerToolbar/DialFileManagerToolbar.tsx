@@ -20,10 +20,10 @@ export interface DialFileManagerToolbarProps {
   hiddenFilesSwitcherLabel?: string;
   showHiddenFilesLabel?: string;
   hideHiddenFilesLabel?: string;
-  isCreateButtonVisible?: boolean;
-  createButtonVariant?: ButtonVariant;
-  createButtonDropdownItems?: DropdownItem[];
-  createButtonLabel?: string;
+  isNewButtonVisible?: boolean;
+  newButtonVariant?: ButtonVariant;
+  newButtonDropdownItems?: DropdownItem[];
+  newButtonLabel?: string;
   onTabChange?: (id: DialFileManagerTabs) => void;
   onToggleHiddenFiles?: (value: boolean) => void;
 }
@@ -35,7 +35,7 @@ export interface DialFileManagerToolbarProps {
  * - Tab navigation for switching between file sections or views
  * - A toggle for showing or hiding hidden files
  * - A refresh button for reloading content
- * - An optional "Create" button or dropdown for creating new files or folders
+ * - An optional "New" button or dropdown for creating new files or folders
  *
  * @example
  * ```tsx
@@ -51,8 +51,8 @@ export interface DialFileManagerToolbarProps {
  *   onTabChange={(id) => console.log('Switched to tab:', id)}
  *   onToggleHiddenFiles={(visible) => console.log('Hidden files visible:', visible)}
  *   onRefresh={() => console.log('Refreshed')}
- *   isCreateButtonVisible
- *   createButtonDropdownItems={[
+ *   isNewButtonVisible
+ *   newButtonDropdownItems={[
  *     { key: 'folder', label: 'New Folder' },
  *     { key: 'file', label: 'Upload File' },
  *   ]}
@@ -67,17 +67,17 @@ export interface DialFileManagerToolbarProps {
  * @param [hideHiddenFilesLabel='Hide hidden'] - Label shown when hidden files are visible.
  * @param [onTabChange] - Callback fired when the user switches between tabs. Receives the selected tab ID.
  * @param [onToggleHiddenFiles] - Callback fired when the hidden files visibility is toggled. Receives the new visibility state.
- * @param [isCreateButtonVisible] - Whether the "Create" button or dropdown should be displayed.
- * @param [createButtonVariant=ButtonVariant.Secondary] - Visual style variant for the create button.
- * @param [createButtonDropdownItems=[]] - Dropdown items available under the create button. If empty, a single create button is shown instead.
- * @param [createButtonLabel='Create'] - Label text for the create button.
+ * @param [isNewButtonVisible] - Whether the "New" button or dropdown should be displayed.
+ * @param [newButtonVariant=ButtonVariant.Secondary] - Visual style variant for the new button.
+ * @param [newButtonDropdownItems=[]] - Dropdown items available under the new button. If empty, a single new button is shown instead.
+ * @param [newButtonLabel='New'] - Label text for the new button.
  *
  * @remarks
  * - Tabs are rendered via `DialTabs`.
  * - The hidden files toggle uses `DialSwitch`.
- * - The refresh and create actions use `DialButton` or dropdown variants for consistency.
+ * - The refresh and new actions use `DialButton` or dropdown variants for consistency.
  * - The toolbar automatically adapts its layout for different screen sizes.
- * - When `createButtonDropdownItems` is provided, the create button becomes a dropdown menu.
+ * - When `newButtonDropdownItems` is provided, the new button becomes a dropdown menu.
  */
 export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   tabs,
@@ -85,10 +85,10 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   onTabChange,
   areHiddenFilesVisible,
   onToggleHiddenFiles,
-  isCreateButtonVisible,
-  createButtonVariant = ButtonVariant.Secondary,
-  createButtonDropdownItems = [],
-  createButtonLabel = 'Create',
+  isNewButtonVisible,
+  newButtonVariant = ButtonVariant.Secondary,
+  newButtonDropdownItems = [],
+  newButtonLabel = 'New',
   hiddenFilesSwitcherLabel = 'Hidden files',
   showHiddenFilesLabel = 'Show hidden files',
   hideHiddenFilesLabel = 'Hide hidden files',
@@ -140,13 +140,13 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         onChange={onToggleHiddenFiles}
       />
 
-      {isCreateButtonVisible && (
+      {isNewButtonVisible && (
         <>
           <div className="h-6 border-l border-primary" />
           <DialButtonDropdown
-            title={createButtonLabel}
-            variant={createButtonVariant}
-            items={createButtonDropdownItems}
+            title={newButtonLabel}
+            variant={newButtonVariant}
+            items={newButtonDropdownItems}
           />
         </>
       )}
@@ -170,11 +170,11 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         />
       </DialDropdown>
 
-      {isCreateButtonVisible ? (
+      {isNewButtonVisible ? (
         <DialButtonDropdown
-          title={createButtonLabel}
-          variant={createButtonVariant}
-          items={createButtonDropdownItems}
+          title={newButtonLabel}
+          variant={newButtonVariant}
+          items={newButtonDropdownItems}
         />
       ) : null}
     </>

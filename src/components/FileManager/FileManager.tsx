@@ -131,7 +131,13 @@ export interface GridOptions
 export type ToolbarOptions = Omit<
   DialFileManagerToolbarProps,
   'areHiddenFilesVisible' | 'onToggleHiddenFiles'
->;
+> & {
+  newActionLabels?: {
+    uploadFiles?: string;
+    newFolder?: string;
+    uploadArchive?: string;
+  };
+};
 
 export type BulkActionsToolbarOptions = Omit<
   DialFileManagerBulkActionsToolbarProps,
@@ -356,6 +362,8 @@ export const DialFileManagerView: FC = () => {
     onUploadFiles,
     onValidateUpload,
     maxFileSize,
+    newActions,
+    isNewButtonVisible,
   } = useFileManagerContext();
 
   const {
@@ -557,6 +565,8 @@ export const DialFileManagerView: FC = () => {
             {...toolbarOptions}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
+            isNewButtonVisible={isNewButtonVisible}
+            newButtonDropdownItems={newActions}
           />
         </div>
       );
@@ -587,6 +597,8 @@ export const DialFileManagerView: FC = () => {
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
     toolbarOptions,
+    isNewButtonVisible,
+    newActions,
   ]);
 
   const gridContextMenu = useGridContextMenu({
