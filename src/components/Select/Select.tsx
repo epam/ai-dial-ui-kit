@@ -11,6 +11,7 @@ import {
   useRef,
   useImperativeHandle,
   type Ref,
+  useId,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
@@ -40,7 +41,7 @@ import { SelectSize, SelectVariant } from '@/types/select';
 export interface DialSelectProps {
   options: SelectOption[];
   multiple?: boolean;
-  elementId: string;
+  elementId?: string;
   size?: SelectSize;
   variant?: SelectVariant;
   value?: string | string[];
@@ -91,7 +92,7 @@ export interface DialSelectProps {
  * ```
  *
  * @param options - Array of options to select from.
- * @param elementId - The id attribute for the select element.
+ * @param [elementId] - The id attribute for the select element.
  * @param [multiple] - Whether multiple selections are allowed.
  * @param [size=SelectSize.Md] - Size of the control.
  * @param [variant=SelectVariant.Primary] - Visual variant.
@@ -147,6 +148,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   dismissRef,
   onFooterClick,
 }) => {
+  const listId = useId();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inlineSearchInputRef = useRef<HTMLInputElement>(null);
@@ -360,7 +362,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
       renderOverlay={() => (
         <div
-          id={`list-${elementId}`}
+          id={`list-${elementId || listId}`}
           role="listbox"
           aria-multiselectable={multiple || undefined}
           className={selectOverlayBaseClasses}
@@ -373,7 +375,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                   placeholder={searchPlaceholder}
                   onChange={setQuery}
                   value={query}
-                  elementId={`search-${elementId}`}
+                  elementId={`search-${elementId || listId}`}
                 />
               )}
               {closable && (
@@ -393,7 +395,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           {multiple && selectAll && selectableFiltered.length > 0 && (
             <div className={classNames(selectOptionBaseClasses, 'mt-2')}>
               <DialCheckbox
-                id={`${elementId}-selectAll`}
+                id={`${elementId || listId}-selectAll`}
                 label={selectAllLabel}
                 checked={allSelectedInFiltered}
                 indeterminate={someSelectedInFiltered}
@@ -437,7 +439,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                         )}
                       >
                         <DialCheckbox
-                          id={`${elementId}-${opt.value}`}
+                          id={`${elementId || listId}-${opt.value}`}
                           label={
                             <span className="flex w-full flex-1 min-w-0 items-center gap-2 text-primary">
                               {opt.icon && <DialIcon icon={opt.icon} />}
@@ -509,7 +511,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-controls={`list-${elementId}`}
+        aria-controls={`list-${elementId || listId}`}
         className={mergeClasses(
           selectTriggerBaseClasses,
           disabled && 'opacity-75 !cursor-not-allowed',
@@ -539,7 +541,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         {inlineSearch && !multiple ? (
           <div className="flex min-w-0 items-center gap-2 text-primary flex-1">
             <input
-              id={`inline-${elementId}`}
+              id={`inline-${elementId || listId}`}
               type="text"
               placeholder={searchPlaceholder ?? placeholder}
               value={inlineInputValue}
