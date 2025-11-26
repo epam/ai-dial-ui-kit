@@ -6,6 +6,7 @@ import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export interface DialButtonProps {
+  autoFocus?: boolean;
   type?: 'button' | 'submit' | 'reset';
   variant?: ButtonVariant;
   cssClass?: string;
@@ -45,6 +46,7 @@ export interface DialButtonProps {
  * @param [hideTitleOnMobile=false] - Whether to hide the title text on mobile devices
  * @param [ariaLabel] - Accessible label for screen readers when no title is provided
  * @param [ref] - Ref to access the button DOM element
+ * @param [autoFocus] - Whether should be set focus on the button
  */
 export const DialButton: FC<DialButtonProps> = ({
   title,
@@ -59,6 +61,7 @@ export const DialButton: FC<DialButtonProps> = ({
   hideTitleOnMobile,
   ariaLabel,
   type = 'button',
+  autoFocus,
 }) => {
   const btnTextClassNames = classNames(
     'dial-small-semi',
@@ -81,6 +84,7 @@ export const DialButton: FC<DialButtonProps> = ({
       onClick={(e) => onClick?.(e)}
       disabled={disable}
       aria-label={title || ariaLabel}
+      autoFocus={autoFocus}
     >
       <DialIcon icon={iconBefore} />
       {title && <span className={btnTextClassNames}>{title}</span>}
