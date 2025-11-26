@@ -1,28 +1,30 @@
-::-webkit-scrollbar-track,
-::-webkit-scrollbar-track:hover,
-::-webkit-scrollbar-corner,
-:not(:hover)::-webkit-scrollbar-thumb {
-  @apply bg-transparent;
-}
+@layer base {
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-track:hover,
+  ::-webkit-scrollbar-corner,
+  :not(:hover)::-webkit-scrollbar-thumb {
+    @apply bg-transparent;
+  }
 
-::-webkit-scrollbar-thumb {
-  @apply cursor-pointer rounded bg-layer-4;
-}
+  ::-webkit-scrollbar-thumb {
+    @apply cursor-pointer rounded bg-layer-4;
+  }
 
-::-webkit-scrollbar {
-  @apply h-[4px] w-[4px];
-}
+  ::-webkit-scrollbar {
+    @apply h-[4px] w-[4px];
+  }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-}
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
 
-:hover {
-  scrollbar-color: var(--bg-layer-4, #333942) transparent;
-}
+  :hover {
+    scrollbar-color: var(--bg-layer-4, #333942) transparent;
+  }
 
-.divide-y > :empty ~ :not([hidden]) {
-  border-top: none;
-  border-bottom: none;
+  .divide-y > :empty ~ :not([hidden]) {
+    border-top: none;
+    border-bottom: none;
+  }
 }
