@@ -145,7 +145,7 @@ export function useEditableItem({
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        save();
+        inputRef.current?.blur();
       } else if (e.key === 'Escape') {
         e.preventDefault();
         cancel();
