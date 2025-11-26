@@ -1,4 +1,4 @@
-import { createContext, type DragEvent } from 'react';
+import { createContext, type DragEvent, type RefObject } from 'react';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
@@ -13,6 +13,7 @@ import type {
 } from './FileManager';
 import type { DestinationFolderMode } from './hooks/use-file-clipboard';
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
+import type { DropdownItem } from '@/models/dropdown';
 
 export interface FileManagerGridRow {
   id: string;
@@ -104,6 +105,12 @@ export interface FileManagerContextValue {
   onValidateUpload?: DialFileManagerProps['onValidateUpload'];
   maxFileSize?: number;
   uploadValidationMessages?: FileUploadValidationMessages;
+
+  newActions: DropdownItem[];
+  isNewButtonVisible: boolean;
+
+  openFileDialog: () => void;
+  fileInputRef: RefObject<HTMLInputElement | null>;
 }
 
 export const FileManagerContext = createContext<

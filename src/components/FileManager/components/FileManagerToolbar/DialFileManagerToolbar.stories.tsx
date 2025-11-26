@@ -16,7 +16,7 @@ const meta: Meta<typeof DialFileManagerToolbar> = {
     docs: {
       description: {
         component:
-          'A toolbar component for a file manager. Contains navigation tabs, a switch for hidden files, refresh button, and an optional create button with dropdown.',
+          'A toolbar component for a file manager. Contains navigation tabs, a switch for hidden files, refresh button, and an optional new button with dropdown.',
       },
     },
   },
@@ -70,9 +70,9 @@ export const Default: Story = {
             onTabChange={setActiveTab}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={setAreHiddenFilesVisible}
-            isCreateButtonVisible
-            createButtonVariant={ButtonVariant.Primary}
-            createButtonDropdownItems={mockCreateItems}
+            isNewButtonVisible
+            newButtonVariant={ButtonVariant.Primary}
+            newButtonDropdownItems={mockCreateItems}
           />
         </div>
       );
@@ -82,7 +82,7 @@ export const Default: Story = {
   },
 };
 
-export const WithSecondaryCreateButton: Story = {
+export const WithSecondaryNewButton: Story = {
   render: () => {
     const StoryWrapper = () => {
       const [activeTab, setActiveTab] = useState('shared');
@@ -96,9 +96,9 @@ export const WithSecondaryCreateButton: Story = {
             onTabChange={setActiveTab}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={setAreHiddenFilesVisible}
-            isCreateButtonVisible
-            createButtonVariant={ButtonVariant.Secondary}
-            createButtonDropdownItems={mockCreateItems}
+            isNewButtonVisible
+            newButtonVariant={ButtonVariant.Secondary}
+            newButtonDropdownItems={mockCreateItems}
           />
         </div>
       );
@@ -108,7 +108,7 @@ export const WithSecondaryCreateButton: Story = {
   },
 };
 
-export const WithoutCreateButton: Story = {
+export const WithoutNewButton: Story = {
   render: () => {
     const StoryWrapper = () => {
       const [activeTab, setActiveTab] = useState('organization');

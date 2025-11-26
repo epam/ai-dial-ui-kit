@@ -33,6 +33,7 @@ import { useItemRenaming } from './hooks/use-item-renaming';
 import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-paths';
 import { IconCopyMinus } from '@tabler/icons-react';
 import { DialButton } from '@/components/Button/Button';
+import { useNewActions } from './hooks/use-new-actions';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -61,6 +62,7 @@ export interface FileManagerProviderProps
  * - clipboard (copy / cut / paste)
  * - delete confirmation state
  * - computed grid rows
+ * - new actions
  *
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
@@ -223,6 +225,43 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onDownloadFiles,
   });
 
+  const {
+    isDragging,
+    isDraggingOverWindow,
+    uploadError,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop: handleFileDropBase,
+    clearError: clearUploadError,
+    openFileDialog: openFileDialogBase,
+    fileInputRef,
+  } = useFileUpload({
+    onUploadFiles,
+    onValidateUpload,
+    maxFileSize,
+  });
+
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      const destinationFolder = currentPath ?? '';
+      const existingFiles = currentFolder?.items ?? [];
+      handleFileDropBase(e, destinationFolder, existingFiles);
+    },
+    [currentPath, currentFolder, handleFileDropBase],
+  );
+
+  const openFileDialog = useCallback(() => {
+    const destinationFolder = currentPath ?? '';
+    const existingFiles = currentFolder?.items ?? [];
+    openFileDialogBase(destinationFolder, existingFiles);
+  }, [currentPath, currentFolder, openFileDialogBase]);
+
+  const { newActions, isNewButtonVisible } = useNewActions({
+    newActionLabels: toolbarOptions?.newActionLabels,
+    onUploadFiles: openFileDialog,
+  });
+
   const gridRows: FileManagerGridRow[] = useMemo(() => {
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
 
@@ -303,30 +342,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     expandedPaths: treeOptions?.expandedPaths,
     onExpandedPathsChange: treeOptions?.onExpandedPathsChange,
   });
-
-  const {
-    isDragging,
-    isDraggingOverWindow,
-    uploadError,
-    handleDragEnter,
-    handleDragLeave,
-    handleDragOver,
-    handleDrop: handleFileDropBase,
-    clearError: clearUploadError,
-  } = useFileUpload({
-    onUploadFiles,
-    onValidateUpload,
-    maxFileSize,
-  });
-
-  const handleDrop = useCallback(
-    (e: DragEvent) => {
-      const destinationFolder = currentPath ?? '';
-      const existingFiles = currentFolder?.items ?? [];
-      handleFileDropBase(e, destinationFolder, existingFiles);
-    },
-    [currentPath, currentFolder, handleFileDropBase],
-  );
 
   const value: FileManagerContextValue = {
     cssClass,
@@ -427,6 +442,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onValidateUpload,
     maxFileSize,
     isDraggingOverWindow,
+    openFileDialog,
+    fileInputRef,
+
+    newActions,
+    isNewButtonVisible,
   };
 
   return (

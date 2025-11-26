@@ -1,60 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DialFileManagerToolbar } from './DialFileManagerToolbar';
-import type { DialTabsProps } from '@/components/Tabs/Tabs';
-import type { DialSwitchProps } from '@/components/Switch/Switch';
-import type { DialButtonProps } from '@/components/Button/Button';
-import type { DialButtonDropdownProps } from '@/components/ButtonDropdown/ButtonDropdown';
-
-vi.mock('@/components/Tabs/Tabs', () => ({
-  DialTabs: ({ tabs, activeTab, onClick }: DialTabsProps) => (
-    <div data-testid="dial-tabs">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          data-testid={`tab-${tab.id}`}
-          data-active={tab.id === activeTab}
-          onClick={() => onClick(tab.id)}
-        >
-          {tab.name}
-        </button>
-      ))}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/Switch/Switch', () => ({
-  DialSwitch: ({ isOn, onChange }: DialSwitchProps) => (
-    <button
-      data-testid="hidden-switch"
-      data-on={isOn}
-      onClick={() => onChange?.(!isOn)}
-    >
-      {isOn ? 'ON' : 'OFF'}
-    </button>
-  ),
-}));
-
-vi.mock('@/components/Button/Button', () => ({
-  DialButton: ({ title, onClick }: DialButtonProps) => (
-    <button data-testid="button" onClick={onClick}>
-      {title}
-    </button>
-  ),
-}));
-
-vi.mock('@/components/ButtonDropdown/ButtonDropdown', () => ({
-  DialButtonDropdown: ({ title }: DialButtonDropdownProps) => (
-    <div data-testid="create-button">{title}</div>
-  ),
-}));
-
-vi.mock('@tabler/icons-react', () => ({
-  IconRefresh: () => <svg data-testid="refresh-icon" />,
-  IconChevronRight: () => <svg data-testid="chevron-right-icon" />,
-  IconEyeOff: () => <svg data-testid="eye-off-icon" />,
-  IconEye: () => <svg data-testid="eye-icon" />,
-}));
 
 describe('Dial UI Kit :: DialFileManagerToolbar', () => {
   const mockTabs = [
@@ -73,8 +19,24 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
       />,
     );
 
-    expect(screen.getByTestId('tab-tab1')).toBeInTheDocument();
-    expect(screen.getByTestId('tab-tab2')).toBeInTheDocument();
+    expect(screen.getByText('Tab 1')).toBeInTheDocument();
+    expect(screen.getByText('Tab 2')).toBeInTheDocument();
+  });
+
+  it('calls onTabChange when tab is clicked', () => {
+    const onTabChange = vi.fn();
+    render(
+      <DialFileManagerToolbar
+        tabs={mockTabs}
+        activeTab="tab1"
+        areHiddenFilesVisible={false}
+        onTabChange={onTabChange}
+        onToggleHiddenFiles={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Tab 2'));
+    expect(onTabChange).toHaveBeenCalledWith('tab2');
   });
 
   it('manages hidden files switch state via props', () => {
@@ -89,26 +51,29 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
       />,
     );
 
-    const switcher = screen.getByTestId('hidden-switch');
-    expect(switcher).toHaveAttribute('data-on', 'true');
+    const switcher = screen.getByRole('checkbox');
+    expect(switcher).toBeChecked();
 
     fireEvent.click(switcher);
     expect(onToggleHiddenFiles).toHaveBeenCalledWith(false);
   });
 
-  it('shows create button only when isCreateButtonVisible is true', () => {
-    const { queryByTestId, rerender } = render(
+  it('shows new button only when isNewButtonVisible is true', () => {
+    const { rerender } = render(
       <DialFileManagerToolbar
         tabs={mockTabs}
         activeTab="tab1"
         areHiddenFilesVisible={false}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={vi.fn()}
-        isCreateButtonVisible={false}
+        isNewButtonVisible={false}
+        newButtonLabel="New"
       />,
     );
 
-    expect(queryByTestId('create-button')).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: /new/i }),
+    ).not.toBeInTheDocument();
 
     rerender(
       <DialFileManagerToolbar
@@ -117,11 +82,61 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
         areHiddenFilesVisible={false}
         onTabChange={vi.fn()}
         onToggleHiddenFiles={vi.fn()}
-        isCreateButtonVisible={true}
-        createButtonDropdownItems={[{ key: '1', label: 'New File' }]}
+        isNewButtonVisible={true}
+        newButtonLabel="New"
+        newButtonDropdownItems={[{ key: '1', label: 'New File' }]}
       />,
     );
 
-    expect(queryByTestId('create-button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /new/i })).toBeInTheDocument();
+  });
+
+  it('renders new button with custom label', () => {
+    const customLabel = 'Create New';
+    render(
+      <DialFileManagerToolbar
+        tabs={mockTabs}
+        activeTab="tab1"
+        areHiddenFilesVisible={false}
+        onTabChange={vi.fn()}
+        onToggleHiddenFiles={vi.fn()}
+        isNewButtonVisible={true}
+        newButtonLabel={customLabel}
+        newButtonDropdownItems={[{ key: '1', label: 'New File' }]}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: /create new/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('does not render tabs when not provided', () => {
+    render(
+      <DialFileManagerToolbar
+        areHiddenFilesVisible={false}
+        onToggleHiddenFiles={vi.fn()}
+      />,
+    );
+
+    expect(screen.queryByText('Tab 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Tab 2')).not.toBeInTheDocument();
+  });
+
+  it('renders with correct hidden files switch label', () => {
+    const customLabel = 'Show System Files';
+    render(
+      <DialFileManagerToolbar
+        tabs={mockTabs}
+        activeTab="tab1"
+        areHiddenFilesVisible={false}
+        hiddenFilesSwitcherLabel={customLabel}
+        onTabChange={vi.fn()}
+        onToggleHiddenFiles={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByText(customLabel)).toBeInTheDocument();
   });
 });
