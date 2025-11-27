@@ -3,9 +3,9 @@ import type { FC, ReactNode } from 'react';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import {
-  containerBaseClasses,
+  containerBaseClassName,
   DRAG_TYPE,
-  handleBaseClasses,
+  handleBaseClassName,
 } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 import { BASE_ICON_PROPS } from '@/constants/icon';
@@ -13,10 +13,10 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 export interface DialDraggableItemProps {
   id: string;
   children: ReactNode;
-  cssClass?: string;
-  findItem?: (field: string) => number;
-  moveItem?: (field: string, atIndex: number) => void;
-  handleAriaLabel?: string;
+  className?: string;
+  ariaLabel?: string;
+  onFind?: (field: string) => number;
+  onMove?: (field: string, atIndex: number) => void;
 }
 
 /**
@@ -35,23 +35,23 @@ export interface DialDraggableItemProps {
  *
  * @param id - Unique identifier of the draggable item
  * @param children - Content rendered within the draggable row
- * @param [cssClass] - Additional CSS classes applied to the root container
- * @param [findItem] - Function to resolve an item's current index by id
- * @param [moveItem] - Function to move an item (by id) to a target index
- * @param [handleAriaLabel='Drag item'] - Accessible label for the handle
+ * @param [className] - Additional CSS classes applied to the root container
+ * @param [onFind] - Function to resolve an item's current index by id
+ * @param [onMove] - Function to move an item (by id) to a target index
+ * @param [ariaLabel='Drag item'] - Accessible label for the handle
  */
 export const DialDraggableItem: FC<DialDraggableItemProps> = ({
   id,
   children,
-  cssClass,
-  findItem,
-  moveItem,
-  handleAriaLabel = 'Drag item',
+  className,
+  onFind,
+  onMove,
+  ariaLabel = 'Drag item',
 }) => {
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dropRef = useRef<HTMLDivElement | null>(null);
 
-  const originalIndex = typeof findItem === 'function' ? findItem(id) : -1;
+  const originalIndex = typeof onFind === 'function' ? onFind(id) : -1;
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -68,14 +68,14 @@ export const DialDraggableItem: FC<DialDraggableItemProps> = ({
         const didDrop = monitor.didDrop();
         if (
           !didDrop &&
-          typeof moveItem === 'function' &&
+          typeof onMove === 'function' &&
           item.originalIndex > -1
         ) {
-          moveItem(item.id, item.originalIndex);
+          onMove(item.id, item.originalIndex);
         }
       },
     }),
-    [id, originalIndex, moveItem],
+    [id, originalIndex, onMove],
   );
 
   const [, drop] = useDrop(
@@ -83,13 +83,13 @@ export const DialDraggableItem: FC<DialDraggableItemProps> = ({
       accept: DRAG_TYPE,
       hover: (item: { id: string }) => {
         if (!item || item.id === id) return;
-        if (typeof findItem === 'function' && typeof moveItem === 'function') {
-          const index = findItem(id);
-          moveItem(item.id, index);
+        if (typeof onFind === 'function' && typeof onMove === 'function') {
+          const index = onFind(id);
+          onMove(item.id, index);
         }
       },
     }),
-    [findItem, moveItem, id],
+    [onFind, onMove, id],
   );
 
   preview(drop(dropRef));
@@ -98,15 +98,11 @@ export const DialDraggableItem: FC<DialDraggableItemProps> = ({
   return (
     <div
       ref={dropRef}
-      className={mergeClasses(containerBaseClasses, cssClass)}
+      className={mergeClasses(containerBaseClassName, className)}
       style={{ opacity: isDragging ? 0 : 1 }}
       aria-roledescription="Draggable item"
     >
-      <div
-        ref={dragRef}
-        className={handleBaseClasses}
-        aria-label={handleAriaLabel}
-      >
+      <div ref={dragRef} className={handleBaseClassName} aria-label={ariaLabel}>
         <IconGripVertical {...BASE_ICON_PROPS} />
       </div>
       {children}
