@@ -351,6 +351,9 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
           onUploadFiles={handleUploadFiles}
+          onUploadArchive={(file, destinationFolder) => {
+            alert(`Uploaded archive ${file.name} to ${destinationFolder}`);
+          }}
           onCreateFolder={handleCreateFolder}
           onCreateFolderValidate={handleCreateFolderValidate}
           folderCreationValidationMessages={{

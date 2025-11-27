@@ -10,7 +10,7 @@ import type { DialFieldLabelProps } from '@/components/Field/Field';
 import { DialMultiSelectTags } from '../Select/MultiSelectTags';
 
 export interface DialSelectFieldProps
-  extends Omit<DialSelectProps, 'cssClass'>,
+  extends Omit<DialSelectProps, 'cssClass' | 'elementId'>,
     Omit<DialFieldLabelProps, 'htmlFor'>,
     Omit<DialFormItemProps, 'label' | 'children' | 'value'> {
   selectCssClass?: string;
