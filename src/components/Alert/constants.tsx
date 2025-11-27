@@ -14,12 +14,12 @@ export const variantIcons: Record<AlertVariant, ReactNode> = {
   success: <IconCircleCheck size={24} stroke={2} />,
 };
 
-export const alertVariantClassMap: Record<AlertVariant, string> = {
+export const alertVariantClassNameMap: Record<AlertVariant, string> = {
   [AlertVariant.Info]: 'bg-info border-info text-info',
   [AlertVariant.Success]: 'bg-success border-success text-success',
   [AlertVariant.Warning]: 'bg-warning border-warning text-warning',
   [AlertVariant.Error]: 'bg-error border-error text-error',
 };
 
-export const alertBaseClasses =
+export const alertBaseClassName =
   'items-center justify-between gap-2 p-3 border border-solid dial-small-150 rounded flex';
