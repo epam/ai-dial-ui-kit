@@ -233,6 +233,24 @@ const PopupComponent = (args: DialFileManagerProps) => {
     [],
   );
 
+  const handleCreateFolder = useCallback(
+    async (file: DialUploadFileItem, parentPath: string, id: string) => {
+      alert(
+        `Creating folder "${file.name}" in path: ${parentPath}. File ID: ${id}. File size: ${file.fileContent.size} bytes.`,
+      );
+    },
+    [],
+  );
+
+  const handleCreateFolderValidate = useCallback((name: string) => {
+    const forbiddenChars = /[<>:"/\\|?*]/;
+    if (forbiddenChars.test(name)) {
+      return 'Folder name contains forbidden characters: < > : " / \\ | ? *';
+    }
+
+    return null;
+  }, []);
+
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
       <DialButton
@@ -333,6 +351,13 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
           onUploadFiles={handleUploadFiles}
+          onCreateFolder={handleCreateFolder}
+          onCreateFolderValidate={handleCreateFolderValidate}
+          folderCreationValidationMessages={{
+            emptyName: 'Please enter a folder name',
+            duplicateName:
+              'A folder with this name already exists in this location',
+          }}
           maxFileSize={10 * 1024 * 1024} // 10MB
           rootItem={rootItem}
         />

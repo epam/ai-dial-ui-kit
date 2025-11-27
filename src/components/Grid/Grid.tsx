@@ -321,7 +321,7 @@ export const DialGrid = <T extends object>({
             matchReferenceWidth
             cssClass="w-full h-full"
           >
-            <span className="block min-w-0 max-w-full">{content}</span>
+            <span className="block min-w-0 max-w-full flex-1">{content}</span>
           </DialDropdown>
         );
       };
