@@ -302,9 +302,9 @@ export const useFileUpload = ({
 
   const openArchiveDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
-      // Only allow one .zip file and perform folder name conflict check
       if (!onUploadArchive) return;
 
+      // Only allow one .zip file
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = '.zip,application/zip';
