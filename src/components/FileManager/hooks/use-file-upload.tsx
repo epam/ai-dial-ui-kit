@@ -248,11 +248,19 @@ export const useFileUpload = ({
   );
 
   useEffect(() => {
-    const input = fileInputRef.current;
-    if (!input) return;
+    let input = fileInputRef.current;
+
+    if (!input) {
+      input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.style.display = 'none';
+      document.body.appendChild(input);
+      fileInputRef.current = input;
+    }
 
     const handleChange = async () => {
-      if (!input.files?.length) return;
+      if (!input?.files?.length) return;
 
       const files = Array.from(input.files);
       const uploadItems: DialUploadFileItem[] = files.map((file) => ({
@@ -270,8 +278,16 @@ export const useFileUpload = ({
     };
 
     input.addEventListener('change', handleChange);
+
     return () => {
+      if (!input) return;
+
       input.removeEventListener('change', handleChange);
+
+      if (fileInputRef.current === input) {
+        document.body.removeChild(input);
+        fileInputRef.current = null;
+      }
     };
   }, [handleUpload]);
 
@@ -280,16 +296,9 @@ export const useFileUpload = ({
       destinationFolderRef.current = destinationFolder;
       existingFilesRef.current = existingFiles;
 
-      if (!fileInputRef.current) {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.multiple = true;
-        input.style.display = 'none';
-        fileInputRef.current = input;
-        document.body.appendChild(input);
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
       }
-
-      fileInputRef.current.click();
     },
     [],
   );

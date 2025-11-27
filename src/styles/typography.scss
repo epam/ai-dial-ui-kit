@@ -58,6 +58,12 @@
   line-height: 18px;
 }
 
+.dial-tiny-semi {
+  @apply font-semibold;
+  font-size: 12px;
+  line-height: 14px;
+}
+
 .dial-caption {
   @apply font-normal;
   font-size: 10px;
