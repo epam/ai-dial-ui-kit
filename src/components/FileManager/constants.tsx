@@ -24,3 +24,5 @@ export const sidebarTitleDefault = 'Files';
 export const BASE_FILE_MANAGER_ICON_SIZE = 20;
 
 export const FILES_DATA_TRANSFER_TYPE = 'Files';
+
+export const FOLDER_PLACEHOLDER_FILE_NAME = '.dial_folder';

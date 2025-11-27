@@ -64,9 +64,12 @@ import { useGridContextMenu } from './hooks/use-grid-context-menu';
 import type {
   FileUploadValidationResult,
   FileUploadValidationMessages,
-} from './hooks/use-file-upload';
+} from '@/components/FileManager/hooks/use-file-upload';
 import classNames from 'classnames';
 import { DialFileManagerActions } from '@/types/file-manager';
+import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
+import { DialItemType } from '@/types/item';
+import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 
 type GridRow = FileManagerGridRow;
 
@@ -195,16 +198,15 @@ export interface DialFileManagerProps {
   onRenameValidate?: (value: string, item: DialFile) => string | null;
 
   onCreateFolder?: (
+    file: DialUploadFileItem,
     folderPath: string,
-    file: File,
-    name: string,
-    bucket?: string,
-  ) => void;
+    fileId: string,
+  ) => void | Promise<void>;
   onCreateFolderValidate?: (
     name: string,
     parentFolder: DialFile,
   ) => string | null;
-  createFolderValidationMessages?: CreateFolderValidationMessages;
+  folderCreationValidationMessages?: FolderCreationValidationMessages;
 
   onUploadFiles?: (
     files: DialUploadFileItem[],
@@ -373,6 +375,10 @@ export const DialFileManagerView: FC = () => {
     maxFileSize,
     newActions,
     isNewButtonVisible,
+    newFolderTempId,
+    cancelFolderCreation,
+    saveFolderCreation,
+    validateFolderName,
   } = useFileManagerContext();
 
   const {
@@ -398,8 +404,23 @@ export const DialFileManagerView: FC = () => {
         headerName: 'Name',
         flex: 1,
         minWidth: 200,
-        cellRenderer: (params: { data: GridRow }) =>
-          params.data?.nodeType === DialFileNodeType.FOLDER ? (
+        cellRenderer: (params: { data: GridRow }) => {
+          if (params.data?.isTemporary && params.data.id === newFolderTempId) {
+            return (
+              <DialFileManagerItemName
+                name=""
+                type={DialItemType.Folder}
+                elementId={`new-folder-${params.data.id}`}
+                editing={true}
+                iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                validate={validateFolderName}
+                onSave={saveFolderCreation}
+                onCancel={cancelFolderCreation}
+              />
+            );
+          }
+
+          return params.data?.nodeType === DialFileNodeType.FOLDER ? (
             <DialFolderName
               name={params.data.name}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
@@ -409,7 +430,8 @@ export const DialFileManagerView: FC = () => {
               name={params.data.name}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
-          ),
+          );
+        },
       },
       {
         field: 'updatedAt',
@@ -430,7 +452,14 @@ export const DialFileManagerView: FC = () => {
         suppressSizeToFit: true,
       },
     ];
-  }, [dateLocale, dateOptions]);
+  }, [
+    dateLocale,
+    dateOptions,
+    newFolderTempId,
+    saveFolderCreation,
+    cancelFolderCreation,
+    validateFolderName,
+  ]);
 
   const baseColumns = userColumnDefs ?? defaultColumns;
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {

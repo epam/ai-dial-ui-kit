@@ -34,6 +34,7 @@ import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-pa
 import { IconCopyMinus } from '@tabler/icons-react';
 import { DialButton } from '@/components/Button/Button';
 import { useNewActions } from './hooks/use-new-actions';
+import { useFolderCreation } from './hooks/use-folder-creation';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -95,6 +96,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onValidateUpload,
   maxFileSize,
   onUploadArchive,
+  onCreateFolder,
+  onCreateFolderValidate,
+  folderCreationValidationMessages,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -265,11 +269,25 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const existingFiles = currentFolder?.items ?? [];
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
+  const {
+    isCreatingFolder,
+    newFolderTempId,
+    startFolderCreation,
+    cancelFolderCreation,
+    saveFolderCreation,
+    validateFolderName,
+  } = useFolderCreation({
+    currentFolder,
+    onCreateFolder,
+    onValidateFolderName: onCreateFolderValidate,
+    validationMessages: folderCreationValidationMessages,
+  });
 
   const { newActions, isNewButtonVisible } = useNewActions({
     newActionLabels: toolbarOptions?.newActionLabels,
     onUploadFiles: openFileDialog,
     onUploadArchive: openArchiveUpload,
+    onCreateFolder: startFolderCreation,
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
@@ -296,12 +314,29 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       path: node.path,
       nodeType: node.nodeType,
       extension: node.extension,
+      isTemporary: false,
     }));
+
+    if (isCreatingFolder && newFolderTempId && !query) {
+      mapped.unshift({
+        id: newFolderTempId,
+        name: '',
+        updatedAt: undefined,
+        size: '-',
+        author: undefined,
+        path: newFolderTempId,
+        nodeType: DialFileNodeType.FOLDER,
+        extension: undefined,
+        isTemporary: true,
+      });
+    }
 
     if (!query) return mapped;
 
     const tokens = query.split(/\s+/).filter(Boolean);
     return mapped.filter((row) => {
+      if (row.isTemporary) return true;
+
       const nameLower = normalizeToLowerCase(row.name);
       const authorLower = normalizeToLowerCase(row.author);
       const extLower = normalizeExtensionWithoutDot(row.extension);
@@ -312,7 +347,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
           extLower.includes(t),
       );
     });
-  }, [currentFolder, effectiveSearchValue, areHiddenFilesVisible]);
+  }, [
+    currentFolder,
+    effectiveSearchValue,
+    areHiddenFilesVisible,
+    isCreatingFolder,
+    newFolderTempId,
+  ]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {
@@ -457,6 +498,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     newActions,
     isNewButtonVisible,
+
+    isCreatingFolder,
+    newFolderTempId,
+    startFolderCreation,
+    cancelFolderCreation,
+    saveFolderCreation,
+    validateFolderName,
   };
 
   return (
