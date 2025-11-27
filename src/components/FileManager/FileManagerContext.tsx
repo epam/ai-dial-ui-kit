@@ -24,6 +24,7 @@ export interface FileManagerGridRow {
   path: string;
   nodeType: DialFileNodeType;
   extension?: string;
+  isTemporary?: boolean;
 }
 
 export interface FileManagerContextValue {
@@ -111,6 +112,13 @@ export interface FileManagerContextValue {
 
   openFileDialog: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;
+
+  isCreatingFolder: boolean;
+  newFolderTempId: string | null;
+  startFolderCreation: () => void;
+  cancelFolderCreation: () => void;
+  saveFolderCreation: (name: string) => Promise<void>;
+  validateFolderName: (name: string) => string | null;
 }
 
 export const FileManagerContext = createContext<

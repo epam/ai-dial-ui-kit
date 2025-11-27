@@ -1,9 +1,89 @@
+import React, { type ReactElement } from 'react';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { DialFileManager } from './FileManager';
 import { itemsMock } from './__mocks__/files';
-import type { ReactElement } from 'react';
+
+interface GridRowLike {
+  name?: string;
+  path?: string;
+}
+
+interface MockColumnDef {
+  filter?: boolean;
+  floatingFilter?: boolean;
+}
+
+interface MockCellClickedEvent<Row extends GridRowLike> {
+  colDef: { colId: string };
+  data: Row;
+}
+
+interface MockAdditionalGridOptions<Row extends GridRowLike> {
+  onCellClicked?: (event: MockCellClickedEvent<Row>) => void;
+}
+
+interface MockDialGridProps<Row extends GridRowLike> {
+  rowData?: Row[];
+  getRowId?: (row: Row, index: number) => string;
+  columnDefs?: MockColumnDef[];
+  cssClass?: string;
+  additionalGridOptions?: MockAdditionalGridOptions<Row>;
+}
+
+vi.mock('@/components/Grid/Grid', () => {
+  function DialGrid<Row extends GridRowLike>(props: MockDialGridProps<Row>) {
+    const { rowData, getRowId, columnDefs, cssClass, additionalGridOptions } =
+      props;
+
+    const rowsArray: Row[] = rowData ?? [];
+    const getId =
+      getRowId ?? ((_: Row, index: number): string => String(index));
+
+    const filtersDisabled =
+      Array.isArray(columnDefs) &&
+      columnDefs.length > 0 &&
+      columnDefs.every(
+        (col) => col.filter === false && col.floatingFilter === false,
+      );
+
+    const handleRowClick = (row: Row): void => {
+      const handler = additionalGridOptions?.onCellClicked;
+      if (!handler) return;
+      handler({ colDef: { colId: 'name' }, data: row });
+    };
+
+    const rows = rowsArray.map((row, index) => {
+      const key = getId(row, index);
+      const label = row.name ?? row.path ?? String(index);
+      return (
+        <tr key={key} className="ag-row" onClick={() => handleRowClick(row)}>
+          <td>{label}</td>
+        </tr>
+      );
+    });
+
+    return (
+      <div className={cssClass} data-testid="dial-grid-mock">
+        <table role="table">
+          {!filtersDisabled && (
+            <thead>
+              <tr>
+                <th>
+                  <input aria-label="column filter" />
+                </th>
+              </tr>
+            </thead>
+          )}
+          <tbody className="ag-center-cols-container">{rows}</tbody>
+        </table>
+      </div>
+    );
+  }
+
+  return { DialGrid };
+});
 
 const renderWithinSizedShell = (ui: ReactElement) =>
   render(<div style={{ height: 640, width: 1100 }}>{ui}</div>);
@@ -11,43 +91,54 @@ const renderWithinSizedShell = (ui: ReactElement) =>
 const getGridRegion = () =>
   screen.getByRole('region', { name: 'File Manager Grid View' });
 
-const waitForGridTable = async () => {
+const waitForGridTable = async (): Promise<HTMLElement> => {
   const grid = getGridRegion();
-  await within(grid).findByRole('table', undefined, { timeout: 6000 });
+  await within(grid).findByRole('table', undefined, { timeout: 5000 });
   return grid;
 };
 
-/** Find a row element inside the grid whose textContent matches the given string or regex. */
-const findInGridByRowText = async (text: string | RegExp) => {
+const findInGridByRowText = async (text: string | RegExp): Promise<Element> => {
   const grid = await waitForGridTable();
   const matcher =
     typeof text === 'string'
-      ? (s: string) => s.includes(text)
-      : (s: string) => text.test(s);
+      ? (value: string): boolean => value.includes(text)
+      : (value: string): boolean => text.test(value);
+
   let found: Element | null = null;
 
   await waitFor(
     () => {
       const rows = grid.querySelectorAll('.ag-center-cols-container .ag-row');
       found =
-        Array.from(rows).find((r) => matcher((r.textContent ?? '').trim())) ||
-        null;
-      if (!found) throw new Error('row not rendered yet');
+        Array.from(rows).find((row) =>
+          matcher((row.textContent ?? '').trim()),
+        ) ?? null;
+      if (found === null) {
+        throw new Error('Row not rendered yet');
+      }
     },
-    { timeout: 6000 },
+    { timeout: 5000 },
   );
 
-  return found!;
+  if (found === null) {
+    throw new Error('Row not found');
+  }
+
+  return found;
 };
 
-const queryAllInGridByRowText = async (text: string | RegExp) => {
+const queryAllInGridByRowText = async (
+  text: string | RegExp,
+): Promise<Element[]> => {
   const grid = await waitForGridTable();
   const matcher =
     typeof text === 'string'
-      ? (s: string) => s.includes(text)
-      : (s: string) => text.test(s);
+      ? (value: string): boolean => value.includes(text)
+      : (value: string): boolean => text.test(value);
   const rows = grid.querySelectorAll('.ag-center-cols-container .ag-row');
-  return Array.from(rows).filter((r) => matcher((r.textContent ?? '').trim()));
+  return Array.from(rows).filter((row) =>
+    matcher((row.textContent ?? '').trim()),
+  );
 };
 
 describe('Dial UI Kit :: FileManager', () => {
@@ -78,7 +169,6 @@ describe('Dial UI Kit :: FileManager', () => {
     expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
     expect(await findInGridByRowText('settings.svg')).toBeInTheDocument();
 
-    // Ensure "24px" folder is not shown in grid results for "svg"
     expect((await queryAllInGridByRowText('24px')).length).toBe(0);
   });
 
@@ -120,7 +210,7 @@ describe('Dial UI Kit :: FileManager', () => {
       />,
     );
 
-    const videoNode = await screen.findByText('Video', {}, { timeout: 6000 });
+    const videoNode = await screen.findByText('Video', {}, { timeout: 5000 });
     await userEvent.click(videoNode);
 
     expect(await findInGridByRowText('promo.mp4')).toBeInTheDocument();
@@ -143,7 +233,6 @@ describe('Dial UI Kit :: FileManager', () => {
       />,
     );
 
-    // No textboxes inside the grid region (floating filters disabled)
     const grid = await waitForGridTable();
     const textboxesInsideGrid = within(grid).queryAllByRole('textbox');
     expect(textboxesInsideGrid.length).toBe(0);
