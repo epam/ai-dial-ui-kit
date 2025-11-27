@@ -31,7 +31,7 @@ const meta: Meta<typeof DialTab> = {
       control: 'boolean',
       description: 'Determines horizontal vs vertical orientation.',
     },
-    cssClass: {
+    className: {
       control: 'text',
       description: 'Optional additional CSS classes.',
     },

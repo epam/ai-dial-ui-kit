@@ -10,7 +10,7 @@ export interface DialTabProps {
   active: boolean;
   invalid?: boolean;
   horizontal?: boolean;
-  cssClass?: string;
+  className?: string;
   onClick: (id: string) => void;
 }
 
@@ -32,23 +32,23 @@ export interface DialTabProps {
  * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`].
  * @param active - Whether the tab is currently active.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
- * @param [cssClass] - Additional CSS classes applied to the tab element.
+ * @param [className] - Additional CSS classes applied to the tab element.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
  */
 export const DialTab: FC<DialTabProps> = ({
   tab,
   active,
   invalid,
-  cssClass,
+  className,
   horizontal,
   onClick,
 }) => {
-  const baseClasses = mergeClasses(
+  const baseClassName = mergeClasses(
     'rounded h-[38px] items-center flex flex-row border-transparent cursor-pointer dial-small leading-4 hover:text-accent-primary',
     { 'border-b-2 px-4': horizontal, 'border-l-2 px-3': !horizontal },
   );
   const tabClassNames = mergeClasses(
-    baseClasses,
+    baseClassName,
     {
       'bg-layer-4': horizontal,
       'bg-layer-1 text-secondary pointer-events-none': tab.disabled,
@@ -57,7 +57,7 @@ export const DialTab: FC<DialTabProps> = ({
       'border-b-accent-primary': active && horizontal && !tab.disabled,
       'border-l-accent-primary': active && !horizontal && !tab.disabled,
     },
-    cssClass,
+    className,
   );
 
   return (
