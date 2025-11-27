@@ -64,7 +64,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
       <DialFieldLabel
         fieldTitle="Styled Field"
         htmlFor="styled-input"
-        cssClass="custom-label-class"
+        className="custom-label-class"
       />,
     );
     const label = screen.getByText('Styled Field').closest('label');
@@ -79,24 +79,24 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     expect(label).toHaveClass('dial-tiny', 'text-secondary');
   });
 
-  test('Should apply default mb-2 class when cssClass does not include mb', () => {
+  test('Should apply default mb-2 class when className does not include mb', () => {
     render(
       <DialFieldLabel
         fieldTitle="Default Margin"
         htmlFor="margin-input"
-        cssClass="custom-class"
+        className="custom-class"
       />,
     );
     const label = screen.getByText('Default Margin').closest('label');
     expect(label).toHaveClass('mb-2');
   });
 
-  test('Should not apply mb-2 when cssClass includes mb', () => {
+  test('Should not apply mb-2 when className includes mb', () => {
     render(
       <DialFieldLabel
         fieldTitle="Custom Margin"
         htmlFor="custom-margin-input"
-        cssClass="mb-4 custom-class"
+        className="mb-4 custom-class"
       />,
     );
     const label = screen.getByText('Custom Margin').closest('label');
@@ -118,7 +118,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
         htmlFor="full-input"
         optional
         optionalText="(Choose if needed)"
-        cssClass="special-label"
+        className="special-label"
       />,
     );
 
