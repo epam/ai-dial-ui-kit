@@ -9,7 +9,7 @@ import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileManagerTabs } from '@/types/file-manager';
-import { SmallScreenThreshold } from '@/types/tab';
+import { ScreenResolution } from '@/types/tab';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 
@@ -125,9 +125,9 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         tabs={tabs}
         activeTab={activeTab}
         onClick={(id: string) => onTabChange(id as DialFileManagerTabs)}
-        smallScreenThreshold={SmallScreenThreshold.Tablet}
-        smallScreenContainerCssClass="w-fit bg-transparent h-[38px]"
-        smallScreenDropdownItemCssClass="px-3 h-[38px]"
+        screenThreshold={ScreenResolution.Tablet}
+        smallScreenContainerClassName="w-fit bg-transparent h-[38px]"
+        smallScreenDropdownItemClassName="px-3 h-[38px]"
       />
     ) : null;
 
