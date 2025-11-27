@@ -1,12 +1,18 @@
 import classNames from 'classnames';
-import type { FC, MouseEvent, ReactNode, Ref } from 'react';
+import type {
+  ButtonHTMLAttributes,
+  FC,
+  MouseEvent,
+  ReactNode,
+  Ref,
+} from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
-export interface DialButtonProps {
-  autoFocus?: boolean;
+export interface DialButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   type?: 'button' | 'submit' | 'reset';
   variant?: ButtonVariant;
   cssClass?: string;
@@ -61,7 +67,7 @@ export const DialButton: FC<DialButtonProps> = ({
   hideTitleOnMobile,
   ariaLabel,
   type = 'button',
-  autoFocus,
+  ...props
 }) => {
   const btnTextClassNames = classNames(
     'dial-small-semi',
@@ -78,13 +84,13 @@ export const DialButton: FC<DialButtonProps> = ({
 
   return (
     <button
+      {...props}
       ref={ref}
       type={type}
       className={btnClassNames}
       onClick={(e) => onClick?.(e)}
       disabled={disable}
       aria-label={title || ariaLabel}
-      autoFocus={autoFocus}
     >
       <DialIcon icon={iconBefore} />
       {title && <span className={btnTextClassNames}>{title}</span>}
