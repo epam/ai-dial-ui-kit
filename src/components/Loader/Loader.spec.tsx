@@ -34,13 +34,15 @@ describe('Dial UI Kit :: DialLoader', () => {
   });
 
   test('applies custom CSS class', () => {
-    render(<DialLoader cssClass="custom-class" />);
+    render(<DialLoader className="custom-class" />);
     const el = screen.getByRole('status');
     expect(el).toHaveClass('custom-class');
   });
 
   test('applies custom icon class', () => {
-    const { container } = render(<DialLoader iconClass="custom-icon-class" />);
+    const { container } = render(
+      <DialLoader iconClassName="custom-icon-class" />,
+    );
     const svg = container.querySelector('svg');
     expect(svg).toHaveClass('custom-icon-class');
   });
