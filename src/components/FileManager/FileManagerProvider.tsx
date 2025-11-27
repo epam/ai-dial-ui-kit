@@ -94,6 +94,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
+  onUploadArchive,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -236,10 +237,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     clearError: clearUploadError,
     openFileDialog: openFileDialogBase,
     fileInputRef,
+    openArchiveDialog,
   } = useFileUpload({
     onUploadFiles,
     onValidateUpload,
     maxFileSize,
+    onUploadArchive,
   });
 
   const handleDrop = useCallback(
@@ -257,9 +260,16 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openFileDialogBase(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openFileDialogBase]);
 
+  const openArchiveUpload = useCallback(() => {
+    const destinationFolder = currentPath ?? '';
+    const existingFiles = currentFolder?.items ?? [];
+    openArchiveDialog(destinationFolder, existingFiles);
+  }, [currentPath, currentFolder, openArchiveDialog]);
+
   const { newActions, isNewButtonVisible } = useNewActions({
     newActionLabels: toolbarOptions?.newActionLabels,
     onUploadFiles: openFileDialog,
+    onUploadArchive: openArchiveUpload,
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {

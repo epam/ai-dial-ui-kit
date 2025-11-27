@@ -217,6 +217,11 @@ export interface DialFileManagerProps {
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
   maxFileSize?: number;
   uploadValidationMessages?: FileUploadValidationMessages;
+  onUploadArchive?: (
+    file: File,
+    name: string,
+    destinationFolder: string,
+  ) => void;
 }
 
 /**
@@ -283,6 +288,10 @@ export interface DialFileManagerProps {
  * @param [onCopyFiles] - Callback fired when files copy-paste
  * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
  * @param [onDeleteFiles] - Callback fired when files are deleted
+ *
+ * @param [onDownloadFiles] - Callback fired when files are downloaded
+ *
+ * @param [onUploadArchive] - Callback fired when archive files are uploaded
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (

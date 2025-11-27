@@ -333,6 +333,9 @@ const PopupComponent = (args: DialFileManagerProps) => {
           onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
           onUploadFiles={handleUploadFiles}
+          onUploadArchive={(file, destinationFolder) => {
+            alert(`Uploaded archive ${file.name} to ${destinationFolder}`);
+          }}
           maxFileSize={10 * 1024 * 1024} // 10MB
           rootItem={rootItem}
         />

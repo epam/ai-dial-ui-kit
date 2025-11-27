@@ -5,7 +5,7 @@ import {
   type DragEvent,
   useRef,
 } from 'react';
-import type { DialFile } from '@/models/file';
+import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FILES_DATA_TRANSFER_TYPE } from '../constants';
 
@@ -33,6 +33,11 @@ export interface UseFileUploadOptions {
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
   maxFileSize?: number;
   validationMessages?: FileUploadValidationMessages;
+  onUploadArchive?: (
+    file: File,
+    name: string,
+    destinationFolder: string,
+  ) => void;
 }
 
 const isDragEventWithFiles = (
@@ -46,6 +51,7 @@ export const useFileUpload = ({
   onValidateUpload,
   maxFileSize,
   validationMessages = {},
+  onUploadArchive,
 }: UseFileUploadOptions = {}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggingOverWindow, setIsDraggingOverWindow] = useState(false);
@@ -294,6 +300,55 @@ export const useFileUpload = ({
     [],
   );
 
+  const openArchiveDialog = useCallback(
+    (destinationFolder: string, existingFiles: DialFile[]) => {
+      // Only allow one .zip file and perform folder name conflict check
+      if (!onUploadArchive) return;
+
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.zip,application/zip';
+      input.multiple = false;
+      input.style.display = 'none';
+
+      const handleChange = () => {
+        const file = input.files?.[0];
+        if (!file) {
+          document.body.removeChild(input);
+          return;
+        }
+
+        const archiveName = file.name.replace(/\.zip$/i, '');
+
+        const conflict = existingFiles.some(
+          (f) =>
+            f.nodeType === DialFileNodeType.FOLDER &&
+            f.name.toLowerCase() === archiveName.toLowerCase(),
+        );
+
+        if (conflict) {
+          setUploadError(
+            validationMessages.validationFailed ||
+              `Folder with name "${archiveName}" already exists`,
+          );
+          document.body.removeChild(input);
+          return;
+        }
+
+        try {
+          onUploadArchive(file, archiveName, destinationFolder);
+        } finally {
+          document.body.removeChild(input);
+        }
+      };
+
+      input.addEventListener('change', handleChange);
+      document.body.appendChild(input);
+      input.click();
+    },
+    [onUploadArchive, validationMessages],
+  );
+
   const clearError = useCallback(() => {
     setUploadError(undefined);
   }, []);
@@ -309,6 +364,7 @@ export const useFileUpload = ({
     clearError,
     handleUpload,
     openFileDialog,
+    openArchiveDialog,
     fileInputRef,
   };
 };
