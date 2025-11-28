@@ -206,7 +206,7 @@ export const DialTabs: FC<DialTabsProps> = ({
   ) : (
     // Desktop
     <div ref={containerRef} className="flex w-full items-start">
-      <div ref={scrollableRef} className={scrollContainerClass}>
+      <div ref={scrollableRef} role="tablist" className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
             key={tab.id}
