@@ -3,7 +3,8 @@ import { IconTrashX } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 
-export interface DialRemoveButtonProps extends DialButtonProps {
+export interface DialRemoveButtonProps
+  extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
   iconClassName?: string;
 }
 
@@ -16,11 +17,11 @@ export interface DialRemoveButtonProps extends DialButtonProps {
  * <DialRemoveButton
  *   label="Delete item"
  *   onClick={handleDelete}
- *   iconClass="text-error"
+ *   iconClassName="text-error"
  * />
  * @component
  * @param {DialRemoveButtonProps} props - The properties for the remove button component.
- * @param {string} [props.iconClass] - Optional CSS class applied to the trash icon for styling or sizing.
+ * @param {string} [props.iconClassName] - Optional CSS class applied to the trash icon for styling or sizing.
  * @returns {JSX.Element} The rendered remove button component.
  */
 export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
@@ -29,10 +30,10 @@ export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
 }) => {
   return (
     <DialButton
+      {...props}
       iconBefore={
         <IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />
       }
-      {...props}
     />
   );
 };

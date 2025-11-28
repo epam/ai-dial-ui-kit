@@ -28,7 +28,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('applies custom cssClass when provided', () => {
+  it('applies custom className when provided', () => {
     const { getByRole } = render(
       <DialRemoveButton className="custom-remove" onClick={vi.fn()} />,
     );
@@ -45,7 +45,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
     expect(icon?.getAttribute('height')).toBe(String(BASE_ICON_PROPS.size));
   });
 
-  it('applies custom iconClass to the IconTrashX element', () => {
+  it('applies custom iconClassName to the IconTrashX element', () => {
     const { container } = render(
       <DialRemoveButton iconClassName="text-error" onClick={vi.fn()} />,
     );
