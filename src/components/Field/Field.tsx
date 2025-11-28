@@ -7,7 +7,7 @@ import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
 type NativeLabelProps = Omit<LabelHTMLAttributes<HTMLLabelElement>, 'children'>;
 
 export interface DialFieldLabelProps extends NativeLabelProps {
-  fieldTitle?: ReactNode;
+  fieldTitle?: string | ReactNode;
   optional?: boolean;
   optionalText?: string;
   description?: ReactNode;
@@ -46,7 +46,11 @@ export const DialFieldLabel: FC<DialFieldLabelProps> = ({
         !className?.includes('mb') && 'mb-2',
       )}
     >
-      <span className="min-h-4">{fieldTitle}</span>
+      {typeof fieldTitle === 'string' ? (
+        <span className="min-h-4">{fieldTitle}</span>
+      ) : (
+        fieldTitle
+      )}
       {optional && <span>{optionalText ?? '(Optional)'}</span>}
       {description && (
         <DialTooltip tooltip={description}>
