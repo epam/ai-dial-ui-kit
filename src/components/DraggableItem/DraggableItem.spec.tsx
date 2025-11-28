@@ -155,7 +155,7 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     const moveItem = vi.fn();
 
     render(
-      <DialDraggableItem id="x-1" findItem={findItem} moveItem={moveItem}>
+      <DialDraggableItem id="x-1" onFind={findItem} onMove={moveItem}>
         <span>Row</span>
       </DialDraggableItem>,
     );
@@ -172,7 +172,7 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     const moveItem = vi.fn();
 
     render(
-      <DialDraggableItem id="x-2" findItem={findItem} moveItem={moveItem}>
+      <DialDraggableItem id="x-2" onFind={findItem} onMove={moveItem}>
         <span>Row</span>
       </DialDraggableItem>,
     );
@@ -189,7 +189,7 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     const moveItem = vi.fn();
 
     render(
-      <DialDraggableItem id="host" findItem={findItem} moveItem={moveItem}>
+      <DialDraggableItem id="host" onFind={findItem} onMove={moveItem}>
         <span>Host</span>
       </DialDraggableItem>,
     );
@@ -205,7 +205,7 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     const moveItem = vi.fn();
 
     render(
-      <DialDraggableItem id="same" findItem={findItem} moveItem={moveItem}>
+      <DialDraggableItem id="same" onFind={findItem} onMove={moveItem}>
         <span>Same</span>
       </DialDraggableItem>,
     );
@@ -221,7 +221,7 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     const moveItem = vi.fn();
 
     render(
-      <DialDraggableItem id="null-case" findItem={findItem} moveItem={moveItem}>
+      <DialDraggableItem id="null-case" onFind={findItem} onMove={moveItem}>
         <span>Row</span>
       </DialDraggableItem>,
     );

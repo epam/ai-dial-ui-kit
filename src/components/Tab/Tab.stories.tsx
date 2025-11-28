@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { TabModel } from '@/models/tab';
 import { DialTab } from './Tab';
 
-const sampleTab: TabModel = { id: 'overview', name: 'Overview' };
+const sampleTab: TabModel = { id: 'overview', label: 'Overview' };
 
 const meta: Meta<typeof DialTab> = {
   title: 'Navigation/Tab',
@@ -52,7 +52,7 @@ export const Default: Story = {
 
 export const Inactive: Story = {
   args: {
-    tab: { id: 'details', name: 'Details' },
+    tab: { id: 'details', label: 'Details' },
     active: false,
     horizontal: true,
     onClick: () => null,
@@ -61,7 +61,7 @@ export const Inactive: Story = {
 
 export const Disabled: Story = {
   args: {
-    tab: { id: 'settings', name: 'Settings', disabled: true },
+    tab: { id: 'settings', label: 'Settings', disabled: true },
     active: false,
     horizontal: true,
     onClick: () => null,
@@ -70,7 +70,7 @@ export const Disabled: Story = {
 
 export const Invalid: Story = {
   args: {
-    tab: { id: 'analytics', name: 'Analytics', invalid: true },
+    tab: { id: 'analytics', label: 'Analytics', invalid: true },
     active: false,
     horizontal: true,
     onClick: () => null,
@@ -81,7 +81,7 @@ export const TooLongText: Story = {
   args: {
     tab: {
       id: 'analytics',
-      name: 'Analytics Settings DialTabs Support Variant Of Long Text Message',
+      label: 'Analytics Settings DialTabs Support Variant Of Long Text Message',
     },
     active: false,
     horizontal: true,
@@ -93,9 +93,9 @@ export const OrientationVariants: Story = {
   render: () => {
     const TabDemo = () => {
       const tabs: TabModel[] = [
-        { id: 'overview', name: 'Overview' },
-        { id: 'details', name: 'Details' },
-        { id: 'settings', name: 'Settings' },
+        { id: 'overview', label: 'Overview' },
+        { id: 'details', label: 'Details' },
+        { id: 'settings', label: 'Settings' },
       ];
 
       const [activeId, setActiveId] = useState(tabs[0].id);

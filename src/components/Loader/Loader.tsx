@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { loaderBaseClasses, loaderIconBaseClasses } from './constants';
+import { loaderBaseClassName, loaderIconBaseClassName } from './constants';
 import LoaderIcon from '@/assets/icons/loader.svg?react';
 
 export interface DialLoaderProps {
@@ -47,7 +47,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
     <div
       role="status"
       className={classNames({
-        [loaderBaseClasses]: true,
+        [loaderBaseClassName]: true,
         ['w-full h-full']: fullWidth,
         [className || '']: !!className,
       })}
@@ -57,7 +57,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
           <LoaderIcon
             width={size}
             height={size}
-            className={classNames(loaderIconBaseClasses, iconClassName)}
+            className={classNames(loaderIconBaseClassName, iconClassName)}
             role="img"
             aria-label={ariaLabel}
           />

@@ -25,6 +25,9 @@ export interface DialNoDataContentProps {
  * @param [icon] - Custom icon to display (defaults to clipboard icon)
  * @param title - The message to display when no data is present
  * @param [description] - The description to display when no data is present
+ * @param [containerClassName] - Additional CSS classes for the container
+ * @param [titleClassName] - Additional CSS classes for the title text
+ * @param [descriptionClassName] - Additional CSS classes for the description text
  */
 export const DialNoDataContent: FC<DialNoDataContentProps> = ({
   icon,

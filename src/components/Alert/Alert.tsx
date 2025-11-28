@@ -6,8 +6,8 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
 import { AlertVariant } from '@/types/alert';
 import {
-  alertBaseClasses,
-  alertVariantClassMap,
+  alertBaseClassName,
+  alertVariantClassNameMap,
   variantIcons,
 } from './constants';
 
@@ -62,8 +62,8 @@ export const DialAlert: FC<DialAlertProps> = ({
     <div
       role="alert"
       className={classNames(
-        alertBaseClasses,
-        alertVariantClassMap[variant],
+        alertBaseClassName,
+        alertVariantClassNameMap[variant],
         className,
       )}
     >
@@ -77,7 +77,7 @@ export const DialAlert: FC<DialAlertProps> = ({
           className="ml-2 text-secondary hover:text-primary"
           aria-label="Close alert"
           iconBefore={<IconX size={16} />}
-          onClick={(e) => onClose?.(e)}
+          onClick={onClose}
         />
       )}
     </div>

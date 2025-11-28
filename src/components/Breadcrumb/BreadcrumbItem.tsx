@@ -1,14 +1,14 @@
 import type { FC, MouseEventHandler, ReactNode } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
-  breadcrumbItemBaseClasses,
-  breadcrumbLinkBaseClasses,
-  breadcrumbLinkInteractiveClasses,
-  breadcrumbCurrentClasses,
-  breadcrumbSeparatorClasses,
+  breadcrumbItemBaseClassName,
+  breadcrumbLinkBaseClassName,
+  breadcrumbLinkInteractiveClassName,
+  breadcrumbCurrentClassName,
+  breadcrumbSeparatorClassName,
   defaultSeparator,
-  breadcrumbItemVisibleClasses,
-  breadcrumbItemLastClasses,
+  breadcrumbItemVisibleClassName,
+  breadcrumbItemLastClassName,
 } from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
@@ -35,18 +35,21 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   iconBefore,
   titleClassName,
 }) => {
-  const containerClasses = mergeClasses(
-    breadcrumbItemBaseClasses,
-    isLast ? breadcrumbItemLastClasses : breadcrumbItemVisibleClasses,
+  const containerClassName = mergeClasses(
+    breadcrumbItemBaseClassName,
+    isLast ? breadcrumbItemLastClassName : breadcrumbItemVisibleClassName,
     className,
   );
   const interactive = (!!href || !!onClick) && !isLast && !disabled;
 
   const contentClassNames = interactive
-    ? mergeClasses(breadcrumbLinkBaseClasses, breadcrumbLinkInteractiveClasses)
+    ? mergeClasses(
+        breadcrumbLinkBaseClassName,
+        breadcrumbLinkInteractiveClassName,
+      )
     : mergeClasses(
-        breadcrumbLinkBaseClasses,
-        breadcrumbCurrentClasses,
+        breadcrumbLinkBaseClassName,
+        breadcrumbCurrentClassName,
         disabled ? 'pointer-events-none opacity-75' : '',
       );
 
@@ -65,7 +68,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
     );
 
   return (
-    <li className={containerClasses}>
+    <li className={containerClassName}>
       {interactive ? (
         <a href={href} onClick={onClick} className={contentClassNames}>
           {iconBefore}
@@ -83,7 +86,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       )}
 
       {!isLast && (
-        <span className={breadcrumbSeparatorClasses}>{separator}</span>
+        <span className={breadcrumbSeparatorClassName}>{separator}</span>
       )}
     </li>
   );

@@ -24,15 +24,15 @@ const meta = {
   argTypes: {
     id: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
-    handleAriaLabel: { control: { type: 'text' } },
-    findItem: { control: false },
-    moveItem: { control: false },
+    ariaLabel: { control: { type: 'text' } },
+    onFind: { control: false },
+    onMove: { control: false },
     children: { control: { type: 'text' } },
   },
   args: {
     id: 'item-1',
     children: 'Draggable row',
-    handleAriaLabel: 'Drag item',
+    ariaLabel: 'Drag item',
   },
 } satisfies Meta<DialDraggableItemProps>;
 
@@ -83,11 +83,7 @@ const SortableListDemoExample: FC = () => {
       <div role="list" className="flex flex-col gap-2">
         {rows.map((row) => (
           <div key={row.id} role="listitem" className="rounded border p-2">
-            <DialDraggableItem
-              id={row.id}
-              findItem={findItem}
-              moveItem={moveItem}
-            >
+            <DialDraggableItem id={row.id} onFind={findItem} onMove={moveItem}>
               <span className="text-sm">{row.label}</span>
             </DialDraggableItem>
           </div>

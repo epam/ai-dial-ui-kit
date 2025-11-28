@@ -9,7 +9,7 @@ import {
 
 import classNames from 'classnames';
 import type { TabModel } from '@/models/tab';
-import { SmallScreenThreshold, TabOrientation } from '@/types/tab';
+import { ScreenResolution, TabOrientation } from '@/types/tab';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -26,7 +26,7 @@ export interface DialTabsProps {
   activeTab: string;
   onClick: (id: string) => void;
   orientation?: TabOrientation;
-  smallScreenThreshold?: SmallScreenThreshold;
+  screenThreshold?: ScreenResolution;
   smallScreenContainerClassName?: string;
   smallScreenDropdownItemClassName?: string;
 }
@@ -64,10 +64,10 @@ export interface DialTabsProps {
  * @param activeTab - The identifier of the currently active tab.
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
  * @param [orientation=TabOrientation.Horizontal] - Layout direction of the tabs. Uses the {@link TabOrientation} enum.
- * @param [smallScreenThreshold=SmallScreenThreshold.Tablet] - Defines the screen size threshold
- *   below which tabs collapse into a dropdown. Uses the {@link SmallScreenThreshold} enum.
+ * @param [screenThreshold=ScreenResolution.Tablet] - Defines the screen size threshold
+ *   below which tabs collapse into a dropdown. Uses the {@link ScreenRelosution} enum.
  *   When set to `Tablet`, both mobile and tablet screens will trigger dropdown mode.
- * @param [smallScreenContainerClassName] - Optional CSS class applied to the dropdown container
+ * @param [smallScreenContainerClassNames] - Optional CSS class applied to the dropdown container
  *   in small-screen (collapsed) mode.
  * @param [smallScreenDropdownItemClassName] - Optional CSS class applied to individual dropdown
  *   items in small-screen mode.
@@ -75,14 +75,14 @@ export interface DialTabsProps {
  * @remarks
  * - Automatically detects horizontal overflow via `ResizeObserver` and shows a dropdown when needed.
  * - Smoothly scrolls to keep the active tab visible when navigating.
- * - Switches layout responsively based on `smallScreenThreshold`.
+ * - Switches layout responsively based on `screenThreshold`.
  */
 export const DialTabs: FC<DialTabsProps> = ({
   tabs,
   activeTab,
   onClick,
   orientation = TabOrientation.Horizontal,
-  smallScreenThreshold = SmallScreenThreshold.Tablet,
+  screenThreshold = ScreenResolution.Tablet,
   smallScreenContainerClassName,
   smallScreenDropdownItemClassName,
 }) => {
@@ -95,7 +95,7 @@ export const DialTabs: FC<DialTabsProps> = ({
 
   const isSmallScreen =
     screenType === ScreenType.Mobile ||
-    (smallScreenThreshold === SmallScreenThreshold.Tablet &&
+    (screenThreshold === ScreenResolution.Tablet &&
       screenType === ScreenType.Tablet);
 
   const isHorizontal = orientation === TabOrientation.Horizontal;
@@ -206,7 +206,7 @@ export const DialTabs: FC<DialTabsProps> = ({
   ) : (
     // Desktop
     <div ref={containerRef} className="flex w-full items-start">
-      <div ref={scrollableRef} className={scrollContainerClass}>
+      <div ref={scrollableRef} role="tablist" className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
             key={tab.id}

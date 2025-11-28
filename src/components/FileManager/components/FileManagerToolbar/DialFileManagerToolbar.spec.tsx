@@ -1,11 +1,12 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DialFileManagerToolbar } from './DialFileManagerToolbar';
+import type { TabModel } from '@/models/tab';
 
 describe('Dial UI Kit :: DialFileManagerToolbar', () => {
-  const mockTabs = [
-    { id: 'tab1', name: 'Tab 1' },
-    { id: 'tab2', name: 'Tab 2' },
+  const mockTabs: TabModel[] = [
+    { id: 'tab1', label: 'Tab 1' },
+    { id: 'tab2', label: 'Tab 2' },
   ];
 
   it('renders tabs passed via props', () => {
