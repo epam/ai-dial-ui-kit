@@ -4,7 +4,6 @@ import classNames from 'classnames';
 export interface DialIconProps {
   icon?: ReactNode;
   className?: string;
-  label?: string;
 }
 
 /**
