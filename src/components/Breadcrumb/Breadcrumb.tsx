@@ -2,12 +2,12 @@ import type { FC, MouseEvent, ReactNode } from 'react';
 import { Children, isValidElement, useMemo, useCallback } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
-  breadcrumbBaseClasses,
-  breadcrumbListClasses,
+  breadcrumbBaseClassName,
+  breadcrumbListClassName,
   defaultSeparator,
-  breadcrumbItemBaseClasses,
-  breadcrumbSeparatorClasses,
-  breadcrumbEllipsisButtonClasses,
+  breadcrumbItemBaseClassName,
+  breadcrumbSeparatorClassName,
+  breadcrumbEllipsisButtonClassName,
 } from './constants';
 import {
   DialBreadcrumbItem,
@@ -22,9 +22,9 @@ export interface DialBreadcrumbProps {
   pathItems?: DialBreadcrumbPathItem[];
   separator?: ReactNode;
   ariaLabel?: string;
-  cssClass?: string;
+  className?: string;
   children?: ReactNode;
-  titleCssClass?: string;
+  titleClassName?: string;
 }
 
 /**
@@ -50,20 +50,20 @@ export interface DialBreadcrumbProps {
  * </DialBreadcrumb>
  * ```
  *
- * @param pathItems - Array of breadcrumb pathItems (see `DialBreadcrumbItem`).
- * @param separator - Custom separator node (default: right chevron icon).
- * @param ariaLabel - Aria label for the `<nav>` element (default: "Breadcrumb").
- * @param cssClass - Additional CSS classes for the `<nav>` container.
- * @param children - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
- * @param titleCssClass - Additional CSS classes applied to each item when using `pathItems` prop.
+ * @param [pathItems] - Array of breadcrumb pathItems (see `DialBreadcrumbItem`).
+ * @param [separator] - Custom separator node (default: right chevron icon).
+ * @param [ariaLabel] - Aria label for the `<nav>` element (default: "Breadcrumb").
+ * @param [className] - Additional CSS classes for the `<nav>` container.
+ * @param [children] - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
+ * @param [titleClassName] - Additional CSS classes applied to each item when using `pathItems` prop.
  */
 export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   pathItems,
   separator = defaultSeparator,
   ariaLabel = 'Breadcrumb',
-  cssClass,
+  className,
   children,
-  titleCssClass,
+  titleClassName,
 }) => {
   const items = useMemo(() => {
     if (pathItems?.length) {
@@ -72,15 +72,9 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
     return Children.toArray(children)
       .filter(isValidElement)
       .map((child) => {
-        const props = child.props as DialBreadcrumbItemProps;
-        return {
-          title: props.title,
-          href: props.href,
-          onClick: props.onClick,
-          disabled: props.disabled,
-          iconBefore: props.iconBefore,
-          cssClass: props.cssClass,
-        };
+        const childProps = child.props as DialBreadcrumbItemProps;
+        const { titleClassName, isLast, separator, ...props } = childProps;
+        return props;
       });
   }, [pathItems, children]);
 
@@ -107,7 +101,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${index}`}
           isLast={index === items.length - 1}
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
       ));
     }
@@ -131,10 +125,10 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           {...first}
           key="item-0"
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
 
-        <li className={mergeClasses(breadcrumbItemBaseClasses)}>
+        <li className={mergeClasses(breadcrumbItemBaseClassName)}>
           <DialDropdown
             menu={{
               items: dropdownItems,
@@ -146,19 +140,19 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
             <button
               type="button"
               aria-label="More breadcrumbs"
-              className={breadcrumbEllipsisButtonClasses}
+              className={breadcrumbEllipsisButtonClassName}
             >
               <IconDots size={16} />
             </button>
           </DialDropdown>
-          <span className={breadcrumbSeparatorClasses}>{separator}</span>
+          <span className={breadcrumbSeparatorClassName}>{separator}</span>
         </li>
 
         <DialBreadcrumbItem
           {...preLast}
           key={`item-${items.length - 2}`}
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
 
         <DialBreadcrumbItem
@@ -166,18 +160,18 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${items.length - 1}`}
           isLast
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
       </>
     );
-  }, [items, separator, titleCssClass, handleDropdownItemClick]);
+  }, [items, separator, titleClassName, handleDropdownItemClick]);
 
   return (
     <nav
       aria-label={ariaLabel}
-      className={mergeClasses(breadcrumbBaseClasses, cssClass)}
+      className={mergeClasses(breadcrumbBaseClassName, className)}
     >
-      <ol className={breadcrumbListClasses}>{content}</ol>
+      <ol className={breadcrumbListClassName}>{content}</ol>
     </nav>
   );
 };
