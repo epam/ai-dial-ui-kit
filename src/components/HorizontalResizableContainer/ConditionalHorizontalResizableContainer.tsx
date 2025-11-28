@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import {
   DialHorizontalResizableContainer,
   type DialHorizontalResizableContainerProps,
@@ -35,11 +36,9 @@ export interface DialConditionalHorizontalResizableContainerProps
  * @param children - Content to render inside the container.
  * @see DialHorizontalResizableContainer
  */
-export const DialConditionalHorizontalResizableContainer = ({
-  enabled = true,
-  children,
-  ...rest
-}: DialConditionalHorizontalResizableContainerProps) => {
+export const DialConditionalHorizontalResizableContainer: FC<
+  DialConditionalHorizontalResizableContainerProps
+> = ({ enabled = true, children, ...rest }) => {
   if (!enabled) {
     return children;
   }
