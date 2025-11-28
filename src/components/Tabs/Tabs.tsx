@@ -248,7 +248,7 @@ export const DialTabs: FC<DialTabsProps> = ({
           >
             <DialButton
               iconBefore={<IconDotsVertical size={18} />}
-              cssClass={classNames(
+              className={classNames(
                 'w-8 h-8 flex items-center justify-center rounded border',
                 isDropdownOpen
                   ? 'bg-layer-4 border-transparent'
