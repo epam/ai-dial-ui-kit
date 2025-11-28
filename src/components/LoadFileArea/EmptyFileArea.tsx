@@ -196,7 +196,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           {emptyButtonLabel && (
             <DialButton
               variant={ButtonVariant.Tertiary}
-              title={emptyButtonLabel}
+              label={emptyButtonLabel}
               onClick={() => fileInputRef.current?.click()}
             />
           )}

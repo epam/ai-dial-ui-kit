@@ -5,7 +5,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialCloseButtonProps {
   ariaLabel?: string;
-  cssClass?: string;
+  className?: string;
   size?: number;
   onClose: (e: MouseEvent<HTMLButtonElement>) => void;
 }
@@ -17,28 +17,28 @@ export interface DialCloseButtonProps {
  * <DialCloseButton
  *   ariaLabel="Close dialog"
  *   onClose={handleClose}
- *   cssClass="custom-close"
+ *   className="custom-close"
  *   size={32}
  * />
  * ```
  *
  * @param [ariaLabel] - Accessible label for screen readers
- * @param [cssClass] - Additional CSS classes to apply to the button
+ * @param [className] - Additional CSS classes to apply to the button
  * @param [size=24] - Size of the close icon
  * @param onClose - Click event handler for the close button
  */
 export const DialCloseButton: FC<DialCloseButtonProps> = ({
   ariaLabel,
-  cssClass,
+  className,
   size = 24,
   onClose,
 }) => {
-  const buttonClass = 'text-secondary hover:text-accent-primary';
+  const buttonClassName = 'text-secondary hover:text-accent-primary';
 
   return (
     <DialButton
-      ariaLabel={ariaLabel}
-      cssClass={mergeClasses(buttonClass, cssClass)}
+      aria-label={ariaLabel}
+      className={mergeClasses(buttonClassName, className)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
     />

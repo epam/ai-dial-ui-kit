@@ -74,7 +74,7 @@ function App() {
   return (
     <div>
       <DialButton 
-        cssClass="dial-primary-button"
+        className="dial-primary-button"
         onClick={() => alert('Hello AI DIAL!')}
       />
     </div>
@@ -242,8 +242,8 @@ export default function Home() {
       <h1>Test library</h1>
       <DialButton
         onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
-        title="Click me"
-        cssClass="dial-primary-button"
+        label="Click me"
+        className="dial-primary-button"
       />
     </div>
   );
