@@ -71,8 +71,8 @@ export interface RadioGroupPopupFieldProps
  * @param [selectedValue] - Current value id used to resolve the displayed option name
  * @param radioButtons - Collection of radio options (id/name)
  * @param [customInputValue] - Custom value text to display instead of a radio option name
- * @param [valueClassNamees] - Extra classes applied to the value text in the collapsed field
- * @param [inputClassNamees] - Extra classes applied to the collapsed input container
+ * @param [valueClassNames] - Extra classes applied to the value text in the collapsed field
+ * @param [inputClassNames] - Extra classes applied to the collapsed input container
  * @param emptyValueText - Placeholder text when no value is selected
  * @param [onClose] - Callback fired when the popup closes
  * @param title - Title text shown in the popup header
@@ -93,8 +93,8 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   selectedValue,
   radioButtons,
   customInputValue,
-  valueClassNamees,
-  inputClassNamees,
+  valueClassNames,
+  inputClassNames,
   emptyValueText,
   onClose,
   title,
@@ -135,8 +135,8 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           customInputValue ??
           radioButtons.find((rb) => rb.id === selectedValue)?.name
         }
-        valueClassNamees={valueClassNamees}
-        inputClassNamees={classNames(inputClassNamees, 'py-2', 'px-3')}
+        valueClassNames={valueClassNames}
+        inputClassNames={classNames(inputClassNames, 'py-2', 'px-3')}
         emptyValueText={emptyValueText}
         onOpen={onOpenPopup}
       >

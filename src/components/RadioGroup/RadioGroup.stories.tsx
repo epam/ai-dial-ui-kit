@@ -345,7 +345,7 @@ export const ManyOptions: Story = {
   },
 };
 
-const AllClassNameesExample = (
+const AllClassNamesExample = (
   args: JSX.IntrinsicAttributes & DialRadioGroupProps,
 ) => {
   const [activeRadioButton, setActiveRadioButton] = useState(
@@ -376,7 +376,7 @@ const AllClassNameesExample = (
     </div>
   );
 };
-export const AllClassNamees: Story = {
+export const AllClassNames: Story = {
   parameters: {
     docs: {
       description: {
@@ -385,7 +385,7 @@ export const AllClassNamees: Story = {
       },
     },
   },
-  render: AllClassNameesExample,
+  render: AllClassNamesExample,
   args: {
     elementId: 'styling-demo',
     fieldTitle: 'CSS Classes Demonstration',

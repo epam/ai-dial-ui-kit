@@ -77,11 +77,11 @@ const meta: Meta<typeof DialInputPopup> = {
       control: 'boolean',
       description: 'Disables interactivity and hides the open button',
     },
-    valueClassNamees: {
+    valueClassNames: {
       control: { type: 'text' },
       description: 'Custom CSS classes for the displayed value text',
     },
-    inputClassNamees: {
+    inputClassNames: {
       control: { type: 'text' },
       description: 'Custom CSS classes for the input wrapper',
     },
