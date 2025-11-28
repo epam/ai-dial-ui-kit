@@ -33,17 +33,17 @@ const ResizeHandle = ({
   side,
   isResizing,
   customHandler,
-  handlerCssClass,
+  handlerClassName,
 }: {
   side: HorizontalResizableContainerSide;
   isResizing: boolean;
   customHandler?: ReactNode;
-  handlerCssClass?: string;
+  handlerClassName?: string;
 }) => {
   const iconClassName = mergeClasses(
     'invisible h-full w-0.5 group-hover:visible bg-accent-primary text-accent-primary cursor-col-resize transition-opacity',
     isResizing && 'visible',
-    handlerCssClass,
+    handlerClassName,
   );
 
   const defaultIcon = <ResizeIcon side={side} className={iconClassName} />;
@@ -64,7 +64,7 @@ export interface DialHorizontalResizableContainerProps {
   onResizeStop?: (width: number) => void;
   onResize?: (width: number) => void;
   side?: HorizontalResizableContainerSide;
-  resizeHandlerCssClass?: string;
+  resizeHandlerClassName?: string;
   resizeHandler?: ReactNode;
 }
 
@@ -114,7 +114,7 @@ export interface DialHorizontalResizableContainerProps {
  * @param [onResizeStop] - Optional callback fired when resize ends.
  * @param [onResize] - Optional callback fired continuously during resizing with current width.
  * @param [side='right'] - Resize handle side.
- * @param [resizeHandlerCssClass] - Optional additional CSS classes.
+ * @param [resizeHandlerClassName] - Optional additional CSS classes.
  * @param [resizeHandler] - Optional custom handler element.
  *
  * @remarks
@@ -133,7 +133,7 @@ export const DialHorizontalResizableContainer: FC<
   onResizeStop,
   onResize,
   side = HorizontalResizableContainerSide.Right,
-  resizeHandlerCssClass,
+  resizeHandlerClassName,
   resizeHandler,
 }) => {
   const [isResizing, setIsResizing] = useState(false);
@@ -169,7 +169,7 @@ export const DialHorizontalResizableContainer: FC<
         side={side}
         isResizing={isResizing}
         customHandler={resizeHandler}
-        handlerCssClass={resizeHandlerCssClass}
+        handlerClassName={resizeHandlerClassName}
       />
     );
 
@@ -212,7 +212,7 @@ export const DialHorizontalResizableContainer: FC<
     minWidth,
     maxWidth,
     resizeHandler,
-    resizeHandlerCssClass,
+    resizeHandlerClassName,
     isResizing,
     resizeStartHandler,
     resizeStopHandler,
