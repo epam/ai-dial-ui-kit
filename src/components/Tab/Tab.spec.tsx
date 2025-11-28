@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialTab } from './Tab';
 
 describe('Dial UI Kit :: DialTab', () => {
-  const baseTab = { id: 'tab1', name: 'Tab 1' };
+  const baseTab = { id: 'tab1', label: 'Tab 1' };
 
   test('renders tab name', () => {
     render(<DialTab tab={baseTab} active={false} onClick={vi.fn()} />);
