@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { loaderBaseClasses, loaderIconBaseClasses } from './constants';
+import { loaderBaseClassName, loaderIconBaseClassName } from './constants';
 import LoaderIcon from '@/assets/icons/loader.svg?react';
 
 export interface DialLoaderProps {
   size?: number;
-  cssClass?: string;
-  iconClass?: string;
+  className?: string;
+  iconClassName?: string;
   fullWidth?: boolean;
   ariaLabel?: string;
 }
@@ -27,19 +27,19 @@ export interface DialLoaderProps {
  * <DialLoader fullWidth={false} />
  *
  * // Custom size and classes
- * <DialLoader size={24} iconClass="text-accent-primary" />
+ * <DialLoader size={24} iconClassName="text-accent-primary" />
  * ```
  *
  * @param [size=18] - Icon size in px
- * @param [cssClass] - Additional classes for the container
- * @param [iconClass] - Additional classes for the SVG icon
+ * @param [className] - Additional classes for the container
+ * @param [iconClassName] - Additional classes for the SVG icon
  * @param [fullWidth=true] - Stretch to full width/height of container
  * @param [ariaLabel='Loading'] - Accessible label for screen readers
  */
 export const DialLoader: FC<DialLoaderProps> = ({
   size = 18,
-  cssClass,
-  iconClass,
+  className,
+  iconClassName,
   fullWidth = true,
   ariaLabel = 'Loading',
 }) => {
@@ -47,9 +47,9 @@ export const DialLoader: FC<DialLoaderProps> = ({
     <div
       role="status"
       className={classNames({
-        [loaderBaseClasses]: true,
+        [loaderBaseClassName]: true,
         ['w-full h-full']: fullWidth,
-        [cssClass || '']: !!cssClass,
+        [className || '']: !!className,
       })}
     >
       <DialIcon
@@ -57,7 +57,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
           <LoaderIcon
             width={size}
             height={size}
-            className={classNames(loaderIconBaseClasses, iconClass)}
+            className={classNames(loaderIconBaseClassName, iconClassName)}
             role="img"
             aria-label={ariaLabel}
           />

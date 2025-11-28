@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialTab } from './Tab';
 
 describe('Dial UI Kit :: DialTab', () => {
-  const baseTab = { id: 'tab1', name: 'Tab 1' };
+  const baseTab = { id: 'tab1', label: 'Tab 1' };
 
   test('renders tab name', () => {
     render(<DialTab tab={baseTab} active={false} onClick={vi.fn()} />);
@@ -160,12 +160,12 @@ describe('Dial UI Kit :: DialTab', () => {
     expect(container.querySelector('.text-error')).toBeInTheDocument();
   });
 
-  test('merges cssClass into final className', () => {
+  test('merges className into final className', () => {
     render(
       <DialTab
         tab={baseTab}
         active={false}
-        cssClass="u-test extra-class"
+        className="u-test extra-class"
         onClick={vi.fn()}
       />,
     );

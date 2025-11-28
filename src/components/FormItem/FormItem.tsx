@@ -166,7 +166,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
             fieldTitle={label}
             optional={optional}
             optionalText={optionalText}
-            cssClass={mergeClasses(
+            className={mergeClasses(
               labelVisuallyHidden && 'sr-only',
               labelCssClass,
             )}
