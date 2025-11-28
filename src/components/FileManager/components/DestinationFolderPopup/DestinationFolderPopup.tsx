@@ -89,7 +89,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">
             <DialButton
-              title={addFolderLabel}
+              label={addFolderLabel}
               variant={ButtonVariant.Tertiary}
               iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
             />
@@ -112,12 +112,12 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           <div className="flex space-x-4">
             <DialButton
               onClick={onClose}
-              title="Cancel"
+              label="Cancel"
               variant={ButtonVariant.Secondary}
             />
             <DialButton
               onClick={onConfirm}
-              title={mode === 'copy' ? copyLabel : moveLabel}
+              label={mode === 'copy' ? copyLabel : moveLabel}
               variant={ButtonVariant.Primary}
             />
           </div>

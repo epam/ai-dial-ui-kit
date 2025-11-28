@@ -244,17 +244,17 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
           <DialButton
             variant={ButtonVariant.Tertiary}
             onClick={() => setSelectedIds(new Set(['2']))}
-            title="Select row 2"
+            label="Select row 2"
           />
           <DialButton
             variant={ButtonVariant.Secondary}
             onClick={() => setSelectedIds(new Set())}
-            title="Clear selection"
+            label="Clear selection"
           />
           <DialButton
             variant={ButtonVariant.Primary}
             onClick={() => setSelectedIds(new Set(['1', '2', '3']))}
-            title="Select all"
+            label="Select all"
           />
         </div>
       </div>

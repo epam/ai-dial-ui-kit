@@ -150,14 +150,14 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
             <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
               <DialButton
                 variant={ButtonVariant.Secondary}
-                title={cancelButtonTitle}
+                label={cancelButtonTitle}
                 onClick={onClosePopup}
               />
               <DialButton
                 variant={ButtonVariant.Primary}
-                title={applyButtonTitle}
+                label={applyButtonTitle}
                 onClick={onApplyValue}
-                disable={!isValid}
+                disabled={!isValid}
               />
             </div>
           }

@@ -160,7 +160,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         allowedPlacements={['bottom', 'bottom-start']}
       >
         <DialButton
-          cssClass="h-[38px]"
+          className="h-[38px]"
           iconBefore={
             <IconDotsVertical
               {...BASE_ICON_PROPS}

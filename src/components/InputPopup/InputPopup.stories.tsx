@@ -40,9 +40,9 @@ const InteractiveInputModal = (args: DialInputPopupProps) => {
               ))}
             </div>
             <DialButton
-              title="Close"
+              label="Close"
               onClick={handleCloseModal}
-              cssClass="mt-2 self-end text-primary"
+              className="mt-2 self-end text-primary"
             />
           </div>
         </DialPopup>
@@ -229,9 +229,9 @@ const InteractiveInputModalWithFormItem = (args: DialInputPopupProps) => {
                 ))}
               </div>
               <DialButton
-                title="Close"
+                label="Close"
                 onClick={handleCloseModal}
-                cssClass="mt-2 self-end text-primary"
+                className="mt-2 self-end text-primary"
               />
             </div>
           </DialPopup>
