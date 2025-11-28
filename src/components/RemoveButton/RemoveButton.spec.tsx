@@ -13,7 +13,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
 
   it('applies aria-label if provided', () => {
     const { getByLabelText } = render(
-      <DialRemoveButton ariaLabel="Delete item" onClick={vi.fn()} />,
+      <DialRemoveButton aria-label="Delete item" onClick={vi.fn()} />,
     );
 
     expect(getByLabelText('Delete item')).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
 
   it('applies custom cssClass when provided', () => {
     const { getByRole } = render(
-      <DialRemoveButton cssClass="custom-remove" onClick={vi.fn()} />,
+      <DialRemoveButton className="custom-remove" onClick={vi.fn()} />,
     );
 
     expect(getByRole('button').className).toMatch(/custom-remove/);

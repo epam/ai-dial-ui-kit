@@ -1,11 +1,5 @@
 import classNames from 'classnames';
-import type {
-  ButtonHTMLAttributes,
-  FC,
-  MouseEvent,
-  ReactNode,
-  Ref,
-} from 'react';
+import type { ButtonHTMLAttributes, FC, ReactNode, Ref } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import type { ButtonVariant } from '@/types/button';
@@ -13,18 +7,14 @@ import { variantClassMap } from './constants';
 
 export interface DialButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
-  type?: 'button' | 'submit' | 'reset';
   variant?: ButtonVariant;
-  cssClass?: string;
-  textCssClass?: string;
-  disable?: boolean;
-  title?: string;
+  className?: string;
+  textClassName?: string;
+  label?: string;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
-  ref?: Ref<HTMLButtonElement>;
+  ref?: Ref<HTMLButtonElement | null>;
   hideTitleOnMobile?: boolean;
-  ariaLabel?: string;
 }
 
 /**
@@ -33,67 +23,60 @@ export interface DialButtonProps
  * @example
  * ```tsx
  * <DialButton
- *   title="Click me"
+ *   label="Click me"
  *   onClick={handleClick}
  *   iconBefore={<Icon />}
- *   cssClass="custom-button"
+ *   className="custom-button"
  * />
  * ```
  *
- * @param [title] - The text content of the button
+ * @param [label] - The text content of the button
  * @param [type='button'] - The HTML button type attribute
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
- * @param [cssClass] - Additional CSS classes to apply to the button
- * @param [textCssClass] - Additional CSS classes to apply specifically to the button text
+ * @param [className] - Additional CSS classes to apply to the button
+ * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [onClick] - Click event handler for the button
- * @param [disable=false] - Whether the button should be disabled
+ * @param [disabled=false] - Whether the button should be disabled
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
  * @param [hideTitleOnMobile=false] - Whether to hide the title text on mobile devices
- * @param [ariaLabel] - Accessible label for screen readers when no title is provided
+ * @param [aria-label] - Accessible label for screen readers when no title is provided
  * @param [ref] - Ref to access the button DOM element
- * @param [autoFocus] - Whether should be set focus on the button
  */
 export const DialButton: FC<DialButtonProps> = ({
-  title,
+  label,
   variant,
-  cssClass,
-  textCssClass,
-  ref,
-  onClick,
-  disable,
+  className,
+  textClassName,
+
   iconAfter,
   iconBefore,
   hideTitleOnMobile,
-  ariaLabel,
   type = 'button',
-  ...props
+  ...restProps
 }) => {
   const btnTextClassNames = classNames(
     'dial-small-semi',
     iconAfter ? 'mr-2' : '',
     iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
-    textCssClass,
+    textClassName,
   );
   const btnClassNames = classNames(
     variant && variantClassMap[variant],
     'focus-visible:outline outline-offset-0',
-    cssClass,
+    className,
   );
 
   return (
     <button
-      {...props}
-      ref={ref}
+      {...restProps}
       type={type}
       className={btnClassNames}
-      onClick={(e) => onClick?.(e)}
-      disabled={disable}
-      aria-label={title || ariaLabel}
+      aria-label={label || restProps['aria-label']}
     >
       <DialIcon icon={iconBefore} />
-      {title && <span className={btnTextClassNames}>{title}</span>}
+      {label && <span className={btnTextClassNames}>{label}</span>}
       <DialIcon icon={iconAfter} />
     </button>
   );

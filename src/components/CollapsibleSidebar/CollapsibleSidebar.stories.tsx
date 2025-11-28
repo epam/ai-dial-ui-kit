@@ -16,7 +16,7 @@ const BarContent = (
     </p>
     <DialButton
       title="Action"
-      cssClass="w-fit"
+      className="w-fit"
       variant={ButtonVariant.Primary}
     />
   </div>
@@ -100,7 +100,7 @@ export const WithAdditionalButtons: Story = {
       <DialButton
         iconBefore={<IconSettings size={18} />}
         onClick={() => alert('Settings clicked!')}
-        cssClass="hover:text-icon-accent-primary"
+        className="hover:text-icon-accent-primary"
       />
     ),
   },

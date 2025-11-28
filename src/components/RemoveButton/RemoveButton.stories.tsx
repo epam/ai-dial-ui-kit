@@ -14,11 +14,11 @@ const meta: Meta<typeof DialRemoveButton> = {
     },
   },
   argTypes: {
-    ariaLabel: {
+    'aria-label': {
       control: { type: 'text' },
       description: 'Accessibility label for the button',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes applied to the button',
     },
@@ -38,14 +38,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    ariaLabel: 'Remove item',
+    'aria-label': 'Remove item',
     onClick: () => alert('Item removed!'),
   },
 };
 
 export const CustomIconClass: Story = {
   args: {
-    ariaLabel: 'Delete entry',
+    'aria-label': 'Delete entry',
     iconClass: 'text-error',
     onClick: () => alert('Deleted!'),
   },
@@ -53,8 +53,8 @@ export const CustomIconClass: Story = {
 
 export const WithCustomButtonClass: Story = {
   args: {
-    ariaLabel: 'Remove',
-    cssClass: 'bg-layer-3 hover:bg-error-alpha text-primary',
+    'aria-label': 'Remove',
+    className: 'bg-layer-3 hover:bg-error-alpha text-primary',
     onClick: () => alert('Removed!'),
   },
 };
@@ -65,7 +65,7 @@ export const AllVariants: Story = {
       <div className="flex flex-row items-center gap-x-4">
         <div className="text-primary min-w-[160px]">Default</div>
         <DialRemoveButton
-          ariaLabel="Remove default"
+          aria-label="Remove default"
           onClick={() => alert('Removed!')}
         />
       </div>
@@ -73,7 +73,7 @@ export const AllVariants: Story = {
       <div className="flex flex-row items-center gap-x-4">
         <div className="text-primary min-w-[160px]">Error Icon</div>
         <DialRemoveButton
-          ariaLabel="Remove error"
+          aria-label="Remove error"
           iconClass="text-error"
           onClick={() => alert('Removed!')}
         />
@@ -82,8 +82,8 @@ export const AllVariants: Story = {
       <div className="flex flex-row items-center gap-x-4">
         <div className="text-primary min-w-[160px]">Custom Button Style</div>
         <DialRemoveButton
-          ariaLabel="Remove custom"
-          cssClass="bg-error text-white hover:bg-error-alpha"
+          aria-label="Remove custom"
+          className="bg-error text-white hover:bg-error-alpha"
           onClick={() => alert('Removed!')}
         />
       </div>

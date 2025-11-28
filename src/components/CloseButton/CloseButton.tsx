@@ -37,8 +37,8 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
 
   return (
     <DialButton
-      ariaLabel={ariaLabel}
-      cssClass={mergeClasses(buttonClass, cssClass)}
+      aria-label={ariaLabel}
+      className={mergeClasses(buttonClass, cssClass)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
     />

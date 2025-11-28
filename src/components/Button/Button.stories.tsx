@@ -14,7 +14,7 @@ const meta = {
     },
   },
   argTypes: {
-    title: {
+    label: {
       control: { type: 'text' },
       description: 'Button text content',
     },
@@ -27,16 +27,16 @@ const meta = {
       ],
       description: 'Button style variant',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Button additional styles',
     },
-    textCssClass: {
+    textClassName: {
       control: { type: 'text' },
       description:
         'Additional CSS classes to apply specifically to the button text',
     },
-    disable: {
+    disabled: {
       control: { type: 'boolean' },
       description: 'Whether the button is disabled',
     },
@@ -52,9 +52,9 @@ const meta = {
       control: false,
       description: 'Icon or element to display after the button text',
     },
-    ariaLabel: {
+    'aria-label': {
       control: { type: 'text' },
-      description: 'Accessibility label (used when title is not provided)',
+      description: 'Accessibility label (used when label is not provided)',
     },
     onClick: {
       control: false,
@@ -66,9 +66,9 @@ const meta = {
     },
   },
   args: {
-    title: 'Button',
+    label: 'Button',
     variant: ButtonVariant.Primary,
-    disable: false,
+    disabled: false,
     hideTitleOnMobile: false,
   },
 } satisfies Meta<DialButtonProps>;
@@ -78,34 +78,34 @@ type Story = StoryObj<typeof meta>;
 
 export const PrimaryButton: Story = {
   args: {
-    title: 'Primary Button',
+    label: 'Primary Button',
     variant: ButtonVariant.Primary,
   },
 };
 
 export const SecondaryButton: Story = {
   args: {
-    title: 'Secondary Button',
+    label: 'Secondary Button',
     variant: ButtonVariant.Secondary,
   },
 };
 export const TertiaryButton: Story = {
   args: {
-    title: 'Tertiary Button',
+    label: 'Tertiary Button',
     variant: ButtonVariant.Tertiary,
   },
 };
 
 export const DangerButton: Story = {
   args: {
-    title: 'Danger Button',
+    label: 'Danger Button',
     variant: ButtonVariant.Danger,
   },
 };
 
 export const WithBothIcons: Story = {
   args: {
-    title: 'Action',
+    label: 'Action',
     iconAfter: <IconArrowRight size={16} />,
     iconBefore: <IconArrowLeft size={16} />,
   },
@@ -113,7 +113,7 @@ export const WithBothIcons: Story = {
 
 export const WithIconBefore: Story = {
   args: {
-    title: 'Save',
+    label: 'Save',
     iconBefore: <IconArrowLeft size={16} />,
     variant: ButtonVariant.Primary,
   },
@@ -121,23 +121,23 @@ export const WithIconBefore: Story = {
 
 export const WithIconAfter: Story = {
   args: {
-    title: 'Alert',
+    label: 'Alert',
     iconAfter: <IconArrowRight size={16} />,
-    cssClass: 'dial-tertiary-button',
+    className: 'dial-tertiary-button',
   },
 };
 
 export const WithCustomTextStyling: Story = {
   args: {
-    title: 'Custom Text Styling',
+    label: 'Custom Text Styling',
     variant: ButtonVariant.Primary,
-    textCssClass: 'font-bold uppercase tracking-wider',
+    textClassName: 'font-bold uppercase tracking-wider',
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Demonstrates the textCssClass prop which allows custom styling of the button text while keeping the button container styling intact.',
+          'Demonstrates the textClassName prop which allows custom styling of the button text while keeping the button container styling intact.',
       },
     },
   },
@@ -145,15 +145,15 @@ export const WithCustomTextStyling: Story = {
 
 export const Disabled: Story = {
   args: {
-    title: 'Disabled Button',
+    label: 'Disabled Button',
     variant: ButtonVariant.Tertiary,
-    disable: true,
+    disabled: true,
   },
 };
 
 export const Hover: Story = {
   args: {
-    title: 'Hover Button',
+    label: 'Hover Button',
     variant: ButtonVariant.Primary,
   },
   parameters: {
@@ -165,7 +165,7 @@ export const Hover: Story = {
 
 export const Focus: Story = {
   args: {
-    title: 'Focus Button',
+    label: 'Focus Button',
     variant: ButtonVariant.Secondary,
   },
   parameters: {
@@ -177,7 +177,7 @@ export const Focus: Story = {
 
 export const Active: Story = {
   args: {
-    title: 'Active Button',
+    label: 'Active Button',
     variant: ButtonVariant.Tertiary,
   },
   parameters: {
@@ -229,7 +229,7 @@ export const AllVariants: Story = {
               </div>
               {variants.map((v) => {
                 const commonProps = {
-                  title: 'Button label',
+                  label: 'Button label',
                   variant: v.variant,
                   iconBefore: <IconArrowLeft size={16} />,
                   iconAfter: <IconArrowRight size={16} />,
@@ -244,7 +244,7 @@ export const AllVariants: Story = {
                   >
                     <DialButton
                       {...commonProps}
-                      disable={state.key === 'disable'}
+                      disabled={state.key === 'disable'}
                     />
                   </div>
                 );

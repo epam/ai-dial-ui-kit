@@ -1,13 +1,10 @@
-import { type FC, type MouseEvent } from 'react';
+import { type FC } from 'react';
 import { IconTrashX } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
-import { DialButton } from '@/components/Button/Button';
+import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 
-export interface DialRemoveButtonProps {
+export interface DialRemoveButtonProps extends DialButtonProps {
   iconClass?: string;
-  cssClass?: string;
-  ariaLabel?: string;
-  onClick: (e: MouseEvent) => void;
 }
 
 /**

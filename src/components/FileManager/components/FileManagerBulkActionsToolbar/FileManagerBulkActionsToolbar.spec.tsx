@@ -6,9 +6,9 @@ import type { DialDropdownProps } from '@/components/Dropdown/Dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 
 vi.mock('@/components/Button/Button', () => ({
-  DialButton: ({ title, onClick, iconBefore }: DialButtonProps) => (
-    <button data-testid={`button-${title}`} onClick={onClick}>
-      {title}
+  DialButton: ({ label, onClick, iconBefore }: DialButtonProps) => (
+    <button data-testid={`button-${label}`} onClick={onClick}>
+      {label}
       {iconBefore && <span data-testid="icon">{true}</span>}
     </button>
   ),
