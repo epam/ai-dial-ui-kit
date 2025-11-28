@@ -1,19 +1,23 @@
+import { IconExclamationCircle } from '@tabler/icons-react';
+import type { ButtonHTMLAttributes, FC } from 'react';
+
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { TabModel } from '@/models/tab';
 import { mergeClasses } from '@/utils/merge-classes';
-import { IconExclamationCircle } from '@tabler/icons-react';
-import type { FC } from 'react';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
-export interface DialTabProps {
+type NativeButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick' | 'children' | 'type' | 'role' | 'disabled'
+>;
+
+export interface DialTabProps extends NativeButtonProps {
   tab: TabModel;
   active: boolean;
   invalid?: boolean;
   horizontal?: boolean;
-  className?: string;
   onClick: (id: string) => void;
 }
-
 /**
  * A single tab element used within the {@link DialTabs} component.
  * Supports active, disabled, and invalid states, and can render in
@@ -32,7 +36,6 @@ export interface DialTabProps {
  * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`].
  * @param active - Whether the tab is currently active.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
- * @param [className] - Additional CSS classes applied to the tab element.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
  */
 export const DialTab: FC<DialTabProps> = ({
@@ -68,10 +71,11 @@ export const DialTab: FC<DialTabProps> = ({
       disabled={tab.disabled}
     >
       <DialEllipsisTooltip
-        text={tab.name}
+        text={tab.label}
         contentClassName="max-w-[200px]"
         cssClass="max-w-[200px]"
       />
+
       {(invalid || tab.invalid) && (
         <div className="text-error pl-1">
           <IconExclamationCircle {...BASE_ICON_PROPS} />
