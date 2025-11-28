@@ -3,7 +3,8 @@ import { IconTrashX } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 
-export interface DialRemoveButtonProps extends DialButtonProps {
+export interface DialRemoveButtonProps
+  extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
   iconClassName?: string;
 }
 
@@ -29,10 +30,10 @@ export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
 }) => {
   return (
     <DialButton
+      {...props}
       iconBefore={
         <IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />
       }
-      {...props}
     />
   );
 };

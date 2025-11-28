@@ -30,13 +30,11 @@ const meta = {
       ],
       description: 'Button style variant',
     },
-
     textClassName: {
       control: { type: 'text' },
       description:
         'Additional CSS classes to apply specifically to the button text',
     },
-
     hideTitleOnMobile: {
       control: { type: 'boolean' },
       description: 'Hide title text on mobile devices',

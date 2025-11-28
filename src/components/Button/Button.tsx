@@ -50,7 +50,6 @@ export const DialButton: FC<DialButtonProps> = ({
   variant,
   className,
   textClassName,
-
   iconAfter,
   iconBefore,
   hideTitleOnMobile,
