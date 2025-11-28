@@ -90,7 +90,7 @@ export const DialFileManagerNavigationPanel: FC<
   DialFileManagerNavigationPanelProps
 > = ({
   ariaLabel = 'Breadcrumb',
-  titleCssClass,
+  titleClassName,
   onItemClick,
 
   path,
@@ -173,8 +173,8 @@ export const DialFileManagerNavigationPanel: FC<
         <DialBreadcrumb
           pathItems={breadcrumbPathItems}
           ariaLabel={ariaLabel}
-          titleCssClass={titleCssClass}
-          cssClass={breadcrumbCssClass}
+          titleClassName={titleClassName}
+          className={breadcrumbCssClass}
         />
       </div>
 
