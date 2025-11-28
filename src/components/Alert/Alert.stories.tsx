@@ -29,7 +29,7 @@ const meta = {
       control: { type: 'text' },
       description: 'Message text displayed inside the alert',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes applied to the alert container',
     },
@@ -98,7 +98,7 @@ export const CustomClass: Story = {
   args: {
     variant: AlertVariant.Info,
     message: 'Alert with custom CSS class',
-    cssClass: 'border-dashed w-[250px] bg-layer-2',
+    className: 'border-dashed w-[250px] bg-layer-2',
   },
   parameters: {
     docs: {

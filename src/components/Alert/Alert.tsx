@@ -6,15 +6,15 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
 import { AlertVariant } from '@/types/alert';
 import {
-  alertBaseClasses,
-  alertVariantClassMap,
+  alertBaseClassName,
+  alertVariantClassNameMap,
   variantIcons,
 } from './constants';
 
 export interface DialAlertProps {
   variant?: AlertVariant;
   message: string | ReactNode;
-  cssClass?: string;
+  className?: string;
   closable?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
@@ -47,14 +47,14 @@ export interface DialAlertProps {
  *
  * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
  * @param message - Message text to display inside the alert
- * @param [cssClass] - Additional CSS classes applied to the alert container
+ * @param [className] - Additional CSS classes applied to the alert container
  * @param [closable=false] - Whether the alert has a close button
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialAlert: FC<DialAlertProps> = ({
   variant = AlertVariant.Info,
   message,
-  cssClass,
+  className,
   closable = false,
   onClose,
 }) => {
@@ -62,9 +62,9 @@ export const DialAlert: FC<DialAlertProps> = ({
     <div
       role="alert"
       className={classNames(
-        alertBaseClasses,
-        alertVariantClassMap[variant],
-        cssClass,
+        alertBaseClassName,
+        alertVariantClassNameMap[variant],
+        className,
       )}
     >
       <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export const DialAlert: FC<DialAlertProps> = ({
           className="ml-2 text-secondary hover:text-primary"
           aria-label="Close alert"
           iconBefore={<IconX size={16} />}
-          onClick={(e) => onClose?.(e)}
+          onClick={onClose}
         />
       )}
     </div>
