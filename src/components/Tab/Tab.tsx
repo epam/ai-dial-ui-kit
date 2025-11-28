@@ -10,7 +10,7 @@ export interface DialTabProps {
   active: boolean;
   invalid?: boolean;
   horizontal?: boolean;
-  cssClass?: string;
+  className?: string;
   onClick: (id: string) => void;
 }
 
@@ -32,14 +32,14 @@ export interface DialTabProps {
  * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`].
  * @param active - Whether the tab is currently active.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
- * @param [cssClass] - Additional CSS classes applied to the tab element.
+ * @param [className] - Additional CSS classes applied to the tab element.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
  */
 export const DialTab: FC<DialTabProps> = ({
   tab,
   active,
   invalid,
-  cssClass,
+  className,
   horizontal,
   onClick,
 }) => {
@@ -57,7 +57,7 @@ export const DialTab: FC<DialTabProps> = ({
       'border-b-accent-primary': active && horizontal && !tab.disabled,
       'border-l-accent-primary': active && !horizontal && !tab.disabled,
     },
-    cssClass,
+    className,
   );
 
   return (
@@ -70,7 +70,7 @@ export const DialTab: FC<DialTabProps> = ({
       <DialEllipsisTooltip
         text={tab.name}
         contentClassName="max-w-[200px]"
-        cssClass="max-w-[200px]"
+        className="max-w-[200px]"
       />
       {(invalid || tab.invalid) && (
         <div className="text-error pl-1">

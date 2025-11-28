@@ -23,7 +23,7 @@ const meta = {
   ],
   argTypes: {
     id: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     handleAriaLabel: { control: { type: 'text' } },
     findItem: { control: false },
     moveItem: { control: false },
@@ -103,6 +103,6 @@ export const SortableListDemo: Story = {
 
 export const WithCustomClass: Story = {
   args: {
-    cssClass: 'bg-accent-primary-alpha',
+    className: 'bg-accent-primary-alpha',
   },
 };

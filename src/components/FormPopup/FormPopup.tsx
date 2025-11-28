@@ -45,7 +45,7 @@ export interface DialFormPopupProps extends DialPopupProps {
  * @param [cancelLabel="Cancel"] - Label for the cancel button
  * @param [isLoading=false] - Shows loader placeholder and hides actions
  * @param [disableSubmitButton=false] - Disables the submit button
- * @param [cssClass] - Extra classes for the popup container
+ * @param [className] - Extra classes for the popup container
  * @param [submitClassName] - Extra classes merged into the submit button
  * @param onClose - Fired on close
  * @param onSubmit - Fired on submit
@@ -61,7 +61,7 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
   cancelLabel = defaultCancelLabel,
   isLoading = false,
   disableSubmitButton = false,
-  cssClass,
+  className,
   submitClassName,
   onClose,
   onSubmit,
@@ -108,7 +108,7 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
     <DialPopup
       open={open}
       title={title}
-      cssClass={cssClass}
+      className={className}
       dividers={dividers}
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}

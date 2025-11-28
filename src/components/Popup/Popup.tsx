@@ -24,7 +24,7 @@ export interface DialPopupProps {
   open?: boolean;
   title?: string | ReactNode;
   portalId?: string;
-  cssClass?: string;
+  className?: string;
   overlayClass?: string;
   headingClass?: string;
   dividers?: boolean;
@@ -61,7 +61,7 @@ export interface DialPopupProps {
  * @param [open=false] - Controls visibility of the popup
  * @param [title] - Optional title rendered in the header
  * @param [portalId] - Optional portal container id
- * @param [cssClass] - Additional CSS classes applied to the popup container
+ * @param [className] - Additional CSS classes applied to the popup container
  * @param [overlayClass] - Additional CSS classes applied to the overlay
  * @param [headingClass] - Additional CSS classes applied to the title element
  * @param [dividers=true] - Whether to render separators between sections
@@ -74,7 +74,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   open = false,
   title,
   portalId,
-  cssClass,
+  className,
   overlayClass,
   headingClass,
   dividers = true,
@@ -131,7 +131,7 @@ export const DialPopup: FC<DialPopupProps> = ({
               'dial-popup',
               popupSizeClassMap[size],
               dividers && popupDividerClasses,
-              cssClass,
+              className,
             )}
           >
             <div className={popupHeaderClasses}>

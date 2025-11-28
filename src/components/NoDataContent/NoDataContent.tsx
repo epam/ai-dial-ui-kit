@@ -6,9 +6,9 @@ export interface DialNoDataContentProps {
   icon?: ReactNode;
   title: string;
   description?: string;
-  containerCssClass?: string;
-  titleCssClass?: string;
-  descriptionCssClass?: string;
+  containerClassName?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 /**
@@ -30,26 +30,26 @@ export const DialNoDataContent: FC<DialNoDataContentProps> = ({
   icon,
   title,
   description,
-  containerCssClass,
-  titleCssClass,
-  descriptionCssClass,
+  containerClassName,
+  titleClassName,
+  descriptionClassName,
 }) => {
   return (
     <div
       className={mergeClasses(
         'h-full w-full flex flex-col items-center justify-center text-secondary',
-        containerCssClass,
+        containerClassName,
       )}
     >
       {icon || <IconClipboardX width={60} height={60} />}
       <span
-        className={mergeClasses('dial-small mt-2 text-primary', titleCssClass)}
+        className={mergeClasses('dial-small mt-2 text-primary', titleClassName)}
       >
         {title}
       </span>
       {description && (
         <span
-          className={mergeClasses('mt-1 text-primary', descriptionCssClass)}
+          className={mergeClasses('mt-1 text-primary', descriptionClassName)}
         >
           {description}
         </span>

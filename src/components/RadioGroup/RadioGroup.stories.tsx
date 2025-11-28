@@ -33,7 +33,7 @@ const meta = {
         type: { summary: 'string' },
       },
     },
-    radioCssClass: {
+    radioClassName: {
       control: { type: 'text' },
       description: 'Additional classes applied to each radio input',
       table: {
@@ -41,7 +41,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    labelCssClass: {
+    labelClassName: {
       control: { type: 'text' },
       description: 'Additional classes applied to each radio label',
       table: {
@@ -49,16 +49,16 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    groupLabelCssClass: {
+    groupLabelClassName: {
       control: { type: 'text' },
       description:
-        'Optional classes applied to the group label. If not provided, labelCssClass will be used.',
+        'Optional classes applied to the group label. If not provided, labelClassName will be used.',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' },
       },
     },
-    containerCssClass: {
+    containerClassName: {
       control: { type: 'text' },
       description: 'Additional classes applied to the outer container',
       table: {
@@ -66,7 +66,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    selectedItemCssClass: {
+    selectedItemClassName: {
       control: { type: 'text' },
       description:
         "Additional classes applied to the selected option's content container",
@@ -75,7 +75,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    selectedLabelCssClass: {
+    selectedLabelClassName: {
       control: { type: 'text' },
       description: "Additional classes applied to the selected option's label",
       table: {
@@ -83,7 +83,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    radioGroupCssClass: {
+    radioGroupClassName: {
       control: { type: 'text' },
       description: 'Additional classes applied to the radio group container',
       table: {
@@ -91,7 +91,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    inputContainerCssClass: {
+    inputContainerClassName: {
       control: { type: 'text' },
       description: "Additional classes applied to each radio input's container",
       table: {
@@ -141,12 +141,12 @@ const meta = {
   args: {
     fieldTitle: 'Attachments',
     elementId: 'attachments',
-    radioCssClass: undefined,
-    labelCssClass: undefined,
-    containerCssClass: undefined,
-    selectedItemCssClass: undefined,
-    radioGroupCssClass: undefined,
-    inputContainerCssClass: undefined,
+    radioClassName: undefined,
+    labelClassName: undefined,
+    containerClassName: undefined,
+    selectedItemClassName: undefined,
+    radioGroupClassName: undefined,
+    inputContainerClassName: undefined,
     disabled: false,
     activeRadioButton: 'none',
     orientation: RadioGroupOrientation.Row,
@@ -345,7 +345,7 @@ export const ManyOptions: Story = {
   },
 };
 
-const AllCssClassesExample = (
+const AllClassNameesExample = (
   args: JSX.IntrinsicAttributes & DialRadioGroupProps,
 ) => {
   const [activeRadioButton, setActiveRadioButton] = useState(
@@ -357,15 +357,15 @@ const AllCssClassesExample = (
       <DialRadioGroup
         {...args}
         activeRadioButton={activeRadioButton}
-        selectedLabelCssClass={
+        selectedLabelClassName={
           activeRadioButton === 'premium'
             ? 'dial-h1 text-warning'
             : 'dial-h1 text-accent-tertiary'
         }
-        selectedInputContainerCssClass={
+        selectedInputContainerClassName={
           activeRadioButton === 'premium' ? 'flex-1' : undefined
         }
-        selectedItemCssClass={
+        selectedItemClassName={
           activeRadioButton === 'premium' ? 'flex-1' : undefined
         }
         onChange={(id) => {
@@ -376,31 +376,31 @@ const AllCssClassesExample = (
     </div>
   );
 };
-export const AllCssClasses: Story = {
+export const AllClassNamees: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Demonstration of all available CSS customization options. Shows containerCssClass, labelCssClass, radioGroupCssClass, inputContainerCssClass, radioCssClass, selectedLabelCssClass and selectedItemCssClass in action. Height is fixed to 500px to show how it can fill available space.',
+          'Demonstration of all available CSS customization options. Shows containerClassName, labelClassName, radioGroupClassName, inputContainerClassName, radioClassName, selectedLabelClassName and selectedItemClassName in action. Height is fixed to 500px to show how it can fill available space.',
       },
     },
   },
-  render: AllCssClassesExample,
+  render: AllClassNameesExample,
   args: {
     elementId: 'styling-demo',
     fieldTitle: 'CSS Classes Demonstration',
     orientation: RadioGroupOrientation.Column,
     activeRadioButton: 'premium',
-    containerCssClass:
+    containerClassName:
       'p-2 bg-layer-2 border-2 border-dashed border-accent-primary rounded-lg h-full',
-    labelCssClass: 'dial-small text-accent-tertiary',
-    groupLabelCssClass: 'dial-h1 text-accent-secondary',
-    formItemChildrenCssClass: 'h-full',
-    radioGroupCssClass:
+    labelClassName: 'dial-small text-accent-tertiary',
+    groupLabelClassName: 'dial-h1 text-accent-secondary',
+    formItemChildrenClassName: 'h-full',
+    radioGroupClassName:
       'flex flex-col h-full bg-layer-1 p-4 rounded-md shadow border border-primary',
-    inputContainerCssClass:
+    inputContainerClassName:
       'mb-3 p-3 bg-layer-0 rounded-md border-l-4 border-accent-primary',
-    radioCssClass:
+    radioClassName:
       'w-5 h-5 text-accent-primary focus:ring-accent-primary focus:ring-2 border-2 border-accent-primary',
     onChange: () => null,
     radioButtons: [

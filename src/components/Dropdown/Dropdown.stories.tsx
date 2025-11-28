@@ -99,7 +99,7 @@ const meta = {
     closable: { control: { type: 'boolean' } },
     anchorToMouse: { control: { type: 'boolean' } },
     matchReferenceWidth: { control: { type: 'boolean' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     listClassName: { control: { type: 'text' } },
     open: { control: false },
     defaultOpen: { control: false },

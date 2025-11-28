@@ -126,8 +126,8 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         activeTab={activeTab}
         onClick={(id: string) => onTabChange(id as DialFileManagerTabs)}
         smallScreenThreshold={SmallScreenThreshold.Tablet}
-        smallScreenContainerCssClass="w-fit bg-transparent h-[38px]"
-        smallScreenDropdownItemCssClass="px-3 h-[38px]"
+        smallScreenContainerClassName="w-fit bg-transparent h-[38px]"
+        smallScreenDropdownItemClassName="px-3 h-[38px]"
       />
     ) : null;
 

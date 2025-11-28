@@ -9,7 +9,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialTagProps {
   tag: string;
-  cssClass?: string;
+  className?: string;
   remove?: (event: MouseEvent<HTMLButtonElement>) => void;
   variant?: TagVariant;
   iconBefore?: ReactNode;
@@ -30,7 +30,7 @@ export interface DialTagProps {
  * ```
  *
  * @param tag - The text label displayed inside the tag.
- * @param [cssClass] - Optional additional CSS classes applied to the tag container.
+ * @param [className] - Optional additional CSS classes applied to the tag container.
  * @param [remove] - Optional callback invoked when the remove button is clicked.
  *                   If not provided, the remove button will not be rendered.
  * @param [variant=TagVariant.Default] - Visual style of the tag. Uses the {@link TagVariant} enum.
@@ -39,7 +39,7 @@ export interface DialTagProps {
  */
 export const DialTag: FC<DialTagProps> = ({
   tag,
-  cssClass,
+  className,
   remove,
   variant = TagVariant.Default,
   iconBefore,
@@ -51,7 +51,7 @@ export const DialTag: FC<DialTagProps> = ({
     'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
     variantClass,
     !bordered ? 'border-transparent' : 'border',
-    cssClass,
+    className,
   );
 
   return (

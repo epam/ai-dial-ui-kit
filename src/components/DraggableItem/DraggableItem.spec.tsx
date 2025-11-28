@@ -127,9 +127,9 @@ describe('Dial UI Kit :: DialDraggableItem', () => {
     expect(handle).toBeInTheDocument();
   });
 
-  test('applies custom cssClass to container', () => {
+  test('applies custom className to container', () => {
     render(
-      <DialDraggableItem id="id-3" cssClass="bg-red-500">
+      <DialDraggableItem id="id-3" className="bg-red-500">
         <span>Row</span>
       </DialDraggableItem>,
     );

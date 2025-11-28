@@ -57,7 +57,7 @@ export interface DialSelectProps {
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
   disabled?: boolean;
-  cssClass?: string;
+  className?: string;
   closable?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
@@ -109,7 +109,7 @@ export interface DialSelectProps {
  * @param [emptyStateDescription] - Description text when there are no options.
  * @param [emptyStateIcon] - Icon to display when there are no options.
  * @param [disabled=false] - Disable the control.
- * @param [cssClass] - Additional CSS classes for the trigger.
+ * @param [className] - Additional CSS classes for the trigger.
  * @param [closable=false] - Show a close button in the dropdown header.
  * @param [header] - Custom node/function rendered above the options.
  * @param [footer] - Custom node/function rendered below the options.
@@ -138,7 +138,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   emptyStateDescription,
   emptyStateIcon,
   disabled = false,
-  cssClass,
+  className,
   closable = false,
   header,
   footer,
@@ -519,7 +519,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             ? 'min-h-[25px] px-1.5 py-1'
             : 'min-h-[38px] px-3 py-2',
           variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
-          cssClass,
+          className,
         )}
         onMouseDown={(e) => {
           if (disabled) return;

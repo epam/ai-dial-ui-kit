@@ -83,9 +83,9 @@ describe('Dial UI Kit :: FormPopup', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('merges cssClass into container', () => {
+  test('merges className into container', () => {
     render(
-      <DialFormPopup {...baseProps} cssClass="ring-1">
+      <DialFormPopup {...baseProps} className="ring-1">
         <form />
       </DialFormPopup>,
     );

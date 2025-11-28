@@ -10,7 +10,7 @@ const meta = {
   argTypes: {
     open: { control: false },
     title: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     overlayClass: { control: { type: 'text' } },
     headingClass: { control: { type: 'text' } },
     dividers: { control: { type: 'boolean' } },
@@ -89,7 +89,7 @@ export const WithLongTitle: Story = {
 export const CustomClasses: Story = {
   render: StatefulRender,
   args: {
-    cssClass: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
+    className: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
     headingClass: 'font-medium bg-red-400',
   },
 };

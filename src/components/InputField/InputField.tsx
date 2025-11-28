@@ -19,9 +19,9 @@ export interface DialInputFieldBaseProps
   value?: string | number;
   defaultEmptyText?: string;
   errorText?: string;
-  elementCssClass?: string;
-  elementContainerCssClass?: string;
-  containerCssClass?: string;
+  elementClassName?: string;
+  elementContainerClassName?: string;
+  containerClassName?: string;
 }
 
 export interface DialInputFieldProps
@@ -56,9 +56,9 @@ export interface DialInputFieldProps
  * @param onChange - Callback function called when the input value changes, receives the new value
  * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
  * @param errorText - Error message text to display below the input
- * @param elementCssClass - Additional CSS classes to apply to the input element
- * @param elementContainerCssClass - Additional CSS classes to apply to the input container
- * @param containerCssClass - Additional CSS classes to apply to the outer container
+ * @param elementClassName - Additional CSS classes to apply to the input element
+ * @param elementContainerClassName - Additional CSS classes to apply to the input container
+ * @param containerClassName - Additional CSS classes to apply to the outer container
  */
 const DialInputField: FC<DialInputFieldProps> = ({
   // form item props
@@ -75,9 +75,9 @@ const DialInputField: FC<DialInputFieldProps> = ({
   elementId,
   fieldTitle,
   errorText,
-  elementCssClass,
-  elementContainerCssClass,
-  containerCssClass,
+  elementClassName,
+  elementContainerClassName,
+  containerClassName,
   defaultEmptyText,
   ...props
 }) => {
@@ -92,14 +92,14 @@ const DialInputField: FC<DialInputFieldProps> = ({
       readonly={readonly}
       orientation={orientation}
       elementId={elementId}
-      cssClass={containerCssClass}
+      className={containerClassName}
       defaultEmptyText={defaultEmptyText}
       value={props.value}
     >
       <DialInput
         elementId={elementId}
-        cssClass={elementCssClass}
-        containerCssClass={elementContainerCssClass}
+        className={elementClassName}
+        containerClassName={elementContainerClassName}
         invalid={errorText != null}
         {...props}
       />

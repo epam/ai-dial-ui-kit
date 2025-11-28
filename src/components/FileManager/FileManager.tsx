@@ -87,7 +87,7 @@ export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
   title?: string;
-  containerCssClass?: string;
+  containerClassName?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
@@ -163,7 +163,7 @@ export interface CreateFolderValidationMessages {
 
 export interface DialFileManagerProps {
   path?: string;
-  cssClass?: string;
+  className?: string;
 
   items?: DialFile[];
   rootItem?: DialRootFolder;
@@ -272,7 +272,7 @@ export interface DialFileManagerProps {
  * ```
  *
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
- * @param [cssClass] - Additional classes for the root container
+ * @param [className] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
@@ -310,7 +310,7 @@ export const DialFileManager: FC<DialFileManagerProps> = (props) => {
  */
 export const DialFileManagerView: FC = () => {
   const {
-    cssClass,
+    className,
     items,
     rootItem,
     filesLoading,
@@ -384,7 +384,7 @@ export const DialFileManagerView: FC = () => {
   const {
     width = sidebarWidth,
     title = sidebarTitleDefault,
-    containerCssClass = treeBaseClasses,
+    containerClassName = treeBaseClasses,
     additionalButtons,
     ...forwardedTreeProps
   } = treeOptions ?? {};
@@ -672,7 +672,7 @@ export const DialFileManagerView: FC = () => {
         {
           'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
         },
-        cssClass,
+        className,
       )}
     >
       {renderToolbar()}
@@ -685,7 +685,7 @@ export const DialFileManagerView: FC = () => {
           <DialCollapsibleSidebar
             width={width}
             title={title}
-            containerCssClass={containerCssClass}
+            containerClassName={containerClassName}
             additionalButtons={additionalButtons}
             isOpened={isTreeCollapsed}
             onToggle={toggleTreeCollapse}
@@ -732,7 +732,7 @@ export const DialFileManagerView: FC = () => {
               getRowId={(row) => row.path}
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
-              cssClass={classNames(
+              className={classNames(
                 isDragging ? 'border border-dashed border-accent-primary' : '',
                 isDraggingOverWindow && !isDragging
                   ? 'border border-dashed border-primary'

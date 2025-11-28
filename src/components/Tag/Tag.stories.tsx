@@ -26,7 +26,7 @@ const meta: Meta<typeof DialTag> = {
       options: Object.values(TagVariant),
       description: 'Visual variant defined by the TagVariant enum.',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Optional additional CSS classes for custom styling.',
     },
@@ -68,7 +68,7 @@ export const WithIconBefore: Story = {
     <DialTag
       tag="Review required"
       remove={args.remove}
-      cssClass="border-[#F4CE46] bg-warning"
+      className="border-[#F4CE46] bg-warning"
       iconBefore={<IconEye size={16} className="text-warning" />}
     />
   ),
@@ -79,7 +79,7 @@ export const DashedBorder: Story = {
     <DialTag
       tag="Business implementation"
       remove={args.remove}
-      cssClass="border-dashed rounded-[8px]"
+      className="border-dashed rounded-[8px]"
     />
   ),
 };

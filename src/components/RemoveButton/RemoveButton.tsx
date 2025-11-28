@@ -16,11 +16,11 @@ export interface DialRemoveButtonProps extends DialButtonProps {
  * <DialRemoveButton
  *   label="Delete item"
  *   onClick={handleDelete}
- *   iconClass="text-error"
+ *   iconClassName="text-error"
  * />
  * @component
  * @param {DialRemoveButtonProps} props - The properties for the remove button component.
- * @param {string} [props.iconClass] - Optional CSS class applied to the trash icon for styling or sizing.
+ * @param {string} [props.iconClassName] - Optional CSS class applied to the trash icon for styling or sizing.
  * @returns {JSX.Element} The rendered remove button component.
  */
 export const DialRemoveButton: FC<DialRemoveButtonProps> = ({

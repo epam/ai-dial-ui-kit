@@ -13,10 +13,10 @@ import { mergeClasses } from '@/utils/merge-classes';
 export interface DialFormItemProps extends DialFormItemBaseProps {
   elementId: string;
   labelVisuallyHidden?: boolean;
-  cssClass?: string;
-  childrenCssClass?: string;
-  labelCssClass?: string;
-  errorCssClass?: string;
+  className?: string;
+  childrenClassName?: string;
+  labelClassName?: string;
+  errorClassName?: string;
   children: ReactNode;
   value?: ReactNode | string;
   defaultEmptyText?: string;
@@ -33,7 +33,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  *
  * @example
  * ```tsx
- * <DialFormItem elementId="transport" label="Transport" cssClass="w-[320px]">
+ * <DialFormItem elementId="transport" label="Transport" className="w-[320px]">
  *   <DialSelect
  *     elementId="transport"
  *     value={transport}
@@ -64,10 +64,10 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  *
  * @param elementId - Unique identifier for the form control element (used for accessibility)
  * @param labelVisuallyHidden - Whether to visually hide the label (still accessible to screen readers, default: false)
- * @param cssClass - Additional CSS classes to apply to the container div
- * @param childrenCssClass - Additional CSS classes to apply to the children container div
- * @param labelCssClass - Additional CSS classes to apply to the label element
- * @param errorCssClass - Additional CSS classes to apply to the error message element
+ * @param className - Additional CSS classes to apply to the container div
+ * @param childrenClassName - Additional CSS classes to apply to the children container div
+ * @param labelClassName - Additional CSS classes to apply to the label element
+ * @param errorClassName - Additional CSS classes to apply to the error message element
  * @param children - The form control element(s) to render inside the DialFormItem
  * @param value - The current value of the form control (for readonly mode)
  * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
@@ -81,10 +81,10 @@ export const DialFormItem: FC<DialFormItemProps> = ({
   error,
   orientation = FormItemOrientation.Vertical,
   labelVisuallyHidden = false,
-  cssClass,
-  labelCssClass,
-  errorCssClass,
-  childrenCssClass,
+  className,
+  labelClassName,
+  errorClassName,
+  childrenClassName,
   captionDescription,
   readonly,
   value,
@@ -110,7 +110,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           id={errorId}
           role="alert"
           aria-live="polite"
-          className={errorCssClass}
+          className={errorClassName}
         >
           <DialErrorText errorText={error} />
         </div>
@@ -122,12 +122,12 @@ export const DialFormItem: FC<DialFormItemProps> = ({
         id={errorId}
         role="alert"
         aria-live="polite"
-        className={errorCssClass}
+        className={errorClassName}
       >
         {error}
       </div>
     );
-  }, [error, errorCssClass, errorId]);
+  }, [error, errorClassName, errorId]);
 
   const renderReadonlyValue = useCallback(() => {
     if (!value) {
@@ -153,7 +153,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
       className={mergeClasses(
         containerBaseClasses,
         orientationClassMap[orientation],
-        cssClass,
+        className,
       )}
     >
       {label && (
@@ -166,16 +166,16 @@ export const DialFormItem: FC<DialFormItemProps> = ({
             fieldTitle={label}
             optional={optional}
             optionalText={optionalText}
-            cssClass={mergeClasses(
+            className={mergeClasses(
               labelVisuallyHidden && 'sr-only',
-              labelCssClass,
+              labelClassName,
             )}
             description={description}
           />
         </div>
       )}
 
-      <div className={mergeClasses('min-w-0 w-full', childrenCssClass)}>
+      <div className={mergeClasses('min-w-0 w-full', childrenClassName)}>
         {readonly ? (
           <div className="dial-input px-3 py-2">{renderReadonlyValue()}</div>
         ) : (

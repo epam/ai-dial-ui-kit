@@ -22,9 +22,9 @@ export interface DialBreadcrumbProps {
   pathItems?: DialBreadcrumbPathItem[];
   separator?: ReactNode;
   ariaLabel?: string;
-  cssClass?: string;
+  className?: string;
   children?: ReactNode;
-  titleCssClass?: string;
+  titleClassName?: string;
 }
 
 /**
@@ -53,17 +53,17 @@ export interface DialBreadcrumbProps {
  * @param pathItems - Array of breadcrumb pathItems (see `DialBreadcrumbItem`).
  * @param separator - Custom separator node (default: right chevron icon).
  * @param ariaLabel - Aria label for the `<nav>` element (default: "Breadcrumb").
- * @param cssClass - Additional CSS classes for the `<nav>` container.
+ * @param className - Additional CSS classes for the `<nav>` container.
  * @param children - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
- * @param titleCssClass - Additional CSS classes applied to each item when using `pathItems` prop.
+ * @param titleClassName - Additional CSS classes applied to each item when using `pathItems` prop.
  */
 export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   pathItems,
   separator = defaultSeparator,
   ariaLabel = 'Breadcrumb',
-  cssClass,
+  className,
   children,
-  titleCssClass,
+  titleClassName,
 }) => {
   const items = useMemo(() => {
     if (pathItems?.length) {
@@ -79,7 +79,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           onClick: props.onClick,
           disabled: props.disabled,
           iconBefore: props.iconBefore,
-          cssClass: props.cssClass,
+          className: props.className,
         };
       });
   }, [pathItems, children]);
@@ -107,7 +107,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${index}`}
           isLast={index === items.length - 1}
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
       ));
     }
@@ -131,7 +131,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           {...first}
           key="item-0"
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
 
         <li className={mergeClasses(breadcrumbItemBaseClasses)}>
@@ -158,7 +158,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           {...preLast}
           key={`item-${items.length - 2}`}
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
 
         <DialBreadcrumbItem
@@ -166,16 +166,16 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${items.length - 1}`}
           isLast
           separator={separator}
-          titleCssClass={titleCssClass}
+          titleClassName={titleClassName}
         />
       </>
     );
-  }, [items, separator, titleCssClass, handleDropdownItemClick]);
+  }, [items, separator, titleClassName, handleDropdownItemClick]);
 
   return (
     <nav
       aria-label={ariaLabel}
-      className={mergeClasses(breadcrumbBaseClasses, cssClass)}
+      className={mergeClasses(breadcrumbBaseClasses, className)}
     >
       <ol className={breadcrumbListClasses}>{content}</ol>
     </nav>

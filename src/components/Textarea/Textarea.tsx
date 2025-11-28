@@ -8,8 +8,8 @@ export interface DialTextareaProps {
   value?: string | number | null;
   placeholder?: string;
   textareaId: string;
-  cssClass?: string;
-  containerCssClass?: string;
+  className?: string;
+  containerClassName?: string;
   disabled?: boolean;
   invalid?: boolean;
   readonly?: boolean;
@@ -34,8 +34,8 @@ export interface DialTextareaProps {
  * @param [value] - The current value of the textarea
  * @param [onChange] - Callback function called when the textarea value changes
  * @param [placeholder] - Placeholder text displayed when textarea is empty
- * @param [cssClass=""] - Additional CSS classes to apply to the textarea element
- * @param [containerCssClass=""] - Additional CSS classes to apply to the container div
+ * @param [className=""] - Additional CSS classes to apply to the textarea element
+ * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [disabled=false] - Whether the textarea is disabled
  * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
@@ -45,8 +45,8 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   value,
   textareaId,
   placeholder,
-  cssClass = '',
-  containerCssClass = '',
+  className = '',
+  containerClassName = '',
   disabled,
   invalid,
   readonly,
@@ -56,7 +56,7 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   return (
     <DialTooltip
       tooltip={disableTooltip ? null : value}
-      triggerClassName={mergeClasses('flex', containerCssClass)}
+      triggerClassName={mergeClasses('flex', containerClassName)}
     >
       <textarea
         id={textareaId}
@@ -68,7 +68,7 @@ export const DialTextarea: FC<DialTextareaProps> = ({
           invalid ? 'dial-input-error' : '',
           disabled && 'dial-input-disable',
           readonly && 'dial-input-readonly',
-          cssClass,
+          className,
         )}
         onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
       />

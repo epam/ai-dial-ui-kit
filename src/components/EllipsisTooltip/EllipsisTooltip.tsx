@@ -10,7 +10,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
   text: string | ReactNode;
-  cssClass?: string;
+  className?: string;
   contentClassName?: string;
   hideTooltip?: boolean;
 }
@@ -20,26 +20,26 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
  * If the text fits, tooltip content is empty and the popup stays hidden.
  *
  * Important: width must be finite for truncation.
- * Consumers can override via `cssClass`.
+ * Consumers can override via `className`.
  *
  * a11y: when truncated, the full text is exposed via `aria-label` on the reference node.
  *
  * @example
  * ```tsx
  * <DialEllipsisTooltip text="Very long message that will be truncated" />
- * <DialEllipsisTooltip text={<span className="font-medium">Custom node</span>} cssClass="max-w-[160px]" />
+ * <DialEllipsisTooltip text={<span className="font-medium">Custom node</span>} className="max-w-[160px]" />
  * <DialEllipsisTooltip text="Tooltip disabled even if truncated" hideTooltip />
  * ```
  *
  * @param text The text or node to display (truncated with ellipsis if too long).
- * @param cssClass Optional additional CSS classes for the text container (e.g. to set width).
+ * @param className Optional additional CSS classes for the text container (e.g. to set width).
  * @param contentClassName Optional additional CSS classes for the tooltip content.
  * @param hideTooltip If true, disables the tooltip even if text is truncated.
  * @param tooltipProps Additional props to pass to the underlying DialTooltipContainer.
  */
 export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
   text,
-  cssClass,
+  className,
   contentClassName,
   hideTooltip,
   ...tooltipProps
@@ -104,7 +104,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
         <span
           className={mergeClasses(
             'block truncate flex-1 min-w-0 max-w-full text-left',
-            cssClass,
+            className,
           )}
           aria-label={isTruncated ? fullText : undefined}
           onMouseEnter={scheduleCompute}

@@ -160,12 +160,12 @@ describe('Dial UI Kit :: DialTab', () => {
     expect(container.querySelector('.text-error')).toBeInTheDocument();
   });
 
-  test('merges cssClass into final className', () => {
+  test('merges className into final className', () => {
     render(
       <DialTab
         tab={baseTab}
         active={false}
-        cssClass="u-test extra-class"
+        className="u-test extra-class"
         onClick={vi.fn()}
       />,
     );

@@ -13,7 +13,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 export interface DialDraggableItemProps {
   id: string;
   children: ReactNode;
-  cssClass?: string;
+  className?: string;
   findItem?: (field: string) => number;
   moveItem?: (field: string, atIndex: number) => void;
   handleAriaLabel?: string;
@@ -35,7 +35,7 @@ export interface DialDraggableItemProps {
  *
  * @param id - Unique identifier of the draggable item
  * @param children - Content rendered within the draggable row
- * @param [cssClass] - Additional CSS classes applied to the root container
+ * @param [className] - Additional CSS classes applied to the root container
  * @param [findItem] - Function to resolve an item's current index by id
  * @param [moveItem] - Function to move an item (by id) to a target index
  * @param [handleAriaLabel='Drag item'] - Accessible label for the handle
@@ -43,7 +43,7 @@ export interface DialDraggableItemProps {
 export const DialDraggableItem: FC<DialDraggableItemProps> = ({
   id,
   children,
-  cssClass,
+  className,
   findItem,
   moveItem,
   handleAriaLabel = 'Drag item',
@@ -98,7 +98,7 @@ export const DialDraggableItem: FC<DialDraggableItemProps> = ({
   return (
     <div
       ref={dropRef}
-      className={mergeClasses(containerBaseClasses, cssClass)}
+      className={mergeClasses(containerBaseClasses, className)}
       style={{ opacity: isDragging ? 0 : 1 }}
       aria-roledescription="Draggable item"
     >

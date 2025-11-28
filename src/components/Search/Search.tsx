@@ -13,8 +13,8 @@ export interface DialSearchProps {
   disabled?: boolean;
   readonly?: boolean;
   invalid?: boolean;
-  cssClass?: string;
-  containerCssClass?: string;
+  className?: string;
+  containerClassName?: string;
   onChange?: (value: string) => void;
   size?: SearchSize;
   allowClear?: boolean;
@@ -42,8 +42,8 @@ export interface DialSearchProps {
  * @param [disabled=false] - Whether the input is disabled
  * @param [readonly=false] - Whether the input is read-only (non-editable)
  * @param [invalid=false] - Whether the input should be styled as invalid
- * @param [cssClass] - Additional CSS classes applied to the input element
- * @param [containerCssClass] - Additional CSS classes applied to the container
+ * @param [className] - Additional CSS classes applied to the input element
+ * @param [containerClassName] - Additional CSS classes applied to the container
  * @param [onChange] - Callback fired when the input value changes
  * @param [size=SearchSize.Base] - The size of the search input. Uses the {@link SearchSize} enum.
  * @param [allowClear=true] - Whether to show a clear button when there is a value
@@ -55,8 +55,8 @@ export const DialSearch: FC<DialSearchProps> = ({
   disabled,
   readonly,
   invalid,
-  cssClass,
-  containerCssClass,
+  className,
+  containerClassName,
   onChange,
   size = SearchSize.Base,
   allowClear = true,
@@ -89,7 +89,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         disabled && 'dial-input-disable',
         readonly && 'dial-input-readonly',
         sizeConfig.containerClass,
-        containerCssClass,
+        containerClassName,
       )}
     >
       <DialIcon
@@ -112,7 +112,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         readOnly={readonly}
         className={classNames(
           'border-0 bg-transparent w-full',
-          cssClass,
+          className,
           sizeConfig.textClass,
         )}
         onChange={(event) =>

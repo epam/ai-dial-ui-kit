@@ -56,7 +56,7 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(button).toHaveClass('custom-button-class');
   });
 
-  test('Should apply custom CSS class to button text with textCssClass prop', () => {
+  test('Should apply custom CSS class to button text with textClassName prop', () => {
     render(
       <DialButton
         label="Custom Text"

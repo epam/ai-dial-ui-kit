@@ -9,7 +9,7 @@ export interface DialFieldLabelProps {
   htmlFor: string;
   optional?: boolean;
   optionalText?: string;
-  cssClass?: string;
+  className?: string;
   description?: string;
 }
 
@@ -26,7 +26,7 @@ export interface DialFieldLabelProps {
  * @param [fieldTitle] - The title/label text to display for the field
  * @param [optional=false] - Whether the field is optional (displays "(Optional)" text if optionalText is not provided)
  * @param [optionalText="(Optional)"] - Custom text for optional indicator
- * @param [cssClass] - Additional CSS classes to apply to the label element
+ * @param [className] - Additional CSS classes to apply to the label element
  * @param [description] - Additional description text, displayed below the label.
  */
 export const DialFieldLabel: FC<DialFieldLabelProps> = ({
@@ -34,15 +34,15 @@ export const DialFieldLabel: FC<DialFieldLabelProps> = ({
   htmlFor,
   optional,
   optionalText,
-  cssClass,
+  className,
   description,
 }) => {
   return fieldTitle ? (
     <label
       className={mergeClasses(
         'dial-tiny text-secondary flex gap-1',
-        cssClass,
-        !cssClass?.includes('mb') && 'mb-2',
+        className,
+        !className?.includes('mb') && 'mb-2',
       )}
       htmlFor={htmlFor}
     >

@@ -18,8 +18,8 @@ export interface DialBreadcrumbItemProps {
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   iconBefore?: ReactNode;
-  cssClass?: string;
-  titleCssClass?: string;
+  className?: string;
+  titleClassName?: string;
   isLast?: boolean;
   separator?: ReactNode;
 }
@@ -31,14 +31,14 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   disabled,
   isLast,
   separator = defaultSeparator,
-  cssClass,
+  className,
   iconBefore,
-  titleCssClass,
+  titleClassName,
 }) => {
   const containerClasses = mergeClasses(
     breadcrumbItemBaseClasses,
     isLast ? breadcrumbItemLastClasses : breadcrumbItemVisibleClasses,
-    cssClass,
+    className,
   );
   const interactive = (!!href || !!onClick) && !isLast && !disabled;
 
@@ -52,12 +52,12 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
 
   const Content =
     typeof title === 'string' ? (
-      <DialEllipsisTooltip cssClass={titleCssClass} text={title} />
+      <DialEllipsisTooltip className={titleClassName} text={title} />
     ) : (
       <span
         className={mergeClasses(
           'flex-1 min-w-0 max-w-full truncate',
-          titleCssClass,
+          titleClassName,
         )}
       >
         {title}
