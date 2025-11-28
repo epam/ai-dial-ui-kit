@@ -4,13 +4,16 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { IconInfoCircle } from '@tabler/icons-react';
 import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
 
-type NativeLabelProps = Omit<LabelHTMLAttributes<HTMLLabelElement>, 'children'>;
+type NativeLabelProps = Omit<
+  LabelHTMLAttributes<HTMLLabelElement>,
+  'children' | 'defaultValue' | 'onChange'
+>;
 
 export interface DialFieldLabelProps extends NativeLabelProps {
   fieldTitle?: string | ReactNode;
   optional?: boolean;
   optionalText?: string;
-  description?: ReactNode;
+  description?: string;
 }
 
 /**
