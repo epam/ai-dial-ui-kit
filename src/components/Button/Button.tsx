@@ -16,7 +16,6 @@ export interface DialButtonProps
     HTMLButtonElement
   > {
   variant?: ButtonVariant;
-  className?: string;
   textClassName?: string;
   label?: string;
   iconBefore?: ReactNode;
