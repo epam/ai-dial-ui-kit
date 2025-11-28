@@ -11,8 +11,8 @@ const meta = {
     open: { control: false },
     title: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
-    overlayClass: { control: { type: 'text' } },
-    headingClass: { control: { type: 'text' } },
+    overlayClassName: { control: { type: 'text' } },
+    headingClassName: { control: { type: 'text' } },
     dividers: { control: { type: 'boolean' } },
     footer: { control: { type: 'text' } },
     onClose: { action: 'onClose', control: false },
@@ -90,7 +90,7 @@ export const CustomClasses: Story = {
   render: StatefulRender,
   args: {
     className: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
-    headingClass: 'font-medium bg-red-400',
+    headingClassName: 'font-medium bg-red-400',
   },
 };
 

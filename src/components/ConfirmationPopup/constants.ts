@@ -14,7 +14,7 @@ export const variantConfig: Record<
   {
     container?: string;
     confirmVariant: ButtonVariant;
-    confirmClass?: string;
+    confirmClassName?: string;
     cancelVariant: ButtonVariant;
   }
 > = {

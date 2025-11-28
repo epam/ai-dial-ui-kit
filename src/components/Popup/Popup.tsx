@@ -25,8 +25,8 @@ export interface DialPopupProps {
   title?: string | ReactNode;
   portalId?: string;
   className?: string;
-  overlayClass?: string;
-  headingClass?: string;
+  overlayClassName?: string;
+  headingClassName?: string;
   dividers?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
@@ -62,8 +62,8 @@ export interface DialPopupProps {
  * @param [title] - Optional title rendered in the header
  * @param [portalId] - Optional portal container id
  * @param [className] - Additional CSS classes applied to the popup container
- * @param [overlayClass] - Additional CSS classes applied to the overlay
- * @param [headingClass] - Additional CSS classes applied to the title element
+ * @param [overlayClassName] - Additional CSS classes applied to the overlay
+ * @param [headingClassName] - Additional CSS classes applied to the title element
  * @param [dividers=true] - Whether to render separators between sections
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
@@ -75,8 +75,8 @@ export const DialPopup: FC<DialPopupProps> = ({
   title,
   portalId,
   className,
-  overlayClass,
-  headingClass,
+  overlayClassName,
+  headingClassName,
   dividers = true,
   children,
   footer,
@@ -107,7 +107,7 @@ export const DialPopup: FC<DialPopupProps> = ({
         id={headingId}
         className={classNames(
           'flex-1 min-w-0 mr-3 truncate dial-h3 text-primary',
-          headingClass,
+          headingClassName,
         )}
       >
         <DialTooltip tooltip={title}>{title}</DialTooltip>
@@ -119,7 +119,9 @@ export const DialPopup: FC<DialPopupProps> = ({
 
   return (
     <FloatingPortal id={portalId}>
-      <FloatingOverlay className={classNames(overlayBaseClasses, overlayClass)}>
+      <FloatingOverlay
+        className={classNames(overlayBaseClasses, overlayClassName)}
+      >
         <FloatingFocusManager context={context}>
           <div
             ref={refs.setFloating}
