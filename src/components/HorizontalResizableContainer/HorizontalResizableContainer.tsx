@@ -3,7 +3,14 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import classNames from 'classnames';
 import { Resizable, type ResizableProps } from 're-resizable';
-import { type ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  type FC,
+  type ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 const ResizeIcon = ({
   side,
@@ -115,7 +122,9 @@ export interface DialHorizontalResizableContainerProps {
  * - `onResizeStop` is optional in both modes.
  * - Controlled mode always uses the value from `width`.
  */
-export const DialHorizontalResizableContainer = ({
+export const DialHorizontalResizableContainer: FC<
+  DialHorizontalResizableContainerProps
+> = ({
   children,
   minWidth,
   maxWidth,
@@ -126,7 +135,7 @@ export const DialHorizontalResizableContainer = ({
   side = HorizontalResizableContainerSide.Right,
   resizeHandlerCssClass,
   resizeHandler,
-}: DialHorizontalResizableContainerProps) => {
+}) => {
   const [isResizing, setIsResizing] = useState(false);
   const [internalWidth, setInternalWidth] = useState(defaultWidth);
 

@@ -18,6 +18,7 @@ export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
+export { DialHorizontalResizableContainer } from './components/HorizontalResizableContainer/HorizontalResizableContainer';
 
 // Grid
 export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
@@ -97,6 +98,7 @@ export {
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
+export { HorizontalResizableContainerSide } from './types/resizable-container';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
