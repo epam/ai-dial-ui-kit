@@ -380,8 +380,8 @@ export const DialSelect: FC<DialSelectProps> = ({
               )}
               {closable && (
                 <DialButton
-                  ariaLabel="Close select"
-                  cssClass="shrink-0"
+                  aria-label="Close select"
+                  className="shrink-0"
                   iconBefore={<IconX size={16} />}
                   onClick={(e) => {
                     onClose?.(e);

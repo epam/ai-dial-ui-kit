@@ -124,7 +124,7 @@ function DynamicResizeExample(args: DialEllipsisTooltipProps) {
       <DialButton
         onClick={() => setNarrow((v) => !v)}
         variant={ButtonVariant.Secondary}
-        title={`Toggle width (${narrow ? 'narrow' : 'wide'})`}
+        label={`Toggle width (${narrow ? 'narrow' : 'wide'})`}
       />
       <div className={narrow ? 'w-40' : 'w-auto'}>
         <DialEllipsisTooltip

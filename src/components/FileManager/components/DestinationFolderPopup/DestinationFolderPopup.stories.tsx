@@ -22,7 +22,7 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
       {!isOpen && (
         <DialButton
           onClick={() => setIsOpen(true)}
-          title="Open Destination Folder Popup"
+          label="Open Destination Folder Popup"
           variant={ButtonVariant.Primary}
         />
       )}
