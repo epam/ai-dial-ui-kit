@@ -10,10 +10,10 @@ const meta = {
   argTypes: {
     separator: { control: { type: 'text' } },
     ariaLabel: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     pathItems: { control: false },
     children: { control: false },
-    titleCssClass: { control: { type: 'text' } },
+    titleClassName: { control: { type: 'text' } },
   },
   args: {
     ariaLabel: 'Breadcrumb',
@@ -119,7 +119,7 @@ export const LongLabelsTruncate: Story = {
           },
           { title: 'Current Page With A Long Name' },
         ]}
-        titleCssClass="max-w-[80px]"
+        titleClassName="max-w-[80px]"
       />
     </div>
   ),

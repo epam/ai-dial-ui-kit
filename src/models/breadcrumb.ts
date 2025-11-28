@@ -5,6 +5,6 @@ export interface DialBreadcrumbPathItem {
   href?: string;
   onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
   disabled?: boolean;
-  cssClass?: string;
+  className?: string;
   iconBefore?: ReactNode;
 }
