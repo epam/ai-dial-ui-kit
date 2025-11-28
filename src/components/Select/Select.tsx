@@ -335,8 +335,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   ]);
 
   const inlineInputValue = open
-    ? (query ?? customSelectedValue)
-    : (singleSelectedOption?.label ?? customSelectedValue ?? '');
+    ? query || customSelectedValue
+    : singleSelectedOption?.label || customSelectedValue || '';
 
   useImperativeHandle(dismissRef, () => ({
     dismiss: () => {
