@@ -335,8 +335,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   ]);
 
   const inlineInputValue = open
-    ? (query ?? customSelectedValue)
-    : (singleSelectedOption?.label ?? customSelectedValue ?? '');
+    ? query || customSelectedValue
+    : singleSelectedOption?.label || customSelectedValue || '';
 
   useImperativeHandle(dismissRef, () => ({
     dismiss: () => {
@@ -380,8 +380,8 @@ export const DialSelect: FC<DialSelectProps> = ({
               )}
               {closable && (
                 <DialButton
-                  ariaLabel="Close select"
-                  cssClass="shrink-0"
+                  aria-label="Close select"
+                  className="shrink-0"
                   iconBefore={<IconX size={16} />}
                   onClick={(e) => {
                     onClose?.(e);

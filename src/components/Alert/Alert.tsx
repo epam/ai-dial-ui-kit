@@ -74,8 +74,8 @@ export const DialAlert: FC<DialAlertProps> = ({
 
       {closable && (
         <DialButton
-          cssClass="ml-2 text-secondary hover:text-primary"
-          ariaLabel="Close alert"
+          className="ml-2 text-secondary hover:text-primary"
+          aria-label="Close alert"
           iconBefore={<IconX size={16} />}
           onClick={onClose}
         />

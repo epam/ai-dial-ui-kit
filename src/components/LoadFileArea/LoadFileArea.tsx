@@ -70,7 +70,7 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
 
   const removeFile = (fileUrl: string) => (
     <DialRemoveButton
-      ariaLabel={removeButtonAriaLabel}
+      aria-label={removeButtonAriaLabel}
       onClick={(e) => removeClick(e, fileUrl)}
     />
   );
