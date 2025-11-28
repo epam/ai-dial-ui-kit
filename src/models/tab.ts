@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 export interface TabModel {
   id: string;
-  name: string;
+  label: string | ReactNode;
   invalid?: boolean;
   disabled?: boolean;
 }
