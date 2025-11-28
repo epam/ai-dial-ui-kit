@@ -10,7 +10,10 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      description: { component: 'A button component.' },
+      description: {
+        component:
+          'A button component. Has all properties from the standard `ButtonHTMLAttributes<HTMLButtonElement>` extended with additional ones for variant, icons, and text styling.',
+      },
     },
   },
   argTypes: {
@@ -27,19 +30,13 @@ const meta = {
       ],
       description: 'Button style variant',
     },
-    className: {
-      control: { type: 'text' },
-      description: 'Button additional styles',
-    },
+
     textClassName: {
       control: { type: 'text' },
       description:
         'Additional CSS classes to apply specifically to the button text',
     },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the button is disabled',
-    },
+
     hideTitleOnMobile: {
       control: { type: 'boolean' },
       description: 'Hide title text on mobile devices',
@@ -51,18 +48,6 @@ const meta = {
     iconAfter: {
       control: false,
       description: 'Icon or element to display after the button text',
-    },
-    'aria-label': {
-      control: { type: 'text' },
-      description: 'Accessibility label (used when label is not provided)',
-    },
-    onClick: {
-      control: false,
-      description: 'Click event handler for the button',
-    },
-    ref: {
-      control: false,
-      description: 'Ref to access the button DOM element',
     },
   },
   args: {

@@ -36,18 +36,14 @@ export interface DialButtonProps
  * />
  * ```
  *
+ * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
+ *
  * @param [label] - The text content of the button
- * @param [type='button'] - The HTML button type attribute
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
- * @param [className] - Additional CSS classes to apply to the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
- * @param [onClick] - Click event handler for the button
- * @param [disabled=false] - Whether the button should be disabled
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
  * @param [hideTitleOnMobile=false] - Whether to hide the title text on mobile devices
- * @param [aria-label] - Accessible label for screen readers when no title is provided
- * @param [ref] - Ref to access the button DOM element
  */
 export const DialButton: FC<DialButtonProps> = ({
   label,
