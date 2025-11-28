@@ -75,14 +75,14 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
     <div className={actionsBaseClasses}>
       <DialButton
         variant={ButtonVariant.Secondary}
-        title={cancelLabel}
+        label={cancelLabel}
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
       <DialButton
         variant={ButtonVariant.Primary}
-        cssClass={submitClassName}
-        title={submitLabel}
-        disable={disableSubmitButton}
+        className={submitClassName}
+        label={submitLabel}
+        disabled={disableSubmitButton}
         onClick={() => onSubmit()}
       />
     </div>
