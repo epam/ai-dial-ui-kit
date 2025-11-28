@@ -13,7 +13,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
 
   it('applies aria-label if provided', () => {
     const { getByLabelText } = render(
-      <DialRemoveButton ariaLabel="Delete item" onClick={vi.fn()} />,
+      <DialRemoveButton aria-label="Delete item" onClick={vi.fn()} />,
     );
 
     expect(getByLabelText('Delete item')).toBeInTheDocument();
@@ -28,9 +28,9 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('applies custom cssClass when provided', () => {
+  it('applies custom className when provided', () => {
     const { getByRole } = render(
-      <DialRemoveButton cssClass="custom-remove" onClick={vi.fn()} />,
+      <DialRemoveButton className="custom-remove" onClick={vi.fn()} />,
     );
 
     expect(getByRole('button').className).toMatch(/custom-remove/);
@@ -45,9 +45,9 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
     expect(icon?.getAttribute('height')).toBe(String(BASE_ICON_PROPS.size));
   });
 
-  it('applies custom iconClass to the IconTrashX element', () => {
+  it('applies custom iconClassName to the IconTrashX element', () => {
     const { container } = render(
-      <DialRemoveButton iconClass="text-error" onClick={vi.fn()} />,
+      <DialRemoveButton iconClassName="text-error" onClick={vi.fn()} />,
     );
 
     const icon = container.querySelector('svg');

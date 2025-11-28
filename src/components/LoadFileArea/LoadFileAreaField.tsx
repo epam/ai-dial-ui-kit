@@ -117,9 +117,9 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
           <div className="flex flex-row items-center gap-x-2">
             <DialButton
               variant={ButtonVariant.Tertiary}
-              cssClass="!text-error"
+              className="!text-error"
               iconBefore={<IconTrashX {...BASE_ICON_PROPS} />}
-              title={deleteAllButtonLabel}
+              label={deleteAllButtonLabel}
               onClick={onRemoveFiles}
             />
 
@@ -127,7 +127,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
               <DialButton
                 variant={ButtonVariant.Tertiary}
                 iconBefore={<IconPlus {...BASE_ICON_PROPS} />}
-                title={addButtonLabel}
+                label={addButtonLabel}
                 onClick={onAddFiles}
               />
             )}

@@ -89,7 +89,7 @@ export const DialFileManagerBulkActionsToolbar: FC<
           <DialButton
             key={key}
             iconBefore={icon}
-            title={title}
+            label={title}
             variant={ButtonVariant.Secondary}
             hideTitleOnMobile
           />
@@ -104,9 +104,9 @@ export const DialFileManagerBulkActionsToolbar: FC<
       >
         <div ref={leftSectionRef}>
           <DialButton
-            title={selectionLabel}
+            label={selectionLabel}
             onClick={onClearSelection}
-            textCssClass="text-accent-primary whitespace-nowrap"
+            textClassName="text-accent-primary whitespace-nowrap"
             variant={ButtonVariant.Tertiary}
             iconBefore={
               <IconX {...BASE_ICON_PROPS} className="text-accent-primary" />
@@ -121,7 +121,7 @@ export const DialFileManagerBulkActionsToolbar: FC<
               allowedPlacements={['bottom', 'bottom-start']}
             >
               <DialButton
-                cssClass="h-[38px]"
+                className="h-[38px]"
                 iconBefore={
                   <IconDotsVertical
                     {...BASE_ICON_PROPS}
@@ -134,13 +134,13 @@ export const DialFileManagerBulkActionsToolbar: FC<
 
           {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
             <DialButton
-              cssClass="!p-[9px]"
+              className="!p-[9px]"
               key={key}
               iconBefore={icon}
-              title={title}
+              label={title}
               variant={ButtonVariant.Secondary}
               hideTitleOnMobile
-              disable={disabled}
+              disabled={disabled}
               onClick={(domEvent) => onClick?.({ key, domEvent })}
             />
           ))}

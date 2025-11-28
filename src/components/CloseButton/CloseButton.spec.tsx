@@ -23,9 +23,9 @@ describe('Dial UI Kit :: DialCloseButton', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  it('applies custom cssClass', () => {
+  it('applies custom className', () => {
     const { getByRole } = render(
-      <DialCloseButton cssClass="custom-class" onClose={vi.fn()} />,
+      <DialCloseButton className="custom-class" onClose={vi.fn()} />,
     );
     expect(getByRole('button').className).toMatch(/custom-class/);
   });

@@ -256,7 +256,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
       <DialButton
         onClick={() => setIsOpen(!isOpen)}
         variant={ButtonVariant.Primary}
-        title="Toggle File Manager"
+        label="Toggle File Manager"
       />
       <DialPopup
         open={isOpen}
@@ -406,7 +406,7 @@ const TreeCollapsedControlledComponent = (args: DialFileManagerProps) => {
         <DialButton
           onClick={() => setIsCollapsed(!isCollapsed)}
           variant={ButtonVariant.Primary}
-          title={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
+          label={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
         />
       </div>
       <DialFileManager

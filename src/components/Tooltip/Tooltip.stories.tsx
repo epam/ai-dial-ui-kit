@@ -93,13 +93,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: <DialButton title="Hover me" />,
+    children: <DialButton label="Hover me" />,
   },
 };
 
 export const TopPlacement: Story = {
   args: {
-    children: <DialButton title="Tooltip on top" />,
+    children: <DialButton label="Tooltip on top" />,
     placement: 'top',
     tooltip: 'This tooltip appears above the trigger',
   },
@@ -107,7 +107,7 @@ export const TopPlacement: Story = {
 
 export const LeftPlacement: Story = {
   args: {
-    children: <DialButton title="Tooltip on left" />,
+    children: <DialButton label="Tooltip on left" />,
     placement: 'left',
     tooltip: 'This tooltip appears to the left',
   },
@@ -115,7 +115,7 @@ export const LeftPlacement: Story = {
 
 export const RightPlacement: Story = {
   args: {
-    children: <DialButton title="Tooltip on right" />,
+    children: <DialButton label="Tooltip on right" />,
     placement: 'right',
     tooltip: 'This tooltip appears to the right',
   },
@@ -123,7 +123,7 @@ export const RightPlacement: Story = {
 
 export const LongContent: Story = {
   args: {
-    children: <DialButton title="Long tooltip" />,
+    children: <DialButton label="Long tooltip" />,
     tooltip:
       'This is a very long tooltip that demonstrates how the component handles longer text content. It should wrap properly and maintain readability.',
   },
@@ -131,7 +131,7 @@ export const LongContent: Story = {
 
 export const InitiallyOpen: Story = {
   args: {
-    children: <DialButton title="Initially open" />,
+    children: <DialButton label="Initially open" />,
     tooltip: 'This tooltip starts open',
     initialOpen: true,
   },
@@ -165,7 +165,7 @@ export const OnlyMouse: Story = {
 
 export const RichContent: Story = {
   args: {
-    children: <DialButton title="Rich content" />,
+    children: <DialButton label="Rich content" />,
     tooltip: (
       <div>
         <strong>Rich tooltip content</strong>
