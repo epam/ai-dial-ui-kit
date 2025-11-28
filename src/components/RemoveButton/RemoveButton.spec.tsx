@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialRemoveButton', () => {
 
   it('applies custom iconClass to the IconTrashX element', () => {
     const { container } = render(
-      <DialRemoveButton iconClass="text-error" onClick={vi.fn()} />,
+      <DialRemoveButton iconClassName="text-error" onClick={vi.fn()} />,
     );
 
     const icon = container.querySelector('svg');

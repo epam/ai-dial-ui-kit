@@ -22,7 +22,7 @@ const meta: Meta<typeof DialRemoveButton> = {
       control: { type: 'text' },
       description: 'Additional CSS classes applied to the button',
     },
-    iconClass: {
+    iconClassName: {
       control: { type: 'text' },
       description: 'Optional CSS class applied to the trash icon',
     },
@@ -46,7 +46,7 @@ export const Default: Story = {
 export const CustomIconClass: Story = {
   args: {
     'aria-label': 'Delete entry',
-    iconClass: 'text-error',
+    iconClassName: 'text-error',
     onClick: () => alert('Deleted!'),
   },
 };
@@ -74,7 +74,7 @@ export const AllVariants: Story = {
         <div className="text-primary min-w-[160px]">Error Icon</div>
         <DialRemoveButton
           aria-label="Remove error"
-          iconClass="text-error"
+          iconClassName="text-error"
           onClick={() => alert('Removed!')}
         />
       </div>

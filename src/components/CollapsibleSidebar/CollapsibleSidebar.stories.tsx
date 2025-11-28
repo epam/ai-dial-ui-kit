@@ -15,7 +15,7 @@ const BarContent = (
       You can place any custom content here — text, lists, buttons, etc.
     </p>
     <DialButton
-      title="Action"
+      label="Action"
       className="w-fit"
       variant={ButtonVariant.Primary}
     />
@@ -170,7 +170,7 @@ const ControlledExternalComponent = (args: DialCollapsibleSidebarProps) => {
       </DialCollapsibleSidebar>
       <div className="flex flex-col gap-2">
         <DialButton
-          title={open ? 'Close from outside' : 'Open from outside'}
+          label={open ? 'Close from outside' : 'Open from outside'}
           onClick={() => setOpen((v) => !v)}
         />
         <p className="text-secondary text-sm">

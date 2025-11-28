@@ -8,7 +8,6 @@ import { variantClassMap } from './constants';
 export interface DialButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  className?: string;
   textClassName?: string;
   label?: string;
   iconBefore?: ReactNode;
@@ -53,7 +52,7 @@ export const DialButton: FC<DialButtonProps> = ({
   iconBefore,
   hideTitleOnMobile,
   type = 'button',
-  ...restProps
+  ...props
 }) => {
   const btnTextClassNames = classNames(
     'dial-small-semi',
@@ -70,10 +69,10 @@ export const DialButton: FC<DialButtonProps> = ({
 
   return (
     <button
-      {...restProps}
+      {...props}
       type={type}
       className={btnClassNames}
-      aria-label={label || restProps['aria-label']}
+      aria-label={label || props['aria-label']}
     >
       <DialIcon icon={iconBefore} />
       {label && <span className={btnTextClassNames}>{label}</span>}

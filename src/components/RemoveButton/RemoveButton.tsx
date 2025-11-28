@@ -4,7 +4,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 
 export interface DialRemoveButtonProps extends DialButtonProps {
-  iconClass?: string;
+  iconClassName?: string;
 }
 
 /**
@@ -24,13 +24,13 @@ export interface DialRemoveButtonProps extends DialButtonProps {
  * @returns {JSX.Element} The rendered remove button component.
  */
 export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
-  iconClass,
+  iconClassName,
   ...props
 }) => {
   return (
     <DialButton
       iconBefore={
-        <IconTrashX {...BASE_ICON_PROPS} className={iconClass || ''} />
+        <IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />
       }
       {...props}
     />
