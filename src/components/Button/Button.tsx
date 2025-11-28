@@ -13,7 +13,7 @@ export interface DialButtonProps
   label?: string;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-  ref?: Ref<HTMLButtonElement | null>;
+  ref?: Ref<HTMLButtonElement>;
   hideTitleOnMobile?: boolean;
 }
 
