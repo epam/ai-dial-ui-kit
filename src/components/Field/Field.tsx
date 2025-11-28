@@ -2,15 +2,15 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconInfoCircle } from '@tabler/icons-react';
-import type { FC, ReactNode } from 'react';
+import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
 
-export interface DialFieldLabelProps {
-  fieldTitle?: string | ReactNode;
-  htmlFor: string;
+type NativeLabelProps = Omit<LabelHTMLAttributes<HTMLLabelElement>, 'children'>;
+
+export interface DialFieldLabelProps extends NativeLabelProps {
+  fieldTitle?: ReactNode;
   optional?: boolean;
   optionalText?: string;
-  className?: string;
-  description?: string;
+  description?: ReactNode;
 }
 
 /**
@@ -22,35 +22,31 @@ export interface DialFieldLabelProps {
  * <DialFieldLabel htmlFor="email-input" fieldTitle="Email Address" />
  * ```
  *
- * @param htmlFor - The ID of the form element this label is associated with
  * @param [fieldTitle] - The title/label text to display for the field
  * @param [optional=false] - Whether the field is optional (displays "(Optional)" text if optionalText is not provided)
  * @param [optionalText="(Optional)"] - Custom text for optional indicator
- * @param [className] - Additional CSS classes to apply to the label element
  * @param [description] - Additional description text, displayed below the label.
  */
 export const DialFieldLabel: FC<DialFieldLabelProps> = ({
   fieldTitle,
-  htmlFor,
   optional,
   optionalText,
   className,
   description,
+  ...props
 }) => {
-  return fieldTitle ? (
+  if (!fieldTitle) return null;
+
+  return (
     <label
+      {...props}
       className={mergeClasses(
         'dial-tiny text-secondary flex gap-1',
         className,
         !className?.includes('mb') && 'mb-2',
       )}
-      htmlFor={htmlFor}
     >
-      {typeof fieldTitle === 'string' ? (
-        <span className="min-h-4">{fieldTitle}</span>
-      ) : (
-        fieldTitle
-      )}
+      <span className="min-h-4">{fieldTitle}</span>
       {optional && <span>{optionalText ?? '(Optional)'}</span>}
       {description && (
         <DialTooltip tooltip={description}>
@@ -60,5 +56,5 @@ export const DialFieldLabel: FC<DialFieldLabelProps> = ({
         </DialTooltip>
       )}
     </label>
-  ) : null;
+  );
 };
