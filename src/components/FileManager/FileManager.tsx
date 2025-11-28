@@ -1,5 +1,12 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, type ReactNode, useMemo, useCallback } from 'react';
+import {
+  type FC,
+  type ReactNode,
+  useMemo,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
   containerBaseClasses,
@@ -11,6 +18,8 @@ import {
   sidebarTitleDefault,
   gridBaseClasses,
   BASE_FILE_MANAGER_ICON_SIZE,
+  FOLDERS_TREE_PANEL_MIN_WIDTH,
+  FOLDERS_TREE_PANEL_MAX_WIDTH,
 } from './constants';
 import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -70,6 +79,7 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
+import { DialConditionalHorizontalResizableContainer } from '@/components/HorizontalResizableContainer/ConditionalHorizontalResizableContainer';
 
 type GridRow = FileManagerGridRow;
 
@@ -389,6 +399,19 @@ export const DialFileManagerView: FC = () => {
     ...forwardedTreeProps
   } = treeOptions ?? {};
 
+  const [sidebarCurrentWidth, setSidebarCurrentWidth] = useState(width);
+
+  const sidebarThrottledRef = useRef<number | null>(null);
+
+  const sidebarResizingHandler = (width: number) => {
+    if (sidebarThrottledRef.current === null) {
+      sidebarThrottledRef.current = requestAnimationFrame(() => {
+        setSidebarCurrentWidth(width);
+        sidebarThrottledRef.current = null;
+      });
+    }
+  };
+
   const {
     columnDefs: userColumnDefs,
     filterable = true,
@@ -682,27 +705,37 @@ export const DialFileManagerView: FC = () => {
           aria-label="File Manager Tree Navigation"
           className="min-h-0 min-w-0 h-full flex-none"
         >
-          <DialCollapsibleSidebar
-            width={width}
-            title={title}
-            containerCssClass={containerCssClass}
-            additionalButtons={additionalButtons}
-            isOpened={isTreeCollapsed}
-            onToggle={toggleTreeCollapse}
+          <DialConditionalHorizontalResizableContainer
+            defaultWidth={sidebarCurrentWidth}
+            width={sidebarCurrentWidth}
+            onResizeStop={setSidebarCurrentWidth}
+            onResize={sidebarResizingHandler}
+            minWidth={FOLDERS_TREE_PANEL_MIN_WIDTH}
+            maxWidth={FOLDERS_TREE_PANEL_MAX_WIDTH}
+            enabled={isTreeCollapsed}
           >
-            <DialFoldersTree
-              {...forwardedTreeProps}
-              items={items}
-              selectedPath={currentPath}
-              onItemClick={handleTreeItemClick}
-              areHiddenFilesVisible={areHiddenFilesVisible}
-              getContextMenuItems={getTreeContextMenuItems}
-              renamedPath={renamedPath}
-              onRenameSave={onRenameSave}
-              onRenameCancel={onRenameCancel}
-              onRenameValidate={onRenameValidate}
-            />
-          </DialCollapsibleSidebar>
+            <DialCollapsibleSidebar
+              width={sidebarCurrentWidth}
+              title={title}
+              containerCssClass={containerCssClass}
+              additionalButtons={additionalButtons}
+              isOpened={isTreeCollapsed}
+              onToggle={toggleTreeCollapse}
+            >
+              <DialFoldersTree
+                {...forwardedTreeProps}
+                items={items}
+                selectedPath={currentPath}
+                onItemClick={handleTreeItemClick}
+                areHiddenFilesVisible={areHiddenFilesVisible}
+                getContextMenuItems={getTreeContextMenuItems}
+                renamedPath={renamedPath}
+                onRenameSave={onRenameSave}
+                onRenameCancel={onRenameCancel}
+                onRenameValidate={onRenameValidate}
+              />
+            </DialCollapsibleSidebar>
+          </DialConditionalHorizontalResizableContainer>
         </aside>
 
         <div className={contentGridClasses}>
