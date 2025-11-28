@@ -1,19 +1,26 @@
 import classNames from 'classnames';
-import type { ButtonHTMLAttributes, FC, ReactNode, Ref } from 'react';
+import type {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  FC,
+  ReactNode,
+} from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import type { ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export interface DialButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   variant?: ButtonVariant;
   className?: string;
   textClassName?: string;
   label?: string;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-  ref?: Ref<HTMLButtonElement>;
   hideTitleOnMobile?: boolean;
 }
 
