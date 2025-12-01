@@ -34,19 +34,19 @@ const meta = {
       control: { type: 'boolean' as const },
       description: 'Whether to visually hide the label',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' as const },
       description: 'Additional CSS classes for the form item container',
     },
-    childrenCssClass: {
+    childrenClassName: {
       control: { type: 'text' as const },
       description: 'Additional CSS classes for the children wrapper',
     },
-    labelCssClass: {
+    labelClassName: {
       control: { type: 'text' as const },
       description: 'Additional CSS classes for the label',
     },
-    errorCssClass: {
+    errorClassName: {
       control: { type: 'text' as const },
       description: 'Additional CSS classes for the error message',
     },
@@ -185,7 +185,7 @@ const SelectBasicExample = (args: DialFormItemProps) => {
         elementId="transport"
         label="Transport"
         description="Select your preferred transport type."
-        cssClass="w-[160px]"
+        className="w-[160px]"
       >
         <DialSelect
           value={transport}
@@ -225,7 +225,7 @@ const SelectHorizontalExample = (args: DialFormItemProps) => {
         elementId="transport-h"
         label="Transport"
         orientation={FormItemOrientation.Horizontal}
-        labelCssClass="w-32 mt-1"
+        labelClassName="w-32 mt-1"
         description="Horizontal layout with label on the left."
       >
         <DialSelect

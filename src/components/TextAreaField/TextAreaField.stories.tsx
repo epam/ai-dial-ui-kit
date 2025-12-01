@@ -7,15 +7,15 @@ import {
 
 const InteractiveTextAreaField = (
   args: DialTextAreaFieldProps & {
-    divCssClass?: string;
+    divClassName?: string;
     additionalElements?: ReactNode;
   },
 ) => {
   const [value, setValue] = useState(args.value || '');
-  const { divCssClass, additionalElements, ...rest } = args;
+  const { divClassName, additionalElements, ...rest } = args;
 
   return (
-    <div className={divCssClass ? divCssClass : 'w-full text-primary'}>
+    <div className={divClassName ? divClassName : 'w-full text-primary'}>
       {additionalElements}
       <DialTextAreaField
         {...rest}
@@ -72,7 +72,7 @@ const meta = {
       control: 'text',
       description: 'Error message to display below the textarea',
     },
-    elementCssClass: {
+    elementClassName: {
       control: 'text',
       description: 'Additional CSS classes to apply to the textarea element',
     },
@@ -157,9 +157,9 @@ export const FullParentHeightWithScroll = {
 Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   `,
-    divCssClass: 'h-[200px] w-[300px] flex flex-col gap-4 bg-layer-1 p-2',
-    containerCssClass: 'flex-1',
-    elementContainerCssClass: 'flex-1',
+    divClassName: 'h-[200px] w-[300px] flex flex-col gap-4 bg-layer-1 p-2',
+    containerClassName: 'flex-1',
+    elementContainerClassName: 'flex-1',
     disableTooltip: true,
     additionalElements: (
       <div className="text-primary">
@@ -195,7 +195,7 @@ export const AllVariants: Story = {
             fieldTitle="Description"
             elementId="hover-textarea-field"
             placeholder="Enter your description here..."
-            elementCssClass="dial-textarea-field-for-hover"
+            elementClassName="dial-textarea-field-for-hover"
           />
         </div>
 
@@ -217,7 +217,7 @@ export const AllVariants: Story = {
             fieldTitle="Description"
             elementId="field-hover-textarea-field"
             placeholder="Enter your description here..."
-            elementCssClass="dial-textarea-field-for-hover"
+            elementClassName="dial-textarea-field-for-hover"
             value="This is some text in the textarea field"
           />
         </div>
@@ -229,7 +229,7 @@ export const AllVariants: Story = {
             fieldTitle="Description"
             elementId="focus-textarea-field"
             placeholder="Enter your description here..."
-            elementCssClass="dial-textarea-field-for-focus"
+            elementClassName="dial-textarea-field-for-focus"
           />
         </div>
 

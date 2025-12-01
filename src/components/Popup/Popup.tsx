@@ -14,9 +14,9 @@ import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { PopupSize } from '@/types/popup';
 import {
-  overlayBaseClasses,
-  popupDividerClasses,
-  popupHeaderClasses,
+  overlayBaseClassName,
+  popupDividerClassName,
+  popupHeaderClassName,
   popupSizeClassMap,
 } from './constants';
 
@@ -24,9 +24,9 @@ export interface DialPopupProps {
   open?: boolean;
   title?: string | ReactNode;
   portalId?: string;
-  cssClass?: string;
-  overlayClass?: string;
-  headingClass?: string;
+  className?: string;
+  overlayClassName?: string;
+  headingClassName?: string;
   dividers?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
@@ -61,9 +61,9 @@ export interface DialPopupProps {
  * @param [open=false] - Controls visibility of the popup
  * @param [title] - Optional title rendered in the header
  * @param [portalId] - Optional portal container id
- * @param [cssClass] - Additional CSS classes applied to the popup container
- * @param [overlayClass] - Additional CSS classes applied to the overlay
- * @param [headingClass] - Additional CSS classes applied to the title element
+ * @param [className] - Additional CSS classes applied to the popup container
+ * @param [overlayClassName] - Additional CSS classes applied to the overlay
+ * @param [headingClassName] - Additional CSS classes applied to the title element
  * @param [dividers=true] - Whether to render separators between sections
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
@@ -74,9 +74,9 @@ export const DialPopup: FC<DialPopupProps> = ({
   open = false,
   title,
   portalId,
-  cssClass,
-  overlayClass,
-  headingClass,
+  className,
+  overlayClassName,
+  headingClassName,
   dividers = true,
   children,
   footer,
@@ -107,7 +107,7 @@ export const DialPopup: FC<DialPopupProps> = ({
         id={headingId}
         className={classNames(
           'flex-1 min-w-0 mr-3 truncate dial-h3 text-primary',
-          headingClass,
+          headingClassName,
         )}
       >
         <DialTooltip tooltip={title}>{title}</DialTooltip>
@@ -119,7 +119,9 @@ export const DialPopup: FC<DialPopupProps> = ({
 
   return (
     <FloatingPortal id={portalId}>
-      <FloatingOverlay className={classNames(overlayBaseClasses, overlayClass)}>
+      <FloatingOverlay
+        className={classNames(overlayBaseClassName, overlayClassName)}
+      >
         <FloatingFocusManager context={context}>
           <div
             ref={refs.setFloating}
@@ -130,11 +132,11 @@ export const DialPopup: FC<DialPopupProps> = ({
             className={classNames(
               'dial-popup',
               popupSizeClassMap[size],
-              dividers && popupDividerClasses,
-              cssClass,
+              dividers && popupDividerClassName,
+              className,
             )}
           >
-            <div className={popupHeaderClasses}>
+            <div className={popupHeaderClassName}>
               {renderTitle(title)}
               <DialCloseButton
                 ariaLabel="Close dialog"

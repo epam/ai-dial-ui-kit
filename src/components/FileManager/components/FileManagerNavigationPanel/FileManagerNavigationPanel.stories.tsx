@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     ariaLabel: { control: { type: 'text' } },
     titleClassName: { control: { type: 'text' } },
-    breadcrumbCssClass: { control: { type: 'text' } },
+    breadcrumbClassName: { control: { type: 'text' } },
 
     path: { control: 'text' },
     makeHref: { control: false },
@@ -24,10 +24,10 @@ const meta = {
     disabled: { control: { type: 'boolean' } },
     readonly: { control: { type: 'boolean' } },
     invalid: { control: { type: 'boolean' } },
-    searchCssClass: { control: { type: 'text' } },
-    searchContainerCssClass: { control: { type: 'text' } },
+    searchClassName: { control: { type: 'text' } },
+    searchContainerClassName: { control: { type: 'text' } },
 
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
   },
   args: {
     path: 'Organization/Folder 4',

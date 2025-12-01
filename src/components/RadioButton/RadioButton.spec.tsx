@@ -32,10 +32,10 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         value="opt-y"
         inputId="radio-y"
         title="With classes"
-        cssClass="custom-input"
-        labelCssClass="custom-label"
+        className="custom-input"
+        labelClassName="custom-label"
         description="desc text"
-        descriptionCssClass="custom-desc"
+        descriptionClassName="custom-desc"
         checked
       />,
     );

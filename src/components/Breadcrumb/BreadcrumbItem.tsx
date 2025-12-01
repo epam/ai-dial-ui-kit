@@ -55,7 +55,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
 
   const Content =
     typeof title === 'string' ? (
-      <DialEllipsisTooltip cssClass={titleClassName} text={title} />
+      <DialEllipsisTooltip className={titleClassName} text={title} />
     ) : (
       <span
         className={mergeClasses(

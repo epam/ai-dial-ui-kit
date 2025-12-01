@@ -55,7 +55,7 @@ const meta: Meta<typeof DialCollapsibleSidebar> = {
       control: { type: 'text' },
       description: 'Title displayed when collapsed (rotated text)',
     },
-    titleCssClass: {
+    titleClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for title',
     },
@@ -67,7 +67,7 @@ const meta: Meta<typeof DialCollapsibleSidebar> = {
       control: false,
       description: 'Content inside the collapsible area',
     },
-    containerCssClass: {
+    containerClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for container',
     },
@@ -163,7 +163,7 @@ const ControlledExternalComponent = (args: DialCollapsibleSidebarProps) => {
         {...args}
         isOpened={open}
         onToggle={(next) => setOpen(next)}
-        containerCssClass="text-primary"
+        containerClassName="text-primary"
         title="Filters"
       >
         {BarContent}

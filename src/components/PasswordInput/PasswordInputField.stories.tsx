@@ -42,7 +42,7 @@ const meta: Meta<typeof DialPasswordInputField> = {
       control: { type: 'text' },
       description: 'Placeholder text',
     },
-    containerCssClass: {
+    containerClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for the container',
     },

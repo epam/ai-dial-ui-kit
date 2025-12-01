@@ -28,13 +28,13 @@ interface MockDialGridProps<Row extends GridRowLike> {
   rowData?: Row[];
   getRowId?: (row: Row, index: number) => string;
   columnDefs?: MockColumnDef[];
-  cssClass?: string;
+  className?: string;
   additionalGridOptions?: MockAdditionalGridOptions<Row>;
 }
 
 vi.mock('@/components/Grid/Grid', () => {
   function DialGrid<Row extends GridRowLike>(props: MockDialGridProps<Row>) {
-    const { rowData, getRowId, columnDefs, cssClass, additionalGridOptions } =
+    const { rowData, getRowId, columnDefs, className, additionalGridOptions } =
       props;
 
     const rowsArray: Row[] = rowData ?? [];
@@ -65,7 +65,7 @@ vi.mock('@/components/Grid/Grid', () => {
     });
 
     return (
-      <div className={cssClass} data-testid="dial-grid-mock">
+      <div className={className} data-testid="dial-grid-mock">
         <table role="table">
           {!filtersDisabled && (
             <thead>

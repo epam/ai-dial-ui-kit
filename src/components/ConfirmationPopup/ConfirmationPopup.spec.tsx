@@ -55,11 +55,11 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('applies descriptionCssClass', () => {
+  test('applies descriptionClassName', () => {
     render(
       <DialConfirmationPopup
         {...baseProps}
-        descriptionCssClass="text-red-500"
+        descriptionClassName="text-red-500"
       />,
     );
     expect(
@@ -121,8 +121,8 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('merges cssClass into container', () => {
-    render(<DialConfirmationPopup {...baseProps} cssClass="ring-1" />);
+  test('merges className into container', () => {
+    render(<DialConfirmationPopup {...baseProps} className="ring-1" />);
     expect(screen.getByRole('dialog')).toHaveClass('ring-1');
   });
 

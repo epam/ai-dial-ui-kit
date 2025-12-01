@@ -10,7 +10,7 @@ export interface DialFileIconProps {
   extension: string;
   size?: number;
   stroke?: number;
-  cssClass?: string;
+  className?: string;
   decorative?: boolean;
   label?: string;
   indicator?: ReactNode;
@@ -31,7 +31,7 @@ export interface DialFileIconProps {
  * @param extension - File extension string (with or without leading dot)
  * @param [size=baseIconProps.size] - Icon pixel size
  * @param [stroke=baseIconProps.stroke] - Tabler icon stroke width
- * @param [cssClass] - Additional classes on the container
+ * @param [className] - Additional classes on the container
  * @param [decorative=false] - Whether the icon should be hidden from assistive technologies
  * @param [label] - Accessible label when not decorative; defaults to "<EXT> file icon"
  * @param [indicator] - Optional indicator element to display alongside the icon
@@ -40,7 +40,7 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
   extension,
   size = BASE_ICON_PROPS.size,
   stroke = BASE_ICON_PROPS.stroke,
-  cssClass,
+  className,
   decorative = false,
   label,
   indicator,
@@ -62,7 +62,7 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
 
   return (
     <span
-      className={classNames('inline-flex relative', cssClass)}
+      className={classNames('inline-flex relative', className)}
       {...(decorative
         ? { 'aria-hidden': true }
         : { role: 'img', 'aria-label': computedLabel })}

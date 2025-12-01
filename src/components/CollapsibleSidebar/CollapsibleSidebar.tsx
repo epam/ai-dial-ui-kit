@@ -16,8 +16,8 @@ export interface DialCollapsibleSidebarProps {
   children: ReactNode;
   width?: number;
   title: string;
-  titleCssClass?: string;
-  containerCssClass?: string;
+  titleClassName?: string;
+  containerClassName?: string;
   iconSize?: number;
   additionalButtons?: ReactNode;
   iconStroke?: number;
@@ -37,8 +37,8 @@ const CLOSED_WIDTH = 48;
  * <DialCollapsibleSidebar
  *   width={300}
  *   title="Menu"
- *   titleCssClass="text-primary font-bold"
- *   containerCssClass="bg-gray-100 shadow-md"
+ *   titleClassName="text-primary font-bold"
+ *   containerClassName="bg-gray-100 shadow-md"
  *   iconSize={24}
  *   additionalButtons={<button>Extra</button>}
  * >
@@ -49,8 +49,8 @@ const CLOSED_WIDTH = 48;
  * @param children - The content to display inside the collapsible bar when expanded
  * @param [width = 280] - The width of the bar when expanded
  * @param title - The title displayed when the bar is collapsed
- * @param [titleCssClass] - Additional CSS classes applied to the title element
- * @param [containerCssClass] - Additional CSS classes applied to the container element
+ * @param [titleClassName] - Additional CSS classes applied to the title element
+ * @param [containerClassName] - Additional CSS classes applied to the container element
  * @param [iconSize = 32] - The size of the toggle icons. Defaults to 32
  * @param [iconStroke = 1.5] - The stroke width of the toggle icons. Defaults to 1.5
  * @param [additionalButtons] - Additional buttons or elements displayed next to the toggle button when expanded
@@ -58,13 +58,13 @@ const CLOSED_WIDTH = 48;
  * @param [onToggle] - Fired when user clicks the toggle in controlled mode, with the next state
  */
 export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
-  containerCssClass,
+  containerClassName,
   children,
   width = 280,
   title,
   iconSize = 24,
   iconStroke = 1.5,
-  titleCssClass,
+  titleClassName,
   additionalButtons,
   isOpened,
   onToggle,
@@ -85,7 +85,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
   const titleClass = classNames([
     `transform rotate-180 [writing-mode:tb-rl] py-4 px-3`,
     opened && 'hidden',
-    titleCssClass,
+    titleClassName,
   ]);
 
   const buttonClass = classNames([
@@ -110,7 +110,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
     <div
       className={classNames([
         'rounded flex flex-col justify-between overflow-y-auto flex-shrink-0',
-        containerCssClass,
+        containerClassName,
       ])}
       style={{ width: `${containerWidth}px` }}
     >

@@ -10,7 +10,7 @@ describe('Dial UI Kit :: DialTag', () => {
   });
 
   test('Should apply additional CSS classes if provided', () => {
-    render(<DialTag tag="tag" cssClass="extra-class" />);
+    render(<DialTag tag="tag" className="extra-class" />);
     const tagDiv = screen.getByText('tag').parentElement;
     expect(tagDiv).toHaveClass('extra-class');
   });

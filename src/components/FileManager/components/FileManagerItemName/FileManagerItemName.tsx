@@ -84,7 +84,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           loading={loading}
           shared={shared}
           iconSize={iconSize}
-          cssClass="max-w-[428px] truncate"
+          className="max-w-[428px] truncate"
         />
       );
     }
@@ -93,7 +93,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         name={name}
         shared={shared}
         iconSize={iconSize}
-        cssClass="max-w-[428px]"
+        className="max-w-[428px]"
       />
     );
   }

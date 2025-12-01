@@ -17,8 +17,8 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
     expect(iconWrapper).toHaveClass('text-accent-primary');
   });
 
-  test('accepts custom cssClass', () => {
-    render(<DialSharedEntityIndicator cssClass="rounded-full p-1" />);
+  test('accepts custom className', () => {
+    render(<DialSharedEntityIndicator className="rounded-full p-1" />);
     expect(
       screen.getByRole('img', { name: 'Shared entity' }).parentElement,
     ).toHaveClass('rounded-full', 'p-1');

@@ -63,7 +63,7 @@ const meta = {
     emptyStateDescription: { control: { type: 'text' } },
     emptyStateIcon: { control: { type: 'object' } },
     disabled: { control: { type: 'boolean' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     closable: { control: { type: 'boolean' } },
     onClose: { control: false },
     onChange: { control: false },
@@ -213,6 +213,6 @@ export const InlineSearch: Story = {
 
 export const CustomTriggerClass: Story = {
   args: {
-    cssClass: 'min-h-[48px] p-8',
+    className: 'min-h-[48px] p-8',
   },
 };

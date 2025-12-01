@@ -8,11 +8,11 @@ export interface DialRadioButtonProps {
   description?: ReactNode;
   checked?: boolean;
   inputId: string;
-  cssClass?: string;
-  labelCssClass?: string;
+  className?: string;
+  labelClassName?: string;
   disabled?: boolean;
   onChange?: (value: string) => void;
-  descriptionCssClass?: string;
+  descriptionClassName?: string;
 }
 
 /**
@@ -40,11 +40,11 @@ export interface DialRadioButtonProps {
  * @param [description] - Supporting text shown when checked
  * @param [checked=false] - Controlled checked state
  * @param inputId - ID associated with the label
- * @param [cssClass] - Additional classes applied to the input element
- * @param [labelCssClass] - Additional classes applied to the label element
+ * @param [className] - Additional classes applied to the input element
+ * @param [labelClassName] - Additional classes applied to the label element
  * @param [disabled] - Disabled state of the control
  * @param [onChange] - Callback fired with `value` when the radio is changed
- * @param [descriptionCssClass] - Additional classes applied to the description block
+ * @param [descriptionClassName] - Additional classes applied to the description block
  */
 export const DialRadioButton: FC<DialRadioButtonProps> = ({
   name,
@@ -53,31 +53,34 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   description,
   checked = false,
   inputId,
-  cssClass,
-  labelCssClass,
+  className,
+  labelClassName,
   disabled,
   onChange,
-  descriptionCssClass,
+  descriptionClassName,
 }) => {
   const descId = `${inputId}-desc`;
 
-  const labelClasses = classNames(
+  const labelClassNames = classNames(
     'dial-small cursor-pointer',
     disabled ? 'text-secondary' : 'text-primary',
-    labelCssClass,
+    labelClassName,
   );
 
-  const inputClasses = classNames(
+  const inputClassName = classNames(
     'cursor-pointer dial-input-radio',
     title && 'mr-2',
-    cssClass,
+    className,
   );
 
-  const containerClasses = classNames('flex flex-col', !!description && 'mb-2');
+  const containerClassName = classNames(
+    'flex flex-col',
+    !!description && 'mb-2',
+  );
 
-  const descriptionClasses = classNames(
+  const descriptionClassNames = classNames(
     'dial-tiny mt-2 ml-[26px] text-secondary',
-    descriptionCssClass,
+    descriptionClassName,
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +89,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   };
 
   return (
-    <div className={containerClasses}>
+    <div className={containerClassName}>
       <div className="flex flex-row items-center">
         <input
           type="radio"
@@ -96,17 +99,17 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           checked={checked}
           disabled={disabled}
           aria-describedby={checked && description ? descId : undefined}
-          className={inputClasses}
+          className={inputClassName}
           onChange={handleChange}
         />
         {title ? (
-          <label className={labelClasses} htmlFor={inputId}>
+          <label className={labelClassNames} htmlFor={inputId}>
             {title}
           </label>
         ) : null}
       </div>
       {checked && description && (
-        <div id={descId} className={descriptionClasses}>
+        <div id={descId} className={descriptionClassNames}>
           {description}
         </div>
       )}

@@ -19,7 +19,7 @@ const meta = {
     loading: { control: { type: 'boolean' } },
     size: { control: { type: 'number', min: 12, max: 64, step: 2 } },
     stroke: { control: { type: 'number', min: 1, max: 2, step: 0.25 } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     decorative: { control: { type: 'boolean' } },
     label: { control: { type: 'text' } },
   },
