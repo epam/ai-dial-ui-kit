@@ -188,7 +188,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
           <div className="flex flex-col min-w-fit w-full">
             <DialDropdown
               trigger={[DropdownTrigger.ContextMenu]}
-              cssClass="w-full"
+              className="w-full"
               anchorToMouse
               menu={{ items: menuItems }}
             >
@@ -240,7 +240,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       placement="bottom-start"
                       allowedPlacements={['top-start', 'top-end']}
                       menu={{ items: menuItems }}
-                      cssClass="sticky right-0"
+                      className="sticky right-0"
                     >
                       <DialIcon
                         className="invisible group-hover:visible text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"

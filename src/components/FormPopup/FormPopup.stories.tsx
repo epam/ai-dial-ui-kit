@@ -11,7 +11,7 @@ const meta = {
   argTypes: {
     open: { control: false },
     title: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     submitClassName: { control: { type: 'text' } },
     dividers: { control: { type: 'boolean' } },
     submitLabel: { control: { type: 'text' } },

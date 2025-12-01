@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialFileName', () => {
   });
 
   test('root container spans full width and keeps spacing', () => {
-    render(<DialFileName name="image.png" cssClass="custom-class" />);
+    render(<DialFileName name="image.png" className="custom-class" />);
     const root = screen.getByRole('img', {
       name: 'File type icon',
     }).parentElement;

@@ -110,8 +110,8 @@ describe('Dial UI Kit :: DialRadioGroup', () => {
         radioButtons={radios}
         activeRadioButton="none"
         orientation={RadioGroupOrientation.Row}
-        radioCssClass="ring-1"
-        labelCssClass="text-primary font-medium"
+        radioClassName="ring-1"
+        labelClassName="text-primary font-medium"
         onChange={() => null}
       />,
     );

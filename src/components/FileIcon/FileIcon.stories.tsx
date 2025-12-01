@@ -13,7 +13,7 @@ const meta = {
     stroke: { control: { type: 'number', min: 1, max: 2, step: 0.25 } },
     decorative: { control: { type: 'boolean' } },
     label: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
   },
   args: {
     extension: '.pdf',
@@ -27,7 +27,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Single: Story = {
-  args: { extension: '.pdf', cssClass: 'text-primary' },
+  args: { extension: '.pdf', className: 'text-primary' },
 };
 
 export const Decorative: Story = {
@@ -35,7 +35,7 @@ export const Decorative: Story = {
 };
 
 export const Unknown: Story = {
-  args: { extension: '.unknown', cssClass: 'text-primary' },
+  args: { extension: '.unknown', className: 'text-primary' },
 };
 
 export const AllVariants: Story = {
@@ -43,7 +43,7 @@ export const AllVariants: Story = {
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
       {supportedExtensions.map((ext) => (
         <div key={ext} className="flex items-center gap-2 p-2 rounded border">
-          <DialFileIcon {...args} extension={ext} cssClass="text-primary" />
+          <DialFileIcon {...args} extension={ext} className="text-primary" />
           <span className="dial-tiny text-secondary">{ext}</span>
         </div>
       ))}
@@ -62,6 +62,6 @@ export const WithIndicator: Story = {
     extension: 'default',
     size: 18,
     decorative: false,
-    cssClass: 'text-primary bg-layer-3',
+    className: 'text-primary bg-layer-3',
   },
 };

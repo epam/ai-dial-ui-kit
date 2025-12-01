@@ -9,30 +9,30 @@ import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 import { DialSearch, type DialSearchProps } from '@/components/Search/Search';
 
 import {
-  panelBaseClasses,
-  breadcrumbContainerClasses,
-  searchContainerClasses,
+  panelBaseClassName,
+  breadcrumbContainerClassName,
+  searchContainerWrapperClassName,
 } from './constants';
 
 export interface DialFileManagerNavigationPanelProps
   extends Omit<
       DialBreadcrumbProps,
-      'pathItems' | 'children' | 'cssClass' | 'separator'
+      'pathItems' | 'children' | 'className' | 'separator'
     >,
     Omit<
       DialSearchProps,
       | 'onChange'
       | 'elementId'
       | 'value'
-      | 'cssClass'
-      | 'containerCssClass'
+      | 'className'
+      | 'containerClassName'
       | 'placeholder'
       | 'size'
     > {
   path?: string;
   makeHref?: (segments: string[], index: number) => string | undefined;
-  cssClass?: string;
-  breadcrumbCssClass?: string;
+  className?: string;
+  breadcrumbClassName?: string;
   onItemClick?: (href?: string) => void;
   rootItemPath?: string;
   rootItemLabel?: string;
@@ -41,8 +41,8 @@ export interface DialFileManagerNavigationPanelProps
   value?: string | number | null;
   elementId?: string;
   onSearchChange?: (value: string) => void;
-  searchCssClass?: string;
-  searchContainerCssClass?: string;
+  searchClassName?: string;
+  searchContainerClassName?: string;
 }
 
 /**
@@ -72,19 +72,19 @@ export interface DialFileManagerNavigationPanelProps
  * ```
  *
  * @param [ariaLabel="Breadcrumb"] - Aria label for the breadcrumb `<nav>`
- * @param [titleCssClass] - Extra classes for breadcrumb titles
+ * @param [titleClassName] - Extra classes for breadcrumb titles
  * @param [path] - A full path string that will be split into breadcrumb items
  * @param [makeHref] - Factory to create hrefs for segments
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
- * @param [cssClass] - Additional classes for the panel container
- * @param [breadcrumbCssClass] - Classes forwarded to inner `DialBreadcrumb`
+ * @param [className] - Additional classes for the panel container
+ * @param [breadcrumbClassName] - ClassName forwarded to inner `DialBreadcrumb`
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
  * @param [elementId="fm-search"] - DOM id for the internal DialSearch input
  * @param [size=SearchSize.Base] - Size of the search input (from DialSearchProps)
  * @param [onSearchChange] - Callback fired when the search value changes
- * @param [searchCssClass] - Extra classes for the search input element
- * @param [searchContainerCssClass] - Extra classes for the search container
+ * @param [searchClassName] - Extra classes for the search input element
+ * @param [searchContainerClassName] - Extra classes for the search container
  */
 export const DialFileManagerNavigationPanel: FC<
   DialFileManagerNavigationPanelProps
@@ -98,8 +98,8 @@ export const DialFileManagerNavigationPanel: FC<
   rootItemPath,
   rootItemLabel,
 
-  cssClass,
-  breadcrumbCssClass,
+  className,
+  breadcrumbClassName,
 
   searchable = true,
   value,
@@ -108,8 +108,8 @@ export const DialFileManagerNavigationPanel: FC<
   readonly,
   invalid,
   onSearchChange,
-  searchCssClass,
-  searchContainerCssClass,
+  searchClassName,
+  searchContainerClassName,
 }) => {
   const breadcrumbPathItems: DialBreadcrumbPathItem[] | undefined =
     useMemo(() => {
@@ -168,19 +168,19 @@ export const DialFileManagerNavigationPanel: FC<
     }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
 
   return (
-    <div className={classNames(panelBaseClasses, cssClass)}>
-      <div className={breadcrumbContainerClasses}>
+    <div className={classNames(panelBaseClassName, className)}>
+      <div className={breadcrumbContainerClassName}>
         <DialBreadcrumb
           pathItems={breadcrumbPathItems}
           ariaLabel={ariaLabel}
           titleClassName={titleClassName}
-          className={breadcrumbCssClass}
+          className={breadcrumbClassName}
         />
       </div>
 
       {searchable && (
         <div
-          className={searchContainerClasses}
+          className={searchContainerWrapperClassName}
           role="search"
           aria-label="Search"
         >
@@ -191,8 +191,8 @@ export const DialFileManagerNavigationPanel: FC<
             disabled={disabled}
             readonly={readonly}
             invalid={invalid}
-            cssClass={searchCssClass}
-            containerCssClass={searchContainerCssClass}
+            className={searchClassName}
+            containerClassName={searchContainerClassName}
           />
         </div>
       )}

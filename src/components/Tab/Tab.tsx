@@ -73,7 +73,7 @@ export const DialTab: FC<DialTabProps> = ({
       <DialEllipsisTooltip
         text={tab.label}
         contentClassName="max-w-[200px]"
-        cssClass="max-w-[200px]"
+        className="max-w-[200px]"
       />
 
       {(invalid || tab.invalid) && (

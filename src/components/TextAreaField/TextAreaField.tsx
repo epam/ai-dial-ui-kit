@@ -40,23 +40,23 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * @param [iconBefore] - Icon or element to display before the input
  * @param [iconAfter] - Icon or element to display after the input
  * @param [textBeforeInput] - Text to display before the input
- * @param [elementCssClass] - Additional CSS classes to apply to the textarea element
- * @param [containerCssClass] - Additional CSS classes to apply to the outer container
- * @param [elementContainerCssClass] - Additional CSS classes to apply to the textarea container
+ * @param [elementClassName] - Additional CSS classes to apply to the textarea element
+ * @param [containerClassName] - Additional CSS classes to apply to the outer container
+ * @param [elementContainerClassName] - Additional CSS classes to apply to the textarea container
  * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
  */
 export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
   fieldTitle,
   optional,
   elementId,
-  elementCssClass,
-  containerCssClass,
-  elementContainerCssClass,
+  elementClassName,
+  containerClassName,
+  elementContainerClassName,
   errorText,
   ...props
 }) => {
   return (
-    <div className={mergeClasses('flex flex-col', containerCssClass)}>
+    <div className={mergeClasses('flex flex-col', containerClassName)}>
       <DialFieldLabel
         fieldTitle={fieldTitle}
         optional={optional}
@@ -64,8 +64,8 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
       />
       <DialTextarea
         textareaId={elementId}
-        cssClass={elementCssClass}
-        containerCssClass={elementContainerCssClass}
+        className={elementClassName}
+        containerClassName={elementContainerClassName}
         {...props}
       />
       <DialErrorText errorText={errorText} />

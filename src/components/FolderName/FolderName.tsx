@@ -9,7 +9,7 @@ import { DialLoader } from '@/components/Loader/Loader';
 
 export interface DialFolderNameProps {
   name: string;
-  cssClass?: string;
+  className?: string;
   shared?: boolean;
   loading?: boolean;
   iconSize?: number;
@@ -25,14 +25,14 @@ export interface DialFolderNameProps {
  * ```
  *
  * @param name - Folder name
- * @param cssClass - Additional CSS classes for the root container
+ * @param className - Additional CSS classes for the root container
  * @param shared - If true, shows shared indicator. Default: false.
  * @param loading - If true, shows loading state. Default: false.
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
-  cssClass,
+  className,
   shared = false,
   loading = false,
   iconSize = BASE_ICON_SIZE,
@@ -50,7 +50,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   };
 
   return (
-    <div className={mergeClasses('flex items-center gap-2 w-full', cssClass)}>
+    <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
       <span className={'inline-flex relative text-secondary'} role="img">
         {getIcon()}
         {shared && (
@@ -60,7 +60,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         )}
       </span>
       <DialEllipsisTooltip
-        cssClass="text-primary dial-small flex-1 min-w-0"
+        className="text-primary dial-small flex-1 min-w-0"
         text={name}
       />
     </div>

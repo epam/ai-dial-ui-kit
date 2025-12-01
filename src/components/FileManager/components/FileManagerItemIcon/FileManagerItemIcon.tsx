@@ -49,7 +49,7 @@ export interface DialFileManagerItemIconProps
  * @param {boolean} [props.loading=false] - Whether to display the loading state.
  * @param {number} [props.size] - Optional icon size override.
  * @param {number} [props.stroke] - Optional icon stroke width override.
- * @param {string} [props.cssClass] - Optional CSS class for styling.
+ * @param {string} [props.className] - Optional CSS class for styling.
  * @param {boolean} [props.decorative] - Whether the icon is decorative (for accessibility).
  * @param {string} [props.label] - Accessible label for screen readers.
  * @param {ReactNode} [props.indicator] - Optional indicator to display over the icon.
@@ -83,7 +83,7 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
       <DialFileIcon
         {...restProps}
         extension={extension ?? ''}
-        cssClass="text-secondary"
+        className="text-secondary"
         indicator={shared ? <DialSharedEntityIndicator /> : null}
         label="File type icon"
       />
@@ -95,7 +95,7 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
       <DialIcon
         icon={
           <IconFolder
-            className={restProps.cssClass}
+            className={restProps.className}
             size={restProps.size ?? BASE_ICON_PROPS.size}
             stroke={restProps.stroke ?? BASE_ICON_PROPS.stroke}
           />

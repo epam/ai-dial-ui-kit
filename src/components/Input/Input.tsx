@@ -22,8 +22,8 @@ export interface DialInputProps
   extends InputBaseProps,
     Partial<NumberInputBaseProps> {
   type?: string;
-  containerCssClass?: string;
-  cssClass?: string;
+  containerClassName?: string;
+  className?: string;
   hideBorder?: boolean;
   tooltipText?: string;
   tooltipTriggerClassName?: string;
@@ -52,8 +52,8 @@ export interface DialInputProps
  * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param type - The HTML input type (text, password, email, number, etc.)
- * @param containerCssClass - Additional CSS classes to apply to the container div
- * @param cssClass - Additional CSS classes to apply to the input element
+ * @param containerClassName - Additional CSS classes to apply to the container div
+ * @param className - Additional CSS classes to apply to the input element
  * @param hideBorder - Whether to hide the input border styling
  * @param tooltipText - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
  * @param tooltipTriggerClassName - Additional CSS classes to apply to the tooltip
@@ -68,8 +68,8 @@ export const DialInput: FC<DialInputProps> = ({
   value,
   elementId,
   placeholder = '',
-  cssClass = '',
-  containerCssClass,
+  className = '',
+  containerClassName,
   tooltipTriggerClassName,
   type = 'text',
   disabled,
@@ -149,15 +149,15 @@ export const DialInput: FC<DialInputProps> = ({
         readonly && 'dial-input-readonly',
         !textBeforeInput && 'pl-3',
         !textAfterInput && 'pr-3',
-        containerCssClass,
+        containerClassName,
       )}
     >
       {textBeforeInput && (
         <div className="mr-2">
           <DialInput
             hideBorder={true}
-            containerCssClass="rounded-r-none border-r-0"
-            cssClass="overflow-hidden overflow-ellipsis dial-small"
+            containerClassName="rounded-r-none border-r-0"
+            className="overflow-hidden overflow-ellipsis dial-small"
             value={textBeforeInput}
             disabled={true}
             elementId={textBeforeInput + 'textBefore'}
@@ -184,7 +184,7 @@ export const DialInput: FC<DialInputProps> = ({
           disabled={disabled}
           className={classNames(
             'border-0 bg-transparent w-full truncate',
-            cssClass,
+            className,
           )}
           onChange={(event) => !readonly && handleChange?.(event)}
           onKeyDown={onKeyDown}
@@ -204,7 +204,7 @@ export const DialInput: FC<DialInputProps> = ({
         <div className="ml-2">
           <DialInput
             hideBorder={true}
-            containerCssClass="rounded-l-none border-l-0"
+            containerClassName="rounded-l-none border-l-0"
             value={textAfterInput}
             disabled={true}
             elementId={textAfterInput + 'textAfter'}

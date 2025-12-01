@@ -4,7 +4,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import {
-  dateCellBaseClasses,
+  dateCellBaseClassName,
   DEFAULT_DATE_FORMAT_OPTIONS,
   DEFAULT_LOCALE,
 } from './constants';
@@ -18,7 +18,7 @@ export interface DialDateCellRendererProps
   locale?: string;
   options?: Intl.DateTimeFormatOptions;
   emptyPlaceholder?: string;
-  cssClass?: string;
+  className?: string;
 }
 
 /**
@@ -40,14 +40,14 @@ export interface DialDateCellRendererProps
  * @param [locale='en-US'] - Locale fixed to U.S. English by default to enforce "Jul 20, 2025".
  * @param [options={ year: 'numeric', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' }] - Options for date formatting (e.g., timeZone).
  * @param [emptyPlaceholder='—'] - Placeholder when value is empty/invalid.
- * @param [cssClass] - Additional classes merged into the wrapper.
+ * @param [className] - Additional classes merged into the wrapper.
  */
 export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   value,
   locale = DEFAULT_LOCALE,
   options = DEFAULT_DATE_FORMAT_OPTIONS,
   emptyPlaceholder = '—',
-  cssClass,
+  className,
 }) => {
   const date = convertToDate(value);
 
@@ -66,7 +66,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
       text={
         iso ? <time dateTime={iso}>{content}</time> : <span>{content}</span>
       }
-      cssClass={classNames(dateCellBaseClasses, cssClass)}
+      className={classNames(dateCellBaseClassName, className)}
       hideTooltip={false}
     />
   );

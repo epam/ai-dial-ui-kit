@@ -87,9 +87,9 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     expect(onSearchChange).toHaveBeenCalledWith('abc');
   });
 
-  test('applies container cssClass to the root element', () => {
+  test('applies container className to the root element', () => {
     const { container } = render(
-      <DialFileManagerNavigationPanel path="Root" cssClass="bg-red-500" />,
+      <DialFileManagerNavigationPanel path="Root" className="bg-red-500" />,
     );
     expect(container.firstChild).toHaveClass('bg-red-500');
   });

@@ -1,21 +1,21 @@
-export const containerBaseClasses =
+export const containerBaseClassName =
   'w-full h-full grid grid-rows-[auto_1fr] gap-5 p-6 overflow-hidden min-w-0 bg-layer-2';
 
-export const toolbarBaseClasses =
+export const toolbarBaseClassName =
   'w-full text-secondary flex items-center gap-2';
 
-export const mainGridClasses =
+export const mainGridClassName =
   'flex min-h-0 min-w-0 h-full gap-4 overflow-hidden';
 
-export const contentGridClasses =
+export const contentGridClassName =
   'flex flex-col flex-1 min-h-0 min-w-0 h-full gap-4';
 
-export const contentHeaderClasses = 'items-center';
+export const contentHeaderClassName = 'items-center';
 
-export const treeBaseClasses =
+export const treeBaseClassName =
   'w-full h-full rounded bg-layer-3 text-secondary overflow-auto min-w-0';
 
-export const gridBaseClasses =
+export const gridBaseClassName =
   'flex-1 w-full rounded text-secondary overflow-auto min-h-0 min-w-0';
 
 export const sidebarWidth = 280;
