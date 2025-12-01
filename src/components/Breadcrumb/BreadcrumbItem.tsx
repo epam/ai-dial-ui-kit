@@ -42,7 +42,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   );
   const interactive = (!!href || !!onClick) && !isLast && !disabled;
 
-  const contentClassNames = interactive
+  const contentClassName = interactive
     ? mergeClasses(
         breadcrumbLinkBaseClassName,
         breadcrumbLinkInteractiveClassName,
@@ -70,13 +70,13 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   return (
     <li className={containerClassName}>
       {interactive ? (
-        <a href={href} onClick={onClick} className={contentClassNames}>
+        <a href={href} onClick={onClick} className={contentClassName}>
           {iconBefore}
           {Content}
         </a>
       ) : (
         <span
-          className={contentClassNames}
+          className={contentClassName}
           aria-current={isLast ? 'page' : undefined}
           aria-disabled={disabled ? 'true' : undefined}
         >
