@@ -50,7 +50,7 @@ export const DialTab: FC<DialTabProps> = ({
     'rounded h-[38px] items-center flex flex-row border-transparent cursor-pointer dial-small leading-4 hover:text-accent-primary',
     { 'border-b-2 px-4': horizontal, 'border-l-2 px-3': !horizontal },
   );
-  const tabClassNames = mergeClasses(
+  const tabClassName = mergeClasses(
     baseClassName,
     {
       'bg-layer-4': horizontal,
@@ -66,14 +66,14 @@ export const DialTab: FC<DialTabProps> = ({
   return (
     <button
       role="tab"
-      className={tabClassNames}
+      className={tabClassName}
       onClick={() => onClick(tab.id)}
       disabled={tab.disabled}
     >
       <DialEllipsisTooltip
         text={tab.label}
         contentClassName="max-w-[200px]"
-        cssClass="max-w-[200px]"
+        className="max-w-[200px]"
       />
 
       {(invalid || tab.invalid) && (

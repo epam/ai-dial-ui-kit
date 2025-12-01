@@ -34,7 +34,7 @@ interface DialFilledInputProps extends DialInputProps {
  */
 export const DialFilledInput: FC<DialFilledInputProps> = ({
   iconBefore,
-  cssClass,
+  className,
   errorText,
   ...props
 }) => {
@@ -55,7 +55,7 @@ export const DialFilledInput: FC<DialFilledInputProps> = ({
       {...props}
       iconBefore={getIcon()}
       tooltipTriggerClassName="flex-1 min-w-0"
-      cssClass={classNames(isInvalid ? 'text-error' : '', cssClass)}
+      className={classNames(isInvalid ? 'text-error' : '', className)}
       tooltipText={isInvalid && errorText ? errorText : undefined}
       hideBorder
     />

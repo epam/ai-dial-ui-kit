@@ -15,8 +15,8 @@ export interface DialInputPopupProps {
   children: ReactNode;
   onOpen: () => void;
   disabled?: boolean;
-  valueCssClasses?: string;
-  inputCssClasses?: string;
+  valueClassName?: string;
+  inputClassName?: string;
   placeholder?: string;
   elementId?: string;
   errorText?: string;
@@ -37,8 +37,8 @@ export interface DialInputPopupProps {
  *   emptyValueText="No value selected"
  *   onOpen={() => setModalState(true)}
  *   disabled={false}
- *   valueCssClasses="custom-value-class"
- *   inputCssClasses="custom-input-class"
+ *   valueClassName="custom-value-class"
+ *   inputClassName="custom-input-class"
  *   elementId="input-modal"
  *   errorText="This field is required"
  * >
@@ -52,8 +52,8 @@ export interface DialInputPopupProps {
  * @param children - The content to render inside the modal when it is opened.
  * @param onOpen - A callback function triggered when the modal open button is clicked.
  * @param [disabled=false] - Whether the input is disabled, preventing user interaction.
- * @param [valueCssClasses] - Additional CSS classes applied to the displayed value.
- * @param [inputCssClasses] - Additional CSS classes applied to the input container.
+ * @param [valueClassName] - Additional CSS classes applied to the displayed value.
+ * @param [inputClassName] - Additional CSS classes applied to the input container.
  * @param [elementId] - A unique identifier for the input element, useful for accessibility and testing.
  * @param [errorText] - An optional error message displayed below the input when an error state is present.
  * @param [invalid] - Whether the input is in an invalid state, affecting styling. Applyed automatically if errorText is provided.
@@ -64,8 +64,8 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   open,
   disabled = false,
   selectedValue,
-  valueCssClasses,
-  inputCssClasses,
+  valueClassName,
+  inputClassName,
   onOpen,
   elementId,
   errorText,
@@ -98,14 +98,14 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         <div
           className={classNames(
             'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
-            inputCssClasses,
+            inputClassName,
             disabled && 'dial-input-disable',
             (errorText || invalid) && 'dial-input-error',
           )}
         >
           <DialTooltip tooltip={value == null ? undefined : String(value)}>
             {value || !placeholder ? (
-              <span className={valueCssClasses}>{value}</span>
+              <span className={valueClassName}>{value}</span>
             ) : (
               <span className="text-secondary">{placeholder}</span>
             )}

@@ -86,11 +86,11 @@ describe('Dial UI Kit :: DialEllipsisTooltip', () => {
     );
   });
 
-  test('honors cssClass override (width and spacing)', () => {
+  test('honors className override (width and spacing)', () => {
     render(
       <DialEllipsisTooltip
         text="Styled text"
-        cssClass="w-96 px-4 text-secondary"
+        className="w-96 px-4 text-secondary"
         contentClassName="bg-test"
         initialOpen
       />,

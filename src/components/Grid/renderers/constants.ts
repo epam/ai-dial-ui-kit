@@ -9,4 +9,4 @@ export const DEFAULT_DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
   second: '2-digit',
 };
 
-export const dateCellBaseClasses = 'text-primary';
+export const dateCellBaseClassName = 'text-primary';

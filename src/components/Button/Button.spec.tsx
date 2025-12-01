@@ -50,13 +50,13 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(screen.queryByText('Icon button')).not.toBeInTheDocument();
   });
 
-  test('Should apply custom className', () => {
+  test('Should apply custom CSS class', () => {
     render(<DialButton label="Styled" className="custom-button-class" />);
     const button = screen.getByRole('button', { name: 'Styled' });
     expect(button).toHaveClass('custom-button-class');
   });
 
-  test('Should apply custom CSS class to button text with textCssClass prop', () => {
+  test('Should apply custom CSS class to button text with textClassName prop', () => {
     render(
       <DialButton
         label="Custom Text"

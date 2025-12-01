@@ -1,4 +1,4 @@
-export const gridBaseClasses = 'h-full';
+export const gridBaseClassName = 'h-full';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--controls-bg-accent, #5C8DEA)',

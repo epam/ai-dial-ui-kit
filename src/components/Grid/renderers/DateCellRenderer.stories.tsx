@@ -13,13 +13,13 @@ const meta = {
     locale: { control: 'text' },
     options: { control: 'object' },
     emptyPlaceholder: { control: 'text' },
-    cssClass: { control: 'text' },
+    className: { control: 'text' },
   },
   args: {
     value: '2025-07-20T00:00:00Z',
     locale: 'en-US',
     emptyPlaceholder: '—',
-    cssClass: 'max-w-[180px]',
+    className: 'max-w-[180px]',
   },
 } satisfies Meta<DialDateCellRendererProps>;
 
@@ -48,7 +48,7 @@ export const DifferentLocale: Story = {
 
 export const Ellipsis: Story = {
   args: {
-    cssClass: 'max-w-[80px]',
+    className: 'max-w-[80px]',
     options: {
       timeZone: 'UTC',
       year: 'numeric',

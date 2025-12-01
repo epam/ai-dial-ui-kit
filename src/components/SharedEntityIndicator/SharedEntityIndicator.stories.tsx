@@ -12,7 +12,7 @@ const meta = {
     label: { control: { type: 'text' } },
     size: { control: { type: 'number', min: 8, max: 32, step: 1 } },
     stroke: { control: { type: 'number', min: 1, max: 3, step: 0.5 } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
   },
   args: {
     label: 'Shared entity',
@@ -35,5 +35,5 @@ export const ThickStroke: Story = {
 };
 
 export const WithCustomClass: Story = {
-  args: { cssClass: 'rounded-full p-1 shadow' },
+  args: { className: 'rounded-full p-1 shadow' },
 };

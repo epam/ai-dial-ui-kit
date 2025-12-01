@@ -1,16 +1,25 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import { type FC, type ReactNode, useMemo, useCallback } from 'react';
+import {
+  type FC,
+  type ReactNode,
+  useMemo,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
-  containerBaseClasses,
-  mainGridClasses,
-  toolbarBaseClasses,
-  treeBaseClasses,
-  contentGridClasses,
+  containerBaseClassName,
+  mainGridClassName,
+  toolbarBaseClassName,
+  treeBaseClassName,
+  contentGridClassName,
   sidebarWidth,
   sidebarTitleDefault,
-  gridBaseClasses,
+  gridBaseClassName,
   BASE_FILE_MANAGER_ICON_SIZE,
+  FOLDERS_TREE_PANEL_MIN_WIDTH,
+  FOLDERS_TREE_PANEL_MAX_WIDTH,
 } from './constants';
 import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -70,6 +79,7 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
+import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
 
 type GridRow = FileManagerGridRow;
 
@@ -87,7 +97,7 @@ export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
   title?: string;
-  containerCssClass?: string;
+  containerClassName?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
@@ -163,7 +173,7 @@ export interface CreateFolderValidationMessages {
 
 export interface DialFileManagerProps {
   path?: string;
-  cssClass?: string;
+  className?: string;
 
   items?: DialFile[];
   rootItem?: DialRootFolder;
@@ -272,7 +282,7 @@ export interface DialFileManagerProps {
  * ```
  *
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
- * @param [cssClass] - Additional classes for the root container
+ * @param [className] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
@@ -310,7 +320,7 @@ export const DialFileManager: FC<DialFileManagerProps> = (props) => {
  */
 export const DialFileManagerView: FC = () => {
   const {
-    cssClass,
+    className,
     items,
     rootItem,
     filesLoading,
@@ -384,10 +394,23 @@ export const DialFileManagerView: FC = () => {
   const {
     width = sidebarWidth,
     title = sidebarTitleDefault,
-    containerCssClass = treeBaseClasses,
+    containerClassName = treeBaseClassName,
     additionalButtons,
     ...forwardedTreeProps
   } = treeOptions ?? {};
+
+  const [sidebarCurrentWidth, setSidebarCurrentWidth] = useState(width);
+
+  const sidebarThrottledRef = useRef<number | null>(null);
+
+  const sidebarResizingHandler = (width: number) => {
+    if (sidebarThrottledRef.current === null) {
+      sidebarThrottledRef.current = requestAnimationFrame(() => {
+        setSidebarCurrentWidth(width);
+        sidebarThrottledRef.current = null;
+      });
+    }
+  };
 
   const {
     columnDefs: userColumnDefs,
@@ -595,7 +618,7 @@ export const DialFileManagerView: FC = () => {
     if (toolbarOptions && selectedIds.size === 0) {
       return (
         <div
-          className={toolbarBaseClasses}
+          className={toolbarBaseClassName}
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
@@ -613,7 +636,7 @@ export const DialFileManagerView: FC = () => {
     if (selectedIds.size > 0 && bulkActionsToolbarOptions) {
       return (
         <div
-          className={toolbarBaseClasses}
+          className={toolbarBaseClassName}
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
@@ -668,44 +691,54 @@ export const DialFileManagerView: FC = () => {
   return (
     <section
       className={mergeClasses(
-        containerBaseClasses,
+        containerBaseClassName,
         {
           'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
         },
-        cssClass,
+        className,
       )}
     >
       {renderToolbar()}
-      <div className={mainGridClasses}>
+      <div className={mainGridClassName}>
         <aside
           role="region"
           aria-label="File Manager Tree Navigation"
           className="min-h-0 min-w-0 h-full flex-none"
         >
-          <DialCollapsibleSidebar
-            width={width}
-            title={title}
-            containerCssClass={containerCssClass}
-            additionalButtons={additionalButtons}
-            isOpened={isTreeCollapsed}
-            onToggle={toggleTreeCollapse}
+          <DialConditionalResizableContainer
+            defaultWidth={sidebarCurrentWidth}
+            width={sidebarCurrentWidth}
+            onResizeStop={setSidebarCurrentWidth}
+            onResize={sidebarResizingHandler}
+            minWidth={FOLDERS_TREE_PANEL_MIN_WIDTH}
+            maxWidth={FOLDERS_TREE_PANEL_MAX_WIDTH}
+            enabled={isTreeCollapsed}
           >
-            <DialFoldersTree
-              {...forwardedTreeProps}
-              items={items}
-              selectedPath={currentPath}
-              onItemClick={handleTreeItemClick}
-              areHiddenFilesVisible={areHiddenFilesVisible}
-              getContextMenuItems={getTreeContextMenuItems}
-              renamedPath={renamedPath}
-              onRenameSave={onRenameSave}
-              onRenameCancel={onRenameCancel}
-              onRenameValidate={onRenameValidate}
-            />
-          </DialCollapsibleSidebar>
+            <DialCollapsibleSidebar
+              width={sidebarCurrentWidth}
+              title={title}
+              containerClassName={containerClassName}
+              additionalButtons={additionalButtons}
+              isOpened={isTreeCollapsed}
+              onToggle={toggleTreeCollapse}
+            >
+              <DialFoldersTree
+                {...forwardedTreeProps}
+                items={items}
+                selectedPath={currentPath}
+                onItemClick={handleTreeItemClick}
+                areHiddenFilesVisible={areHiddenFilesVisible}
+                getContextMenuItems={getTreeContextMenuItems}
+                renamedPath={renamedPath}
+                onRenameSave={onRenameSave}
+                onRenameCancel={onRenameCancel}
+                onRenameValidate={onRenameValidate}
+              />
+            </DialCollapsibleSidebar>
+          </DialConditionalResizableContainer>
         </aside>
 
-        <div className={contentGridClasses}>
+        <div className={contentGridClassName}>
           <DialFileManagerNavigationPanel
             {...(navigationPanelOptions ?? {})}
             path={currentPath}
@@ -720,7 +753,7 @@ export const DialFileManagerView: FC = () => {
           <section
             role="region"
             aria-label="File Manager Grid View"
-            className={mergeClasses(gridBaseClasses)}
+            className={mergeClasses(gridBaseClassName)}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
@@ -732,7 +765,7 @@ export const DialFileManagerView: FC = () => {
               getRowId={(row) => row.path}
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
-              cssClass={classNames(
+              className={classNames(
                 isDragging ? 'border border-dashed border-accent-primary' : '',
                 isDraggingOverWindow && !isDragging
                   ? 'border border-dashed border-primary'

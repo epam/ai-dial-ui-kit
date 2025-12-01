@@ -59,6 +59,7 @@
   "dependencies": {
     "ag-grid-community": "^34.3.0",
     "ag-grid-react": "^34.3.0",
+    "re-resizable": "^6.11.2",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "tailwind-merge": "^3.3.1"

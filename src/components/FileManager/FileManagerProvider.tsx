@@ -68,7 +68,7 @@ export interface FileManagerProviderProps
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   children,
-  cssClass,
+  className,
   items = [],
   rootItem,
   path,
@@ -395,7 +395,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const value: FileManagerContextValue = {
-    cssClass,
+    className,
     items,
     rootItem,
     filesLoading,

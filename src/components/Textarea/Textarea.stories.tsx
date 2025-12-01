@@ -50,7 +50,7 @@ const meta = {
       control: 'boolean',
       description: 'Whether the textarea has validation errors',
     },
-    cssClass: {
+    className: {
       control: 'text',
       description: 'Additional CSS classes to apply to the textarea',
     },
@@ -124,7 +124,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Hover</div>
           <InteractiveTextarea
             textareaId="hover-textarea"
-            cssClass="dial-textarea-for-hover"
+            className="dial-textarea-for-hover"
             placeholder="Enter your text here..."
           />
         </div>
@@ -145,7 +145,7 @@ export const AllVariants: Story = {
           <InteractiveTextarea
             textareaId="field-hover-textarea"
             placeholder="Enter your text here..."
-            cssClass="dial-textarea-for-hover"
+            className="dial-textarea-for-hover"
             value="This is some text in the textarea"
           />
         </div>
@@ -155,7 +155,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Focus</div>
           <InteractiveTextarea
             textareaId="focus-textarea"
-            cssClass="dial-textarea-for-focus"
+            className="dial-textarea-for-focus"
             placeholder="Enter your text here..."
           />
         </div>

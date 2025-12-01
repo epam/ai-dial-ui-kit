@@ -26,7 +26,7 @@ describe('Dial UI Kit :: DialGrid', () => {
       <DialGrid<TestRow>
         columnDefs={testColumns}
         rowData={testRows}
-        cssClass="test-grid"
+        className="test-grid"
       />,
     );
 
@@ -123,7 +123,7 @@ describe('Dial UI Kit :: DialGrid', () => {
       <DialGrid<TestRow>
         columnDefs={testColumns}
         rowData={testRows}
-        cssClass="my-custom-grid-class"
+        className="my-custom-grid-class"
       />,
     );
 

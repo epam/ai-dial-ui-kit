@@ -13,7 +13,7 @@ export interface DialCheckboxProps {
   indeterminate?: boolean;
   ariaLabel?: string;
   onChange?: (value?: boolean, id?: string) => void;
-  cssClass?: string;
+  className?: string;
 }
 /**
  * A Checkbox component with styling options
@@ -36,7 +36,7 @@ export interface DialCheckboxProps {
  * @param [indeterminate=false] - indeterminate state
  * @param [ariaLabel] - Accessible label for screen readers when no title is provided
  * @param [onChange] - Callback function called when the checkbox value changes
- * @param [cssClass] - Additional CSS classes to apply to the checkbox wrapper
+ * @param [className] - Additional CSS classes to apply to the checkbox wrapper
  */
 export const DialCheckbox: FC<DialCheckboxProps> = ({
   label,
@@ -46,7 +46,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   disabled,
   ariaLabel,
   onChange,
-  cssClass,
+  className,
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,36 +55,36 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
     [onChange, id],
   );
 
-  const checkboxClassNames = classNames(
+  const checkboxClassName = classNames(
     'flex flex-row items-center cursor-pointer text-accent-primary small-medium flex-1 min-w-0',
     `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',
-    cssClass,
+    className,
   );
 
-  const iconClass = classNames(
+  const iconClassName = classNames(
     'mr-2 border rounded',
     disabled ? 'bg-layer-4 border-icon-secondary' : '',
   );
 
   const renderIcon = () => {
     if (indeterminate) {
-      return <IconMinus className={iconClass} {...BASE_ICON_PROPS} />;
+      return <IconMinus className={iconClassName} {...BASE_ICON_PROPS} />;
     }
     if (checked) {
-      return <IconCheck className={iconClass} {...BASE_ICON_PROPS} />;
+      return <IconCheck className={iconClassName} {...BASE_ICON_PROPS} />;
     }
     return null;
   };
 
   return (
-    <label className={checkboxClassNames} htmlFor={id}>
+    <label className={checkboxClassName} htmlFor={id}>
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
-          <DialEllipsisTooltip text={label} cssClass="text-primary" />
+          <DialEllipsisTooltip text={label} className="text-primary" />
         ) : (
           label
         ))}

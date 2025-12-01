@@ -45,11 +45,11 @@ const meta = {
       control: { type: 'text' },
       description: 'Placeholder text',
     },
-    containerCssClass: {
+    containerClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for the container',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes for the input element',
     },
@@ -247,7 +247,7 @@ export const AllVariantsWithIcons: Story = {
           <div className="text-primary font-semibold mb-2">Hover</div>
           <InteractiveInput
             elementId="hover-input"
-            containerCssClass="dial-input-for-hover"
+            containerClassName="dial-input-for-hover"
             placeholder="Placeholder"
             iconBefore={<IconSearch size={16} />}
             iconAfter={<IconEye size={16} />}
@@ -272,7 +272,7 @@ export const AllVariantsWithIcons: Story = {
           <InteractiveInput
             elementId="field-hover-input"
             placeholder="Placeholder"
-            containerCssClass="dial-input-for-hover"
+            containerClassName="dial-input-for-hover"
             value="Input value"
             iconBefore={<IconSearch size={16} />}
             iconAfter={<IconEye size={16} />}
@@ -284,7 +284,7 @@ export const AllVariantsWithIcons: Story = {
           <div className="text-primary font-semibold mb-2">Focus</div>
           <InteractiveInput
             elementId="focus-input"
-            containerCssClass="dial-input-for-focus"
+            containerClassName="dial-input-for-focus"
             placeholder="Placeholder"
             iconBefore={<IconSearch size={16} />}
             iconAfter={<IconEye size={16} />}
@@ -357,7 +357,7 @@ export const AllVariantsWithoutIcon: Story = {
           <div className="text-primary font-semibold mb-2">Hover</div>
           <InteractiveInput
             elementId="hover-no-icon-input"
-            containerCssClass="dial-input-for-hover-no-icon"
+            containerClassName="dial-input-for-hover-no-icon"
             placeholder="Placeholder"
           />
         </div>
@@ -377,7 +377,7 @@ export const AllVariantsWithoutIcon: Story = {
           <div className="text-primary font-semibold mb-2">Field hover</div>
           <InteractiveInput
             elementId="field-hover-no-icon-input"
-            containerCssClass="dial-input-for-hover-no-icon"
+            containerClassName="dial-input-for-hover-no-icon"
             placeholder="Placeholder"
             value="Input value"
           />
@@ -388,7 +388,7 @@ export const AllVariantsWithoutIcon: Story = {
           <div className="text-primary font-semibold mb-2">Focus</div>
           <InteractiveInput
             elementId="focus-no-icon-input"
-            containerCssClass="dial-input-for-focus-no-icon"
+            containerClassName="dial-input-for-focus-no-icon"
             placeholder="Placeholder"
           />
         </div>

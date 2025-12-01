@@ -79,8 +79,8 @@ const meta = {
     inputId: { control: { type: 'text' } },
     checked: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
-    cssClass: { control: { type: 'text' } },
-    labelCssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
+    labelClassName: { control: { type: 'text' } },
     onChange: { control: false },
   },
   args: {
@@ -120,7 +120,7 @@ export const LongLabelAndDescription: Story = {
     title:
       'A very long label that should wrap onto multiple lines to demonstrate text wrapping behavior in the radio label',
     checked: true,
-    descriptionCssClass: 'text-secondary',
+    descriptionClassName: 'text-secondary',
     description:
       'This is a long description intended to demonstrate multiline wrapping and spacing relative to the radio input and label.',
   },
@@ -128,8 +128,8 @@ export const LongLabelAndDescription: Story = {
 
 export const CustomClasses: Story = {
   args: {
-    cssClass: 'ring-2 ring-offset-1',
-    labelCssClass: 'text-primary font-medium',
+    className: 'ring-2 ring-offset-1',
+    labelClassName: 'text-primary font-medium',
   },
 };
 
