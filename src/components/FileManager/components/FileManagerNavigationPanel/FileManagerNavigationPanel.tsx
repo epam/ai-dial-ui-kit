@@ -9,9 +9,9 @@ import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 import { DialSearch, type DialSearchProps } from '@/components/Search/Search';
 
 import {
-  panelBaseClasses,
-  breadcrumbContainerClasses,
-  searchContainerClasses,
+  panelBaseClassName,
+  breadcrumbContainerClassName,
+  searchContainerWrapperClassName,
 } from './constants';
 
 export interface DialFileManagerNavigationPanelProps
@@ -77,7 +77,7 @@ export interface DialFileManagerNavigationPanelProps
  * @param [makeHref] - Factory to create hrefs for segments
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
  * @param [className] - Additional classes for the panel container
- * @param [breadcrumbClassName] - Classes forwarded to inner `DialBreadcrumb`
+ * @param [breadcrumbClassName] - ClassName forwarded to inner `DialBreadcrumb`
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
  * @param [elementId="fm-search"] - DOM id for the internal DialSearch input
@@ -168,8 +168,8 @@ export const DialFileManagerNavigationPanel: FC<
     }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
 
   return (
-    <div className={classNames(panelBaseClasses, className)}>
-      <div className={breadcrumbContainerClasses}>
+    <div className={classNames(panelBaseClassName, className)}>
+      <div className={breadcrumbContainerClassName}>
         <DialBreadcrumb
           pathItems={breadcrumbPathItems}
           ariaLabel={ariaLabel}
@@ -180,7 +180,7 @@ export const DialFileManagerNavigationPanel: FC<
 
       {searchable && (
         <div
-          className={searchContainerClasses}
+          className={searchContainerWrapperClassName}
           role="search"
           aria-label="Search"
         >

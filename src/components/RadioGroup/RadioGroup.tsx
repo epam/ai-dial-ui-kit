@@ -6,9 +6,9 @@ import type { RadioButtonWithContent } from '@/models/radio';
 import type { RadioGroupOrientation } from '@/types/radio-group';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
-  optionsWrapperBaseClasses,
+  optionsWrapperBaseClassName,
   orientationClassMap,
-  selectedContentClasses,
+  selectedContentClassName,
 } from './constants';
 
 export interface DialRadioGroupProps {
@@ -105,7 +105,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
         aria-label={fieldTitle}
         aria-disabled={disabled || undefined}
         className={mergeClasses(
-          optionsWrapperBaseClasses,
+          optionsWrapperBaseClassName,
           orientationClassMap[orientation],
           radioGroupClassName,
         )}
@@ -136,7 +136,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
             {radio.id === activeRadioButton && radio.content ? (
               <div
                 className={mergeClasses(
-                  selectedContentClasses,
+                  selectedContentClassName,
                   selectedItemClassName,
                 )}
               >

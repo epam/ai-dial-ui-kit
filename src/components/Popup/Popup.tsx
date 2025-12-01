@@ -14,9 +14,9 @@ import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { PopupSize } from '@/types/popup';
 import {
-  overlayBaseClasses,
-  popupDividerClasses,
-  popupHeaderClasses,
+  overlayBaseClassName,
+  popupDividerClassName,
+  popupHeaderClassName,
   popupSizeClassMap,
 } from './constants';
 
@@ -120,7 +120,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
-        className={classNames(overlayBaseClasses, overlayClassName)}
+        className={classNames(overlayBaseClassName, overlayClassName)}
       >
         <FloatingFocusManager context={context}>
           <div
@@ -132,11 +132,11 @@ export const DialPopup: FC<DialPopupProps> = ({
             className={classNames(
               'dial-popup',
               popupSizeClassMap[size],
-              dividers && popupDividerClasses,
+              dividers && popupDividerClassName,
               className,
             )}
           >
-            <div className={popupHeaderClasses}>
+            <div className={popupHeaderClassName}>
               {renderTitle(title)}
               <DialCloseButton
                 ariaLabel="Close dialog"

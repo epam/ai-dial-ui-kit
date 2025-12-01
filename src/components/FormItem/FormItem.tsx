@@ -7,7 +7,7 @@ import {
   FormItemOrientation,
   type DialFormItemBaseProps,
 } from '@/types/form-item';
-import { containerBaseClasses, orientationClassMap } from './constants';
+import { containerBaseClassName, orientationClassMap } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialFormItemProps extends DialFormItemBaseProps {
@@ -151,7 +151,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
       aria-labelledby={label ? labelId : undefined}
       aria-describedby={describedBy}
       className={mergeClasses(
-        containerBaseClasses,
+        containerBaseClassName,
         orientationClassMap[orientation],
         className,
       )}

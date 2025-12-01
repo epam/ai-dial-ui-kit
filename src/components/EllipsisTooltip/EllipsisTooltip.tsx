@@ -5,7 +5,7 @@ import { DialTooltipContainer } from '@/components/Tooltip/TooltipContainer';
 import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
 import type { DialTooltipContainerOptions } from '@/components/Tooltip/TooltipContext';
 import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
-import { tooltipContentBaseClasses } from './constants';
+import { tooltipContentBaseClassName } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
@@ -117,7 +117,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
 
       <DialTooltipContent
         className={mergeClasses(
-          tooltipContentBaseClasses,
+          tooltipContentBaseClassName,
           contentClassName,
           !tooltipContent && 'hidden',
         )}

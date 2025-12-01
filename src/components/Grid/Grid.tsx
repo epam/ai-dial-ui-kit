@@ -29,7 +29,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 
-import { gridBaseClasses, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
+import { gridBaseClassName, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
@@ -416,7 +416,7 @@ export const DialGrid = <T extends object>({
   return (
     <div
       className={classNames(
-        gridBaseClasses,
+        gridBaseClassName,
         className,
         withSelectionColumn && 'with-selection-column',
       )}

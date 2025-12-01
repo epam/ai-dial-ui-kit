@@ -1,1 +1,1 @@
-export const tooltipContentBaseClasses = 'text-primary';
+export const tooltipContentBaseClassName = 'text-primary';

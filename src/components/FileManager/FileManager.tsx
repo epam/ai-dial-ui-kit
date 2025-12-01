@@ -2,14 +2,14 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { type FC, type ReactNode, useMemo, useCallback } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import {
-  containerBaseClasses,
-  mainGridClasses,
-  toolbarBaseClasses,
-  treeBaseClasses,
-  contentGridClasses,
+  containerBaseClassName,
+  mainGridClassName,
+  toolbarBaseClassName,
+  treeBaseClassName,
+  contentGridClassName,
   sidebarWidth,
   sidebarTitleDefault,
-  gridBaseClasses,
+  gridBaseClassName,
   BASE_FILE_MANAGER_ICON_SIZE,
 } from './constants';
 import { findNodeByPath } from './utils';
@@ -384,7 +384,7 @@ export const DialFileManagerView: FC = () => {
   const {
     width = sidebarWidth,
     title = sidebarTitleDefault,
-    containerClassName = treeBaseClasses,
+    containerClassName = treeBaseClassName,
     additionalButtons,
     ...forwardedTreeProps
   } = treeOptions ?? {};
@@ -595,7 +595,7 @@ export const DialFileManagerView: FC = () => {
     if (toolbarOptions && selectedIds.size === 0) {
       return (
         <div
-          className={toolbarBaseClasses}
+          className={toolbarBaseClassName}
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
@@ -613,7 +613,7 @@ export const DialFileManagerView: FC = () => {
     if (selectedIds.size > 0 && bulkActionsToolbarOptions) {
       return (
         <div
-          className={toolbarBaseClasses}
+          className={toolbarBaseClassName}
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
@@ -668,7 +668,7 @@ export const DialFileManagerView: FC = () => {
   return (
     <section
       className={mergeClasses(
-        containerBaseClasses,
+        containerBaseClassName,
         {
           'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
         },
@@ -676,7 +676,7 @@ export const DialFileManagerView: FC = () => {
       )}
     >
       {renderToolbar()}
-      <div className={mainGridClasses}>
+      <div className={mainGridClassName}>
         <aside
           role="region"
           aria-label="File Manager Tree Navigation"
@@ -705,7 +705,7 @@ export const DialFileManagerView: FC = () => {
           </DialCollapsibleSidebar>
         </aside>
 
-        <div className={contentGridClasses}>
+        <div className={contentGridClassName}>
           <DialFileManagerNavigationPanel
             {...(navigationPanelOptions ?? {})}
             path={currentPath}
@@ -720,7 +720,7 @@ export const DialFileManagerView: FC = () => {
           <section
             role="region"
             aria-label="File Manager Grid View"
-            className={mergeClasses(gridBaseClasses)}
+            className={mergeClasses(gridBaseClassName)}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}

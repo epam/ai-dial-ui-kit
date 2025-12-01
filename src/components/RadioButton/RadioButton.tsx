@@ -61,21 +61,24 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 }) => {
   const descId = `${inputId}-desc`;
 
-  const labelClasses = classNames(
+  const labelClassNames = classNames(
     'dial-small cursor-pointer',
     disabled ? 'text-secondary' : 'text-primary',
     labelClassName,
   );
 
-  const inputClasses = classNames(
+  const inputClassName = classNames(
     'cursor-pointer dial-input-radio',
     title && 'mr-2',
     className,
   );
 
-  const containerClasses = classNames('flex flex-col', !!description && 'mb-2');
+  const containerClassName = classNames(
+    'flex flex-col',
+    !!description && 'mb-2',
+  );
 
-  const descriptionClasses = classNames(
+  const descriptionClassNames = classNames(
     'dial-tiny mt-2 ml-[26px] text-secondary',
     descriptionClassName,
   );
@@ -86,7 +89,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   };
 
   return (
-    <div className={containerClasses}>
+    <div className={containerClassName}>
       <div className="flex flex-row items-center">
         <input
           type="radio"
@@ -96,17 +99,17 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           checked={checked}
           disabled={disabled}
           aria-describedby={checked && description ? descId : undefined}
-          className={inputClasses}
+          className={inputClassName}
           onChange={handleChange}
         />
         {title ? (
-          <label className={labelClasses} htmlFor={inputId}>
+          <label className={labelClassNames} htmlFor={inputId}>
             {title}
           </label>
         ) : null}
       </div>
       {checked && description && (
-        <div id={descId} className={descriptionClasses}>
+        <div id={descId} className={descriptionClassNames}>
           {description}
         </div>
       )}

@@ -7,7 +7,7 @@ import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 
 import {
-  actionsBaseClasses,
+  actionsBaseClassName,
   defaultCancelLabel,
   defaultSubmitLabel,
 } from './constants';
@@ -72,7 +72,7 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
   footer,
 }) => {
   const defaultFooter = !isLoading ? (
-    <div className={actionsBaseClasses}>
+    <div className={actionsBaseClassName}>
       <DialButton
         variant={ButtonVariant.Secondary}
         label={cancelLabel}

@@ -33,12 +33,12 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger } from '@/types/dropdown';
 
 import {
-  dropdownBaseClasses,
-  dropdownListBaseClasses,
-  dropdownItemBaseClasses,
-  dropdownItemDisabledClasses,
-  dropdownItemDangerClasses,
-  dropdownDividerClasses,
+  dropdownBaseClassName,
+  dropdownListBaseClassName,
+  dropdownItemBaseClassName,
+  dropdownItemDisabledClassName,
+  dropdownItemDangerClassName,
+  dropdownDividerClassName,
   dropdownGap,
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
@@ -328,7 +328,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 <div
                   key={it.key}
                   role="separator"
-                  className={dropdownDividerClasses}
+                  className={dropdownDividerClassName}
                 />
               );
             }
@@ -339,9 +339,9 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 type="button"
                 aria-disabled={!!it.disabled}
                 className={classNames(
-                  dropdownItemBaseClasses,
-                  it.disabled && dropdownItemDisabledClasses,
-                  it.danger && dropdownItemDangerClasses,
+                  dropdownItemBaseClassName,
+                  it.disabled && dropdownItemDisabledClassName,
+                  it.danger && dropdownItemDangerClassName,
                 )}
                 disabled={it.disabled}
                 onClick={handleItemClick(it)}
@@ -413,7 +413,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
       <span
         ref={refs.setReference}
         className={classNames(
-          dropdownBaseClasses,
+          dropdownBaseClassName,
           disabled && '!cursor-not-allowed opacity-75',
           className,
         )}
@@ -438,7 +438,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
               ref={refs.setFloating}
               style={floatingStyles}
               className={classNames(
-                dropdownListBaseClasses,
+                dropdownListBaseClassName,
                 !matchReferenceWidth && 'w-max',
                 listClassName,
               )}

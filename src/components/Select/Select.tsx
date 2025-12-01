@@ -21,12 +21,12 @@ import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 
 import {
-  selectTriggerBaseClasses,
-  selectOverlayBaseClasses,
-  selectOptionBaseClasses,
-  selectOptionSelectedClasses,
-  selectOptionSingleSelectedClasses,
-  selectOptionDisabledClasses,
+  selectTriggerBaseClassName,
+  selectOverlayBaseClassName,
+  selectOptionBaseClassName,
+  selectOptionSelectedClassName,
+  selectOptionSingleSelectedClassName,
+  selectOptionDisabledClassName,
   selectChevronIcon,
   dropdownMenuMaxHeight,
 } from './constants';
@@ -365,7 +365,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           id={`list-${elementId || listId}`}
           role="listbox"
           aria-multiselectable={multiple || undefined}
-          className={selectOverlayBaseClasses}
+          className={selectOverlayBaseClassName}
         >
           {header && <>{typeof header === 'function' ? header() : header}</>}
           {(searchable || closable) && options.length > 8 && (
@@ -393,7 +393,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           )}
 
           {multiple && selectAll && selectableFiltered.length > 0 && (
-            <div className={classNames(selectOptionBaseClasses, 'mt-2')}>
+            <div className={classNames(selectOptionBaseClassName, 'mt-2')}>
               <DialCheckbox
                 id={`${elementId || listId}-selectAll`}
                 label={selectAllLabel}
@@ -432,9 +432,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                         aria-selected={selected}
                         aria-disabled={!!opt.disabled}
                         className={classNames(
-                          selectOptionBaseClasses,
-                          selected && selectOptionSelectedClasses,
-                          opt.disabled && selectOptionDisabledClasses,
+                          selectOptionBaseClassName,
+                          selected && selectOptionSelectedClassName,
+                          opt.disabled && selectOptionDisabledClassName,
                           'w-full',
                         )}
                       >
@@ -472,9 +472,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                       aria-disabled={!!opt.disabled}
                       disabled={opt.disabled}
                       className={classNames(
-                        selectOptionBaseClasses,
-                        selected && selectOptionSingleSelectedClasses,
-                        opt.disabled && selectOptionDisabledClasses,
+                        selectOptionBaseClassName,
+                        selected && selectOptionSingleSelectedClassName,
+                        opt.disabled && selectOptionDisabledClassName,
                       )}
                       onClick={() => !opt.disabled && handleToggle(opt.value)}
                     >
@@ -513,7 +513,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         aria-expanded={open}
         aria-controls={`list-${elementId || listId}`}
         className={mergeClasses(
-          selectTriggerBaseClasses,
+          selectTriggerBaseClassName,
           disabled && 'opacity-75 !cursor-not-allowed',
           size === SelectSize.Sm
             ? 'min-h-[25px] px-1.5 py-1'

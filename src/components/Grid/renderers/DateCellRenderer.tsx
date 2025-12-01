@@ -4,7 +4,7 @@ import type { ICellRendererParams } from 'ag-grid-community';
 
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import {
-  dateCellBaseClasses,
+  dateCellBaseClassName,
   DEFAULT_DATE_FORMAT_OPTIONS,
   DEFAULT_LOCALE,
 } from './constants';
@@ -66,7 +66,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
       text={
         iso ? <time dateTime={iso}>{content}</time> : <span>{content}</span>
       }
-      className={classNames(dateCellBaseClasses, className)}
+      className={classNames(dateCellBaseClassName, className)}
       hideTooltip={false}
     />
   );

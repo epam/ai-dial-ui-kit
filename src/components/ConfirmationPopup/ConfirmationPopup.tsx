@@ -4,10 +4,10 @@ import { useCallback, type FC, type ReactNode } from 'react';
 import { DialButton } from '@/components/Button/Button';
 import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import {
-  actionsBaseClasses,
+  actionsBaseClassName,
   defaultCancelLabel,
   defaultConfirmLabel,
-  descriptionBaseClasses,
+  descriptionBaseClassName,
   variantConfig,
 } from './constants';
 import { DialLoader } from '@/components/Loader/Loader';
@@ -86,7 +86,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   footer,
 }) => {
   const defaultFooter = !isLoading ? (
-    <div className={actionsBaseClasses}>
+    <div className={actionsBaseClassName}>
       <DialButton
         variant={ButtonVariant.Secondary}
         label={cancelLabel}
@@ -118,7 +118,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
     if (description) {
       return (
         <div
-          className={classNames(descriptionBaseClasses, descriptionClassName)}
+          className={classNames(descriptionBaseClassName, descriptionClassName)}
         >
           {description}
         </div>
