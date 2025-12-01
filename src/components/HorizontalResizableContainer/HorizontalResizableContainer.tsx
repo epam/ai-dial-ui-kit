@@ -113,7 +113,7 @@ export interface DialHorizontalResizableContainerProps {
  * @param [defaultWidth] - Initial width in uncontrolled mode.
  * @param [onResizeStop] - Optional callback fired when resize ends.
  * @param [onResize] - Optional callback fired continuously during resizing with current width.
- * @param [side='right'] - Resize handle side.
+ * @param [side=HorizontalResizableContainerSide.Right] - Resize handle side.
  * @param [resizeHandlerClassName] - Optional additional CSS classes.
  * @param [resizeHandler] - Optional custom handler element.
  *
