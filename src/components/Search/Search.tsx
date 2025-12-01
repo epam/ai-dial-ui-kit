@@ -88,7 +88,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
         readonly && 'dial-input-readonly',
-        sizeConfig.containerClass,
+        sizeConfig.containerClassName,
         containerClassName,
       )}
     >

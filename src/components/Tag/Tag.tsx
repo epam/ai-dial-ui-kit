@@ -47,7 +47,7 @@ export const DialTag: FC<DialTagProps> = ({
 }) => {
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
-  const containerClass = mergeClasses(
+  const containerClassName = mergeClasses(
     'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
     variantClass,
     !bordered ? 'border-transparent' : 'border',
@@ -55,7 +55,7 @@ export const DialTag: FC<DialTagProps> = ({
   );
 
   return (
-    <div key={tag} className={containerClass}>
+    <div key={tag} className={containerClassName}>
       <DialIcon icon={iconBefore} />
       <DialEllipsisTooltip text={tag} />
       {remove && (
