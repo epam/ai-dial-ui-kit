@@ -113,7 +113,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         className={classNames(
           'border-0 bg-transparent w-full',
           className,
-          sizeConfig.textClass,
+          sizeConfig.textClassName,
         )}
         onChange={(event) =>
           !readonly && handleChange(event.currentTarget.value)
