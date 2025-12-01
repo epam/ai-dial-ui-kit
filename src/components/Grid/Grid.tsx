@@ -397,8 +397,8 @@ export const DialGrid = <T extends object>({
       <DialNoDataContent
         title={emptyStateTitle}
         description={emptyStateDescription}
-        containerCssClass="gap-3"
-        titleCssClass="mt-2 !text-lg"
+        containerClassName="gap-3"
+        titleClassName="mt-2 !text-lg"
         icon={
           emptyStateIcon || (
             <IconZoomCancel

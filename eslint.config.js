@@ -52,10 +52,16 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
+          args: 'all',
           argsIgnorePattern: '^_',
-          varsIgnorePattern: '^__',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
         },
       ],
+
       '@typescript-eslint/no-explicit-any': 'warn',
       'react-refresh/only-export-components': 'error',
       'prettier/prettier': 'error',

@@ -24,8 +24,8 @@ describe('Dial UI Kit :: DialAlert', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('Should apply custom cssClass', () => {
-    render(<DialAlert message="Styled" cssClass="custom-alert-class" />);
+  test('Should apply custom className', () => {
+    render(<DialAlert message="Styled" className="custom-alert-class" />);
     const alert = screen.getByRole('alert');
     expect(alert).toHaveClass('custom-alert-class');
   });

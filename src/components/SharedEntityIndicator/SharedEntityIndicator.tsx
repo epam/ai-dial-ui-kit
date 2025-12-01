@@ -38,7 +38,6 @@ export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
   return (
     <DialIcon
       className={mergeClasses('text-accent-primary', cssClass)}
-      label="Shared entity indicator"
       icon={
         <IconArrowUpRight
           size={size}

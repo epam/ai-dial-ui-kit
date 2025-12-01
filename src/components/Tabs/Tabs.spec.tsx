@@ -4,10 +4,11 @@ import { DialTabs } from './Tabs';
 import { TabOrientation } from '@/types/tab';
 import * as useScreenTypeHook from '@/hooks/use-screen-type';
 import { ScreenType } from '@/types/screen';
+import type { TabModel } from '@/models/tab';
 
-const tabsMock = [
-  { id: 'tab1', name: 'Tab1' },
-  { id: 'tab2', name: 'Tab2' },
+const tabsMock: TabModel[] = [
+  { id: 'tab1', label: 'Tab1' },
+  { id: 'tab2', label: 'Tab2' },
 ];
 
 describe('Dial UI Kit :: DialTabs', () => {

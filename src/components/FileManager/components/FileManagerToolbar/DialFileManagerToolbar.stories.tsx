@@ -30,9 +30,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const mockTabs: TabModel[] = [
-  { id: 'organization', name: 'Organization' },
-  { id: 'shared', name: 'Shared with me' },
-  { id: 'all', name: 'All files' },
+  { id: 'organization', label: 'Organization' },
+  { id: 'shared', label: 'Shared with me' },
+  { id: 'all', label: 'All files' },
 ];
 
 const mockCreateItems: DropdownItem[] = [

@@ -3,7 +3,7 @@ export enum TabOrientation {
   Vertical = 'vertical',
 }
 
-export enum SmallScreenThreshold {
+export enum ScreenResolution {
   Mobile = 'mobile',
   Tablet = 'tablet',
 }

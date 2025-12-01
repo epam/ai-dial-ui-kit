@@ -5,17 +5,17 @@ import { TabOrientation } from '@/types/tab';
 import type { TabModel } from '@/models/tab';
 
 const sampleTabs: TabModel[] = [
-  { id: 'overview', name: 'Overview' },
-  { id: 'details', name: 'Details' },
-  { id: 'settings', name: 'Settings' },
-  { id: 'analytics', name: 'Analytics' },
+  { id: 'overview', label: 'Overview' },
+  { id: 'details', label: 'Details' },
+  { id: 'settings', label: 'Settings' },
+  { id: 'analytics', label: 'Analytics' },
 ];
 
 const manySampleTabs: TabModel[] = [
   ...sampleTabs,
   ...sampleTabs.map((t) => ({
     id: t.id + '_copy',
-    name: t.name + ' Copy',
+    label: t.label + ' Copy',
     invalid: t.id === 'overview',
   })),
 ];
