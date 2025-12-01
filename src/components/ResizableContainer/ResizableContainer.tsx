@@ -1,7 +1,4 @@
-import { HorizontalResizableContainerSide } from '@/types/resizable-container';
-import { mergeClasses } from '@/utils/merge-classes';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import classNames from 'classnames';
+import { ResizableContainerSide } from '@/types/resizable-container';
 import { Resizable, type ResizableProps } from 're-resizable';
 import {
   type FC,
@@ -11,51 +8,9 @@ import {
   useRef,
   useState,
 } from 'react';
+import { ResizeHandle } from './components/ResizeHandle';
 
-const ResizeIcon = ({
-  side,
-  className,
-}: {
-  side: HorizontalResizableContainerSide;
-  className: string;
-}) => {
-  const isLeft = side === HorizontalResizableContainerSide.Left;
-  const Icon = isLeft ? IconChevronLeft : IconChevronRight;
-
-  return (
-    <div className={className}>
-      <Icon className={classNames('h-full', isLeft && '-ml-6')} />
-    </div>
-  );
-};
-
-const ResizeHandle = ({
-  side,
-  isResizing,
-  customHandler,
-  handlerClassName,
-}: {
-  side: HorizontalResizableContainerSide;
-  isResizing: boolean;
-  customHandler?: ReactNode;
-  handlerClassName?: string;
-}) => {
-  const iconClassName = mergeClasses(
-    'invisible h-full w-0.5 group-hover:visible bg-accent-primary text-accent-primary cursor-col-resize transition-opacity',
-    isResizing && 'visible',
-    handlerClassName,
-  );
-
-  const defaultIcon = <ResizeIcon side={side} className={iconClassName} />;
-
-  if (customHandler) {
-    return <div className={iconClassName}>{customHandler}</div>;
-  }
-
-  return defaultIcon;
-};
-
-export interface DialHorizontalResizableContainerProps {
+export interface DialResizableContainerProps {
   children: ReactNode;
   minWidth: number;
   maxWidth: number;
@@ -63,40 +18,40 @@ export interface DialHorizontalResizableContainerProps {
   defaultWidth: number;
   onResizeStop?: (width: number) => void;
   onResize?: (width: number) => void;
-  side?: HorizontalResizableContainerSide;
+  side?: ResizableContainerSide;
   resizeHandlerClassName?: string;
   resizeHandler?: ReactNode;
 }
 
 /**
- * DialHorizontalResizableContainer — A reusable horizontal resizable container
+ * DialResizableContainer — A reusable resizable container
  * supporting both **controlled** and **uncontrolled** width modes.
  *
  * Controlled Mode
  *
  * Provide `width` and optionally `onResizeStop`:
  * ```tsx
- * <DialHorizontalResizableContainer
+ * <DialResizableContainer
  *   width={sidebarWidth}
  *   onResizeStop={(w) => setSidebarWidth(w)}
  *   minWidth={180}
  *   maxWidth={520}
  * >
  *   <Sidebar />
- * </DialHorizontalResizableContainer>
+ * </DialResizableContainer>
  * ```
  *
  * Uncontrolled Mode
  *
  * Omit `width` entirely — the component manages its own width:
  * ```tsx
- * <DialHorizontalResizableContainer
+ * <DialResizableContainer
  *   defaultWidth={260}
  *   minWidth={180}
  *   maxWidth={520}
  * >
  *   <Sidebar />
- * </DialHorizontalResizableContainer>
+ * </DialResizableContainer>
  * ```
  *
  * Features:
@@ -113,7 +68,7 @@ export interface DialHorizontalResizableContainerProps {
  * @param [defaultWidth] - Initial width in uncontrolled mode.
  * @param [onResizeStop] - Optional callback fired when resize ends.
  * @param [onResize] - Optional callback fired continuously during resizing with current width.
- * @param [side=HorizontalResizableContainerSide.Right] - Resize handle side.
+ * @param [side=ResizableContainerSide.Right] - Resize handle side.
  * @param [resizeHandlerClassName] - Optional additional CSS classes.
  * @param [resizeHandler] - Optional custom handler element.
  *
@@ -122,9 +77,7 @@ export interface DialHorizontalResizableContainerProps {
  * - `onResizeStop` is optional in both modes.
  * - Controlled mode always uses the value from `width`.
  */
-export const DialHorizontalResizableContainer: FC<
-  DialHorizontalResizableContainerProps
-> = ({
+export const DialResizableContainer: FC<DialResizableContainerProps> = ({
   children,
   minWidth,
   maxWidth,
@@ -132,7 +85,7 @@ export const DialHorizontalResizableContainer: FC<
   defaultWidth,
   onResizeStop,
   onResize,
-  side = HorizontalResizableContainerSide.Right,
+  side = ResizableContainerSide.Right,
   resizeHandlerClassName,
   resizeHandler,
 }) => {
@@ -162,7 +115,7 @@ export const DialHorizontalResizableContainer: FC<
   }, [onResizeStop, isControlled, minWidth]);
 
   const resizeSettings: ResizableProps = useMemo(() => {
-    const isLeft = side === HorizontalResizableContainerSide.Left;
+    const isLeft = side === ResizableContainerSide.Left;
 
     const handleComponent = (
       <ResizeHandle

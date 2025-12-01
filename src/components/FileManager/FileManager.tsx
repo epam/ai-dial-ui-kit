@@ -79,7 +79,7 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
-import { DialConditionalHorizontalResizableContainer } from '@/components/HorizontalResizableContainer/ConditionalHorizontalResizableContainer';
+import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
 
 type GridRow = FileManagerGridRow;
 
@@ -705,7 +705,7 @@ export const DialFileManagerView: FC = () => {
           aria-label="File Manager Tree Navigation"
           className="min-h-0 min-w-0 h-full flex-none"
         >
-          <DialConditionalHorizontalResizableContainer
+          <DialConditionalResizableContainer
             defaultWidth={sidebarCurrentWidth}
             width={sidebarCurrentWidth}
             onResizeStop={setSidebarCurrentWidth}
@@ -735,7 +735,7 @@ export const DialFileManagerView: FC = () => {
                 onRenameValidate={onRenameValidate}
               />
             </DialCollapsibleSidebar>
-          </DialConditionalHorizontalResizableContainer>
+          </DialConditionalResizableContainer>
         </aside>
 
         <div className={contentGridClasses}>

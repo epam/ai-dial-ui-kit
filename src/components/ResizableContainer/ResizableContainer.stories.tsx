@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { HorizontalResizableContainerSide } from '@/types/resizable-container';
+import { ResizableContainerSide } from '@/types/resizable-container';
 import { IconGripVertical } from '@tabler/icons-react';
 import {
-  DialHorizontalResizableContainer,
-  type DialHorizontalResizableContainerProps,
-} from './HorizontalResizableContainer';
+  DialResizableContainer,
+  type DialResizableContainerProps,
+} from './ResizableContainer';
 
-const InteractiveResizable = (args: DialHorizontalResizableContainerProps) => {
+const InteractiveResizable = (args: DialResizableContainerProps) => {
   const content = (args.children as React.ReactNode) ?? (
     <div className="p-4 text-primary">
       <div className="font-medium">Resizable content</div>
@@ -23,27 +23,27 @@ const InteractiveResizable = (args: DialHorizontalResizableContainerProps) => {
 
   return (
     <div className="h-full">
-      <DialHorizontalResizableContainer
+      <DialResizableContainer
         {...args}
         width={width}
         onResizeStop={(w) => setWidth(w)}
       >
         {content}
-      </DialHorizontalResizableContainer>
+      </DialResizableContainer>
     </div>
   );
 };
 
-const meta: Meta<typeof DialHorizontalResizableContainer> = {
-  title: 'Components/HorizontalResizableContainer',
-  component: DialHorizontalResizableContainer,
+const meta: Meta<typeof DialResizableContainer> = {
+  title: 'Components/ResizableContainer',
+  component: DialResizableContainer,
   tags: ['layout', 'resizable', 'container'],
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          'A horizontally resizable container that supports controlled and uncontrolled modes, left/right resizing, and custom resize handles.',
+          'A resizable container that supports controlled and uncontrolled modes, left/right resizing, and custom resize handles.',
       },
     },
   },
@@ -70,7 +70,7 @@ const meta: Meta<typeof DialHorizontalResizableContainer> = {
     },
     side: {
       control: { type: 'select' },
-      options: Object.values(HorizontalResizableContainerSide),
+      options: Object.values(ResizableContainerSide),
       description: 'Which side the resize handle appears on.',
     },
     resizeHandlerClassName: {
@@ -92,7 +92,7 @@ const meta: Meta<typeof DialHorizontalResizableContainer> = {
     minWidth: 150,
     maxWidth: 500,
     defaultWidth: 260,
-    side: HorizontalResizableContainerSide.Right,
+    side: ResizableContainerSide.Right,
     children: (
       <div className="p-4 text-primary">
         <div className="font-medium">Default children content</div>
@@ -107,7 +107,7 @@ const meta: Meta<typeof DialHorizontalResizableContainer> = {
 
 export default meta;
 
-type Story = StoryObj<typeof DialHorizontalResizableContainer>;
+type Story = StoryObj<typeof DialResizableContainer>;
 
 export const Uncontrolled: Story = {
   args: {
@@ -133,7 +133,7 @@ export const Controlled: Story = {
 export const ResizeFromLeft: Story = {
   args: {
     defaultWidth: 260,
-    side: HorizontalResizableContainerSide.Left,
+    side: ResizableContainerSide.Left,
     children: (
       <div className="p-4 text-primary">
         <div>Left-side handle</div>

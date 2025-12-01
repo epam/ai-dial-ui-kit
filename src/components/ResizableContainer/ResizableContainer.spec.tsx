@@ -1,18 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { DialHorizontalResizableContainer } from './HorizontalResizableContainer';
-import { HorizontalResizableContainerSide } from '@/types/resizable-container';
+import { DialResizableContainer } from './ResizableContainer';
+import { ResizableContainerSide } from '@/types/resizable-container';
 
-describe('Dial UI Kit :: DialHorizontalResizableContainer', () => {
+describe('Dial UI Kit :: DialResizableContainer', () => {
   it('renders children content', () => {
     render(
-      <DialHorizontalResizableContainer
-        defaultWidth={260}
-        minWidth={150}
-        maxWidth={500}
-      >
+      <DialResizableContainer defaultWidth={260} minWidth={150} maxWidth={500}>
         <div>Test content</div>
-      </DialHorizontalResizableContainer>,
+      </DialResizableContainer>,
     );
 
     expect(screen.getByText('Test content')).toBeInTheDocument();
@@ -20,14 +16,14 @@ describe('Dial UI Kit :: DialHorizontalResizableContainer', () => {
 
   it('renders left-side handle when side is Left', () => {
     render(
-      <DialHorizontalResizableContainer
+      <DialResizableContainer
         defaultWidth={260}
         minWidth={150}
         maxWidth={500}
-        side={HorizontalResizableContainerSide.Left}
+        side={ResizableContainerSide.Left}
       >
         <div>Left content</div>
-      </DialHorizontalResizableContainer>,
+      </DialResizableContainer>,
     );
 
     expect(screen.getByText('Left content')).toBeInTheDocument();
@@ -40,14 +36,14 @@ describe('Dial UI Kit :: DialHorizontalResizableContainer', () => {
 
   it('renders custom resize handler', () => {
     render(
-      <DialHorizontalResizableContainer
+      <DialResizableContainer
         defaultWidth={260}
         minWidth={150}
         maxWidth={500}
         resizeHandler={<span>CustomHandle</span>}
       >
         <div>With custom handler</div>
-      </DialHorizontalResizableContainer>,
+      </DialResizableContainer>,
     );
 
     expect(screen.getByText('With custom handler')).toBeInTheDocument();

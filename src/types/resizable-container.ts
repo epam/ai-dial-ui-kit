@@ -1,4 +1,4 @@
-export enum HorizontalResizableContainerSide {
+export enum ResizableContainerSide {
   Left = 'left',
   Right = 'right',
 }
