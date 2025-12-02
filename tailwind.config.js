@@ -65,15 +65,6 @@ const buttonsTextColors = {
   'controls-disable': 'var(--controls-disable, #333942)',
 };
 
-const iconColors = {
-  'icon-error': 'var(--icon-error, #F76464)',
-  'icon-accent-secondary': 'var(--icon-accent-secondary, #37BABC)',
-  'icon-accent-tertiary': 'var(--icon-accent-tertiary, #A972FF)',
-  'icon-accent-primary': 'var(--icon-accent-primary, #5C8DEA)',
-  'icon-secondary': 'var(--icon-secondary, #7F8792)',
-  'icon-primary': 'var(--icon-primary, #F3F4F6)',
-};
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],

@@ -407,7 +407,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         <>
           {treeOptions?.additionalButtons}
           <DialButton
-            className="hover:text-icon-accent-primary p-1"
+            className="hover:text-accent-primary p-1"
             onClick={collapseAll}
             iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
           />

@@ -100,7 +100,7 @@ export const WithAdditionalButtons: Story = {
       <DialButton
         iconBefore={<IconSettings size={18} />}
         onClick={() => alert('Settings clicked!')}
-        className="hover:text-icon-accent-primary"
+        className="hover:text-accent-primary"
       />
     ),
   },
