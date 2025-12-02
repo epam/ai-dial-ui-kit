@@ -80,6 +80,7 @@ import { DialFileManagerItemName } from '@/components/FileManager/components/Fil
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
+import type { RenameValidationMessages } from './hooks/use-item-renaming';
 
 type GridRow = FileManagerGridRow;
 
@@ -202,10 +203,8 @@ export interface DialFileManagerProps {
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
   onDownloadFiles?: (items: DialFile[]) => void;
 
-  onRename?: (itemPath: string) => void;
-  onRenameSave?: (value: string) => void;
-  onRenameCancel?: () => void;
   onRenameValidate?: (value: string, item: DialFile) => string | null;
+  renameValidationMessages?: RenameValidationMessages;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
