@@ -68,7 +68,7 @@ export interface FileManagerProviderProps
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   children,
-  cssClass,
+  className,
   items = [],
   rootItem,
   path,
@@ -402,7 +402,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const value: FileManagerContextValue = {
-    cssClass,
+    className,
     items,
     rootItem,
     filesLoading,
@@ -414,7 +414,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         <>
           {treeOptions?.additionalButtons}
           <DialButton
-            cssClass="hover:text-icon-accent-primary p-1"
+            className="hover:text-icon-accent-primary p-1"
             onClick={collapseAll}
             iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
           />

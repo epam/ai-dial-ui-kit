@@ -1,6 +1,6 @@
 {
   "name": "@epam/ai-dial-ui-kit",
-  "version": "0.4.0-rc",
+  "version": "0.5.0-rc",
   "type": "module",
   "license": "Apache-2.0",
   "description": "A modern UI kit for building AI DIAL interfaces with React",
@@ -59,6 +59,7 @@
   "dependencies": {
     "ag-grid-community": "^34.3.0",
     "ag-grid-react": "^34.3.0",
+    "re-resizable": "^6.11.2",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "tailwind-merge": "^3.3.1"

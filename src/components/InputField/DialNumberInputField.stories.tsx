@@ -191,7 +191,7 @@ export const AllVariants: Story = {
             elementId="hover-no-value"
             fieldTitle="Hover Field"
             placeholder="Enter number"
-            elementContainerCssClass="dial-input-for-hover"
+            elementContainerClassName="dial-input-for-hover"
           />
         </div>
         <div>
@@ -199,7 +199,7 @@ export const AllVariants: Story = {
             elementId="focus-no-value"
             fieldTitle="Focus Field"
             placeholder="Enter number"
-            elementContainerCssClass="dial-input-for-focus"
+            elementContainerClassName="dial-input-for-focus"
           />
         </div>
         <div>
@@ -234,7 +234,7 @@ export const AllVariants: Story = {
             fieldTitle="Hover Field"
             placeholder="Enter number"
             value={42.5}
-            elementContainerCssClass="dial-input-for-hover"
+            elementContainerClassName="dial-input-for-hover"
           />
         </div>
         <div>
@@ -243,7 +243,7 @@ export const AllVariants: Story = {
             fieldTitle="Focus Field"
             placeholder="Enter number"
             value={42.5}
-            elementContainerCssClass="dial-input-for-focus"
+            elementContainerClassName="dial-input-for-focus"
           />
         </div>
         <div>
@@ -279,7 +279,7 @@ export const AllVariants: Story = {
             fieldTitle="Hover with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
-            elementContainerCssClass="dial-input-for-hover"
+            elementContainerClassName="dial-input-for-hover"
           />
         </div>
         <div>
@@ -288,7 +288,7 @@ export const AllVariants: Story = {
             fieldTitle="Focus with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
-            elementContainerCssClass="dial-input-for-focus"
+            elementContainerClassName="dial-input-for-focus"
           />
         </div>
         <div>
@@ -326,7 +326,7 @@ export const AllVariants: Story = {
             placeholder="Enter number"
             value={0.005}
             iconBefore={<IconSearch size={16} />}
-            elementContainerCssClass="dial-input-for-hover"
+            elementContainerClassName="dial-input-for-hover"
           />
         </div>
         <div>
@@ -336,7 +336,7 @@ export const AllVariants: Story = {
             placeholder="Enter number"
             value={0.005}
             iconBefore={<IconSearch size={16} />}
-            elementContainerCssClass="dial-input-for-focus"
+            elementContainerClassName="dial-input-for-focus"
           />
         </div>
         <div>

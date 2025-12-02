@@ -29,7 +29,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 
-import { gridBaseClasses, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
+import { gridBaseClassName, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
@@ -40,7 +40,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   rowData?: T[];
   additionalGridOptions?: GridOptions<T>;
   getContextMenuItems?: (row: T) => DropdownItem[];
-  cssClass?: string;
+  className?: string;
   ariaLabel?: string;
   withSelectionColumn?: boolean;
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
@@ -129,7 +129,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [rowData] - Array of data objects to display in the grid
  * @param [additionalGridOptions] - Additional ag-Grid GridOptions to merge with defaults
  * @param [getContextMenuItems] - Function returning context menu items for a given row
- * @param [cssClass] - Additional CSS classes to apply to the grid container
+ * @param [className] - Additional CSS classes to apply to the grid container
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
@@ -150,7 +150,7 @@ export const DialGrid = <T extends object>({
   rowData,
   additionalGridOptions,
   getContextMenuItems,
-  cssClass,
+  className,
   ariaLabel = 'Data grid',
   withSelectionColumn = true,
   wrapCustomCellRenderers = true,
@@ -225,7 +225,7 @@ export const DialGrid = <T extends object>({
           ariaLabel="Select all rows"
           checked={checked}
           indeterminate={indeterminate}
-          cssClass={`dial-header-select ${headerCheckboxState}`}
+          className={`dial-header-select ${headerCheckboxState}`}
           onChange={handleHeaderCheckboxChange}
         />
       </div>
@@ -243,12 +243,12 @@ export const DialGrid = <T extends object>({
             menu={{ items }}
             anchorToMouse
             matchReferenceWidth
-            cssClass="w-full"
+            className="w-full"
           >
             <span className="block min-w-0 h-full max-w-full">
               <DialEllipsisTooltip
                 text={valueText}
-                cssClass="max-w-full h-full"
+                className="max-w-full h-full"
               />
             </span>
           </DialDropdown>
@@ -272,7 +272,7 @@ export const DialGrid = <T extends object>({
             id={checkboxId}
             ariaLabel="Select row"
             checked={checked}
-            cssClass="dial-row-select"
+            className="dial-row-select"
             onChange={(next) => {
               if (p.data) {
                 handleSelectionToggle(p.data, !!next);
@@ -319,7 +319,7 @@ export const DialGrid = <T extends object>({
             menu={{ items }}
             anchorToMouse
             matchReferenceWidth
-            cssClass="w-full h-full"
+            className="w-full h-full"
           >
             <span className="block min-w-0 max-w-full flex-1">{content}</span>
           </DialDropdown>
@@ -397,8 +397,8 @@ export const DialGrid = <T extends object>({
       <DialNoDataContent
         title={emptyStateTitle}
         description={emptyStateDescription}
-        containerCssClass="gap-3"
-        titleCssClass="mt-2 !text-lg"
+        containerClassName="gap-3"
+        titleClassName="mt-2 !text-lg"
         icon={
           emptyStateIcon || (
             <IconZoomCancel
@@ -416,8 +416,8 @@ export const DialGrid = <T extends object>({
   return (
     <div
       className={classNames(
-        gridBaseClasses,
-        cssClass,
+        gridBaseClassName,
+        className,
         withSelectionColumn && 'with-selection-column',
       )}
       aria-label={ariaLabel}

@@ -62,7 +62,7 @@ const TriggerBtn = ({ label = 'Open' }: { label?: string }) => (
   <DialButton
     variant={ButtonVariant.Primary}
     iconAfter={<IconChevronDown size={16} />}
-    title={label}
+    label={label}
   />
 );
 
@@ -99,7 +99,7 @@ const meta = {
     closable: { control: { type: 'boolean' } },
     anchorToMouse: { control: { type: 'boolean' } },
     matchReferenceWidth: { control: { type: 'boolean' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     listClassName: { control: { type: 'text' } },
     open: { control: false },
     defaultOpen: { control: false },
@@ -151,7 +151,7 @@ const ControlledExample = (args: DialDropdownProps) => {
       <span ref={controllerRef}>
         <DialButton
           variant={ButtonVariant.Secondary}
-          title={open ? 'Close Dropdown' : 'Open Dropdown'}
+          label={open ? 'Close Dropdown' : 'Open Dropdown'}
           onClick={() => setOpen((v) => !v)}
         />
       </span>
@@ -195,7 +195,7 @@ export const SecondaryEllipsisTrigger: Story = {
     children: (
       <DialButton
         variant={ButtonVariant.Secondary}
-        ariaLabel="More actions"
+        aria-label="More actions"
         iconBefore={<IconDots size={16} />}
       />
     ),
@@ -313,12 +313,12 @@ const FooterActionsExample = (args: DialDropdownProps) => {
             <div className="flex items-center justify-end gap-2">
               <DialButton
                 variant={ButtonVariant.Secondary}
-                title="Cancel"
+                label="Cancel"
                 onClick={() => setOpen(false)}
               />
               <DialButton
                 variant={ButtonVariant.Primary}
-                title="Apply"
+                label="Apply"
                 onClick={() => setOpen(false)}
               />
             </div>
@@ -364,7 +364,7 @@ export const ClickNearCursor: Story = {
     <DialDropdown {...args}>
       <DialButton
         variant={ButtonVariant.Primary}
-        title="Click me (opens near cursor)"
+        label="Click me (opens near cursor)"
       />
     </DialDropdown>
   ),
@@ -378,7 +378,7 @@ export const CompareWidthModes: Story = {
       <DialDropdown {...args} matchReferenceWidth>
         <DialButton
           variant={ButtonVariant.Secondary}
-          title="Match trigger width"
+          label="Match trigger width"
         />
       </DialDropdown>
       <DialDropdown
@@ -393,7 +393,7 @@ export const CompareWidthModes: Story = {
       >
         <DialButton
           variant={ButtonVariant.Secondary}
-          title="Hug content width"
+          label="Hug content width"
         />
       </DialDropdown>
     </div>

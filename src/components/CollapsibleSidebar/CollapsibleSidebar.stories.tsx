@@ -15,8 +15,8 @@ const BarContent = (
       You can place any custom content here — text, lists, buttons, etc.
     </p>
     <DialButton
-      title="Action"
-      cssClass="w-fit"
+      label="Action"
+      className="w-fit"
       variant={ButtonVariant.Primary}
     />
   </div>
@@ -55,7 +55,7 @@ const meta: Meta<typeof DialCollapsibleSidebar> = {
       control: { type: 'text' },
       description: 'Title displayed when collapsed (rotated text)',
     },
-    titleCssClass: {
+    titleClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for title',
     },
@@ -67,7 +67,7 @@ const meta: Meta<typeof DialCollapsibleSidebar> = {
       control: false,
       description: 'Content inside the collapsible area',
     },
-    containerCssClass: {
+    containerClassName: {
       control: { type: 'text' },
       description: 'Additional CSS classes for container',
     },
@@ -100,7 +100,7 @@ export const WithAdditionalButtons: Story = {
       <DialButton
         iconBefore={<IconSettings size={18} />}
         onClick={() => alert('Settings clicked!')}
-        cssClass="hover:text-icon-accent-primary"
+        className="hover:text-icon-accent-primary"
       />
     ),
   },
@@ -163,14 +163,14 @@ const ControlledExternalComponent = (args: DialCollapsibleSidebarProps) => {
         {...args}
         isOpened={open}
         onToggle={(next) => setOpen(next)}
-        containerCssClass="text-primary"
+        containerClassName="text-primary"
         title="Filters"
       >
         {BarContent}
       </DialCollapsibleSidebar>
       <div className="flex flex-col gap-2">
         <DialButton
-          title={open ? 'Close from outside' : 'Open from outside'}
+          label={open ? 'Close from outside' : 'Open from outside'}
           onClick={() => setOpen((v) => !v)}
         />
         <p className="text-secondary text-sm">

@@ -10,11 +10,11 @@ import type { DialFieldLabelProps } from '@/components/Field/Field';
 import { DialMultiSelectTags } from '../Select/MultiSelectTags';
 
 export interface DialSelectFieldProps
-  extends Omit<DialSelectProps, 'cssClass' | 'elementId'>,
+  extends Omit<DialSelectProps, 'className' | 'elementId'>,
     Omit<DialFieldLabelProps, 'htmlFor'>,
     Omit<DialFormItemProps, 'label' | 'children' | 'value'> {
-  selectCssClass?: string;
-  containerCssClass?: string;
+  selectClassName?: string;
+  containerClassName?: string;
 }
 
 /**
@@ -37,12 +37,12 @@ export interface DialSelectFieldProps
  * />
  *
  * @params - Component properties extending:
- * - {@link DialSelectProps} for select options and props, except for cssClass
+ * - {@link DialSelectProps} for select options and props, except for className
  * - {@link DialFormItemProps} for form item props, except for htmlFor
  * - {@link DialFieldLabelProps} for label props, except for label, children, value
  *
- * @param selectCssClass CSS class for the select element
- * @param containerCssClass CSS class for the form item container
+ * @param selectClassName CSS class for the select element
+ * @param containerClassName CSS class for the form item container
  * @param emptyStateTitle Title to show when there are no options
  * @param restSelectProps All other DialSelect props
  * @param restFormItemProps All other DialFormItem props
@@ -52,8 +52,8 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   fieldTitle,
   optional,
   captionDescription,
-  containerCssClass,
-  selectCssClass,
+  containerClassName,
+  selectClassName,
   error,
   elementId,
   description,
@@ -94,13 +94,13 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       description={description}
       error={error}
       captionDescription={captionDescription}
-      cssClass={containerCssClass}
+      className={containerClassName}
       readonly={readonly}
       value={getReadonlyValue()}
       defaultEmptyText={defaultEmptyText}
     >
       <DialSelect
-        cssClass={selectCssClass}
+        className={selectClassName}
         value={value}
         elementId={elementId}
         {...restSelectProps}

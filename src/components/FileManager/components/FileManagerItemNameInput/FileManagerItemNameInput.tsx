@@ -14,7 +14,7 @@ export interface DialFileManagerItemNameInputProps {
   elementId: string;
   iconSize?: number;
   iconStroke?: number;
-  iconCssClass?: string;
+  iconClassName?: string;
   iconLabel?: string;
   iconIndicator?: ReactNode;
   inputInvalid?: boolean;
@@ -60,7 +60,7 @@ export interface DialFileManagerItemNameInputProps {
  * @param {boolean} [props.loading=false] - Whether the icon is loading.
  * @param {number} [props.iconSize] - Optional size override for the icon.
  * @param {number} [props.iconStroke] - Optional stroke width override for the icon.
- * @param {string} [props.iconCssClass] - Optional CSS class for the icon.
+ * @param {string} [props.iconClassName] - Optional CSS class for the icon.
  * @param {string} [props.iconLabel] - Optional accessible label for the icon.
  * @param {ReactNode} [props.iconIndicator] - Optional indicator to render over the icon.
  * @param {boolean} [props.inputInvalid=false] - Marks the input as invalid.
@@ -77,7 +77,7 @@ export const DialFileManagerItemNameInput: FC<
   elementId,
   loading = false,
   shared = false,
-  iconCssClass,
+  iconClassName,
   iconIndicator,
   iconLabel,
   iconSize,
@@ -110,7 +110,7 @@ export const DialFileManagerItemNameInput: FC<
         name={name}
         type={type}
         label={iconLabel}
-        cssClass={iconCssClass}
+        className={iconClassName}
         indicator={iconIndicator}
         size={iconSize}
         stroke={iconStroke}
@@ -118,7 +118,7 @@ export const DialFileManagerItemNameInput: FC<
         shared={shared}
       />
       <DialInput
-        containerCssClass="!h-6 py-[1px] pl-[7px] pr-[7px]"
+        containerClassName="!h-6 py-[1px] pl-[7px] pr-[7px]"
         elementId={elementId}
         defaultValue={name}
         onChange={onChange}

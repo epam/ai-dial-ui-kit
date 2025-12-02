@@ -63,7 +63,7 @@ const columns: ColDef<Row>[] = [
     headerName: 'Name',
     flex: 1,
     cellRenderer: (param: { data: Row }) => (
-      <DialFileName name={param.data.name} cssClass="h-full" />
+      <DialFileName name={param.data.name} className="h-full" />
     ),
   },
   {
@@ -74,7 +74,7 @@ const columns: ColDef<Row>[] = [
     cellRendererParams: {
       locale: 'en-US',
       emptyPlaceholder: '—',
-      cssClass: 'h-full',
+      className: 'h-full',
     },
   },
   { field: 'size', headerName: 'Size', width: 120 },
@@ -157,7 +157,7 @@ const meta = {
     rowData: { control: false },
     additionalGridOptions: { control: false },
     getContextMenuItems: { control: false },
-    cssClass: { control: 'text' },
+    className: { control: 'text' },
     ariaLabel: { control: 'text' },
     selectedRowIds: { control: false },
     onSelectionChange: { control: false },
@@ -244,17 +244,17 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
           <DialButton
             variant={ButtonVariant.Tertiary}
             onClick={() => setSelectedIds(new Set(['2']))}
-            title="Select row 2"
+            label="Select row 2"
           />
           <DialButton
             variant={ButtonVariant.Secondary}
             onClick={() => setSelectedIds(new Set())}
-            title="Clear selection"
+            label="Clear selection"
           />
           <DialButton
             variant={ButtonVariant.Primary}
             onClick={() => setSelectedIds(new Set(['1', '2', '3']))}
-            title="Select all"
+            label="Select all"
           />
         </div>
       </div>

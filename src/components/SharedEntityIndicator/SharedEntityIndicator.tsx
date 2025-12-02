@@ -8,7 +8,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 export interface DialSharedEntityIndicatorProps {
   label?: string;
   size?: number;
-  cssClass?: string;
+  className?: string;
   stroke?: number;
 }
 
@@ -25,20 +25,19 @@ export interface DialSharedEntityIndicatorProps {
  *
  * @param [label="Shared entity"] - Accessible label for assistive tech
  * @param [size=10] - Pixel size for the icon
- * @param [cssClass] - Additional Tailwind classes appended to the container
+ * @param [className] - Additional Tailwind classes appended to the container
  * @param [stroke=2] - Stroke width for the icon
  *
  */
 export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
   label = 'Shared entity',
   size = 10,
-  cssClass,
+  className,
   stroke = 2,
 }) => {
   return (
     <DialIcon
-      className={mergeClasses('text-accent-primary', cssClass)}
-      label="Shared entity indicator"
+      className={mergeClasses('text-accent-primary', className)}
       icon={
         <IconArrowUpRight
           size={size}

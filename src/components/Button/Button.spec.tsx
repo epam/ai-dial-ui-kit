@@ -4,8 +4,8 @@ import { DialButton } from './Button';
 import { ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
-  test('Should render with title and be accessible by role', () => {
-    render(<DialButton title="Click me" />);
+  test('Should render with label and be accessible by role', () => {
+    render(<DialButton label="Click me" />);
     expect(
       screen.getByRole('button', { name: 'Click me' }),
     ).toBeInTheDocument();
@@ -14,20 +14,20 @@ describe('Dial UI Kit :: DialButton', () => {
 
   test('Should call onClick when clicked', () => {
     const onClick = vi.fn();
-    render(<DialButton title="Clickable Button" onClick={onClick} />);
+    render(<DialButton label="Clickable Button" onClick={onClick} />);
     fireEvent.click(screen.getByRole('button', { name: 'Clickable Button' }));
     expect(onClick).toHaveBeenCalled();
   });
 
-  test('Should be disabled when disable prop is true', () => {
-    render(<DialButton title="Disabled" disable hideTitleOnMobile />);
+  test('Should be disabled when disabled prop is true', () => {
+    render(<DialButton label="Disabled" disabled hideTitleOnMobile />);
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
   });
 
   test('Should render iconBefore and iconAfter', () => {
     render(
       <DialButton
-        title="With Icons"
+        label="With Icons"
         iconBefore={<span>Before</span>}
         iconAfter={<span>After</span>}
       />,
@@ -36,11 +36,11 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(screen.getByText('After')).toBeInTheDocument();
   });
 
-  test('Should render without title when only icons are provided', () => {
+  test('Should render without label when only icons are provided', () => {
     render(
       <DialButton
         iconBefore={<span data-testid="icon">Icon</span>}
-        ariaLabel="Icon button"
+        aria-label="Icon button"
       />,
     );
     expect(
@@ -51,16 +51,16 @@ describe('Dial UI Kit :: DialButton', () => {
   });
 
   test('Should apply custom CSS class', () => {
-    render(<DialButton title="Styled" cssClass="custom-button-class" />);
+    render(<DialButton label="Styled" className="custom-button-class" />);
     const button = screen.getByRole('button', { name: 'Styled' });
     expect(button).toHaveClass('custom-button-class');
   });
 
-  test('Should apply custom CSS class to button text with textCssClass prop', () => {
+  test('Should apply custom CSS class to button text with textClassName prop', () => {
     render(
       <DialButton
-        title="Custom Text"
-        textCssClass="custom-text-class font-bold"
+        label="Custom Text"
+        textClassName="custom-text-class font-bold"
       />,
     );
     const titleSpan = screen.getByText('Custom Text');
@@ -68,19 +68,19 @@ describe('Dial UI Kit :: DialButton', () => {
   });
 
   test('Should apply focus-visible outline classes', () => {
-    render(<DialButton title="Focus test" />);
+    render(<DialButton label="Focus test" />);
     const button = screen.getByRole('button', { name: 'Focus test' });
     expect(button).toHaveClass('focus-visible:outline', 'outline-offset-0');
   });
 
-  test('Should hide title on mobile when hideTitleOnMobile is true', () => {
-    render(<DialButton title="Mobile test" hideTitleOnMobile />);
+  test('Should hide label on mobile when hideTitleOnMobile is true', () => {
+    render(<DialButton label="Mobile test" hideTitleOnMobile />);
     const titleSpan = screen.getByText('Mobile test');
     expect(titleSpan).toHaveClass('hidden', 'sm:inline');
   });
 
-  test('Should show title on all devices when hideTitleOnMobile is false', () => {
-    render(<DialButton title="Desktop test" hideTitleOnMobile={false} />);
+  test('Should show label on all devices when hideTitleOnMobile is false', () => {
+    render(<DialButton label="Desktop test" hideTitleOnMobile={false} />);
     const titleSpan = screen.getByText('Desktop test');
     expect(titleSpan).toHaveClass('inline');
     expect(titleSpan).not.toHaveClass('hidden');
@@ -89,7 +89,7 @@ describe('Dial UI Kit :: DialButton', () => {
   test('Should apply correct spacing classes with icons', () => {
     render(
       <DialButton
-        title="Spacing test"
+        label="Spacing test"
         iconBefore={<span>Before</span>}
         iconAfter={<span>After</span>}
       />,
@@ -99,23 +99,23 @@ describe('Dial UI Kit :: DialButton', () => {
   });
 
   test('Should apply correct spacing with only iconBefore', () => {
-    render(<DialButton title="Before only" iconBefore={<span>Before</span>} />);
+    render(<DialButton label="Before only" iconBefore={<span>Before</span>} />);
     const titleSpan = screen.getByText('Before only');
     expect(titleSpan).toHaveClass('ml-2');
     expect(titleSpan).not.toHaveClass('mr-2');
   });
 
   test('Should apply correct spacing with only iconAfter', () => {
-    render(<DialButton title="After only" iconAfter={<span>After</span>} />);
+    render(<DialButton label="After only" iconAfter={<span>After</span>} />);
     const titleSpan = screen.getByText('After only');
     expect(titleSpan).toHaveClass('mr-2');
     expect(titleSpan).not.toHaveClass('ml-2');
   });
 
-  test('Should use ariaLabel when title is not provided', () => {
+  test('Should use aria-label when label is not provided', () => {
     render(
       <DialButton
-        ariaLabel="Custom aria label"
+        aria-label="Custom aria label"
         iconBefore={<span>Icon</span>}
       />,
     );
@@ -124,29 +124,29 @@ describe('Dial UI Kit :: DialButton', () => {
     ).toBeInTheDocument();
   });
 
-  test('Should prefer title over ariaLabel for aria-label', () => {
-    render(<DialButton title="Button title" ariaLabel="Aria label" />);
+  test('Should prefer label over native "aria-label" from properties for aria-label', () => {
+    render(<DialButton label="Button label" aria-label="Aria label" />);
     expect(
-      screen.getByRole('button', { name: 'Button title' }),
+      screen.getByRole('button', { name: 'Button label' }),
     ).toBeInTheDocument();
   });
 
   test('Should have correct button type', () => {
-    render(<DialButton title="Type test" />);
+    render(<DialButton label="Type test" />);
     const button = screen.getByRole('button', { name: 'Type test' });
     expect(button).toHaveAttribute('type', 'button');
   });
 
   test('Should not call onClick when disabled', () => {
     const onClick = vi.fn();
-    render(<DialButton title="Disabled click" onClick={onClick} disable />);
+    render(<DialButton label="Disabled click" onClick={onClick} disabled />);
     fireEvent.click(screen.getByRole('button', { name: 'Disabled click' }));
     expect(onClick).not.toHaveBeenCalled();
   });
 
   test('Should pass mouse event to onClick handler', () => {
     const onClick = vi.fn();
-    render(<DialButton title="Event test" onClick={onClick} />);
+    render(<DialButton label="Event test" onClick={onClick} />);
     fireEvent.click(screen.getByRole('button', { name: 'Event test' }));
     expect(onClick).toHaveBeenCalledWith(expect.any(Object));
     expect(onClick.mock.calls[0][0]).toHaveProperty('type', 'click');
@@ -157,7 +157,7 @@ describe('Dial UI Kit :: DialButton', () => {
     [ButtonVariant.Secondary, 'dial-secondary-button'],
     [ButtonVariant.Tertiary, 'dial-tertiary-button'],
   ])('applies mapped class for variant %s', (variant, expectedClass) => {
-    render(<DialButton title="Click me" variant={variant} />);
+    render(<DialButton label="Click me" variant={variant} />);
 
     const btn = screen.getByRole('button', { name: 'Click me' });
     expect(btn).toBeInTheDocument();

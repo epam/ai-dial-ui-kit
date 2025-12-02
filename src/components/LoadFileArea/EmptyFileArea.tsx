@@ -166,7 +166,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
     clearErrorState();
   };
 
-  const containerCssClasses = classNames(
+  const containerClassName = classNames(
     'border border-dashed rounded w-full cursor-pointer relative h-full hover:border-hover',
     !canDrop && !isFileValidationError && 'border-primary',
     canDrop && (!isOver ? 'border-hover' : 'border-accent-primary'),
@@ -178,7 +178,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   return (
     <>
       <div
-        className={containerCssClasses}
+        className={containerClassName}
         ref={dropRef}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -196,7 +196,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           {emptyButtonLabel && (
             <DialButton
               variant={ButtonVariant.Tertiary}
-              title={emptyButtonLabel}
+              label={emptyButtonLabel}
               onClick={() => fileInputRef.current?.click()}
             />
           )}

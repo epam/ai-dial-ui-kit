@@ -22,7 +22,7 @@ const meta: Meta<typeof DialCloseButton> = {
       control: { type: 'number' },
       description: 'Size of the close icon',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes applied to the alert container',
     },
@@ -54,7 +54,7 @@ export const CustomSize: Story = {
 export const WithCustomClass: Story = {
   args: {
     ariaLabel: 'Close',
-    cssClass: 'bg-layer-2 text-primary hover:text-accent-tertiary',
+    className: 'bg-layer-2 text-primary hover:text-accent-tertiary',
     onClose: () => alert('Closed!'),
   },
 };
@@ -92,7 +92,7 @@ export const AllVariants: Story = {
         <div className="text-primary pr-4 py-2">With custom class</div>
         <DialCloseButton
           ariaLabel="Close dialog"
-          cssClass="bg-error text-error hover:text-error"
+          className="bg-error text-error hover:text-error"
           onClose={() => alert('Closed!')}
         />
       </div>

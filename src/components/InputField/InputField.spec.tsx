@@ -303,8 +303,8 @@ describe('Dial UI Kit :: DialTextInputField', () => {
       <DialTextInputField
         elementId="test-text"
         fieldTitle="Test Text Field"
-        containerCssClass="custom-container"
-        elementCssClass="custom-input"
+        containerClassName="custom-container"
+        elementClassName="custom-input"
       />,
     );
 

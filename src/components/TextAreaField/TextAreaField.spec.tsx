@@ -35,8 +35,8 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
       <DialTextAreaField
         fieldTitle="Test Field"
         elementId="test-textarea"
-        elementCssClass="custom-class"
-        containerCssClass="container-class"
+        elementClassName="custom-class"
+        containerClassName="container-class"
       />,
     );
 

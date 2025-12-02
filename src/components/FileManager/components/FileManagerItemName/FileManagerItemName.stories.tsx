@@ -43,7 +43,7 @@ const EditableWrapper = (props: Story['args']) => {
       />
 
       <DialButton
-        title="Edit name"
+        className="Edit name"
         onClick={() => setEditing(true)}
         variant={ButtonVariant.Secondary}
       />

@@ -13,7 +13,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     text: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     contentClassName: { control: { type: 'text' } },
     hideTooltip: { control: { type: 'boolean' } },
     placement: {
@@ -49,7 +49,7 @@ export const Default: Story = {
 export const NotTruncated_AutoWidth: Story = {
   args: {
     text: 'Fits fine — no tooltip content',
-    cssClass: 'w-auto',
+    className: 'w-auto',
   },
 };
 
@@ -62,7 +62,7 @@ export const NotTruncated_ShortText: Story = {
 export const VeryNarrow: Story = {
   args: {
     text: 'Extremely long content that definitely will not fit into a tiny width, thus the tooltip should mirror the full string.',
-    cssClass: 'w-32',
+    className: 'w-32',
   },
 };
 
@@ -70,7 +70,7 @@ export const InsideFlexRow_Truncated: Story = {
   render: (args) => (
     <div className="flex items-center gap-2 min-w-0 w-72">
       <span className="shrink-0 text-primary">Label:</span>
-      <DialEllipsisTooltip {...args} cssClass="min-w-0 w-full" />
+      <DialEllipsisTooltip {...args} className="min-w-0 w-full" />
     </div>
   ),
   args: {
@@ -82,7 +82,7 @@ export const InsideFlexRow_NotTruncated: Story = {
   render: (args) => (
     <div className="flex items-center gap-2 w-full">
       <span className="shrink-0 text-primary">Label:</span>
-      <DialEllipsisTooltip {...args} cssClass="w-auto" />
+      <DialEllipsisTooltip {...args} className="w-auto" />
     </div>
   ),
   args: {
@@ -93,14 +93,14 @@ export const InsideFlexRow_NotTruncated: Story = {
 export const LongUnbrokenWord: Story = {
   args: {
     text: 'SupercalifragilisticexpialidociousSupercalifragilisticexpialidociousSupercalifragilisticexpialidocious',
-    cssClass: 'w-40',
+    className: 'w-40',
   },
 };
 
 export const DisabledTooltip: Story = {
   args: {
     text: 'Tooltip suppressed even when truncated',
-    cssClass: 'w-32',
+    className: 'w-32',
     hideTooltip: true,
   },
 };
@@ -113,7 +113,7 @@ export const WithNodeContent: Story = {
         truncated
       </span>
     ),
-    cssClass: 'w-40',
+    className: 'w-40',
   },
 };
 
@@ -124,12 +124,12 @@ function DynamicResizeExample(args: DialEllipsisTooltipProps) {
       <DialButton
         onClick={() => setNarrow((v) => !v)}
         variant={ButtonVariant.Secondary}
-        title={`Toggle width (${narrow ? 'narrow' : 'wide'})`}
+        label={`Toggle width (${narrow ? 'narrow' : 'wide'})`}
       />
       <div className={narrow ? 'w-40' : 'w-auto'}>
         <DialEllipsisTooltip
           {...args}
-          cssClass={narrow ? 'w-full' : 'w-auto'}
+          className={narrow ? 'w-full' : 'w-auto'}
         />
       </div>
     </div>

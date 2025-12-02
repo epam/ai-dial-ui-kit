@@ -20,12 +20,12 @@ describe('Dial UI Kit :: DialSelectField', () => {
     expect(group).toHaveAttribute('aria-labelledby', 'transport-label');
   });
 
-  test('applies containerCssClass to FormItem wrapper', () => {
+  test('applies containerClassName to FormItem wrapper', () => {
     render(
       <DialSelectField
         elementId="styled"
         fieldTitle="Styled"
-        containerCssClass="ring-1"
+        containerClassName="ring-1"
         options={[{ value: 'x', label: 'X' }]}
       />,
     );

@@ -29,7 +29,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     path: { control: { type: 'text' } },
-    cssClass: { control: { type: 'text' } },
+    className: { control: { type: 'text' } },
     items: { control: 'object' },
     treeOptions: { control: 'object' },
     navigationPanelOptions: { control: 'object' },
@@ -113,7 +113,7 @@ export const WithFilesInTree: Story = {
 };
 
 export const CustomClasses: Story = {
-  args: { cssClass: 'bg-layer-4 h-[640px]' },
+  args: { className: 'bg-layer-4 h-[640px]' },
 };
 
 const WithTabsControlledComponent = (args: DialFileManagerProps) => {
@@ -261,12 +261,12 @@ const PopupComponent = (args: DialFileManagerProps) => {
       <DialButton
         onClick={() => setIsOpen(!isOpen)}
         variant={ButtonVariant.Primary}
-        title="Toggle File Manager"
+        label="Toggle File Manager"
       />
       <DialPopup
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        cssClass="w-[1000px] !h-[600px]"
+        className="w-[1000px] !h-[600px]"
       >
         <DialFileManager
           {...args}
@@ -411,7 +411,7 @@ const TreeCollapsedControlledComponent = (args: DialFileManagerProps) => {
         <DialButton
           onClick={() => setIsCollapsed(!isCollapsed)}
           variant={ButtonVariant.Primary}
-          title={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
+          label={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
         />
       </div>
       <DialFileManager

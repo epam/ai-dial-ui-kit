@@ -17,7 +17,7 @@ export const useDialFileManagerTabs = (
     if (!tabLabels) return void 0;
     return Object.values(DialFileManagerTabs).map((tab) => ({
       id: tab,
-      name: tabLabels?.[tab] || tab.replace('_', ' '),
+      label: tabLabels?.[tab] || tab.replace('_', ' '),
     }));
   }, [tabLabels]);
 

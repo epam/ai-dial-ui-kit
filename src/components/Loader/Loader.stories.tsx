@@ -12,8 +12,11 @@ const meta = {
   },
   argTypes: {
     size: { control: { type: 'number' }, description: 'Icon size in px' },
-    cssClass: { control: { type: 'text' }, description: 'Container classes' },
-    iconClass: { control: { type: 'text' }, description: 'SVG icon classes' },
+    className: { control: { type: 'text' }, description: 'Container classes' },
+    iconClassName: {
+      control: { type: 'text' },
+      description: 'SVG icon classes',
+    },
     fullWidth: {
       control: { type: 'boolean' },
       description: 'Stretch to full width/height of container',
@@ -45,8 +48,8 @@ export const CustomSize: Story = {
 
 export const WithCustomClasses: Story = {
   args: {
-    iconClass: 'text-accent-primary',
-    cssClass: 'bg-layer-3',
+    iconClassName: 'text-accent-primary',
+    className: 'bg-layer-3',
     size: 28,
     fullWidth: false,
   },

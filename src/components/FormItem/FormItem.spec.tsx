@@ -14,9 +14,13 @@ describe('Dial UI Kit :: DialFormItem', () => {
     expect(group).not.toHaveAttribute('aria-labelledby');
   });
 
-  test('applies custom cssClass to container', () => {
+  test('applies custom className to container', () => {
     render(
-      <DialFormItem elementId="with-class" label="With class" cssClass="ring-1">
+      <DialFormItem
+        elementId="with-class"
+        label="With class"
+        className="ring-1"
+      >
         <input id="with-class" />
       </DialFormItem>,
     );

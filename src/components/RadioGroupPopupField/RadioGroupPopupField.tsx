@@ -71,8 +71,8 @@ export interface RadioGroupPopupFieldProps
  * @param [selectedValue] - Current value id used to resolve the displayed option name
  * @param radioButtons - Collection of radio options (id/name)
  * @param [customInputValue] - Custom value text to display instead of a radio option name
- * @param [valueCssClasses] - Extra classes applied to the value text in the collapsed field
- * @param [inputCssClasses] - Extra classes applied to the collapsed input container
+ * @param [valueClassName] - Extra classes applied to the value text in the collapsed field
+ * @param [inputClassName] - Extra classes applied to the collapsed input container
  * @param emptyValueText - Placeholder text when no value is selected
  * @param [onClose] - Callback fired when the popup closes
  * @param title - Title text shown in the popup header
@@ -93,8 +93,8 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   selectedValue,
   radioButtons,
   customInputValue,
-  valueCssClasses,
-  inputCssClasses,
+  valueClassName,
+  inputClassName,
   emptyValueText,
   onClose,
   title,
@@ -135,8 +135,8 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           customInputValue ??
           radioButtons.find((rb) => rb.id === selectedValue)?.name
         }
-        valueCssClasses={valueCssClasses}
-        inputCssClasses={classNames(inputCssClasses, 'py-2', 'px-3')}
+        valueClassName={valueClassName}
+        inputClassName={classNames(inputClassName, 'py-2', 'px-3')}
         emptyValueText={emptyValueText}
         onOpen={onOpenPopup}
       >
@@ -150,14 +150,14 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
             <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
               <DialButton
                 variant={ButtonVariant.Secondary}
-                title={cancelButtonTitle}
+                label={cancelButtonTitle}
                 onClick={onClosePopup}
               />
               <DialButton
                 variant={ButtonVariant.Primary}
-                title={applyButtonTitle}
+                label={applyButtonTitle}
                 onClick={onApplyValue}
-                disable={!isValid}
+                disabled={!isValid}
               />
             </div>
           }
@@ -165,7 +165,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           <div className="px-6 py-4">
             <DialRadioGroup
               radioButtons={radioButtons}
-              labelCssClass="dial-small"
+              labelClassName="dial-small"
               activeRadioButton={selectedRadioValue}
               onChange={onChangeRadioField}
               elementId={id}

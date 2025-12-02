@@ -40,9 +40,9 @@ const InteractiveInputModal = (args: DialInputPopupProps) => {
               ))}
             </div>
             <DialButton
-              title="Close"
+              label="Close"
               onClick={handleCloseModal}
-              cssClass="mt-2 self-end text-primary"
+              className="mt-2 self-end text-primary"
             />
           </div>
         </DialPopup>
@@ -77,11 +77,11 @@ const meta: Meta<typeof DialInputPopup> = {
       control: 'boolean',
       description: 'Disables interactivity and hides the open button',
     },
-    valueCssClasses: {
+    valueClassName: {
       control: { type: 'text' },
       description: 'Custom CSS classes for the displayed value text',
     },
-    inputCssClasses: {
+    inputClassName: {
       control: { type: 'text' },
       description: 'Custom CSS classes for the input wrapper',
     },
@@ -229,9 +229,9 @@ const InteractiveInputModalWithFormItem = (args: DialInputPopupProps) => {
                 ))}
               </div>
               <DialButton
-                title="Close"
+                label="Close"
                 onClick={handleCloseModal}
-                cssClass="mt-2 self-end text-primary"
+                className="mt-2 self-end text-primary"
               />
             </div>
           </DialPopup>

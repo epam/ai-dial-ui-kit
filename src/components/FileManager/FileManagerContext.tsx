@@ -30,7 +30,7 @@ export interface FileManagerGridRow {
 }
 
 export interface FileManagerContextValue {
-  cssClass?: string;
+  className?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
   filesLoading?: boolean;

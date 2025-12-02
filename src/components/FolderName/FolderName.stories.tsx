@@ -10,7 +10,7 @@ const meta = {
       control: { type: 'text' },
       description: 'Folder name',
     },
-    cssClass: {
+    className: {
       control: { type: 'text' },
       description: 'Additional CSS classes for the root container',
     },
@@ -50,6 +50,6 @@ export const LongName: Story = {
 export const WithCustomClass: Story = {
   args: {
     name: 'Reference Materials',
-    cssClass: 'bg-layer-2 border-2 border-accent-primary p-2 rounded-xl',
+    className: 'bg-layer-2 border-2 border-accent-primary p-2 rounded-xl',
   },
 };

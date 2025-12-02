@@ -4,10 +4,10 @@ import { useCallback, type FC, type ReactNode } from 'react';
 import { DialButton } from '@/components/Button/Button';
 import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import {
-  actionsBaseClasses,
+  actionsBaseClassName,
   defaultCancelLabel,
   defaultConfirmLabel,
-  descriptionBaseClasses,
+  descriptionBaseClassName,
   variantConfig,
 } from './constants';
 import { DialLoader } from '@/components/Loader/Loader';
@@ -17,7 +17,7 @@ import { PopupSize } from '@/types/popup';
 
 export interface DialConfirmationPopupProps extends DialPopupProps {
   description?: string | ReactNode;
-  descriptionCssClass?: string;
+  descriptionClassName?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   isLoading?: boolean;
@@ -49,13 +49,13 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  *
  * @param title - Title content for the header
  * @param [description] - Secondary text (ignored when `children` set)
- * @param [descriptionCssClass] - Custom CSS class for the description
+ * @param [descriptionClassName] - Custom CSS class for the description
  * @param [open=false] - Controls visibility of the popup
  * @param [confirmLabel="Ok"] - Label for the confirm button
  * @param [cancelLabel="Cancel"] - Label for the cancel button
  * @param [isLoading=false] - Shows loader placeholder and hides actions
  * @param [disableConfirmButton=false] - Disables the confirm button
- * @param [cssClass] - Extra classes for the popup container
+ * @param [className] - Extra classes for the popup container
  * @param [confirmClassName] - Extra classes merged into the confirm button
  * @param onClose - Fired on close
  * @param onConfirm - Fired on confirm
@@ -68,13 +68,13 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
 export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   title,
   description,
-  descriptionCssClass,
+  descriptionClassName,
   open = false,
   confirmLabel = defaultConfirmLabel,
   cancelLabel = defaultCancelLabel,
   isLoading = false,
   disableConfirmButton = false,
-  cssClass,
+  className,
   confirmClassName,
   onClose,
   onConfirm,
@@ -86,17 +86,17 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   footer,
 }) => {
   const defaultFooter = !isLoading ? (
-    <div className={actionsBaseClasses}>
+    <div className={actionsBaseClassName}>
       <DialButton
         variant={ButtonVariant.Secondary}
-        title={cancelLabel}
+        label={cancelLabel}
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
       <DialButton
         variant={variantConfig[variant].confirmVariant}
-        cssClass={confirmClassName}
-        title={confirmLabel}
-        disable={disableConfirmButton}
+        className={confirmClassName}
+        label={confirmLabel}
+        disabled={disableConfirmButton}
         onClick={() => onConfirm()}
       />
     </div>
@@ -118,7 +118,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
     if (description) {
       return (
         <div
-          className={classNames(descriptionBaseClasses, descriptionCssClass)}
+          className={classNames(descriptionBaseClassName, descriptionClassName)}
         >
           {description}
         </div>
@@ -126,13 +126,13 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
     }
 
     return null;
-  }, [children, description, isLoading, descriptionCssClass]);
+  }, [children, description, isLoading, descriptionClassName]);
 
   return (
     <DialPopup
       open={open}
       title={title}
-      cssClass={classNames(variantConfig[variant].container, cssClass)}
+      className={classNames(variantConfig[variant].container, className)}
       dividers={dividers}
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}
