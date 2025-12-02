@@ -95,7 +95,7 @@ const StoryWrapper = ({
       {!isOpen && (
         <DialButton
           onClick={() => setIsOpen(true)}
-          title="Show Conflict Resolution Popup"
+          label="Show Conflict Resolution Popup"
           variant={ButtonVariant.Primary}
         />
       )}

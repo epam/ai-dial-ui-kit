@@ -433,12 +433,12 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
         <div className="flex justify-end gap-3 py-4 px-6">
           <DialButton
             onClick={onClose}
-            title={cancelLabel}
+            label={cancelLabel}
             variant={ButtonVariant.Secondary}
           />
           <DialButton
             onClick={handleConfirm}
-            title={confirmLabel}
+            label={confirmLabel}
             variant={ButtonVariant.Primary}
           />
         </div>
