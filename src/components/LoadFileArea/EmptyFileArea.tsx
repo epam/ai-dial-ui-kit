@@ -166,7 +166,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
     clearErrorState();
   };
 
-  const containerClassNames = classNames(
+  const containerClassName = classNames(
     'border border-dashed rounded w-full cursor-pointer relative h-full hover:border-hover',
     !canDrop && !isFileValidationError && 'border-primary',
     canDrop && (!isOver ? 'border-hover' : 'border-accent-primary'),
@@ -178,7 +178,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   return (
     <>
       <div
-        className={containerClassNames}
+        className={containerClassName}
         ref={dropRef}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}

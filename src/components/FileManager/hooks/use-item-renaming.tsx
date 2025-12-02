@@ -1,7 +1,17 @@
 import type { DialFile } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { findNodeByPath } from '@/components/FileManager/utils';
+
+export interface RenameValidationMessages {
+  emptyName?: string;
+  duplicateName?: string;
+}
+
+const DEFAULT_VALIDATION_MESSAGES: Required<RenameValidationMessages> = {
+  emptyName: 'Name cannot be empty',
+  duplicateName: 'An item with this name already exists',
+};
 
 function collectCopiedItems(
   node: DialFile,
@@ -34,17 +44,13 @@ function changeLastPathSegment(path: string, newName: string): string {
 
 export const useItemRenaming = ({
   items,
-  onRename,
-  onRenameSave,
-  onRenameCancel,
   onRenameValidate,
+  validationMessages,
   onMoveToFiles,
 }: {
   items?: DialFile[];
-  onRename?: (path: string) => void;
-  onRenameSave?: (value: string) => void;
-  onRenameCancel?: () => void;
   onRenameValidate?: (value: string, item: DialFile) => string | null;
+  validationMessages?: RenameValidationMessages;
   onMoveToFiles?: (
     items: DialCopiedItem[],
     sourceFolder: string,
@@ -53,26 +59,29 @@ export const useItemRenaming = ({
 }) => {
   const [renamedPath, setRenamedPath] = useState<string | undefined>();
 
-  const renameHandler = useCallback(
-    (path: string) => {
-      onRename?.(path);
-      setRenamedPath(path);
-    },
-    [onRename],
+  const messages = useMemo(
+    () => ({
+      ...DEFAULT_VALIDATION_MESSAGES,
+      ...validationMessages,
+    }),
+    [validationMessages],
   );
+
+  const renameHandler = useCallback((path: string) => {
+    setRenamedPath(path);
+  }, []);
 
   const renameCancelHandler = useCallback(() => {
     setRenamedPath(undefined);
-    onRenameCancel?.();
-  }, [onRenameCancel]);
+  }, []);
 
   const renameSaveHandler = useCallback(
     (value: string) => {
-      if (onMoveToFiles && renamedPath) {
+      if (renamedPath) {
         const destinationPath = changeLastPathSegment(renamedPath, value);
         const targetNode = findNodeByPath(items, renamedPath);
 
-        if (targetNode) {
+        if (targetNode && onMoveToFiles) {
           const affected = collectCopiedItems(
             targetNode,
             renamedPath,
@@ -83,16 +92,44 @@ export const useItemRenaming = ({
       }
 
       setRenamedPath(undefined);
-      onRenameSave?.(value);
     },
-    [onRenameSave, renamedPath, onMoveToFiles, items],
+    [renamedPath, onMoveToFiles, items],
   );
 
   const renameValidateHandler = useCallback(
-    (value: string, item: DialFile) => {
-      return onRenameValidate?.(value, item) ?? null;
+    (value: string, item: DialFile): string | null => {
+      const trimmedName = value.trim();
+
+      if (!trimmedName) {
+        return messages.emptyName;
+      }
+
+      const parentPath = item.parentPath;
+      if (parentPath) {
+        const parentFolder = findNodeByPath(items, parentPath);
+        if (parentFolder) {
+          const existingNames = new Set(
+            (parentFolder.items ?? [])
+              .filter((sibling) => sibling.path !== item.path)
+              .map((sibling) => sibling.name.toLowerCase()),
+          );
+
+          if (existingNames.has(trimmedName.toLowerCase())) {
+            return messages.duplicateName;
+          }
+        }
+      }
+
+      if (onRenameValidate) {
+        const customError = onRenameValidate(trimmedName, item);
+        if (customError) {
+          return customError;
+        }
+      }
+
+      return null;
     },
-    [onRenameValidate],
+    [onRenameValidate, messages, items],
   );
 
   return {

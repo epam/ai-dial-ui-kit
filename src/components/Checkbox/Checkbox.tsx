@@ -55,7 +55,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
     [onChange, id],
   );
 
-  const checkboxClassNames = classNames(
+  const checkboxClassName = classNames(
     'flex flex-row items-center cursor-pointer text-accent-primary small-medium flex-1 min-w-0',
     `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
     disabled
@@ -80,7 +80,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   };
 
   return (
-    <label className={checkboxClassNames} htmlFor={id}>
+    <label className={checkboxClassName} htmlFor={id}>
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (

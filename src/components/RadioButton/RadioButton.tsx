@@ -61,7 +61,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 }) => {
   const descId = `${inputId}-desc`;
 
-  const labelClassNames = classNames(
+  const allLabelClassName = classNames(
     'dial-small cursor-pointer',
     disabled ? 'text-secondary' : 'text-primary',
     labelClassName,
@@ -78,7 +78,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
     !!description && 'mb-2',
   );
 
-  const descriptionClassNames = classNames(
+  const allDescriptionClassName = classNames(
     'dial-tiny mt-2 ml-[26px] text-secondary',
     descriptionClassName,
   );
@@ -103,13 +103,13 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           onChange={handleChange}
         />
         {title ? (
-          <label className={labelClassNames} htmlFor={inputId}>
+          <label className={allLabelClassName} htmlFor={inputId}>
             {title}
           </label>
         ) : null}
       </div>
       {checked && description && (
-        <div id={descId} className={descriptionClassNames}>
+        <div id={descId} className={allDescriptionClassName}>
           {description}
         </div>
       )}

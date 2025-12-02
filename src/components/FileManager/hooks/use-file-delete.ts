@@ -4,9 +4,13 @@ import { useState, useCallback } from 'react';
 
 export interface UseFileDeleteOptions {
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
+  onDeleteSuccess?: () => void;
 }
 
-export const useFileDelete = ({ onDeleteFiles }: UseFileDeleteOptions) => {
+export const useFileDelete = ({
+  onDeleteFiles,
+  onDeleteSuccess,
+}: UseFileDeleteOptions) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<DialFile[]>([]);
   const [parentFolderPath, setParentFolderPath] = useState<string>('');
@@ -32,9 +36,16 @@ export const useFileDelete = ({ onDeleteFiles }: UseFileDeleteOptions) => {
         nodeType: file.nodeType,
       }));
       onDeleteFiles(deletedItems, parentFolderPath);
+      onDeleteSuccess?.();
     }
     closeDeleteConfirmation();
-  }, [itemsToDelete, onDeleteFiles, closeDeleteConfirmation, parentFolderPath]);
+  }, [
+    itemsToDelete,
+    onDeleteFiles,
+    onDeleteSuccess,
+    closeDeleteConfirmation,
+    parentFolderPath,
+  ]);
 
   return {
     deleteConfirmationOpen,
