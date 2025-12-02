@@ -171,6 +171,11 @@ export interface CreateFolderValidationMessages {
   forbiddenChars?: string;
 }
 
+export interface RenameValidationMessages {
+  emptyName?: string;
+  duplicateName?: string;
+}
+
 export interface DialFileManagerProps {
   path?: string;
   className?: string;
@@ -202,10 +207,8 @@ export interface DialFileManagerProps {
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
   onDownloadFiles?: (items: DialFile[]) => void;
 
-  onRename?: (itemPath: string) => void;
-  onRenameSave?: (value: string) => void;
-  onRenameCancel?: () => void;
   onRenameValidate?: (value: string, item: DialFile) => string | null;
+  renameValidationMessages?: RenameValidationMessages;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
