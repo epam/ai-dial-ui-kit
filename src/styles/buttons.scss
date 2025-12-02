@@ -8,7 +8,7 @@
 }
 
 .dial-base-button-disable {
-  @apply text-controls-disable bg-controls-disable;
+  @apply cursor-not-allowed text-controls-disable bg-controls-disable;
 }
 
 .dial-primary-button {
