@@ -82,6 +82,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
+  conflictResolutionPopupOptions,
   onPathChange,
   onTableFileClick,
   onCopyFiles,
@@ -188,6 +189,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSetCopiedFiles,
     handleSetMovedFiles,
     destinationFolderMode,
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   } = useFileClipboard({
     getDestinationFiles: (path: string) => {
       const folder = findFolderForPath(items, path);
@@ -505,6 +512,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
+
+    conflictResolutionPopupOptions,
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   };
 
   return (

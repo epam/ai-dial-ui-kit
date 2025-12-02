@@ -10,10 +10,12 @@ import type {
   DialFileManagerProps,
   DeleteConfirmationOptions,
   DialFileManagerDestinationFolderPopupOptions,
+  DialFileManagerConflictResolutionPopupOptions,
 } from './FileManager';
 import type { DestinationFolderMode } from './hooks/use-file-clipboard';
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
+import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
 
 export interface FileManagerGridRow {
   id: string;
@@ -39,6 +41,7 @@ export interface FileManagerContextValue {
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
@@ -119,6 +122,13 @@ export interface FileManagerContextValue {
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
   validateFolderName: (name: string) => string | null;
+
+  conflictingFiles: DialFile[];
+  conflictResolutionOpen: boolean;
+  closeConflictResolution: () => void;
+  handleConflictReplace: () => void;
+  handleConflictDuplicate: () => void;
+  handleConflictDecideForEach: (decisions: FileConflictDecision[]) => void;
 }
 
 export const FileManagerContext = createContext<

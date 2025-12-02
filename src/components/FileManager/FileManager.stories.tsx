@@ -13,10 +13,15 @@ import { DialButton } from '@/components/Button/Button';
 import { DialPopup } from '@/components/Popup/Popup';
 import {
   DialFileNodeType,
+  DialFileResourceType,
   type DialFile,
   type DialRootFolder,
 } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
+import {
+  DialFileManagerConflictActions,
+  DialFileManagerConflictStrategies,
+} from '@/types/file-manager';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -481,5 +486,280 @@ export const Loading: Story = {
 export const LoadingWithData: Story = {
   args: {
     filesLoading: true,
+  },
+};
+
+const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
+  const [items] = useState<DialFile[]>(itemsMock);
+  const [destinationPath, setDestinationPath] = useState<string | undefined>();
+
+  const itemsWithDuplicates = useMemo(() => {
+    const clonedItems = JSON.parse(JSON.stringify(items)) as DialFile[];
+    const designFolder = clonedItems[0]?.items?.find(
+      (item) => item.name === 'Design',
+    );
+    if (designFolder?.items) {
+      designFolder.items.push({
+        id: 'duplicate-test-1',
+        name: 'alert.svg',
+        path: '/All files/Design/alert.svg',
+        parentPath: '/All files/Design',
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'svg',
+        contentType: 'image/svg+xml',
+        folderId: 'design',
+        updatedAt: '2025-01-20',
+        contentLength: 5120,
+      });
+    }
+    return clonedItems;
+  }, [items]);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        items={itemsWithDuplicates}
+        destinationFolderPopupOptions={{
+          destinationFolderPath: destinationPath,
+          setDestinationFolderPath: setDestinationPath,
+        }}
+        conflictResolutionPopupOptions={{
+          title: 'Replace Or Duplicate Item',
+          actionLabels: {
+            [DialFileManagerConflictActions.Replace]: 'Replace',
+            [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
+            [DialFileManagerConflictActions.Cancel]: 'Cancel',
+          },
+          strategyLabels: {
+            [DialFileManagerConflictStrategies.ReplaceAll]: 'Replace All',
+            [DialFileManagerConflictStrategies.DuplicateAll]: 'Duplicate All',
+            [DialFileManagerConflictStrategies.DecideForEach]:
+              'Decide For Each',
+          },
+        }}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          actionLabels: {
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+          },
+        }}
+        bulkActionsToolbarOptions={{
+          selectionLabel: 'items selected',
+          actionLabels: {
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+          },
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>([
+            '/All files',
+            '/All files/Design',
+            '/All files/Design/Icons',
+            '/All files/Design/Icons/SVG',
+            '/All files/Design/Icons/SVG/24px',
+          ]),
+        }}
+        onCopyFiles={(items, destinationFolder) => {
+          // eslint-disable-next-line no-console
+          console.log('Copy files:', items, 'to', destinationFolder);
+          alert(
+            `Copied ${items.length} file(s) to ${destinationFolder}:\n${items
+              .map(
+                (f) =>
+                  `${f.sourceUrl} -> ${f.destinationUrl} (overwrite: ${f.overwrite})`,
+              )
+              .join('\n')}`,
+          );
+        }}
+        onMoveToFiles={(items, sourceFolder, destinationFolder) => {
+          alert(
+            `Moved ${items.length} file(s) from ${sourceFolder} to ${destinationFolder}:\n${items
+              .map(
+                (f) =>
+                  `${f.sourceUrl} -> ${f.destinationUrl} (overwrite: ${f.overwrite})`,
+              )
+              .join('\n')}`,
+          );
+        }}
+        onDeleteFiles={(items, sourceFolder) => {
+          alert(
+            `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
+          );
+        }}
+        onDownloadFiles={(items) => {
+          alert(
+            `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
+          );
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithConflictResolution: Story = {
+  render: WithConflictResolutionComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Test conflict resolution by:\n' +
+          '1. Navigate to /All files/Design/Icons/SVG/24px\n' +
+          '2. Select "alert.svg" file\n' +
+          '3. Click "Copy to" action\n' +
+          '4. Select /All files/Design as destination\n' +
+          '5. Click "Copy" - conflict popup should appear\n' +
+          '6. Choose "Replace" (overwrite: true) or "Duplicate" (overwrite: false)',
+      },
+    },
+  },
+};
+
+const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
+  const [destinationPath, setDestinationPath] = useState<string | undefined>();
+
+  const itemsWithMultipleDuplicates = useMemo(() => {
+    const clonedItems = JSON.parse(JSON.stringify(itemsMock)) as DialFile[];
+    const designFolder = clonedItems[0]?.items?.find(
+      (item) => item.name === 'Design',
+    );
+    if (designFolder?.items) {
+      designFolder.items.push(
+        {
+          id: 'duplicate-test-1',
+          name: 'alert.svg',
+          path: '/All files/Design/alert.svg',
+          parentPath: '/All files/Design',
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'svg',
+          contentType: 'image/svg+xml',
+          folderId: 'design',
+          updatedAt: '2025-01-20',
+          contentLength: 5120,
+        },
+        {
+          id: 'duplicate-test-2',
+          name: 'settings.svg',
+          path: '/All files/Design/settings.svg',
+          parentPath: '/All files/Design',
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'svg',
+          contentType: 'image/svg+xml',
+          folderId: 'design',
+          updatedAt: '2025-01-20',
+          contentLength: 6144,
+        },
+        {
+          id: 'duplicate-test-3',
+          name: 'logo.svg',
+          path: '/All files/Design/logo.svg',
+          parentPath: '/All files/Design',
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'svg',
+          contentType: 'image/svg+xml',
+          folderId: 'design',
+          updatedAt: '2025-01-20',
+          contentLength: 5120,
+        },
+      );
+    }
+    return clonedItems;
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        items={itemsWithMultipleDuplicates}
+        path="/All files/Design/Icons/SVG/24px"
+        destinationFolderPopupOptions={{
+          destinationFolderPath: destinationPath,
+          setDestinationFolderPath: setDestinationPath,
+        }}
+        conflictResolutionPopupOptions={{
+          title: 'Replace Or Duplicate Items',
+          actionLabels: {
+            [DialFileManagerConflictActions.Replace]: 'Replace',
+            [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
+            [DialFileManagerConflictActions.Cancel]: 'Cancel',
+          },
+          strategyLabels: {
+            [DialFileManagerConflictStrategies.ReplaceAll]: 'Replace All',
+            [DialFileManagerConflictStrategies.DuplicateAll]: 'Duplicate All',
+            [DialFileManagerConflictStrategies.DecideForEach]:
+              'Decide For Each',
+          },
+        }}
+        gridOptions={{
+          actionLabels: {
+            copy: 'Copy to',
+          },
+        }}
+        bulkActionsToolbarOptions={{
+          selectionLabel: 'items selected',
+          actionLabels: {
+            copy: 'Copy to',
+            move: 'Move to',
+          },
+        }}
+        treeOptions={{
+          expandedPaths: new Set<string>([
+            '/All files',
+            '/All files/Design',
+            '/All files/Design/Icons',
+            '/All files/Design/Icons/SVG',
+            '/All files/Design/Icons/SVG/24px',
+          ]),
+        }}
+        onCopyFiles={(items, destinationFolder) => {
+          alert(
+            `Copied ${items.length} file(s) to ${destinationFolder}:\n${items
+              .map(
+                (f) =>
+                  `${f.sourceUrl} -> ${f.destinationUrl} (overwrite: ${f.overwrite})`,
+              )
+              .join('\n')}`,
+          );
+        }}
+        onMoveToFiles={(items, sourceFolder, destinationFolder) => {
+          alert(
+            `Moved ${items.length} file(s) from ${sourceFolder} to ${destinationFolder}:\n${items
+              .map(
+                (f) =>
+                  `${f.sourceUrl} -> ${f.destinationUrl} (overwrite: ${f.overwrite})`,
+              )
+              .join('\n')}`,
+          );
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithMultipleConflicts: Story = {
+  render: WithMultipleConflictsComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Test multiple file conflicts by:\n' +
+          '1. Select multiple files (alert.svg, settings.svg, logo.svg)\n' +
+          '2. Click "Copy to" action\n' +
+          '3. Select /All files/Design as destination\n' +
+          '4. Click "Copy" - conflict popup should show multiple files',
+      },
+    },
   },
 };

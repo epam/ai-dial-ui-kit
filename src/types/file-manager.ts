@@ -12,3 +12,15 @@ export enum DialFileManagerActions {
   Download = 'download',
   Delete = 'delete',
 }
+
+export enum DialFileManagerConflictActions {
+  Replace = 'replace',
+  Duplicate = 'duplicate',
+  Cancel = 'cancel',
+}
+
+export enum DialFileManagerConflictStrategies {
+  ReplaceAll = 'replaceAll',
+  DuplicateAll = 'duplicateAll',
+  DecideForEach = 'decideForEach',
+}

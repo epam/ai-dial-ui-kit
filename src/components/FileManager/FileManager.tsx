@@ -70,8 +70,17 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
+import {
+  ConflictResolutionPopup,
+  type ConflictResolutionPopupProps,
+} from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 
 type GridRow = FileManagerGridRow;
+
+export type DialFileManagerConflictResolutionPopupOptions = Omit<
+  ConflictResolutionPopupProps,
+  'open' | 'onClose' | 'onReplace' | 'onDuplicate' | 'conflictingFiles'
+>;
 
 export type DialFileManagerDestinationFolderPopupOptions = Pick<
   DestinationFolderPopupProps,
@@ -179,6 +188,7 @@ export interface DialFileManagerProps {
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -321,6 +331,7 @@ export const DialFileManagerView: FC = () => {
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
     destinationFolderPopupOptions,
+    conflictResolutionPopupOptions,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -379,6 +390,13 @@ export const DialFileManagerView: FC = () => {
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
+
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   } = useFileManagerContext();
 
   const {
@@ -797,6 +815,15 @@ export const DialFileManagerView: FC = () => {
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
+      />
+      <ConflictResolutionPopup
+        {...conflictResolutionPopupOptions}
+        open={conflictResolutionOpen}
+        onClose={closeConflictResolution}
+        onReplace={handleConflictReplace}
+        onDuplicate={handleConflictDuplicate}
+        onDecideForEach={handleConflictDecideForEach}
+        conflictingFiles={conflictingFiles}
       />
     </section>
   );

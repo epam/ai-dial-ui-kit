@@ -1,7 +1,8 @@
 import type { DialFile } from '@/models/file';
-import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
 import { useCallback, useState } from 'react';
+import type { FileConflictDecision } from '../components/ConflictResolutionPopup/ConflictResolutionPopup';
+import { useConflictResolution } from './use-conflict-resolution';
 
 export interface UseFileClipboardOptions {
   getDestinationFiles: (path: string) => DialFile[];
@@ -16,69 +17,6 @@ export interface UseFileClipboardOptions {
 
 export type DestinationFolderMode = 'copy' | 'move';
 
-/**
- * Resolves filename conflicts by adding (1), (2), etc.
- * Example: "file.txt" -> "file (1).txt" -> "file (2).txt"
- */
-const resolveNameConflict = (
-  originalName: string,
-  existingNames: Set<string>,
-): string => {
-  if (!existingNames.has(originalName)) {
-    return originalName;
-  }
-
-  const lastDotIndex = originalName.lastIndexOf('.');
-  const hasExtension = lastDotIndex > 0;
-
-  const baseName = hasExtension
-    ? originalName.substring(0, lastDotIndex)
-    : originalName;
-  const extension = hasExtension ? originalName.substring(lastDotIndex) : '';
-
-  let counter = 1;
-  let newName: string;
-
-  do {
-    newName = `${baseName} (${counter})${extension}`;
-    counter++;
-  } while (existingNames.has(newName));
-
-  return newName;
-};
-
-const getFileName = (file: DialFile): string => {
-  return file.name;
-};
-
-const getCopiedItems = (
-  destinationUrl: string,
-  items: DialFile[],
-  destinationFiles: DialFile[],
-  overwrite = false,
-): DialCopiedItem[] => {
-  const existingNames = new Set(destinationFiles.map(getFileName));
-
-  return items.map((file) => {
-    const originalName = file.name;
-
-    const finalName = overwrite
-      ? originalName
-      : resolveNameConflict(originalName, existingNames);
-
-    if (!overwrite) {
-      existingNames.add(finalName);
-    }
-
-    return {
-      sourceUrl: file.path,
-      destinationUrl: `${destinationUrl}/${finalName}`,
-      overwrite,
-      nodeType: file.nodeType ?? DialFileNodeType.ITEM,
-    };
-  });
-};
-
 export const useFileClipboard = ({
   getDestinationFiles,
   onCopyFiles,
@@ -91,47 +29,130 @@ export const useFileClipboard = ({
   const [destinationFolderMode, setDestinationFolderMode] =
     useState<DestinationFolderMode>('copy');
 
+  const [operationMetadata, setOperationMetadata] = useState<{
+    type: 'copy' | 'move';
+    sourceFolder?: string;
+  } | null>(null);
+
+  const {
+    conflictingFiles,
+    conflictResolutionOpen,
+    hasActiveConflictRef,
+    startConflictResolution,
+    resolveConflictsWithStrategy,
+    closeConflictResolution,
+    openConflictResolution,
+    handleReplaceAll: baseHandleReplaceAll,
+    handleDuplicateAll: baseHandleDuplicateAll,
+    handleDecideForEach: baseHandleDecideForEach,
+  } = useConflictResolution({
+    getDestinationFiles,
+    onResolve: (items, destinationFolder) => {
+      if (operationMetadata?.type === 'copy') {
+        onCopyFiles?.(items, destinationFolder);
+      } else if (
+        operationMetadata?.type === 'move' &&
+        operationMetadata.sourceFolder
+      ) {
+        onMoveToFiles?.(
+          items,
+          operationMetadata.sourceFolder,
+          destinationFolder,
+        );
+      }
+    },
+  });
+
+  const clearState = useCallback(() => {
+    setCopiedFiles([]);
+    setMovedFiles([]);
+    setOperationMetadata(null);
+  }, []);
+
   const handleCopyTo = useCallback(
     (destinationFolder: string) => {
-      const destinationFiles = getDestinationFiles(destinationFolder);
-      const resolvedItems = getCopiedItems(
-        destinationFolder,
-        copiedFiles,
-        destinationFiles,
-        false,
-      );
-      onCopyFiles?.(resolvedItems, destinationFolder);
+      const result = startConflictResolution(destinationFolder, copiedFiles, {
+        type: 'copy',
+      });
+
+      setOperationMetadata({ type: 'copy' });
+
+      if (!result.hasConflicts) {
+        const resolvedItems = resolveConflictsWithStrategy(
+          destinationFolder,
+          copiedFiles,
+          false,
+        );
+        onCopyFiles?.(resolvedItems, destinationFolder);
+        clearState();
+      }
     },
-    [getDestinationFiles, onCopyFiles, copiedFiles],
+    [
+      copiedFiles,
+      startConflictResolution,
+      resolveConflictsWithStrategy,
+      onCopyFiles,
+      clearState,
+    ],
   );
 
   const handleMoveTo = useCallback(
     (destinationFolder: string, sourceFolder: string) => {
-      const destinationFiles = getDestinationFiles(destinationFolder);
-      const resolvedItems = getCopiedItems(
-        destinationFolder,
-        movedFiles,
-        destinationFiles,
-        true,
-      );
-      onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+      const result = startConflictResolution(destinationFolder, movedFiles, {
+        type: 'move',
+        sourceFolder,
+      });
+
+      setOperationMetadata({ type: 'move', sourceFolder });
+
+      if (!result.hasConflicts) {
+        const resolvedItems = resolveConflictsWithStrategy(
+          destinationFolder,
+          movedFiles,
+          true,
+        );
+        onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+        clearState();
+      }
     },
-    [getDestinationFiles, onMoveToFiles, movedFiles],
+    [
+      movedFiles,
+      startConflictResolution,
+      resolveConflictsWithStrategy,
+      onMoveToFiles,
+      clearState,
+    ],
+  );
+
+  const handleConflictReplace = useCallback(() => {
+    baseHandleReplaceAll();
+    clearState();
+  }, [baseHandleReplaceAll, clearState]);
+
+  const handleConflictDuplicate = useCallback(() => {
+    baseHandleDuplicateAll();
+    clearState();
+  }, [baseHandleDuplicateAll, clearState]);
+
+  const handleConflictDecideForEach = useCallback(
+    (decisions: FileConflictDecision[]) => {
+      baseHandleDecideForEach(decisions);
+      clearState();
+    },
+    [baseHandleDecideForEach, clearState],
   );
 
   const handleDuplicate = useCallback(
     (files: DialFile[]) => {
       const destinationUrl = files.at(0)?.parentPath ?? '/';
-      const destinationFiles = getDestinationFiles(destinationUrl);
-      const resolvedItems = getCopiedItems(
+      const resolvedItems = resolveConflictsWithStrategy(
         destinationUrl,
         files,
-        destinationFiles,
         false,
       );
       onCopyFiles?.(resolvedItems, destinationUrl);
     },
-    [onCopyFiles, getDestinationFiles],
+    [onCopyFiles, resolveConflictsWithStrategy],
   );
 
   const handleOpenDestinationFolderPopup = useCallback(
@@ -142,15 +163,12 @@ export const useFileClipboard = ({
     [],
   );
 
-  const clearState = useCallback(() => {
-    setCopiedFiles([]);
-    setMovedFiles([]);
-  }, []);
-
   const handleCloseDestinationFolderPopup = useCallback(() => {
     setOpenDestinationFolderPopup(false);
-    clearState();
-  }, [clearState]);
+    if (!hasActiveConflictRef.current) {
+      clearState();
+    }
+  }, [clearState, hasActiveConflictRef]);
 
   const handleSetCopiedFiles = useCallback((files: DialFile[]) => {
     setCopiedFiles(files);
@@ -171,5 +189,12 @@ export const useFileClipboard = ({
     handleSetCopiedFiles,
     handleSetMovedFiles,
     clearState,
+    conflictingFiles,
+    conflictResolutionOpen,
+    openConflictResolution,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   };
 };
