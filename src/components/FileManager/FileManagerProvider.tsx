@@ -224,6 +224,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     confirmDelete,
   } = useFileDelete({
     onDeleteFiles,
+    onDeleteSuccess: clearSelection,
   });
 
   const { handleDownloadFiles } = useFileDownload({
