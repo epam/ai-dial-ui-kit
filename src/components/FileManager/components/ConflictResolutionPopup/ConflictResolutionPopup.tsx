@@ -466,7 +466,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
             onChange={(id) =>
               setStrategy(id as DialFileManagerConflictStrategies)
             }
-            formItemChildrenCssClass="gap-3"
+            formItemChildrenClassName="gap-3"
           />
         )}
       </div>
