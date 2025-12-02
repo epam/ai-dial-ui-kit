@@ -10,17 +10,12 @@ const backgroundsColors = {
   warning: 'var(--bg-warning, #3F3D25)',
   info: 'var(--bg-info, #1C2C47)',
   success: 'var(--bg-success, #1D3841)',
-  'model-icon': 'var(--bg-model-icon, #FFFFFF)',
   'accent-primary': 'var(--bg-accent-primary, #5C8DEA)',
   'accent-secondary': 'var(--bg-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--bg-accent-tertiary, #A972FF)',
   'accent-primary-alpha': 'var(--bg-accent-primary-alpha, #5C8DEA2B)',
   'accent-secondary-alpha': 'var(--bg-accent-secondary-alpha, #37BABC26)',
   'accent-tertiary-alpha': 'var(--bg-accent-tertiary-alpha, #A972FF2B)',
-  'red-400': 'var(--bg-red-400, #F76464)',
-  'red-800': 'var(--bg-red-800, #AE2F2F)',
-  'orange-400': 'var(--bg-orange-400, #D97C27)',
-  'orange-800': 'var(--bg-orange-800, #B25500)',
 };
 
 const buttonsBgColors = {
@@ -44,8 +39,8 @@ const borderColors = {
   'accent-primary-hover': 'var(--stroke-accent-primary-hover, #4878d2)',
   'accent-secondary': 'var(--stroke-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--stroke-accent-tertiary, #A972FF)',
-  'red-900': 'var(--red-900, #402027)',
-  'icon-secondary': 'var(--icon-secondary, #7F8792)',
+  'red-900': 'var(--red-900, #402027)', // TODO: remove or rename - need UI for Stepper
+  'icon-secondary': 'var(--icon-secondary, #7F8792)', // TODO:  rename - need UI for Checkbox
 };
 
 const textColors = {
