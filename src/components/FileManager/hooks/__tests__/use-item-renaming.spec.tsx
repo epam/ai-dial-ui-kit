@@ -74,23 +74,18 @@ describe('useItemRenaming hook', () => {
     expect(typeof result.current.renameValidateHandler).toBe('function');
   });
 
-  it('renameHandler sets renamedPath and calls onRename', () => {
-    const onRename = vi.fn();
-    const { result } = renderHook(() => useItemRenaming({ items, onRename }));
+  it('renameHandler sets renamedPath', () => {
+    const { result } = renderHook(() => useItemRenaming({ items }));
 
     act(() => {
       result.current.renameHandler('/root/A');
     });
 
-    expect(onRename).toHaveBeenCalledWith('/root/A');
     expect(result.current.renamedPath).toBe('/root/A');
   });
 
-  it('renameCancelHandler clears renamedPath and calls onRenameCancel', () => {
-    const onRenameCancel = vi.fn();
-    const { result } = renderHook(() =>
-      useItemRenaming({ items, onRenameCancel }),
-    );
+  it('renameCancelHandler clears renamedPath', () => {
+    const { result } = renderHook(() => useItemRenaming({ items }));
 
     act(() => {
       result.current.renameHandler('/root/A');
@@ -100,16 +95,14 @@ describe('useItemRenaming hook', () => {
       result.current.renameCancelHandler();
     });
 
-    expect(onRenameCancel).toHaveBeenCalledTimes(1);
     expect(result.current.renamedPath).toBeUndefined();
   });
 
   it('renameSaveHandler calls onMoveToFiles for folder with nested children (recursive)', () => {
     const onMoveToFiles = vi.fn();
-    const onRenameSave = vi.fn();
 
     const { result } = renderHook(() =>
-      useItemRenaming({ items, onMoveToFiles, onRenameSave }),
+      useItemRenaming({ items, onMoveToFiles }),
     );
 
     act(() => {
@@ -153,17 +146,14 @@ describe('useItemRenaming hook', () => {
       destinationFolder,
     );
 
-    expect(onRenameSave).toHaveBeenCalledWith('Symbols');
-
     expect(result.current.renamedPath).toBeUndefined();
   });
 
-  it('renameSaveHandler does nothing for onMoveToFiles if target not found but still calls onRenameSave', () => {
+  it('renameSaveHandler does nothing for onMoveToFiles if target not found', () => {
     const onMoveToFiles = vi.fn();
-    const onRenameSave = vi.fn();
 
     const { result } = renderHook(() =>
-      useItemRenaming({ items, onMoveToFiles, onRenameSave }),
+      useItemRenaming({ items, onMoveToFiles }),
     );
 
     act(() => {
@@ -175,15 +165,11 @@ describe('useItemRenaming hook', () => {
     });
 
     expect(onMoveToFiles).not.toHaveBeenCalled();
-    expect(onRenameSave).toHaveBeenCalledWith('Whatever');
     expect(result.current.renamedPath).toBeUndefined();
   });
 
-  it('renameSaveHandler works when onMoveToFiles is not provided (no crash) and still calls onRenameSave', () => {
-    const onRenameSave = vi.fn();
-    const { result } = renderHook(() =>
-      useItemRenaming({ items, onRenameSave }),
-    );
+  it('renameSaveHandler works when onMoveToFiles is not provided (no crash)', () => {
+    const { result } = renderHook(() => useItemRenaming({ items }));
 
     act(() => {
       result.current.renameHandler('/root/B');
@@ -193,7 +179,6 @@ describe('useItemRenaming hook', () => {
       result.current.renameSaveHandler('NewB');
     });
 
-    expect(onRenameSave).toHaveBeenCalledWith('NewB');
     expect(result.current.renamedPath).toBeUndefined();
   });
 
@@ -250,19 +235,95 @@ describe('useItemRenaming hook', () => {
     ]);
   });
 
-  it('renameValidateHandler delegates to onRenameValidate and returns its result', () => {
-    const validate = vi.fn((value: string) =>
-      value === 'bad' ? 'error' : null,
-    );
-    const { result } = renderHook(() =>
-      useItemRenaming({ items, onRenameValidate: validate }),
-    );
+  describe('renameValidateHandler', () => {
+    it('returns error for empty name', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
 
-    const ok = result.current.renameValidateHandler('good', items[0]);
-    const bad = result.current.renameValidateHandler('bad', items[0]);
+      const error = result.current.renameValidateHandler(
+        '  ',
+        items[0].items![0],
+      );
+      expect(error).toBe('Name cannot be empty');
+    });
 
-    expect(ok).toBeNull();
-    expect(bad).toBe('error');
-    expect(validate).toHaveBeenCalledTimes(2);
+    it('returns error for duplicate name in the same folder', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0]; // /root/A
+      const error = result.current.renameValidateHandler('B', folderA);
+      expect(error).toBe('An item with this name already exists');
+    });
+
+    it('returns null for valid unique name', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0]; // /root/A
+      const error = result.current.renameValidateHandler('C', folderA);
+      expect(error).toBeNull();
+    });
+
+    it('allows renaming to the same name (case-insensitive check excludes self)', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0]; // /root/A
+      const error = result.current.renameValidateHandler('A', folderA);
+      expect(error).toBeNull();
+    });
+
+    it('uses custom validation messages', () => {
+      const { result } = renderHook(() =>
+        useItemRenaming({
+          items,
+          validationMessages: {
+            emptyName: 'Custom empty error',
+            duplicateName: 'Custom duplicate error',
+          },
+        }),
+      );
+
+      const emptyError = result.current.renameValidateHandler(
+        '  ',
+        items[0].items![0],
+      );
+      expect(emptyError).toBe('Custom empty error');
+
+      const folderA = items[0].items![0];
+      const duplicateError = result.current.renameValidateHandler('B', folderA);
+      expect(duplicateError).toBe('Custom duplicate error');
+    });
+
+    it('delegates to onRenameValidate and returns its result', () => {
+      const validate = vi.fn((value: string) =>
+        value === 'bad' ? 'Custom validation error' : null,
+      );
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onRenameValidate: validate }),
+      );
+
+      const folderA = items[0].items![0];
+      const ok = result.current.renameValidateHandler('good', folderA);
+      const bad = result.current.renameValidateHandler('bad', folderA);
+
+      expect(ok).toBeNull();
+      expect(bad).toBe('Custom validation error');
+      expect(validate).toHaveBeenCalledWith('good', folderA);
+      expect(validate).toHaveBeenCalledWith('bad', folderA);
+    });
+
+    it('checks custom validation after built-in validation passes', () => {
+      const validate = vi.fn(() => 'Always fails');
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onRenameValidate: validate }),
+      );
+
+      const folderA = items[0].items![0];
+      const error = result.current.renameValidateHandler(
+        'UniqueValid',
+        folderA,
+      );
+
+      expect(error).toBe('Always fails');
+      expect(validate).toHaveBeenCalledWith('UniqueValid', folderA);
+    });
   });
 });

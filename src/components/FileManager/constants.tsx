@@ -26,3 +26,7 @@ export const BASE_FILE_MANAGER_ICON_SIZE = 20;
 export const FILES_DATA_TRANSFER_TYPE = 'Files';
 
 export const FOLDER_PLACEHOLDER_FILE_NAME = '.dial_folder';
+
+export const FOLDERS_TREE_PANEL_MIN_WIDTH = 280;
+
+export const FOLDERS_TREE_PANEL_MAX_WIDTH = 460;

@@ -98,6 +98,50 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
     expect(result.current.itemsToDelete).toEqual([]);
   });
 
+  it('confirmDelete calls onDeleteSuccess after successful deletion', () => {
+    const onDeleteFiles = vi.fn();
+    const onDeleteSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDelete({ onDeleteFiles, onDeleteSuccess }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'file.txt',
+        path: '/file.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.openDeleteConfirmation(files, '/');
+    });
+
+    act(() => {
+      result.current.confirmDelete();
+    });
+
+    expect(onDeleteFiles).toHaveBeenCalledTimes(1);
+    expect(onDeleteSuccess).toHaveBeenCalledTimes(1);
+    expect(onDeleteSuccess).toHaveBeenCalledWith();
+  });
+
+  it('confirmDelete does not call onDeleteSuccess if no items to delete', () => {
+    const onDeleteFiles = vi.fn();
+    const onDeleteSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDelete({ onDeleteFiles, onDeleteSuccess }),
+    );
+
+    act(() => {
+      result.current.confirmDelete();
+    });
+
+    expect(onDeleteFiles).not.toHaveBeenCalled();
+    expect(onDeleteSuccess).not.toHaveBeenCalled();
+  });
+
   it('confirmDelete does not call onDeleteFiles if no items to delete', () => {
     const onDeleteFiles = vi.fn();
     const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
@@ -134,6 +178,62 @@ describe('Dial UI Kit :: FileManager :: useFileDelete', () => {
 
     expect(result.current.deleteConfirmationOpen).toBe(false);
     expect(result.current.itemsToDelete).toEqual([]);
+  });
+
+  it('confirmDelete works without onDeleteSuccess callback', () => {
+    const onDeleteFiles = vi.fn();
+    const { result } = renderHook(() => useFileDelete({ onDeleteFiles }));
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'file.txt',
+        path: '/file.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.openDeleteConfirmation(files, '/');
+    });
+
+    expect(() => {
+      act(() => {
+        result.current.confirmDelete();
+      });
+    }).not.toThrow();
+
+    expect(onDeleteFiles).toHaveBeenCalledTimes(1);
+    expect(result.current.deleteConfirmationOpen).toBe(false);
+  });
+
+  it('onDeleteSuccess is called after onDeleteFiles', () => {
+    const callOrder: string[] = [];
+    const onDeleteFiles = vi.fn(() => callOrder.push('onDeleteFiles'));
+    const onDeleteSuccess = vi.fn(() => callOrder.push('onDeleteSuccess'));
+
+    const { result } = renderHook(() =>
+      useFileDelete({ onDeleteFiles, onDeleteSuccess }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'file.txt',
+        path: '/file.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.openDeleteConfirmation(files, '/');
+    });
+
+    act(() => {
+      result.current.confirmDelete();
+    });
+
+    expect(callOrder).toEqual(['onDeleteFiles', 'onDeleteSuccess']);
   });
 
   it('handles deletion of multiple files including folders', () => {
