@@ -75,7 +75,10 @@ import type {
   FileUploadValidationMessages,
 } from '@/components/FileManager/hooks/use-file-upload';
 import classNames from 'classnames';
-import { DialFileManagerActions } from '@/types/file-manager';
+import {
+  DestinationFolderMode,
+  DialFileManagerActions,
+} from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
@@ -525,7 +528,7 @@ export const DialFileManagerView: FC = () => {
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
         items.push({
-          key: 'copy',
+          key: DestinationFolderMode.Copy,
           label: treeOptions.actionLabels[DialFileManagerActions.Copy],
           icon: (
             <CopyToIcon
@@ -536,13 +539,13 @@ export const DialFileManagerView: FC = () => {
           ),
           onClick: () => {
             handleSetCopiedFiles([file]);
-            handleOpenDestinationFolderPopup('copy');
+            handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
           },
         });
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Move]) {
         items.push({
-          key: 'move',
+          key: DestinationFolderMode.Move,
           label: treeOptions.actionLabels[DialFileManagerActions.Move],
           icon: (
             <MoveToIcon
@@ -553,7 +556,7 @@ export const DialFileManagerView: FC = () => {
           ),
           onClick: () => {
             handleSetMovedFiles([file]);
-            handleOpenDestinationFolderPopup('move');
+            handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
           },
         });
       }
@@ -620,11 +623,11 @@ export const DialFileManagerView: FC = () => {
     onDuplicate: handleDuplicate,
     onCopy: (files) => {
       handleSetCopiedFiles(files);
-      handleOpenDestinationFolderPopup('copy');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
     },
     onMove: (files) => {
       handleSetMovedFiles(files);
-      handleOpenDestinationFolderPopup('move');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: handleDownloadFiles,
     onRename,
@@ -685,11 +688,11 @@ export const DialFileManagerView: FC = () => {
     onDuplicate: (file) => handleDuplicate([file]),
     onCopy: (file) => {
       handleSetCopiedFiles([file]);
-      handleOpenDestinationFolderPopup('copy');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
     },
     onMove: (file) => {
       handleSetMovedFiles([file]);
-      handleOpenDestinationFolderPopup('move');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: (file) => handleDownloadFiles([file]),
     onRename,
@@ -825,7 +828,7 @@ export const DialFileManagerView: FC = () => {
         onConfirm={() => {
           const destinationPath =
             destinationFolderPopupOptions?.destinationFolderPath ?? '/';
-          if (destinationFolderMode === 'copy') {
+          if (destinationFolderMode === DestinationFolderMode.Copy) {
             handleCopyTo(destinationPath);
           } else {
             const sourcePath = currentPath ?? '/';

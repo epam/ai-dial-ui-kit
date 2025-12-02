@@ -3,7 +3,10 @@ import { renderHook, act } from '@testing-library/react';
 import { useFileClipboard } from '@/components/FileManager/hooks/use-file-clipboard';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
-import { DialFileManagerConflictActions } from '@/types/file-manager';
+import {
+  DestinationFolderMode,
+  DialFileManagerConflictActions,
+} from '@/types/file-manager';
 
 describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
   let destinationFiles: DialFile[] = [];
@@ -22,7 +25,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     expect(result.current.openDestinationFolderPopup).toBe(false);
-    expect(result.current.destinationFolderMode).toBe('copy');
+    expect(result.current.destinationFolderMode).toBe(
+      DestinationFolderMode.Copy,
+    );
     expect(result.current.conflictResolutionOpen).toBe(false);
     expect(result.current.conflictingFiles).toEqual([]);
   });
@@ -33,7 +38,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     act(() => {
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
@@ -46,11 +53,15 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     act(() => {
-      result.current.handleOpenDestinationFolderPopup('move');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Move,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
-    expect(result.current.destinationFolderMode).toBe('move');
+    expect(result.current.destinationFolderMode).toBe(
+      DestinationFolderMode.Move,
+    );
   });
 
   it('handleCloseDestinationFolderPopup closes popup and clears state', () => {
@@ -67,7 +78,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
@@ -488,7 +501,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
       result.current.handleCloseDestinationFolderPopup();
     });
 

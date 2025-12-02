@@ -24,3 +24,8 @@ export enum DialFileManagerConflictStrategies {
   DuplicateAll = 'duplicateAll',
   DecideForEach = 'decideForEach',
 }
+
+export enum DestinationFolderMode {
+  Copy = 'copy',
+  Move = 'move',
+}

@@ -12,10 +12,10 @@ import type {
   DialFileManagerDestinationFolderPopupOptions,
   DialFileManagerConflictResolutionPopupOptions,
 } from './FileManager';
-import type { DestinationFolderMode } from './hooks/use-file-clipboard';
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
 import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
+import type { DestinationFolderMode } from '@/types/file-manager';
 
 export interface FileManagerGridRow {
   id: string;

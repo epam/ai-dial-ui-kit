@@ -2,7 +2,7 @@ import { useCallback, useState, useRef } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
-import type { FileConflictDecision } from '../components/ConflictResolutionPopup/ConflictResolutionPopup';
+import type { FileConflictDecision } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { DialFileManagerConflictActions } from '@/types/file-manager';
 
 export interface UseConflictResolutionOptions {

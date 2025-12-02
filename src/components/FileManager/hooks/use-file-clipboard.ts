@@ -1,8 +1,9 @@
 import type { DialFile } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
 import { useCallback, useState } from 'react';
-import type { FileConflictDecision } from '../components/ConflictResolutionPopup/ConflictResolutionPopup';
+import type { FileConflictDecision } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { useConflictResolution } from './use-conflict-resolution';
+import { DestinationFolderMode } from '@/types/file-manager';
 
 export interface UseFileClipboardOptions {
   getDestinationFiles: (path: string) => DialFile[];
@@ -15,7 +16,7 @@ export interface UseFileClipboardOptions {
   ) => void;
 }
 
-export type DestinationFolderMode = 'copy' | 'move';
+// export type DestinationFolderMode = 'copy' | 'move';
 
 export const useFileClipboard = ({
   getDestinationFiles,
@@ -27,7 +28,7 @@ export const useFileClipboard = ({
   const [copiedFiles, setCopiedFiles] = useState<DialFile[]>([]);
   const [movedFiles, setMovedFiles] = useState<DialFile[]>([]);
   const [destinationFolderMode, setDestinationFolderMode] =
-    useState<DestinationFolderMode>('copy');
+    useState<DestinationFolderMode>(DestinationFolderMode.Copy);
 
   const [operationMetadata, setOperationMetadata] = useState<{
     type: 'copy' | 'move';
@@ -72,10 +73,10 @@ export const useFileClipboard = ({
   const handleCopyTo = useCallback(
     (destinationFolder: string) => {
       const result = startConflictResolution(destinationFolder, copiedFiles, {
-        type: 'copy',
+        type: DestinationFolderMode.Copy,
       });
 
-      setOperationMetadata({ type: 'copy' });
+      setOperationMetadata({ type: DestinationFolderMode.Copy });
 
       if (!result.hasConflicts) {
         const resolvedItems = resolveConflictsWithStrategy(
@@ -99,11 +100,11 @@ export const useFileClipboard = ({
   const handleMoveTo = useCallback(
     (destinationFolder: string, sourceFolder: string) => {
       const result = startConflictResolution(destinationFolder, movedFiles, {
-        type: 'move',
+        type: DestinationFolderMode.Move,
         sourceFolder,
       });
 
-      setOperationMetadata({ type: 'move', sourceFolder });
+      setOperationMetadata({ type: DestinationFolderMode.Move, sourceFolder });
 
       if (!result.hasConflicts) {
         const resolvedItems = resolveConflictsWithStrategy(
