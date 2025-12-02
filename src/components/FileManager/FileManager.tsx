@@ -80,6 +80,7 @@ import { DialFileManagerItemName } from '@/components/FileManager/components/Fil
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
+import type { RenameValidationMessages } from './hooks/use-item-renaming';
 
 type GridRow = FileManagerGridRow;
 
@@ -169,11 +170,6 @@ export interface CreateFolderValidationMessages {
   emptyName?: string;
   duplicateName?: string;
   forbiddenChars?: string;
-}
-
-export interface RenameValidationMessages {
-  emptyName?: string;
-  duplicateName?: string;
 }
 
 export interface DialFileManagerProps {
