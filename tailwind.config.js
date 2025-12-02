@@ -73,7 +73,7 @@ export default {
     borderColor: borderColors,
     stroke: borderColors,
     divideColor: borderColors,
-    textColor: { ...textColors, ...buttonsTextColors, ...iconColors },
+    textColor: { ...textColors, ...buttonsTextColors },
     gradientColorStops: backgroundsColors,
     extend: {
       animation: {
