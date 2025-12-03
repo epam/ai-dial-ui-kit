@@ -64,17 +64,18 @@ describe('useItemRenaming hook', () => {
     items = buildTree();
   });
 
-  it('initial state: renamedPath undefined and handlers exist', () => {
+  it('initial state: renamedPath and renamedItem undefined, handlers exist', () => {
     const { result } = renderHook(() => useItemRenaming({ items }));
 
     expect(result.current.renamedPath).toBeUndefined();
+    expect(result.current.renamedItem).toBeUndefined();
     expect(typeof result.current.renameHandler).toBe('function');
     expect(typeof result.current.renameCancelHandler).toBe('function');
     expect(typeof result.current.renameSaveHandler).toBe('function');
     expect(typeof result.current.renameValidateHandler).toBe('function');
   });
 
-  it('renameHandler sets renamedPath', () => {
+  it('renameHandler sets renamedPath and renamedItem', () => {
     const { result } = renderHook(() => useItemRenaming({ items }));
 
     act(() => {
@@ -82,9 +83,12 @@ describe('useItemRenaming hook', () => {
     });
 
     expect(result.current.renamedPath).toBe('/root/A');
+    expect(result.current.renamedItem).toBeDefined();
+    expect(result.current.renamedItem?.path).toBe('/root/A');
+    expect(result.current.renamedItem?.name).toBe('A');
   });
 
-  it('renameCancelHandler clears renamedPath', () => {
+  it('renameCancelHandler clears renamedPath and renamedItem', () => {
     const { result } = renderHook(() => useItemRenaming({ items }));
 
     act(() => {
@@ -96,9 +100,10 @@ describe('useItemRenaming hook', () => {
     });
 
     expect(result.current.renamedPath).toBeUndefined();
+    expect(result.current.renamedItem).toBeUndefined();
   });
 
-  it('renameSaveHandler calls onMoveToFiles for folder with nested children (recursive)', () => {
+  it('renameSaveHandler calls onMoveToFiles with only the renamed item', () => {
     const onMoveToFiles = vi.fn();
 
     const { result } = renderHook(() =>
@@ -113,8 +118,7 @@ describe('useItemRenaming hook', () => {
       result.current.renameSaveHandler('Symbols');
     });
 
-    const sourceFolder = '/root/A';
-    const destinationFolder = '/root/Symbols';
+    const parentPath = '/root';
 
     const expected: DialCopiedItem[] = [
       {
@@ -122,34 +126,20 @@ describe('useItemRenaming hook', () => {
         destinationUrl: '/root/Symbols',
         nodeType: DialFileNodeType.FOLDER,
       },
-      {
-        sourceUrl: '/root/A/a1.txt',
-        destinationUrl: '/root/Symbols/a1.txt',
-        nodeType: DialFileNodeType.ITEM,
-      },
-      {
-        sourceUrl: '/root/A/sub',
-        destinationUrl: '/root/Symbols/sub',
-        nodeType: DialFileNodeType.FOLDER,
-      },
-      {
-        sourceUrl: '/root/A/sub/deep.txt',
-        destinationUrl: '/root/Symbols/sub/deep.txt',
-        nodeType: DialFileNodeType.ITEM,
-      },
     ];
 
     expect(onMoveToFiles).toHaveBeenCalledTimes(1);
     expect(onMoveToFiles).toHaveBeenCalledWith(
       expected,
-      sourceFolder,
-      destinationFolder,
+      parentPath,
+      parentPath,
     );
 
     expect(result.current.renamedPath).toBeUndefined();
+    expect(result.current.renamedItem).toBeUndefined();
   });
 
-  it('renameSaveHandler does nothing for onMoveToFiles if target not found', () => {
+  it('renameSaveHandler does nothing if item not found', () => {
     const onMoveToFiles = vi.fn();
 
     const { result } = renderHook(() =>
@@ -166,6 +156,7 @@ describe('useItemRenaming hook', () => {
 
     expect(onMoveToFiles).not.toHaveBeenCalled();
     expect(result.current.renamedPath).toBeUndefined();
+    expect(result.current.renamedItem).toBeUndefined();
   });
 
   it('renameSaveHandler works when onMoveToFiles is not provided (no crash)', () => {
@@ -180,59 +171,33 @@ describe('useItemRenaming hook', () => {
     });
 
     expect(result.current.renamedPath).toBeUndefined();
+    expect(result.current.renamedItem).toBeUndefined();
   });
 
-  it('replaces only the first occurrence of oldBase when building destinationUrl (prefix replacement behavior)', () => {
+  it('handles renaming a file (not a folder)', () => {
     const onMoveToFiles = vi.fn();
 
-    const itemsCustom: DialFile[] = [
-      {
-        id: 'p1',
-        name: 'B',
-        path: '/A/B',
-        nodeType: DialFileNodeType.FOLDER,
-        items: [
-          {
-            id: 'p2',
-            name: 'B2',
-            path: '/A/B/B/file.txt',
-            nodeType: DialFileNodeType.ITEM,
-            parentPath: '/A/B/B',
-          } as DialFile,
-        ],
-      } as DialFile,
-    ];
-
     const { result } = renderHook(() =>
-      useItemRenaming({ items: itemsCustom, onMoveToFiles }),
+      useItemRenaming({ items, onMoveToFiles }),
     );
 
     act(() => {
-      result.current.renameHandler('/A/B');
+      result.current.renameHandler('/root/A/a1.txt');
     });
 
     act(() => {
-      result.current.renameSaveHandler('C');
+      result.current.renameSaveHandler('renamed.txt');
     });
 
-    expect(onMoveToFiles).toHaveBeenCalledTimes(1);
-    const [affected, source, dest] = onMoveToFiles.mock.calls[0];
-
-    expect(source).toBe('/A/B');
-    expect(dest).toBe('/A/C');
-
-    expect(affected).toEqual([
+    const expected: DialCopiedItem[] = [
       {
-        sourceUrl: '/A/B',
-        destinationUrl: '/A/C',
-        nodeType: DialFileNodeType.FOLDER,
-      },
-      {
-        sourceUrl: '/A/B/B/file.txt',
-        destinationUrl: '/A/C/B/file.txt',
+        sourceUrl: '/root/A/a1.txt',
+        destinationUrl: '/root/A/renamed.txt',
         nodeType: DialFileNodeType.ITEM,
       },
-    ]);
+    ];
+
+    expect(onMoveToFiles).toHaveBeenCalledWith(expected, '/root/A', '/root/A');
   });
 
   describe('renameValidateHandler', () => {
