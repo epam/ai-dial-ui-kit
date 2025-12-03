@@ -18,15 +18,26 @@ export interface DialFileNameProps {
  * Component to display a file name with a file icon and shared indicator.
  * Handles long names with ellipsis and tooltip.
  *
+ * If `details` is provided (e.g., file size, date), the component switches to
+ * a vertical layout and renders the extra information below the file name.
+ *
  * @example
  * ```tsx
+ * // Without details
  * <DialFileName name="Document.pdf" />
+ *
+ * // With details (file size and updated date)
+ * <DialFileName
+ *   name="Document.pdf"
+ *   details={<span className="text-secondary">24 KB · Jul 20, 2025</span>}
+ * />
  * ```
  *
- * @param name - Full file name with or without extension
- * @param className - Additional CSS classes for the root container
- * @param shared - Whether the file is shared
+ * @param name - Full file name with or without extension.
+ * @param className - Additional CSS classes for the root container.
+ * @param shared - Whether the file is shared.
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
+ * @param details - Optional metadata block displayed under the file name (e.g., size, modified date).
  */
 export const DialFileName: FC<DialFileNameProps> = ({
   name,

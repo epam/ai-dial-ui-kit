@@ -71,6 +71,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * Provides a pre-configured grid with:
  * - Dark theme styling with CSS variable integration
  * - Optional row selection with checkboxes
+ * - Optional actions column
  * - Context menu integration via DialDropdown
  * - Text overflow handling with tooltips via DialEllipsisTooltip
  * - Controlled or uncontrolled selection modes
@@ -137,8 +138,11 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [className] - Additional CSS classes to apply to the grid container
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
+ * @param [withActionsColumn=false] - Whether to show an additional actions column for each row
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
+ * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
+ * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
@@ -149,6 +153,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  *   providing additional context or instructions (e.g., "No data found" or "Try adjusting your filters").
  * @param [loading=false] - When true, shows AG-Grid's native loading overlay
  * @param [wrapperBorder=true] - Whether to apply a border around the grid container
+ * @param [withoutHeaderBorders=false] - Whether to hide the header row borders
  */
 export const DialGrid = <T extends object>({
   columnDefs,
