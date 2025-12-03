@@ -16,6 +16,8 @@ const backgroundsColors = {
   'accent-primary-alpha': 'var(--bg-accent-primary-alpha, #5C8DEA2B)',
   'accent-secondary-alpha': 'var(--bg-accent-secondary-alpha, #37BABC26)',
   'accent-tertiary-alpha': 'var(--bg-accent-tertiary-alpha, #A972FF2B)',
+  'red-400': 'var(--bg-red-400, #F76464)', // TODO: remove or rename - need UI for Button
+  'red-800': 'var(--bg-red-800, #AE2F2F)', // TODO: remove or rename - need UI for Button
 };
 
 const buttonsBgColors = {
