@@ -199,7 +199,10 @@ export const DialFileManagerNavigationPanel: FC<
           className="!p-[9px]"
           variant={ButtonVariant.Secondary}
           iconBefore={<IconArrowLeft {...BASE_ICON_PROPS} />}
-          onClick={() => setIsSearchExpanded(false)}
+          onClick={() => {
+            setIsSearchExpanded(false);
+            onSearchChange?.('');
+          }}
         />
       );
     }
@@ -221,6 +224,7 @@ export const DialFileManagerNavigationPanel: FC<
     isSearchExpanded,
     isCompactView,
     titleClassName,
+    onSearchChange,
   ]);
 
   return (
