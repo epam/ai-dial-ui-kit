@@ -108,4 +108,42 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('/')).toBeInTheDocument();
   });
+
+  test('search container has small width initially in compact view', () => {
+    render(
+      <DialFileManagerNavigationPanel path="Root" isCompactView searchable />,
+    );
+    const searchContainer = screen.getByRole('search');
+    expect(searchContainer).toHaveClass('w-[38px]');
+  });
+
+  test('search container expands to full width when clicked in compact view', () => {
+    render(
+      <DialFileManagerNavigationPanel path="Root" isCompactView searchable />,
+    );
+    const searchContainer = screen.getByRole('search');
+
+    fireEvent.click(searchContainer);
+    expect(searchContainer).toHaveClass('w-full');
+  });
+
+  test('renders back button instead of breadcrumb when compact view & search expanded', () => {
+    render(
+      <DialFileManagerNavigationPanel
+        path="Root/Folder"
+        isCompactView
+        searchable
+      />,
+    );
+    const searchContainer = screen.getByRole('search');
+
+    fireEvent.click(searchContainer);
+
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+    const backButton = screen.getByRole('button');
+    expect(backButton).toBeInTheDocument();
+
+    fireEvent.click(backButton);
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
+  });
 });
