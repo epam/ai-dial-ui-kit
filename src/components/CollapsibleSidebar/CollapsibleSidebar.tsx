@@ -128,7 +128,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       >
         {opened && additionalButtons}
         <DialButton
-          className={'hover:text-icon-accent-primary p-1'}
+          className={'hover:text-accent-primary p-1'}
           onClick={changeVisibility}
           iconBefore={
             opened ? (

@@ -21,7 +21,7 @@ export const breadcrumbLinkInteractiveClassName =
 export const breadcrumbCurrentClassName = 'text-primary cursor-default';
 
 export const breadcrumbSeparatorClassName =
-  'flex-none inline-flex items-center leading-none text-icon-secondary';
+  'flex-none inline-flex items-center leading-none text-secondary';
 
 export const breadcrumbEllipsisButtonClassName =
   'items-center gap-1 min-w-0 transition-colors text-secondary hover:text-accent-primary';
