@@ -199,6 +199,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getSourceFiles: () => items,
     onCopyFiles,
     onMoveToFiles,
+    onCopySuccess: clearSelection,
+    onMoveSuccess: clearSelection,
+    onDuplicateSuccess: clearSelection,
   });
 
   useEffect(() => {
@@ -232,6 +235,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const { handleDownloadFiles } = useFileDownload({
     onDownloadFiles,
+    onDownloadSuccess: clearSelection,
   });
 
   const {

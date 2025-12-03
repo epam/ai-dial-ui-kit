@@ -92,8 +92,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     expect(result.current.openDestinationFolderPopup).toBe(false);
   });
 
-  it('handleCopyTo without conflicts calls onCopyFiles directly', () => {
+  it('handleCopyTo without conflicts calls onCopyFiles and onCopySuccess', () => {
     const onCopyFiles = vi.fn();
+    const onCopySuccess = vi.fn();
     destinationFiles = [];
     const copiedFiles: DialFile[] = [
       {
@@ -115,6 +116,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onCopySuccess,
       }),
     );
 
@@ -144,11 +146,13 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/dest',
     );
+    expect(onCopySuccess).toHaveBeenCalledTimes(1);
     expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
   it('handleCopyTo with conflicts opens conflict resolution popup', () => {
     const onCopyFiles = vi.fn();
+    const onCopySuccess = vi.fn();
     destinationFiles = [
       {
         id: '1',
@@ -177,6 +181,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onCopySuccess,
       }),
     );
 
@@ -192,10 +197,12 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     expect(result.current.conflictingFiles).toHaveLength(1);
     expect(result.current.conflictingFiles[0].name).toBe('a.txt');
     expect(onCopyFiles).not.toHaveBeenCalled();
+    expect(onCopySuccess).not.toHaveBeenCalled();
   });
 
-  it('handleConflictReplace resolves with overwrite=true', () => {
+  it('handleConflictReplace resolves with overwrite=true and calls onCopySuccess', () => {
     const onCopyFiles = vi.fn();
+    const onCopySuccess = vi.fn();
     destinationFiles = [
       {
         id: '1',
@@ -218,6 +225,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onCopySuccess,
       }),
     );
 
@@ -246,11 +254,13 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/dest',
     );
+    expect(onCopySuccess).toHaveBeenCalledTimes(1);
     expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleConflictDuplicate resolves with renamed files', () => {
+  it('handleConflictDuplicate resolves with renamed files and calls onCopySuccess', () => {
     const onCopyFiles = vi.fn();
+    const onCopySuccess = vi.fn();
     destinationFiles = [
       {
         id: '1',
@@ -273,6 +283,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onCopySuccess,
       }),
     );
 
@@ -301,11 +312,13 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/dest',
     );
+    expect(onCopySuccess).toHaveBeenCalledTimes(1);
     expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleConflictDecideForEach with mixed decisions', () => {
+  it('handleConflictDecideForEach with mixed decisions calls onCopySuccess', () => {
     const onCopyFiles = vi.fn();
+    const onCopySuccess = vi.fn();
     destinationFiles = [
       {
         id: '1',
@@ -352,6 +365,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onCopySuccess,
       }),
     );
 
@@ -394,11 +408,13 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/dest',
     );
+    expect(onCopySuccess).toHaveBeenCalledTimes(1);
     expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleMoveTo without conflicts calls onMoveToFiles directly', () => {
+  it('handleMoveTo without conflicts calls onMoveToFiles and onMoveSuccess', () => {
     const onMoveToFiles = vi.fn();
+    const onMoveSuccess = vi.fn();
     destinationFiles = [];
     const movedFiles: DialFile[] = [
       {
@@ -415,6 +431,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onMoveToFiles,
+        onMoveSuccess,
       }),
     );
 
@@ -438,10 +455,12 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       '/source',
       '/dest',
     );
+    expect(onMoveSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('handleDuplicate duplicates files in the same folder', () => {
+  it('handleDuplicate duplicates files in the same folder and calls onDuplicateSuccess', () => {
     const onCopyFiles = vi.fn();
+    const onDuplicateSuccess = vi.fn();
     destinationFiles = [
       {
         id: '1',
@@ -466,6 +485,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         getDestinationFiles,
         getSourceFiles,
         onCopyFiles,
+        onDuplicateSuccess,
       }),
     );
 
@@ -484,6 +504,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/folder',
     );
+    expect(onDuplicateSuccess).toHaveBeenCalledTimes(1);
   });
 
   it('clearState is called after handleCloseDestinationFolderPopup', () => {
