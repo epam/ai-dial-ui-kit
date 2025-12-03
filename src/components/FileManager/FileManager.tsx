@@ -382,6 +382,7 @@ export const DialFileManagerView: FC = () => {
     deleteConfirmationOpen,
     itemsToDelete,
     renamedPath,
+    renamedItem,
     onRename,
     onRenameSave,
     onRenameCancel,
@@ -463,6 +464,26 @@ export const DialFileManagerView: FC = () => {
             );
           }
 
+          const isBeingRenamed = renamedPath === params.data?.path;
+          if (isBeingRenamed && renamedItem && params.data) {
+            return (
+              <DialFileManagerItemName
+                name={params.data.name}
+                type={
+                  params.data.nodeType === DialFileNodeType.FOLDER
+                    ? DialItemType.Folder
+                    : DialItemType.File
+                }
+                elementId={`rename-${params.data.id}`}
+                editing={true}
+                iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                validate={(value) => onRenameValidate(value, renamedItem)}
+                onSave={onRenameSave}
+                onCancel={onRenameCancel}
+              />
+            );
+          }
+
           return params.data?.nodeType === DialFileNodeType.FOLDER ? (
             <DialFolderName
               name={params.data.name}
@@ -502,6 +523,11 @@ export const DialFileManagerView: FC = () => {
     saveFolderCreation,
     cancelFolderCreation,
     validateFolderName,
+    renamedPath,
+    renamedItem,
+    onRenameValidate,
+    onRenameSave,
+    onRenameCancel,
   ]);
 
   const baseColumns = userColumnDefs ?? defaultColumns;

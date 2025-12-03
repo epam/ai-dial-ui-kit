@@ -147,6 +147,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const {
     renamedPath,
+    renamedItem,
     renameHandler,
     renameSaveHandler,
     renameCancelHandler,
@@ -468,6 +469,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleDownloadFiles,
 
     renamedPath,
+    renamedItem,
     onRename: renameHandler,
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,
