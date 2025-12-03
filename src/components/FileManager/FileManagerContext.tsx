@@ -43,6 +43,8 @@ export interface FileManagerContextValue {
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
+  compactViewWidthBreakpoint?: number;
+
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
 

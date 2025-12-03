@@ -20,9 +20,10 @@ import {
   BASE_FILE_MANAGER_ICON_SIZE,
   FOLDERS_TREE_PANEL_MIN_WIDTH,
   FOLDERS_TREE_PANEL_MAX_WIDTH,
-  MOBILE_HEADER_HEIGHT,
-  MOBILE_FOLDER_ROW_HEIGHT,
-  MOBILE_FILE_ROW_HEIGHT,
+  COMPACT_VIEW_HEADER_HEIGHT,
+  COMPACT_VIEW_FOLDER_ROW_HEIGHT,
+  COMPACT_VIEW_FILE_ROW_HEIGHT,
+  DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
 } from './constants';
 import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -91,8 +92,8 @@ import {
 } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
 import type { RenameValidationMessages } from './hooks/use-item-renaming';
-import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { DialFileManagerItemDetails } from './components/FileManagerItemDetails/FileManagerItemDetails';
+import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 
 type GridRow = FileManagerGridRow;
 
@@ -209,6 +210,8 @@ export interface DialFileManagerProps {
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
+  compactViewWidthBreakpoint?: number;
+
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
 
@@ -311,6 +314,8 @@ export interface DialFileManagerProps {
  * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
  * @param [deleteConfirmationOptions] - Options for the delete confirmation popup
  *
+ * @param [compactViewWidthBreakpoint=DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT] - Width (px) below which the component switches to compact view.
+ *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
@@ -349,6 +354,7 @@ export const DialFileManagerView: FC = () => {
     deleteConfirmationOptions,
     destinationFolderPopupOptions,
     conflictResolutionPopupOptions,
+    compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -445,7 +451,9 @@ export const DialFileManagerView: FC = () => {
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
-  const isMobile = useIsMobileScreen();
+  const { containerRef, isSmaller: isCompactView } = useWidthBreakpoint(
+    compactViewWidthBreakpoint,
+  );
 
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
@@ -470,7 +478,7 @@ export const DialFileManagerView: FC = () => {
             );
           }
 
-          if (isMobile) {
+          if (isCompactView) {
             return (
               <DialFileManagerItemDetails
                 id={params.data.id}
@@ -520,7 +528,7 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     newFolderTempId,
-    isMobile,
+    isCompactView,
     saveFolderCreation,
     cancelFolderCreation,
     validateFolderName,
@@ -530,7 +538,7 @@ export const DialFileManagerView: FC = () => {
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
     let columns = baseColumns;
 
-    if (isMobile) {
+    if (isCompactView) {
       columns = columns.slice(0, 1);
     }
 
@@ -541,7 +549,7 @@ export const DialFileManagerView: FC = () => {
       filter: false,
       floatingFilter: false,
     }));
-  }, [baseColumns, filterable, isMobile]);
+  }, [baseColumns, filterable, isCompactView]);
 
   const getTreeContextMenuItems = (file: DialFile): DropdownItem[] => {
     const items: DropdownItem[] = [];
@@ -739,6 +747,7 @@ export const DialFileManagerView: FC = () => {
 
   return (
     <section
+      ref={containerRef}
       className={mergeClasses(
         containerBaseClassName,
         {
@@ -814,9 +823,9 @@ export const DialFileManagerView: FC = () => {
               getRowId={(row) => row.path}
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
-              withoutHeaderBorders={isMobile}
+              withoutHeaderBorders={isCompactView}
               withActionsColumn
-              selectionOnHover={!isMobile}
+              selectionOnHover={!isCompactView}
               className={classNames(
                 isDragging ? 'border border-dashed border-accent-primary' : '',
                 isDraggingOverWindow && !isDragging
@@ -837,13 +846,13 @@ export const DialFileManagerView: FC = () => {
                     handleTableRowClick(event.data);
                   }
                 },
-                ...(isMobile
+                ...(isCompactView
                   ? {
-                      headerHeight: MOBILE_HEADER_HEIGHT,
+                      headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                       getRowHeight: (params) =>
                         params.data?.nodeType === DialFileNodeType.FOLDER
-                          ? MOBILE_FOLDER_ROW_HEIGHT
-                          : MOBILE_FILE_ROW_HEIGHT,
+                          ? COMPACT_VIEW_FOLDER_ROW_HEIGHT
+                          : COMPACT_VIEW_FILE_ROW_HEIGHT,
                     }
                   : {}),
               }}
