@@ -332,6 +332,16 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 />
               );
             }
+            if (it.type === DropdownItemType.Header) {
+              return (
+                <div
+                  key={it.key}
+                  className="px-3 py-2 text-secondary dial-caption"
+                >
+                  {it.label}
+                </div>
+              );
+            }
             return (
               <button
                 key={it.key}
@@ -342,6 +352,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                   dropdownItemBaseClassName,
                   it.disabled && dropdownItemDisabledClassName,
                   it.danger && dropdownItemDangerClassName,
+                  it.buttonClassName,
                 )}
                 disabled={it.disabled}
                 onClick={handleItemClick(it)}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import type { Placement } from '@floating-ui/react';
@@ -398,4 +399,102 @@ export const CompareWidthModes: Story = {
       </DialDropdown>
     </div>
   ),
+};
+
+export const DropdownDynamicButtons: Story = {
+  name: 'With dynamic button items and styles',
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const [selectedFirstSection, setSelectedFirstSection] = useState<
+      string | null
+    >('custom');
+    const [selectedSecondSection, setSelectedSecondSection] = useState<
+      string | null
+    >('subsection1');
+    const [showSubsection, setShowSubsection] = useState(false);
+    const borderCss = 'border-l-2 border-accent-primary pl-2 rounded-l-none';
+
+    const baseItems: DropdownItem[] = [
+      {
+        key: 'header1',
+        type: DropdownItemType.Header,
+        label: 'First Section',
+      },
+      {
+        key: 'normal',
+        label: 'Normal Item',
+        buttonClassName:
+          selectedFirstSection === 'normal' ? borderCss : undefined,
+        onClick: () => {
+          setSelectedFirstSection('normal');
+        },
+      },
+      {
+        key: 'custom',
+        label: 'Custom Styled Item',
+        buttonClassName:
+          selectedFirstSection === 'custom' ? borderCss : undefined,
+        onClick: () => {
+          setSelectedFirstSection('custom');
+        },
+      },
+      {
+        key: 'withSubsection',
+        label: 'Item with Subsection',
+        buttonClassName:
+          selectedFirstSection === 'withSubsection' ? borderCss : undefined,
+        onClick: (info) => {
+          info.domEvent.preventDefault();
+          setSelectedFirstSection('withSubsection');
+          setShowSubsection(true);
+          setTimeout(() => setOpen(true), 0);
+        },
+      },
+    ];
+
+    const subsectionItems: DropdownItem[] =
+      showSubsection && selectedFirstSection === 'withSubsection'
+        ? [
+            { key: 'd1', type: DropdownItemType.Divider },
+            {
+              key: 'header2',
+              type: DropdownItemType.Header,
+              label: 'Subsection',
+            },
+            {
+              key: 'subsection1',
+              label: 'Subsection Item 1',
+              buttonClassName:
+                selectedSecondSection === 'subsection1' ? borderCss : undefined,
+              onClick: () => {
+                setSelectedSecondSection('subsection1');
+              },
+            },
+            {
+              key: 'subsection2',
+              label: 'Subsection Item 2',
+              buttonClassName:
+                selectedSecondSection === 'subsection2' ? borderCss : undefined,
+              onClick: () => {
+                setSelectedSecondSection('subsection2');
+              },
+            },
+          ]
+        : [];
+
+    const items = [...baseItems, ...subsectionItems];
+
+    return (
+      <DialDropdown
+        {...args}
+        open={open}
+        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
+        placement="bottom"
+        menu={{ items }}
+      >
+        <TriggerBtn label="Dynamic items" />
+      </DialDropdown>
+    );
+  },
 };

@@ -136,6 +136,54 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(menuEl).toHaveClass('w-max');
   });
 
+  test('renders header item type correctly', () => {
+    const itemsWithHeader: DropdownItem[] = [
+      { key: 'item1', label: 'Item 1' },
+      { key: 'd1', type: DropdownItemType.Divider },
+      {
+        key: 'h1',
+        type: DropdownItemType.Header,
+        label: <span>Section Title</span>,
+      },
+      { key: 'item2', label: 'Item 2' },
+    ];
+    render(
+      <DialDropdown menu={{ items: itemsWithHeader }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    expect(screen.getByText('Section Title')).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: 'Item 1' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: 'Item 2' }),
+    ).toBeInTheDocument();
+  });
+
+  test('header item does not act as clickable menuitem', () => {
+    const onMenu = vi.fn();
+    const itemsWithHeader: DropdownItem[] = [
+      { key: 'item1', label: 'Item 1' },
+      {
+        key: 'h1',
+        type: DropdownItemType.Header,
+        label: <span>Section Header</span>,
+      },
+    ];
+    render(
+      <DialDropdown menu={{ items: itemsWithHeader, onClick: onMenu }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    const headerElement = screen.getByText('Section Header');
+    fireEvent.click(headerElement);
+    expect(onMenu).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
   test('outsideClosable=false keeps menu open on outside press', () => {
     render(
       <DialDropdown outsideClosable={false} menu={{ items }}>
