@@ -27,7 +27,7 @@ type Story = StoryObj<typeof meta>;
 export const OneIcon: Story = {
   args: {
     icon: (
-      <div className="text-icon-accent-secondary">
+      <div className="text-accent-secondary">
         <IconFlame size={40} />
       </div>
     ),
@@ -42,7 +42,7 @@ export const NoIcon: Story = {
 
 export const DifferentSizes: Story = {
   render: () => (
-    <div className="flex gap-4 items-center text-icon-accent-primary">
+    <div className="flex gap-4 items-center text-accent-primary">
       <DialIcon icon={<IconSnowflake size={12} />} />
       <DialIcon icon={<IconSnowflake size={16} />} />
       <DialIcon icon={<IconSnowflake size={22} />} />

@@ -96,7 +96,7 @@ export const DialFileManagerItemNameInput: FC<
         {inputIconAfter || (
           <IconAlertCircleFilled
             {...BASE_ICON_PROPS}
-            className="text-icon-error"
+            className="text-error"
             aria-label="alert"
           />
         )}
