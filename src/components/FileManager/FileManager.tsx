@@ -453,7 +453,11 @@ export const DialFileManagerView: FC = () => {
           if (isMobile) {
             return (
               <DialFileManagerItemDetails
-                row={params.data}
+                id={params.data.id}
+                name={params.data.name}
+                nodeType={params.data.nodeType}
+                size={params.data.size}
+                updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
                 dateOptions={dateOptions}
               />
