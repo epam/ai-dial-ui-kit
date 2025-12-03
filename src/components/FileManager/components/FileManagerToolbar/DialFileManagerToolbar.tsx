@@ -144,7 +144,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         <>
           <div className="h-6 border-l border-primary" />
           <DialButtonDropdown
-            title={newButtonLabel}
+            label={newButtonLabel}
             variant={newButtonVariant}
             items={newButtonDropdownItems}
           />
@@ -172,7 +172,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
 
       {isNewButtonVisible ? (
         <DialButtonDropdown
-          title={newButtonLabel}
+          label={newButtonLabel}
           variant={newButtonVariant}
           items={newButtonDropdownItems}
         />

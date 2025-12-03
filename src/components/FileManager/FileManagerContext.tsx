@@ -76,6 +76,7 @@ export interface FileManagerContextValue {
   handleSetMovedFiles: (files: DialFile[]) => void;
 
   renamedPath?: string;
+  renamedItem?: DialFile;
   onRename: (file: string) => void;
   onRenameSave: (value: string) => void;
   onRenameCancel: () => void;
