@@ -14,14 +14,18 @@ export interface UseFileClipboardOptions {
     sourceFolder: string,
     destinationFolder: string,
   ) => void;
+  onCopySuccess?: () => void;
+  onMoveSuccess?: () => void;
+  onDuplicateSuccess?: () => void;
 }
-
-// export type DestinationFolderMode = 'copy' | 'move';
 
 export const useFileClipboard = ({
   getDestinationFiles,
   onCopyFiles,
   onMoveToFiles,
+  onCopySuccess,
+  onMoveSuccess,
+  onDuplicateSuccess,
 }: UseFileClipboardOptions) => {
   const [openDestinationFolderPopup, setOpenDestinationFolderPopup] =
     useState<boolean>(false);
@@ -31,7 +35,7 @@ export const useFileClipboard = ({
     useState<DestinationFolderMode>(DestinationFolderMode.Copy);
 
   const [operationMetadata, setOperationMetadata] = useState<{
-    type: 'copy' | 'move';
+    type: DestinationFolderMode.Copy | DestinationFolderMode.Move;
     sourceFolder?: string;
   } | null>(null);
 
@@ -49,10 +53,11 @@ export const useFileClipboard = ({
   } = useConflictResolution({
     getDestinationFiles,
     onResolve: (items, destinationFolder) => {
-      if (operationMetadata?.type === 'copy') {
+      if (operationMetadata?.type === DestinationFolderMode.Copy) {
         onCopyFiles?.(items, destinationFolder);
+        onCopySuccess?.();
       } else if (
-        operationMetadata?.type === 'move' &&
+        operationMetadata?.type === DestinationFolderMode.Move &&
         operationMetadata.sourceFolder
       ) {
         onMoveToFiles?.(
@@ -60,6 +65,7 @@ export const useFileClipboard = ({
           operationMetadata.sourceFolder,
           destinationFolder,
         );
+        onMoveSuccess?.();
       }
     },
   });
@@ -85,6 +91,7 @@ export const useFileClipboard = ({
           false,
         );
         onCopyFiles?.(resolvedItems, destinationFolder);
+        onCopySuccess?.();
         clearState();
       }
     },
@@ -93,6 +100,7 @@ export const useFileClipboard = ({
       startConflictResolution,
       resolveConflictsWithStrategy,
       onCopyFiles,
+      onCopySuccess,
       clearState,
     ],
   );
@@ -113,6 +121,7 @@ export const useFileClipboard = ({
           true,
         );
         onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+        onMoveSuccess?.();
         clearState();
       }
     },
@@ -121,6 +130,7 @@ export const useFileClipboard = ({
       startConflictResolution,
       resolveConflictsWithStrategy,
       onMoveToFiles,
+      onMoveSuccess,
       clearState,
     ],
   );
@@ -152,8 +162,9 @@ export const useFileClipboard = ({
         false,
       );
       onCopyFiles?.(resolvedItems, destinationUrl);
+      onDuplicateSuccess?.();
     },
-    [onCopyFiles, resolveConflictsWithStrategy],
+    [onCopyFiles, onDuplicateSuccess, resolveConflictsWithStrategy],
   );
 
   const handleOpenDestinationFolderPopup = useCallback(

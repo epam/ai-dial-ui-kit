@@ -39,9 +39,12 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     expect(typeof result.current.handleDownloadFiles).toBe('function');
   });
 
-  it('calls onDownloadFiles with provided items', () => {
+  it('calls onDownloadFiles and onDownloadSuccess with provided items', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     const files = [mockFile1, mockFile2];
 
@@ -51,17 +54,22 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles).toHaveBeenCalledWith(files);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call onDownloadFiles when items array is empty', () => {
+  it('does not call onDownloadFiles or onDownloadSuccess when items array is empty', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     act(() => {
       result.current.handleDownloadFiles([]);
     });
 
     expect(onDownloadFiles).not.toHaveBeenCalled();
+    expect(onDownloadSuccess).not.toHaveBeenCalled();
   });
 
   it('does not throw when onDownloadFiles is not provided', () => {
@@ -74,9 +82,12 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
     }).not.toThrow();
   });
 
-  it('handles downloading a single file', () => {
+  it('handles downloading a single file and calls onDownloadSuccess', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     act(() => {
       result.current.handleDownloadFiles([mockFile1]);
@@ -84,11 +95,15 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles).toHaveBeenCalledWith([mockFile1]);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('handles downloading multiple files', () => {
+  it('handles downloading multiple files and calls onDownloadSuccess', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     const files = [mockFile1, mockFile2];
 
@@ -98,11 +113,15 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles).toHaveBeenCalledWith(files);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('handles downloading a folder', () => {
+  it('handles downloading a folder and calls onDownloadSuccess', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     act(() => {
       result.current.handleDownloadFiles([mockFolder]);
@@ -110,11 +129,15 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles).toHaveBeenCalledWith([mockFolder]);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
   });
 
-  it('handles downloading mixed files and folders', () => {
+  it('handles downloading mixed files and folders and calls onDownloadSuccess', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     const items = [mockFile1, mockFolder, mockFile2];
 
@@ -124,14 +147,17 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles).toHaveBeenCalledWith(items);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
   });
 
   it('updates callback when onDownloadFiles changes', () => {
     const onDownloadFiles1 = vi.fn();
     const onDownloadFiles2 = vi.fn();
+    const onDownloadSuccess = vi.fn();
 
     const { result, rerender } = renderHook(
-      ({ callback }) => useFileDownload({ onDownloadFiles: callback }),
+      ({ callback }) =>
+        useFileDownload({ onDownloadFiles: callback, onDownloadSuccess }),
       { initialProps: { callback: onDownloadFiles1 } },
     );
 
@@ -141,6 +167,7 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles2).not.toHaveBeenCalled();
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
 
     rerender({ callback: onDownloadFiles2 });
 
@@ -150,23 +177,29 @@ describe('Dial UI Kit :: FileManager :: useFileDownload', () => {
 
     expect(onDownloadFiles1).toHaveBeenCalledTimes(1);
     expect(onDownloadFiles2).toHaveBeenCalledTimes(1);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(2);
   });
 
-  it('sequential downloads call callback each time', () => {
+  it('sequential downloads call callback and onDownloadSuccess each time', () => {
     const onDownloadFiles = vi.fn();
-    const { result } = renderHook(() => useFileDownload({ onDownloadFiles }));
+    const onDownloadSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useFileDownload({ onDownloadFiles, onDownloadSuccess }),
+    );
 
     act(() => {
       result.current.handleDownloadFiles([mockFile1]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(1);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(1);
 
     act(() => {
       result.current.handleDownloadFiles([mockFile2]);
     });
 
     expect(onDownloadFiles).toHaveBeenCalledTimes(2);
+    expect(onDownloadSuccess).toHaveBeenCalledTimes(2);
     expect(onDownloadFiles).toHaveBeenNthCalledWith(1, [mockFile1]);
     expect(onDownloadFiles).toHaveBeenNthCalledWith(2, [mockFile2]);
   });
