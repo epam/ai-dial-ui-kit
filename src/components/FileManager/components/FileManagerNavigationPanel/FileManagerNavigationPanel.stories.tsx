@@ -108,3 +108,15 @@ export const DisabledReadonlyInvalid: Story = {
     invalid: true,
   },
 };
+
+export const CompactView: Story = {
+  args: {
+    isCompactView: true,
+    searchable: true,
+    path: 'Organization/Folder 4',
+    elementId: 'compact-search',
+  },
+  render: (args) => {
+    return <DialFileManagerNavigationPanel {...args} />;
+  },
+};
