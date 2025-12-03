@@ -159,9 +159,6 @@ const PopupComponent = (args: DialFileManagerProps) => {
     shared: 'Shared with Me',
     organization: 'Organization',
   });
-
-  const [items, setItems] = useState<DialFile[]>(itemsMock);
-  const [renaming, setRenaming] = useState<string | undefined>();
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
 
   const updateItemNameByPath = useCallback(
@@ -181,24 +178,6 @@ const PopupComponent = (args: DialFileManagerProps) => {
     },
     [],
   );
-
-  const handleRename = useCallback((path: string) => {
-    setRenaming(path);
-  }, []);
-
-  const handleRenameSave = useCallback(
-    (value: string) => {
-      if (renaming) {
-        setItems((prevItems) =>
-          updateItemNameByPath(prevItems, renaming, value),
-        );
-        setRenaming(undefined);
-      }
-    },
-    [renaming, setItems, updateItemNameByPath],
-  );
-
-  const handleRenameCancel = useCallback(() => setRenaming(undefined), []);
 
   const handleRenameValidation = useCallback(
     (value: string, item: DialFile) => {
@@ -270,7 +249,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
-          items={items}
+          items={itemsMock}
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,
@@ -290,6 +269,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               move: 'Move to',
               download: 'Download',
               delete: 'Delete',
+              rename: 'Rename',
             },
           }}
           toolbarOptions={{
@@ -351,9 +331,6 @@ const PopupComponent = (args: DialFileManagerProps) => {
               `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
             );
           }}
-          onRename={handleRename}
-          onRenameSave={handleRenameSave}
-          onRenameCancel={handleRenameCancel}
           onRenameValidate={handleRenameValidation}
           onUploadFiles={handleUploadFiles}
           onUploadArchive={(file, destinationFolder) => {
