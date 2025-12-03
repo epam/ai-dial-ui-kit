@@ -10,17 +10,14 @@ const backgroundsColors = {
   warning: 'var(--bg-warning, #3F3D25)',
   info: 'var(--bg-info, #1C2C47)',
   success: 'var(--bg-success, #1D3841)',
-  'model-icon': 'var(--bg-model-icon, #FFFFFF)',
   'accent-primary': 'var(--bg-accent-primary, #5C8DEA)',
   'accent-secondary': 'var(--bg-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--bg-accent-tertiary, #A972FF)',
   'accent-primary-alpha': 'var(--bg-accent-primary-alpha, #5C8DEA2B)',
   'accent-secondary-alpha': 'var(--bg-accent-secondary-alpha, #37BABC26)',
   'accent-tertiary-alpha': 'var(--bg-accent-tertiary-alpha, #A972FF2B)',
-  'red-400': 'var(--bg-red-400, #F76464)',
-  'red-800': 'var(--bg-red-800, #AE2F2F)',
-  'orange-400': 'var(--bg-orange-400, #D97C27)',
-  'orange-800': 'var(--bg-orange-800, #B25500)',
+  'red-400': 'var(--bg-red-400, #F76464)', // TODO: remove or rename - need UI for Button
+  'red-800': 'var(--bg-red-800, #AE2F2F)', // TODO: remove or rename - need UI for Button
 };
 
 const buttonsBgColors = {
@@ -44,8 +41,8 @@ const borderColors = {
   'accent-primary-hover': 'var(--stroke-accent-primary-hover, #4878d2)',
   'accent-secondary': 'var(--stroke-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--stroke-accent-tertiary, #A972FF)',
-  'red-900': 'var(--red-900, #402027)',
-  'icon-secondary': 'var(--icon-secondary, #7F8792)',
+  'red-900': 'var(--red-900, #402027)', // TODO: remove or rename - need UI for Stepper
+  'icon-secondary': 'var(--icon-secondary, #7F8792)', // TODO:  rename - need UI for Checkbox
 };
 
 const textColors = {
@@ -70,15 +67,6 @@ const buttonsTextColors = {
   'controls-disable': 'var(--controls-disable, #333942)',
 };
 
-const iconColors = {
-  'icon-error': 'var(--icon-error, #F76464)',
-  'icon-accent-secondary': 'var(--icon-accent-secondary, #37BABC)',
-  'icon-accent-tertiary': 'var(--icon-accent-tertiary, #A972FF)',
-  'icon-accent-primary': 'var(--icon-accent-primary, #5C8DEA)',
-  'icon-secondary': 'var(--icon-secondary, #7F8792)',
-  'icon-primary': 'var(--icon-primary, #F3F4F6)',
-};
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
@@ -87,7 +75,7 @@ export default {
     borderColor: borderColors,
     stroke: borderColors,
     divideColor: borderColors,
-    textColor: { ...textColors, ...buttonsTextColors, ...iconColors },
+    textColor: { ...textColors, ...buttonsTextColors },
     gradientColorStops: backgroundsColors,
     extend: {
       animation: {
