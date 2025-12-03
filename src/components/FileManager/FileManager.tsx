@@ -451,7 +451,7 @@ export const DialFileManagerView: FC = () => {
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
-  const { containerRef, isSmaller: isCompactView } = useWidthBreakpoint(
+  const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
   );
 
