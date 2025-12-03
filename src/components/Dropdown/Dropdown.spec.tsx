@@ -142,7 +142,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       { key: 'd1', type: DropdownItemType.Divider },
       {
         key: 'h1',
-        type: DropdownItemType.Header,
+        type: DropdownItemType.PlainText,
         label: <span>Section Title</span>,
       },
       { key: 'item2', label: 'Item 2' },
@@ -168,7 +168,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       { key: 'item1', label: 'Item 1' },
       {
         key: 'h1',
-        type: DropdownItemType.Header,
+        type: DropdownItemType.PlainText,
         label: <span>Section Header</span>,
       },
     ];

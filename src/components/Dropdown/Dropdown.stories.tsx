@@ -417,14 +417,13 @@ export const DropdownDynamicButtons: Story = {
     const baseItems: DropdownItem[] = [
       {
         key: 'header1',
-        type: DropdownItemType.Header,
+        type: DropdownItemType.PlainText,
         label: 'First Section',
       },
       {
         key: 'normal',
         label: 'Normal Item',
-        buttonClassName:
-          selectedFirstSection === 'normal' ? borderCss : undefined,
+        className: selectedFirstSection === 'normal' ? borderCss : undefined,
         onClick: () => {
           setSelectedFirstSection('normal');
         },
@@ -432,8 +431,7 @@ export const DropdownDynamicButtons: Story = {
       {
         key: 'custom',
         label: 'Custom Styled Item',
-        buttonClassName:
-          selectedFirstSection === 'custom' ? borderCss : undefined,
+        className: selectedFirstSection === 'custom' ? borderCss : undefined,
         onClick: () => {
           setSelectedFirstSection('custom');
         },
@@ -441,7 +439,7 @@ export const DropdownDynamicButtons: Story = {
       {
         key: 'withSubsection',
         label: 'Item with Subsection',
-        buttonClassName:
+        className:
           selectedFirstSection === 'withSubsection' ? borderCss : undefined,
         onClick: (info) => {
           info.domEvent.preventDefault();
@@ -458,13 +456,13 @@ export const DropdownDynamicButtons: Story = {
             { key: 'd1', type: DropdownItemType.Divider },
             {
               key: 'header2',
-              type: DropdownItemType.Header,
+              type: DropdownItemType.PlainText,
               label: 'Subsection',
             },
             {
               key: 'subsection1',
               label: 'Subsection Item 1',
-              buttonClassName:
+              className:
                 selectedSecondSection === 'subsection1' ? borderCss : undefined,
               onClick: () => {
                 setSelectedSecondSection('subsection1');
@@ -473,7 +471,7 @@ export const DropdownDynamicButtons: Story = {
             {
               key: 'subsection2',
               label: 'Subsection Item 2',
-              buttonClassName:
+              className:
                 selectedSecondSection === 'subsection2' ? borderCss : undefined,
               onClick: () => {
                 setSelectedSecondSection('subsection2');

@@ -12,5 +12,5 @@ export enum DropdownTrigger {
 export enum DropdownItemType {
   Item = 'item',
   Divider = 'divider',
-  Header = 'header',
+  PlainText = 'plainText',
 }
