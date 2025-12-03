@@ -4,14 +4,17 @@ import { BASE_FILE_MANAGER_ICON_SIZE } from '../../constants';
 import type { FileManagerGridRow } from '../../FileManagerContext';
 import { DialFileNodeType } from '@/models/file';
 import { DialItemType } from '@/types/item';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 interface DialFileManagerItemDetailsProps {
   row: FileManagerGridRow;
+  dateLocale?: Intl.LocalesArgument;
+  dateOptions?: Intl.DateTimeFormatOptions;
 }
 
 export const DialFileManagerItemDetails: FC<
   DialFileManagerItemDetailsProps
-> = ({ row }) => {
+> = ({ row, dateLocale, dateOptions }) => {
   const { id, name, nodeType, size, updatedAt } = row;
 
   return (
@@ -29,7 +32,15 @@ export const DialFileManagerItemDetails: FC<
           details={
             <div className="flex gap-1 dial-tiny text-secondary">
               <span>{size}</span>
-              <span>{updatedAt}</span>
+              <div className="flex self-center w-0.5 h-0.5 bg-controls-disable rounded-full" />
+              <span>
+                <DialDateCellRenderer
+                  value={updatedAt}
+                  locale={dateLocale?.toString()}
+                  options={dateOptions}
+                  className="dial-tiny text-secondary"
+                />
+              </span>
             </div>
           }
         />

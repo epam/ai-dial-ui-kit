@@ -435,10 +435,6 @@ export const DialFileManagerView: FC = () => {
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
-          if (isMobile) {
-            return <DialFileManagerItemDetails row={params.data} />;
-          }
-
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
               <DialFileManagerItemName
@@ -450,6 +446,16 @@ export const DialFileManagerView: FC = () => {
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
                 onCancel={cancelFolderCreation}
+              />
+            );
+          }
+
+          if (isMobile) {
+            return (
+              <DialFileManagerItemDetails
+                row={params.data}
+                dateLocale={dateLocale}
+                dateOptions={dateOptions}
               />
             );
           }

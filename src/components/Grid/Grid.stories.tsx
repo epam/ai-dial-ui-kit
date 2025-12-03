@@ -197,6 +197,7 @@ export const ManyRows: Story = {
       updateTime: '2024-05-01',
       size: `${(Math.random() * 200 + 10).toFixed(0)} KB`,
       author: i % 2 ? 'alex' : 'mary',
+      type: DialFileNodeType.ITEM,
     })),
   },
   decorators: [
