@@ -33,7 +33,9 @@ import { gridBaseClassName, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { IconZoomCancel } from '@tabler/icons-react';
+import { IconDotsVertical, IconZoomCancel } from '@tabler/icons-react';
+import { DialIcon } from '@/components/Icon/Icon';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -43,9 +45,11 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   className?: string;
   ariaLabel?: string;
   withSelectionColumn?: boolean;
+  withActionsColumn?: boolean;
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
+  selectionOnHover?: boolean;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
@@ -56,6 +60,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   emptyStateDescription?: string;
   loading?: boolean;
   wrapperBorder?: boolean;
+  withoutHeaderBorders?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -153,9 +158,11 @@ export const DialGrid = <T extends object>({
   className,
   ariaLabel = 'Data grid',
   withSelectionColumn = true,
+  withActionsColumn = false,
   wrapCustomCellRenderers = true,
   selectedRowIds,
   selectedRows,
+  selectionOnHover = true,
   onSelectionChange,
   onSelectionChangeWithMap,
   getRowId = (row: T) =>
@@ -167,6 +174,7 @@ export const DialGrid = <T extends object>({
   emptyStateDescription = "Sorry, we couldn't find any results for your search.",
   loading = false,
   wrapperBorder = true,
+  withoutHeaderBorders = false,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -225,12 +233,15 @@ export const DialGrid = <T extends object>({
           ariaLabel="Select all rows"
           checked={checked}
           indeterminate={indeterminate}
-          className={`dial-header-select ${headerCheckboxState}`}
+          className={classNames(
+            `dial-header-select ${headerCheckboxState}`,
+            !selectionOnHover && 'dial-header-select-visible',
+          )}
           onChange={handleHeaderCheckboxChange}
         />
       </div>
     );
-  }, [headerCheckboxState, handleHeaderCheckboxChange]);
+  }, [headerCheckboxState, handleHeaderCheckboxChange, selectionOnHover]);
 
   const renderDataCell = useCallback(
     (p: ICellRendererParams<T, unknown>) => {
@@ -272,7 +283,10 @@ export const DialGrid = <T extends object>({
             id={checkboxId}
             ariaLabel="Select row"
             checked={checked}
-            className="dial-row-select"
+            className={classNames([
+              'dial-row-select',
+              !selectionOnHover && 'dial-row-select-visible',
+            ])}
             onChange={(next) => {
               if (p.data) {
                 handleSelectionToggle(p.data, !!next);
@@ -282,7 +296,7 @@ export const DialGrid = <T extends object>({
         </div>
       );
     },
-    [currentSelectedIds, getRowId, handleSelectionToggle],
+    [currentSelectedIds, getRowId, handleSelectionToggle, selectionOnHover],
   );
 
   const wrapRendererIfNeeded = useCallback(
@@ -351,10 +365,66 @@ export const DialGrid = <T extends object>({
     [renderSelectCell, renderHeaderSelectCell],
   );
 
+  const renderActionsCell = useCallback(
+    (p: ICellRendererParams<T, unknown>) => {
+      if (!p.data) return null;
+
+      const items = p.data ? (getContextMenuItems?.(p.data) ?? []) : [];
+
+      if (!items.length) return null;
+
+      return (
+        <DialDropdown
+          placement="bottom-start"
+          allowedPlacements={['top-start', 'top-end']}
+          menu={{ items }}
+          className="sticky right-0"
+        >
+          <DialIcon
+            className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
+            icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
+          />
+        </DialDropdown>
+      );
+    },
+    [getContextMenuItems],
+  );
+
+  const actionsCol: ColDef<T> = useMemo(
+    () => ({
+      colId: '__actions',
+      headerName: '',
+      width: 44,
+      minWidth: 44,
+      suppressSizeToFit: true,
+      sortable: false,
+      resizable: false,
+      filter: false,
+      floatingFilter: false,
+      suppressMenu: true,
+      borderless: true,
+      cellRenderer: renderActionsCell,
+    }),
+    [renderActionsCell],
+  );
+
   const computedColumnDefs = useMemo<ColDef<T>[]>(() => {
-    const user = (columnDefs ?? []).map(wrapRendererIfNeeded);
-    return withSelectionColumn ? [selectCol, ...user] : user;
-  }, [columnDefs, selectCol, withSelectionColumn, wrapRendererIfNeeded]);
+    const baseColumns = (columnDefs ?? []).map(wrapRendererIfNeeded);
+
+    const result: ColDef<T>[] = [];
+    if (withSelectionColumn) result.push(selectCol);
+    result.push(...baseColumns);
+    if (withActionsColumn) result.push(actionsCol);
+
+    return result;
+  }, [
+    columnDefs,
+    selectCol,
+    actionsCol,
+    withSelectionColumn,
+    withActionsColumn,
+    wrapRendererIfNeeded,
+  ]);
 
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
@@ -419,6 +489,7 @@ export const DialGrid = <T extends object>({
         gridBaseClassName,
         className,
         withSelectionColumn && 'with-selection-column',
+        withoutHeaderBorders && 'dial-without-header-borders',
       )}
       aria-label={ariaLabel}
       role="region"

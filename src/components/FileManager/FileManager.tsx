@@ -20,6 +20,9 @@ import {
   BASE_FILE_MANAGER_ICON_SIZE,
   FOLDERS_TREE_PANEL_MIN_WIDTH,
   FOLDERS_TREE_PANEL_MAX_WIDTH,
+  MOBILE_HEADER_HEIGHT,
+  MOBILE_FOLDER_ROW_HEIGHT,
+  MOBILE_FILE_ROW_HEIGHT,
 } from './constants';
 import { findNodeByPath } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -80,6 +83,8 @@ import { DialFileManagerItemName } from '@/components/FileManager/components/Fil
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import { DialFileManagerItemDetails } from './components/FileManagerItemDetails/FileManagerItemDetails';
 
 type GridRow = FileManagerGridRow;
 
@@ -420,6 +425,8 @@ export const DialFileManagerView: FC = () => {
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
+  const isMobile = useIsMobileScreen();
+
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
       {
@@ -428,6 +435,10 @@ export const DialFileManagerView: FC = () => {
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
+          if (isMobile) {
+            return <DialFileManagerItemDetails row={params.data} />;
+          }
+
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
               <DialFileManagerItemName
@@ -479,6 +490,7 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     newFolderTempId,
+    isMobile,
     saveFolderCreation,
     cancelFolderCreation,
     validateFolderName,
@@ -486,13 +498,20 @@ export const DialFileManagerView: FC = () => {
 
   const baseColumns = userColumnDefs ?? defaultColumns;
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
-    if (filterable) return baseColumns;
-    return baseColumns.map((col) => ({
+    let columns = baseColumns;
+
+    if (isMobile) {
+      columns = columns.slice(0, 1);
+    }
+
+    if (filterable) return columns;
+
+    return columns.map((col) => ({
       ...col,
       filter: false,
       floatingFilter: false,
     }));
-  }, [baseColumns, filterable]);
+  }, [baseColumns, filterable, isMobile]);
 
   const getTreeContextMenuItems = (file: DialFile): DropdownItem[] => {
     const items: DropdownItem[] = [];
@@ -765,6 +784,9 @@ export const DialFileManagerView: FC = () => {
               getRowId={(row) => row.path}
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
+              withoutHeaderBorders={isMobile}
+              withActionsColumn
+              selectionOnHover={!isMobile}
               className={classNames(
                 isDragging ? 'border border-dashed border-accent-primary' : '',
                 isDraggingOverWindow && !isDragging
@@ -775,13 +797,25 @@ export const DialFileManagerView: FC = () => {
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,
                 onCellClicked: (event) => {
-                  if (event.colDef.colId === '__select') {
+                  if (
+                    event.colDef.colId === '__select' ||
+                    event.colDef.colId === '__actions'
+                  ) {
                     return;
                   }
                   if (event.data) {
                     handleTableRowClick(event.data);
                   }
                 },
+                ...(isMobile
+                  ? {
+                      headerHeight: MOBILE_HEADER_HEIGHT,
+                      getRowHeight: (params) =>
+                        params.data?.nodeType === DialFileNodeType.FOLDER
+                          ? MOBILE_FOLDER_ROW_HEIGHT
+                          : MOBILE_FILE_ROW_HEIGHT,
+                    }
+                  : {}),
               }}
               selectedRows={selectedGridRows}
               onSelectionChangeWithMap={handleSelectionChange}

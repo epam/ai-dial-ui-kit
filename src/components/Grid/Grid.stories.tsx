@@ -11,12 +11,19 @@ import {
   IconClipboardCopy,
   IconCopy,
   IconCut,
+  IconDotsVertical,
   IconDownload,
   IconPencil,
   IconTrashX,
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialDateCellRenderer } from './renderers/DateCellRenderer';
+import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
+import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
+import { DialItemType } from '@/types/item';
+import { DialFileNodeType } from '@/models/file';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { DialIcon } from '@/components/Icon/Icon';
 
 interface Row {
   id: string;
@@ -24,6 +31,7 @@ interface Row {
   updateTime: string;
   size: string;
   author: string;
+  type: DialFileNodeType;
 }
 
 const rows: Row[] = [
@@ -33,6 +41,7 @@ const rows: Row[] = [
     updateTime: '2024-05-23',
     size: '128 KB',
     author: 'alex',
+    type: DialFileNodeType.ITEM,
   },
   {
     id: '2',
@@ -40,6 +49,7 @@ const rows: Row[] = [
     updateTime: '2024-05-20',
     size: '-',
     author: 'system',
+    type: DialFileNodeType.FOLDER,
   },
   {
     id: '3',
@@ -47,6 +57,7 @@ const rows: Row[] = [
     updateTime: '2024-05-18',
     size: '4 KB',
     author: 'mary',
+    type: DialFileNodeType.ITEM,
   },
   {
     id: '4',
@@ -54,6 +65,7 @@ const rows: Row[] = [
     updateTime: '',
     size: '-',
     author: 'system',
+    type: DialFileNodeType.FOLDER,
   },
 ];
 
@@ -318,5 +330,77 @@ export const EmptyState: Story = {
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     rowData: [],
+  },
+};
+
+export const Compact: Story = {
+  args: {
+    selectedRowIds: undefined,
+    onSelectionChange: undefined,
+    selectionOnHover: false,
+    withoutHeaderBorders: true,
+    additionalGridOptions: {
+      headerHeight: 44,
+      getRowHeight: (params) =>
+        params.data?.type === DialFileNodeType.FOLDER ? 44 : 56,
+    },
+    columnDefs: [
+      {
+        field: 'name',
+        headerName: 'Name',
+        flex: 1,
+        filter: false,
+        floatingFilter: false,
+        cellRenderer: (param: { data: Row }) => {
+          const type =
+            param.data.type === DialFileNodeType.FOLDER
+              ? DialItemType.Folder
+              : DialItemType.File;
+
+          return (
+            <div className="flex">
+              <div className="flex flex-1 min-w-0">
+                <DialFileManagerItemName
+                  type={type}
+                  name={param.data.name}
+                  elementId={param.data.id}
+                  iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                  details={
+                    <div className="flex gap-1 dial-tiny text-secondary">
+                      <span>{param.data.size}</span>
+                      <span>{param.data.updateTime}</span>
+                    </div>
+                  }
+                />
+              </div>
+              <div className="flex justify-end">
+                <DialDropdown
+                  placement="bottom-start"
+                  allowedPlacements={['top-start', 'top-end']}
+                  menu={{
+                    items: [
+                      {
+                        key: 'copy',
+                        label: 'Copy',
+                      },
+                      {
+                        key: 'delete',
+                        label: 'Delete',
+                      },
+                    ],
+                  }}
+                  className="sticky right-0"
+                >
+                  <DialIcon
+                    className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
+                    icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
+                  />
+                </DialDropdown>
+              </div>
+            </div>
+          );
+        },
+      },
+    ],
   },
 };

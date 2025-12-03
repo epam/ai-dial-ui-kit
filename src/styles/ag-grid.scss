@@ -10,6 +10,7 @@
   }
 
   @apply overflow-x-auto;
+
   .ag-header {
     .ag-header-cell.align-right {
       .ag-header-cell-label {
@@ -36,6 +37,7 @@
 
   .ag-cell {
     @apply flex items-center;
+
     &.ag-grid-no-border,
     &.ag-cell-focus {
       @apply border-0;
@@ -48,37 +50,47 @@
 
   .ag-error-row {
     @apply bg-error;
+
     #editable-cell-renderer {
       @apply border-error;
     }
+
     &.ag-error-border {
       @apply border border-error;
       @apply cursor-pointer;
     }
+
     &.ag-row-hover:not(.ag-full-width-row):before {
       @apply bg-transparent;
     }
   }
+
   .ag-new-row {
     @apply bg-success;
+
     &.ag-new-border {
       @apply border border-accent-secondary;
       @apply cursor-pointer;
     }
+
     &.ag-row-hover:not(.ag-full-width-row):before {
       @apply bg-transparent;
     }
   }
+
   .ag-changed-row {
     @apply bg-info;
+
     &.ag-changed-border {
       @apply border border-accent-primary;
       @apply cursor-pointer;
     }
+
     &.ag-row-hover:not(.ag-full-width-row):before {
       @apply bg-transparent;
     }
   }
+
   .ag-empty-row {
     &.ag-row-hover:not(.ag-full-width-row):before {
       @apply bg-transparent;
@@ -93,11 +105,13 @@
   }
 
   .ag-row-hover .dial-row-select,
-  .ag-row-selected .dial-row-select {
+  .ag-row-selected .dial-row-select,
+  .ag-row .dial-row-select-visible {
     opacity: 1;
   }
 
-  .header-checkbox-container .dial-header-select.unchecked {
+  .header-checkbox-container
+    .dial-header-select.unchecked:not(.dial-header-select-visible) {
     opacity: 0;
     transition: opacity 0.12s ease;
   }
@@ -106,8 +120,19 @@
     .header-checkbox-container
     .dial-header-select.unchecked,
   .header-checkbox-container .dial-header-select.checked,
-  .header-checkbox-container .dial-header-select.indeterminate {
+  .header-checkbox-container .dial-header-select.indeterminate,
+  .header-checkbox-container .dial-header-select-visible {
     opacity: 1;
+  }
+}
+
+.dial-without-header-borders {
+  .ag-header {
+    .ag-header-cell {
+      &::after {
+        @apply border-r-0;
+      }
+    }
   }
 }
 

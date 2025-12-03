@@ -30,3 +30,9 @@ export const FOLDER_PLACEHOLDER_FILE_NAME = '.dial_folder';
 export const FOLDERS_TREE_PANEL_MIN_WIDTH = 280;
 
 export const FOLDERS_TREE_PANEL_MAX_WIDTH = 460;
+
+export const MOBILE_HEADER_HEIGHT = 44;
+
+export const MOBILE_FOLDER_ROW_HEIGHT = MOBILE_HEADER_HEIGHT;
+
+export const MOBILE_FILE_ROW_HEIGHT = 56;
