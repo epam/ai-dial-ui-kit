@@ -135,7 +135,7 @@ export interface DeleteConfirmationOptions {
 
 export type NavigationPanelOptions = Omit<
   DialFileManagerNavigationPanelProps,
-  'path' | 'makeHref' | 'onItemClick'
+  'path' | 'onItemClick'
 >;
 
 export interface GridOptions
@@ -786,10 +786,10 @@ export const DialFileManagerView: FC = () => {
 
         <div className={contentGridClassName}>
           <DialFileManagerNavigationPanel
+            makeHref={(segments) => '/' + segments.join('/')}
             {...(navigationPanelOptions ?? {})}
             path={currentPath}
             onItemClick={handleBreadcrumbItemClick}
-            makeHref={(segments) => '/' + segments.join('/')}
             rootItemPath={rootItem?.path}
             rootItemLabel={rootItem?.breadcrumbLabel}
             value={effectiveSearchValue}
