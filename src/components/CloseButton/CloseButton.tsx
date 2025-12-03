@@ -34,7 +34,7 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
   className,
   size = 24,
   onClose,
-  disabled,
+  ...props
 }) => {
   const buttonClassName = 'text-secondary hover:enabled:text-accent-primary';
 
@@ -44,7 +44,7 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
       className={mergeClasses(buttonClassName, className)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
-      disabled={disabled}
+      {...props}
     />
   );
 };
