@@ -82,16 +82,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
+  conflictResolutionPopupOptions,
   onPathChange,
   onTableFileClick,
   onCopyFiles,
   onMoveToFiles,
   onDeleteFiles,
   onDownloadFiles,
-  onRename,
-  onRenameSave,
-  onRenameCancel,
   onRenameValidate,
+  renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
@@ -154,10 +153,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     renameValidateHandler,
   } = useItemRenaming({
     items,
-    onRename,
-    onRenameSave,
-    onRenameCancel,
     onRenameValidate,
+    validationMessages: renameValidationMessages,
     onMoveToFiles,
   });
 
@@ -188,6 +185,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSetCopiedFiles,
     handleSetMovedFiles,
     destinationFolderMode,
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   } = useFileClipboard({
     getDestinationFiles: (path: string) => {
       const folder = findFolderForPath(items, path);
@@ -224,6 +227,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     confirmDelete,
   } = useFileDelete({
     onDeleteFiles,
+    onDeleteSuccess: clearSelection,
   });
 
   const { handleDownloadFiles } = useFileDownload({
@@ -505,6 +509,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
+
+    conflictResolutionPopupOptions,
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   };
 
   return (

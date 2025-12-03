@@ -56,14 +56,14 @@ export const DialButton: FC<DialButtonProps> = ({
   type = 'button',
   ...props
 }) => {
-  const btnTextClassNames = classNames(
+  const btnTextClassName = classNames(
     'dial-small-semi',
     iconAfter ? 'mr-2' : '',
     iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
     textClassName,
   );
-  const btnClassNames = classNames(
+  const btnClassName = classNames(
     variant && variantClassMap[variant],
     'focus-visible:outline outline-offset-0',
     className,
@@ -73,11 +73,11 @@ export const DialButton: FC<DialButtonProps> = ({
     <button
       {...props}
       type={type}
-      className={btnClassNames}
+      className={btnClassName}
       aria-label={label || props['aria-label']}
     >
       <DialIcon icon={iconBefore} />
-      {label && <span className={btnTextClassNames}>{label}</span>}
+      {label && <span className={btnTextClassName}>{label}</span>}
       <DialIcon icon={iconAfter} />
     </button>
   );

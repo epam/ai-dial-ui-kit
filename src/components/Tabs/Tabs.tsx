@@ -67,7 +67,7 @@ export interface DialTabsProps {
  * @param [screenThreshold=ScreenResolution.Tablet] - Defines the screen size threshold
  *   below which tabs collapse into a dropdown. Uses the {@link ScreenRelosution} enum.
  *   When set to `Tablet`, both mobile and tablet screens will trigger dropdown mode.
- * @param [smallScreenContainerClassNames] - Optional CSS class applied to the dropdown container
+ * @param [smallScreenContainerClassName] - Optional CSS class applied to the dropdown container
  *   in small-screen (collapsed) mode.
  * @param [smallScreenDropdownItemClassName] - Optional CSS class applied to individual dropdown
  *   items in small-screen mode.
