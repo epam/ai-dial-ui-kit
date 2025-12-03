@@ -75,14 +75,26 @@ import type {
   FileUploadValidationMessages,
 } from '@/components/FileManager/hooks/use-file-upload';
 import classNames from 'classnames';
-import { DialFileManagerActions } from '@/types/file-manager';
+import {
+  DestinationFolderMode,
+  DialFileManagerActions,
+} from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
+import {
+  ConflictResolutionPopup,
+  type ConflictResolutionPopupProps,
+} from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
 import type { RenameValidationMessages } from './hooks/use-item-renaming';
 
 type GridRow = FileManagerGridRow;
+
+export type DialFileManagerConflictResolutionPopupOptions = Omit<
+  ConflictResolutionPopupProps,
+  'open' | 'onClose' | 'onReplace' | 'onDuplicate' | 'conflictingFiles'
+>;
 
 export type DialFileManagerDestinationFolderPopupOptions = Pick<
   DestinationFolderPopupProps,
@@ -190,6 +202,7 @@ export interface DialFileManagerProps {
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -330,6 +343,7 @@ export const DialFileManagerView: FC = () => {
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
     destinationFolderPopupOptions,
+    conflictResolutionPopupOptions,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -388,6 +402,13 @@ export const DialFileManagerView: FC = () => {
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
+
+    conflictingFiles,
+    conflictResolutionOpen,
+    closeConflictResolution,
+    handleConflictReplace,
+    handleConflictDuplicate,
+    handleConflictDecideForEach,
   } = useFileManagerContext();
 
   const {
@@ -506,7 +527,7 @@ export const DialFileManagerView: FC = () => {
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
         items.push({
-          key: 'copy',
+          key: DestinationFolderMode.Copy,
           label: treeOptions.actionLabels[DialFileManagerActions.Copy],
           icon: (
             <CopyToIcon
@@ -517,13 +538,13 @@ export const DialFileManagerView: FC = () => {
           ),
           onClick: () => {
             handleSetCopiedFiles([file]);
-            handleOpenDestinationFolderPopup('copy');
+            handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
           },
         });
       }
       if (treeOptions.actionLabels[DialFileManagerActions.Move]) {
         items.push({
-          key: 'move',
+          key: DestinationFolderMode.Move,
           label: treeOptions.actionLabels[DialFileManagerActions.Move],
           icon: (
             <MoveToIcon
@@ -534,7 +555,7 @@ export const DialFileManagerView: FC = () => {
           ),
           onClick: () => {
             handleSetMovedFiles([file]);
-            handleOpenDestinationFolderPopup('move');
+            handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
           },
         });
       }
@@ -601,11 +622,11 @@ export const DialFileManagerView: FC = () => {
     onDuplicate: handleDuplicate,
     onCopy: (files) => {
       handleSetCopiedFiles(files);
-      handleOpenDestinationFolderPopup('copy');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
     },
     onMove: (files) => {
       handleSetMovedFiles(files);
-      handleOpenDestinationFolderPopup('move');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: handleDownloadFiles,
     onRename,
@@ -666,11 +687,11 @@ export const DialFileManagerView: FC = () => {
     onDuplicate: (file) => handleDuplicate([file]),
     onCopy: (file) => {
       handleSetCopiedFiles([file]);
-      handleOpenDestinationFolderPopup('copy');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Copy);
     },
     onMove: (file) => {
       handleSetMovedFiles([file]);
-      handleOpenDestinationFolderPopup('move');
+      handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: (file) => handleDownloadFiles([file]),
     onRename,
@@ -806,7 +827,7 @@ export const DialFileManagerView: FC = () => {
         onConfirm={() => {
           const destinationPath =
             destinationFolderPopupOptions?.destinationFolderPath ?? '/';
-          if (destinationFolderMode === 'copy') {
+          if (destinationFolderMode === DestinationFolderMode.Copy) {
             handleCopyTo(destinationPath);
           } else {
             const sourcePath = currentPath ?? '/';
@@ -829,6 +850,15 @@ export const DialFileManagerView: FC = () => {
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
+      />
+      <ConflictResolutionPopup
+        {...conflictResolutionPopupOptions}
+        open={conflictResolutionOpen}
+        onClose={closeConflictResolution}
+        onReplace={handleConflictReplace}
+        onDuplicate={handleConflictDuplicate}
+        onDecideForEach={handleConflictDecideForEach}
+        conflictingFiles={conflictingFiles}
       />
     </section>
   );

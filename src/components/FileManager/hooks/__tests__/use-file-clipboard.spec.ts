@@ -3,6 +3,10 @@ import { renderHook, act } from '@testing-library/react';
 import { useFileClipboard } from '@/components/FileManager/hooks/use-file-clipboard';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import {
+  DestinationFolderMode,
+  DialFileManagerConflictActions,
+} from '@/types/file-manager';
 
 describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
   let destinationFiles: DialFile[] = [];
@@ -21,7 +25,11 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     expect(result.current.openDestinationFolderPopup).toBe(false);
-    expect(result.current.destinationFolderMode).toBe('copy');
+    expect(result.current.destinationFolderMode).toBe(
+      DestinationFolderMode.Copy,
+    );
+    expect(result.current.conflictResolutionOpen).toBe(false);
+    expect(result.current.conflictingFiles).toEqual([]);
   });
 
   it('handleOpenDestinationFolderPopup with copy mode', () => {
@@ -30,7 +38,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     act(() => {
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
@@ -43,11 +53,15 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
 
     act(() => {
-      result.current.handleOpenDestinationFolderPopup('move');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Move,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
-    expect(result.current.destinationFolderMode).toBe('move');
+    expect(result.current.destinationFolderMode).toBe(
+      DestinationFolderMode.Move,
+    );
   });
 
   it('handleCloseDestinationFolderPopup closes popup and clears state', () => {
@@ -64,7 +78,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
@@ -76,7 +92,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     expect(result.current.openDestinationFolderPopup).toBe(false);
   });
 
-  it('handleCopyTo calls onCopyFiles with resolved items', () => {
+  it('handleCopyTo without conflicts calls onCopyFiles directly', () => {
     const onCopyFiles = vi.fn();
     destinationFiles = [];
     const copiedFiles: DialFile[] = [
@@ -128,25 +144,31 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       ],
       '/dest',
     );
+    expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleMoveTo calls onMoveToFiles with resolved items', () => {
-    const onMoveToFiles = vi.fn();
-    destinationFiles = [];
-    const movedFiles: DialFile[] = [
+  it('handleCopyTo with conflicts opens conflict resolution popup', () => {
+    const onCopyFiles = vi.fn();
+    destinationFiles = [
       {
         id: '1',
-        name: 'm1',
-        path: '/source/m1',
-        nodeType: DialFileNodeType.FOLDER,
-        parentPath: '/source',
+        name: 'a.txt',
+        path: '/dest/a.txt',
+        nodeType: DialFileNodeType.ITEM,
       } as DialFile,
+    ];
+    const copiedFiles: DialFile[] = [
       {
         id: '2',
-        name: 'm2.txt',
-        path: '/source/m2.txt',
+        name: 'a.txt',
+        path: '/src/a.txt',
         nodeType: DialFileNodeType.ITEM,
-        parentPath: '/source',
+      } as DialFile,
+      {
+        id: '3',
+        name: 'b.txt',
+        path: '/src/b.txt',
+        nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
 
@@ -154,40 +176,25 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       useFileClipboard({
         getDestinationFiles,
         getSourceFiles,
-        onMoveToFiles,
+        onCopyFiles,
       }),
     );
 
     act(() => {
-      result.current.handleSetMovedFiles(movedFiles);
+      result.current.handleSetCopiedFiles(copiedFiles);
     });
 
     act(() => {
-      result.current.handleMoveTo('/dest', '/source');
+      result.current.handleCopyTo('/dest');
     });
 
-    expect(onMoveToFiles).toHaveBeenCalledTimes(1);
-    expect(onMoveToFiles).toHaveBeenCalledWith(
-      [
-        {
-          sourceUrl: '/source/m1',
-          destinationUrl: '/dest/m1',
-          overwrite: true,
-          nodeType: DialFileNodeType.FOLDER,
-        },
-        {
-          sourceUrl: '/source/m2.txt',
-          destinationUrl: '/dest/m2.txt',
-          overwrite: true,
-          nodeType: DialFileNodeType.ITEM,
-        },
-      ],
-      '/source',
-      '/dest',
-    );
+    expect(result.current.conflictResolutionOpen).toBe(true);
+    expect(result.current.conflictingFiles).toHaveLength(1);
+    expect(result.current.conflictingFiles[0].name).toBe('a.txt');
+    expect(onCopyFiles).not.toHaveBeenCalled();
   });
 
-  it('handleCopyTo with name conflict -> adds (1) to filename', () => {
+  it('handleConflictReplace resolves with overwrite=true', () => {
     const onCopyFiles = vi.fn();
     destinationFiles = [
       {
@@ -222,40 +229,41 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.handleCopyTo('/dest');
     });
 
+    expect(result.current.conflictResolutionOpen).toBe(true);
+
+    act(() => {
+      result.current.handleConflictReplace();
+    });
+
     expect(onCopyFiles).toHaveBeenCalledWith(
       [
-        {
+        expect.objectContaining({
           sourceUrl: '/src/file.txt',
-          destinationUrl: '/dest/file (1).txt',
-          overwrite: false,
+          destinationUrl: '/dest/file.txt',
+          overwrite: true,
           nodeType: DialFileNodeType.ITEM,
-        },
+        }),
       ],
       '/dest',
     );
+    expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleCopyTo with multiple conflicts -> increments counter', () => {
+  it('handleConflictDuplicate resolves with renamed files', () => {
     const onCopyFiles = vi.fn();
     destinationFiles = [
       {
         id: '1',
-        name: 'doc.pdf',
-        path: '/dest/doc.pdf',
-        nodeType: DialFileNodeType.ITEM,
-      } as DialFile,
-      {
-        id: '2',
-        name: 'doc (1).pdf',
-        path: '/dest/doc (1).pdf',
+        name: 'file.txt',
+        path: '/dest/file.txt',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
     const copiedFiles: DialFile[] = [
       {
-        id: '3',
-        name: 'doc.pdf',
-        path: '/src/doc.pdf',
+        id: '2',
+        name: 'file.txt',
+        path: '/src/file.txt',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -276,20 +284,27 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.handleCopyTo('/dest');
     });
 
+    expect(result.current.conflictResolutionOpen).toBe(true);
+
+    act(() => {
+      result.current.handleConflictDuplicate();
+    });
+
     expect(onCopyFiles).toHaveBeenCalledWith(
       [
-        {
-          sourceUrl: '/src/doc.pdf',
-          destinationUrl: '/dest/doc (2).pdf',
+        expect.objectContaining({
+          sourceUrl: '/src/file.txt',
+          destinationUrl: '/dest/file (1).txt',
           overwrite: false,
           nodeType: DialFileNodeType.ITEM,
-        },
+        }),
       ],
       '/dest',
     );
+    expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleCopyTo with multiple files with conflicts', () => {
+  it('handleConflictDecideForEach with mixed decisions', () => {
     const onCopyFiles = vi.fn();
     destinationFiles = [
       {
@@ -304,22 +319,28 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         path: '/dest/b.txt',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
+      {
+        id: '3',
+        name: 'c.txt',
+        path: '/dest/c.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
     ];
     const copiedFiles: DialFile[] = [
       {
-        id: '3',
+        id: '4',
         name: 'a.txt',
         path: '/src/a.txt',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
-        id: '4',
+        id: '5',
         name: 'b.txt',
         path: '/src/b.txt',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
-        id: '5',
+        id: '6',
         name: 'c.txt',
         path: '/src/c.txt',
         nodeType: DialFileNodeType.ITEM,
@@ -342,48 +363,50 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.handleCopyTo('/dest');
     });
 
-    expect(onCopyFiles).toHaveBeenCalledWith(
-      [
+    act(() => {
+      result.current.handleConflictDecideForEach([
         {
-          sourceUrl: '/src/a.txt',
-          destinationUrl: '/dest/a (1).txt',
-          overwrite: false,
-          nodeType: DialFileNodeType.ITEM,
+          file: copiedFiles[0],
+          action: DialFileManagerConflictActions.Replace,
         },
         {
+          file: copiedFiles[1],
+          action: DialFileManagerConflictActions.Duplicate,
+        },
+        { file: copiedFiles[2], action: DialFileManagerConflictActions.Cancel },
+      ]);
+    });
+
+    expect(onCopyFiles).toHaveBeenCalledWith(
+      [
+        expect.objectContaining({
+          sourceUrl: '/src/a.txt',
+          destinationUrl: '/dest/a.txt',
+          overwrite: true,
+          nodeType: DialFileNodeType.ITEM,
+        }),
+        expect.objectContaining({
           sourceUrl: '/src/b.txt',
           destinationUrl: '/dest/b (1).txt',
           overwrite: false,
           nodeType: DialFileNodeType.ITEM,
-        },
-        {
-          sourceUrl: '/src/c.txt',
-          destinationUrl: '/dest/c.txt',
-          overwrite: false,
-          nodeType: DialFileNodeType.ITEM,
-        },
+        }),
       ],
       '/dest',
     );
+    expect(result.current.conflictResolutionOpen).toBe(false);
   });
 
-  it('handleMoveTo with files without extension', () => {
+  it('handleMoveTo without conflicts calls onMoveToFiles directly', () => {
     const onMoveToFiles = vi.fn();
-    destinationFiles = [
-      {
-        id: '1',
-        name: 'README',
-        path: '/dest/README',
-        nodeType: DialFileNodeType.ITEM,
-      } as DialFile,
-    ];
+    destinationFiles = [];
     const movedFiles: DialFile[] = [
       {
-        id: '2',
-        name: 'README',
-        path: '/src/README',
-        nodeType: DialFileNodeType.ITEM,
-        parentPath: '/src',
+        id: '1',
+        name: 'm1',
+        path: '/source/m1',
+        nodeType: DialFileNodeType.FOLDER,
+        parentPath: '/source',
       } as DialFile,
     ];
 
@@ -400,19 +423,19 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     });
 
     act(() => {
-      result.current.handleMoveTo('/dest', '/src');
+      result.current.handleMoveTo('/dest', '/source');
     });
 
     expect(onMoveToFiles).toHaveBeenCalledWith(
       [
         {
-          sourceUrl: '/src/README',
-          destinationUrl: '/dest/README',
-          overwrite: true,
-          nodeType: DialFileNodeType.ITEM,
+          sourceUrl: '/source/m1',
+          destinationUrl: '/dest/m1',
+          overwrite: false,
+          nodeType: DialFileNodeType.FOLDER,
         },
       ],
-      '/src',
+      '/source',
       '/dest',
     );
   });
@@ -463,36 +486,6 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
   });
 
-  it('handleSetCopiedFiles and handleSetMovedFiles store files', () => {
-    const { result } = renderHook(() =>
-      useFileClipboard({ getDestinationFiles, getSourceFiles }),
-    );
-
-    const copiedFiles: DialFile[] = [
-      {
-        id: '1',
-        name: 'a.txt',
-        path: '/a.txt',
-        nodeType: DialFileNodeType.ITEM,
-      } as DialFile,
-    ];
-    const movedFiles: DialFile[] = [
-      {
-        id: '2',
-        name: 'b.txt',
-        path: '/b.txt',
-        nodeType: DialFileNodeType.ITEM,
-      } as DialFile,
-    ];
-
-    act(() => {
-      result.current.handleSetCopiedFiles(copiedFiles);
-      result.current.handleSetMovedFiles(movedFiles);
-    });
-
-    expect(result.current).toBeDefined();
-  });
-
   it('clearState is called after handleCloseDestinationFolderPopup', () => {
     const onCopyFiles = vi.fn();
     const { result } = renderHook(() =>
@@ -508,7 +501,9 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
-      result.current.handleOpenDestinationFolderPopup('copy');
+      result.current.handleOpenDestinationFolderPopup(
+        DestinationFolderMode.Copy,
+      );
       result.current.handleCloseDestinationFolderPopup();
     });
 
