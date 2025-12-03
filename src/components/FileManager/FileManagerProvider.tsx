@@ -89,10 +89,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onMoveToFiles,
   onDeleteFiles,
   onDownloadFiles,
-  onRename,
-  onRenameSave,
-  onRenameCancel,
   onRenameValidate,
+  renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
@@ -155,10 +153,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     renameValidateHandler,
   } = useItemRenaming({
     items,
-    onRename,
-    onRenameSave,
-    onRenameCancel,
     onRenameValidate,
+    validationMessages: renameValidationMessages,
     onMoveToFiles,
   });
 
