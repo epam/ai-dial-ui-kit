@@ -8,6 +8,7 @@ export interface DialCloseButtonProps {
   className?: string;
   size?: number;
   onClose: (e: MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 /**
  * A Close button component with a customizable icon and accessible label.
@@ -26,14 +27,16 @@ export interface DialCloseButtonProps {
  * @param [className] - Additional CSS classes to apply to the button
  * @param [size=24] - Size of the close icon
  * @param onClose - Click event handler for the close button
+ * @param [disabled] - Whether the button is disabled
  */
 export const DialCloseButton: FC<DialCloseButtonProps> = ({
   ariaLabel,
   className,
   size = 24,
   onClose,
+  disabled,
 }) => {
-  const buttonClassName = 'text-secondary hover:text-accent-primary';
+  const buttonClassName = 'text-secondary hover:enabled:text-accent-primary';
 
   return (
     <DialButton
@@ -41,6 +44,7 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
       className={mergeClasses(buttonClassName, className)}
       onClick={onClose}
       iconBefore={<IconX size={size} />}
+      disabled={disabled}
     />
   );
 };

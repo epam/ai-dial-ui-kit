@@ -65,7 +65,7 @@ export const DialButton: FC<DialButtonProps> = ({
   );
   const btnClassName = classNames(
     variant && variantClassMap[variant],
-    'focus-visible:outline outline-offset-0',
+    'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
 
