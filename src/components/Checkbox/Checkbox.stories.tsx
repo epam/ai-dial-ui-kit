@@ -199,6 +199,14 @@ export const AllVariants: Story = {
           indeterminate={true}
         />
       </div>
+
+      {/* No Label Checkbox  */}
+      <div>
+        <div className="text-primary font-semibold mb-2">No Label</div>
+        <div className="p-4 border border-accent-primary rounded-md inline-block">
+          <InteractiveCheckbox id="no-label-checkbox" label={null} checked />
+        </div>
+      </div>
     </div>
   ),
 };
