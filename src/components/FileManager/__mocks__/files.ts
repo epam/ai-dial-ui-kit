@@ -357,6 +357,16 @@ export const itemsMock: DialFile[] = [
               },
             ],
           },
+          {
+            id: 'long-name-without-spaces-design-folder-to-test-ui-behavior',
+            name: 'ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents.png',
+            path: '/All files/Design/ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents',
+            parentPath: '/All files/Design',
+            nodeType: DialFileNodeType.ITEM,
+            folderId: 'design',
+            updatedAt: '2025-01-11',
+            items: [],
+          },
         ],
       },
 
