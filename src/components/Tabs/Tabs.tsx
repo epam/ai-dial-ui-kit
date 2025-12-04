@@ -156,6 +156,7 @@ export const DialTabs: FC<DialTabsProps> = ({
 
   return isSmallScreen ? (
     <div
+      role="tablist"
       className={mergeClasses(
         'h-11 flex items-center bg-layer-3 px-4',
         smallScreenContainerClassName,
