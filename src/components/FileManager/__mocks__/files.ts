@@ -559,6 +559,15 @@ export const itemsMock: DialFile[] = [
           },
         ],
       },
+      {
+        id: 'empty-f1',
+        name: 'Empty folder',
+        path: 'All files/Empty folder',
+        parentPath: 'All files',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-01',
+      },
 
       // ─────────── Very deep nested branches
       buildDeepBranch({ id: 'root', path: 'All files' }, 'Deep Nest', 14),

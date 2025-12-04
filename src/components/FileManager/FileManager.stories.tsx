@@ -160,6 +160,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
     organization: 'Organization',
   });
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
+  const [loadedPaths, setLoadedPaths] = useState<Set<string>>(new Set());
 
   const updateItemNameByPath = useCallback(
     (items: DialFile[], path: string, newName: string): DialFile[] => {
@@ -249,6 +250,12 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
+          onPathChange={(path) => {
+            if (path) {
+              setLoadedPaths((prev) => new Set(prev).add(path));
+            }
+            args.onPathChange?.(path);
+          }}
           items={itemsMock}
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
@@ -301,6 +308,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ...(args.treeOptions ?? {}),
             collapsed: false,
             expandedPaths: new Set<string>([rootItem.path]),
+            loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
               duplicate: 'Duplicate',
