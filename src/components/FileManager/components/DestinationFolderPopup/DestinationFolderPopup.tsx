@@ -103,6 +103,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
+      className={'md:!h-[800px]'}
       footer={
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">
