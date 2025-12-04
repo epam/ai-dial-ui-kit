@@ -259,10 +259,6 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
-
-  // Remove these from here - they're now part of destinationFolderPopupOptions
-  // getCopyHeader?: (itemsCount: number, itemName?: string) => string;
-  // getMoveHeader?: (itemsCount: number, itemName?: string) => string;
 }
 
 /**
