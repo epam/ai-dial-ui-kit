@@ -186,6 +186,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSetCopiedFiles,
     handleSetMovedFiles,
     destinationFolderMode,
+    destinationFolderTitle,
     conflictingFiles,
     conflictResolutionOpen,
     closeConflictResolution,
@@ -203,6 +204,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCopySuccess: clearSelection,
     onMoveSuccess: clearSelection,
     onDuplicateSuccess: clearSelection,
+    getCopyHeader: destinationFolderPopupOptions?.getCopyHeader,
+    getMoveHeader: destinationFolderPopupOptions?.getMoveHeader,
   });
 
   useEffect(() => {
@@ -432,6 +435,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       ...destinationFolderPopupOptions,
       destinationFolderPath,
       setDestinationFolderPath,
+      title: destinationFolderTitle,
     },
 
     currentPath,

@@ -110,9 +110,11 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'copyLabel'
   | 'moveLabel'
   | 'hiddenFilesSwitcherLabel'
-  | 'getCopyHeader'
-  | 'getMoveHeader'
->;
+  | 'title'
+> & {
+  getCopyHeader?: (itemsCount: number, itemName?: string) => string;
+  getMoveHeader?: (itemsCount: number, itemName?: string) => string;
+};
 
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
@@ -257,6 +259,10 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
+
+  // Remove these from here - they're now part of destinationFolderPopupOptions
+  // getCopyHeader?: (itemsCount: number, itemName?: string) => string;
+  // getMoveHeader?: (itemsCount: number, itemName?: string) => string;
 }
 
 /**
