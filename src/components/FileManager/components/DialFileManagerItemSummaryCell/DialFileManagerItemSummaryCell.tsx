@@ -4,6 +4,7 @@ import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants'
 import { DialFileNodeType } from '@/models/file';
 import { DialItemType } from '@/types/item';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { IconCircleFilled } from '@tabler/icons-react';
 
 interface DialFileManagerItemSummaryCellProps {
   id: string;
@@ -73,9 +74,9 @@ export const DialFileManagerItemSummaryCell: FC<
           elementId={id}
           iconSize={BASE_FILE_MANAGER_ICON_SIZE}
           details={
-            <div className="flex gap-1 dial-tiny text-secondary">
+            <div className="flex items-center gap-1 dial-tiny text-secondary">
               <span>{size}</span>
-              <div className="flex self-center w-0.5 h-0.5 bg-controls-disable rounded-full" />
+              <IconCircleFilled size={2} className="text-secondary" />
               <span>
                 <DialDateCellRenderer
                   value={updatedAt}
