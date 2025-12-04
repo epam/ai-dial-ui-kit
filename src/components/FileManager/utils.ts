@@ -2,7 +2,7 @@ import { DialFileNodeType, type DialFile } from '@/models/file';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,
-  path?: string,
+  path: string,
 ): DialFile | undefined => {
   if (!nodes || !nodes.length || !path) return undefined;
   for (const n of nodes) {
