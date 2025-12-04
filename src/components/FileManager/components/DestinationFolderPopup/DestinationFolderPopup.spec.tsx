@@ -360,6 +360,103 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
   });
 
+  test('renders custom copy header when getCopyHeader is provided', () => {
+    const getCopyHeader = vi.fn(
+      (itemsCount: number) => `Copying ${itemsCount} items`,
+    );
+
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        getCopyHeader={getCopyHeader}
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          breadcrumbLabel: 'Root',
+        }}
+      />,
+    );
+
+    expect(getCopyHeader).toHaveBeenCalledWith(2, 'Documents');
+    expect(screen.getByText('Copying 2 items')).toBeInTheDocument();
+  });
+
+  test('renders custom move header when getMoveHeader is provided', () => {
+    const getMoveHeader = vi.fn(
+      (itemsCount: number, itemsName?: string) =>
+        `Moving ${itemsCount} items${itemsName ? `: ${itemsName}` : ''}`,
+    );
+
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        getMoveHeader={getMoveHeader}
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          breadcrumbLabel: 'Root',
+        }}
+      />,
+    );
+
+    expect(getMoveHeader).toHaveBeenCalledWith(2, 'Documents');
+    expect(screen.getByText('Moving 2 items: Documents')).toBeInTheDocument();
+  });
+
+  test('renders default copy header when getCopyHeader is not provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          breadcrumbLabel: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Copy to')).toBeInTheDocument();
+  });
+
+  test('renders default move header when getMoveHeader is not provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          breadcrumbLabel: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Move to')).toBeInTheDocument();
+  });
+
   test('collapses tree and expands root path by default', () => {
     render(
       <DestinationFolderPopup

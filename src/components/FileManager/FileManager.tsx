@@ -110,6 +110,8 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'copyLabel'
   | 'moveLabel'
   | 'hiddenFilesSwitcherLabel'
+  | 'getCopyHeader'
+  | 'getMoveHeader'
 >;
 
 export interface FileTreeOptions
@@ -121,6 +123,7 @@ export interface FileTreeOptions
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
   expandedPaths?: Set<string>;
+  loadedPaths?: Set<string>;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;
@@ -173,7 +176,7 @@ export type ToolbarOptions = Omit<
 
 export type BulkActionsToolbarOptions = Omit<
   DialFileManagerBulkActionsToolbarProps,
-  'onClearSelection' | 'actions'
+  'onClearSelection' | 'actions' | 'selectedCount'
 > & {
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;
@@ -731,7 +734,8 @@ export const DialFileManagerView: FC = () => {
           aria-label="File Manager Toolbar"
         >
           <DialFileManagerBulkActionsToolbar
-            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
+            {...bulkActionsToolbarOptions}
+            selectedCount={selectedIds.size}
             onClearSelection={clearSelection}
             actions={bulkActions}
           />
@@ -888,9 +892,9 @@ export const DialFileManagerView: FC = () => {
         >
           <DialFileManagerNavigationPanel
             {...(navigationPanelOptions ?? {})}
+            makeHref={(segments) => segments.join('/')}
             path={currentPath}
             onItemClick={handleBreadcrumbItemClick}
-            makeHref={(segments) => '/' + segments.join('/')}
             rootItemPath={rootItem?.path}
             rootItemLabel={rootItem?.breadcrumbLabel}
             value={effectiveSearchValue}
@@ -965,6 +969,7 @@ export const DialFileManagerView: FC = () => {
         contentRenderer={deleteConfirmationOptions?.contentRenderer}
       />
       <DestinationFolderPopup
+        {...destinationFolderPopupOptions}
         open={openDestinationFolderPopup}
         onClose={handleCloseDestinationFolderPopup}
         onConfirm={() => {
@@ -981,14 +986,6 @@ export const DialFileManagerView: FC = () => {
         mode={destinationFolderMode}
         items={items}
         rootItem={rootItem}
-        onPathChange={destinationFolderPopupOptions?.setDestinationFolderPath}
-        path={destinationFolderPopupOptions?.destinationFolderPath}
-        addFolderLabel={destinationFolderPopupOptions?.addFolderLabel}
-        copyLabel={destinationFolderPopupOptions?.copyLabel}
-        moveLabel={destinationFolderPopupOptions?.moveLabel}
-        hiddenFilesSwitcherLabel={
-          destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
-        }
         gridOptions={{ columnDefs: columnDefs, loading: filesLoading }}
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}

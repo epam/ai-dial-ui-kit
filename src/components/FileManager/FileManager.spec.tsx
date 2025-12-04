@@ -179,11 +179,11 @@ describe('Dial UI Kit :: FileManager', () => {
         path="/All files/Design/Icons/SVG/24px"
         treeOptions={{
           expandedPaths: new Set([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
           showFiles: true,
         }}
@@ -202,9 +202,9 @@ describe('Dial UI Kit :: FileManager', () => {
     renderWithinSizedShell(
       <DialFileManager
         items={itemsMock}
-        path="/All files"
+        path="All files"
         treeOptions={{
-          expandedPaths: new Set(['/All files', '/All files/Media']),
+          expandedPaths: new Set(['All files', 'All files/Media']),
           showFiles: true,
         }}
       />,

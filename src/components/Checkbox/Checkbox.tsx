@@ -56,8 +56,8 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   );
 
   const checkboxClassName = classNames(
-    'flex flex-row items-center cursor-pointer text-accent-primary small-medium flex-1 min-w-0',
-    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
+    'flex flex-row items-center cursor-pointer text-accent-primary small-medium min-w-0',
+    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded'}`,
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',
@@ -65,7 +65,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   );
 
   const iconClassName = classNames(
-    'mr-2 border rounded',
+    'border rounded',
     disabled ? 'bg-layer-4 border-icon-secondary' : '',
   );
 
@@ -84,7 +84,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
-          <DialEllipsisTooltip text={label} className="text-primary" />
+          <DialEllipsisTooltip text={label} className="ml-2 text-primary" />
         ) : (
           label
         ))}
