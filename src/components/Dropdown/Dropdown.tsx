@@ -44,6 +44,7 @@ import {
 import { type DropdownItem } from '@/models/dropdown';
 import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { DropdownItemType } from '@/types/dropdown';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DropdownMenuProps {
   items: DropdownItem[];
@@ -332,6 +333,19 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 />
               );
             }
+            if (it.type === DropdownItemType.PlainText) {
+              return (
+                <div
+                  key={it.key}
+                  className={mergeClasses(
+                    'px-3 py-2 text-secondary dial-caption',
+                    it.className,
+                  )}
+                >
+                  {it.label}
+                </div>
+              );
+            }
             return (
               <button
                 key={it.key}
@@ -342,6 +356,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                   dropdownItemBaseClassName,
                   it.disabled && dropdownItemDisabledClassName,
                   it.danger && dropdownItemDangerClassName,
+                  it.className,
                 )}
                 disabled={it.disabled}
                 onClick={handleItemClick(it)}
