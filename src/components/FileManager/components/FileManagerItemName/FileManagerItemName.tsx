@@ -64,10 +64,10 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   loading = false,
   shared = false,
   iconSize = BASE_ICON_SIZE,
-  details,
   validate,
   onSave,
   onCancel,
+  ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
     useEditableItem({
@@ -92,11 +92,11 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     }
     return (
       <DialFileName
+        className="max-w-[428px]"
+        {...restProps}
         name={name}
         shared={shared}
         iconSize={iconSize}
-        className="max-w-[428px]"
-        details={details}
       />
     );
   }
