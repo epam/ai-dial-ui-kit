@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import {
   DialFileManagerItemNameInput,
   type DialFileManagerItemNameInputProps,
@@ -17,6 +17,7 @@ export interface DialFileManagerItemNameProps
   editing?: boolean;
   loading?: boolean;
   shared?: boolean;
+  details?: ReactNode;
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
@@ -66,6 +67,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   validate,
   onSave,
   onCancel,
+  ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
     useEditableItem({
@@ -90,10 +92,11 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     }
     return (
       <DialFileName
+        className="max-w-[428px]"
+        {...restProps}
         name={name}
         shared={shared}
         iconSize={iconSize}
-        className="max-w-[428px]"
       />
     );
   }

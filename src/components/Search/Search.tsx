@@ -5,6 +5,7 @@ import { IconSearch, IconX } from '@tabler/icons-react';
 import { DialIcon } from '@/components/Icon/Icon';
 import { SIZE_CONFIG } from './constants';
 import { SearchSize } from '@/types/search';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialSearchProps {
   elementId: string;
@@ -83,7 +84,7 @@ export const DialSearch: FC<DialSearchProps> = ({
 
   return (
     <div
-      className={classNames(
+      className={mergeClasses(
         'dial-input flex flex-row items-center justify-between',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',

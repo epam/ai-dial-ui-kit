@@ -46,6 +46,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
+  selectionOnHover?: boolean;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
@@ -56,6 +57,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   emptyStateDescription?: string;
   loading?: boolean;
   wrapperBorder?: boolean;
+  withoutHeaderBorders?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -134,6 +136,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
+ * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
+ * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
@@ -144,6 +148,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  *   providing additional context or instructions (e.g., "No data found" or "Try adjusting your filters").
  * @param [loading=false] - When true, shows AG-Grid's native loading overlay
  * @param [wrapperBorder=true] - Whether to apply a border around the grid container
+ * @param [withoutHeaderBorders=false] - Whether to hide the header row borders
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -156,6 +161,7 @@ export const DialGrid = <T extends object>({
   wrapCustomCellRenderers = true,
   selectedRowIds,
   selectedRows,
+  selectionOnHover = true,
   onSelectionChange,
   onSelectionChangeWithMap,
   getRowId = (row: T) =>
@@ -167,6 +173,7 @@ export const DialGrid = <T extends object>({
   emptyStateDescription = "Sorry, we couldn't find any results for your search.",
   loading = false,
   wrapperBorder = true,
+  withoutHeaderBorders = false,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -225,12 +232,15 @@ export const DialGrid = <T extends object>({
           ariaLabel="Select all rows"
           checked={checked}
           indeterminate={indeterminate}
-          className={`dial-header-select ${headerCheckboxState}`}
+          className={classNames(
+            `dial-header-select ${headerCheckboxState}`,
+            !selectionOnHover && 'dial-header-select-visible',
+          )}
           onChange={handleHeaderCheckboxChange}
         />
       </div>
     );
-  }, [headerCheckboxState, handleHeaderCheckboxChange]);
+  }, [headerCheckboxState, handleHeaderCheckboxChange, selectionOnHover]);
 
   const renderDataCell = useCallback(
     (p: ICellRendererParams<T, unknown>) => {
@@ -272,7 +282,10 @@ export const DialGrid = <T extends object>({
             id={checkboxId}
             ariaLabel="Select row"
             checked={checked}
-            className="dial-row-select"
+            className={classNames([
+              'dial-row-select',
+              !selectionOnHover && 'dial-row-select-visible',
+            ])}
             onChange={(next) => {
               if (p.data) {
                 handleSelectionToggle(p.data, !!next);
@@ -282,7 +295,7 @@ export const DialGrid = <T extends object>({
         </div>
       );
     },
-    [currentSelectedIds, getRowId, handleSelectionToggle],
+    [currentSelectedIds, getRowId, handleSelectionToggle, selectionOnHover],
   );
 
   const wrapRendererIfNeeded = useCallback(
@@ -419,6 +432,7 @@ export const DialGrid = <T extends object>({
         gridBaseClassName,
         className,
         withSelectionColumn && 'with-selection-column',
+        withoutHeaderBorders && 'dial-without-header-borders',
       )}
       aria-label={ariaLabel}
       role="region"
