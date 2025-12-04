@@ -36,17 +36,17 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
-    path: '/All files/Folder 4',
+    path: 'All files/Folder 4',
     items: itemsMock,
     treeOptions: {
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
-        '/All files/Design/Icons/SVG',
-        '/All files/Folder 4',
-        '/All files/Media',
-        '/All files/Projects',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
+        'All files/Design/Icons/SVG',
+        'All files/Folder 4',
+        'All files/Media',
+        'All files/Projects',
       ]),
     },
     navigationPanelOptions: {
@@ -63,14 +63,14 @@ export const Basic: Story = {};
 
 export const PreselectedNode: Story = {
   args: {
-    path: '/All files/Design/Icons/SVG/24px/logo.svg',
+    path: 'All files/Design/Icons/SVG/24px/logo.svg',
     treeOptions: {
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
-        '/All files/Design/Icons/SVG',
-        '/All files/Design/Icons/SVG/24px',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
+        'All files/Design/Icons/SVG',
+        'All files/Design/Icons/SVG/24px',
       ]),
     },
   },
@@ -160,6 +160,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
     organization: 'Organization',
   });
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
+  const [loadedPaths, setLoadedPaths] = useState<Set<string>>(new Set());
 
   const updateItemNameByPath = useCallback(
     (items: DialFile[], path: string, newName: string): DialFile[] => {
@@ -249,10 +250,20 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
+          onPathChange={(path) => {
+            if (path) {
+              setLoadedPaths((prev) => new Set(prev).add(path));
+            }
+            args.onPathChange?.(path);
+          }}
           items={itemsMock}
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,
+            getCopyHeader: (itemsCount) =>
+              `${itemsCount} item(s) selected to copy`,
+            getMoveHeader: (itemsCount, itemsName) =>
+              `${itemsCount} item(s) selected to move. First item: ${itemsName}`,
           }}
           gridOptions={{
             ...(args.gridOptions ?? {}),
@@ -284,7 +295,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
             },
           }}
           bulkActionsToolbarOptions={{
-            selectionLabel: 'items selected',
+            getSelectionLabel: (selectedCount: number) =>
+              `${selectedCount} item(s) selected`,
             actionLabels: {
               duplicate: 'Duplicate',
               copy: 'Copy to',
@@ -297,6 +309,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ...(args.treeOptions ?? {}),
             collapsed: false,
             expandedPaths: new Set<string>([rootItem.path]),
+            loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
               duplicate: 'Duplicate',
@@ -410,7 +423,7 @@ export const TreeCollapsedControlled: Story = {
 const rootItem: DialRootFolder = {
   id: 'root',
   folderId: 'root',
-  path: '/All files',
+  path: 'All files',
   name: 'All files',
   breadcrumbLabel: 'My Workspace',
   nodeType: DialFileNodeType.FOLDER,
@@ -422,9 +435,9 @@ const WithRootItemComponent = (args: DialFileManagerProps) => {
     () => ({
       ...args.treeOptions,
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
       ]),
     }),
     [args.treeOptions],
@@ -434,7 +447,7 @@ const WithRootItemComponent = (args: DialFileManagerProps) => {
       <DialFileManager
         {...args}
         rootItem={rootItem}
-        path="/All files/Design/Icons"
+        path="All files/Design/Icons"
         treeOptions={treeOptions}
       />
     </div>
@@ -479,8 +492,8 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
       designFolder.items.push({
         id: 'duplicate-test-1',
         name: 'alert.svg',
-        path: '/All files/Design/alert.svg',
-        parentPath: '/All files/Design',
+        path: 'All files/Design/alert.svg',
+        parentPath: 'All files/Design',
         nodeType: DialFileNodeType.ITEM,
         resourceType: DialFileResourceType.FILE,
         extension: 'svg',
@@ -527,7 +540,8 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             duplicate: 'Duplicate',
             copy: 'Copy to',
@@ -539,11 +553,11 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
         treeOptions={{
           ...(args.treeOptions ?? {}),
           expandedPaths: new Set<string>([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
         }}
         onCopyFiles={(items, destinationFolder) => {
@@ -614,8 +628,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-1',
           name: 'alert.svg',
-          path: '/All files/Design/alert.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/alert.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -627,8 +641,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-2',
           name: 'settings.svg',
-          path: '/All files/Design/settings.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/settings.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -640,8 +654,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-3',
           name: 'logo.svg',
-          path: '/All files/Design/logo.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/logo.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -660,7 +674,7 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
       <DialFileManager
         {...args}
         items={itemsWithMultipleDuplicates}
-        path="/All files/Design/Icons/SVG/24px"
+        path="All files/Design/Icons/SVG/24px"
         destinationFolderPopupOptions={{
           destinationFolderPath: destinationPath,
           setDestinationFolderPath: setDestinationPath,
@@ -685,7 +699,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             copy: 'Copy to',
             move: 'Move to',
@@ -693,11 +708,11 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         }}
         treeOptions={{
           expandedPaths: new Set<string>([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
         }}
         onCopyFiles={(items, destinationFolder) => {

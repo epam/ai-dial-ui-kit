@@ -7,7 +7,7 @@ import {
 
 /**
  * Helper to build a very deep nested folder chain:
- * /All files/<rootName>/Level 01/.../Level NN
+ * All files/<rootName>/Level 01/.../Level NN
  * Adds a couple of files at various depths to emulate real structures.
  */
 function buildDeepBranch(
@@ -94,8 +94,8 @@ export const itemsMock: DialFile[] = [
   {
     id: 'root',
     name: 'All files',
-    path: '/All files',
-    parentPath: '/',
+    path: 'All files',
+    parentPath: '',
     nodeType: DialFileNodeType.FOLDER,
     folderId: 'root',
     updatedAt: '2025-01-01',
@@ -104,8 +104,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'design',
         name: 'Design',
-        path: '/All files/Design',
-        parentPath: '/All files',
+        path: 'All files/Design',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-03',
@@ -113,8 +113,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'design-icons',
             name: 'Icons',
-            path: '/All files/Design/Icons',
-            parentPath: '/All files/Design',
+            path: 'All files/Design/Icons',
+            parentPath: 'All files/Design',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'design',
             updatedAt: '2025-01-05',
@@ -122,8 +122,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'icons-svg',
                 name: 'SVG',
-                path: '/All files/Design/Icons/SVG',
-                parentPath: '/All files/Design/Icons',
+                path: 'All files/Design/Icons/SVG',
+                parentPath: 'All files/Design/Icons',
                 nodeType: DialFileNodeType.FOLDER,
                 folderId: 'design-icons',
                 updatedAt: '2025-01-06',
@@ -131,8 +131,8 @@ export const itemsMock: DialFile[] = [
                   {
                     id: 'icons-svg-24',
                     name: '24px',
-                    path: '/All files/Design/Icons/SVG/24px',
-                    parentPath: '/All files/Design/Icons/SVG',
+                    path: 'All files/Design/Icons/SVG/24px',
+                    parentPath: 'All files/Design/Icons/SVG',
                     nodeType: DialFileNodeType.FOLDER,
                     folderId: 'icons-svg',
                     updatedAt: '2025-01-06',
@@ -140,8 +140,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'ico-alert',
                         name: 'alert.svg',
-                        path: '/All files/Design/Icons/SVG/24px/alert.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/alert.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -153,8 +153,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'ico-settings',
                         name: 'settings.svg',
-                        path: '/All files/Design/Icons/SVG/24px/settings.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/settings.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -166,8 +166,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: '.hidden-file',
                         name: '.hidden-file',
-                        path: '/All files/Design/Icons/SVG/24px/.hidden-file',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/.hidden-file',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'txt',
@@ -179,8 +179,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: '.hidden-folder',
                         name: '.hidden-folder',
-                        path: '/All files/Design/Icons/SVG/24px/.hidden-folder',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/.hidden-folder',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.FOLDER,
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
@@ -188,9 +188,9 @@ export const itemsMock: DialFile[] = [
                           {
                             id: 'inside-hidden',
                             name: 'inside-hidden.txt',
-                            path: '/All files/Design/Icons/SVG/24px/.hidden-folder/inside-hidden.txt',
+                            path: 'All files/Design/Icons/SVG/24px/.hidden-folder/inside-hidden.txt',
                             parentPath:
-                              '/All files/Design/Icons/SVG/24px/.hidden-folder',
+                              'All files/Design/Icons/SVG/24px/.hidden-folder',
                             nodeType: DialFileNodeType.ITEM,
                             resourceType: DialFileResourceType.FILE,
                             extension: 'txt',
@@ -204,8 +204,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'ico-long-name',
                         name: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.svg",
-                        path: "/All files/Design/Icons/SVG/24px/Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.svg",
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: "All files/Design/Icons/SVG/24px/Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.svg",
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -217,8 +217,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-svg',
                         name: 'logo.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -230,8 +230,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-extended-svg',
                         name: 'logo-extended-version-with-huge-filename-to-test-ui-behavior.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -243,8 +243,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-extended-svg-2',
                         name: 'logo-extended-version-with-huge-filename-to-test-ui-behavior-2.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-2.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-2.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -256,8 +256,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-extended-svg-3',
                         name: 'logo-extended-version-with-huge-filename-to-test-ui-behavior-3.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-3.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-3.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -269,8 +269,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-extended-svg-4',
                         name: 'logo-extended-version-with-huge-filename-to-test-ui-behavior-4.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-4.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-extended-version-with-huge-filename-to-test-ui-behavior-4.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -282,8 +282,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-svg-5',
                         name: 'logo-5.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-5.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-5.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -295,8 +295,8 @@ export const itemsMock: DialFile[] = [
                       {
                         id: 'logo-svg-6',
                         name: 'logo-6.svg',
-                        path: '/All files/Design/Icons/SVG/24px/logo-6.svg',
-                        parentPath: '/All files/Design/Icons/SVG/24px',
+                        path: 'All files/Design/Icons/SVG/24px/logo-6.svg',
+                        parentPath: 'All files/Design/Icons/SVG/24px',
                         nodeType: DialFileNodeType.ITEM,
                         resourceType: DialFileResourceType.FILE,
                         extension: 'svg',
@@ -312,8 +312,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'icons-png',
                 name: 'PNG',
-                path: '/All files/Design/Icons/PNG',
-                parentPath: '/All files/Design/Icons',
+                path: 'All files/Design/Icons/PNG',
+                parentPath: 'All files/Design/Icons',
                 nodeType: DialFileNodeType.FOLDER,
                 folderId: 'design-icons',
                 updatedAt: '2025-01-06',
@@ -321,8 +321,8 @@ export const itemsMock: DialFile[] = [
                   {
                     id: 'png-hero',
                     name: 'hero.png',
-                    path: '/All files/Design/Icons/PNG/hero.png',
-                    parentPath: '/All files/Design/Icons/PNG',
+                    path: 'All files/Design/Icons/PNG/hero.png',
+                    parentPath: 'All files/Design/Icons/PNG',
                     nodeType: DialFileNodeType.ITEM,
                     resourceType: DialFileResourceType.FILE,
                     extension: 'png',
@@ -337,8 +337,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'design-mockups',
             name: 'Mockups',
-            path: '/All files/Design/Mockups',
-            parentPath: '/All files/Design',
+            path: 'All files/Design/Mockups',
+            parentPath: 'All files/Design',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'design',
             updatedAt: '2025-01-11',
@@ -346,8 +346,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'mock-home',
                 name: 'homepage.fig',
-                path: '/All files/Design/Mockups/homepage.fig',
-                parentPath: '/All files/Design/Mockups',
+                path: 'All files/Design/Mockups/homepage.fig',
+                parentPath: 'All files/Design/Mockups',
                 nodeType: DialFileNodeType.ITEM,
                 resourceType: DialFileResourceType.FILE,
                 extension: 'fig',
@@ -357,6 +357,16 @@ export const itemsMock: DialFile[] = [
               },
             ],
           },
+          {
+            id: 'long-name-without-spaces-design-folder-to-test-ui-behavior',
+            name: 'ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents.png',
+            path: '/All files/Design/ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents',
+            parentPath: '/All files/Design',
+            nodeType: DialFileNodeType.ITEM,
+            folderId: 'design',
+            updatedAt: '2025-01-11',
+            items: [],
+          },
         ],
       },
 
@@ -364,8 +374,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'hidden-root-folder',
         name: '.hidden-root-folder',
-        path: '/All files/.hidden-root-folder',
-        parentPath: '/All files',
+        path: 'All files/.hidden-root-folder',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-13',
@@ -373,8 +383,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'inside-hidden-root',
             name: 'inside-hidden-root.txt',
-            path: '/All files/.hidden-root-folder/inside-hidden-root.txt',
-            parentPath: '/All files/.hidden-root-folder',
+            path: 'All files/.hidden-root-folder/inside-hidden-root.txt',
+            parentPath: 'All files/.hidden-root-folder',
             nodeType: DialFileNodeType.ITEM,
             resourceType: DialFileResourceType.FILE,
             extension: 'txt',
@@ -385,8 +395,8 @@ export const itemsMock: DialFile[] = [
           {
             id: '.hidden-file-in-hidden-folder',
             name: '.hidden-file-in-hidden-folder.txt',
-            path: '/All files/.hidden-root-folder/.hidden-file-in-hidden-folder.txt',
-            parentPath: '/All files/.hidden-root-folder',
+            path: 'All files/.hidden-root-folder/.hidden-file-in-hidden-folder.txt',
+            parentPath: 'All files/.hidden-root-folder',
             nodeType: DialFileNodeType.ITEM,
             resourceType: DialFileResourceType.FILE,
             extension: 'txt',
@@ -401,8 +411,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'media',
         name: 'Media',
-        path: '/All files/Media',
-        parentPath: '/All files',
+        path: 'All files/Media',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-04',
@@ -410,8 +420,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'media-photos',
             name: 'Photos',
-            path: '/All files/Media/Photos',
-            parentPath: '/All files/Media',
+            path: 'All files/Media/Photos',
+            parentPath: 'All files/Media',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'media',
             updatedAt: '2025-01-08',
@@ -419,8 +429,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'photos-2025',
                 name: '2025',
-                path: '/All files/Media/Photos/2025',
-                parentPath: '/All files/Media/Photos',
+                path: 'All files/Media/Photos/2025',
+                parentPath: 'All files/Media/Photos',
                 nodeType: DialFileNodeType.FOLDER,
                 folderId: 'media-photos',
                 updatedAt: '2025-01-14',
@@ -428,8 +438,8 @@ export const itemsMock: DialFile[] = [
                   {
                     id: 'photo-team',
                     name: 'team.jpg',
-                    path: '/All files/Media/Photos/2025/team.jpg',
-                    parentPath: '/All files/Media/Photos/2025',
+                    path: 'All files/Media/Photos/2025/team.jpg',
+                    parentPath: 'All files/Media/Photos/2025',
                     nodeType: DialFileNodeType.ITEM,
                     resourceType: DialFileResourceType.FILE,
                     extension: 'jpg',
@@ -444,8 +454,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'media-video',
             name: 'Video',
-            path: '/All files/Media/Video',
-            parentPath: '/All files/Media',
+            path: 'All files/Media/Video',
+            parentPath: 'All files/Media',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'media',
             updatedAt: '2025-01-09',
@@ -453,8 +463,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'video-promo',
                 name: 'promo.mp4',
-                path: '/All files/Media/Video/promo.mp4',
-                parentPath: '/All files/Media/Video',
+                path: 'All files/Media/Video/promo.mp4',
+                parentPath: 'All files/Media/Video',
                 nodeType: DialFileNodeType.ITEM,
                 resourceType: DialFileResourceType.FILE,
                 extension: 'mp4',
@@ -471,8 +481,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'f1',
         name: 'Folder 1',
-        path: '/All files/Folder 1',
-        parentPath: '/All files',
+        path: 'All files/Folder 1',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-01',
@@ -480,8 +490,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'f1-notes',
             name: 'notes.txt',
-            path: '/All files/Folder 1/notes.txt',
-            parentPath: '/All files/Folder 1',
+            path: 'All files/Folder 1/notes.txt',
+            parentPath: 'All files/Folder 1',
             nodeType: DialFileNodeType.ITEM,
             resourceType: DialFileResourceType.FILE,
             extension: 'txt',
@@ -494,8 +504,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'f2',
         name: 'Folder 2',
-        path: '/All files/Folder 2',
-        parentPath: '/All files',
+        path: 'All files/Folder 2',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-02',
@@ -503,8 +513,8 @@ export const itemsMock: DialFile[] = [
           {
             id: 'f2-a',
             name: 'Sub A',
-            path: '/All files/Folder 2/Sub A',
-            parentPath: '/All files/Folder 2',
+            path: 'All files/Folder 2/Sub A',
+            parentPath: 'All files/Folder 2',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'f2',
             updatedAt: '2025-01-02',
@@ -512,8 +522,8 @@ export const itemsMock: DialFile[] = [
               {
                 id: 'f2-a-1',
                 name: 'doc-a1.pdf',
-                path: '/All files/Folder 2/Sub A/doc-a1.pdf',
-                parentPath: '/All files/Folder 2/Sub A',
+                path: 'All files/Folder 2/Sub A/doc-a1.pdf',
+                parentPath: 'All files/Folder 2/Sub A',
                 nodeType: DialFileNodeType.ITEM,
                 resourceType: DialFileResourceType.FILE,
                 extension: 'pdf',
@@ -528,8 +538,8 @@ export const itemsMock: DialFile[] = [
       {
         id: 'long-f1',
         name: 'This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
-        path: '/All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
-        parentPath: '/All files',
+        path: 'All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
+        parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-01',
@@ -537,9 +547,9 @@ export const itemsMock: DialFile[] = [
           {
             id: 'long-f1-notes',
             name: 'This is a very long file name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI.txt',
-            path: '/All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI/This is a very long file name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI.txt',
+            path: 'All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI/This is a very long file name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI.txt',
             parentPath:
-              '/All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
+              'All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
             nodeType: DialFileNodeType.ITEM,
             resourceType: DialFileResourceType.FILE,
             extension: 'txt',
@@ -549,11 +559,20 @@ export const itemsMock: DialFile[] = [
           },
         ],
       },
+      {
+        id: 'empty-f1',
+        name: 'Empty folder',
+        path: 'All files/Empty folder',
+        parentPath: 'All files',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'root',
+        updatedAt: '2025-01-01',
+      },
 
       // ─────────── Very deep nested branches
-      buildDeepBranch({ id: 'root', path: '/All files' }, 'Deep Nest', 14),
-      buildDeepBranch({ id: 'root', path: '/All files' }, 'Ultra Depth', 18),
-      buildDeepBranch({ id: 'root', path: '/All files' }, 'Labyrinth', 22),
+      buildDeepBranch({ id: 'root', path: 'All files' }, 'Deep Nest', 14),
+      buildDeepBranch({ id: 'root', path: 'All files' }, 'Ultra Depth', 18),
+      buildDeepBranch({ id: 'root', path: 'All files' }, 'Labyrinth', 22),
     ],
   },
 ];

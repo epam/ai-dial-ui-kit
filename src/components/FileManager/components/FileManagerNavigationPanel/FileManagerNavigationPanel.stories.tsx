@@ -56,7 +56,7 @@ export const WithItemClick: Story = {
         {...args}
         onItemClick={handleItemClick}
         makeHref={(segments, index) =>
-          '#' + '/' + segments.slice(0, index + 1).join('/')
+          '#' + segments.slice(0, index + 1).join('/')
         }
       />
     );
@@ -78,7 +78,7 @@ export const WithLinks: Story = {
       {...args}
       // Make all but the last breadcrumb items clickable
       makeHref={(segments, index) =>
-        '#' + '/' + segments.slice(0, index + 1).join('/')
+        '#' + segments.slice(0, index + 1).join('/')
       }
     />
   ),

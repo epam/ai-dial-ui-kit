@@ -30,9 +30,14 @@ const meta: Meta<typeof DialFileManagerBulkActionsToolbar> = {
     },
   },
   argTypes: {
-    selectionLabel: {
-      control: 'text',
-      description: 'Label showing how many items are selected.',
+    getSelectionLabel: {
+      control: false,
+      description:
+        'Function to get the label showing current selection status (e.g., "3 files selected").',
+    },
+    selectedCount: {
+      control: 'number',
+      description: 'Count of currently selected items.',
     },
     onClearSelection: {
       action: 'onClearSelections',
@@ -121,18 +126,22 @@ const extraMockActions = [
 
 export const Default: Story = {
   args: {
-    selectionLabel: '3 items selected',
+    getSelectionLabel: (selectedCount: number) =>
+      `${selectedCount} items selected`,
     onClearSelection: () => alert('Selections cleared'),
     actions: mockActions,
+    selectedCount: 3,
   },
   render: (args) => <DialFileManagerBulkActionsToolbar {...args} />,
 };
 
 export const ManyActions: Story = {
   args: {
-    selectionLabel: '1 item selected',
+    getSelectionLabel: (selectedCount: number) =>
+      `${selectedCount} items selected`,
     onClearSelection: () => alert('Selections cleared'),
     actions: [...mockActions, ...extraMockActions],
+    selectedCount: 5,
   },
   render: (args) => <DialFileManagerBulkActionsToolbar {...args} />,
 };

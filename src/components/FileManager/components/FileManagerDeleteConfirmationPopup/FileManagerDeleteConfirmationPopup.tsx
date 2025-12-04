@@ -50,7 +50,10 @@ export const FileManagerDeleteConfirmationPopup: FC<
         {itemsToDelete.length === 1 ? (
           <>
             Do you want to delete file or folder{' '}
-            <span className="text-primary">"{itemsToDelete[0].name}"</span>?
+            <span className="text-primary break-all">
+              "{itemsToDelete[0].name}"
+            </span>
+            ?
           </>
         ) : (
           <>

@@ -34,7 +34,7 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
   test('creates hrefs via `makeHref` and invokes `onItemClick` with href (click a non-last segment)', () => {
     const onItemClick = vi.fn();
     const makeHref = (segments: string[], index: number) =>
-      '/' + segments.slice(0, index + 1).join('/');
+      segments.slice(0, index + 1).join('/');
 
     render(
       <DialFileManagerNavigationPanel
@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     const deptLink = screen.getByRole('link', { name: 'Dept' });
     fireEvent.click(deptLink);
     expect(onItemClick).toHaveBeenCalledTimes(1);
-    expect(onItemClick).toHaveBeenCalledWith('/Org/Dept');
+    expect(onItemClick).toHaveBeenCalledWith('Org/Dept');
   });
 
   test('renders search when `searchable` is true and reflects controlled value', () => {

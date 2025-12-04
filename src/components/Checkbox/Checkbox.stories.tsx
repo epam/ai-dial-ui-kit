@@ -107,6 +107,18 @@ export const DisabledIndeterminate: Story = {
   },
 };
 
+export const NoLabel: Story = {
+  args: {
+    id: 'no-label-checkbox',
+    label: null,
+  },
+  render: (args) => (
+    <div className="p-4 border border-accent-primary rounded-md">
+      <InteractiveCheckbox {...args} />
+    </div>
+  ),
+};
+
 export const AllVariants: Story = {
   args: {
     id: 'all-variants-textarea',
@@ -186,6 +198,14 @@ export const AllVariants: Story = {
           disabled={true}
           indeterminate={true}
         />
+      </div>
+
+      {/* No Label Checkbox  */}
+      <div>
+        <div className="text-primary font-semibold mb-2">No Label</div>
+        <div className="p-4 border border-accent-primary rounded-md inline-block">
+          <InteractiveCheckbox id="no-label-checkbox" label={null} checked />
+        </div>
       </div>
     </div>
   ),

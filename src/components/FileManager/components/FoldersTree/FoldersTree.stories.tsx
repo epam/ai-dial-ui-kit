@@ -287,6 +287,7 @@ export const Default: Story = {
             items={items}
             expandedPaths={expanded}
             loadingPaths={loading}
+            loadedPaths={loaded}
             selectedPath={selected}
             renamedPath={renaming}
             onItemClick={handleItemClick}
