@@ -401,6 +401,7 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    getDisplayName,
     isDragging,
     isDraggingOverWindow,
     handleDragEnter,
@@ -484,9 +485,10 @@ export const DialFileManagerView: FC = () => {
 
           const isBeingRenamed = renamedPath === params.data?.path;
           if (isBeingRenamed && renamedItem && params.data) {
+            const displayName = getDisplayName(renamedItem);
             return (
               <DialFileManagerItemName
-                name={params.data.name}
+                name={displayName}
                 type={
                   params.data.nodeType === DialFileNodeType.FOLDER
                     ? DialItemType.Folder
@@ -561,6 +563,7 @@ export const DialFileManagerView: FC = () => {
     onRenameValidate,
     onRenameSave,
     onRenameCancel,
+    getDisplayName,
   ]);
 
   const getTreeContextMenuItems = useCallback(

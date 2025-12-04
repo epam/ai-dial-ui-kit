@@ -120,7 +120,7 @@ export const DialFileManagerItemNameInput: FC<
       <DialInput
         containerClassName="!h-6 py-[1px] pl-[7px] pr-[7px]"
         elementId={elementId}
-        defaultValue={name}
+        value={name}
         onChange={onChange}
         invalid={inputInvalid}
         iconAfter={getInputIconAfter()}
