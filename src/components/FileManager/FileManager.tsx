@@ -117,6 +117,7 @@ export interface FileTreeOptions
   collapsed?: boolean;
   onCollapseChange?: (collapsed: boolean) => void;
   expandedPaths?: Set<string>;
+  loadedPaths?: Set<string>;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;

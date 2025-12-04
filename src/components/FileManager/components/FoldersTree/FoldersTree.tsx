@@ -20,6 +20,7 @@ export interface DialFoldersTreeProps {
   items: DialFile[];
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
+  loadedPaths?: Set<string>;
   selectedPath?: string;
   renamedPath?: string;
   showFiles?: boolean;
@@ -106,6 +107,7 @@ export interface DialFoldersTreeProps {
  * @param [items] - Array of folder and file nodes to display in the tree.
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
+ * @param [loadedPaths] - Set of folder paths that have loaded.
  * @param [selectedPath] - Path representing the currently selected folder or file.
  * @param [renamedPath] - Path of the folder or file currently being edited.
  * @param [showFiles=false] - Whether to show files in addition to folders.
@@ -131,6 +133,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   showFiles = false,
   expandedPaths: externalExpandedPaths,
   loadingPaths = new Set(),
+  loadedPaths = new Set(),
   selectedPath,
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
@@ -173,6 +176,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const isSelected = selectedPath === path;
       const isLoading = loadingPaths.has(path);
       const isRenaming = renamedPath === path;
+      const isLoaded = loadedPaths.has(path);
 
       const validateHandler =
         onRenameValidate && ((value: string) => onRenameValidate(value, node));
@@ -216,7 +220,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                         className={classNames(
                           'flex-shrink-0',
                           isExpanded && 'rotate-90 transition-all',
-                          !hasValidItems && 'text-transparent',
+                          isLoaded && !hasValidItems && 'text-transparent',
                         )}
                       />
                     )}
