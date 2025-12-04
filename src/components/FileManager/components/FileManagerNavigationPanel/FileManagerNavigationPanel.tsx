@@ -67,7 +67,7 @@ export interface DialFileManagerNavigationPanelProps
  * // With clickable parents
  * <FileManagerNavigationPanel
  *   path="Org/Design/Assets"
- *   makeHref={(segments, i) => '#' + '/' + segments.slice(0, i + 1).join('/')}
+ *   makeHref={(segments, i) => '#' + segments.slice(0, i + 1).join('/')}
  * />
  * ```
  *

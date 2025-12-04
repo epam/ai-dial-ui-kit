@@ -104,6 +104,8 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'copyLabel'
   | 'moveLabel'
   | 'hiddenFilesSwitcherLabel'
+  | 'getCopyHeader'
+  | 'getMoveHeader'
 >;
 
 export interface FileTreeOptions
@@ -787,9 +789,9 @@ export const DialFileManagerView: FC = () => {
         <div className={contentGridClassName}>
           <DialFileManagerNavigationPanel
             {...(navigationPanelOptions ?? {})}
+            makeHref={(segments) => segments.join('/')}
             path={currentPath}
             onItemClick={handleBreadcrumbItemClick}
-            makeHref={(segments) => '/' + segments.join('/')}
             rootItemPath={rootItem?.path}
             rootItemLabel={rootItem?.breadcrumbLabel}
             value={effectiveSearchValue}
@@ -848,6 +850,7 @@ export const DialFileManagerView: FC = () => {
         contentRenderer={deleteConfirmationOptions?.contentRenderer}
       />
       <DestinationFolderPopup
+        {...destinationFolderPopupOptions}
         open={openDestinationFolderPopup}
         onClose={handleCloseDestinationFolderPopup}
         onConfirm={() => {
@@ -864,14 +867,6 @@ export const DialFileManagerView: FC = () => {
         mode={destinationFolderMode}
         items={items}
         rootItem={rootItem}
-        onPathChange={destinationFolderPopupOptions?.setDestinationFolderPath}
-        path={destinationFolderPopupOptions?.destinationFolderPath}
-        addFolderLabel={destinationFolderPopupOptions?.addFolderLabel}
-        copyLabel={destinationFolderPopupOptions?.copyLabel}
-        moveLabel={destinationFolderPopupOptions?.moveLabel}
-        hiddenFilesSwitcherLabel={
-          destinationFolderPopupOptions?.hiddenFilesSwitcherLabel
-        }
         gridOptions={{ columnDefs: columnDefs, loading: filesLoading }}
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
