@@ -787,9 +787,9 @@ export const DialFileManagerView: FC = () => {
         <div className={contentGridClassName}>
           <DialFileManagerNavigationPanel
             {...(navigationPanelOptions ?? {})}
+            makeHref={(segments) => segments.join('/')}
             path={currentPath}
             onItemClick={handleBreadcrumbItemClick}
-            makeHref={(segments) => '/' + segments.join('/')}
             rootItemPath={rootItem?.path}
             rootItemLabel={rootItem?.breadcrumbLabel}
             value={effectiveSearchValue}
