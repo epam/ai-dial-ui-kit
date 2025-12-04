@@ -9,7 +9,7 @@ import { ButtonVariant } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { useState, useCallback, type FC, useMemo } from 'react';
+import { useState, useCallback, type FC } from 'react';
 import { DestinationFolderMode } from '@/types/file-manager';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
@@ -23,8 +23,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   addFolderLabel?: string;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
-  getCopyHeader?: (itemsCount: number, itemName?: string) => string;
-  getMoveHeader?: (itemsCount: number, itemName?: string) => string;
+  title?: string;
 }
 
 /**
@@ -41,6 +40,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  *   onClose={handleClose}
  *   onConfirm={handleConfirm}
  *   mode="copy"
+ *   title="Copy 3 files"
  *   items={files}
  *   rootItem={rootFolder}
  *   path={currentPath}
@@ -56,12 +56,11 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param [moveLabel="Move"] - Label for the move button
  * @param [addFolderLabel="Add folder"] - Label for the add folder button
  * @param [hiddenFilesSwitcherLabel="Show hidden files"] - Label for the hidden files toggle
+ * @param [title] - Custom title for the popup header
  * @param items - Array of files to display in the File Manager
  * @param rootItem - Root folder item
  * @param path - Current path in the File Manager
  * @param onPathChange - Callback fired when the path changes
- * @param getCopyHeader - Function to get custom header for copy mode
- * @param getMoveHeader - Function to get custom header for move mode
  */
 export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
@@ -75,8 +74,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
-  getCopyHeader,
-  getMoveHeader,
+  title,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -85,16 +83,8 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     setShowHiddenFiles(value);
   }, []);
 
-  const headerTitle = useMemo(() => {
-    if (mode === DestinationFolderMode.Copy) {
-      return getCopyHeader && restProps.items
-        ? getCopyHeader(restProps.items.length, restProps.items[0]?.name)
-        : 'Copy to';
-    }
-    return getMoveHeader && restProps.items
-      ? getMoveHeader(restProps.items.length, restProps.items[0]?.name)
-      : 'Move to';
-  }, [mode, restProps.items, getCopyHeader, getMoveHeader]);
+  const defaultTitle =
+    mode === DestinationFolderMode.Copy ? 'Copy to' : 'Move to';
 
   return (
     <DialPopup
@@ -141,7 +131,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           </div>
         </div>
       }
-      title={headerTitle}
+      title={title ?? defaultTitle}
     >
       <DialFileManager
         {...restProps}

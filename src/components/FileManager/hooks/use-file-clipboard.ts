@@ -17,6 +17,8 @@ export interface UseFileClipboardOptions {
   onCopySuccess?: () => void;
   onMoveSuccess?: () => void;
   onDuplicateSuccess?: () => void;
+  getCopyHeader?: (itemsCount: number, itemName?: string) => string;
+  getMoveHeader?: (itemsCount: number, itemName?: string) => string;
 }
 
 export const useFileClipboard = ({
@@ -26,6 +28,8 @@ export const useFileClipboard = ({
   onCopySuccess,
   onMoveSuccess,
   onDuplicateSuccess,
+  getCopyHeader,
+  getMoveHeader,
 }: UseFileClipboardOptions) => {
   const [openDestinationFolderPopup, setOpenDestinationFolderPopup] =
     useState<boolean>(false);
@@ -182,13 +186,32 @@ export const useFileClipboard = ({
     }
   }, [clearState, hasActiveConflictRef]);
 
-  const handleSetCopiedFiles = useCallback((files: DialFile[]) => {
-    setCopiedFiles(files);
-  }, []);
+  const [destinationFolderTitle, setDestinationFolderTitle] =
+    useState<string>();
 
-  const handleSetMovedFiles = useCallback((files: DialFile[]) => {
-    setMovedFiles(files);
-  }, []);
+  const handleSetCopiedFiles = useCallback(
+    (files: DialFile[]) => {
+      setCopiedFiles(files);
+      if (getCopyHeader && files.length > 0) {
+        setDestinationFolderTitle(getCopyHeader(files.length, files[0]?.name));
+      } else {
+        setDestinationFolderTitle(undefined);
+      }
+    },
+    [getCopyHeader],
+  );
+
+  const handleSetMovedFiles = useCallback(
+    (files: DialFile[]) => {
+      setMovedFiles(files);
+      if (getMoveHeader && files.length > 0) {
+        setDestinationFolderTitle(getMoveHeader(files.length, files[0]?.name));
+      } else {
+        setDestinationFolderTitle(undefined);
+      }
+    },
+    [getMoveHeader],
+  );
 
   return {
     handleDuplicate,
@@ -198,6 +221,7 @@ export const useFileClipboard = ({
     handleMoveTo,
     openDestinationFolderPopup,
     destinationFolderMode,
+    destinationFolderTitle,
     handleSetCopiedFiles,
     handleSetMovedFiles,
     clearState,

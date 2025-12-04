@@ -534,4 +534,175 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
 
     expect(onCopyFiles).toHaveBeenCalledWith([], '/dest');
   });
+
+  it('sets destinationFolderTitle using getCopyHeader when copying files', () => {
+    const getCopyHeader = vi.fn(
+      (count: number, name?: string) =>
+        `Copying ${count} file(s)${name ? `: ${name}` : ''}`,
+    );
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+        getCopyHeader,
+      }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'document.txt',
+        path: '/src/document.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+      {
+        id: '2',
+        name: 'image.png',
+        path: '/src/image.png',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetCopiedFiles(files);
+    });
+
+    expect(getCopyHeader).toHaveBeenCalledWith(2, 'document.txt');
+    expect(result.current.destinationFolderTitle).toBe(
+      'Copying 2 file(s): document.txt',
+    );
+  });
+
+  it('sets destinationFolderTitle using getMoveHeader when moving files', () => {
+    const getMoveHeader = vi.fn(
+      (count: number, name?: string) =>
+        `Moving ${count} file(s)${name ? `: ${name}` : ''}`,
+    );
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+        getMoveHeader,
+      }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'folder',
+        path: '/src/folder',
+        nodeType: DialFileNodeType.FOLDER,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetMovedFiles(files);
+    });
+
+    expect(getMoveHeader).toHaveBeenCalledWith(1, 'folder');
+    expect(result.current.destinationFolderTitle).toBe(
+      'Moving 1 file(s): folder',
+    );
+  });
+
+  it('does not set destinationFolderTitle when getCopyHeader is not provided', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+      }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'file.txt',
+        path: '/file.txt',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetCopiedFiles(files);
+    });
+
+    expect(result.current.destinationFolderTitle).toBeUndefined();
+  });
+
+  it('does not set destinationFolderTitle when getMoveHeader is not provided', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+      }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '1',
+        name: 'folder',
+        path: '/folder',
+        nodeType: DialFileNodeType.FOLDER,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetMovedFiles(files);
+    });
+
+    expect(result.current.destinationFolderTitle).toBeUndefined();
+  });
+
+  it('does not set destinationFolderTitle when files array is empty', () => {
+    const getCopyHeader = vi.fn(() => 'Copy files');
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+        getCopyHeader,
+      }),
+    );
+
+    act(() => {
+      result.current.handleSetCopiedFiles([]);
+    });
+
+    expect(getCopyHeader).not.toHaveBeenCalled();
+    expect(result.current.destinationFolderTitle).toBeUndefined();
+  });
+
+  it('clears destinationFolderTitle after clearState', () => {
+    const getCopyHeader = vi.fn(() => 'Copy 1 file');
+    const { result } = renderHook(() =>
+      useFileClipboard({
+        getDestinationFiles,
+        getSourceFiles,
+        getCopyHeader,
+      }),
+    );
+
+    act(() => {
+      result.current.handleSetCopiedFiles([
+        {
+          id: '1',
+          name: 'file.txt',
+          path: '/file.txt',
+          nodeType: DialFileNodeType.ITEM,
+        } as DialFile,
+      ]);
+    });
+
+    expect(result.current.destinationFolderTitle).toBe('Copy 1 file');
+
+    act(() => {
+      result.current.clearState();
+    });
+
+    // After clearState, copiedFiles are empty, but title remains until handleSetCopiedFiles is called again
+    act(() => {
+      result.current.handleSetCopiedFiles([]);
+    });
+
+    expect(result.current.destinationFolderTitle).toBeUndefined();
+  });
 });
