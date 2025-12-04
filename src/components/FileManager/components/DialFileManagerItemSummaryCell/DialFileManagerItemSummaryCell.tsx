@@ -5,7 +5,7 @@ import { DialFileNodeType } from '@/models/file';
 import { DialItemType } from '@/types/item';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
-interface DialFileManagerItemDetailsProps {
+interface DialFileManagerItemSummaryCellProps {
   id: string;
   name: string;
   nodeType: DialFileNodeType;
@@ -30,7 +30,7 @@ interface DialFileManagerItemDetailsProps {
  *
  * ### Example
  * ```tsx
- * <DialFileManagerItemDetails
+ * <DialFileManagerItemSummaryCell
  *   id="42"
  *   name="Report.pdf"
  *   nodeType={DialFileNodeType.FILE}
@@ -40,7 +40,7 @@ interface DialFileManagerItemDetailsProps {
  *   dateOptions={{ timeZone: 'UTC' }}
  * />
  *
- * <DialFileManagerItemDetails
+ * <DialFileManagerItemSummaryCell
  *   id="folder-1"
  *   name="Projects"
  *   nodeType={DialFileNodeType.FOLDER}
@@ -57,8 +57,8 @@ interface DialFileManagerItemDetailsProps {
  * @param dateLocale - Optional locale override for date formatting (e.g., `"fr-FR"`).
  * @param dateOptions - Optional `Intl.DateTimeFormat` configuration (e.g., `{ timeZone: 'UTC' }`).
  */
-export const DialFileManagerItemDetails: FC<
-  DialFileManagerItemDetailsProps
+export const DialFileManagerItemSummaryCell: FC<
+  DialFileManagerItemSummaryCellProps
 > = ({ id, name, nodeType, size, updatedAt, dateLocale, dateOptions }) => {
   return (
     <div className="flex">

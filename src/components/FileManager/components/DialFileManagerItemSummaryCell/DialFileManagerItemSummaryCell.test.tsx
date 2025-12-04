@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
-import { DialFileManagerItemDetails } from './FileManagerItemDetails';
+import { DialFileManagerItemSummaryCell } from './DialFileManagerItemSummaryCell';
 import { DialFileNodeType } from '@/models/file';
 
 const baseProps = {
@@ -11,20 +11,20 @@ const baseProps = {
   updatedAt: '2025-07-20T00:00:00Z',
 };
 
-describe('Dial UI Kit :: DialFileManagerItemDetails', () => {
+describe('Dial UI Kit :: FileManagerItemSummaryCell', () => {
   test('renders file name', () => {
-    render(<DialFileManagerItemDetails {...baseProps} />);
+    render(<DialFileManagerItemSummaryCell {...baseProps} />);
     expect(screen.getByText('Example File.txt')).toBeInTheDocument();
   });
 
   test('renders size', () => {
-    render(<DialFileManagerItemDetails {...baseProps} />);
+    render(<DialFileManagerItemSummaryCell {...baseProps} />);
     expect(screen.getByText('15 KB')).toBeInTheDocument();
   });
 
   test('renders ISO date via DialDateCellRenderer', () => {
     render(
-      <DialFileManagerItemDetails
+      <DialFileManagerItemSummaryCell
         {...baseProps}
         dateLocale="en-US"
         dateOptions={{ timeZone: 'UTC' }}
@@ -41,7 +41,7 @@ describe('Dial UI Kit :: DialFileManagerItemDetails', () => {
 
   test('renders numeric timestamp correctly', () => {
     render(
-      <DialFileManagerItemDetails
+      <DialFileManagerItemSummaryCell
         {...baseProps}
         updatedAt={'1752969600000'}
         dateLocale="en-US"
@@ -53,7 +53,9 @@ describe('Dial UI Kit :: DialFileManagerItemDetails', () => {
   });
 
   test('renders placeholder when updatedAt is missing', () => {
-    render(<DialFileManagerItemDetails {...baseProps} updatedAt={undefined} />);
+    render(
+      <DialFileManagerItemSummaryCell {...baseProps} updatedAt={undefined} />,
+    );
 
     expect(screen.getByText('—')).toBeInTheDocument();
   });

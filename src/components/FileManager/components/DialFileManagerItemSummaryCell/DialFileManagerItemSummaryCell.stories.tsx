@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFileManagerItemDetails } from './FileManagerItemDetails';
+import { DialFileManagerItemSummaryCell } from './DialFileManagerItemSummaryCell';
 import { DialFileNodeType } from '@/models/file';
 
-const meta: Meta<typeof DialFileManagerItemDetails> = {
-  title: 'FileManager/components/FileManagerItemDetails',
-  component: DialFileManagerItemDetails,
+const meta: Meta<typeof DialFileManagerItemSummaryCell> = {
+  title: 'FileManager/components/FileManagerItemSummaryCell',
+  component: DialFileManagerItemSummaryCell,
   parameters: { layout: 'centered' },
   argTypes: {
     id: { control: 'text' },

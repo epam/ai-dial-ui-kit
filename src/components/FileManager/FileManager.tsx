@@ -91,7 +91,7 @@ import {
 } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
 import type { RenameValidationMessages } from '@/components/FileManager/hooks/use-item-renaming';
-import { DialFileManagerItemDetails } from '@/components/FileManager/components/FileManagerItemDetails/FileManagerItemDetails';
+import { DialFileManagerItemSummaryCell } from '@/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell';
 import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
 
@@ -480,7 +480,7 @@ export const DialFileManagerView: FC = () => {
 
           if (isCompactView) {
             return (
-              <DialFileManagerItemDetails
+              <DialFileManagerItemSummaryCell
                 id={params.data.id}
                 name={params.data.name}
                 nodeType={params.data.nodeType}
