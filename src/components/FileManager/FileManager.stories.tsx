@@ -262,10 +262,14 @@ const PopupComponent = (args: DialFileManagerProps) => {
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,
-            getCopyHeader: (itemsCount) =>
-              `${itemsCount} item(s) selected to copy`,
-            getMoveHeader: (itemsCount, itemsName) =>
-              `${itemsCount} item(s) selected to move. First item: ${itemsName}`,
+            getCopyHeader: (itemsCount, itemName) =>
+              itemsCount === 1 && itemName
+                ? `Copy "${itemName}"`
+                : `Copy ${itemsCount} item(s)`,
+            getMoveHeader: (itemsCount, itemName) =>
+              itemsCount === 1 && itemName
+                ? `Move "${itemName}"`
+                : `Move ${itemsCount} item(s)`,
           }}
           gridOptions={{
             ...(args.gridOptions ?? {}),
