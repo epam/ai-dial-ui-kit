@@ -92,9 +92,13 @@ describe('Dial UI Kit :: DialCheckbox', () => {
 
     let icon = document.querySelector('svg') as SVGElement;
     expect(icon).toBeInTheDocument();
-
-    expect(icon).toHaveClass('mr-2', 'border', 'rounded');
+    expect(icon).toHaveClass('border', 'rounded');
     expect(icon).toHaveClass('bg-layer-4', 'border-icon-secondary');
+
+    const label = screen.getByText('Disabled checked');
+
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveClass('ml-2');
 
     rerender(
       <DialCheckbox
@@ -108,7 +112,6 @@ describe('Dial UI Kit :: DialCheckbox', () => {
     icon = document.querySelector('svg') as SVGElement;
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveClass(
-      'mr-2',
       'border',
       'rounded',
       'bg-layer-4',
@@ -131,5 +134,15 @@ describe('Dial UI Kit :: DialCheckbox', () => {
 
     const svgs = document.querySelectorAll('svg');
     expect(svgs.length).toBe(1);
+  });
+
+  test('does not render label when label prop is null', () => {
+    render(<DialCheckbox id="no-label" checked={false} label={null} />);
+
+    const input = screen.getByRole('checkbox');
+    expect(input).toBeInTheDocument();
+
+    const label = screen.queryByText(/./);
+    expect(label).toBeNull();
   });
 });
