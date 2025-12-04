@@ -15,9 +15,10 @@ export interface DialActionDropdownItem extends DropdownItem {
 }
 
 export interface DialFileManagerBulkActionsToolbarProps {
-  selectionLabel: string;
+  getSelectionLabel: (selectedCount: number) => string;
   onClearSelection: () => void;
   actions: DialActionDropdownItem[];
+  selectedCount: number;
 }
 
 /**
@@ -45,7 +46,7 @@ export interface DialFileManagerBulkActionsToolbarProps {
  * @example
  * ```tsx
  * <DialFileManagerSelectionToolbar
- *   selectionLabel="3 files selected"
+ *   getSelectionLabel={(count) => `${count} files selected`}
  *   onClearSelection={() => console.log('Cleared')}
  *   actions={[
  *     { key: 'download', title: 'Download', icon: <IconDownload />, onClick: () => {} },
@@ -55,16 +56,17 @@ export interface DialFileManagerBulkActionsToolbarProps {
  * ```
  *
  * @param {object} props
- * @param {string} props.selectionLabel - Label showing current selection status (e.g., "3 files selected").
+ * @param {() => string} props.getSelectionLabel - Function to get the label showing current selection status (e.g., "3 files selected").
  * @param {() => void} props.onClearSelection - Callback invoked when the clear selection button is clicked.
  * @param {DialActionDropdownItem[]} props.actions - List of available toolbar actions.
  *   Each action defines a title, icon, key, and optional click handler.
+ * @param {number} [props.selectedCount] - Count of currently selected items.
  *
  * @returns {JSX.Element} A responsive toolbar that adjusts visible actions based on available width.
  */
 export const DialFileManagerBulkActionsToolbar: FC<
   DialFileManagerBulkActionsToolbarProps
-> = ({ selectionLabel, onClearSelection, actions }) => {
+> = ({ getSelectionLabel, onClearSelection, actions, selectedCount }) => {
   const isMobile = useIsMobileScreen();
 
   const {
@@ -78,6 +80,8 @@ export const DialFileManagerBulkActionsToolbar: FC<
     actionsGap: ACTIONS_GAP,
     containerPadding: CONTAINER_PADDING,
   });
+
+  const selectionLabel = getSelectionLabel(selectedCount);
 
   return (
     <>

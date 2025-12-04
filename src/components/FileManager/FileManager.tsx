@@ -169,7 +169,7 @@ export type ToolbarOptions = Omit<
 
 export type BulkActionsToolbarOptions = Omit<
   DialFileManagerBulkActionsToolbarProps,
-  'onClearSelection' | 'actions'
+  'onClearSelection' | 'actions' | 'selectedCount'
 > & {
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;
@@ -689,7 +689,8 @@ export const DialFileManagerView: FC = () => {
           aria-label="File Manager Toolbar"
         >
           <DialFileManagerBulkActionsToolbar
-            selectionLabel={`${selectedIds.size} ${bulkActionsToolbarOptions.selectionLabel}`}
+            {...bulkActionsToolbarOptions}
+            selectedCount={selectedIds.size}
             onClearSelection={clearSelection}
             actions={bulkActions}
           />

@@ -288,7 +288,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
             },
           }}
           bulkActionsToolbarOptions={{
-            selectionLabel: 'items selected',
+            getSelectionLabel: (selectedCount: number) =>
+              `${selectedCount} item(s) selected`,
             actionLabels: {
               duplicate: 'Duplicate',
               copy: 'Copy to',
@@ -531,7 +532,8 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             duplicate: 'Duplicate',
             copy: 'Copy to',
@@ -689,7 +691,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             copy: 'Copy to',
             move: 'Move to',
