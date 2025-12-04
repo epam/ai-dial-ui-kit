@@ -107,5 +107,8 @@ export const CustomLabels: Story = {
     copyLabel: 'Copy Here',
     moveLabel: 'Move Here',
     hiddenFilesSwitcherLabel: 'Display hidden items',
+    getCopyHeader: (itemsCount) => `${itemsCount} item(s) selected to copy`,
+    getMoveHeader: (itemsCount, itemsName) =>
+      `${itemsCount} item(s) selected to move. First item: ${itemsName}`,
   },
 };
