@@ -361,16 +361,12 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
   });
 
   test('renders custom copy header when getCopyHeader is provided', () => {
-    const getCopyHeader = vi.fn(
-      (itemsCount: number) => `Copying ${itemsCount} items`,
-    );
-
     render(
       <DestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
-        getCopyHeader={getCopyHeader}
+        title="Copying 2 items"
         items={mockFiles}
         rootItem={{
           id: 'root',
@@ -383,22 +379,16 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
       />,
     );
 
-    expect(getCopyHeader).toHaveBeenCalledWith(2, 'Documents');
     expect(screen.getByText('Copying 2 items')).toBeInTheDocument();
   });
 
   test('renders custom move header when getMoveHeader is provided', () => {
-    const getMoveHeader = vi.fn(
-      (itemsCount: number, itemsName?: string) =>
-        `Moving ${itemsCount} items${itemsName ? `: ${itemsName}` : ''}`,
-    );
-
     render(
       <DestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
-        getMoveHeader={getMoveHeader}
+        title="Moving 2 items: Documents"
         items={mockFiles}
         rootItem={{
           id: 'root',
@@ -411,7 +401,6 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
       />,
     );
 
-    expect(getMoveHeader).toHaveBeenCalledWith(2, 'Documents');
     expect(screen.getByText('Moving 2 items: Documents')).toBeInTheDocument();
   });
 
