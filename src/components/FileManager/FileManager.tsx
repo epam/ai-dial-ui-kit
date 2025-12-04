@@ -135,7 +135,7 @@ export interface DeleteConfirmationOptions {
 
 export type NavigationPanelOptions = Omit<
   DialFileManagerNavigationPanelProps,
-  'path' | 'onItemClick'
+  'path' | 'makeHref' | 'onItemClick'
 >;
 
 export interface GridOptions
