@@ -266,7 +266,7 @@ export const DialGrid = <T extends object>({
       const checkboxId = `row-select-${rowId}`;
 
       return (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center size-full">
           <DialCheckbox
             key={`${rowId}-${checked}`}
             id={checkboxId}
@@ -335,8 +335,8 @@ export const DialGrid = <T extends object>({
     () => ({
       colId: '__select',
       headerName: '',
-      width: 40,
-      minWidth: 40,
+      width: 44,
+      minWidth: 44,
       suppressSizeToFit: true,
       lockPosition: true,
       sortable: false,
