@@ -33,9 +33,7 @@ import { gridBaseClassName, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { IconDotsVertical, IconZoomCancel } from '@tabler/icons-react';
-import { DialIcon } from '@/components/Icon/Icon';
-import { BASE_ICON_PROPS } from '@/constants/icon';
+import { IconZoomCancel } from '@tabler/icons-react';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -45,7 +43,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   className?: string;
   ariaLabel?: string;
   withSelectionColumn?: boolean;
-  withActionsColumn?: boolean;
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
@@ -71,7 +68,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * Provides a pre-configured grid with:
  * - Dark theme styling with CSS variable integration
  * - Optional row selection with checkboxes
- * - Optional actions column
  * - Context menu integration via DialDropdown
  * - Text overflow handling with tooltips via DialEllipsisTooltip
  * - Controlled or uncontrolled selection modes
@@ -138,7 +134,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [className] - Additional CSS classes to apply to the grid container
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
- * @param [withActionsColumn=false] - Whether to show an additional actions column for each row
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
  * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
@@ -163,7 +158,6 @@ export const DialGrid = <T extends object>({
   className,
   ariaLabel = 'Data grid',
   withSelectionColumn = true,
-  withActionsColumn = false,
   wrapCustomCellRenderers = true,
   selectedRowIds,
   selectedRows,
@@ -370,66 +364,10 @@ export const DialGrid = <T extends object>({
     [renderSelectCell, renderHeaderSelectCell],
   );
 
-  const renderActionsCell = useCallback(
-    (p: ICellRendererParams<T, unknown>) => {
-      if (!p.data) return null;
-
-      const items = p.data ? (getContextMenuItems?.(p.data) ?? []) : [];
-
-      if (!items.length) return null;
-
-      return (
-        <DialDropdown
-          placement="bottom-start"
-          allowedPlacements={['top-start', 'top-end']}
-          menu={{ items }}
-          className="sticky right-0"
-        >
-          <DialIcon
-            className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
-            icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
-          />
-        </DialDropdown>
-      );
-    },
-    [getContextMenuItems],
-  );
-
-  const actionsCol: ColDef<T> = useMemo(
-    () => ({
-      colId: '__actions',
-      headerName: '',
-      width: 44,
-      minWidth: 44,
-      suppressSizeToFit: true,
-      sortable: false,
-      resizable: false,
-      filter: false,
-      floatingFilter: false,
-      suppressMenu: true,
-      borderless: true,
-      cellRenderer: renderActionsCell,
-    }),
-    [renderActionsCell],
-  );
-
   const computedColumnDefs = useMemo<ColDef<T>[]>(() => {
-    const baseColumns = (columnDefs ?? []).map(wrapRendererIfNeeded);
-
-    const result: ColDef<T>[] = [];
-    if (withSelectionColumn) result.push(selectCol);
-    result.push(...baseColumns);
-    if (withActionsColumn) result.push(actionsCol);
-
-    return result;
-  }, [
-    columnDefs,
-    selectCol,
-    actionsCol,
-    withSelectionColumn,
-    withActionsColumn,
-    wrapRendererIfNeeded,
-  ]);
+    const user = (columnDefs ?? []).map(wrapRendererIfNeeded);
+    return withSelectionColumn ? [selectCol, ...user] : user;
+  }, [columnDefs, selectCol, withSelectionColumn, wrapRendererIfNeeded]);
 
   const defaultColDef: ColDef<T> = useMemo(
     () => ({

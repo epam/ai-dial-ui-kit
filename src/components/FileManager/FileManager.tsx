@@ -21,7 +21,6 @@ import {
   FOLDERS_TREE_PANEL_MIN_WIDTH,
   FOLDERS_TREE_PANEL_MAX_WIDTH,
   COMPACT_VIEW_HEADER_HEIGHT,
-  COMPACT_VIEW_FOLDER_ROW_HEIGHT,
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
 } from './constants';
@@ -91,9 +90,10 @@ import {
   type ConflictResolutionPopupProps,
 } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
-import type { RenameValidationMessages } from './hooks/use-item-renaming';
-import { DialFileManagerItemDetails } from './components/FileManagerItemDetails/FileManagerItemDetails';
+import type { RenameValidationMessages } from '@/components/FileManager/hooks/use-item-renaming';
+import { DialFileManagerItemDetails } from '@/components/FileManager/components/FileManagerItemDetails/FileManagerItemDetails';
 import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
+import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
 
 type GridRow = FileManagerGridRow;
 
@@ -534,23 +534,6 @@ export const DialFileManagerView: FC = () => {
     validateFolderName,
   ]);
 
-  const baseColumns = userColumnDefs ?? defaultColumns;
-  const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
-    let columns = baseColumns;
-
-    if (isCompactView) {
-      columns = columns.slice(0, 1);
-    }
-
-    if (filterable) return columns;
-
-    return columns.map((col) => ({
-      ...col,
-      filter: false,
-      floatingFilter: false,
-    }));
-  }, [baseColumns, filterable, isCompactView]);
-
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
@@ -825,6 +808,30 @@ export const DialFileManagerView: FC = () => {
     [items, gridContextMenu],
   );
 
+  const { actionsColumnDef } = useGridActionsColumn({
+    getContextMenuItems: getGridContextMenuItems,
+  });
+
+  const baseColumns = userColumnDefs ?? defaultColumns;
+  const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
+    let columns = baseColumns;
+
+    // In compact view, we display only one main column (with name and details).
+    // We also append a system column for the actions button.
+    if (isCompactView) {
+      columns = columns.slice(0, 1);
+      columns.push(actionsColumnDef);
+    }
+
+    if (filterable) return columns;
+
+    return columns.map((col) => ({
+      ...col,
+      filter: false,
+      floatingFilter: false,
+    }));
+  }, [baseColumns, filterable, isCompactView, actionsColumnDef]);
+
   return (
     <section
       ref={containerRef}
@@ -875,7 +882,6 @@ export const DialFileManagerView: FC = () => {
               loading={filesLoading}
               getContextMenuItems={getGridContextMenuItems}
               withoutHeaderBorders={isCompactView}
-              withActionsColumn
               selectionOnHover={!isCompactView}
               className={classNames(
                 isDragging ? 'border border-dashed border-accent-primary' : '',
@@ -902,7 +908,7 @@ export const DialFileManagerView: FC = () => {
                       headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                       getRowHeight: (params) =>
                         params.data?.nodeType === DialFileNodeType.FOLDER
-                          ? COMPACT_VIEW_FOLDER_ROW_HEIGHT
+                          ? COMPACT_VIEW_HEADER_HEIGHT
                           : COMPACT_VIEW_FILE_ROW_HEIGHT,
                     }
                   : {}),
