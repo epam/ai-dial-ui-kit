@@ -429,13 +429,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
     destinationFolderPopupOptions: {
+      ...destinationFolderPopupOptions,
       destinationFolderPath,
       setDestinationFolderPath,
-      addFolderLabel: destinationFolderPopupOptions?.addFolderLabel,
-      copyLabel: destinationFolderPopupOptions?.copyLabel,
-      moveLabel: destinationFolderPopupOptions?.moveLabel,
-      hiddenFilesSwitcherLabel:
-        destinationFolderPopupOptions?.hiddenFilesSwitcherLabel,
     },
 
     currentPath,
