@@ -5,7 +5,7 @@ export const GRID_THEME_COLORS = {
   backgroundColor: 'var(--bg-layer-2, #141A23)',
   oddRowBackgroundColor: 'var(--bg-layer-3, #222932)',
   borderColor: 'var(--bg-layer-4, #333942)',
-  rowBorder: '1px solid var(--border-tertiary, #090D13)',
+  rowBorder: '1px solid var(--stroke-tertiary, #090D13)',
   borderRadius: 3,
   browserColorScheme: 'dark',
   chromeBackgroundColor: 'var(--bg-layer-1, #090D13)',
