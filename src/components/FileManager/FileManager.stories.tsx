@@ -22,6 +22,7 @@ import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
+import { PopupSize } from '@/types/popup';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -247,6 +248,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
       >
         <DialFileManager
           {...args}

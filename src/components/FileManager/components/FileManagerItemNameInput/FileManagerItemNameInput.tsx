@@ -127,7 +127,7 @@ export const DialFileManagerItemNameInput: FC<
           inputContainerClassName,
         )}
         elementId={elementId}
-        defaultValue={name}
+        value={name}
         onChange={onChange}
         invalid={inputInvalid}
         iconAfter={getInputIconAfter()}

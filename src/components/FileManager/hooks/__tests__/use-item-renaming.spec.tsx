@@ -28,6 +28,27 @@ function buildTree(): DialFile[] {
               parentPath: '/root/A',
             } as DialFile,
             {
+              id: 'f-a-2',
+              name: 'document.pdf',
+              path: '/root/A/document.pdf',
+              nodeType: DialFileNodeType.ITEM,
+              parentPath: '/root/A',
+            } as DialFile,
+            {
+              id: 'f-a-2b',
+              name: 'document.txt',
+              path: '/root/A/document.txt',
+              nodeType: DialFileNodeType.ITEM,
+              parentPath: '/root/A',
+            } as DialFile,
+            {
+              id: 'f-a-3',
+              name: 'noext',
+              path: '/root/A/noext',
+              nodeType: DialFileNodeType.ITEM,
+              parentPath: '/root/A',
+            } as DialFile,
+            {
               id: 'f-a-sub',
               name: 'sub',
               path: '/root/A/sub',
@@ -73,6 +94,7 @@ describe('useItemRenaming hook', () => {
     expect(typeof result.current.renameCancelHandler).toBe('function');
     expect(typeof result.current.renameSaveHandler).toBe('function');
     expect(typeof result.current.renameValidateHandler).toBe('function');
+    expect(typeof result.current.getDisplayName).toBe('function');
   });
 
   it('renameHandler sets renamedPath and renamedItem', () => {
@@ -200,6 +222,289 @@ describe('useItemRenaming hook', () => {
     expect(onMoveToFiles).toHaveBeenCalledWith(expected, '/root/A', '/root/A');
   });
 
+  describe('File extension handling', () => {
+    it('automatically adds extension back when renaming a file', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A/a1.txt');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('renamed');
+      });
+
+      const expected: DialCopiedItem[] = [
+        {
+          sourceUrl: '/root/A/a1.txt',
+          destinationUrl: '/root/A/renamed.txt',
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ];
+
+      expect(onMoveToFiles).toHaveBeenCalledWith(
+        expected,
+        '/root/A',
+        '/root/A',
+      );
+    });
+
+    it('handles files with multiple dots in name', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      const fileWithDots: DialFile = {
+        id: 'f-dots',
+        name: 'my.file.backup.txt',
+        path: '/root/A/my.file.backup.txt',
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: '/root/A',
+      } as DialFile;
+
+      items[0].items![0].items!.push(fileWithDots);
+
+      act(() => {
+        result.current.renameHandler('/root/A/my.file.backup.txt');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('newname');
+      });
+
+      const expected: DialCopiedItem[] = [
+        {
+          sourceUrl: '/root/A/my.file.backup.txt',
+          destinationUrl: '/root/A/newname.txt',
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ];
+
+      expect(onMoveToFiles).toHaveBeenCalledWith(
+        expected,
+        '/root/A',
+        '/root/A',
+      );
+    });
+
+    it('handles files without extension', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A/noext');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('renamed');
+      });
+
+      const expected: DialCopiedItem[] = [
+        {
+          sourceUrl: '/root/A/noext',
+          destinationUrl: '/root/A/renamed',
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ];
+
+      expect(onMoveToFiles).toHaveBeenCalledWith(
+        expected,
+        '/root/A',
+        '/root/A',
+      );
+    });
+
+    it('handles files starting with dot (hidden files)', () => {
+      const onMoveToFiles = vi.fn();
+
+      const hiddenFile: DialFile = {
+        id: 'f-hidden',
+        name: '.gitignore',
+        path: '/root/A/.gitignore',
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: '/root/A',
+      } as DialFile;
+
+      items[0].items![0].items!.push(hiddenFile);
+
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A/.gitignore');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('renamed');
+      });
+
+      const expected: DialCopiedItem[] = [
+        {
+          sourceUrl: '/root/A/.gitignore',
+          destinationUrl: '/root/A/renamed',
+          nodeType: DialFileNodeType.ITEM,
+        },
+      ];
+
+      expect(onMoveToFiles).toHaveBeenCalledWith(
+        expected,
+        '/root/A',
+        '/root/A',
+      );
+    });
+
+    it('does not add extension to folders', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A/sub');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('newsub');
+      });
+
+      const expected: DialCopiedItem[] = [
+        {
+          sourceUrl: '/root/A/sub',
+          destinationUrl: '/root/A/newsub',
+          nodeType: DialFileNodeType.FOLDER,
+        },
+      ];
+
+      expect(onMoveToFiles).toHaveBeenCalledWith(
+        expected,
+        '/root/A',
+        '/root/A',
+      );
+    });
+  });
+
+  describe('No-change detection', () => {
+    it('does not call onMoveToFiles if name is unchanged for folder', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('A');
+      });
+
+      expect(onMoveToFiles).not.toHaveBeenCalled();
+      expect(result.current.renamedPath).toBeUndefined();
+      expect(result.current.renamedItem).toBeUndefined();
+    });
+
+    it('does not call onMoveToFiles if name is unchanged for file (with extension)', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A/a1.txt');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('a1');
+      });
+
+      expect(onMoveToFiles).not.toHaveBeenCalled();
+      expect(result.current.renamedPath).toBeUndefined();
+    });
+
+    it('does not call onMoveToFiles if only whitespace changes', () => {
+      const onMoveToFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onMoveToFiles }),
+      );
+
+      act(() => {
+        result.current.renameHandler('/root/A');
+      });
+
+      act(() => {
+        result.current.renameSaveHandler('  A  ');
+      });
+
+      expect(onMoveToFiles).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getDisplayName', () => {
+    it('returns name without extension for files', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const file = items[0].items![0].items![0]; // a1.txt
+      const displayName = result.current.getDisplayName(file);
+
+      expect(displayName).toBe('a1');
+    });
+
+    it('returns full name for files without extension', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const file = items[0].items![0].items![3];
+      const displayName = result.current.getDisplayName(file);
+
+      expect(displayName).toBe('noext');
+    });
+
+    it('returns full name for folders', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folder = items[0].items![0];
+      const displayName = result.current.getDisplayName(folder);
+
+      expect(displayName).toBe('A');
+    });
+
+    it('handles files with multiple dots correctly', () => {
+      const fileWithDots: DialFile = {
+        id: 'f-dots',
+        name: 'my.file.backup.txt',
+        path: '/root/A/my.file.backup.txt',
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: '/root/A',
+      } as DialFile;
+
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const displayName = result.current.getDisplayName(fileWithDots);
+      expect(displayName).toBe('my.file.backup');
+    });
+
+    it('handles hidden files starting with dot', () => {
+      const hiddenFile: DialFile = {
+        id: 'f-hidden',
+        name: '.gitignore',
+        path: '/root/A/.gitignore',
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: '/root/A',
+      } as DialFile;
+
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const displayName = result.current.getDisplayName(hiddenFile);
+      expect(displayName).toBe('.gitignore');
+    });
+  });
+
   describe('renameValidateHandler', () => {
     it('returns error for empty name', () => {
       const { result } = renderHook(() => useItemRenaming({ items }));
@@ -233,6 +538,25 @@ describe('useItemRenaming hook', () => {
       const folderA = items[0].items![0]; // /root/A
       const error = result.current.renameValidateHandler('A', folderA);
       expect(error).toBeNull();
+    });
+
+    it('validates file names with automatic extension appending', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const file = items[0].items![0].items![0]; // a1.txt
+
+      // Try to rename to existing file name (without extension in input)
+      const error = result.current.renameValidateHandler('document', file);
+      expect(error).toBe('An item with this name already exists');
+    });
+
+    it('validates file names case-insensitively with extension', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const file = items[0].items![0].items![0]; // a1.txt
+
+      const error = result.current.renameValidateHandler('DOCUMENT', file);
+      expect(error).toBe('An item with this name already exists');
     });
 
     it('uses custom validation messages', () => {
@@ -289,6 +613,18 @@ describe('useItemRenaming hook', () => {
 
       expect(error).toBe('Always fails');
       expect(validate).toHaveBeenCalledWith('UniqueValid', folderA);
+    });
+
+    it('custom validation receives full file name with extension', () => {
+      const validate = vi.fn(() => null);
+      const { result } = renderHook(() =>
+        useItemRenaming({ items, onRenameValidate: validate }),
+      );
+
+      const file = items[0].items![0].items![0]; // a1.txt
+      result.current.renameValidateHandler('newname', file);
+
+      expect(validate).toHaveBeenCalledWith('newname.txt', file);
     });
   });
 });

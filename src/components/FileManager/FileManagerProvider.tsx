@@ -151,6 +151,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     renameSaveHandler,
     renameCancelHandler,
     renameValidateHandler,
+    getDisplayName,
   } = useItemRenaming({
     items,
     onRenameValidate,
@@ -474,6 +475,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,
     onRenameValidate: renameValidateHandler,
+    getDisplayName,
 
     openDeleteConfirmation,
     closeDeleteConfirmation,
