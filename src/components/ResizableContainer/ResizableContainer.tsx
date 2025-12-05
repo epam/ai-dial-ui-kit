@@ -144,8 +144,8 @@ export const DialResizableContainer: FC<DialResizableContainerProps> = ({
         left: 'group',
       },
       handleStyles: {
-        right: { right: '-11px' },
-        left: { left: '-3px' },
+        right: { right: '-8px', zIndex: 10 },
+        left: { left: 0, zIndex: 10 },
       },
       handleComponent: {
         left: isLeft ? handleComponent : undefined,
