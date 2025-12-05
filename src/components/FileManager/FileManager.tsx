@@ -470,6 +470,8 @@ export const DialFileManagerView: FC = () => {
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
+          const type = params.data.nodeType;
+
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
               <DialFileManagerItemName
@@ -492,7 +494,7 @@ export const DialFileManagerView: FC = () => {
               <DialFileManagerItemName
                 name={displayName}
                 type={
-                  params.data.nodeType === DialFileNodeType.FOLDER
+                  type === DialFileNodeType.FOLDER
                     ? DialItemType.Folder
                     : DialItemType.File
                 }
@@ -502,6 +504,10 @@ export const DialFileManagerView: FC = () => {
                 validate={(value) => onRenameValidate(value, renamedItem)}
                 onSave={onRenameSave}
                 onCancel={onRenameCancel}
+                inputContainerClassName={mergeClasses([
+                  '!h-9',
+                  isCompactView && type === DialFileNodeType.ITEM && '!h-10',
+                ])}
               />
             );
           }
@@ -511,7 +517,7 @@ export const DialFileManagerView: FC = () => {
               <DialFileManagerItemSummaryCell
                 id={params.data.id}
                 name={params.data.name}
-                nodeType={params.data.nodeType}
+                nodeType={type}
                 size={params.data.size}
                 updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
@@ -520,7 +526,7 @@ export const DialFileManagerView: FC = () => {
             );
           }
 
-          return params.data?.nodeType === DialFileNodeType.FOLDER ? (
+          return type === DialFileNodeType.FOLDER ? (
             <DialFolderName
               name={params.data.name}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
@@ -938,9 +944,10 @@ export const DialFileManagerView: FC = () => {
                     handleTableRowClick(event.data);
                   }
                 },
+                headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
                 ...(isCompactView
                   ? {
-                      headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                       getRowHeight: (params) =>
                         params.data?.nodeType === DialFileNodeType.FOLDER
                           ? COMPACT_VIEW_HEADER_HEIGHT

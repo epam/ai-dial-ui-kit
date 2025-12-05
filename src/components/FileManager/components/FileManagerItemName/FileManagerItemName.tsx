@@ -67,6 +67,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   validate,
   onSave,
   onCancel,
+  inputContainerClassName,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -111,6 +112,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
       inputRef={inputRef}
       onChange={onChange}
       iconSize={iconSize}
+      inputContainerClassName={inputContainerClassName}
     />
   );
 };

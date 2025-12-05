@@ -5,6 +5,7 @@ import { DialInput } from '@/components/Input/Input';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialFileManagerItemNameInputProps {
   type: DialItemType;
@@ -19,6 +20,7 @@ export interface DialFileManagerItemNameInputProps {
   iconIndicator?: ReactNode;
   inputInvalid?: boolean;
   inputInvalidMessage?: string;
+  inputContainerClassName?: string;
   inputIconAfter?: ReactNode;
   inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
@@ -66,6 +68,7 @@ export interface DialFileManagerItemNameInputProps {
  * @param {boolean} [props.inputInvalid=false] - Marks the input as invalid.
  * @param {string} [props.inputInvalidMessage] - Tooltip message shown when invalid.
  * @param {ReactNode} [props.inputIconAfter] - Optional icon shown after the input (defaults to an error icon).
+ * @param {string} [props.inputContainerClassName] - Additional CSS classes applied to the input container.
  * @param {Ref<HTMLInputElement>} [props.inputRef] - Ref to access the underlying input element.
  * @param {(value: string) => void} [props.onChange] - Callback fired when input value changes.
  */
@@ -84,6 +87,7 @@ export const DialFileManagerItemNameInput: FC<
   iconStroke,
   inputInvalid,
   inputInvalidMessage,
+  inputContainerClassName,
   inputIconAfter,
   inputRef,
   onChange,
@@ -118,7 +122,10 @@ export const DialFileManagerItemNameInput: FC<
         shared={shared}
       />
       <DialInput
-        containerClassName="!h-6 py-[1px] pl-[7px] pr-[7px]"
+        containerClassName={mergeClasses(
+          '!h-6 py-[1px] pl-[7px] pr-[7px]',
+          inputContainerClassName,
+        )}
         elementId={elementId}
         value={name}
         onChange={onChange}
