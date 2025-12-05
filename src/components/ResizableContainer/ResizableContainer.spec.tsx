@@ -28,9 +28,7 @@ describe('Dial UI Kit :: DialResizableContainer', () => {
 
     expect(screen.getByText('Left content')).toBeInTheDocument();
 
-    const handle = document.querySelector(
-      '[style*="left: -3px"]',
-    ) as HTMLElement;
+    const handle = document.querySelector('[style*="left: 0"]') as HTMLElement;
     expect(handle).toBeInTheDocument();
   });
 
