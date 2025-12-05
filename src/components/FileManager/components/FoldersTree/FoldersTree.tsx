@@ -189,7 +189,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
-          <div className="flex flex-col min-w-fit w-full">
+          <div className="flex flex-col w-full">
             <DialDropdown
               trigger={[DropdownTrigger.ContextMenu]}
               className="w-full"
