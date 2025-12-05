@@ -150,7 +150,9 @@ export const DialSelect: FC<DialSelectProps> = ({
 }) => {
   const listId = useId();
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(
+    inlineSearch ? customSelectedValue || '' : '',
+  );
   const inlineSearchInputRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
@@ -171,8 +173,8 @@ export const DialSelect: FC<DialSelectProps> = ({
   }, [options, query]);
 
   useEffect(() => {
-    if (!open) setQuery('');
-  }, [open]);
+    if (!open && !inlineSearch) setQuery('');
+  }, [inlineSearch, open]);
 
   const setSelection = useCallback(
     (next: string | string[]) => {
@@ -334,9 +336,9 @@ export const DialSelect: FC<DialSelectProps> = ({
     singleSelectedOption,
   ]);
 
-  const inlineInputValue = open
-    ? query || customSelectedValue
-    : singleSelectedOption?.label || customSelectedValue || '';
+  const inlineInputValue = useMemo(() => {
+    return query || singleSelectedOption?.label || '';
+  }, [query, singleSelectedOption]);
 
   useImperativeHandle(dismissRef, () => ({
     dismiss: () => {
@@ -346,7 +348,7 @@ export const DialSelect: FC<DialSelectProps> = ({
 
   const setInlineSearchQuery = () => {
     setQuery(
-      selectedValues.length === 1 ? (singleSelectedOption?.label ?? '') : '',
+      selectedValues.length === 1 ? (singleSelectedOption?.label ?? query) : '',
     );
   };
 
