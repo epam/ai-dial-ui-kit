@@ -31,10 +31,9 @@ import {
 import type { DialFileManagerProps } from './FileManager';
 import { useItemRenaming } from './hooks/use-item-renaming';
 import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-paths';
-import { IconCopyMinus } from '@tabler/icons-react';
-import { DialButton } from '@/components/Button/Button';
 import { useNewActions } from './hooks/use-new-actions';
 import { useFolderCreation } from './hooks/use-folder-creation';
+import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -406,6 +405,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onExpandedPathsChange: treeOptions?.onExpandedPathsChange,
   });
 
+  const { additionalButtons } = useTreeAdditionalButtons({
+    collapseAll,
+    expandedPathsLength: expandedPaths.size,
+    additionalButtons: treeOptions?.additionalButtons,
+  });
+
   const value: FileManagerContextValue = {
     className,
     items,
@@ -415,16 +420,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       ...treeOptions,
       expandedPaths,
       onExpandedPathsChange: setExpandedPaths,
-      additionalButtons: (
-        <>
-          {treeOptions?.additionalButtons}
-          <DialButton
-            className="hover:text-accent-primary p-1"
-            onClick={collapseAll}
-            iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
-          />
-        </>
-      ),
+      additionalButtons,
     },
     navigationPanelOptions,
     gridOptions,
