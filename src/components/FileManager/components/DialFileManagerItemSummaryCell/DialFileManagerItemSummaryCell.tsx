@@ -76,15 +76,19 @@ export const DialFileManagerItemSummaryCell: FC<
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">
               <span>{size}</span>
-              <IconCircleFilled size={2} className="text-secondary" />
-              <span>
-                <DialDateCellRenderer
-                  value={updatedAt}
-                  locale={dateLocale?.toString()}
-                  options={dateOptions}
-                  className="dial-tiny text-secondary"
-                />
-              </span>
+              {updatedAt && size && (
+                <IconCircleFilled size={2} className="text-secondary" />
+              )}
+              {updatedAt ? (
+                <span>
+                  <DialDateCellRenderer
+                    value={updatedAt}
+                    locale={dateLocale?.toString()}
+                    options={dateOptions}
+                    className="dial-tiny text-secondary"
+                  />
+                </span>
+              ) : null}
             </div>
           }
         />

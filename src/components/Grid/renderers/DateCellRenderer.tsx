@@ -39,14 +39,14 @@ export interface DialDateCellRendererProps
  *
  * @param [locale='en-US'] - Locale fixed to U.S. English by default to enforce "Jul 20, 2025".
  * @param [options={ year: 'numeric', month: 'numeric', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' }] - Options for date formatting (e.g., timeZone).
- * @param [emptyPlaceholder='—'] - Placeholder when value is empty/invalid.
+ * @param [emptyPlaceholder] - Placeholder when value is empty/invalid.
  * @param [className] - Additional classes merged into the wrapper.
  */
 export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   value,
   locale = DEFAULT_LOCALE,
   options = DEFAULT_DATE_FORMAT_OPTIONS,
-  emptyPlaceholder = '—',
+  emptyPlaceholder,
   className,
 }) => {
   const date = convertToDate(value);

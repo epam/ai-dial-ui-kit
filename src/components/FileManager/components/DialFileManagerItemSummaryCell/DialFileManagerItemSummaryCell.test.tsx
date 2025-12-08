@@ -51,12 +51,4 @@ describe('Dial UI Kit :: FileManagerItemSummaryCell', () => {
 
     expect(screen.getByText('7/20/2025')).toBeInTheDocument();
   });
-
-  test('renders placeholder when updatedAt is missing', () => {
-    render(
-      <DialFileManagerItemSummaryCell {...baseProps} updatedAt={undefined} />,
-    );
-
-    expect(screen.getByText('—')).toBeInTheDocument();
-  });
 });

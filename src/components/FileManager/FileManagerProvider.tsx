@@ -39,7 +39,7 @@ import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tre
  * Formats bytes into a short, human-readable string.
  */
 const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '-';
+  if (!bytes || bytes <= 0) return '';
   const KB = 1024;
   const MB = KB * 1024;
   if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
@@ -321,7 +321,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       size:
         node.nodeType === DialFileNodeType.ITEM
           ? formatBytes(node.contentLength)
-          : '-',
+          : '',
       author: node.author,
       path: node.path,
       nodeType: node.nodeType,
@@ -334,7 +334,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         id: newFolderTempId,
         name: '',
         updatedAt: undefined,
-        size: '-',
+        size: '',
         author: undefined,
         path: newFolderTempId,
         nodeType: DialFileNodeType.FOLDER,
