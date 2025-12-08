@@ -176,6 +176,10 @@ export const DialSelect: FC<DialSelectProps> = ({
     if (!open && !inlineSearch) setQuery('');
   }, [inlineSearch, open]);
 
+  useEffect(() => {
+    if (inlineSearch) setQuery(customSelectedValue || '');
+  }, [customSelectedValue, inlineSearch]);
+
   const setSelection = useCallback(
     (next: string | string[]) => {
       if (!isControlled) setUncontrolled(next);
