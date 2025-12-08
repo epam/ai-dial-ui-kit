@@ -36,7 +36,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -56,7 +56,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -77,7 +77,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -98,7 +98,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -120,7 +120,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -144,7 +144,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -167,7 +167,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -191,7 +191,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -212,7 +212,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -234,7 +234,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -255,7 +255,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -275,7 +275,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -303,7 +303,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -324,7 +324,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -352,7 +352,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -374,7 +374,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -396,7 +396,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -417,7 +417,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -438,7 +438,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -458,7 +458,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );

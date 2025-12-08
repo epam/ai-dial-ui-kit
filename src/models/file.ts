@@ -39,5 +39,5 @@ export enum DialFilePermission {
 }
 
 export interface DialRootFolder extends DialFile {
-  breadcrumbLabel: string;
+  label: string;
 }

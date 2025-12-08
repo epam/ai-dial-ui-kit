@@ -24,6 +24,8 @@ export interface DialFoldersTreeProps {
   selectedPath?: string;
   renamedPath?: string;
   showFiles?: boolean;
+  rootItemPath?: string;
+  rootItemLabel?: string;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
@@ -120,7 +122,8 @@ export interface DialFoldersTreeProps {
  * @param [onRenameValidate] - Function to validate the new name during editing. Should return an error string or `null` if valid.
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
  * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
- *
+ * @param [rootItemPath] - Path of the folder to treat as the custom root node (no context menu, special label).
+ * @param [rootItemLabel] - Label to display for the root node instead of its actual name.
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
  * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
@@ -140,6 +143,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateIcon,
   areHiddenFilesVisible = false,
   renamedPath,
+  rootItemLabel,
+  rootItemPath,
   onItemClick,
   getContextMenuItems,
   onRenameSave,
@@ -177,6 +182,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const isLoading = loadingPaths.has(path);
       const isRenaming = renamedPath === path;
       const isLoaded = loadedPaths.has(path);
+      const isRootFolder =
+        rootItemPath && rootItemLabel && path === rootItemPath && isFolder;
 
       const validateHandler =
         onRenameValidate && ((value: string) => onRenameValidate(value, node));
@@ -185,7 +192,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         ? 'bg-accent-primary-alpha border-l-2 border-l-accent-primary rounded'
         : 'border-l-2 border-l-transparent';
 
-      const menuItems = getContextMenuItems?.(node) ?? [];
+      const menuItems = isRootFolder ? [] : (getContextMenuItems?.(node) ?? []);
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
@@ -226,19 +233,21 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                     )}
                     <DialFileManagerItemName
                       elementId={`${path}-tree-item`}
-                      name={name}
+                      name={isRootFolder ? rootItemLabel : name}
                       type={isFolder ? DialItemType.Folder : DialItemType.File}
                       loading={isLoading}
-                      editing={isRenaming}
-                      onSave={onRenameSave}
-                      onCancel={onRenameCancel}
-                      validate={validateHandler}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                      {...(!isRootFolder && {
+                        editing: isRenaming,
+                        onSave: onRenameSave,
+                        onCancel: onRenameCancel,
+                        validate: validateHandler,
+                      })}
                     />
                   </>
                 </div>
 
-                {menuItems.length > 0 && !isRenaming && (
+                {menuItems.length > 0 && !isRenaming && !isRootFolder && (
                   <div className="flex-1 flex justify-end">
                     <DialDropdown
                       placement="bottom-start"
