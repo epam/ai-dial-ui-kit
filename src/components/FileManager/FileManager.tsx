@@ -7,7 +7,7 @@ import {
   useState,
   useRef,
 } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import {
   containerBaseClassName,
   mainGridClassName,
@@ -493,6 +493,10 @@ export const DialFileManagerView: FC = () => {
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
                 onCancel={cancelFolderCreation}
+                inputContainerClassName={mergeClasses([
+                  '!h-9',
+                  isCompactView && type === DialFileNodeType.ITEM && '!h-10',
+                ])}
               />
             );
           }
@@ -915,6 +919,23 @@ export const DialFileManagerView: FC = () => {
     visibleColumns,
   ]);
 
+  const cellClickHandler = useCallback(
+    (event: CellClickedEvent<FileManagerGridRow>) => {
+      if (
+        event.colDef.colId === '__select' ||
+        event.colDef.colId === FileManagerColumnKey.Actions ||
+        (renamedPath && event.data?.path === renamedPath) ||
+        event.data?.isTemporary
+      ) {
+        return;
+      }
+      if (event.data) {
+        handleTableRowClick(event.data);
+      }
+    },
+    [renamedPath, handleTableRowClick],
+  );
+
   return (
     <section
       ref={containerRef}
@@ -975,17 +996,7 @@ export const DialFileManagerView: FC = () => {
               {...forwardedGridOptions}
               additionalGridOptions={{
                 ...forwardedGridOptions.additionalGridOptions,
-                onCellClicked: (event) => {
-                  if (
-                    event.colDef.colId === '__select' ||
-                    event.colDef.colId === '__actions'
-                  ) {
-                    return;
-                  }
-                  if (event.data) {
-                    handleTableRowClick(event.data);
-                  }
-                },
+                onCellClicked: cellClickHandler,
                 headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                 rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
                 ...(isCompactView
