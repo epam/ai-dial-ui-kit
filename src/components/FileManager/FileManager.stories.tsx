@@ -23,6 +23,7 @@ import {
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
 import { PopupSize } from '@/types/popup';
+import { FileManagerColumnKey } from '@/types/file-manager';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -773,6 +774,40 @@ export const WithMultipleConflicts: Story = {
           '2. Click "Copy to" action\n' +
           '3. Select /All files/Design as destination\n' +
           '4. Click "Copy" - conflict popup should show multiple files',
+      },
+    },
+  },
+};
+
+export const WithCustomVisibleColumns: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [
+        FileManagerColumnKey.Name,
+        FileManagerColumnKey.UpdatedAt,
+        FileManagerColumnKey.Author,
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager with custom visible columns (without Size column)',
+      },
+    },
+  },
+};
+
+export const OnlyNameColumn: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [FileManagerColumnKey.Name],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager showing only Name column',
       },
     },
   },
