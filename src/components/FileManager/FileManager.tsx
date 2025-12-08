@@ -95,6 +95,7 @@ import { DialFileManagerItemSummaryCell } from '@/components/FileManager/compone
 import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
 import { FileManagerColumnKey } from '@/types/file-manager';
+import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
 
 type GridRow = FileManagerGridRow;
 
@@ -441,6 +442,9 @@ export const DialFileManagerView: FC = () => {
 
   const [sidebarCurrentWidth, setSidebarCurrentWidth] = useState(width);
 
+  const { renameTriggerView, onGridRename, onTreeRename } =
+    useTriggerViewRename({ onRename });
+
   const sidebarThrottledRef = useRef<number | null>(null);
 
   const sidebarResizingHandler = (width: number) => {
@@ -497,7 +501,8 @@ export const DialFileManagerView: FC = () => {
             );
           }
 
-          const isBeingRenamed = renamedPath === params.data?.path;
+          const isBeingRenamed =
+            renameTriggerView === 'grid' && renamedPath === params.data?.path;
           if (isBeingRenamed && renamedItem && params.data) {
             const displayName = getDisplayName(renamedItem);
             return (
@@ -590,6 +595,7 @@ export const DialFileManagerView: FC = () => {
     validateFolderName,
     renamedPath,
     renamedItem,
+    renameTriggerView,
     onRenameValidate,
     onRenameSave,
     onRenameCancel,
@@ -662,7 +668,7 @@ export const DialFileManagerView: FC = () => {
                 className="text-secondary"
               />
             ),
-            onClick: () => onRename(file.path),
+            onClick: () => onTreeRename(file.path),
           });
         }
         if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
@@ -685,7 +691,7 @@ export const DialFileManagerView: FC = () => {
       handleOpenDestinationFolderPopup,
       handleSetCopiedFiles,
       handleSetMovedFiles,
-      onRename,
+      onTreeRename,
       openDeleteConfirmation,
       treeOptions,
     ],
@@ -729,7 +735,7 @@ export const DialFileManagerView: FC = () => {
       handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: handleDownloadFiles,
-    onRename,
+    onRename: onGridRename,
     onDelete: openDeleteConfirmation,
     getCurrentFolderPath: () => currentPath ?? '/',
   });
@@ -818,7 +824,9 @@ export const DialFileManagerView: FC = () => {
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
-              renamedPath={renamedPath}
+              renamedPath={
+                renameTriggerView === 'tree' ? renamedPath : undefined
+              }
               onRenameSave={onRenameSave}
               onRenameCancel={onRenameCancel}
               onRenameValidate={onRenameValidate}
@@ -842,6 +850,7 @@ export const DialFileManagerView: FC = () => {
     onRenameCancel,
     onRenameSave,
     onRenameValidate,
+    renameTriggerView,
     renamedPath,
     sidebarCurrentWidth,
     title,
@@ -860,7 +869,7 @@ export const DialFileManagerView: FC = () => {
       handleOpenDestinationFolderPopup(DestinationFolderMode.Move);
     },
     onDownload: (file) => handleDownloadFiles([file]),
-    onRename,
+    onRename: onGridRename,
     onDelete: (file, parentFolderPath) =>
       openDeleteConfirmation([file], parentFolderPath),
   });
