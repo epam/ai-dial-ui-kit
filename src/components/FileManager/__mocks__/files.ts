@@ -112,7 +112,6 @@ export const itemsMock: DialFile[] = [
         parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
-        updatedAt: '2025-01-03',
         items: [
           {
             id: 'design-icons',
