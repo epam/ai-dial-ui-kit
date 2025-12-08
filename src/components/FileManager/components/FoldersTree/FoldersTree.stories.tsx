@@ -176,6 +176,8 @@ export const Default: Story = {
     items: mockFolders,
     expandedPaths: new Set(),
     showFiles: false,
+    rootItemLabel: 'My workspace',
+    rootItemPath: '/root',
   },
   render: (args) => {
     const Wrapper = () => {
