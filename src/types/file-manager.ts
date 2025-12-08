@@ -29,3 +29,11 @@ export enum DestinationFolderMode {
   Copy = 'copy',
   Move = 'move',
 }
+
+export enum FileManagerColumnKey {
+  Name = 'name',
+  UpdatedAt = 'updatedAt',
+  Size = 'size',
+  Author = 'author',
+  Actions = '__actions',
+}

@@ -94,6 +94,7 @@ import type { RenameValidationMessages } from '@/components/FileManager/hooks/us
 import { DialFileManagerItemSummaryCell } from '@/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell';
 import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
+import { FileManagerColumnKey } from '@/types/file-manager';
 
 type GridRow = FileManagerGridRow;
 
@@ -155,6 +156,7 @@ export interface GridOptions
   filterable?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
+  visibleColumns?: FileManagerColumnKey[];
   actionLabels?: {
     [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;
@@ -455,6 +457,12 @@ export const DialFileManagerView: FC = () => {
     filterable = true,
     dateLocale,
     dateOptions,
+    visibleColumns = [
+      FileManagerColumnKey.Name,
+      FileManagerColumnKey.UpdatedAt,
+      FileManagerColumnKey.Size,
+      FileManagerColumnKey.Author,
+    ],
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -465,6 +473,7 @@ export const DialFileManagerView: FC = () => {
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
       {
+        colId: FileManagerColumnKey.Name,
         field: 'name',
         headerName: 'Name',
         flex: 1,
@@ -540,6 +549,7 @@ export const DialFileManagerView: FC = () => {
         },
       },
       {
+        colId: FileManagerColumnKey.UpdatedAt,
         field: 'updatedAt',
         headerName: 'Modified Date',
         width: 168,
@@ -552,10 +562,21 @@ export const DialFileManagerView: FC = () => {
         },
       },
       {
+        colId: FileManagerColumnKey.Size,
         field: 'size',
         headerName: 'Size',
         width: 120,
         suppressSizeToFit: true,
+      },
+      {
+        colId: FileManagerColumnKey.Author,
+        field: 'author',
+        headerName: 'Author',
+        width: 200,
+        suppressSizeToFit: true,
+        cellRenderer: (params: { data: GridRow }) => {
+          return params.data.author || '—';
+        },
       },
     ];
   }, [
@@ -857,10 +878,20 @@ export const DialFileManagerView: FC = () => {
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
     let columns = baseColumns;
 
+    if (!userColumnDefs) {
+      columns = columns.filter(
+        (col) =>
+          col.colId &&
+          visibleColumns.includes(col.colId as FileManagerColumnKey),
+      );
+    }
+
     // In compact view, we display only one main column (with name and details).
     // We also append a system column for the actions button.
     if (isCompactView) {
       columns = columns.slice(0, 1);
+      columns.push(actionsColumnDef);
+    } else {
       columns.push(actionsColumnDef);
     }
 
@@ -871,7 +902,14 @@ export const DialFileManagerView: FC = () => {
       filter: false,
       floatingFilter: false,
     }));
-  }, [baseColumns, filterable, isCompactView, actionsColumnDef]);
+  }, [
+    baseColumns,
+    filterable,
+    isCompactView,
+    actionsColumnDef,
+    userColumnDefs,
+    visibleColumns,
+  ]);
 
   return (
     <section

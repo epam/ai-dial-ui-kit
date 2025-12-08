@@ -31,6 +31,8 @@ function buildDeepBranch(
   let current = deepRoot;
   let parentId = rootId;
 
+  const authors = ['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson'];
+
   for (let i = startIndex; i < startIndex + levels; i++) {
     const id = `${rootId}-l${String(i).padStart(2, '0')}`;
     const name = `Level ${String(i).padStart(2, '0')}`;
@@ -62,6 +64,7 @@ function buildDeepBranch(
         updatedAt: `2025-01-${String(16 + Math.floor(i / 2)).padStart(2, '0')}`,
         permissions: [DialFilePermission.READ],
         contentLength: 1024,
+        author: authors[i % authors.length],
       });
     }
     if (i % 5 === 0) {
@@ -78,6 +81,7 @@ function buildDeepBranch(
         folderId: id,
         updatedAt: `2025-01-${String(17 + Math.floor(i / 2)).padStart(2, '0')}`,
         permissions: [DialFilePermission.READ, DialFilePermission.SHARE],
+        author: authors[(i + 1) % authors.length],
       });
     }
 
@@ -149,6 +153,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 5120,
+                        author: 'Sarah Anderson',
                       },
                       {
                         id: 'ico-settings',
@@ -162,6 +167,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 61440 * 1000,
+                        author: 'Michael Chen',
                       },
                       {
                         id: '.hidden-file',
@@ -175,6 +181,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 128,
+                        author: 'Emma Thompson',
                       },
                       {
                         id: '.hidden-folder',
@@ -198,6 +205,7 @@ export const itemsMock: DialFile[] = [
                             folderId: '.hidden-folder',
                             updatedAt: '2025-01-10',
                             contentLength: 256,
+                            author: 'James Wilson',
                           },
                         ],
                       },
@@ -213,6 +221,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 12,
+                        author: 'Jennifer Martinez',
                       },
                       {
                         id: 'logo-svg',
@@ -226,6 +235,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 5120,
+                        author: 'Robert Taylor',
                       },
                       {
                         id: 'logo-extended-svg',
@@ -239,6 +249,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Linda Garcia',
                       },
                       {
                         id: 'logo-extended-svg-2',
@@ -252,6 +263,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Kevin Brown',
                       },
                       {
                         id: 'logo-extended-svg-3',
@@ -265,6 +277,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Patricia Lee',
                       },
                       {
                         id: 'logo-extended-svg-4',
@@ -278,6 +291,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Daniel White',
                       },
                       {
                         id: 'logo-svg-5',
@@ -291,6 +305,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Nancy Harris',
                       },
                       {
                         id: 'logo-svg-6',
@@ -304,6 +319,7 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
+                        author: 'Christopher Clark',
                       },
                     ],
                   },
@@ -329,6 +345,7 @@ export const itemsMock: DialFile[] = [
                     contentType: 'image/png',
                     folderId: 'icons-png',
                     updatedAt: '2025-01-06',
+                    author: 'Amanda Rodriguez',
                   },
                 ],
               },
@@ -354,6 +371,7 @@ export const itemsMock: DialFile[] = [
                 contentType: 'application/octet-stream',
                 folderId: 'design-mockups',
                 updatedAt: '2025-01-12',
+                author: 'Steven Martinez',
               },
             ],
           },
@@ -366,6 +384,7 @@ export const itemsMock: DialFile[] = [
             folderId: 'design',
             updatedAt: '2025-01-11',
             items: [],
+            author: 'Jessica Walker',
           },
         ],
       },
@@ -391,6 +410,7 @@ export const itemsMock: DialFile[] = [
             contentType: 'text/plain',
             folderId: 'hidden-root-folder',
             updatedAt: '2025-01-13',
+            author: 'Matthew Lewis',
           },
           {
             id: '.hidden-file-in-hidden-folder',
@@ -403,6 +423,7 @@ export const itemsMock: DialFile[] = [
             contentType: 'text/plain',
             folderId: 'hidden-root-folder',
             updatedAt: '2025-01-13',
+            author: 'Laura Young',
           },
         ],
       },
@@ -446,6 +467,7 @@ export const itemsMock: DialFile[] = [
                     contentType: 'image/jpeg',
                     folderId: 'photos-2025',
                     updatedAt: '2025-01-14',
+                    author: 'Brian Hall',
                   },
                 ],
               },
@@ -471,6 +493,7 @@ export const itemsMock: DialFile[] = [
                 contentType: 'video/mp4',
                 folderId: 'media-video',
                 updatedAt: '2025-01-09',
+                author: 'Michelle Allen',
               },
             ],
           },
@@ -498,6 +521,7 @@ export const itemsMock: DialFile[] = [
             contentType: 'text/plain',
             folderId: 'f1',
             updatedAt: '2025-01-02',
+            author: 'Richard King',
           },
         ],
       },
@@ -530,6 +554,7 @@ export const itemsMock: DialFile[] = [
                 contentType: 'application/pdf',
                 folderId: 'f2-a',
                 updatedAt: '2025-01-03',
+                author: 'Susan Wright',
               },
             ],
           },
@@ -556,6 +581,7 @@ export const itemsMock: DialFile[] = [
             contentType: 'text/plain',
             folderId: 'f1',
             updatedAt: '2025-01-02',
+            author: 'Thomas Scott',
           },
         ],
       },

@@ -96,6 +96,7 @@ export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,
+  FileManagerColumnKey,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
