@@ -143,6 +143,10 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           collapsed: true,
           expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
         }}
+        gridOptions={{
+          withSelectionColumn: false,
+          ...restProps.gridOptions,
+        }}
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
