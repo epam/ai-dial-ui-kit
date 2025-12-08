@@ -462,6 +462,7 @@ export const DialFileManagerView: FC = () => {
       FileManagerColumnKey.UpdatedAt,
       FileManagerColumnKey.Size,
       FileManagerColumnKey.Author,
+      FileManagerColumnKey.Actions,
     ],
     ...forwardedGridOptions
   } = gridOptions ?? {};
