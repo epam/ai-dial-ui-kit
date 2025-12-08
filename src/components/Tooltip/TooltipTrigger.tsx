@@ -3,15 +3,18 @@ import { useMergeRefs } from '@floating-ui/react';
 import {
   type FC,
   type HTMLProps,
+  type ReactElement,
   type Ref,
   cloneElement,
   isValidElement,
-  useRef,
 } from 'react';
 
 interface TooltipTriggerProps extends HTMLProps<HTMLElement> {
   asChild?: boolean;
 }
+
+type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
+
 /**
  * The trigger element for a tooltip that can be clicked or hovered
  *
@@ -24,26 +27,17 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
   ...props
 }) => {
   const context = useTooltipContext();
-  const propRef = useRef(null);
 
   const asValidChild = asChild && isValidElement(children);
 
-  const isRefInChildren =
-    children &&
-    typeof children === 'object' &&
-    'ref' in children &&
-    children.ref !== undefined;
+  const childrenRef = asValidChild
+    ? (children as ElementWithRef).props?.ref
+    : null;
 
-  const childrenRef = isRefInChildren
-    ? (children.ref as Ref<Element>)
-    : undefined;
-
-  const refsToMerge: Ref<Element>[] = [context.refs.setReference, propRef];
-  if (asValidChild && childrenRef) {
-    refsToMerge.push(childrenRef);
-  }
-
-  const ref = useMergeRefs(refsToMerge);
+  const ref = useMergeRefs([
+    context.refs.setReference,
+    ...(childrenRef ? [childrenRef] : []),
+  ]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asValidChild) {
