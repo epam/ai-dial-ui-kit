@@ -22,7 +22,7 @@ export { DialResizableContainer } from './components/ResizableContainer/Resizabl
 export { DialConditionalResizableContainer } from './components/ResizableContainer/ConditionalResizableContainer';
 
 // Grid
-export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
+export { DialGrid } from './components/Grid/Grid';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
