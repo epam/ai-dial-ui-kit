@@ -923,7 +923,7 @@ export const DialFileManagerView: FC = () => {
     (event: CellClickedEvent<FileManagerGridRow>) => {
       if (
         event.colDef.colId === '__select' ||
-        event.colDef.colId === '__actions' ||
+        event.colDef.colId === FileManagerColumnKey.Actions ||
         (renamedPath && event.data?.path === renamedPath) ||
         event.data?.isTemporary
       ) {
