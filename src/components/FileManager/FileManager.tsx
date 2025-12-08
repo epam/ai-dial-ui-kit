@@ -562,7 +562,6 @@ export const DialFileManagerView: FC = () => {
         cellRenderer: DialDateCellRenderer,
         cellRendererParams: {
           locale: dateLocale,
-          emptyPlaceholder: '—',
           options: dateOptions,
         },
       },
@@ -580,7 +579,7 @@ export const DialFileManagerView: FC = () => {
         width: 200,
         suppressSizeToFit: true,
         cellRenderer: (params: { data: GridRow }) => {
-          return params.data.author || '—';
+          return params.data.author;
         },
       },
     ];
