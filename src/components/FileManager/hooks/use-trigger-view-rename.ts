@@ -1,6 +1,5 @@
+import { FileManagerRenameTriggerView } from '@/types/file-manager';
 import { useCallback, useState } from 'react';
-
-type RenameView = 'tree' | 'grid';
 
 interface UseTriggerViewRenameOptions {
   onRename: (path: string) => void;
@@ -20,12 +19,12 @@ export const useTriggerViewRename = ({
   onRename,
 }: UseTriggerViewRenameOptions) => {
   const [renameTriggerView, setRenameTriggerView] =
-    useState<RenameView>('grid');
+    useState<FileManagerRenameTriggerView>(FileManagerRenameTriggerView.Grid);
 
   const onGridRename = useCallback(
     (path: string) => {
       onRename(path);
-      setRenameTriggerView('grid');
+      setRenameTriggerView(FileManagerRenameTriggerView.Grid);
     },
     [onRename],
   );
@@ -33,7 +32,7 @@ export const useTriggerViewRename = ({
   const onTreeRename = useCallback(
     (path: string) => {
       onRename(path);
-      setRenameTriggerView('tree');
+      setRenameTriggerView(FileManagerRenameTriggerView.Tree);
     },
     [onRename],
   );

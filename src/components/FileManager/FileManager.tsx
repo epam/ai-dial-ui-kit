@@ -81,6 +81,7 @@ import classNames from 'classnames';
 import {
   DestinationFolderMode,
   DialFileManagerActions,
+  FileManagerRenameTriggerView,
 } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
@@ -502,7 +503,8 @@ export const DialFileManagerView: FC = () => {
           }
 
           const isBeingRenamed =
-            renameTriggerView === 'grid' && renamedPath === params.data?.path;
+            renameTriggerView === FileManagerRenameTriggerView.Grid &&
+            renamedPath === params.data?.path;
           if (isBeingRenamed && renamedItem && params.data) {
             const displayName = getDisplayName(renamedItem);
             return (
@@ -825,7 +827,9 @@ export const DialFileManagerView: FC = () => {
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
               renamedPath={
-                renameTriggerView === 'tree' ? renamedPath : undefined
+                renameTriggerView === FileManagerRenameTriggerView.Tree
+                  ? renamedPath
+                  : undefined
               }
               onRenameSave={onRenameSave}
               onRenameCancel={onRenameCancel}
