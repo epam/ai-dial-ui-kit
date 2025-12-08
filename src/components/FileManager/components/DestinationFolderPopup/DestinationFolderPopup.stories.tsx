@@ -79,7 +79,7 @@ const meta: Meta<DestinationFolderPopupProps> = {
       path: '/',
       folderId: 'root-folder',
       nodeType: DialFileNodeType.FOLDER,
-      breadcrumbLabel: 'Root',
+      label: 'Root',
     },
     path: '/',
   },

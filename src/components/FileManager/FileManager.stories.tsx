@@ -240,16 +240,16 @@ const PopupComponent = (args: DialFileManagerProps) => {
   const rootFolder = rootItem;
   switch (activeTab) {
     case 'my_files':
-      rootFolder.breadcrumbLabel = 'My Files';
+      rootFolder.label = 'My Files';
       break;
     case 'shared':
-      rootFolder.breadcrumbLabel = 'Shared with Me';
+      rootFolder.label = 'Shared with Me';
       break;
     case 'organization':
-      rootFolder.breadcrumbLabel = 'Organization';
+      rootFolder.label = 'Organization';
       break;
     default:
-      rootFolder.breadcrumbLabel = 'Files';
+      rootFolder.label = 'Files';
       break;
   }
 
@@ -447,7 +447,7 @@ const rootItem: DialRootFolder = {
   folderId: 'root',
   path: 'All files',
   name: 'All files',
-  breadcrumbLabel: 'My Workspace',
+  label: 'My Workspace',
   nodeType: DialFileNodeType.FOLDER,
   items: itemsMock,
 };
