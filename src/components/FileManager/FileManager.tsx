@@ -790,6 +790,8 @@ export const DialFileManagerView: FC = () => {
             <DialFoldersTree
               {...forwardedTreeProps}
               items={items}
+              rootItemPath={rootItem?.path}
+              rootItemLabel={rootItem?.breadcrumbLabel}
               selectedPath={currentPath}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
@@ -814,6 +816,7 @@ export const DialFileManagerView: FC = () => {
     isCompactView,
     isTreeCollapsed,
     items,
+    rootItem,
     onRenameCancel,
     onRenameSave,
     onRenameValidate,

@@ -237,6 +237,22 @@ const PopupComponent = (args: DialFileManagerProps) => {
     return null;
   }, []);
 
+  const rootFolder = rootItem;
+  switch (activeTab) {
+    case 'my_files':
+      rootFolder.breadcrumbLabel = 'My Files';
+      break;
+    case 'shared':
+      rootFolder.breadcrumbLabel = 'Shared with Me';
+      break;
+    case 'organization':
+      rootFolder.breadcrumbLabel = 'Organization';
+      break;
+    default:
+      rootFolder.breadcrumbLabel = 'Files';
+      break;
+  }
+
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
       <DialButton
@@ -314,7 +330,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
           treeOptions={{
             ...(args.treeOptions ?? {}),
             collapsed: false,
-            expandedPaths: new Set<string>([rootItem.path]),
+            expandedPaths: new Set<string>([rootFolder.path]),
             loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
@@ -363,7 +379,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               'A folder with this name already exists in this location',
           }}
           maxFileSize={10 * 1024 * 1024} // 10MB
-          rootItem={rootItem}
+          rootItem={rootFolder}
         />
       </DialPopup>
     </div>

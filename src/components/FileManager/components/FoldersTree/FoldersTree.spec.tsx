@@ -29,7 +29,7 @@ const mockItems = [
 ];
 
 const getMenu = vi.fn(() => [
-  { key: 'copy', label: 'Copy', icon: <span data-testid="icon-copy" /> },
+  { key: 'copy', label: 'Copy', icon: <span>copy-icon</span> },
 ]);
 
 describe('Dial UI Kit :: DialFoldersTree', () => {
@@ -108,5 +108,20 @@ describe('Dial UI Kit :: DialFoldersTree', () => {
     expect(getMenu).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Subfolder' }),
     );
+  });
+
+  test('renders root item with custom label when rootItemLabel is provided', () => {
+    render(
+      <DialFoldersTree
+        items={mockItems}
+        rootItemPath="/root"
+        rootItemLabel="Custom Root Label"
+        expandedPaths={new Set(['/root'])}
+      />,
+    );
+
+    expect(screen.getByText('Custom Root Label')).toBeInTheDocument();
+
+    expect(screen.queryByText('Root')).not.toBeInTheDocument();
   });
 });
