@@ -1,10 +1,10 @@
 import { IconX } from '@tabler/icons-react';
-import classNames from 'classnames';
-import { type FC, type ReactNode, type MouseEvent, useMemo } from 'react';
+import { type FC, type MouseEvent, type ReactNode, useMemo } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
+import { DialIcon } from '@/components/Icon/Icon';
 import { AlertVariant } from '@/types/alert';
+import { mergeClasses } from '@/utils/merge-classes';
 import {
   alertBaseClassName,
   alertVariantClassNameMap,
@@ -71,7 +71,7 @@ export const DialAlert: FC<DialAlertProps> = ({
   return (
     <div
       role="alert"
-      className={classNames(
+      className={mergeClasses(
         alertBaseClassName,
         alertVariantClassNameMap[variant],
         className,
@@ -79,7 +79,7 @@ export const DialAlert: FC<DialAlertProps> = ({
     >
       <div className="flex items-center gap-2">
         <DialIcon icon={icon} />
-        <div className="text-primary dial-small">{message}</div>
+        <div className="text-primary">{message}</div>
       </div>
 
       {closable && (
