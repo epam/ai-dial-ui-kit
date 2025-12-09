@@ -7,9 +7,9 @@ import {
 } from 'react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
-import { FILES_DATA_TRANSFER_TYPE } from '../constants';
+import { FILES_DATA_TRANSFER_TYPE } from '@/components/FileManager/constants';
 import { useConflictResolution } from './use-conflict-resolution';
-import type { FileConflictDecision } from '../components/ConflictResolutionPopup/ConflictResolutionPopup';
+import type { FileConflictDecision } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
 
 export interface FileUploadValidationResult {
   valid: boolean;

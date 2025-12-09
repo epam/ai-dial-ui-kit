@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getStepClass, getCircleClass } from '../utils';
+import { getStepClass, getCircleClass } from '@/components/Steps/utils';
 import { StepStatus } from '@/models/step';
 
 const baseStep = { id: 'step1', name: 'Step 1' };

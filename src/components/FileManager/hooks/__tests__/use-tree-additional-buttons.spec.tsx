@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
-import { useTreeAdditionalButtons } from '../use-tree-additional-buttons';
+import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
 import React from 'react';
 
 describe('Dial UI Kit :: FileManager :: useTreeAdditionalButtons', () => {

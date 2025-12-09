@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { DialSteps } from '../Steps';
+import { DialSteps } from '@/components/Steps/Steps';
 import { StepStatus } from '@/models/step';
 import { render, fireEvent } from '@testing-library/react';
 
