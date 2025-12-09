@@ -30,6 +30,11 @@ export enum DestinationFolderMode {
   Move = 'move',
 }
 
+export enum FileManagerRenameTriggerView {
+  Tree = 'tree',
+  Grid = 'grid',
+}
+
 export enum FileManagerColumnKey {
   Name = 'name',
   UpdatedAt = 'updatedAt',
