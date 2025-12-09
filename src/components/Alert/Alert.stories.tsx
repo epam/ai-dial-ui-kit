@@ -37,6 +37,14 @@ const meta = {
       control: { type: 'boolean' },
       description: 'Whether the close button should be shown',
     },
+    iconSize: {
+      control: { type: 'number' },
+      description: 'Size of the icon displayed in the alert',
+    },
+    iconStroke: {
+      control: { type: 'number' },
+      description: 'Stroke width of the icon displayed in the alert',
+    },
     onClose: {
       control: false,
       description: 'Callback fired when the close button is clicked',
@@ -97,8 +105,14 @@ export const LongMessage: Story = {
 export const CustomClass: Story = {
   args: {
     variant: AlertVariant.Info,
-    message: 'Alert with custom CSS class',
-    className: 'border-dashed w-[250px] bg-layer-2',
+    message: (
+      <span>
+        Alert with <span className="italic">custom CSS class</span>
+      </span>
+    ),
+    iconSize: 12,
+    iconStroke: 1,
+    className: 'py-1 px-2 border-dashed dial-tiny-sensory w-[250px] bg-layer-2',
   },
   parameters: {
     docs: {
@@ -117,6 +131,22 @@ export const AllVariants: Story = {
       <DialAlert variant={AlertVariant.Success} message="Success alert" />
       <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
       <DialAlert variant={AlertVariant.Error} message="Error alert" />
+      <div className="dial-caption text-primary">Additional</div>
+      <DialAlert
+        variant={AlertVariant.Info}
+        iconSize={14}
+        className="py-1 px-2 w-fit"
+        message={
+          <span className="dial-tiny">
+            <b>Customized</b> to be smaller Info alert
+          </span>
+        }
+      />
+      <DialAlert
+        closable
+        variant={AlertVariant.Error}
+        message="Closable error alert"
+      />
     </div>
   ),
   parameters: {
