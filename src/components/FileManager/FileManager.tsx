@@ -1036,14 +1036,11 @@ export const DialFileManagerView: FC = () => {
       </div>
 
       <FileManagerDeleteConfirmationPopup
+        {...deleteConfirmationOptions}
         open={deleteConfirmationOpen}
         itemsToDelete={itemsToDelete}
         onClose={closeDeleteConfirmation}
         onConfirm={confirmDelete}
-        cancelLabel={deleteConfirmationOptions?.cancelLabel}
-        confirmLabel={deleteConfirmationOptions?.confirmLabel}
-        titleRenderer={deleteConfirmationOptions?.titleRenderer}
-        contentRenderer={deleteConfirmationOptions?.contentRenderer}
       />
       <DestinationFolderPopup
         {...destinationFolderPopupOptions}

@@ -58,8 +58,7 @@ export const FileManagerDeleteConfirmationPopup: FC<
         ) : (
           <>
             Do you want to delete the following{' '}
-            <span className="text-primary">{itemsToDelete.length}</span> item
-            {itemsToDelete.length !== 1 ? 's' : ''}?
+            <span className="text-primary">{itemsToDelete.length}</span> items?
           </>
         )}
       </p>
