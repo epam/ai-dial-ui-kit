@@ -254,6 +254,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openFileDialog: openFileDialogBase,
     fileInputRef,
     openArchiveDialog,
+
+    uploadConflictingFiles,
+    uploadConflictResolutionOpen,
+    closeUploadConflictResolution,
+    handleUploadConflictReplace,
+    handleUploadConflictDuplicate,
+    handleUploadConflictDecideForEach,
   } = useFileUpload({
     onUploadFiles,
     onValidateUpload,
@@ -521,6 +528,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+
+    uploadConflictingFiles,
+    uploadConflictResolutionOpen,
+    closeUploadConflictResolution,
+    handleUploadConflictReplace,
+    handleUploadConflictDuplicate,
+    handleUploadConflictDecideForEach,
   };
 
   return (

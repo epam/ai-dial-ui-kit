@@ -8,6 +8,8 @@ import {
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FILES_DATA_TRANSFER_TYPE } from '../constants';
+import { useConflictResolution } from './use-conflict-resolution';
+import type { FileConflictDecision } from '../components/ConflictResolutionPopup/ConflictResolutionPopup';
 
 export interface FileUploadValidationResult {
   valid: boolean;
@@ -60,6 +62,57 @@ export const useFileUpload = ({
   const destinationFolderRef = useRef<string>('');
   const existingFilesRef = useRef<DialFile[]>([]);
 
+  const [pendingUploadFiles, setPendingUploadFiles] = useState<
+    Map<string, DialUploadFileItem>
+  >(new Map());
+
+  const [uploadMetadata, setUploadMetadata] = useState<{
+    destinationFolder: string;
+  } | null>(null);
+
+  const {
+    conflictingFiles,
+    conflictResolutionOpen,
+    hasActiveConflictRef,
+    startConflictResolution,
+    closeConflictResolution,
+    openConflictResolution,
+    handleReplaceAll: baseHandleReplaceAll,
+    handleDuplicateAll: baseHandleDuplicateAll,
+    handleDecideForEach: baseHandleDecideForEach,
+  } = useConflictResolution({
+    getDestinationFiles: () => existingFilesRef.current,
+    onResolve: (items, destinationFolder) => {
+      if (!uploadMetadata) return;
+
+      const uploadItems = items
+        .map((item) => {
+          const originalFile = pendingUploadFiles.get(item.sourceUrl);
+          if (!originalFile) {
+            return;
+          }
+
+          const finalName = item.destinationUrl.split('/').pop()!;
+
+          return {
+            fileContent: originalFile.fileContent,
+            name: finalName,
+          };
+        })
+        .filter(Boolean) as DialUploadFileItem[];
+
+      if (uploadItems.length > 0) {
+        onUploadFiles?.(uploadItems, destinationFolder);
+      }
+      clearUploadState();
+    },
+  });
+
+  const clearUploadState = useCallback(() => {
+    setPendingUploadFiles(new Map());
+    setUploadMetadata(null);
+  }, []);
+
   useEffect(() => {
     let dragCounter = 0;
 
@@ -102,18 +155,6 @@ export const useFileUpload = ({
     };
   }, []);
 
-  const checkForDuplicates = useCallback(
-    (files: DialUploadFileItem[], existingFiles: DialFile[]): string[] => {
-      const existingNames = new Set(
-        existingFiles.map((f) => f.name.toLowerCase()),
-      );
-      return files
-        .filter((file) => existingNames.has(file.name.toLowerCase()))
-        .map((file) => file.name);
-    },
-    [],
-  );
-
   const checkFileSize = useCallback(
     (files: DialUploadFileItem[]): string[] => {
       if (!maxFileSize) return [];
@@ -124,6 +165,21 @@ export const useFileUpload = ({
     [maxFileSize],
   );
 
+  const convertUploadItemsToDialFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string): DialFile[] => {
+      return files.map((file) => ({
+        id: file.name,
+        name: file.name,
+        folderId: destinationFolder,
+        path: file.name,
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: destinationFolder,
+        contentLength: file.fileContent.size,
+      }));
+    },
+    [],
+  );
+
   const handleUpload = useCallback(
     async (
       files: DialUploadFileItem[],
@@ -131,15 +187,7 @@ export const useFileUpload = ({
       existingFiles: DialFile[],
     ) => {
       setUploadError(undefined);
-
-      const duplicates = checkForDuplicates(files, existingFiles);
-      if (duplicates.length > 0) {
-        const message =
-          validationMessages.duplicateFiles ||
-          `Files with the same name already exist: ${duplicates.join(', ')}`;
-        setUploadError(message);
-        return false;
-      }
+      existingFilesRef.current = existingFiles;
 
       const oversizedFiles = checkFileSize(files);
       if (oversizedFiles.length > 0) {
@@ -176,20 +224,61 @@ export const useFileUpload = ({
         }
       }
 
-      if (onUploadFiles) {
-        onUploadFiles(files, destinationFolder);
+      const filesMap = new Map(files.map((f) => [f.name, f]));
+      setPendingUploadFiles(filesMap);
+
+      const dialFiles = convertUploadItemsToDialFiles(files, destinationFolder);
+
+      setUploadMetadata({ destinationFolder });
+
+      const result = startConflictResolution(destinationFolder, dialFiles, {
+        destinationFolder,
+      });
+
+      if (result.hasConflicts) {
+        return false;
       }
+
+      onUploadFiles?.(files, destinationFolder);
+      clearUploadState();
       return true;
     },
     [
       onUploadFiles,
       onValidateUpload,
-      checkForDuplicates,
       checkFileSize,
       maxFileSize,
       validationMessages,
+      convertUploadItemsToDialFiles,
+      startConflictResolution,
+      clearUploadState,
     ],
   );
+
+  const handleConflictReplace = useCallback(() => {
+    baseHandleReplaceAll();
+    clearUploadState();
+  }, [baseHandleReplaceAll, clearUploadState]);
+
+  const handleConflictDuplicate = useCallback(() => {
+    baseHandleDuplicateAll();
+    clearUploadState();
+  }, [baseHandleDuplicateAll, clearUploadState]);
+
+  const handleConflictDecideForEach = useCallback(
+    (decisions: FileConflictDecision[]) => {
+      baseHandleDecideForEach(decisions);
+      clearUploadState();
+    },
+    [baseHandleDecideForEach, clearUploadState],
+  );
+
+  const handleCloseConflictResolution = useCallback(() => {
+    closeConflictResolution();
+    if (!hasActiveConflictRef.current) {
+      clearUploadState();
+    }
+  }, [closeConflictResolution, hasActiveConflictRef, clearUploadState]);
 
   const handleDragEnter = useCallback((e: DragEvent) => {
     e.preventDefault();
@@ -375,5 +464,14 @@ export const useFileUpload = ({
     openFileDialog,
     openArchiveDialog,
     fileInputRef,
+
+    uploadConflictingFiles: conflictingFiles,
+    uploadConflictResolutionOpen: conflictResolutionOpen,
+    hasActiveUploadConflictRef: hasActiveConflictRef,
+    openUploadConflictResolution: openConflictResolution,
+    closeUploadConflictResolution: handleCloseConflictResolution,
+    handleUploadConflictReplace: handleConflictReplace,
+    handleUploadConflictDuplicate: handleConflictDuplicate,
+    handleUploadConflictDecideForEach: handleConflictDecideForEach,
   };
 };
