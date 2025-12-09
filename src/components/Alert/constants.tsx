@@ -1,18 +1,21 @@
 import { AlertVariant } from '@/types/alert';
-import type { ReactNode } from 'react';
 import {
   IconAlertCircle,
   IconAlertTriangle,
   IconCircleCheck,
   IconInfoCircle,
+  type ReactNode,
 } from '@tabler/icons-react';
 
-export const variantIcons: Record<AlertVariant, ReactNode> = {
-  info: <IconInfoCircle size={24} stroke={2} />,
-  error: <IconAlertCircle size={24} stroke={2} />,
-  warning: <IconAlertTriangle size={24} stroke={2} />,
-  success: <IconCircleCheck size={24} stroke={2} />,
-};
+export const variantIcons = (props: {
+  size: number;
+  stroke: number;
+}): Record<AlertVariant, ReactNode> => ({
+  info: <IconInfoCircle {...props} />,
+  error: <IconAlertCircle {...props} />,
+  warning: <IconAlertTriangle {...props} />,
+  success: <IconCircleCheck {...props} />,
+});
 
 export const alertVariantClassNameMap: Record<AlertVariant, string> = {
   [AlertVariant.Info]: 'bg-info border-info text-info',

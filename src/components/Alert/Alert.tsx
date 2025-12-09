@@ -16,6 +16,8 @@ export interface DialAlertProps {
   message: string | ReactNode;
   className?: string;
   closable?: boolean;
+  iconSize?: number;
+  iconStroke?: number;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -49,12 +51,16 @@ export interface DialAlertProps {
  * @param message - Message text to display inside the alert
  * @param [className] - Additional CSS classes applied to the alert container
  * @param [closable=false] - Whether the alert has a close button
+ * @param [iconSize=24] - Size of the icon displayed in the alert
+ * @param [iconStroke=2] - Stroke width of the icon displayed in the alert
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialAlert: FC<DialAlertProps> = ({
   variant = AlertVariant.Info,
   message,
   className,
+  iconSize = 24,
+  iconStroke = 2,
   closable = false,
   onClose,
 }) => {
@@ -68,8 +74,10 @@ export const DialAlert: FC<DialAlertProps> = ({
       )}
     >
       <div className="flex items-center gap-2">
-        <DialIcon icon={variantIcons[variant]} />
-        <div className="text-primary">{message}</div>
+        <DialIcon
+          icon={variantIcons({ size: iconSize, stroke: iconStroke })[variant]}
+        />
+        <div className="text-primary dial-small">{message}</div>
       </div>
 
       {closable && (
