@@ -10,7 +10,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { isHiddenDotFile } from '../../utils';
+import { isHiddenDotFile } from '@/components/FileManager/utils';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';

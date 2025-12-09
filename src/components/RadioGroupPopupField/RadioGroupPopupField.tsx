@@ -13,7 +13,7 @@ import {
 } from '@/components/RadioGroup/RadioGroup';
 import classNames from 'classnames';
 import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
-import { DialButton } from '../Button/Button';
+import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 import { RadioGroupOrientation } from '@/types/radio-group';
 import { PopupSize } from '@/types/popup';

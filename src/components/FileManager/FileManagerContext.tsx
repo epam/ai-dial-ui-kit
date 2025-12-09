@@ -133,6 +133,15 @@ export interface FileManagerContextValue {
   handleConflictReplace: () => void;
   handleConflictDuplicate: () => void;
   handleConflictDecideForEach: (decisions: FileConflictDecision[]) => void;
+
+  uploadConflictingFiles: DialFile[];
+  uploadConflictResolutionOpen: boolean;
+  closeUploadConflictResolution: () => void;
+  handleUploadConflictReplace: () => void;
+  handleUploadConflictDuplicate: () => void;
+  handleUploadConflictDecideForEach: (
+    decisions: FileConflictDecision[],
+  ) => void;
 }
 
 export const FileManagerContext = createContext<

@@ -4,7 +4,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { IconDotsVertical } from '@tabler/icons-react';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { useCallback, useMemo } from 'react';
-import type { FileManagerGridRow } from '../FileManagerContext';
+import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import type { DropdownItem } from '@/models/dropdown';
 
 interface UseGridActionsColumnProps {
