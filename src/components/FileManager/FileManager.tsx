@@ -431,6 +431,13 @@ export const DialFileManagerView: FC = () => {
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+
+    uploadConflictingFiles,
+    uploadConflictResolutionOpen,
+    closeUploadConflictResolution,
+    handleUploadConflictReplace,
+    handleUploadConflictDuplicate,
+    handleUploadConflictDecideForEach,
   } = useFileManagerContext();
 
   const {
@@ -1069,6 +1076,16 @@ export const DialFileManagerView: FC = () => {
         onDuplicate={handleConflictDuplicate}
         onDecideForEach={handleConflictDecideForEach}
         conflictingFiles={conflictingFiles}
+      />
+
+      <ConflictResolutionPopup
+        {...conflictResolutionPopupOptions}
+        open={uploadConflictResolutionOpen}
+        onClose={closeUploadConflictResolution}
+        onReplace={handleUploadConflictReplace}
+        onDuplicate={handleUploadConflictDuplicate}
+        onDecideForEach={handleUploadConflictDecideForEach}
+        conflictingFiles={uploadConflictingFiles}
       />
     </section>
   );

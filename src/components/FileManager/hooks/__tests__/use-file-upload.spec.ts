@@ -56,6 +56,19 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     expect(typeof result.current.handleDragOver).toBe('function');
     expect(typeof result.current.handleDrop).toBe('function');
     expect(typeof result.current.clearError).toBe('function');
+
+    expect(result.current.uploadConflictingFiles).toEqual([]);
+    expect(result.current.uploadConflictResolutionOpen).toBe(false);
+    expect(typeof result.current.closeUploadConflictResolution).toBe(
+      'function',
+    );
+    expect(typeof result.current.handleUploadConflictReplace).toBe('function');
+    expect(typeof result.current.handleUploadConflictDuplicate).toBe(
+      'function',
+    );
+    expect(typeof result.current.handleUploadConflictDecideForEach).toBe(
+      'function',
+    );
   });
 
   it('sets up window event listeners on mount', () => {
@@ -244,7 +257,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   describe('handleDrop', () => {
-    it('calls onUploadFiles with valid files', async () => {
+    it('calls onUploadFiles with valid files when no conflicts', async () => {
       const onUploadFiles = vi.fn();
       const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
 
@@ -318,7 +331,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   describe('duplicate file validation', () => {
-    it('shows error when uploading duplicate files', async () => {
+    it('opens conflict resolution popup when uploading duplicate files', async () => {
       const onUploadFiles = vi.fn();
       const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
 
@@ -341,43 +354,14 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         );
       });
 
-      expect(result.current.uploadError).toBeDefined();
-      expect(result.current.uploadError).toContain('already exist');
-      expect(result.current.uploadError).toContain('existing.txt');
-      expect(onUploadFiles).not.toHaveBeenCalled();
-    });
-
-    it('uses custom duplicate error message', async () => {
-      const onUploadFiles = vi.fn();
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          validationMessages: {
-            duplicateFiles: 'Custom: Files already exist',
-          },
-        }),
-      );
-
-      const files = [createMockFile('existing.txt', 1024)];
-
-      const mockEvent = {
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-        dataTransfer: {
-          types: ['Files'],
-          files,
-        },
-      } as unknown as DragEvent;
-
-      await act(async () => {
-        await result.current.handleDrop(
-          mockEvent,
-          '/folder',
-          mockExistingFiles,
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+        expect(result.current.uploadConflictingFiles).toHaveLength(1);
+        expect(result.current.uploadConflictingFiles[0]?.name).toBe(
+          'existing.txt',
         );
+        expect(onUploadFiles).not.toHaveBeenCalled();
       });
-
-      expect(result.current.uploadError).toBe('Custom: Files already exist');
     });
 
     it('allows uploading files with different names', async () => {
@@ -404,7 +388,87 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       });
 
       expect(result.current.uploadError).toBeUndefined();
+      expect(result.current.uploadConflictResolutionOpen).toBe(false);
       expect(onUploadFiles).toHaveBeenCalled();
+    });
+
+    it('handles conflict resolution - replace', async () => {
+      const onUploadFiles = vi.fn();
+      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+
+      const files = [createMockFile('existing.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(
+          mockEvent,
+          '/folder',
+          mockExistingFiles,
+        );
+      });
+
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+      });
+
+      act(() => {
+        result.current.handleUploadConflictReplace();
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledWith(
+          [{ fileContent: files[0], name: 'existing.txt' }],
+          '/folder',
+        );
+        expect(result.current.uploadConflictResolutionOpen).toBe(false);
+      });
+    });
+
+    it('handles conflict resolution - duplicate', async () => {
+      const onUploadFiles = vi.fn();
+      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+
+      const files = [createMockFile('existing.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(
+          mockEvent,
+          '/folder',
+          mockExistingFiles,
+        );
+      });
+
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+      });
+
+      act(() => {
+        result.current.handleUploadConflictDuplicate();
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalled();
+        const callArgs = onUploadFiles.mock.calls[0];
+        expect(callArgs[0][0].name).toMatch(/existing \(\d+\)\.txt/);
+        expect(result.current.uploadConflictResolutionOpen).toBe(false);
+      });
     });
   });
 
@@ -646,9 +710,12 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   describe('clearError', () => {
     it('clears upload error', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const maxFileSize = 1024;
+      const { result } = renderHook(() =>
+        useFileUpload({ onUploadFiles, maxFileSize }),
+      );
 
-      const files = [createMockFile('existing.txt', 1024)];
+      const files = [createMockFile('large.txt', 2048)];
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -660,11 +727,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       } as unknown as DragEvent;
 
       await act(async () => {
-        await result.current.handleDrop(
-          mockEvent,
-          '/folder',
-          mockExistingFiles,
-        );
+        await result.current.handleDrop(mockEvent, '/folder', []);
       });
 
       expect(result.current.uploadError).toBeDefined();
@@ -678,7 +741,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   describe('validation order', () => {
-    it('checks duplicates before size', async () => {
+    it('checks size before conflicts', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024;
       const { result } = renderHook(() =>
@@ -704,7 +767,8 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         );
       });
 
-      expect(result.current.uploadError).toContain('already exist');
+      expect(result.current.uploadError).toContain('exceed maximum size');
+      expect(result.current.uploadConflictResolutionOpen).toBe(false);
       expect(onUploadFiles).not.toHaveBeenCalled();
     });
 
@@ -736,7 +800,6 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       });
 
       await waitFor(() => {
-        // Should show size error, not call custom validation
         expect(result.current.uploadError).toContain('exceed maximum size');
         expect(onValidateUpload).not.toHaveBeenCalled();
         expect(onUploadFiles).not.toHaveBeenCalled();
@@ -745,7 +808,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   describe('multiple files handling', () => {
-    it('validates all files and shows all duplicate names', async () => {
+    it('opens conflict popup for multiple conflicting files', async () => {
       const onUploadFiles = vi.fn();
       const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
 
@@ -772,9 +835,16 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         );
       });
 
-      expect(result.current.uploadError).toContain('existing.txt');
-      expect(result.current.uploadError).toContain('document.pdf');
-      expect(onUploadFiles).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+        expect(result.current.uploadConflictingFiles).toHaveLength(2);
+        const conflictNames = result.current.uploadConflictingFiles.map(
+          (f) => f.name,
+        );
+        expect(conflictNames).toContain('existing.txt');
+        expect(conflictNames).toContain('document.pdf');
+        expect(onUploadFiles).not.toHaveBeenCalled();
+      });
     });
 
     it('validates all files and shows all oversized names', async () => {
