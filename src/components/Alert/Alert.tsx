@@ -1,6 +1,6 @@
 import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
-import type { FC, ReactNode, MouseEvent } from 'react';
+import { type FC, type ReactNode, type MouseEvent, useMemo } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialButton } from '@/components/Button/Button';
@@ -64,6 +64,10 @@ export const DialAlert: FC<DialAlertProps> = ({
   closable = false,
   onClose,
 }) => {
+  const icon = useMemo(() => {
+    return variantIcons({ size: iconSize, stroke: iconStroke })[variant];
+  }, [variant, iconSize, iconStroke]);
+
   return (
     <div
       role="alert"
@@ -74,9 +78,7 @@ export const DialAlert: FC<DialAlertProps> = ({
       )}
     >
       <div className="flex items-center gap-2">
-        <DialIcon
-          icon={variantIcons({ size: iconSize, stroke: iconStroke })[variant]}
-        />
+        <DialIcon icon={icon} />
         <div className="text-primary dial-small">{message}</div>
       </div>
 
