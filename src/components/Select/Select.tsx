@@ -340,10 +340,6 @@ export const DialSelect: FC<DialSelectProps> = ({
     singleSelectedOption,
   ]);
 
-  const inlineInputValue = useMemo(() => {
-    return query || singleSelectedOption?.label || '';
-  }, [query, singleSelectedOption]);
-
   useImperativeHandle(dismissRef, () => ({
     dismiss: () => {
       setOpen(false);
@@ -550,7 +546,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               id={`inline-${elementId || listId}`}
               type="text"
               placeholder={searchPlaceholder ?? placeholder}
-              value={inlineInputValue}
+              value={query || ''}
               onChange={(e) => setQuery(e.currentTarget.value)}
               onFocus={() => !disabled && setOpen(true)}
               onMouseDown={(e) => {
