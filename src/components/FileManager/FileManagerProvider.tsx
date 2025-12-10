@@ -34,6 +34,8 @@ import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-pa
 import { useNewActions } from './hooks/use-new-actions';
 import { useFolderCreation } from './hooks/use-folder-creation';
 import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
+import { useFileMetadata } from './hooks/use-file-metadata';
+import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 
 /**
  * Formats bytes into a short, human-readable string.
@@ -97,6 +99,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onCreateFolder,
   onCreateFolderValidate,
   folderCreationValidationMessages,
+  fileMetadataPopupOptions,
+  onGetInfo,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -419,6 +423,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     additionalButtons: treeOptions?.additionalButtons,
   });
 
+  const {
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup,
+  } = useFileMetadata({ onGetInfo });
+
+  const handleCloseMetadataPopup = useCallback(() => {
+    closeMetadataPopup();
+    fileMetadataPopupOptions?.clearMetadata?.();
+  }, [closeMetadataPopup, fileMetadataPopupOptions]);
+
   const value: FileManagerContextValue = {
     className,
     items,
@@ -535,11 +551,32 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
     handleUploadConflictDecideForEach,
+
+    fileMetadataPopupOptions,
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup: handleCloseMetadataPopup,
+    onGetInfo,
   };
 
   return (
     <FileManagerContext.Provider value={value}>
       {children}
+      <FileMetadataPopup
+        open={isMetadataPopupOpen}
+        onClose={handleCloseMetadataPopup}
+        fileMetadata={
+          fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
+        }
+        loading={fileMetadataPopupOptions?.loading}
+        title={fileMetadataPopupOptions?.title}
+        nameLabel={fileMetadataPopupOptions?.nameLabel}
+        pathLabel={fileMetadataPopupOptions?.pathLabel}
+        modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}
+        sizeLabel={fileMetadataPopupOptions?.sizeLabel}
+        authorLabel={fileMetadataPopupOptions?.authorLabel}
+      />
     </FileManagerContext.Provider>
   );
 };

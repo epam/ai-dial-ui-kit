@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { DialFile } from '@/models/file';
+import { type DialFile } from '@/models/file';
 import { DialFileManagerActions } from '@/types/file-manager';
 import type { DropdownItem } from '@/models/dropdown';
 import {
@@ -7,10 +7,12 @@ import {
   IconDownload,
   IconPencilMinus,
   IconTrashX,
+  IconInfoCircle,
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialFileNodeType } from '@/models/file';
 
 export interface UseGridContextMenuProps {
   actionLabels?: {
@@ -20,6 +22,7 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
+    [DialFileManagerActions.Info]?: string;
   };
   onDuplicate: (file: DialFile) => void;
   onCopy: (file: DialFile) => void;
@@ -27,6 +30,7 @@ export interface UseGridContextMenuProps {
   onDownload: (file: DialFile) => void;
   onRename: (filePath: string) => void;
   onDelete: (file: DialFile, parentFolderPath: string) => void;
+  onInfo: (file: DialFile) => void;
 }
 
 export const useGridContextMenu = ({
@@ -37,6 +41,7 @@ export const useGridContextMenu = ({
   onDownload,
   onRename,
   onDelete,
+  onInfo,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -116,6 +121,20 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (
+        actionLabels[DialFileManagerActions.Info] &&
+        file.nodeType === DialFileNodeType.ITEM
+      ) {
+        items.push({
+          key: DialFileManagerActions.Info,
+          label: actionLabels[DialFileManagerActions.Info],
+          icon: (
+            <IconInfoCircle {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onInfo(file),
+        });
+      }
+
       return items;
     };
   }, [
@@ -126,5 +145,6 @@ export const useGridContextMenu = ({
     onDownload,
     onRename,
     onDelete,
+    onInfo,
   ]);
 };
