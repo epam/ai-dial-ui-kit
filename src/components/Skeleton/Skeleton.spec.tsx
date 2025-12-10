@@ -56,16 +56,20 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders without title', () => {
     const { container } = render(<DialSkeleton showTitle={false} />);
-    const elements = container.querySelectorAll('.h-4');
-    // Should have only paragraph rows, no title
-    expect(elements.length).toBeGreaterThan(0);
-  });
+    const mainContainer = container.querySelector('.flex.gap-4');
+    expect(mainContainer).toBeInTheDocument();
 
-  it('renders with custom paragraph rows', () => {
-    const { container } = render(<DialSkeleton paragraph={{ rows: 5 }} />);
     const paragraphContainer = container.querySelector(
       '.flex.flex-col.gap-3:last-child',
     );
+    expect(paragraphContainer).toBeInTheDocument();
+  });
+
+  it('renders with custom paragraph rows', () => {
+    const { container } = render(
+      <DialSkeleton paragraph={{ rows: 5 }} showTitle={false} />,
+    );
+    const paragraphContainer = container.querySelector('.flex.flex-col.gap-3');
     const rows = paragraphContainer?.querySelectorAll('.h-4');
     expect(rows?.length).toBe(5);
   });
@@ -127,7 +131,6 @@ describe('Dial UI Kit :: DialSkeleton', () => {
     const { container } = render(
       <DialSkeleton variant={DialSkeletonVariant.Default} />,
     );
-    // Default variant should render complex skeleton with title and paragraph
     expect(container.querySelector('.flex.gap-4')).toBeInTheDocument();
   });
 
@@ -167,18 +170,24 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   });
 
   it('renders with custom title width', () => {
-    const { container } = render(<DialSkeleton showTitle={{ width: '50%' }} />);
-    const titleElement = container.querySelector('.h-4');
+    const { container } = render(
+      <DialSkeleton showTitle={{ width: '50%' }} paragraph={false} />,
+    );
+    const contentContainer = container.querySelector(
+      '.flex-1.flex.flex-col.gap-3',
+    );
+    const titleElement = contentContainer?.querySelector('.h-4');
     expect(titleElement).toHaveStyle({ width: '50%' });
   });
 
   it('renders with custom paragraph widths array', () => {
     const { container } = render(
-      <DialSkeleton paragraph={{ rows: 3, width: ['100%', '80%', '60%'] }} />,
+      <DialSkeleton
+        paragraph={{ rows: 3, width: ['100%', '80%', '60%'] }}
+        showTitle={false}
+      />,
     );
-    const paragraphContainer = container.querySelector(
-      '.flex.flex-col.gap-3:last-child',
-    );
+    const paragraphContainer = container.querySelector('.flex.flex-col.gap-3');
     const rows = paragraphContainer?.querySelectorAll('.h-4');
 
     expect(rows?.[0]).toHaveStyle({ width: '100%' });
@@ -188,8 +197,11 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders without paragraph', () => {
     const { container } = render(<DialSkeleton paragraph={false} />);
-    const paragraphContainer = container.querySelector(
-      '.flex.flex-col.gap-3:last-child',
+    const contentContainer = container.querySelector(
+      '.flex-1.flex.flex-col.gap-3',
+    );
+    const paragraphContainer = contentContainer?.querySelector(
+      '.flex.flex-col.gap-3',
     );
     expect(paragraphContainer).not.toBeInTheDocument();
   });
@@ -203,13 +215,12 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   });
 
   it('uses default paragraph widths when not specified', () => {
-    const { container } = render(<DialSkeleton paragraph={{ rows: 3 }} />);
-    const paragraphContainer = container.querySelector(
-      '.flex.flex-col.gap-3:last-child',
+    const { container } = render(
+      <DialSkeleton paragraph={{ rows: 3 }} showTitle={false} />,
     );
+    const paragraphContainer = container.querySelector('.flex.flex-col.gap-3');
     const rows = paragraphContainer?.querySelectorAll('.h-4');
 
-    // First and second rows should be 100%, last row should be 61%
     expect(rows?.[0]).toHaveStyle({ width: '100%' });
     expect(rows?.[1]).toHaveStyle({ width: '100%' });
     expect(rows?.[2]).toHaveStyle({ width: '61%' });
@@ -229,5 +240,27 @@ describe('Dial UI Kit :: DialSkeleton', () => {
       );
       expect(container.firstChild).toBeInTheDocument();
     });
+  });
+
+  it('renders title and paragraph together', () => {
+    const { container } = render(
+      <DialSkeleton showTitle paragraph={{ rows: 2 }} />,
+    );
+    const contentContainer = container.querySelector(
+      '.flex-1.flex.flex-col.gap-3',
+    );
+    const allElements = contentContainer?.querySelectorAll('.h-4');
+
+    expect(allElements?.length).toBe(3);
+  });
+
+  it('renders only title without paragraph', () => {
+    const { container } = render(<DialSkeleton showTitle paragraph={false} />);
+    const contentContainer = container.querySelector(
+      '.flex-1.flex.flex-col.gap-3',
+    );
+    const allElements = contentContainer?.querySelectorAll('.h-4');
+
+    expect(allElements?.length).toBe(1);
   });
 });
