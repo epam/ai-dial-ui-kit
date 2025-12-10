@@ -3,9 +3,10 @@ import { PopupSize } from '@/types/popup';
 import { type FC } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileName } from '@/components/FileName/FileName';
-import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import { DialSkeleton } from '@/components/Skeleton/Skeleton';
 import { DialSkeletonVariant } from '@/types/skeleton';
+import { formatBytes, formatDate } from '../../utils';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface FileMetadataPopupProps {
   open: boolean;
@@ -18,6 +19,8 @@ export interface FileMetadataPopupProps {
   modifiedDateLabel?: string;
   sizeLabel?: string;
   authorLabel?: string;
+  dateLocale?: Intl.LocalesArgument;
+  dateOptions?: Intl.DateTimeFormatOptions;
 }
 
 /**
@@ -35,6 +38,8 @@ export interface FileMetadataPopupProps {
  *   fileMetadata={file}
  *   loading={isLoading}
  *   title="Information"
+ *   dateLocale="en-US"
+ *   dateOptions={{ year: 'numeric', month: 'short', day: '2-digit' }}
  * />
  * ```
  *
@@ -48,6 +53,8 @@ export interface FileMetadataPopupProps {
  * @param [modifiedDateLabel="Modified Date:"] - Label for the modified date field
  * @param [sizeLabel="Size:"] - Label for the size field
  * @param [authorLabel="Author:"] - Label for the author field
+ * @param [dateLocale="en-US"] - Locale for date formatting
+ * @param [dateOptions] - Options for date formatting
  */
 export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
   open,
@@ -60,29 +67,9 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
   modifiedDateLabel = 'Modified Date:',
   sizeLabel = 'Size:',
   authorLabel = 'Author:',
+  dateLocale = 'en-US',
+  dateOptions,
 }) => {
-  const formatBytes = (bytes?: number): string => {
-    if (!bytes || bytes <= 0) return '';
-    const KB = 1024;
-    const MB = KB * 1024;
-    if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
-    if (bytes >= KB) return `${(bytes / KB).toFixed(0)} KB`;
-    return `${bytes} bytes`;
-  };
-
-  const formatDate = (date?: string): string => {
-    if (!date) return '';
-    try {
-      return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-      }).format(new Date(date));
-    } catch {
-      return date;
-    }
-  };
-
   return (
     <DialPopup
       open={open}
@@ -93,12 +80,12 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
     >
       <div className="px-6 py-4">
         <div
-          className="grid gap-4"
+          className="grid gap-x-4 gap-y-4 items-center dial-small"
           style={{ gridTemplateColumns: '100px 1fr' }}
         >
           {loading ? (
             <>
-              <div className="text-secondary text-sm">{nameLabel}</div>
+              <div className="text-secondary">{nameLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="100%"
@@ -106,65 +93,74 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
                 className="bg-layer-2"
               />
 
-              <div className="text-secondary text-sm">{pathLabel}</div>
+              <div className="text-secondary">{modifiedDateLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
-                width="100%"
+                width="90%"
                 height={16}
                 className="bg-layer-2"
               />
 
-              <div className="text-secondary text-sm">{modifiedDateLabel}</div>
+              <div className="text-secondary">{sizeLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
-                width="128px"
+                width="60%"
                 height={16}
                 className="bg-layer-2"
               />
 
-              <div className="text-secondary text-sm">{sizeLabel}</div>
+              <div className="text-secondary">{authorLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
-                width="96px"
+                width="80%"
                 height={16}
                 className="bg-layer-2"
               />
 
-              <div className="text-secondary text-sm">{authorLabel}</div>
+              <div className="text-secondary">{pathLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
-                width="160px"
+                width="70%"
                 height={16}
                 className="bg-layer-2"
               />
             </>
           ) : fileMetadata ? (
             <>
-              <div className="text-secondary text-sm">{nameLabel}</div>
-              <div className="text-primary">
-                <DialFileName
-                  name={fileMetadata.name}
-                  iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+              <div className="text-secondary">{nameLabel}</div>
+              <div className="text-primary min-w-0">
+                <DialEllipsisTooltip
+                  text={<DialFileName name={fileMetadata.name} iconSize={16} />}
                 />
               </div>
 
-              <div className="text-secondary text-sm">{pathLabel}</div>
-              <div className="text-primary font-mono text-sm break-all">
+              <div className="text-secondary">{modifiedDateLabel}</div>
+              <div className="text-primary min-w-0">
+                <DialEllipsisTooltip
+                  text={formatDate(
+                    fileMetadata.updatedAt,
+                    dateLocale,
+                    dateOptions,
+                  )}
+                />
+              </div>
+
+              <div className="text-secondary">{sizeLabel}</div>
+              <div className="text-primary min-w-0">
+                <DialEllipsisTooltip
+                  text={formatBytes(fileMetadata.contentLength)}
+                />
+              </div>
+
+              <div className="text-secondary">{authorLabel}</div>
+              <div className="text-primary min-w-0">
+                <DialEllipsisTooltip text={fileMetadata.author || '—'} />
+              </div>
+
+              <div className="text-secondary">{pathLabel}</div>
+              <div className="text-primary break-words min-w-0">
                 {fileMetadata.path}
               </div>
-
-              <div className="text-secondary text-sm">{modifiedDateLabel}</div>
-              <div className="text-primary">
-                {formatDate(fileMetadata.updatedAt)}
-              </div>
-
-              <div className="text-secondary text-sm">{sizeLabel}</div>
-              <div className="text-primary">
-                {formatBytes(fileMetadata.contentLength)}
-              </div>
-
-              <div className="text-secondary text-sm">{authorLabel}</div>
-              <div className="text-primary">{fileMetadata.author || '—'}</div>
             </>
           ) : null}
         </div>

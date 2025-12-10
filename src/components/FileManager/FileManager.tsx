@@ -97,6 +97,7 @@ import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
 import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
+import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 
 type GridRow = FileManagerGridRow;
 
@@ -456,6 +457,10 @@ export const DialFileManagerView: FC = () => {
     handleUploadConflictDecideForEach,
 
     openMetadataPopup,
+    fileMetadataPopupOptions,
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    closeMetadataPopup,
   } = useFileManagerContext();
 
   const {
@@ -1111,6 +1116,23 @@ export const DialFileManagerView: FC = () => {
         onDuplicate={handleUploadConflictDuplicate}
         onDecideForEach={handleUploadConflictDecideForEach}
         conflictingFiles={uploadConflictingFiles}
+      />
+
+      <FileMetadataPopup
+        open={isMetadataPopupOpen}
+        onClose={closeMetadataPopup}
+        fileMetadata={
+          fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
+        }
+        loading={fileMetadataPopupOptions?.loading}
+        title={fileMetadataPopupOptions?.title}
+        nameLabel={fileMetadataPopupOptions?.nameLabel}
+        pathLabel={fileMetadataPopupOptions?.pathLabel}
+        modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}
+        sizeLabel={fileMetadataPopupOptions?.sizeLabel}
+        authorLabel={fileMetadataPopupOptions?.authorLabel}
+        dateLocale={gridOptions?.dateLocale}
+        dateOptions={gridOptions?.dateOptions}
       />
     </section>
   );

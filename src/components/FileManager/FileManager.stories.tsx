@@ -812,3 +812,197 @@ export const OnlyNameColumn: Story = {
     },
   },
 };
+
+const WithFileMetadataComponent = (args: DialFileManagerProps) => {
+  const [fileMetadata, setFileMetadata] = useState<DialFile | undefined>();
+  const [metadataLoading, setMetadataLoading] = useState(false);
+
+  const handleGetInfo = useCallback(async (file: DialFile) => {
+    setMetadataLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setFileMetadata(file);
+    setMetadataLoading(false);
+  }, []);
+
+  const handleCloseMetadata = useCallback(() => {
+    setFileMetadata(undefined);
+    setMetadataLoading(false);
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          actionLabels: {
+            info: 'Info',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+          ]),
+        }}
+        fileMetadataPopupOptions={{
+          fileMetadata,
+          loading: metadataLoading,
+          clearMetadata: handleCloseMetadata,
+        }}
+        onGetInfo={handleGetInfo}
+      />
+    </div>
+  );
+};
+
+export const WithFileMetadata: Story = {
+  render: WithFileMetadataComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with file metadata popup. Right-click on any file and select "Info" to view metadata. Shows loading skeleton for 1.5 seconds.',
+      },
+    },
+  },
+};
+
+const WithFileMetadataInPopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [fileMetadata, setFileMetadata] = useState<DialFile | undefined>();
+  const [metadataLoading, setMetadataLoading] = useState(false);
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  const handleGetInfo = useCallback(async (file: DialFile) => {
+    setMetadataLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setFileMetadata(file);
+    setMetadataLoading(false);
+  }, []);
+
+  const handleCloseMetadata = useCallback(() => {
+    setFileMetadata(undefined);
+    setMetadataLoading(false);
+  }, []);
+
+  const rootFolder: DialRootFolder = useMemo(() => {
+    const folder = { ...rootItem };
+    switch (activeTab) {
+      case 'my_files':
+        folder.label = 'My Files';
+        break;
+      case 'shared':
+        folder.label = 'Shared with Me';
+        break;
+      case 'organization':
+        folder.label = 'Organization';
+        break;
+      default:
+        folder.label = 'Files';
+        break;
+    }
+    return folder;
+  }, [activeTab]);
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        label="Toggle File Manager"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
+      >
+        <DialFileManager
+          {...args}
+          items={itemsMock}
+          rootItem={rootFolder}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+            actionLabels: {
+              info: 'Info',
+              duplicate: 'Duplicate',
+              copy: 'Copy to',
+              move: 'Move to',
+              download: 'Download',
+              delete: 'Delete',
+              rename: 'Rename',
+            },
+          }}
+          toolbarOptions={{
+            ...(args.toolbarOptions ?? {}),
+            tabs: tabs,
+            activeTab: activeTab,
+            onTabChange: handleTabChange,
+          }}
+          treeOptions={{
+            ...(args.treeOptions ?? {}),
+            collapsed: false,
+            expandedPaths: new Set<string>([rootFolder.path]),
+          }}
+          fileMetadataPopupOptions={{
+            fileMetadata,
+            loading: metadataLoading,
+            clearMetadata: handleCloseMetadata,
+          }}
+          onGetInfo={handleGetInfo}
+          onCopyFiles={(items, destinationFolder) => {
+            alert(
+              `Copying files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${destinationFolder}`,
+            );
+          }}
+          onMoveToFiles={(items, sourceFolder, destinationFolder) => {
+            alert(
+              `Moving files from ${sourceFolder} to ${destinationFolder}: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')}`,
+            );
+          }}
+          onDeleteFiles={(items, sourceFolder) => {
+            alert(
+              `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
+            );
+          }}
+          onDownloadFiles={(items) => {
+            alert(
+              `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
+            );
+          }}
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const InPopupWithMetadata: Story = {
+  render: WithFileMetadataInPopupComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager in a popup with file metadata support. Right-click on any file and select "Info" to view its metadata.',
+      },
+    },
+  },
+};
