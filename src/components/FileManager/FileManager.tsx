@@ -360,6 +360,8 @@ export interface DialFileManagerProps {
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
+ *
+ * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
