@@ -68,7 +68,7 @@ export interface FileManagerContextValue {
   gridRows: FileManagerGridRow[];
 
   handleCopyTo: (destinationFolder: string) => void;
-  handleMoveTo: (destinationFolder: string, sourceFolder: string) => void;
+  handleMoveTo: (destinationFolder: string, sourceFolder?: string) => void;
   handleDuplicate: (files: DialFile[]) => void;
   handleOpenDestinationFolderPopup: (mode: DestinationFolderMode) => void;
   handleCloseDestinationFolderPopup: () => void;
