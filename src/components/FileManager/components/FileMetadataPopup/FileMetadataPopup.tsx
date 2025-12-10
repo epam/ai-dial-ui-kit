@@ -7,6 +7,14 @@ import { DialSkeleton } from '@/components/Skeleton/Skeleton';
 import { DialSkeletonVariant } from '@/types/skeleton';
 import { formatBytes, formatDate } from '@/components/FileManager/utils';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import {
+  LABEL_COLUMN_WIDTH,
+  SKELETON_HEIGHT,
+  LABEL_CLASS,
+  VALUE_CLASS,
+  PATH_CLASS,
+  SKELETON_CLASS,
+} from './constants';
 
 export interface FileMetadataPopupProps {
   open: boolean;
@@ -81,61 +89,61 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
       <div className="px-6 py-4">
         <div
           className="grid gap-x-4 gap-y-4 items-center dial-small"
-          style={{ gridTemplateColumns: '100px 1fr' }}
+          style={{ gridTemplateColumns: `${LABEL_COLUMN_WIDTH}px 1fr` }}
         >
           {loading ? (
             <>
-              <div className="text-secondary">{nameLabel}</div>
+              <div className={LABEL_CLASS}>{nameLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="100%"
-                height={16}
-                className="bg-layer-2"
+                height={SKELETON_HEIGHT}
+                className={SKELETON_CLASS}
               />
 
-              <div className="text-secondary">{modifiedDateLabel}</div>
+              <div className={LABEL_CLASS}>{modifiedDateLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="90%"
-                height={16}
-                className="bg-layer-2"
+                height={SKELETON_HEIGHT}
+                className={SKELETON_CLASS}
               />
 
-              <div className="text-secondary">{sizeLabel}</div>
+              <div className={LABEL_CLASS}>{sizeLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="60%"
-                height={16}
-                className="bg-layer-2"
+                height={SKELETON_HEIGHT}
+                className={SKELETON_CLASS}
               />
 
-              <div className="text-secondary">{authorLabel}</div>
+              <div className={LABEL_CLASS}>{authorLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="80%"
-                height={16}
-                className="bg-layer-2"
+                height={SKELETON_HEIGHT}
+                className={SKELETON_CLASS}
               />
 
-              <div className="text-secondary">{pathLabel}</div>
+              <div className={LABEL_CLASS}>{pathLabel}</div>
               <DialSkeleton
                 variant={DialSkeletonVariant.Text}
                 width="70%"
-                height={16}
-                className="bg-layer-2"
+                height={SKELETON_HEIGHT}
+                className={SKELETON_CLASS}
               />
             </>
           ) : fileMetadata ? (
             <>
-              <div className="text-secondary">{nameLabel}</div>
-              <div className="text-primary min-w-0">
+              <div className={LABEL_CLASS}>{nameLabel}</div>
+              <div className={VALUE_CLASS}>
                 <DialEllipsisTooltip
                   text={<DialFileName name={fileMetadata.name} iconSize={16} />}
                 />
               </div>
 
-              <div className="text-secondary">{modifiedDateLabel}</div>
-              <div className="text-primary min-w-0">
+              <div className={LABEL_CLASS}>{modifiedDateLabel}</div>
+              <div className={VALUE_CLASS}>
                 <DialEllipsisTooltip
                   text={formatDate(
                     fileMetadata.updatedAt,
@@ -145,22 +153,20 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
                 />
               </div>
 
-              <div className="text-secondary">{sizeLabel}</div>
-              <div className="text-primary min-w-0">
+              <div className={LABEL_CLASS}>{sizeLabel}</div>
+              <div className={VALUE_CLASS}>
                 <DialEllipsisTooltip
                   text={formatBytes(fileMetadata.contentLength)}
                 />
               </div>
 
-              <div className="text-secondary">{authorLabel}</div>
-              <div className="text-primary min-w-0">
+              <div className={LABEL_CLASS}>{authorLabel}</div>
+              <div className={VALUE_CLASS}>
                 <DialEllipsisTooltip text={fileMetadata.author || '—'} />
               </div>
 
-              <div className="text-secondary">{pathLabel}</div>
-              <div className="text-primary break-words min-w-0">
-                {fileMetadata.path}
-              </div>
+              <div className={LABEL_CLASS}>{pathLabel}</div>
+              <div className={PATH_CLASS}>{fileMetadata.path}</div>
             </>
           ) : null}
         </div>
