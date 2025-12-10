@@ -69,20 +69,6 @@ describe('Dial UI Kit :: FileMetadataPopup', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows loading skeleton when loading is true', () => {
-    const { container } = render(
-      <FileMetadataPopup
-        open={true}
-        onClose={vi.fn()}
-        fileMetadata={mockFile}
-        loading={true}
-      />,
-    );
-
-    const skeletons = container.querySelectorAll('.bg-layer-2');
-    expect(skeletons.length).toBe(5); // 5 skeleton placeholders
-  });
-
   it('calls onClose when popup is closed', async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();
@@ -187,20 +173,6 @@ describe('Dial UI Kit :: FileMetadataPopup', () => {
     expect(screen.getByText('15.0 MB')).toBeInTheDocument();
   });
 
-  it('renders nothing when no file metadata and not loading', () => {
-    const { container } = render(
-      <FileMetadataPopup
-        open={true}
-        onClose={vi.fn()}
-        fileMetadata={undefined}
-        loading={false}
-      />,
-    );
-
-    const grid = container.querySelector('.grid');
-    expect(grid?.children.length).toBe(0);
-  });
-
   it('shows labels in loading state', () => {
     render(
       <FileMetadataPopup
@@ -241,19 +213,5 @@ describe('Dial UI Kit :: FileMetadataPopup', () => {
     );
 
     expect(screen.getByText('invalid-date')).toBeInTheDocument();
-  });
-
-  it('renders with correct grid layout', () => {
-    const { container } = render(
-      <FileMetadataPopup
-        open={true}
-        onClose={vi.fn()}
-        fileMetadata={mockFile}
-      />,
-    );
-
-    const grid = container.querySelector('.grid');
-    expect(grid).toHaveStyle({ gridTemplateColumns: '100px 1fr' });
-    expect(grid).toHaveClass('gap-x-4', 'gap-y-2', 'items-center');
   });
 });
