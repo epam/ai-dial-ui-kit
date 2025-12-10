@@ -38,7 +38,7 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
-    path: 'All files/Folder 4',
+    path: 'All files',
     items: itemsMock,
     treeOptions: {
       expandedPaths: new Set<string>([
@@ -46,7 +46,6 @@ const meta = {
         'All files/Design',
         'All files/Design/Icons',
         'All files/Design/Icons/SVG',
-        'All files/Folder 4',
         'All files/Media',
         'All files/Projects',
       ]),
