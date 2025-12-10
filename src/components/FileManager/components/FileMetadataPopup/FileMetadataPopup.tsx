@@ -5,7 +5,7 @@ import type { DialFile } from '@/models/file';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialSkeleton } from '@/components/Skeleton/Skeleton';
 import { DialSkeletonVariant } from '@/types/skeleton';
-import { formatBytes, formatDate } from '../../utils';
+import { formatBytes, formatDate } from '@/components/FileManager/utils';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface FileMetadataPopupProps {
