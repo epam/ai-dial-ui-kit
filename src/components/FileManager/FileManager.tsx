@@ -1052,8 +1052,7 @@ export const DialFileManagerView: FC = () => {
           if (destinationFolderMode === DestinationFolderMode.Copy) {
             handleCopyTo(destinationPath);
           } else {
-            const sourcePath = currentPath ?? '/';
-            handleMoveTo(destinationPath, sourcePath);
+            handleMoveTo(destinationPath);
           }
           handleCloseDestinationFolderPopup();
         }}
