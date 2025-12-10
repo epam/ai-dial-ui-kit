@@ -6,6 +6,8 @@ import {
   useCallback,
   useState,
   useRef,
+  type Ref,
+  useImperativeHandle,
 } from 'react';
 import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import {
@@ -52,6 +54,7 @@ import {
   type DialCopiedItem,
   type DialDeletedItem,
   type DialUploadFileItem,
+  type FileManagerActionsRef,
 } from '@/models/file-manager';
 import {
   IconCopy,
@@ -114,6 +117,9 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'moveLabel'
   | 'hiddenFilesSwitcherLabel'
   | 'title'
+  | 'onCreateFolder'
+  | 'onCreateFolderValidate'
+  | 'folderCreationValidationMessages'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
@@ -199,6 +205,23 @@ export interface CreateFolderValidationMessages {
   forbiddenChars?: string;
 }
 
+interface FileManagerGridContext {
+  newFolderTempId?: string;
+  renamedPath?: string;
+  renamedItem?: DialFile;
+  renameTriggerView: FileManagerRenameTriggerView;
+
+  cancelFolderCreation: () => void;
+  saveFolderCreation: (name: string) => Promise<void>;
+  validateFolderName: (name: string) => string | null;
+
+  onRenameValidate: (value: string, item: DialFile) => string | null;
+  onRenameSave: (value: string) => void;
+  onRenameCancel: () => void;
+
+  getDisplayName: (item: DialFile) => string;
+}
+
 export interface DialFileManagerProps {
   path?: string;
   className?: string;
@@ -263,6 +286,8 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
+
+  actionsRef?: Ref<FileManagerActionsRef>;
 }
 
 /**
@@ -424,6 +449,7 @@ export const DialFileManagerView: FC = () => {
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
+    startFolderCreation,
 
     conflictingFiles,
     conflictResolutionOpen,
@@ -438,6 +464,8 @@ export const DialFileManagerView: FC = () => {
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
     handleUploadConflictDecideForEach,
+
+    actionsRef,
   } = useFileManagerContext();
 
   const {
@@ -491,8 +519,17 @@ export const DialFileManagerView: FC = () => {
         headerName: 'Name',
         flex: 1,
         minWidth: 200,
-        cellRenderer: (params: { data: GridRow }) => {
+        cellRenderer: (params: {
+          data: GridRow;
+          context: FileManagerGridContext;
+        }) => {
           const type = params.data.nodeType;
+          const {
+            saveFolderCreation,
+            validateFolderName,
+            cancelFolderCreation,
+            newFolderTempId,
+          } = params.context;
 
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
@@ -512,6 +549,16 @@ export const DialFileManagerView: FC = () => {
               />
             );
           }
+
+          const {
+            renameTriggerView,
+            renamedPath,
+            renamedItem,
+            getDisplayName,
+            onRenameValidate,
+            onRenameSave,
+            onRenameCancel,
+          } = params.context;
 
           const isBeingRenamed =
             renameTriggerView === FileManagerRenameTriggerView.Grid &&
@@ -597,22 +644,7 @@ export const DialFileManagerView: FC = () => {
         },
       },
     ];
-  }, [
-    dateLocale,
-    dateOptions,
-    newFolderTempId,
-    isCompactView,
-    saveFolderCreation,
-    cancelFolderCreation,
-    validateFolderName,
-    renamedPath,
-    renamedItem,
-    renameTriggerView,
-    onRenameValidate,
-    onRenameSave,
-    onRenameCancel,
-    getDisplayName,
-  ]);
+  }, [dateLocale, dateOptions, isCompactView]);
 
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
@@ -800,6 +832,14 @@ export const DialFileManagerView: FC = () => {
     isNewButtonVisible,
     newActions,
   ]);
+
+  useImperativeHandle(
+    actionsRef,
+    () => ({
+      createFolder: startFolderCreation,
+    }),
+    [startFolderCreation],
+  );
 
   const renderFoldersTree = useCallback(() => {
     if (isCompactView) return null;
@@ -1026,6 +1066,19 @@ export const DialFileManagerView: FC = () => {
                           : COMPACT_VIEW_FILE_ROW_HEIGHT,
                     }
                   : {}),
+                context: {
+                  cancelFolderCreation,
+                  saveFolderCreation,
+                  getDisplayName,
+                  onRenameCancel,
+                  onRenameSave,
+                  onRenameValidate,
+                  renameTriggerView,
+                  validateFolderName,
+                  renamedItem,
+                  renamedPath,
+                  newFolderTempId,
+                } as FileManagerGridContext,
               }}
               selectedRows={selectedGridRows}
               onSelectionChangeWithMap={handleSelectionChange}

@@ -9,8 +9,9 @@ import { ButtonVariant } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { useState, useCallback, type FC } from 'react';
+import { useState, useCallback, type FC, useRef } from 'react';
 import { DestinationFolderMode } from '@/types/file-manager';
+import type { FileManagerActionsRef } from '@/models/file-manager';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -78,6 +79,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
+  const fileManagerActionRef = useRef<FileManagerActionsRef>(null);
 
   const handleShowHiddenFilesChange = useCallback((value: boolean) => {
     setShowHiddenFiles(value);
@@ -101,6 +103,9 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               label={addFolderLabel}
               variant={ButtonVariant.Tertiary}
               iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
+              onClick={() => {
+                fileManagerActionRef.current?.createFolder?.();
+              }}
             />
             <div className="border border-l border-primary my-2" />
             <div
@@ -136,6 +141,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     >
       <DialFileManager
         {...restProps}
+        actionsRef={fileManagerActionRef}
         showHiddenFiles={showHiddenFiles}
         onShowHiddenFilesChange={handleShowHiddenFilesChange}
         treeOptions={{

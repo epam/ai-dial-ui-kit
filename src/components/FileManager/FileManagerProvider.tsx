@@ -97,6 +97,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onCreateFolder,
   onCreateFolderValidate,
   folderCreationValidationMessages,
+  actionsRef,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -288,6 +289,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const existingFiles = currentFolder?.items ?? [];
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -440,6 +442,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       destinationFolderPath,
       setDestinationFolderPath,
       title: destinationFolderTitle,
+      onCreateFolder,
+      onCreateFolderValidate,
+      folderCreationValidationMessages,
     },
 
     currentPath,
@@ -535,6 +540,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
     handleUploadConflictDecideForEach,
+    actionsRef,
   };
 
   return (
