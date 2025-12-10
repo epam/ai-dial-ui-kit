@@ -110,13 +110,14 @@ export const useFileClipboard = ({
   );
 
   const handleMoveTo = useCallback(
-    (destinationFolder: string, sourceFolder: string) => {
+    (destinationFolder: string, sourceFolder?: string) => {
+      const sourceFolderPath =
+        sourceFolder || (operationMetadata?.sourceFolder ?? '/');
+
       const result = startConflictResolution(destinationFolder, movedFiles, {
         type: DestinationFolderMode.Move,
-        sourceFolder,
+        sourceFolderPath,
       });
-
-      setOperationMetadata({ type: DestinationFolderMode.Move, sourceFolder });
 
       if (!result.hasConflicts) {
         const resolvedItems = resolveConflictsWithStrategy(
@@ -124,7 +125,7 @@ export const useFileClipboard = ({
           movedFiles,
           true,
         );
-        onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+        onMoveToFiles?.(resolvedItems, sourceFolderPath, destinationFolder);
         onMoveSuccess?.();
         clearState();
       }
@@ -136,6 +137,7 @@ export const useFileClipboard = ({
       onMoveToFiles,
       onMoveSuccess,
       clearState,
+      operationMetadata,
     ],
   );
 
@@ -204,13 +206,18 @@ export const useFileClipboard = ({
   const handleSetMovedFiles = useCallback(
     (files: DialFile[]) => {
       setMovedFiles(files);
+      setOperationMetadata({
+        type: DestinationFolderMode.Move,
+        sourceFolder: files[0]?.folderId,
+      });
+
       if (getMoveHeader && files.length > 0) {
         setDestinationFolderTitle(getMoveHeader(files.length, files[0]?.name));
       } else {
         setDestinationFolderTitle(undefined);
       }
     },
-    [getMoveHeader],
+    [getMoveHeader, setOperationMetadata],
   );
 
   return {

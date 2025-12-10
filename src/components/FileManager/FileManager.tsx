@@ -1060,14 +1060,11 @@ export const DialFileManagerView: FC = () => {
       </div>
 
       <FileManagerDeleteConfirmationPopup
+        {...deleteConfirmationOptions}
         open={deleteConfirmationOpen}
         itemsToDelete={itemsToDelete}
         onClose={closeDeleteConfirmation}
         onConfirm={confirmDelete}
-        cancelLabel={deleteConfirmationOptions?.cancelLabel}
-        confirmLabel={deleteConfirmationOptions?.confirmLabel}
-        titleRenderer={deleteConfirmationOptions?.titleRenderer}
-        contentRenderer={deleteConfirmationOptions?.contentRenderer}
       />
       <DestinationFolderPopup
         {...destinationFolderPopupOptions}
@@ -1079,8 +1076,7 @@ export const DialFileManagerView: FC = () => {
           if (destinationFolderMode === DestinationFolderMode.Copy) {
             handleCopyTo(destinationPath);
           } else {
-            const sourcePath = currentPath ?? '/';
-            handleMoveTo(destinationPath, sourcePath);
+            handleMoveTo(destinationPath);
           }
           handleCloseDestinationFolderPopup();
         }}
