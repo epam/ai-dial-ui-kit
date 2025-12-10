@@ -5,6 +5,7 @@ import {
   DialSkeletonAvatarSize,
   DialSkeletonAvatarShape,
 } from '@/types/skeleton';
+import { getAvatarSize } from './utils';
 
 export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   active?: boolean;
@@ -22,19 +23,6 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   width?: string | number;
   height?: string | number;
 }
-
-const getAvatarSize = (size?: number | DialSkeletonAvatarSize): number => {
-  if (typeof size === 'number') return size;
-  switch (size) {
-    case DialSkeletonAvatarSize.Small:
-      return 32;
-    case DialSkeletonAvatarSize.Large:
-      return 64;
-    case DialSkeletonAvatarSize.Default:
-    default:
-      return 40;
-  }
-};
 
 /**
  * DialSkeleton
@@ -102,7 +90,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   width,
   height,
   className,
-  ...rest
+  ...props
 }) => {
   if (!loading && children) {
     return <>{children}</>;
@@ -127,12 +115,12 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
     if (height)
       style.height = typeof height === 'number' ? `${height}px` : height;
 
-    return <div className={variantClass} style={style} {...rest} />;
+    return <div className={variantClass} style={style} {...props} />;
   }
 
-  const showAvatar = avatar !== false;
-  const displayTitle = showTitle !== false;
-  const showParagraph = paragraph !== false;
+  const showAvatar = !!avatar;
+  const displayTitle = !!showTitle;
+  const showParagraph = !!paragraph;
 
   const avatarConfig = typeof avatar === 'object' ? avatar : {};
   const titleConfig = typeof showTitle === 'object' ? showTitle : {};
@@ -156,7 +144,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   };
 
   return (
-    <div className={mergeClasses('flex gap-4', className)} {...rest}>
+    <div {...props} className={mergeClasses('flex gap-4', className)}>
       {showAvatar && (
         <div
           className={mergeClasses(
