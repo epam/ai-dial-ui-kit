@@ -11,7 +11,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { useState, useCallback, type FC, useRef } from 'react';
 import { DestinationFolderMode } from '@/types/file-manager';
-import type { FileManagerActionsRef } from '@/models/file-manager';
+import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -79,7 +79,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
-  const fileManagerActionRef = useRef<FileManagerActionsRef>(null);
+  const fileManagerActionRef = useRef<DialFileManagerActionsRef>(null);
 
   const handleShowHiddenFilesChange = useCallback((value: boolean) => {
     setShowHiddenFiles(value);

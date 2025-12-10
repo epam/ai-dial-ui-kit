@@ -16,7 +16,7 @@ import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
 import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
 import type { DestinationFolderMode } from '@/types/file-manager';
-import type { FileManagerActionsRef } from '@/models/file-manager';
+import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
 export interface FileManagerGridRow {
   id: string;
@@ -144,7 +144,7 @@ export interface FileManagerContextValue {
     decisions: FileConflictDecision[],
   ) => void;
 
-  actionsRef?: Ref<FileManagerActionsRef>;
+  actionsRef?: Ref<DialFileManagerActionsRef>;
 }
 
 export const FileManagerContext = createContext<

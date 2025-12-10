@@ -54,7 +54,7 @@ import {
   type DialCopiedItem,
   type DialDeletedItem,
   type DialUploadFileItem,
-  type FileManagerActionsRef,
+  type DialFileManagerActionsRef,
 } from '@/models/file-manager';
 import {
   IconCopy,
@@ -287,7 +287,7 @@ export interface DialFileManagerProps {
     destinationFolder: string,
   ) => void;
 
-  actionsRef?: Ref<FileManagerActionsRef>;
+  actionsRef?: Ref<DialFileManagerActionsRef>;
 }
 
 /**

@@ -17,6 +17,6 @@ export interface DialUploadFileItem {
   name: string;
 }
 
-export interface FileManagerActionsRef {
+export interface DialFileManagerActionsRef {
   createFolder: () => void;
 }
