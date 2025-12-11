@@ -1041,3 +1041,23 @@ export const WithUnshareAction: Story = {
     </div>
   ),
 };
+
+export const WithOwnerColumn: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [
+        FileManagerColumnKey.Name,
+        FileManagerColumnKey.UpdatedAt,
+        FileManagerColumnKey.Size,
+        FileManagerColumnKey.Owner,
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager with Owner column instead of Author.',
+      },
+    },
+  },
+};
