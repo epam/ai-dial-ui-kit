@@ -28,6 +28,7 @@ export interface FileManagerGridRow {
   nodeType: DialFileNodeType;
   extension?: string;
   isTemporary?: boolean;
+  owner?: string;
 }
 
 export interface FileManagerContextValue {
