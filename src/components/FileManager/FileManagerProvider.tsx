@@ -328,6 +328,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       nodeType: node.nodeType,
       extension: node.extension,
       isTemporary: false,
+      owner: node.owner,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -341,6 +342,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         nodeType: DialFileNodeType.FOLDER,
         extension: undefined,
         isTemporary: true,
+        owner: undefined,
       });
     }
 

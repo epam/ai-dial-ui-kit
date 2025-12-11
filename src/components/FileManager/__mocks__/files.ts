@@ -5,6 +5,28 @@ import {
   type DialFile,
 } from '@/models/file';
 
+const authors = ['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson'];
+const owners = [
+  'James Wilson',
+  'Emma Thompson',
+  'Michael Chen',
+  'Sarah Anderson',
+  'Daniel Martinez',
+  'Olivia Brown',
+  'Christopher Lee',
+  'Sophia Garcia',
+  'Matthew Rodriguez',
+  'Isabella Davis',
+  'Andrew Taylor',
+  'Ava Johnson',
+  'William Moore',
+  'Mia Jackson',
+  'Robert White',
+  'Charlotte Harris',
+  'David Miller',
+  'Amelia Martin',
+];
+
 /**
  * Helper to build a very deep nested folder chain:
  * All files/<rootName>/Level 01/.../Level NN
@@ -31,8 +53,6 @@ function buildDeepBranch(
   let current = deepRoot;
   let parentId = rootId;
 
-  const authors = ['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson'];
-
   for (let i = startIndex; i < startIndex + levels; i++) {
     const id = `${rootId}-l${String(i).padStart(2, '0')}`;
     const name = `Level ${String(i).padStart(2, '0')}`;
@@ -49,7 +69,6 @@ function buildDeepBranch(
       items: [],
     };
 
-    // Insert a file at some depths (3, 6, 9, 12, 15...) to increase complexity
     if (i % 3 === 0) {
       folderNode.items!.push({
         id: `${id}-readme`,
@@ -65,6 +84,7 @@ function buildDeepBranch(
         permissions: [DialFilePermission.READ],
         contentLength: 1024,
         author: authors[i % authors.length],
+        owner: owners[i % owners.length],
       });
     }
     if (i % 5 === 0) {
@@ -82,6 +102,7 @@ function buildDeepBranch(
         updatedAt: `2025-01-${String(17 + Math.floor(i / 2)).padStart(2, '0')}`,
         permissions: [DialFilePermission.READ, DialFilePermission.SHARE],
         author: authors[(i + 1) % authors.length],
+        owner: owners[(i + 1) % owners.length],
       });
     }
 
@@ -152,7 +173,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 5120,
-                        author: 'Sarah Anderson',
+                        author: authors[0],
+                        owner: owners[0],
                       },
                       {
                         id: 'ico-settings',
@@ -166,7 +188,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 61440 * 1000,
-                        author: 'Michael Chen',
+                        author: authors[3],
+                        owner: owners[2],
                       },
                       {
                         id: '.hidden-file',
@@ -180,7 +203,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 128,
-                        author: 'Emma Thompson',
+                        author: authors[2],
+                        owner: owners[3],
                       },
                       {
                         id: '.hidden-folder',
@@ -204,7 +228,8 @@ export const itemsMock: DialFile[] = [
                             folderId: '.hidden-folder',
                             updatedAt: '2025-01-10',
                             contentLength: 256,
-                            author: 'James Wilson',
+                            author: authors[2],
+                            owner: owners[3],
                           },
                         ],
                       },
@@ -220,7 +245,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 12,
-                        author: 'Jennifer Martinez',
+                        author: authors[2],
+                        owner: owners[5],
                       },
                       {
                         id: 'logo-svg',
@@ -234,7 +260,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 5120,
-                        author: 'Robert Taylor',
+                        author: authors[3],
+                        owner: owners[6],
                       },
                       {
                         id: 'logo-extended-svg',
@@ -248,7 +275,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Linda Garcia',
+                        author: authors[2],
+                        owner: owners[7],
                       },
                       {
                         id: 'logo-extended-svg-2',
@@ -262,7 +290,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Kevin Brown',
+                        author: authors[2],
+                        owner: owners[8],
                       },
                       {
                         id: 'logo-extended-svg-3',
@@ -276,7 +305,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Patricia Lee',
+                        author: authors[2],
+                        owner: owners[9],
                       },
                       {
                         id: 'logo-extended-svg-4',
@@ -290,7 +320,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Daniel White',
+                        author: authors[3],
+                        owner: owners[10],
                       },
                       {
                         id: 'logo-svg-5',
@@ -304,7 +335,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Nancy Harris',
+                        author: authors[2],
+                        owner: owners[4],
                       },
                       {
                         id: 'logo-svg-6',
@@ -318,7 +350,8 @@ export const itemsMock: DialFile[] = [
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
                         contentLength: 15120,
-                        author: 'Christopher Clark',
+                        author: authors[1],
+                        owner: owners[5],
                       },
                     ],
                   },

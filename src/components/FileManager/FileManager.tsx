@@ -668,6 +668,16 @@ export const DialFileManagerView: FC = () => {
           return params.data.author;
         },
       },
+      {
+        colId: FileManagerColumnKey.Owner,
+        field: 'owner',
+        headerName: 'Owner',
+        width: 200,
+        suppressSizeToFit: true,
+        cellRenderer: (params: { data: GridRow }) => {
+          return params.data.owner;
+        },
+      },
     ];
   }, [dateLocale, dateOptions, isCompactView]);
 
