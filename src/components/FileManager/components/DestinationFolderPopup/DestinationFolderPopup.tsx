@@ -104,7 +104,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               variant={ButtonVariant.Tertiary}
               iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
               onClick={() => {
-                fileManagerActionRef.current?.createFolder?.();
+                fileManagerActionRef.current?.createFolder();
               }}
             />
             <div className="border border-l border-primary my-2" />
