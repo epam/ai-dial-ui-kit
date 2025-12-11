@@ -7,18 +7,24 @@ import {
 
 const authors = ['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson'];
 const owners = [
-  'Tony Stark',
-  'Steve Rogers',
-  'Natasha Romanoff',
-  'Bruce Banner',
-  'Thor Odinson',
-  'Peter Parker',
-  'Stephen Strange',
-  'Scott Lang',
-  'Wanda Maximoff',
-  'Bucky Barnes',
-  'Clint Barton',
-  'Peter Quill',
+  'James Wilson',
+  'Emma Thompson',
+  'Michael Chen',
+  'Sarah Anderson',
+  'Daniel Martinez',
+  'Olivia Brown',
+  'Christopher Lee',
+  'Sophia Garcia',
+  'Matthew Rodriguez',
+  'Isabella Davis',
+  'Andrew Taylor',
+  'Ava Johnson',
+  'William Moore',
+  'Mia Jackson',
+  'Robert White',
+  'Charlotte Harris',
+  'David Miller',
+  'Amelia Martin',
 ];
 
 /**
