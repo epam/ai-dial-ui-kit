@@ -11,6 +11,7 @@ import type {
   DeleteConfirmationOptions,
   DialFileManagerDestinationFolderPopupOptions,
   DialFileManagerConflictResolutionPopupOptions,
+  FileMetadataPopupOptions,
 } from './FileManager';
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
@@ -43,6 +44,7 @@ export interface FileManagerContextValue {
   deleteConfirmationOptions?: DeleteConfirmationOptions;
   destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
+  fileMetadataPopupOptions?: FileMetadataPopupOptions;
 
   compactViewWidthBreakpoint?: number;
 
@@ -143,6 +145,12 @@ export interface FileManagerContextValue {
   handleUploadConflictDecideForEach: (
     decisions: FileConflictDecision[],
   ) => void;
+
+  isMetadataPopupOpen: boolean;
+  selectedFileForMetadata?: DialFile;
+  openMetadataPopup: (file: DialFile) => void;
+  closeMetadataPopup: () => void;
+  onGetInfo?: (file: DialFile) => void | Promise<void>;
 
   actionsRef?: Ref<DialFileManagerActionsRef>;
 }

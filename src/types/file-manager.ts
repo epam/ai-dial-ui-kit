@@ -8,9 +8,10 @@ export enum DialFileManagerActions {
   Duplicate = 'duplicate',
   Copy = 'copy',
   Move = 'move',
-  Rename = 'rename',
   Download = 'download',
   Delete = 'delete',
+  Rename = 'rename',
+  Info = 'info',
 }
 
 export enum DialFileManagerConflictActions {
