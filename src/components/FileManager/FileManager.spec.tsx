@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DialFileManager } from './FileManager';
 import { itemsMock } from './__mocks__/files';
+import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
 interface GridRowLike {
   name?: string;
@@ -236,5 +237,32 @@ describe('Dial UI Kit :: FileManager', () => {
     const grid = await waitForGridTable();
     const textboxesInsideGrid = within(grid).queryAllByRole('textbox');
     expect(textboxesInsideGrid.length).toBe(0);
+  });
+
+  test('actionsRef.createFolder adds a new row to the grid', async () => {
+    const actionsRef = React.createRef<DialFileManagerActionsRef>();
+
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        path="/All files"
+        actionsRef={actionsRef}
+        treeOptions={{
+          expandedPaths: new Set(['/All files']),
+          showFiles: true,
+        }}
+      />,
+    );
+
+    const rowsBefore = screen.getAllByRole('row').length;
+
+    expect(actionsRef.current).not.toBeNull();
+    expect(typeof actionsRef.current?.createFolder).toBe('function');
+    actionsRef.current?.createFolder();
+
+    await waitFor(() => {
+      const rowsAfter = screen.getAllByRole('row').length;
+      expect(rowsAfter).toBe(rowsBefore + 1);
+    });
   });
 });
