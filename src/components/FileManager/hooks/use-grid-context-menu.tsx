@@ -11,6 +11,7 @@ import {
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
+import IconUnshare from '@/assets/icons/unshare.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileNodeType } from '@/models/file';
 
@@ -23,6 +24,7 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
+    [DialFileManagerActions.Unshare]?: string;
   };
   onDuplicate: (file: DialFile) => void;
   onCopy: (file: DialFile) => void;
@@ -31,6 +33,7 @@ export interface UseGridContextMenuProps {
   onRename: (filePath: string) => void;
   onDelete: (file: DialFile, parentFolderPath: string) => void;
   onInfo: (file: DialFile) => void;
+  onUnshare: (file: DialFile) => void;
 }
 
 export const useGridContextMenu = ({
@@ -42,6 +45,7 @@ export const useGridContextMenu = ({
   onRename,
   onDelete,
   onInfo,
+  onUnshare,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -135,6 +139,21 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (actionLabels[DialFileManagerActions.Unshare]) {
+        items.push({
+          key: DialFileManagerActions.Unshare,
+          label: actionLabels[DialFileManagerActions.Unshare],
+          icon: (
+            <IconUnshare
+              width={BASE_ICON_PROPS.size}
+              height={BASE_ICON_PROPS.size}
+              className="text-secondary"
+            />
+          ),
+          onClick: () => onUnshare(file),
+        });
+      }
+
       return items;
     };
   }, [
@@ -146,5 +165,6 @@ export const useGridContextMenu = ({
     onRename,
     onDelete,
     onInfo,
+    onUnshare,
   ]);
 };

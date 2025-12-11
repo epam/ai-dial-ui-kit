@@ -98,6 +98,7 @@ import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-ac
 import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
+import IconUnshare from '@/assets/icons/unshare.svg?react';
 
 type GridRow = FileManagerGridRow;
 
@@ -150,6 +151,7 @@ export interface FileTreeOptions
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
+    [DialFileManagerActions.Unshare]?: string;
   };
 }
 
@@ -180,6 +182,7 @@ export interface GridOptions
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
+    [DialFileManagerActions.Unshare]?: string;
   };
 }
 
@@ -280,6 +283,8 @@ export interface DialFileManagerProps {
 
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
+
+  onUnshareFile?: (file: DialFile) => void | Promise<void>;
 }
 
 /**
@@ -461,6 +466,8 @@ export const DialFileManagerView: FC = () => {
     isMetadataPopupOpen,
     selectedFileForMetadata,
     closeMetadataPopup,
+
+    onUnshareFile,
   } = useFileManagerContext();
 
   const {
@@ -706,6 +713,20 @@ export const DialFileManagerView: FC = () => {
             onClick: () => onTreeRename(file.path),
           });
         }
+        if (treeOptions.actionLabels[DialFileManagerActions.Unshare]) {
+          items.push({
+            key: 'unshare',
+            label: treeOptions.actionLabels[DialFileManagerActions.Unshare],
+            icon: (
+              <IconUnshare
+                width={BASE_ICON_PROPS.size}
+                height={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onUnshareFile?.(file),
+          });
+        }
         if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
           items.push({
             key: 'delete',
@@ -729,6 +750,7 @@ export const DialFileManagerView: FC = () => {
       onTreeRename,
       openDeleteConfirmation,
       treeOptions,
+      onUnshareFile, // добавлено
     ],
   );
 
@@ -910,6 +932,7 @@ export const DialFileManagerView: FC = () => {
     onDelete: (file, parentFolderPath) =>
       openDeleteConfirmation([file], parentFolderPath),
     onInfo: (file) => openMetadataPopup(file),
+    onUnshare: (file) => onUnshareFile?.(file),
   });
 
   const getGridContextMenuItems = useCallback(

@@ -89,6 +89,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   folderCreationValidationMessages,
   fileMetadataPopupOptions,
   onGetInfo,
+  onUnshareFile,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -547,6 +548,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openMetadataPopup,
     closeMetadataPopup: handleCloseMetadataPopup,
     onGetInfo,
+    onUnshareFile,
   };
 
   return (

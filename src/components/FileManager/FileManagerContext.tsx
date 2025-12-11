@@ -150,6 +150,7 @@ export interface FileManagerContextValue {
   openMetadataPopup: (file: DialFile) => void;
   closeMetadataPopup: () => void;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
+  onUnshareFile?: (file: DialFile) => void | Promise<void>;
 }
 
 export const FileManagerContext = createContext<
