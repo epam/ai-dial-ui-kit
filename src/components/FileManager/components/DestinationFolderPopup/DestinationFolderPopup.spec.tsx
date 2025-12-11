@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
@@ -484,11 +484,11 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     );
 
     const rowsBefore = await screen.findAllByRole('row');
-
     fireEvent.click(screen.getByRole('button', { name: 'Add folder' }));
 
-    const rowsAfter = await screen.findAllByRole('row');
-
-    expect(rowsAfter.length).toBe(rowsBefore.length + 1);
+    await waitFor(() => {
+      const rowsAfter = screen.getAllByRole('row');
+      expect(rowsAfter.length).toBe(rowsBefore.length + 1);
+    });
   });
 });
