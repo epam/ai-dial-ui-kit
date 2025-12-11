@@ -783,7 +783,7 @@ export const DialFileManagerView: FC = () => {
       onTreeRename,
       openDeleteConfirmation,
       treeOptions,
-      onUnshareFile, // добавлено
+      onUnshareFile,
     ],
   );
 
