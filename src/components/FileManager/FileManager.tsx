@@ -97,6 +97,7 @@ import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
 import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
+import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 
 type GridRow = FileManagerGridRow;
 
@@ -118,6 +119,18 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
 };
+
+export interface FileMetadataPopupOptions {
+  fileMetadata?: DialFile;
+  loading?: boolean;
+  clearMetadata?: () => void;
+  title?: string;
+  nameLabel?: string;
+  pathLabel?: string;
+  modifiedDateLabel?: string;
+  sizeLabel?: string;
+  authorLabel?: string;
+}
 
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
@@ -166,6 +179,7 @@ export interface GridOptions
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
+    [DialFileManagerActions.Info]?: string;
   };
 }
 
@@ -263,6 +277,9 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
+
+  fileMetadataPopupOptions?: FileMetadataPopupOptions;
+  onGetInfo?: (file: DialFile) => void | Promise<void>;
 }
 
 /**
@@ -438,6 +455,12 @@ export const DialFileManagerView: FC = () => {
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
     handleUploadConflictDecideForEach,
+
+    openMetadataPopup,
+    fileMetadataPopupOptions,
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    closeMetadataPopup,
   } = useFileManagerContext();
 
   const {
@@ -886,6 +909,7 @@ export const DialFileManagerView: FC = () => {
     onRename: onGridRename,
     onDelete: (file, parentFolderPath) =>
       openDeleteConfirmation([file], parentFolderPath),
+    onInfo: (file) => openMetadataPopup(file),
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1088,6 +1112,23 @@ export const DialFileManagerView: FC = () => {
         onDuplicate={handleUploadConflictDuplicate}
         onDecideForEach={handleUploadConflictDecideForEach}
         conflictingFiles={uploadConflictingFiles}
+      />
+
+      <FileMetadataPopup
+        open={isMetadataPopupOpen}
+        onClose={closeMetadataPopup}
+        fileMetadata={
+          fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
+        }
+        loading={fileMetadataPopupOptions?.loading}
+        title={fileMetadataPopupOptions?.title}
+        nameLabel={fileMetadataPopupOptions?.nameLabel}
+        pathLabel={fileMetadataPopupOptions?.pathLabel}
+        modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}
+        sizeLabel={fileMetadataPopupOptions?.sizeLabel}
+        authorLabel={fileMetadataPopupOptions?.authorLabel}
+        dateLocale={gridOptions?.dateLocale}
+        dateOptions={gridOptions?.dateOptions}
       />
     </section>
   );

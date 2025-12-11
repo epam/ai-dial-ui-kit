@@ -12,6 +12,7 @@ import { DialFileNodeType } from '@/models/file';
 import {
   collectAllDescendants,
   findFolderForPath,
+  formatBytes,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
@@ -34,18 +35,7 @@ import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-pa
 import { useNewActions } from './hooks/use-new-actions';
 import { useFolderCreation } from './hooks/use-folder-creation';
 import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
-
-/**
- * Formats bytes into a short, human-readable string.
- */
-const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '';
-  const KB = 1024;
-  const MB = KB * 1024;
-  if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
-  if (bytes >= KB) return `${(bytes / KB).toFixed(0)} KB`;
-  return `${bytes} bytes`;
-};
+import { useFileMetadata } from './hooks/use-file-metadata';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -97,6 +87,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onCreateFolder,
   onCreateFolderValidate,
   folderCreationValidationMessages,
+  fileMetadataPopupOptions,
+  onGetInfo,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -288,6 +280,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const existingFiles = currentFolder?.items ?? [];
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -419,6 +412,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     additionalButtons: treeOptions?.additionalButtons,
   });
 
+  const {
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup,
+  } = useFileMetadata({ onGetInfo });
+
+  const handleCloseMetadataPopup = useCallback(() => {
+    closeMetadataPopup();
+    fileMetadataPopupOptions?.clearMetadata?.();
+  }, [closeMetadataPopup, fileMetadataPopupOptions]);
+
   const value: FileManagerContextValue = {
     className,
     items,
@@ -535,6 +540,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
     handleUploadConflictDecideForEach,
+
+    fileMetadataPopupOptions,
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup: handleCloseMetadataPopup,
+    onGetInfo,
   };
 
   return (

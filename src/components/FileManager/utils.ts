@@ -54,3 +54,59 @@ export const isHiddenDotFile = (node: DialFile) => {
   const name = node.name ?? node.path.split('/').pop() ?? '';
   return name.startsWith('.');
 };
+
+/**
+ * Formats bytes into a short, human-readable string.
+ *
+ * @param bytes - Number of bytes to format
+ * @returns Formatted string (e.g., "15.0 MB", "150 KB", "512 bytes")
+ *
+ * @example
+ * ```ts
+ * formatBytes(2150) // "2 KB"
+ * formatBytes(15728640) // "15.0 MB"
+ * formatBytes(512) // "512 bytes"
+ * ```
+ */
+export const formatBytes = (bytes?: number): string => {
+  if (!bytes || bytes <= 0) return '';
+  const KB = 1024;
+  const MB = KB * 1024;
+  if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
+  if (bytes >= KB) return `${(bytes / KB).toFixed(0)} KB`;
+  return `${bytes} bytes`;
+};
+
+/**
+ * Formats date string into a localized date string.
+ *
+ * @param date - ISO date string or any valid date string
+ * @param locale - BCP 47 language tag (e.g., 'en-US', 'ru-RU')
+ * @param options - Intl.DateTimeFormat options
+ * @returns Formatted date string or original string if formatting fails
+ *
+ * @example
+ * ```ts
+ * formatDate('2025-09-05T10:30:00Z', 'en-US', { year: 'numeric', month: 'short', day: '2-digit' })
+ * // "Sep 05, 2025"
+ *
+ * formatDate('2025-09-05T10:30:00Z', 'ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })
+ * // "5 сентября 2025 г."
+ * ```
+ */
+export const formatDate = (
+  date?: string,
+  locale: Intl.LocalesArgument = 'en-US',
+  options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  },
+): string => {
+  if (!date) return '';
+  try {
+    return new Intl.DateTimeFormat(locale, options).format(new Date(date));
+  } catch {
+    return date;
+  }
+};
