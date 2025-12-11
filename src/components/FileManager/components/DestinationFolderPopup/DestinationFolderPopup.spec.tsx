@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
@@ -464,5 +464,31 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     );
 
     expect(screen.getByText('Documents')).toBeInTheDocument();
+  });
+
+  test('clicking Add folder inserts a new placeholder row in the FileManager grid', async () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    const rowsBefore = await screen.findAllByRole('row');
+    fireEvent.click(screen.getByRole('button', { name: 'Add folder' }));
+
+    await waitFor(() => {
+      const rowsAfter = screen.getAllByRole('row');
+      expect(rowsAfter.length).toBe(rowsBefore.length + 1);
+    });
   });
 });

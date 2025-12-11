@@ -1,4 +1,4 @@
-import { createContext, type DragEvent, type RefObject } from 'react';
+import { createContext, type DragEvent, type Ref, type RefObject } from 'react';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
@@ -17,6 +17,7 @@ import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
 import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
 import type { DestinationFolderMode } from '@/types/file-manager';
+import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
 export interface FileManagerGridRow {
   id: string;
@@ -151,6 +152,8 @@ export interface FileManagerContextValue {
   openMetadataPopup: (file: DialFile) => void;
   closeMetadataPopup: () => void;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
+
+  actionsRef?: Ref<DialFileManagerActionsRef>;
 }
 
 export const FileManagerContext = createContext<
