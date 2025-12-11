@@ -275,6 +275,12 @@ const PopupComponent = (args: DialFileManagerProps) => {
             args.onPathChange?.(path);
           }}
           items={itemsMock}
+          sharedByMePaths={
+            new Set([
+              'All files/Design/Icons/SVG/24px/alert.svg',
+              'All files/Empty folder',
+            ])
+          }
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,

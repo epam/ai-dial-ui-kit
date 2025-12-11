@@ -154,6 +154,8 @@ export interface FileManagerContextValue {
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
   actionsRef?: Ref<DialFileManagerActionsRef>;
+
+  sharedByMePaths?: Set<string>;
 }
 
 export const FileManagerContext = createContext<
