@@ -14,10 +14,22 @@ const DEFAULT_VALIDATION_MESSAGES: Required<RenameValidationMessages> = {
   duplicateName: 'An item with this name already exists',
 };
 
+function trimTrailingSlashes(path: string): string {
+  let i = path.length;
+  while (i > 0 && path[i - 1] === '/') i--;
+  return path.slice(0, i);
+}
+
 function changeLastPathSegment(path: string, newName: string): string {
-  const parts = path.replace(/\/+$/, '').split('/');
-  parts[parts.length - 1] = newName;
-  return parts.join('/');
+  const trimmed = trimTrailingSlashes(path);
+  const lastSlashIndex = trimmed.lastIndexOf('/');
+
+  if (lastSlashIndex === -1) {
+    return newName;
+  }
+
+  const base = trimmed.slice(0, lastSlashIndex + 1);
+  return base + newName;
 }
 
 function getFileNameWithoutExtension(name: string): string {
