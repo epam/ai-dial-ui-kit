@@ -21,6 +21,7 @@ export interface DialFoldersTreeProps {
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
   loadedPaths?: Set<string>;
+  sharedByMePaths?: Set<string>;
   selectedPath?: string;
   renamedPath?: string;
   showFiles?: boolean;
@@ -110,6 +111,7 @@ export interface DialFoldersTreeProps {
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
  * @param [loadedPaths] - Set of folder paths that have loaded.
+ * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges).
  * @param [selectedPath] - Path representing the currently selected folder or file.
  * @param [renamedPath] - Path of the folder or file currently being edited.
  * @param [showFiles=false] - Whether to show files in addition to folders.
@@ -137,6 +139,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   expandedPaths: externalExpandedPaths,
   loadingPaths = new Set(),
   loadedPaths = new Set(),
+  sharedByMePaths = new Set(),
   selectedPath,
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
@@ -182,6 +185,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const isLoading = loadingPaths.has(path);
       const isRenaming = renamedPath === path;
       const isLoaded = loadedPaths.has(path);
+      const isSharedByMe = sharedByMePaths.has(path);
       const isRootFolder =
         rootItemPath && rootItemLabel && path === rootItemPath && isFolder;
 
@@ -236,6 +240,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       name={isRootFolder ? rootItemLabel : name}
                       type={isFolder ? DialItemType.Folder : DialItemType.File}
                       loading={isLoading}
+                      shared={isSharedByMe}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                       {...(!isRootFolder && {
                         editing: isRenaming,

@@ -12,6 +12,7 @@ interface DialFileManagerItemSummaryCellProps {
   nodeType: DialFileNodeType;
   size?: string;
   updatedAt?: string;
+  shared?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
 }
@@ -60,7 +61,16 @@ interface DialFileManagerItemSummaryCellProps {
  */
 export const DialFileManagerItemSummaryCell: FC<
   DialFileManagerItemSummaryCellProps
-> = ({ id, name, nodeType, size, updatedAt, dateLocale, dateOptions }) => {
+> = ({
+  id,
+  name,
+  nodeType,
+  size,
+  updatedAt,
+  dateLocale,
+  dateOptions,
+  shared,
+}) => {
   return (
     <div className="flex">
       <div className="flex flex-1 min-w-0">
@@ -72,6 +82,7 @@ export const DialFileManagerItemSummaryCell: FC<
           }
           name={name}
           elementId={id}
+          shared={shared}
           iconSize={BASE_FILE_MANAGER_ICON_SIZE}
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">

@@ -227,6 +227,7 @@ interface FileManagerGridContext {
   renamedPath?: string;
   renamedItem?: DialFile;
   renameTriggerView: FileManagerRenameTriggerView;
+  sharedByMePaths?: Set<string>;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -246,6 +247,7 @@ export interface DialFileManagerProps {
   items?: DialFile[];
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
+  sharedByMePaths?: Set<string>;
 
   showHiddenFiles?: boolean;
   onShowHiddenFilesChange?: (value: boolean) => void;
@@ -382,6 +384,8 @@ export interface DialFileManagerProps {
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
  *
+ * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges) in the tree and grid.
+ *
  * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
@@ -412,6 +416,7 @@ export const DialFileManagerView: FC = () => {
     destinationFolderPopupOptions,
     conflictResolutionPopupOptions,
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+    sharedByMePaths,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -560,7 +565,10 @@ export const DialFileManagerView: FC = () => {
             validateFolderName,
             cancelFolderCreation,
             newFolderTempId,
+            sharedByMePaths,
           } = params.context;
+
+          const isSharedByMe = sharedByMePaths?.has(params.data.path);
 
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
@@ -569,6 +577,7 @@ export const DialFileManagerView: FC = () => {
                 type={DialItemType.Folder}
                 elementId={`new-folder-${params.data.id}`}
                 editing={true}
+                shared={isSharedByMe}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
@@ -606,6 +615,7 @@ export const DialFileManagerView: FC = () => {
                 }
                 elementId={`rename-${params.data.id}`}
                 editing={true}
+                shared={isSharedByMe}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={(value) => onRenameValidate(value, renamedItem)}
                 onSave={onRenameSave}
@@ -625,6 +635,7 @@ export const DialFileManagerView: FC = () => {
                 name={params.data.name}
                 nodeType={type}
                 size={params.data.size}
+                shared={isSharedByMe}
                 updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
                 dateOptions={dateOptions}
@@ -635,11 +646,13 @@ export const DialFileManagerView: FC = () => {
           return type === DialFileNodeType.FOLDER ? (
             <DialFolderName
               name={params.data.name}
+              shared={isSharedByMe}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ) : (
             <DialFileName
               name={params.data.name}
+              shared={isSharedByMe}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
@@ -929,6 +942,7 @@ export const DialFileManagerView: FC = () => {
               rootItemPath={rootItem?.path}
               rootItemLabel={rootItem?.label}
               selectedPath={currentPath}
+              sharedByMePaths={sharedByMePaths}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
@@ -964,6 +978,7 @@ export const DialFileManagerView: FC = () => {
     renamedPath,
     sidebarCurrentWidth,
     title,
+    sharedByMePaths,
     toggleTreeCollapse,
   ]);
 
@@ -1136,6 +1151,7 @@ export const DialFileManagerView: FC = () => {
                   renamedItem,
                   renamedPath,
                   newFolderTempId,
+                  sharedByMePaths,
                 } as FileManagerGridContext,
               }}
               selectedRows={selectedGridRows}

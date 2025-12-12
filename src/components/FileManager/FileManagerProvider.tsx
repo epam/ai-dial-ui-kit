@@ -91,6 +91,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onGetInfo,
   onUnshareFile,
   actionsRef,
+  sharedByMePaths,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -558,6 +559,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onUnshareFile,
 
     actionsRef,
+    sharedByMePaths,
   };
 
   return (
