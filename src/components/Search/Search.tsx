@@ -17,6 +17,7 @@ export interface DialSearchProps {
   className?: string;
   containerClassName?: string;
   onChange?: (value: string) => void;
+  onBlur?: () => void;
   size?: SearchSize;
   allowClear?: boolean;
 }
@@ -33,6 +34,7 @@ export interface DialSearchProps {
  *   placeholder="Search"
  *   size={SearchSize.Small}
  *   onChange={(value) => setQuery(value)}
+ *   onBlur={() => handleBlur()}
  *   disabled={false}
  * />
  * ```
@@ -46,6 +48,7 @@ export interface DialSearchProps {
  * @param [className] - Additional CSS classes applied to the input element
  * @param [containerClassName] - Additional CSS classes applied to the container
  * @param [onChange] - Callback fired when the input value changes
+ * @param [onBlur] - Callback fired when the input loses focus
  * @param [size=SearchSize.Base] - The size of the search input. Uses the {@link SearchSize} enum.
  * @param [allowClear=true] - Whether to show a clear button when there is a value
  */
@@ -59,6 +62,7 @@ export const DialSearch: FC<DialSearchProps> = ({
   className,
   containerClassName,
   onChange,
+  onBlur,
   size = SearchSize.Base,
   allowClear = true,
 }) => {
@@ -119,6 +123,7 @@ export const DialSearch: FC<DialSearchProps> = ({
         onChange={(event) =>
           !readonly && handleChange(event.currentTarget.value)
         }
+        onBlur={onBlur}
       />
 
       {query && !readonly && !disabled && allowClear && (
