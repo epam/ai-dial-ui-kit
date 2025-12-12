@@ -12,6 +12,7 @@ export enum DialFileManagerActions {
   Delete = 'delete',
   Rename = 'rename',
   Info = 'info',
+  Unshare = 'unshare',
 }
 
 export enum DialFileManagerConflictActions {

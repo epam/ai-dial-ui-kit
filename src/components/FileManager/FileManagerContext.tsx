@@ -153,6 +153,8 @@ export interface FileManagerContextValue {
   closeMetadataPopup: () => void;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
+  onUnshareFile?: (file: DialFile) => void | Promise<void>;
+
   actionsRef?: Ref<DialFileManagerActionsRef>;
 
   sharedByMePaths?: Set<string>;

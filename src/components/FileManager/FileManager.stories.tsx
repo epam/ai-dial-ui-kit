@@ -1012,6 +1012,42 @@ export const InPopupWithMetadata: Story = {
   },
 };
 
+export const WithUnshareAction: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+            info: 'Info',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            rename: 'Rename',
+            download: 'Download',
+            delete: 'Delete',
+          },
+        }}
+        onUnshareFile={(file) => {
+          alert(`Unsharing file: ${file.name}`);
+        }}
+      />
+    </div>
+  ),
+};
+
 export const WithOwnerColumn: Story = {
   args: {
     gridOptions: {
