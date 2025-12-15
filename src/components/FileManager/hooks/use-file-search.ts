@@ -127,8 +127,7 @@ export function useFileSearch({
     if (isSearchModeRef.current) {
       handleSearchClear();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPath]);
+  }, [currentPath, handleSearchClear]);
 
   // Cache all files when search results arrive
   useEffect(() => {
@@ -138,9 +137,7 @@ export function useFileSearch({
   }, [searchResults]);
 
   const filteredSearchResults = useMemo(() => {
-    // If external search callback is provided
     if (onSearchFiles) {
-      // Use cached search results and filter by name locally
       const filesToFilter =
         allFilesCache.current.length > 0
           ? allFilesCache.current
@@ -153,7 +150,6 @@ export function useFileSearch({
       return filterFilesByName(filesToFilter, effectiveSearchValue);
     }
 
-    // Local search mode (no external callback)
     if (!effectiveSearchValue || !allItems.length) {
       return [];
     }
