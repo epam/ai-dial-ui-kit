@@ -152,7 +152,10 @@ export const DialPopup: FC<DialPopupProps> = ({
                 onClose={(e) => onClose?.(e)}
               />
             </div>
-            <div className="flex-grow overflow-auto">
+            <div
+              className="flex-grow overflow-auto"
+              aria-label="popup-description"
+            >
               {/* Body area */}
               {children}
             </div>

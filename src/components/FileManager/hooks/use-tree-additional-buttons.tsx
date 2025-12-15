@@ -43,6 +43,7 @@ export const useTreeAdditionalButtons = ({
           className={buttonClass}
           onClick={collapseAll}
           iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
+          aria-label="collapse-all"
         />
       </>
     );

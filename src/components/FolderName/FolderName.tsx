@@ -62,6 +62,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
       <DialEllipsisTooltip
         className="text-primary dial-small flex-1 min-w-0"
         text={name}
+        id="name"
       />
     </div>
   );
