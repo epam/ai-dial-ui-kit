@@ -242,6 +242,7 @@ export const DialFileManagerNavigationPanel: FC<
         },
         className,
       )}
+      aria-label="navigation-panel"
     >
       {renderNavigation()}
       {searchable && (

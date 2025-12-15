@@ -13,6 +13,7 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
   className?: string;
   contentClassName?: string;
   hideTooltip?: boolean;
+  id?: string;
 }
 
 /**
@@ -35,6 +36,7 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
  * @param className Optional additional CSS classes for the text container (e.g. to set width).
  * @param contentClassName Optional additional CSS classes for the tooltip content.
  * @param hideTooltip If true, disables the tooltip even if text is truncated.
+ * @param id Optional attribute for unique identification
  * @param tooltipProps Additional props to pass to the underlying DialTooltipContainer.
  */
 export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
@@ -42,6 +44,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
   className,
   contentClassName,
   hideTooltip,
+  id,
   ...tooltipProps
 }) => {
   const ref = useRef<HTMLElement | null>(null);
@@ -102,6 +105,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
         onFocusCapture={scheduleCompute}
       >
         <span
+          id={id}
           className={mergeClasses(
             'block truncate flex-1 min-w-0 max-w-full text-left',
             className,

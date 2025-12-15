@@ -1,11 +1,18 @@
 import { IconCheck, IconMinus } from '@tabler/icons-react';
 import classNames from 'classnames';
-import { type ChangeEvent, type FC, type ReactNode, useCallback } from 'react';
+import {
+  type ChangeEvent,
+  type FC,
+  type ReactNode,
+  useCallback,
+  type LabelHTMLAttributes,
+} from 'react';
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
-export interface DialCheckboxProps {
+export interface DialCheckboxProps
+  extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
   id: string;
   label?: string | ReactNode;
   checked: boolean;
@@ -13,8 +20,8 @@ export interface DialCheckboxProps {
   indeterminate?: boolean;
   ariaLabel?: string;
   onChange?: (value?: boolean, id?: string) => void;
-  className?: string;
 }
+
 /**
  * A Checkbox component with styling options
  *
@@ -47,6 +54,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   ariaLabel,
   onChange,
   className,
+  ...labelProps
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +88,12 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   };
 
   return (
-    <label className={checkboxClassName} htmlFor={id}>
+    <label
+      {...labelProps}
+      className={checkboxClassName}
+      htmlFor={id}
+      aria-description={labelProps['aria-description'] || 'checkbox-container'}
+    >
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
