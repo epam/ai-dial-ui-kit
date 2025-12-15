@@ -1,5 +1,11 @@
 import { IconX } from '@tabler/icons-react';
-import { type FC, type MouseEvent, type ReactNode, useMemo } from 'react';
+import {
+  type FC,
+  type MouseEvent,
+  type ReactNode,
+  useMemo,
+  type HTMLAttributes,
+} from 'react';
 
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -11,10 +17,9 @@ import {
   variantIcons,
 } from './constants';
 
-export interface DialAlertProps {
+export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
   message: string | ReactNode;
-  className?: string;
   closable?: boolean;
   iconSize?: number;
   iconStroke?: number;
@@ -45,6 +50,13 @@ export interface DialAlertProps {
  *   message="Something went wrong."
  *   onClose={(e) => console.log('closed', e)}
  * />
+ *
+ * <DialAlert
+ *   variant={AlertVariant.Warning}
+ *   message="Custom alert"
+ *   aria-live="polite"
+ *   id="warning-alert"
+ * />
  * ```
  *
  * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
@@ -63,6 +75,7 @@ export const DialAlert: FC<DialAlertProps> = ({
   iconStroke = 2,
   closable = false,
   onClose,
+  ...props
 }) => {
   const icon = useMemo(() => {
     return variantIcons({ size: iconSize, stroke: iconStroke })[variant];
@@ -70,6 +83,7 @@ export const DialAlert: FC<DialAlertProps> = ({
 
   return (
     <div
+      {...props}
       role="alert"
       className={mergeClasses(
         alertBaseClassName,
