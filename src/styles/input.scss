@@ -35,6 +35,10 @@
   @apply text-secondary;
 }
 
+.dial-input-disable:hover {
+  @apply border-primary;
+}
+
 .dial-input-error {
   @apply border-error;
 }
