@@ -200,7 +200,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full" aria-label="folder">
             <DialDropdown
               trigger={[DropdownTrigger.ContextMenu]}
               className="w-full"
@@ -213,6 +213,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                   'py-1 gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group/item w-full mb-[2px] relative',
                   selectedClass,
                 )}
+                aria-selected={isSelected}
               >
                 {!isRenaming && (
                   <div
@@ -278,7 +279,10 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   };
 
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto">
+    <div
+      className="flex-1 w-full h-full overflow-y-auto"
+      aria-label="folders-tree"
+    >
       {items.length > 0 ? (
         renderTree(items, 0)
       ) : (

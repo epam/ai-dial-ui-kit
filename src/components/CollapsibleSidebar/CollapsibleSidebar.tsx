@@ -113,6 +113,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
         containerClassName,
       ])}
       style={{ width: `${containerWidth}px` }}
+      aria-label="collapsible-sidebar"
     >
       <div
         className={classNames([
@@ -130,6 +131,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
         <DialButton
           className={'hover:text-accent-primary p-1'}
           onClick={changeVisibility}
+          aria-label="sidebar-state"
           iconBefore={
             opened ? (
               <IconChevronsLeft size={iconSize} stroke={iconStroke} />

@@ -58,7 +58,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   );
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center" role="switch">
       <input
         type="checkbox"
         onChange={onClick}
@@ -79,7 +79,14 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           )}
         ></span>
       </label>
-      {title && <span className="pl-2 dial-small text-primary">{title}</span>}
+      {title && (
+        <span
+          className="pl-2 dial-small text-primary"
+          aria-label="switch-title"
+        >
+          {title}
+        </span>
+      )}
     </div>
   );
 };

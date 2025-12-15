@@ -322,7 +322,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           <>{typeof menu.header === 'function' ? menu.header() : menu.header}</>
         )}
 
-        <div role="none" className="py-1">
+        <div role="none" className="py-1" aria-label="dropdown">
           {menu.items.map((it) => {
             if (it.type === DropdownItemType.Divider) {
               return (
@@ -377,6 +377,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                     it.danger && 'text-error',
                     it.disabled && 'text-secondary',
                   )}
+                  aria-labelledby="item-text"
                 >
                   {it.label}
                 </span>

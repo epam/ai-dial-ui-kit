@@ -80,7 +80,11 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   };
 
   return (
-    <label className={checkboxClassName} htmlFor={id}>
+    <label
+      className={checkboxClassName}
+      htmlFor={id}
+      aria-description="checkbox-container"
+    >
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
