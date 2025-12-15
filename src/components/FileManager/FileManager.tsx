@@ -102,6 +102,7 @@ import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
+import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
 
 type GridRow = FileManagerGridRow;
 
@@ -682,7 +683,7 @@ export const DialFileManagerView: FC = () => {
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
-          return params.data.path;
+          return <DialEllipsisTooltip text={params.data.path} />;
         },
       },
       {
