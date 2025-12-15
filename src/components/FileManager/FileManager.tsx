@@ -102,7 +102,7 @@ import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 type GridRow = FileManagerGridRow;
 
