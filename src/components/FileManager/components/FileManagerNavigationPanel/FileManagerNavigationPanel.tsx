@@ -192,6 +192,12 @@ export const DialFileManagerNavigationPanel: FC<
     }
   }, [elementId, isSearchExpanded]);
 
+  const handleSearchBlur = useCallback(() => {
+    if (!value || String(value).trim() === '') {
+      onSearchChange?.('');
+    }
+  }, [value, onSearchChange]);
+
   const renderNavigation = useCallback(() => {
     if (isCompactView && isSearchExpanded) {
       return (
@@ -254,6 +260,7 @@ export const DialFileManagerNavigationPanel: FC<
             onChange={onSearchChange}
             disabled={disabled}
             readonly={readonly}
+            onBlur={handleSearchBlur}
             invalid={invalid}
             className={searchClassName}
             containerClassName={mergeClasses(searchContainerClassName, {

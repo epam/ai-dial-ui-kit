@@ -311,6 +311,11 @@ export interface DialFileManagerProps {
 
   onUnshareFile?: (file: DialFile) => void | Promise<void>;
   actionsRef?: Ref<DialFileManagerActionsRef>;
+
+  onSearchFiles?: (folder: string, query: string) => void;
+  searchInProgress?: boolean;
+  searchResults?: DialFile[];
+  clearSearchResults?: () => void;
 }
 
 /**
@@ -502,6 +507,8 @@ export const DialFileManagerView: FC = () => {
     onUnshareFile,
 
     actionsRef,
+    searchInProgress,
+    isSearchMode,
   } = useFileManagerContext();
 
   const {
@@ -546,6 +553,16 @@ export const DialFileManagerView: FC = () => {
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
   );
+
+  const effectiveVisibleColumns = useMemo(() => {
+    return isSearchMode
+      ? [
+          FileManagerColumnKey.Name,
+          FileManagerColumnKey.Path,
+          FileManagerColumnKey.Actions,
+        ]
+      : visibleColumns;
+  }, [isSearchMode, visibleColumns]);
 
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
@@ -656,6 +673,16 @@ export const DialFileManagerView: FC = () => {
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
+        },
+      },
+      {
+        colId: FileManagerColumnKey.Path,
+        field: 'path',
+        headerName: 'Path',
+        flex: 1,
+        minWidth: 200,
+        cellRenderer: (params: { data: GridRow }) => {
+          return params.data.path;
         },
       },
       {
@@ -1022,7 +1049,7 @@ export const DialFileManagerView: FC = () => {
       columns = columns.filter(
         (col) =>
           col.colId &&
-          visibleColumns.includes(col.colId as FileManagerColumnKey),
+          effectiveVisibleColumns.includes(col.colId as FileManagerColumnKey),
       );
     }
 
@@ -1048,7 +1075,7 @@ export const DialFileManagerView: FC = () => {
     isCompactView,
     actionsColumnDef,
     userColumnDefs,
-    visibleColumns,
+    effectiveVisibleColumns,
   ]);
 
   const cellClickHandler = useCallback(
@@ -1115,7 +1142,7 @@ export const DialFileManagerView: FC = () => {
               columnDefs={columnDefs}
               rowData={gridRows}
               getRowId={(row) => row.path}
-              loading={filesLoading}
+              loading={filesLoading || searchInProgress}
               getContextMenuItems={getGridContextMenuItems}
               withoutHeaderBorders={isCompactView}
               selectionOnHover={!isCompactView}
