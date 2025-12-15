@@ -158,6 +158,12 @@ export interface FileManagerContextValue {
   actionsRef?: Ref<DialFileManagerActionsRef>;
 
   sharedByMePaths?: Set<string>;
+
+  onSearchFiles?: (folder: string, query: string) => void;
+  searchInProgress?: boolean;
+  searchResults?: DialFile[];
+  clearSearchResults?: () => void;
+  isSearchMode: boolean;
 }
 
 export const FileManagerContext = createContext<
