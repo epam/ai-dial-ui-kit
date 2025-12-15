@@ -2,6 +2,9 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialPopup, type DialPopupProps } from './Popup';
 import { PopupSize } from '@/types/popup';
+import { DialLoader } from '@/components/Loader/Loader';
+import { DialButton } from '@/components/Button/Button';
+import { ButtonVariant } from '@/types/button';
 
 const meta = {
   title: 'Overlay/Popup',
@@ -121,4 +124,30 @@ export const DifferentSizes: Story = {
     </div>
   ),
   args: {},
+};
+
+export const WithoutHeaderAndDismiss: Story = {
+  render: StatefulRender,
+  args: {
+    className: '!w-[280px]',
+    title: undefined,
+    footer: undefined,
+    dividers: false,
+    headerClassName: 'hidden',
+    closeOnOutsideClick: false,
+    children: (
+      <div className="flex items-center flex-col gap-6 p-9">
+        <DialLoader size={120} />
+        <div className="flex flex-col gap-2 text-center text-primary">
+          <div className="text-lg font-semibold">Moving items</div>
+          <div className="text-sm">8 of 24 items moved...</div>
+        </div>
+        <DialButton
+          className="w-fit"
+          variant={ButtonVariant.Tertiary}
+          label="Cancel"
+        />
+      </div>
+    ),
+  },
 };

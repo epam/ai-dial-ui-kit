@@ -19,6 +19,7 @@ import {
   popupHeaderClassName,
   popupSizeClassMap,
 } from './constants';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialPopupProps {
   open?: boolean;
@@ -27,11 +28,13 @@ export interface DialPopupProps {
   className?: string;
   overlayClassName?: string;
   headingClassName?: string;
+  headerClassName?: string;
   dividers?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
   size?: PopupSize;
+  closeOnOutsideClick?: boolean;
 }
 
 /**
@@ -64,11 +67,13 @@ export interface DialPopupProps {
  * @param [className] - Additional CSS classes applied to the popup container
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
  * @param [headingClassName] - Additional CSS classes applied to the title element
+ * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [dividers=true] - Whether to render separators between sections
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
+ * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -77,11 +82,13 @@ export const DialPopup: FC<DialPopupProps> = ({
   className,
   overlayClassName,
   headingClassName,
+  headerClassName,
   dividers = true,
   children,
   footer,
   onClose,
   size = PopupSize.Md,
+  closeOnOutsideClick = true,
 }) => {
   const { refs, context } = useFloating({
     open,
@@ -91,7 +98,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   });
 
   const role = useRole(context, { role: 'dialog' });
-  const dismiss = useDismiss(context, { outsidePress: true });
+  const dismiss = useDismiss(context, { outsidePress: closeOnOutsideClick });
   const { getFloatingProps } = useInteractions([role, dismiss]);
 
   if (!open) return null;
@@ -136,7 +143,9 @@ export const DialPopup: FC<DialPopupProps> = ({
               className,
             )}
           >
-            <div className={popupHeaderClassName}>
+            <div
+              className={mergeClasses(popupHeaderClassName, headerClassName)}
+            >
               {renderTitle(title)}
               <DialCloseButton
                 ariaLabel="Close dialog"

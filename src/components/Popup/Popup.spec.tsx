@@ -73,4 +73,41 @@ describe('Dial UI Kit :: DialPopup', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveClass(popupSizeClassMap[PopupSize.Lg]);
   });
+
+  test('applies headerClassName to the popup header', () => {
+    render(
+      <DialPopup
+        open
+        title="Header class test"
+        headerClassName="custom-header-class"
+      >
+        <div>Body</div>
+      </DialPopup>,
+    );
+
+    const header = screen
+      .getByRole('button', { name: 'Close dialog' })
+      .closest('div');
+
+    expect(header).toHaveClass('custom-header-class');
+  });
+
+  test('does not close on outside click when closeOnOutsideClick is false', () => {
+    const onClose = vi.fn();
+
+    render(
+      <DialPopup
+        open
+        title="Outside click disabled"
+        closeOnOutsideClick={false}
+        onClose={onClose}
+      >
+        <div>Body</div>
+      </DialPopup>,
+    );
+
+    fireEvent.mouseDown(document.body);
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
 });
