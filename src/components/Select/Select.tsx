@@ -547,7 +547,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               type="text"
               placeholder={searchPlaceholder ?? placeholder}
               value={query || ''}
-              onChange={(e) => setQuery(e.currentTarget.value)}
+              onChange={(e) => setQuery(e.currentTarget.value.trimStart())}
               onFocus={() => !disabled && setOpen(true)}
               onMouseDown={(e) => {
                 setInlineSearchQuery();
@@ -556,10 +556,14 @@ export const DialSelect: FC<DialSelectProps> = ({
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+              }}
               className="bg-transparent outline-none w-full dial-small"
               ref={inlineSearchInputRef}
               disabled={disabled}
               aria-disabled={disabled}
+              autoComplete="off"
             />
           </div>
         ) : (
