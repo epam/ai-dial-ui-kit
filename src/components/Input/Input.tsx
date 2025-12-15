@@ -151,6 +151,7 @@ export const DialInput: FC<DialInputProps> = ({
         !textAfterInput && 'pr-3',
         containerClassName,
       )}
+      aria-label="input-container"
     >
       {textBeforeInput && (
         <div className="mr-2">

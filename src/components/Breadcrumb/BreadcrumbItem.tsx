@@ -55,20 +55,25 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
 
   const Content =
     typeof title === 'string' ? (
-      <DialEllipsisTooltip className={titleClassName} text={title} />
+      <DialEllipsisTooltip
+        className={titleClassName}
+        text={title}
+        id="breadcrumb-item-content"
+      />
     ) : (
       <span
         className={mergeClasses(
           'flex-1 min-w-0 max-w-full truncate',
           titleClassName,
         )}
+        aria-label="breadcrumb-item-content"
       >
         {title}
       </span>
     );
 
   return (
-    <li className={containerClassName}>
+    <li className={containerClassName} aria-label="breadcrumb-item">
       {interactive ? (
         <a href={href} onClick={onClick} className={contentClassName}>
           {iconBefore}
@@ -86,7 +91,9 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       )}
 
       {!isLast && (
-        <span className={breadcrumbSeparatorClassName}>{separator}</span>
+        <span className={breadcrumbSeparatorClassName} aria-label="separator">
+          {separator}
+        </span>
       )}
     </li>
   );
