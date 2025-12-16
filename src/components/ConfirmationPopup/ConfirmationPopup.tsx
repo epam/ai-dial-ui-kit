@@ -16,7 +16,7 @@ import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 
 export interface DialConfirmationPopupProps extends DialPopupProps {
-  description?: string | ReactNode;
+  description?: ReactNode;
   descriptionClassName?: string;
   confirmLabel?: string;
   cancelLabel?: string;
