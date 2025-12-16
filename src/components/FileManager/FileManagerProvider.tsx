@@ -98,7 +98,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   searchResults,
   searchInProgress,
   clearSearchResults,
-  accept,
+  allowedFileTypes,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -274,7 +274,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onValidateUpload,
     maxFileSize,
     onUploadArchive,
-    accept,
+    allowedFileTypes,
     validationMessages: uploadValidationMessages,
   });
 
@@ -480,7 +480,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const value: FileManagerContextValue = {
     className,
     items,
-    accept,
+    allowedFileTypes,
     rootItem,
     filesLoading,
     treeOptions: {

@@ -40,7 +40,7 @@ export interface FileManagerContextValue {
   className?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
-  accept?: DialFileAcceptType[];
+  allowedFileTypes?: DialFileAcceptType[];
   filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;

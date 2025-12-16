@@ -246,7 +246,7 @@ export interface DialFileManagerProps {
   path?: string;
   className?: string;
 
-  accept?: DialFileAcceptType[];
+  allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
@@ -396,7 +396,7 @@ export interface DialFileManagerProps {
  *
  * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
  *
- * @param [accept] - Accepted file types (same format as HTML `<input accept>`); controls upload filtering and disabled items in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), extensions (e.g. `.svg`), and *\/\*.
+ * @param allowedFileTypes - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -427,7 +427,7 @@ export const DialFileManagerView: FC = () => {
     conflictResolutionPopupOptions,
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
     sharedByMePaths,
-    accept,
+    allowedFileTypes,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -571,11 +571,11 @@ export const DialFileManagerView: FC = () => {
   }, [isSearchMode, visibleColumns]);
 
   const isRowDisabled = useCallback(
-    (row: FileManagerGridRow, accept?: DialFileAcceptType[]) => {
+    (row: FileManagerGridRow, allowedFileTypes?: DialFileAcceptType[]) => {
       const isFileTypeAccepted =
         row.nodeType === DialFileNodeType.FOLDER ||
         !row.contentType ||
-        isFileAccepted(accept, row.contentType, row.name);
+        isFileAccepted(allowedFileTypes, row.contentType, row.name);
 
       return !isFileTypeAccepted;
     },
@@ -870,10 +870,10 @@ export const DialFileManagerView: FC = () => {
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
     gridRows
-      .filter((row) => isRowDisabled(row, accept))
+      .filter((row) => isRowDisabled(row, allowedFileTypes))
       .forEach((row) => ids.add(row.path));
     return ids;
-  }, [accept, gridRows, isRowDisabled]);
+  }, [allowedFileTypes, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {
@@ -1067,7 +1067,7 @@ export const DialFileManagerView: FC = () => {
   const { actionsColumnDef } = useGridActionsColumn({
     getContextMenuItems: getGridContextMenuItems,
     isRowDisabled,
-    accept,
+    allowedFileTypes: allowedFileTypes,
   });
 
   const baseColumns = userColumnDefs ?? defaultColumns;

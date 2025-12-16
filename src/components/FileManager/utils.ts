@@ -113,11 +113,15 @@ export const formatDate = (
 };
 
 export function isFileAccepted(
-  accept: DialFileAcceptType[] | undefined,
+  allowedFileTypes: DialFileAcceptType[] | undefined,
   contentType: string,
   fileName?: string,
 ): boolean {
-  if (!accept || accept.length === 0 || accept.includes('*/*')) {
+  if (
+    !allowedFileTypes ||
+    allowedFileTypes.length === 0 ||
+    allowedFileTypes.includes('*/*')
+  ) {
     return true;
   }
 
@@ -128,7 +132,7 @@ export function isFileAccepted(
       ? `.${fileName.split('.').at(-1)!.toLowerCase()}`
       : undefined;
 
-  return accept.some((rule) => {
+  return allowedFileTypes.some((rule) => {
     const normalizedRule = rule.toLowerCase();
 
     if (normalizedRule.startsWith('.')) {

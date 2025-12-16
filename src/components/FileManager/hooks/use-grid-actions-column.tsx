@@ -12,21 +12,21 @@ interface UseGridActionsColumnProps {
   getContextMenuItems: (row: FileManagerGridRow) => DropdownItem[];
   isRowDisabled: (
     row: FileManagerGridRow,
-    accept?: DialFileAcceptType[],
+    allowedFileTypes?: DialFileAcceptType[],
   ) => boolean;
-  accept?: DialFileAcceptType[];
+  allowedFileTypes?: DialFileAcceptType[];
 }
 
 export const useGridActionsColumn = ({
   getContextMenuItems,
   isRowDisabled,
-  accept,
+  allowedFileTypes,
 }: UseGridActionsColumnProps) => {
   const renderActionsCell = useCallback(
     (p: ICellRendererParams<FileManagerGridRow, unknown>) => {
       if (!p.data) return null;
 
-      const disabled = isRowDisabled(p.data, accept);
+      const disabled = isRowDisabled(p.data, allowedFileTypes);
 
       if (disabled) return null;
 
@@ -48,7 +48,7 @@ export const useGridActionsColumn = ({
         </DialDropdown>
       );
     },
-    [accept, getContextMenuItems, isRowDisabled],
+    [allowedFileTypes, getContextMenuItems, isRowDisabled],
   );
 
   const actionsColumnDef: ColDef<FileManagerGridRow> = useMemo(

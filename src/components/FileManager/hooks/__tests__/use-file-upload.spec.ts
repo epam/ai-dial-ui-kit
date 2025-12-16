@@ -977,7 +977,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['application/pdf'],
+          allowedFileTypes: ['application/pdf'],
         }),
       );
 
@@ -1008,7 +1008,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['image/*'],
+          allowedFileTypes: ['image/*'],
           validationMessages: {
             unsupportedFiles: 'Custom unsupported message',
           },
@@ -1040,7 +1040,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['text/plain'],
+          allowedFileTypes: ['text/plain'],
         }),
       );
 
@@ -1072,7 +1072,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['.pdf'],
+          allowedFileTypes: ['.pdf'],
         }),
       );
 
@@ -1101,7 +1101,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['text/plain'],
+          allowedFileTypes: ['text/plain'],
         }),
       );
 
@@ -1136,7 +1136,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const { result } = renderHook(() =>
         useFileUpload({
           onUploadFiles,
-          accept: ['*/*'],
+          allowedFileTypes: ['*/*'],
         }),
       );
 

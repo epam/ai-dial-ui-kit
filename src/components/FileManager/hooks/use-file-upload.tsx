@@ -39,7 +39,7 @@ export interface UseFileUploadOptions {
     destinationFolder: string,
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
   maxFileSize?: number;
-  accept?: DialFileAcceptType[];
+  allowedFileTypes?: DialFileAcceptType[];
   validationMessages?: FileUploadValidationMessages;
   onUploadArchive?: (
     file: File,
@@ -58,7 +58,7 @@ export const useFileUpload = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
-  accept,
+  allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
 }: UseFileUploadOptions = {}) => {
@@ -79,13 +79,13 @@ export const useFileUpload = ({
 
   const filterAcceptedFiles = useCallback(
     (files: DialUploadFileItem[]) => {
-      if (!accept || accept.includes('*/*')) return files;
+      if (!allowedFileTypes || allowedFileTypes.includes('*/*')) return files;
 
       return files.filter(({ fileContent, name }) =>
-        isFileAccepted(accept, fileContent.type, name),
+        isFileAccepted(allowedFileTypes, fileContent.type, name),
       );
     },
-    [accept],
+    [allowedFileTypes],
   );
 
   const {
@@ -385,8 +385,8 @@ export const useFileUpload = ({
       fileInputRef.current = input;
     }
 
-    if (accept && accept.length > 0) {
-      input.accept = accept.join(',');
+    if (allowedFileTypes && allowedFileTypes.length > 0) {
+      input.accept = allowedFileTypes.join(',');
     } else {
       input.removeAttribute('accept');
     }
@@ -432,7 +432,7 @@ export const useFileUpload = ({
         fileInputRef.current = null;
       }
     };
-  }, [accept, filterAcceptedFiles, handleUpload, validationMessages]);
+  }, [allowedFileTypes, filterAcceptedFiles, handleUpload, validationMessages]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
