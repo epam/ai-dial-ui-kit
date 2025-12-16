@@ -92,6 +92,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onUnshareFile,
   actionsRef,
   sharedByMePaths,
+  accept,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -317,7 +318,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       source = source.filter((node) => !isHiddenDotFile(node));
     }
 
-    const mapped = source.map((node) => ({
+    const mapped: FileManagerGridRow[] = source.map((node) => ({
       id: node.id ?? node.path,
       name: node.name ?? node.path.split('/').pop() ?? '',
       updatedAt: node.updatedAt,
@@ -331,6 +332,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       extension: node.extension,
       isTemporary: false,
       owner: node.owner,
+      contentType: node.contentType,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -432,6 +434,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const value: FileManagerContextValue = {
     className,
     items,
+    accept,
     rootItem,
     filesLoading,
     treeOptions: {
