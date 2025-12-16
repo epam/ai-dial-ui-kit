@@ -69,6 +69,122 @@ describe('Dial UI Kit :: FileMetadataPopup', () => {
     ).toBeInTheDocument();
   });
 
+  it('decodes URI encoded path', () => {
+    const fileWithEncodedPath: DialFile = {
+      ...mockFile,
+      path: 'files/folder/Screenshot%202025-12-10%20at%2009.44.24.png',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithEncodedPath}
+      />,
+    );
+
+    expect(
+      screen.getByText('files/folder/Screenshot 2025-12-10 at 09.44.24.png'),
+    ).toBeInTheDocument();
+  });
+
+  it('decodes URI encoded path with special characters', () => {
+    const fileWithSpecialChars: DialFile = {
+      ...mockFile,
+      path: 'files/folder/file%20with%20%26%20special%20%23%20chars.txt',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithSpecialChars}
+      />,
+    );
+
+    expect(
+      screen.getByText('files/folder/file with & special # chars.txt'),
+    ).toBeInTheDocument();
+  });
+
+  it('decodes complex URI encoded path', () => {
+    const fileWithComplexPath: DialFile = {
+      ...mockFile,
+      path: 'files/akWB1YBFr8MR1nshJgXHKUWfPCLZf8x6nMKGsa9WMxmggzPWW42NdcfpPRiPjRHT5/13/Screenshot%202025-12-10%20at%2009.44.24.png',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithComplexPath}
+      />,
+    );
+
+    expect(
+      screen.getByText(
+        'files/akWB1YBFr8MR1nshJgXHKUWfPCLZf8x6nMKGsa9WMxmggzPWW42NdcfpPRiPjRHT5/13/Screenshot 2025-12-10 at 09.44.24.png',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('handles path with multiple encoded spaces', () => {
+    const fileWithSpaces: DialFile = {
+      ...mockFile,
+      path: 'My%20Files/My%20Folder/My%20Document.pdf',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithSpaces}
+      />,
+    );
+
+    expect(
+      screen.getByText('My Files/My Folder/My Document.pdf'),
+    ).toBeInTheDocument();
+  });
+
+  it('handles path with plus signs', () => {
+    const fileWithPlus: DialFile = {
+      ...mockFile,
+      path: 'files/folder/file+with+plus.txt',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithPlus}
+      />,
+    );
+
+    expect(
+      screen.getByText('files/folder/file+with+plus.txt'),
+    ).toBeInTheDocument();
+  });
+
+  it('handles already decoded path', () => {
+    const fileWithDecodedPath: DialFile = {
+      ...mockFile,
+      path: 'files/folder/normal file name.txt',
+    };
+
+    render(
+      <FileMetadataPopup
+        open={true}
+        onClose={vi.fn()}
+        fileMetadata={fileWithDecodedPath}
+      />,
+    );
+
+    expect(
+      screen.getByText('files/folder/normal file name.txt'),
+    ).toBeInTheDocument();
+  });
+
   it('calls onClose when popup is closed', async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();

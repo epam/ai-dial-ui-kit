@@ -16,20 +16,20 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   it('shows children when loading is false', () => {
     render(
       <DialSkeleton loading={false}>
-        <div data-testid="content">Loaded Content</div>
+        <div role="contentinfo">Loaded Content</div>
       </DialSkeleton>,
     );
-    expect(screen.getByTestId('content')).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
     expect(screen.getByText('Loaded Content')).toBeInTheDocument();
   });
 
   it('shows skeleton when loading is true', () => {
     render(
       <DialSkeleton loading={true}>
-        <div data-testid="content">Loaded Content</div>
+        <div role="contentinfo">Loaded Content</div>
       </DialSkeleton>,
     );
-    expect(screen.queryByTestId('content')).not.toBeInTheDocument();
+    expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument();
   });
 
   it('renders with avatar', () => {
@@ -208,9 +208,9 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('forwards HTML attributes', () => {
     const { container } = render(
-      <DialSkeleton data-testid="skeleton" role="status" />,
+      <DialSkeleton role="status" aria-label="Loading..." />,
     );
-    expect(container.firstChild).toHaveAttribute('data-testid', 'skeleton');
+    expect(container.firstChild).toHaveAttribute('aria-label', 'Loading...');
     expect(container.firstChild).toHaveAttribute('role', 'status');
   });
 

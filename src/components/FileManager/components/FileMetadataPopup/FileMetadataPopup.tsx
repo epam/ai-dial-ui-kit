@@ -166,7 +166,9 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
               </div>
 
               <div className={LABEL_CLASS}>{pathLabel}</div>
-              <div className={PATH_CLASS}>{fileMetadata.path}</div>
+              <div className={PATH_CLASS}>
+                {decodeURIComponent(fileMetadata.path)}
+              </div>
             </>
           ) : null}
         </div>
