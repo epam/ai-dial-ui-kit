@@ -38,10 +38,8 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
       },
     );
 
-    expect(onSelectionClear).toHaveBeenCalledTimes(1);
-
     rerender({ path: '/updated' });
-    expect(onSelectionClear).toHaveBeenCalledTimes(2);
+    expect(onSelectionClear).toHaveBeenCalledTimes(1);
   });
 
   it('sets currentPath directly with setCurrentPath', () => {

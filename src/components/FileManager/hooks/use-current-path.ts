@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export interface UseCurrentPathOptions {
   path?: string;
@@ -12,9 +12,16 @@ export const useCurrentPath = ({
   onSelectionClear,
 }: UseCurrentPathOptions) => {
   const [currentPath, setCurrentPath] = useState<string | undefined>(path);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     setCurrentPath(path);
+
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     onSelectionClear?.();
   }, [path, onSelectionClear]);
 
