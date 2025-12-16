@@ -136,6 +136,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
+ * @param [disabledRowIds] - Set of row IDs that should be disabled. Disabled rows are non-interactive and cannot be selected. IDs must match values from `getRowId`.
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
  * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
  * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
