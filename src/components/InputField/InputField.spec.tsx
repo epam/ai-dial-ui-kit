@@ -289,13 +289,21 @@ describe('Dial UI Kit :: DialTextInputField', () => {
       <DialTextInputField
         elementId="test-text"
         fieldTitle="Test Text Field"
-        iconBefore={<span data-testid="before-icon">🔍</span>}
-        iconAfter={<span data-testid="after-icon">👁️</span>}
+        iconBefore={
+          <span role="img" aria-label="Search">
+            🔍
+          </span>
+        }
+        iconAfter={
+          <span role="img" aria-label="View">
+            👁️
+          </span>
+        }
       />,
     );
 
-    expect(screen.getByTestId('before-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('after-icon')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Search' })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'View' })).toBeInTheDocument();
   });
 
   test('applies custom CSS classes', () => {

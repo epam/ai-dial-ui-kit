@@ -39,14 +39,14 @@ describe('Dial UI Kit :: DialButton', () => {
   test('Should render without label when only icons are provided', () => {
     render(
       <DialButton
-        iconBefore={<span data-testid="icon">Icon</span>}
+        iconBefore={<span role={'img'}>Icon</span>}
         aria-label="Icon button"
       />,
     );
     expect(
       screen.getByRole('button', { name: 'Icon button' }),
     ).toBeInTheDocument();
-    expect(screen.getByTestId('icon')).toBeInTheDocument();
+    expect(screen.getByRole('img')).toBeInTheDocument();
     expect(screen.queryByText('Icon button')).not.toBeInTheDocument();
   });
 

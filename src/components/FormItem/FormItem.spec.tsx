@@ -88,13 +88,19 @@ describe('Dial UI Kit :: DialFormItem', () => {
       <DialFormItem
         elementId="custom-error"
         label="Label"
-        error={<span data-testid="custom-err">Custom error</span>}
+        error={
+          <span role="contentinfo" aria-label="Custom error">
+            Custom error
+          </span>
+        }
       >
         <input id="custom-error" />
       </DialFormItem>,
     );
     expect(screen.getByRole('alert')).toBeInTheDocument();
-    expect(screen.getByTestId('custom-err')).toHaveTextContent('Custom error');
+    expect(
+      screen.getByRole('contentinfo', { name: 'Custom error' }),
+    ).toHaveTextContent('Custom error');
   });
 
   test('boolean error does not render alert (used only to style caption/field)', () => {

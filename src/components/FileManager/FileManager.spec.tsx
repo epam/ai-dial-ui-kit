@@ -66,7 +66,11 @@ vi.mock('@/components/Grid/Grid', () => {
     });
 
     return (
-      <div className={className} data-testid="dial-grid-mock">
+      <div
+        className={className}
+        role={'grid'}
+        aria-label="File Manager Grid View"
+      >
         <table role="table">
           {!filtersDisabled && (
             <thead>
