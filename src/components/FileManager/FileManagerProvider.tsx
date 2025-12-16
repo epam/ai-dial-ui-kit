@@ -82,6 +82,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
+  uploadValidationMessages,
   maxFileSize,
   onUploadArchive,
   onCreateFolder,
@@ -262,6 +263,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onValidateUpload,
     maxFileSize,
     onUploadArchive,
+    accept,
+    validationMessages: uploadValidationMessages,
   });
 
   const handleDrop = useCallback(
