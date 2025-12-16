@@ -81,7 +81,10 @@ export const DialSwitch: FC<DialSwitchProps> = ({
       </label>
       {title && (
         <span
-          className="pl-2 dial-small text-primary"
+          className={classNames(
+            'pl-2 dial-small',
+            disabled ? 'text-secondary' : 'text-primary',
+          )}
           aria-label="switch-title"
         >
           {title}
