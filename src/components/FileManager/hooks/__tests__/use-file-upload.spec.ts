@@ -969,4 +969,202 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       expect(document.body.contains(input)).toBe(false);
     });
   });
+
+  describe('accept file types validation', () => {
+    it('blocks upload when all files are not accepted', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['application/pdf'],
+        }),
+      );
+
+      const files = [new File([''], 'test.txt', { type: 'text/plain' })];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).not.toHaveBeenCalled();
+      expect(result.current.uploadError).toBe(
+        'Selected files are not supported',
+      );
+    });
+
+    it('uses custom unsupportedFiles validation message', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['image/*'],
+          validationMessages: {
+            unsupportedFiles: 'Custom unsupported message',
+          },
+        }),
+      );
+
+      const files = [new File([''], 'doc.pdf', { type: 'application/pdf' })];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).not.toHaveBeenCalled();
+      expect(result.current.uploadError).toBe('Custom unsupported message');
+    });
+
+    it('allows upload when file matches accept MIME type', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['text/plain'],
+        }),
+      );
+
+      const file = new File([''], 'test.txt', { type: 'text/plain' });
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files: [file],
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(result.current.uploadError).toBeUndefined();
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [{ fileContent: file, name: 'test.txt' }],
+        '/folder',
+      );
+    });
+
+    it('allows upload when file matches accept extension', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['.pdf'],
+        }),
+      );
+
+      const file = new File([''], 'doc.pdf', { type: '' });
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files: [file],
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).toHaveBeenCalled();
+      expect(result.current.uploadError).toBeUndefined();
+    });
+
+    it('filters out unsupported files and uploads only accepted ones', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['text/plain'],
+        }),
+      );
+
+      const files = [
+        new File([''], 'a.txt', { type: 'text/plain' }),
+        new File([''], 'b.pdf', { type: 'application/pdf' }),
+      ];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [{ fileContent: files[0], name: 'a.txt' }],
+        '/folder',
+      );
+      expect(result.current.uploadError).toBeUndefined();
+    });
+
+    it('does not filter files when accept contains */*', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({
+          onUploadFiles,
+          allowedFileTypes: ['*/*'],
+        }),
+      );
+
+      const files = [
+        new File([''], 'a.txt', { type: 'text/plain' }),
+        new File([''], 'b.pdf', { type: 'application/pdf' }),
+      ];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [
+          { fileContent: files[0], name: 'a.txt' },
+          { fileContent: files[1], name: 'b.pdf' },
+        ],
+        '/folder',
+      );
+    });
+  });
 });

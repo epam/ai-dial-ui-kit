@@ -1,4 +1,5 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
+import type { DialFileAcceptType } from '@/models/file-manager';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,
@@ -110,3 +111,39 @@ export const formatDate = (
     return date;
   }
 };
+
+export function isFileAccepted(
+  allowedFileTypes: DialFileAcceptType[] | undefined,
+  contentType: string,
+  fileName?: string,
+): boolean {
+  if (
+    !allowedFileTypes ||
+    allowedFileTypes.length === 0 ||
+    allowedFileTypes.includes('*/*')
+  ) {
+    return true;
+  }
+
+  const normalizedType = contentType.toLowerCase();
+
+  const extension =
+    fileName && fileName.includes('.')
+      ? `.${fileName.split('.').at(-1)!.toLowerCase()}`
+      : undefined;
+
+  return allowedFileTypes.some((rule) => {
+    const normalizedRule = rule.toLowerCase();
+
+    if (normalizedRule.startsWith('.')) {
+      return extension === normalizedRule;
+    }
+
+    if (normalizedRule.endsWith('/*')) {
+      const baseType = normalizedRule.slice(0, -1);
+      return normalizedType.startsWith(baseType);
+    }
+
+    return normalizedType === normalizedRule;
+  });
+}

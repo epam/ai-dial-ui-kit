@@ -26,7 +26,7 @@ import {
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
 } from './constants';
-import { findNodeByPath } from './utils';
+import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
@@ -55,6 +55,7 @@ import {
   type DialDeletedItem,
   type DialUploadFileItem,
   type DialFileManagerActionsRef,
+  type DialFileAcceptType,
 } from '@/models/file-manager';
 import {
   IconCopy,
@@ -245,6 +246,7 @@ export interface DialFileManagerProps {
   path?: string;
   className?: string;
 
+  allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
@@ -393,6 +395,8 @@ export interface DialFileManagerProps {
  * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges) in the tree and grid.
  *
  * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
+ *
+ * @param allowedFileTypes - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -423,6 +427,7 @@ export const DialFileManagerView: FC = () => {
     conflictResolutionPopupOptions,
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
     sharedByMePaths,
+    allowedFileTypes,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -565,6 +570,18 @@ export const DialFileManagerView: FC = () => {
       : visibleColumns;
   }, [isSearchMode, visibleColumns]);
 
+  const isRowDisabled = useCallback(
+    (row: FileManagerGridRow, allowedFileTypes?: DialFileAcceptType[]) => {
+      const isFileTypeAccepted =
+        row.nodeType === DialFileNodeType.FOLDER ||
+        !row.contentType ||
+        isFileAccepted(allowedFileTypes, row.contentType, row.name);
+
+      return !isFileTypeAccepted;
+    },
+    [],
+  );
+
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
       {
@@ -621,6 +638,7 @@ export const DialFileManagerView: FC = () => {
           const isBeingRenamed =
             renameTriggerView === FileManagerRenameTriggerView.Grid &&
             renamedPath === params.data?.path;
+
           if (isBeingRenamed && renamedItem && params.data) {
             const displayName = getDisplayName(renamedItem);
             return (
@@ -849,6 +867,14 @@ export const DialFileManagerView: FC = () => {
     return map;
   }, [selectedFiles, gridRows]);
 
+  const disabledGridRowIds = useMemo(() => {
+    const ids = new Set<string>();
+    gridRows
+      .filter((row) => isRowDisabled(row, allowedFileTypes))
+      .forEach((row) => ids.add(row.path));
+    return ids;
+  }, [allowedFileTypes, gridRows, isRowDisabled]);
+
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {
       const newSelectedFiles = new Map<string, DialFile>();
@@ -1040,6 +1066,8 @@ export const DialFileManagerView: FC = () => {
 
   const { actionsColumnDef } = useGridActionsColumn({
     getContextMenuItems: getGridContextMenuItems,
+    isRowDisabled,
+    allowedFileTypes: allowedFileTypes,
   });
 
   const baseColumns = userColumnDefs ?? defaultColumns;
@@ -1185,6 +1213,7 @@ export const DialFileManagerView: FC = () => {
               selectedRows={selectedGridRows}
               onSelectionChangeWithMap={handleSelectionChange}
               wrapperBorder={!isDragging && !isDraggingOverWindow}
+              disabledRowIds={disabledGridRowIds}
             />
           </section>
         </div>

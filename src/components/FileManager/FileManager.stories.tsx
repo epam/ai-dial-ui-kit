@@ -276,6 +276,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
+          allowedFileTypes={['.svg', 'text/plain', 'application/pdf']}
           onPathChange={(path) => {
             if (path) {
               setLoadedPaths((prev) => new Set(prev).add(path));

@@ -6,10 +6,14 @@ import {
   useRef,
 } from 'react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
-import type { DialUploadFileItem } from '@/models/file-manager';
+import type {
+  DialFileAcceptType,
+  DialUploadFileItem,
+} from '@/models/file-manager';
 import { FILES_DATA_TRANSFER_TYPE } from '@/components/FileManager/constants';
 import { useConflictResolution } from './use-conflict-resolution';
 import type { FileConflictDecision } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
+import { isFileAccepted } from '../utils';
 
 export interface FileUploadValidationResult {
   valid: boolean;
@@ -19,6 +23,7 @@ export interface FileUploadValidationResult {
 export interface FileUploadValidationMessages {
   duplicateFiles?: string;
   oversizedFiles?: string;
+  unsupportedFiles?: string;
   validationFailed?: string;
   validationError?: string;
 }
@@ -34,6 +39,7 @@ export interface UseFileUploadOptions {
     destinationFolder: string,
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
   maxFileSize?: number;
+  allowedFileTypes?: DialFileAcceptType[];
   validationMessages?: FileUploadValidationMessages;
   onUploadArchive?: (
     file: File,
@@ -52,6 +58,7 @@ export const useFileUpload = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
+  allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
 }: UseFileUploadOptions = {}) => {
@@ -69,6 +76,17 @@ export const useFileUpload = ({
   const [uploadMetadata, setUploadMetadata] = useState<{
     destinationFolder: string;
   } | null>(null);
+
+  const filterAcceptedFiles = useCallback(
+    (files: DialUploadFileItem[]) => {
+      if (!allowedFileTypes || allowedFileTypes.includes('*/*')) return files;
+
+      return files.filter(({ fileContent, name }) =>
+        isFileAccepted(allowedFileTypes, fileContent.type, name),
+      );
+    },
+    [allowedFileTypes],
+  );
 
   const {
     conflictingFiles,
@@ -331,15 +349,28 @@ export const useFileUpload = ({
       }
 
       const files = Array.from(e.dataTransfer.files);
-      if (files.length > 0) {
-        const uploadItems: DialUploadFileItem[] = files.map((file) => ({
-          fileContent: file,
-          name: file.name,
-        }));
-        await handleUpload(uploadItems, destinationFolder, existingFiles);
+      if (files.length === 0) {
+        return;
       }
+
+      const uploadItems: DialUploadFileItem[] = files.map((file) => ({
+        fileContent: file,
+        name: file.name,
+      }));
+
+      const acceptedItems = filterAcceptedFiles(uploadItems);
+
+      if (acceptedItems.length === 0) {
+        setUploadError(
+          validationMessages.unsupportedFiles ||
+            'Selected files are not supported',
+        );
+        return;
+      }
+
+      await handleUpload(acceptedItems, destinationFolder, existingFiles);
     },
-    [handleUpload],
+    [handleUpload, filterAcceptedFiles, validationMessages],
   );
 
   useEffect(() => {
@@ -354,6 +385,12 @@ export const useFileUpload = ({
       fileInputRef.current = input;
     }
 
+    if (allowedFileTypes && allowedFileTypes.length > 0) {
+      input.accept = allowedFileTypes.join(',');
+    } else {
+      input.removeAttribute('accept');
+    }
+
     const handleChange = async () => {
       if (!input?.files?.length) return;
 
@@ -363,8 +400,19 @@ export const useFileUpload = ({
         name: file.name,
       }));
 
+      const acceptedItems = filterAcceptedFiles(uploadItems);
+
+      if (acceptedItems.length === 0) {
+        setUploadError(
+          validationMessages.unsupportedFiles ||
+            'Selected files are not supported',
+        );
+        input.value = '';
+        return;
+      }
+
       await handleUpload(
-        uploadItems,
+        acceptedItems,
         destinationFolderRef.current,
         existingFilesRef.current,
       );
@@ -384,7 +432,7 @@ export const useFileUpload = ({
         fileInputRef.current = null;
       }
     };
-  }, [handleUpload]);
+  }, [allowedFileTypes, filterAcceptedFiles, handleUpload, validationMessages]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {

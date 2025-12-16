@@ -20,3 +20,7 @@ export interface DialUploadFileItem {
 export interface DialFileManagerActionsRef {
   createFolder: () => void;
 }
+
+export type DialFileAcceptType =
+  | `${string}/${string}` // MIME (wildcard)
+  | `.${string}`; // extension

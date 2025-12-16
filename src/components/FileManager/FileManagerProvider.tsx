@@ -83,6 +83,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
+  uploadValidationMessages,
   maxFileSize,
   onUploadArchive,
   onCreateFolder,
@@ -97,6 +98,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   searchResults,
   searchInProgress,
   clearSearchResults,
+  allowedFileTypes,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
     new Map(),
@@ -272,6 +274,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onValidateUpload,
     maxFileSize,
     onUploadArchive,
+    allowedFileTypes,
+    validationMessages: uploadValidationMessages,
   });
 
   const handleDrop = useCallback(
@@ -367,7 +371,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       source = source.filter((node) => !isHiddenDotFile(node));
     }
 
-    const mapped = source.map((node) => ({
+    const mapped: FileManagerGridRow[] = source.map((node) => ({
       id: node.id ?? node.path,
       name: node.name ?? node.path.split('/').pop() ?? '',
       updatedAt: node.updatedAt,
@@ -381,6 +385,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       extension: node.extension,
       isTemporary: false,
       owner: node.owner,
+      contentType: node.contentType,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -475,6 +480,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const value: FileManagerContextValue = {
     className,
     items,
+    allowedFileTypes,
     rootItem,
     filesLoading,
     treeOptions: {

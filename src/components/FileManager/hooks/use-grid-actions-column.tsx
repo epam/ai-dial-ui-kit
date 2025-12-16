@@ -6,17 +6,29 @@ import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { useCallback, useMemo } from 'react';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import type { DropdownItem } from '@/models/dropdown';
+import type { DialFileAcceptType } from '@/models/file-manager';
 
 interface UseGridActionsColumnProps {
   getContextMenuItems: (row: FileManagerGridRow) => DropdownItem[];
+  isRowDisabled: (
+    row: FileManagerGridRow,
+    allowedFileTypes?: DialFileAcceptType[],
+  ) => boolean;
+  allowedFileTypes?: DialFileAcceptType[];
 }
 
 export const useGridActionsColumn = ({
   getContextMenuItems,
+  isRowDisabled,
+  allowedFileTypes,
 }: UseGridActionsColumnProps) => {
   const renderActionsCell = useCallback(
     (p: ICellRendererParams<FileManagerGridRow, unknown>) => {
       if (!p.data) return null;
+
+      const disabled = isRowDisabled(p.data, allowedFileTypes);
+
+      if (disabled) return null;
 
       const items = p.data ? (getContextMenuItems?.(p.data) ?? []) : [];
 
@@ -36,7 +48,7 @@ export const useGridActionsColumn = ({
         </DialDropdown>
       );
     },
-    [getContextMenuItems],
+    [allowedFileTypes, getContextMenuItems, isRowDisabled],
   );
 
   const actionsColumnDef: ColDef<FileManagerGridRow> = useMemo(

@@ -135,6 +135,7 @@ export {
   type DialDeletedItem,
   type DialUploadFileItem,
   type DialFileManagerActionsRef,
+  type DialFileAcceptType,
 } from './models/file-manager';
 
 // Utils

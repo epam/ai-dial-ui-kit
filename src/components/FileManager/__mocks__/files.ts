@@ -413,6 +413,7 @@ export const itemsMock: DialFile[] = [
             path: '/All files/Design/ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents',
             parentPath: '/All files/Design',
             nodeType: DialFileNodeType.ITEM,
+            contentType: 'image/png',
             folderId: 'design',
             updatedAt: '2025-01-11',
             items: [],

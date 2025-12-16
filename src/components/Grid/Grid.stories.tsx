@@ -326,6 +326,13 @@ export const ClickableRows: Story = {
   },
 };
 
+export const WithDisabledRows: Story = {
+  args: {
+    selectedRowIds: undefined,
+    disabledRowIds: new Set(['1', '3']),
+  },
+};
+
 export const EmptyState: Story = {
   args: {
     selectedRowIds: undefined,
