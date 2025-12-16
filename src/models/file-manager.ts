@@ -22,5 +22,5 @@ export interface DialFileManagerActionsRef {
 }
 
 export type DialFileAcceptType =
-  | `${string}/${string}` // MIME (incl wildcard)
+  | `${string}/${string}` // MIME (wildcard)
   | `.${string}`; // extension
