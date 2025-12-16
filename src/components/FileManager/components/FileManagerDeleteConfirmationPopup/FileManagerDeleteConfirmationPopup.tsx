@@ -10,7 +10,7 @@ export interface FileManagerDeleteConfirmationPopupProps {
   onConfirm: () => void;
   cancelLabel?: string;
   confirmLabel?: string;
-  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  titleRenderer?: (fileNames: string[]) => ReactNode;
   contentRenderer?: (fileNames: string[]) => ReactNode;
 }
 
@@ -96,7 +96,7 @@ export const FileManagerDeleteConfirmationPopup: FC<
   return (
     <DialConfirmationPopup
       open={open}
-      title={title}
+      header={title}
       confirmLabel={confirmLabel}
       cancelLabel={cancelLabel}
       variant={ConfirmationPopupVariant.Danger}

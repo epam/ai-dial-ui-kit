@@ -66,7 +66,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * @param [size=PopupSize.Sm] - Size of the popup
  */
 export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
-  title,
+  header: title,
   description,
   descriptionClassName,
   open = false,
@@ -131,7 +131,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   return (
     <DialPopup
       open={open}
-      title={title}
+      header={title}
       className={classNames(variantConfig[variant].container, className)}
       dividers={dividers}
       onClose={() => onClose?.()}

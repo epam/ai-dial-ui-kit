@@ -31,7 +31,7 @@ const meta = {
       control: 'text',
       description: 'Unique identifier for the switch element',
     },
-    title: {
+    label: {
       control: 'text',
       description: 'The title/label text to display for the switch',
     },
@@ -58,7 +58,7 @@ export const Default: Story = {
   render: InteractiveSwitch,
   args: {
     switchId: 'default-switch',
-    title: 'Enable feature',
+    label: 'Enable feature',
   },
 };
 
@@ -66,7 +66,7 @@ export const WithActiveValue: Story = {
   render: InteractiveSwitch,
   args: {
     switchId: 'default-switch',
-    title: 'Enable feature',
+    label: 'Enable feature',
     isOn: true,
   },
 };
@@ -75,7 +75,7 @@ export const Disabled: Story = {
   render: InteractiveSwitch,
   args: {
     switchId: 'default-switch',
-    title: 'Enable feature',
+    label: 'Enable feature',
     isOn: false,
     disabled: true,
   },
@@ -85,7 +85,7 @@ export const DisabledWithActiveValue: Story = {
   render: InteractiveSwitch,
   args: {
     switchId: 'default-switch',
-    title: 'Enable feature',
+    label: 'Enable feature',
     isOn: true,
     disabled: true,
   },
@@ -100,7 +100,7 @@ export const AllVariants: Story = {
       {/* Default State */}
       <div>
         <div className="text-primary font-semibold mb-2">Default</div>
-        <InteractiveSwitch switchId="default-switch" title="Switch" />
+        <InteractiveSwitch switchId="default-switch" label="Switch" />
       </div>
 
       {/* Default State active Switch  */}
@@ -110,7 +110,7 @@ export const AllVariants: Story = {
         </div>
         <InteractiveSwitch
           switchId="default-switch"
-          title="Switch"
+          label="Switch"
           isOn={true}
         />
       </div>
@@ -122,7 +122,7 @@ export const AllVariants: Story = {
         </div>
         <InteractiveSwitch
           switchId="disabled-switch"
-          title="Disabled Switch"
+          label="Disabled Switch"
           disabled={true}
           isOn={true}
         />
@@ -135,7 +135,7 @@ export const AllVariants: Story = {
         </div>
         <InteractiveSwitch
           switchId="disabled-switch"
-          title="Disabled Switch"
+          label="Disabled Switch"
           disabled={true}
           isOn={false}
         />

@@ -4,7 +4,7 @@ import type { ChangeEvent, FC, ReactNode } from 'react';
 export interface DialRadioButtonProps {
   name: string;
   value: string;
-  title?: string;
+  label?: ReactNode;
   description?: ReactNode;
   checked?: boolean;
   inputId: string;
@@ -36,7 +36,7 @@ export interface DialRadioButtonProps {
  *
  * @param name - Radio group name
  * @param value - Radio value emitted on change
- * @param [title] - Visible label text
+ * @param label - Visible label text
  * @param [description] - Supporting text shown when checked
  * @param [checked=false] - Controlled checked state
  * @param inputId - ID associated with the label
@@ -49,7 +49,7 @@ export interface DialRadioButtonProps {
 export const DialRadioButton: FC<DialRadioButtonProps> = ({
   name,
   value,
-  title,
+  label,
   description,
   checked = false,
   inputId,
@@ -69,7 +69,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 
   const inputClassName = classNames(
     'cursor-pointer dial-input-radio',
-    title && 'mr-2',
+    !!label && 'mr-2',
     className,
   );
 
@@ -102,9 +102,9 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           className={inputClassName}
           onChange={handleChange}
         />
-        {title ? (
+        {label ? (
           <label className={allLabelClassName} htmlFor={inputId}>
-            {title}
+            {label}
           </label>
         ) : null}
       </div>

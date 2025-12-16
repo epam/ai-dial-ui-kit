@@ -12,7 +12,7 @@ describe('Dial UI Kit :: DialPopup', () => {
 
   test('renders title and body when open', () => {
     render(
-      <DialPopup open title="Title">
+      <DialPopup open header="Title">
         <div>Body content</div>
       </DialPopup>,
     );
@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialPopup', () => {
 
   test('renders footer', () => {
     render(
-      <DialPopup open title="With footer" footer={<div>Footer here</div>}>
+      <DialPopup open header="With footer" footer={<div>Footer here</div>}>
         <div>Body</div>
       </DialPopup>,
     );
@@ -33,7 +33,7 @@ describe('Dial UI Kit :: DialPopup', () => {
   test('calls onClose when close button clicked', () => {
     const onClose = vi.fn();
     render(
-      <DialPopup open title="Closable" onClose={onClose}>
+      <DialPopup open header="Closable" onClose={onClose}>
         <div>Body</div>
       </DialPopup>,
     );
@@ -45,7 +45,7 @@ describe('Dial UI Kit :: DialPopup', () => {
     render(
       <DialPopup
         open
-        title={
+        header={
           <span>
             <strong>Node title</strong>
           </span>
@@ -65,7 +65,7 @@ describe('Dial UI Kit :: DialPopup', () => {
 
   test('applies size class correctly', () => {
     render(
-      <DialPopup open title="Size Test" size={PopupSize.Lg}>
+      <DialPopup open header="Size Test" size={PopupSize.Lg}>
         <div>Body</div>
       </DialPopup>,
     );
@@ -78,7 +78,7 @@ describe('Dial UI Kit :: DialPopup', () => {
     render(
       <DialPopup
         open
-        title="Header class test"
+        header="Header class test"
         headerClassName="custom-header-class"
       >
         <div>Body</div>
@@ -98,7 +98,7 @@ describe('Dial UI Kit :: DialPopup', () => {
     render(
       <DialPopup
         open
-        title="Outside click disabled"
+        header="Outside click disabled"
         closeOnOutsideClick={false}
         onClose={onClose}
       >

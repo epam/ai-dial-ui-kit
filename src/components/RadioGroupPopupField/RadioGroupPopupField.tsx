@@ -143,7 +143,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
         <DialPopup
           open={isOpen}
           onClose={onClosePopup}
-          title={title}
+          header={title}
           portalId={portalId}
           size={size}
           footer={

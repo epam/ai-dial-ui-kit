@@ -165,7 +165,7 @@ export interface FileTreeOptions
 
 export interface DeleteConfirmationOptions {
   cancelLabel?: string;
-  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  titleRenderer?: (fileNames: string[]) => ReactNode;
   confirmLabel?: string;
   contentRenderer?: (fileNames: string[]) => ReactNode;
 }

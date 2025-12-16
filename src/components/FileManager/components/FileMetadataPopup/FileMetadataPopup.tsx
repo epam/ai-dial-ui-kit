@@ -83,7 +83,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
       open={open}
       onClose={onClose}
       size={PopupSize.Sm}
-      title={title}
+      header={title}
       dividers={false}
     >
       <div className="px-6 py-4">

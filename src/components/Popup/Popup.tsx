@@ -23,7 +23,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialPopupProps {
   open?: boolean;
-  title?: string | ReactNode;
+  header?: ReactNode;
   portalId?: string;
   className?: string;
   overlayClassName?: string;
@@ -62,7 +62,7 @@ export interface DialPopupProps {
  * ```
  *
  * @param [open=false] - Controls visibility of the popup
- * @param [title] - Optional title rendered in the header
+ * @param [header] - Optional title rendered in the header
  * @param [portalId] - Optional portal container id
  * @param [className] - Additional CSS classes applied to the popup container
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
@@ -77,7 +77,7 @@ export interface DialPopupProps {
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
-  title,
+  header,
   portalId,
   className,
   overlayClassName,
@@ -104,9 +104,9 @@ export const DialPopup: FC<DialPopupProps> = ({
   if (!open) return null;
 
   const headingId =
-    typeof title === 'string' ? 'dial-popup-heading' : undefined;
+    typeof header === 'string' ? 'dial-popup-heading' : undefined;
 
-  const renderTitle = (title?: ReactNode | string) => {
+  const renderTitle = (title?: ReactNode) => {
     if (!title) return <span /* empty element to balance the close button */ />;
 
     return typeof title === 'string' ? (
@@ -146,7 +146,7 @@ export const DialPopup: FC<DialPopupProps> = ({
             <div
               className={mergeClasses(popupHeaderClassName, headerClassName)}
             >
-              {renderTitle(title)}
+              {renderTitle(header)}
               <DialCloseButton
                 ariaLabel="Close dialog"
                 onClose={(e) => onClose?.(e)}

@@ -23,7 +23,7 @@ const InteractiveInputModal = (args: DialInputPopupProps) => {
         onOpen={handleOpenModal}
         emptyValueText="None"
       >
-        <DialPopup open onClose={handleCloseModal} title="Select value">
+        <DialPopup open onClose={handleCloseModal} header="Select value">
           <div className="rounded-lg p-6 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               {['Option 1', 'Option 2', 'Option 3'].map((opt) => (
@@ -212,7 +212,7 @@ const InteractiveInputModalWithFormItem = (args: DialInputPopupProps) => {
           onOpen={handleOpenModal}
           emptyValueText="None"
         >
-          <DialPopup open onClose={handleCloseModal} title="Select value">
+          <DialPopup open onClose={handleCloseModal} header="Select value">
             <div className="rounded-lg p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 {['Option 1', 'Option 2', 'Option 3'].map((opt) => (

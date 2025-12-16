@@ -31,7 +31,7 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     render(
       <DialConfirmationPopup
         {...baseProps}
-        title={
+        header={
           <span>
             <strong>Node title</strong>
           </span>
@@ -133,7 +133,7 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     render(
       <DialConfirmationPopup
         open
-        title="Confirm?"
+        header="Confirm?"
         cancelLabel="Cancel dialog"
         onClose={onClose}
         onConfirm={onConfirm}

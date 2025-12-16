@@ -129,7 +129,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
                 labelClassName,
                 radio.id === activeRadioButton && selectedLabelClassName,
               )}
-              title={radio.name}
+              label={radio.name}
               checked={radio.id === activeRadioButton}
               onChange={() => onChange(radio.id)}
             />
