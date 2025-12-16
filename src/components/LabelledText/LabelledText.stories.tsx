@@ -55,5 +55,6 @@ export const TooltipOnly: Story = {
   args: {
     label: 'Tooltip Only',
     text: 'Hover for tooltip',
+    tooltip: 'Tooltip is different from text',
   },
 };

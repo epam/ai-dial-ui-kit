@@ -96,6 +96,14 @@ const WithSearchControlledComponent = (args: DialFileManagerProps) => {
 
 export const WithSearchControlled: Story = {
   render: WithSearchControlledComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with controlled search input. Parent component manages search state. Uses local search by default.',
+      },
+    },
+  },
 };
 
 export const GridWithoutFilters: Story = {
@@ -1064,6 +1072,150 @@ export const WithOwnerColumn: Story = {
     docs: {
       description: {
         story: 'File Manager with Owner column instead of Author.',
+      },
+    },
+  },
+};
+
+const WithLocalSearchComponent = (args: DialFileManagerProps) => {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        navigationPanelOptions={{
+          ...args.navigationPanelOptions,
+          searchable: true,
+          value: query,
+          onSearchChange: (v) => setQuery(String(v ?? '')),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithLocalSearch: Story = {
+  render: WithLocalSearchComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with local search functionality. Search works across all files and folders in the tree without external API calls. Try searching for "svg", "design", or "alert".',
+      },
+    },
+  },
+};
+
+const WithServerSearchComponent = (args: DialFileManagerProps) => {
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<DialFile[]>([]);
+  const [searchInProgress, setSearchInProgress] = useState(false);
+
+  const handleSearch = useCallback((_folder: string, _searchQuery: string) => {
+    setSearchInProgress(true);
+
+    // Simulate API call that returns ALL files
+    setTimeout(() => {
+      const allFiles: DialFile[] = [];
+      const traverse = (items: DialFile[]) => {
+        items.forEach((item) => {
+          allFiles.push(item);
+          if (item.items) {
+            traverse(item.items);
+          }
+        });
+      };
+      traverse(itemsMock);
+
+      setSearchResults(allFiles);
+      setSearchInProgress(false);
+    }, 800);
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setSearchResults([]);
+    setSearchInProgress(false);
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        navigationPanelOptions={{
+          ...args.navigationPanelOptions,
+          searchable: true,
+          value: query,
+          onSearchChange: (v) => setQuery(String(v ?? '')),
+        }}
+        onSearchFiles={handleSearch}
+        searchResults={searchResults}
+        searchInProgress={searchInProgress}
+        clearSearchResults={clearSearch}
+      />
+    </div>
+  );
+};
+
+export const WithServerSearch: Story = {
+  render: WithServerSearchComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with server-side search. The API is called once to fetch all files from the current folder. Further filtering by typed characters happens locally in the browser. Shows loading state during initial fetch. Try searching for "svg" or "alert".',
+      },
+    },
+  },
+};
+
+const WithSearchInPopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        label="Toggle File Manager with Search"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
+      >
+        <DialFileManager
+          {...args}
+          items={itemsMock}
+          navigationPanelOptions={{
+            searchable: true,
+            value: query,
+            onSearchChange: (v) => setQuery(String(v ?? '')),
+          }}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+          }}
+          treeOptions={{
+            ...(args.treeOptions ?? {}),
+            collapsed: false,
+            expandedPaths: new Set<string>(['All files']),
+          }}
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const WithSearchInPopup: Story = {
+  render: WithSearchInPopupComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with search functionality inside a popup. Local search is enabled by default.',
       },
     },
   },

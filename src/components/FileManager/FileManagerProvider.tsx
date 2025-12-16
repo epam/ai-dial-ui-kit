@@ -36,6 +36,7 @@ import { useNewActions } from './hooks/use-new-actions';
 import { useFolderCreation } from './hooks/use-folder-creation';
 import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
 import { useFileMetadata } from './hooks/use-file-metadata';
+import { useFileSearch } from './hooks/use-file-search';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -93,6 +94,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onUnshareFile,
   actionsRef,
   sharedByMePaths,
+  onSearchFiles,
+  searchResults,
+  searchInProgress,
+  clearSearchResults,
   accept,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
@@ -156,17 +161,23 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onMoveToFiles,
   });
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  useEffect(() => {
-    const external = navigationPanelOptions?.value;
-    if (external != null) {
-      setSearchValue(String(external));
-    }
-  }, [navigationPanelOptions?.value]);
-
-  const effectiveSearchValue = String(
-    navigationPanelOptions?.value ?? searchValue ?? '',
-  ).trim();
+  const {
+    isSearchMode,
+    searchValue,
+    effectiveSearchValue,
+    setSearchValue,
+    handleSearchChange,
+    searchResultsRows,
+  } = useFileSearch({
+    onSearchFiles,
+    clearSearchResults,
+    currentPath,
+    searchResults,
+    searchInProgress,
+    navigationPanelValue: navigationPanelOptions?.value,
+    onNavigationPanelSearchChange: navigationPanelOptions?.onSearchChange,
+    allItems: items,
+  });
 
   const currentFolder = useMemo(
     () => findFolderForPath(items, currentPath) ?? items[0],
@@ -310,6 +321,45 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
+    if (isSearchMode) {
+      const source = searchResultsRows;
+
+      if (!areHiddenFilesVisible) {
+        const filtered = source.filter((node) => !isHiddenDotFile(node));
+        return filtered.map((node) => ({
+          id: node.id ?? node.path,
+          name: node.name ?? node.path.split('/').pop() ?? '',
+          updatedAt: node.updatedAt,
+          size:
+            node.nodeType === DialFileNodeType.ITEM
+              ? formatBytes(node.contentLength)
+              : '',
+          author: node.author,
+          path: node.path,
+          nodeType: node.nodeType,
+          extension: node.extension,
+          isTemporary: false,
+          owner: node.owner,
+        }));
+      }
+
+      return source.map((node) => ({
+        id: node.id ?? node.path,
+        name: node.name ?? node.path.split('/').pop() ?? '',
+        updatedAt: node.updatedAt,
+        size:
+          node.nodeType === DialFileNodeType.ITEM
+            ? formatBytes(node.contentLength)
+            : '',
+        author: node.author,
+        path: node.path,
+        nodeType: node.nodeType,
+        extension: node.extension,
+        isTemporary: false,
+        owner: node.owner,
+      }));
+    }
+
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
 
     const directChildren = currentFolder?.items ?? [];
@@ -370,6 +420,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       );
     });
   }, [
+    isSearchMode,
+    searchResultsRows,
     currentFolder,
     effectiveSearchValue,
     areHiddenFilesVisible,
@@ -389,15 +441,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       handlePathChange(href);
     },
     [handlePathChange],
-  );
-
-  const handleSearchChange = useCallback(
-    (value?: string) => {
-      const next = String(value ?? '');
-      setSearchValue(next);
-      navigationPanelOptions?.onSearchChange?.(next);
-    },
-    [navigationPanelOptions],
   );
 
   const handleTableRowClick = useCallback(
@@ -566,6 +609,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     actionsRef,
     sharedByMePaths,
+
+    onSearchFiles,
+    searchInProgress,
+    searchResults,
+    clearSearchResults,
+    isSearchMode,
   };
 
   return (

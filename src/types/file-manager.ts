@@ -44,5 +44,6 @@ export enum FileManagerColumnKey {
   Author = 'author',
   // Dial Chat–specific field required to show the owner of shared files and folders
   Owner = 'owner',
+  Path = 'path',
   Actions = '__actions',
 }

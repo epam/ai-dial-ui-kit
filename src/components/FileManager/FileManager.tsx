@@ -103,6 +103,7 @@ import { FileManagerColumnKey } from '@/types/file-manager';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 type GridRow = FileManagerGridRow;
 
@@ -313,6 +314,11 @@ export interface DialFileManagerProps {
 
   onUnshareFile?: (file: DialFile) => void | Promise<void>;
   actionsRef?: Ref<DialFileManagerActionsRef>;
+
+  onSearchFiles?: (folder: string, query: string) => void;
+  searchInProgress?: boolean;
+  searchResults?: DialFile[];
+  clearSearchResults?: () => void;
 }
 
 /**
@@ -507,6 +513,8 @@ export const DialFileManagerView: FC = () => {
     onUnshareFile,
 
     actionsRef,
+    searchInProgress,
+    isSearchMode,
   } = useFileManagerContext();
 
   const {
@@ -551,6 +559,16 @@ export const DialFileManagerView: FC = () => {
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
   );
+
+  const effectiveVisibleColumns = useMemo(() => {
+    return isSearchMode
+      ? [
+          FileManagerColumnKey.Name,
+          FileManagerColumnKey.Path,
+          FileManagerColumnKey.Actions,
+        ]
+      : visibleColumns;
+  }, [isSearchMode, visibleColumns]);
 
   const isRowDisabled = useCallback(
     (row: FileManagerGridRow, accept?: DialFileAcceptType[]) => {
@@ -674,6 +692,16 @@ export const DialFileManagerView: FC = () => {
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
+        },
+      },
+      {
+        colId: FileManagerColumnKey.Path,
+        field: 'path',
+        headerName: 'Path',
+        flex: 1,
+        minWidth: 200,
+        cellRenderer: (params: { data: GridRow }) => {
+          return <DialEllipsisTooltip text={params.data.path} />;
         },
       },
       {
@@ -1050,7 +1078,7 @@ export const DialFileManagerView: FC = () => {
       columns = columns.filter(
         (col) =>
           col.colId &&
-          visibleColumns.includes(col.colId as FileManagerColumnKey),
+          effectiveVisibleColumns.includes(col.colId as FileManagerColumnKey),
       );
     }
 
@@ -1076,7 +1104,7 @@ export const DialFileManagerView: FC = () => {
     isCompactView,
     actionsColumnDef,
     userColumnDefs,
-    visibleColumns,
+    effectiveVisibleColumns,
   ]);
 
   const cellClickHandler = useCallback(
@@ -1143,7 +1171,7 @@ export const DialFileManagerView: FC = () => {
               columnDefs={columnDefs}
               rowData={gridRows}
               getRowId={(row) => row.path}
-              loading={filesLoading}
+              loading={filesLoading || searchInProgress}
               getContextMenuItems={getGridContextMenuItems}
               withoutHeaderBorders={isCompactView}
               selectionOnHover={!isCompactView}
