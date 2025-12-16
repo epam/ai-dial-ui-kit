@@ -262,6 +262,96 @@ export const NoAuthor: Story = {
   },
 };
 
+const EncodedPathComponent: FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const fileWithEncodedPath: DialFile = {
+    id: 'file-5',
+    name: 'Screenshot 2025-12-10 at 09.44.24.png',
+    path: 'files/akWB1YBFr8MR1nshJgXHKUWfPCLZf8x6nMKGsa9WMxmggzPWW42NdcfpPRiPjRHT5/13/Screenshot%202025-12-10%20at%2009.44.24.png',
+    updatedAt: '2025-12-10T09:44:24Z',
+    contentLength: 3456789,
+    author: 'Jane Doe',
+    contentType: 'image/png',
+    nodeType: DialFileNodeType.ITEM,
+    folderId: 'folder-13',
+  };
+
+  return (
+    <div className="w-full h-[100px] flex items-center justify-center">
+      {!isOpen && (
+        <DialButton
+          onClick={() => setIsOpen(true)}
+          label="Show File with Encoded Path"
+          variant={ButtonVariant.Primary}
+        />
+      )}
+      <FileMetadataPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        fileMetadata={fileWithEncodedPath}
+      />
+    </div>
+  );
+};
+
+export const EncodedPath: Story = {
+  render: () => <EncodedPathComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File metadata popup displaying a URI-encoded path with spaces and special characters. The path is automatically decoded for display (e.g., `%20` becomes space).',
+      },
+    },
+  },
+};
+
+const SpecialCharactersPathComponent: FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const fileWithSpecialChars: DialFile = {
+    id: 'file-6',
+    name: 'file with & special # chars.txt',
+    path: 'My%20Files/Special%20%26%20Important/file%20with%20%26%20special%20%23%20chars.txt',
+    updatedAt: '2025-12-15T14:30:00Z',
+    contentLength: 1024,
+    author: 'Bob Smith',
+    contentType: 'text/plain',
+    nodeType: DialFileNodeType.ITEM,
+    folderId: 'folder-spec',
+  };
+
+  return (
+    <div className="w-full h-[100px] flex items-center justify-center">
+      {!isOpen && (
+        <DialButton
+          onClick={() => setIsOpen(true)}
+          label="Show File with Special Characters"
+          variant={ButtonVariant.Primary}
+        />
+      )}
+      <FileMetadataPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        fileMetadata={fileWithSpecialChars}
+      />
+    </div>
+  );
+};
+
+export const SpecialCharactersPath: Story = {
+  render: () => <SpecialCharactersPathComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File metadata popup with special characters in the path (& and #). These are properly decoded from URI encoding.',
+      },
+    },
+  },
+};
+
 const CustomLabelsComponent: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
