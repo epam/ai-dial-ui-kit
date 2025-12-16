@@ -5,7 +5,7 @@ import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 
 describe('Dial UI Kit :: ConfirmationPopup', () => {
   const baseProps = {
-    title: 'Confirm Deleting Model',
+    header: 'Confirm Deleting Model',
     description: 'Are you sure that you want to delete model?',
     open: true,
     confirmLabel: 'Delete',
