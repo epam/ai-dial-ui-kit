@@ -16,10 +16,10 @@ describe('Dial UI Kit :: DialTag', () => {
   });
 
   test('Should render iconBefore when provided', () => {
-    const IconBefore = <IconEar data-testid="before-icon" />;
+    const IconBefore = <IconEar role="img" aria-label="Ear icon" />;
     render(<DialTag tag="tag" iconBefore={IconBefore} />);
 
-    expect(screen.getByTestId('before-icon')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Ear icon' })).toBeInTheDocument();
     expect(screen.getByText('tag')).toBeInTheDocument();
   });
 
