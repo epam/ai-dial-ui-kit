@@ -19,7 +19,7 @@ const meta = {
   argTypes: {
     label: {
       control: { type: 'text' },
-      description: 'Button text content',
+      description: 'Button label content',
     },
     variant: {
       control: { type: 'select' },
@@ -72,6 +72,7 @@ export const SecondaryButton: Story = {
     variant: ButtonVariant.Secondary,
   },
 };
+
 export const TertiaryButton: Story = {
   args: {
     label: 'Tertiary Button',
@@ -83,6 +84,63 @@ export const DangerButton: Story = {
   args: {
     label: 'Danger Button',
     variant: ButtonVariant.Danger,
+  },
+};
+
+export const WithReactNodeLabel: Story = {
+  args: {
+    label: (
+      <span>
+        Custom <strong>React</strong> Label
+      </span>
+    ),
+    variant: ButtonVariant.Primary,
+    'aria-label': 'Custom React Label',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates that label can accept ReactNode for more complex content. Remember to provide aria-label for accessibility when using ReactNode.',
+      },
+    },
+  },
+};
+
+export const WithIconAsLabel: Story = {
+  args: {
+    label: <IconArrowRight size={20} />,
+    variant: ButtonVariant.Secondary,
+    'aria-label': 'Arrow button',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Button with an icon as the label content. Requires aria-label for accessibility.',
+      },
+    },
+  },
+};
+
+export const WithComplexLabel: Story = {
+  args: {
+    label: (
+      <span className="flex items-center gap-1">
+        <span className="text-xs">🔥</span>
+        <span>Hot Deal</span>
+      </span>
+    ),
+    variant: ButtonVariant.Primary,
+    'aria-label': 'Hot Deal',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Example of a complex label with emoji and custom layout using ReactNode.',
+      },
+    },
   },
 };
 
