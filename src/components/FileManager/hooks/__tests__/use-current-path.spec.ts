@@ -29,21 +29,10 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
     expect(result.current.currentPath).toBe('/updated');
   });
 
-  it('calls onSelectionClear when path prop changes', () => {
-    const onSelectionClear = vi.fn();
-    const { rerender } = renderHook(
-      ({ path }) => useCurrentPath({ path, onSelectionClear }),
-      {
-        initialProps: { path: '/initial' as string | undefined },
-      },
-    );
-
-    rerender({ path: '/updated' });
-    expect(onSelectionClear).toHaveBeenCalledTimes(1);
-  });
-
   it('sets currentPath directly with setCurrentPath', () => {
-    const { result } = renderHook(() => useCurrentPath({ path: '/initial' }));
+    const { result } = renderHook(() =>
+      useCurrentPath({ defaultPath: '/initial' }),
+    );
 
     act(() => {
       result.current.setCurrentPath('/new/path');
@@ -62,7 +51,7 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
 
     const { result } = renderHook(() =>
       useCurrentPath({
-        path: '/initial',
+        defaultPath: '/initial',
         onPathChange,
         onSelectionClear,
       }),
@@ -84,7 +73,7 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
     const onPathChange = vi.fn();
 
     const { result } = renderHook(() =>
-      useCurrentPath({ path: '/initial', onPathChange }),
+      useCurrentPath({ defaultPath: '/initial', onPathChange }),
     );
 
     act(() => {
@@ -96,7 +85,9 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
   });
 
   it('works without optional callbacks', () => {
-    const { result } = renderHook(() => useCurrentPath({ path: '/initial' }));
+    const { result } = renderHook(() =>
+      useCurrentPath({ defaultPath: '/initial' }),
+    );
 
     act(() => {
       result.current.handlePathChange('/new');
@@ -111,5 +102,58 @@ describe('Dial UI Kit :: FileManager :: useCurrentPath', () => {
     expect(typeof result.current.currentPath).toBe('string');
     expect(typeof result.current.setCurrentPath).toBe('function');
     expect(typeof result.current.handlePathChange).toBe('function');
+  });
+
+  it('does not update currentPath via setCurrentPath in controlled mode', () => {
+    const onPathChange = vi.fn();
+
+    const { result } = renderHook(() =>
+      useCurrentPath({ path: '/initial', onPathChange }),
+    );
+
+    act(() => {
+      result.current.setCurrentPath('/new');
+    });
+
+    expect(result.current.currentPath).toBe('/initial');
+    expect(onPathChange).toHaveBeenCalledWith('/new');
+  });
+
+  it('updates currentPath only when controlled path prop changes', () => {
+    const { result, rerender } = renderHook(
+      ({ path }) => useCurrentPath({ path }),
+      {
+        initialProps: { path: '/initial' },
+      },
+    );
+
+    rerender({ path: '/updated' });
+
+    expect(result.current.currentPath).toBe('/updated');
+  });
+
+  it('does not call onSelectionClear when path prop changes', () => {
+    const onSelectionClear = vi.fn();
+
+    const { rerender } = renderHook(
+      ({ path }) => useCurrentPath({ path, onSelectionClear }),
+      {
+        initialProps: { path: '/initial' as string | undefined },
+      },
+    );
+
+    rerender({ path: '/updated' });
+
+    expect(onSelectionClear).not.toHaveBeenCalled();
+  });
+
+  it('controlled mode works without onPathChange', () => {
+    const { result } = renderHook(() => useCurrentPath({ path: '/initial' }));
+
+    act(() => {
+      result.current.handlePathChange('/new');
+    });
+
+    expect(result.current.currentPath).toBe('/initial');
   });
 });

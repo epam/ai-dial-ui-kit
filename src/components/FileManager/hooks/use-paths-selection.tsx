@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface UsePathsSelectionParams {
   selectedPaths?: Set<string>;
@@ -24,12 +24,6 @@ export function usePathsSelection({
     Set<string>
   >(() => defaultSelectedPaths ?? new Set());
 
-  useEffect(() => {
-    if (isControlled && selectedPaths) {
-      setInternalSelectedPaths(new Set(selectedPaths));
-    }
-  }, [isControlled, selectedPaths]);
-
   const effectiveSelectedPaths = useMemo(
     () => (isControlled ? selectedPaths! : internalSelectedPaths),
     [isControlled, selectedPaths, internalSelectedPaths],
@@ -38,7 +32,6 @@ export function usePathsSelection({
   const setSelectedPaths = useCallback(
     (paths: Set<string>) => {
       const next = new Set(paths);
-
       onSelectedPathsChange?.(next);
 
       if (!isControlled) {

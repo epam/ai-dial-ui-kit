@@ -181,7 +181,7 @@ describe('Dial UI Kit :: FileManager', () => {
     renderWithinSizedShell(
       <DialFileManager
         items={itemsMock}
-        path="/All files/Design/Icons/SVG/24px"
+        defaultPath="/All files/Design/Icons/SVG/24px"
         treeOptions={{
           expandedPaths: new Set([
             'All files',
@@ -207,7 +207,7 @@ describe('Dial UI Kit :: FileManager', () => {
     renderWithinSizedShell(
       <DialFileManager
         items={itemsMock}
-        path="All files"
+        defaultPath="All files"
         treeOptions={{
           expandedPaths: new Set(['All files', 'All files/Media']),
           showFiles: true,

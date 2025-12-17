@@ -244,6 +244,7 @@ interface FileManagerGridContext {
 
 export interface DialFileManagerProps {
   path?: string;
+  defaultPath?: string;
   className?: string;
 
   allowedFileTypes?: DialFileAcceptType[];
@@ -371,10 +372,13 @@ export interface DialFileManagerProps {
  * ```
  *
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
+ * @param [defaultPath] - Initial path used in uncontrolled mode (applied only on first render)
  * @param [className] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
+ * @param [selectedPaths] - Controlled set of selected item paths
+ * @param [defaultSelectedPaths] - Initial selected paths used in uncontrolled mode
  *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
@@ -386,6 +390,7 @@ export interface DialFileManagerProps {
  * @param [compactViewWidthBreakpoint=DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT] - Width (px) below which the component switches to compact view.
  *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
+ * @param [onSelectedPathsChange] - Callback fired when the selected paths change
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
  * @param [onCopyFiles] - Callback fired when files copy-paste

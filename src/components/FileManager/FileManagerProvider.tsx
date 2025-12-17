@@ -64,6 +64,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   items = [],
   rootItem,
   path,
+  defaultPath,
   filesLoading,
   selectedPaths,
   defaultSelectedPaths,
@@ -130,6 +131,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
+    defaultPath,
     onPathChange,
     onSelectionClear: clearSelection,
   });
