@@ -55,7 +55,7 @@ export interface DialFormPopupProps extends DialPopupProps {
  * @param [size=PopupSize.Md] - Size of the popup
  */
 export const DialFormPopup: FC<DialFormPopupProps> = ({
-  header: title,
+  header,
   open = false,
   submitLabel = defaultSubmitLabel,
   cancelLabel = defaultCancelLabel,
@@ -107,7 +107,7 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
   return (
     <DialPopup
       open={open}
-      header={title}
+      header={header}
       className={className}
       dividers={dividers}
       onClose={() => onClose?.()}
