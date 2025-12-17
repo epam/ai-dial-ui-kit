@@ -4,7 +4,7 @@ import { DialSwitch } from './Switch';
 
 describe('Dial UI Kit :: DialSwitch', () => {
   it('renders with title', () => {
-    render(<DialSwitch title="Test Switch" switchId="switch1" />);
+    render(<DialSwitch label="Test Switch" switchId="switch1" />);
     expect(screen.getByText('Test Switch')).toBeInTheDocument();
   });
 
@@ -12,7 +12,7 @@ describe('Dial UI Kit :: DialSwitch', () => {
     const onChange = vi.fn();
     render(
       <DialSwitch
-        title="Test Switch"
+        label="Test Switch"
         switchId="switch2"
         isOn={false}
         onChange={onChange}
@@ -27,7 +27,7 @@ describe('Dial UI Kit :: DialSwitch', () => {
     const onChange = vi.fn();
     render(
       <DialSwitch
-        title="Disabled Switch"
+        label="Disabled Switch"
         switchId="switch3"
         disabled
         onChange={onChange}

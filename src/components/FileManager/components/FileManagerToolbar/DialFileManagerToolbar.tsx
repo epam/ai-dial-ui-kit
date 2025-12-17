@@ -135,7 +135,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
     <>
       <DialSwitch
         switchId="hidden-files-switch"
-        title={hiddenFilesSwitcherLabel}
+        label={hiddenFilesSwitcherLabel}
         isOn={areHiddenFilesVisible}
         onChange={onToggleHiddenFiles}
       />

@@ -32,7 +32,7 @@ const mockFile: DialFile = {
 const StoryWrapper: FC<{
   loading?: boolean;
   fileMetadata?: DialFile;
-  title?: ReactNode;
+  header?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;
@@ -368,7 +368,7 @@ const CustomLabelsComponent: FC = () => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         fileMetadata={mockFile}
-        title="File Details"
+        header="File Details"
         nameLabel="File Name:"
         pathLabel="Location:"
         modifiedDateLabel="Last Updated:"

@@ -13,19 +13,19 @@ import {
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialBreadcrumbItemProps {
-  title: ReactNode;
+  label: ReactNode;
   href?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   iconBefore?: ReactNode;
   className?: string;
-  titleClassName?: string;
+  labelClassName?: string;
   isLast?: boolean;
   separator?: ReactNode;
 }
 
 export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
-  title,
+  label,
   href,
   onClick,
   disabled,
@@ -33,7 +33,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   separator = defaultSeparator,
   className,
   iconBefore,
-  titleClassName,
+  labelClassName,
 }) => {
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
@@ -54,21 +54,21 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       );
 
   const Content =
-    typeof title === 'string' ? (
+    typeof label === 'string' ? (
       <DialEllipsisTooltip
-        className={titleClassName}
-        text={title}
+        className={labelClassName}
+        text={label}
         id="breadcrumb-item-content"
       />
     ) : (
       <span
         className={mergeClasses(
           'flex-1 min-w-0 max-w-full truncate',
-          titleClassName,
+          labelClassName,
         )}
         aria-label="breadcrumb-item-content"
       >
-        {title}
+        {label}
       </span>
     );
 

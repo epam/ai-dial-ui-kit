@@ -556,7 +556,6 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Item',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
@@ -720,7 +719,6 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Items',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',

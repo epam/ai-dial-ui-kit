@@ -366,7 +366,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
         open={true}
         onClose={vi.fn()}
         mode="copy"
-        title="Copying 2 items"
+        header="Copying 2 items"
         items={mockFiles}
         rootItem={{
           id: 'root',
@@ -388,7 +388,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
         open={true}
         onClose={vi.fn()}
         mode="move"
-        title="Moving 2 items: Documents"
+        header="Moving 2 items: Documents"
         items={mockFiles}
         rootItem={{
           id: 'root',

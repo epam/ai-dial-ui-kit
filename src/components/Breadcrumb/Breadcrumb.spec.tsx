@@ -8,9 +8,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     render(
       <DialBreadcrumb
         pathItems={[
-          { title: 'Home', href: '/' },
-          { title: 'Section', href: '/section' },
-          { title: 'Current' },
+          { label: 'Home', href: '/' },
+          { label: 'Section', href: '/section' },
+          { label: 'Current' },
         ]}
       />,
     );
@@ -25,9 +25,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     render(
       <DialBreadcrumb
         pathItems={[
-          { title: 'Home', href: '#home' },
-          { title: 'Library', href: '#lib' },
-          { title: 'Data' },
+          { label: 'Home', href: '#home' },
+          { label: 'Library', href: '#lib' },
+          { label: 'Data' },
         ]}
       />,
     );
@@ -50,8 +50,8 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     render(
       <DialBreadcrumb
         pathItems={[
-          { title: 'Home', href: '#', onClick, disabled: true },
-          { title: 'Current' },
+          { label: 'Home', href: '#', onClick, disabled: true },
+          { label: 'Current' },
         ]}
       />,
     );
@@ -73,9 +73,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
   test('composition API: children <DialBreadcrumbItem/> receive current/last injection', () => {
     render(
       <DialBreadcrumb>
-        <DialBreadcrumbItem title="Home" href="#" />
-        <DialBreadcrumbItem title="Section" href="#" />
-        <DialBreadcrumbItem title="Current" />
+        <DialBreadcrumbItem label="Home" href="#" />
+        <DialBreadcrumbItem label="Section" href="#" />
+        <DialBreadcrumbItem label="Current" />
       </DialBreadcrumb>,
     );
     const currentText = screen.getByText('Current');
@@ -91,9 +91,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
       <DialBreadcrumb
         separator="/"
         pathItems={[
-          { title: 'A', href: '#' },
-          { title: 'B', href: '#' },
-          { title: 'C' },
+          { label: 'A', href: '#' },
+          { label: 'B', href: '#' },
+          { label: 'C' },
         ]}
       />,
     );
@@ -106,11 +106,11 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
       <DialBreadcrumb
         pathItems={[
           {
-            title: 'Folder',
+            label: 'Folder',
             href: '#',
             iconBefore: <span aria-label="icon">📁</span>,
           },
-          { title: 'Current', iconBefore: <span aria-label="icon">📁</span> },
+          { label: 'Current', iconBefore: <span aria-label="icon">📁</span> },
         ]}
       />,
     );

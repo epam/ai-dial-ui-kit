@@ -22,7 +22,7 @@ export interface DialLabelledTextProps {
  * />
  * ```
  *
- * @param label - The main label text for the field
+ * @param [label] - The main label text for the field
  * @param [text] - Optional tooltip and secondary text
  * @param [tooltip] - Optional tooltip different from main text
  * @param [children] - Custom content to render instead of the default text/tooltip

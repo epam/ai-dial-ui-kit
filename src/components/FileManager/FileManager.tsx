@@ -120,7 +120,7 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'copyLabel'
   | 'moveLabel'
   | 'hiddenFilesSwitcherLabel'
-  | 'title'
+  | 'header'
   | 'onCreateFolder'
   | 'onCreateFolderValidate'
   | 'folderCreationValidationMessages'
@@ -133,7 +133,7 @@ export interface FileMetadataPopupOptions {
   fileMetadata?: DialFile;
   loading?: boolean;
   clearMetadata?: () => void;
-  title?: ReactNode;
+  header?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;
@@ -144,7 +144,7 @@ export interface FileMetadataPopupOptions {
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
-  title?: ReactNode;
+  header?: ReactNode;
   containerClassName?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;
@@ -528,7 +528,7 @@ export const DialFileManagerView: FC = () => {
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
-    title = sidebarTitleDefault,
+    header = sidebarTitleDefault,
     containerClassName = treeBaseClassName,
     additionalButtons,
     ...forwardedTreeProps
@@ -988,7 +988,7 @@ export const DialFileManagerView: FC = () => {
         >
           <DialCollapsibleSidebar
             width={sidebarCurrentWidth}
-            title={title}
+            title={header}
             containerClassName={containerClassName}
             additionalButtons={additionalButtons}
             isOpened={isTreeCollapsed}
@@ -1035,7 +1035,7 @@ export const DialFileManagerView: FC = () => {
     renameTriggerView,
     renamedPath,
     sidebarCurrentWidth,
-    title,
+    header,
     sharedByMePaths,
     toggleTreeCollapse,
   ]);
@@ -1287,7 +1287,7 @@ export const DialFileManagerView: FC = () => {
           fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
         }
         loading={fileMetadataPopupOptions?.loading}
-        title={fileMetadataPopupOptions?.title}
+        header={fileMetadataPopupOptions?.header}
         nameLabel={fileMetadataPopupOptions?.nameLabel}
         pathLabel={fileMetadataPopupOptions?.pathLabel}
         modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}

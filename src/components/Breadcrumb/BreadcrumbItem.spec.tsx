@@ -5,7 +5,7 @@ import { DialBreadcrumbItem } from './BreadcrumbItem';
 describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
   test('renders as link when interactive (has href and not last/disabled)', () => {
     const onClick = vi.fn();
-    render(<DialBreadcrumbItem title="Home" href="#home" onClick={onClick} />);
+    render(<DialBreadcrumbItem label="Home" href="#home" onClick={onClick} />);
     const link = screen.getByRole('link', { name: 'Home' });
     expect(link).toBeInTheDocument();
     expect(link.className).toMatch(/hover:text-accent-primary/);
@@ -16,7 +16,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
   test('renders as non-interactive current page when isLast', () => {
     render(
       <ul>
-        <DialBreadcrumbItem title="Current" isLast />
+        <DialBreadcrumbItem label="Current" isLast />
       </ul>,
     );
     const text = screen.getByText('Current');
@@ -31,7 +31,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     render(
       <ul>
         <DialBreadcrumbItem
-          title="Disabled"
+          label="Disabled"
           href="#x"
           disabled
           onClick={onClick}
@@ -51,7 +51,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
   test('adds custom classes to container and title element', () => {
     render(
       <ul>
-        <DialBreadcrumbItem title="Styled" href="#s" className="dial-small" />
+        <DialBreadcrumbItem label="Styled" href="#s" className="dial-small" />
       </ul>,
     );
     const link = screen.getByRole('link', { name: 'Styled' });
@@ -63,7 +63,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     render(
       <ul>
         <DialBreadcrumbItem
-          title="Folder"
+          label="Folder"
           href="#"
           iconBefore={<span aria-label="icon">📁</span>}
         />
@@ -77,7 +77,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     render(
       <ul>
         <DialBreadcrumbItem
-          title={<strong role="test">Custom</strong>}
+          label={<strong role="test">Custom</strong>}
           href="#"
         />
       </ul>,

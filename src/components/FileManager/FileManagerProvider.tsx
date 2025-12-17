@@ -518,7 +518,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       ...destinationFolderPopupOptions,
       destinationFolderPath,
       setDestinationFolderPath,
-      title: destinationFolderTitle,
+      header: destinationFolderTitle,
       onCreateFolder,
       onCreateFolderValidate,
       folderCreationValidationMessages,

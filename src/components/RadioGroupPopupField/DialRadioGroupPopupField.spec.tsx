@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Group"
         htmlFor="group"
-        title="Choose an option"
+        header="Choose an option"
         emptyValueText="None"
         radioButtons={radioButtons}
         selectedRadioValue="opt-1"
@@ -34,7 +34,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Custom"
         htmlFor="custom"
-        title="Choose"
+        header="Choose"
         emptyValueText="None"
         customInputValue="Custom Value"
         radioButtons={radioButtons}
@@ -54,7 +54,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Group"
         htmlFor="group"
-        title="Select one"
+        header="Select one"
         emptyValueText="None"
         radioButtons={radioButtons}
         selectedRadioValue="opt-1"
@@ -78,7 +78,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Disabled"
         htmlFor="disabled"
-        title="Hidden dialog"
+        header="Hidden dialog"
         emptyValueText="None"
         radioButtons={radioButtons}
         selectedRadioValue="opt-1"
@@ -103,7 +103,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Group"
         htmlFor="group"
-        title="Select"
+        header="Select"
         emptyValueText="None"
         radioButtons={radioButtons}
         selectedRadioValue="opt-1"
@@ -129,7 +129,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
       <DialRadioGroupPopupField
         fieldTitle="Group"
         htmlFor="group"
-        title="Select"
+        header="Select"
         emptyValueText="None"
         radioButtons={radioButtons}
         selectedRadioValue="opt-2"

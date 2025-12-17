@@ -11,7 +11,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     ariaLabel: { control: { type: 'text' } },
-    titleClassName: { control: { type: 'text' } },
+    labelClassName: { control: { type: 'text' } },
     breadcrumbClassName: { control: { type: 'text' } },
 
     path: { control: 'text' },

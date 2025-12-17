@@ -20,7 +20,7 @@ export interface FileMetadataPopupProps {
   onClose: () => void;
   fileMetadata?: DialFile;
   loading?: boolean;
-  title?: ReactNode;
+  header?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;
@@ -68,7 +68,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
   onClose,
   fileMetadata,
   loading = false,
-  title = 'Information',
+  header = 'Information',
   nameLabel = 'Name:',
   pathLabel = 'Path:',
   modifiedDateLabel = 'Modified Date:',
@@ -82,7 +82,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
       open={open}
       onClose={onClose}
       size={PopupSize.Sm}
-      title={title}
+      header={header}
       dividers={false}
     >
       <div className="px-6 py-4">
