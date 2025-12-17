@@ -17,7 +17,7 @@ export interface DialButtonProps
   > {
   variant?: ButtonVariant;
   textClassName?: string;
-  label?: string;
+  label?: ReactNode;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
   hideTitleOnMobile?: boolean;
@@ -74,7 +74,7 @@ export const DialButton: FC<DialButtonProps> = ({
       {...props}
       type={type}
       className={btnClassName}
-      aria-label={label || props['aria-label']}
+      aria-label={(typeof label === 'string' && label) || props['aria-label']}
     >
       <DialIcon icon={iconBefore} />
       {label && <span className={btnTextClassName}>{label}</span>}

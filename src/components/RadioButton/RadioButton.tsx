@@ -4,7 +4,7 @@ import type { ChangeEvent, FC, ReactNode } from 'react';
 export interface DialRadioButtonProps {
   name: string;
   value: string;
-  title?: string;
+  title?: ReactNode;
   description?: ReactNode;
   checked?: boolean;
   inputId: string;
@@ -69,7 +69,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 
   const inputClassName = classNames(
     'cursor-pointer dial-input-radio',
-    title && 'mr-2',
+    !!title && 'mr-2',
     className,
   );
 

@@ -15,7 +15,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 export interface DialCollapsibleSidebarProps {
   children: ReactNode;
   width?: number;
-  title: string;
+  title: ReactNode;
   titleClassName?: string;
   containerClassName?: string;
   iconSize?: number;
