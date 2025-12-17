@@ -36,7 +36,7 @@ export interface DialRadioButtonProps {
  *
  * @param name - Radio group name
  * @param value - Radio value emitted on change
- * @param label - Visible label text
+ * @param [label] - Visible label text
  * @param [description] - Supporting text shown when checked
  * @param [checked=false] - Controlled checked state
  * @param inputId - ID associated with the label
