@@ -34,7 +34,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   className,
   iconBefore,
   labelClassName,
-  ...rest
+  ...props
 }) => {
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
@@ -75,9 +75,9 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
 
   return (
     <li
-      {...rest}
+      {...props}
       className={containerClassName}
-      aria-label={rest['aria-label'] || 'breadcrumb-item'}
+      aria-label={props['aria-label'] || 'breadcrumb-item'}
     >
       {interactive ? (
         <a href={href} onClick={onClick} className={contentClassName}>
