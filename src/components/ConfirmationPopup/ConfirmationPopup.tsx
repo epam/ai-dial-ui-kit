@@ -39,7 +39,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * ```tsx
  * <ConfirmationModal
  *   open
- *   title="Delete item?"
+ *   header="Delete item?"
  *   description="This action cannot be undone."
  *   confirmLabel="Delete"
  *   onClose={() => setOpen(false)}
@@ -47,7 +47,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * />
  * ```
  *
- * @param title - Title content for the header
+ * @param header - Title content for the header
  * @param [description] - Secondary text (ignored when `children` set)
  * @param [descriptionClassName] - Custom CSS class for the description
  * @param [open=false] - Controls visibility of the popup
