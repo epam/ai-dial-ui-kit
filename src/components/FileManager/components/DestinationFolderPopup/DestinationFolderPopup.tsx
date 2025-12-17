@@ -9,7 +9,7 @@ import { ButtonVariant } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { useState, useCallback, type FC, useRef } from 'react';
+import { useState, useCallback, type FC, useRef, type ReactNode } from 'react';
 import { DestinationFolderMode } from '@/types/file-manager';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
@@ -24,7 +24,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   addFolderLabel?: string;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
-  title?: string;
+  title?: ReactNode;
 }
 
 /**

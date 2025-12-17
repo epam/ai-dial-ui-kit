@@ -23,7 +23,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialPopupProps {
   open?: boolean;
-  title?: string | ReactNode;
+  title?: ReactNode;
   portalId?: string;
   className?: string;
   overlayClassName?: string;
@@ -106,7 +106,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   const headingId =
     typeof title === 'string' ? 'dial-popup-heading' : undefined;
 
-  const renderTitle = (title?: ReactNode | string) => {
+  const renderTitle = (title?: ReactNode) => {
     if (!title) return <span /* empty element to balance the close button */ />;
 
     return typeof title === 'string' ? (

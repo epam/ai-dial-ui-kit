@@ -14,7 +14,7 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 export interface DialCheckboxProps
   extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
   id: string;
-  label?: string | ReactNode;
+  label?: ReactNode;
   checked: boolean;
   disabled?: boolean;
   indeterminate?: boolean;

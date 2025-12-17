@@ -9,7 +9,7 @@ import { tooltipContentBaseClassName } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
-  text: string | ReactNode;
+  text: ReactNode;
   className?: string;
   contentClassName?: string;
   hideTooltip?: boolean;

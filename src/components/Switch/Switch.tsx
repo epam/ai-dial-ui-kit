@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { useCallback, type ChangeEvent, type FC } from 'react';
+import { useCallback, type ChangeEvent, type FC, type ReactNode } from 'react';
 
 export interface DialSwitchProps {
-  title?: string;
+  title?: ReactNode;
   switchId: string;
   isOn?: boolean;
   disabled?: boolean;
