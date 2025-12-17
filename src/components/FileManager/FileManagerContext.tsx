@@ -68,9 +68,9 @@ export interface FileManagerContextValue {
   toggleTreeCollapse: () => void;
   setIsTreeCollapsed: (value: boolean) => void;
 
-  selectedIds: Set<string>;
+  selectedPaths: Set<string>;
   selectedFiles: Map<string, DialFile>;
-  setSelectedFiles: (next: Map<string, DialFile>) => void;
+  setSelectedPaths: (paths: Set<string>) => void;
   clearSelection: () => void;
 
   currentFolder?: DialFile;
