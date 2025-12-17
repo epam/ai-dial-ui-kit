@@ -7,6 +7,13 @@ export interface Props extends HTMLAttributes<HTMLSpanElement> {
 
 /**
  * A component for displaying error messages with consistent styling
+ *
+ * @example
+ * ```tsx
+ * <DialErrorText errorText="This field is required" />
+ * ```
+ *
+ * @param [errorText] - The error message text to display. If undefined or empty, nothing is rendered
  */
 export const DialErrorText: FC<Props> = ({ errorText, className, ...rest }) => {
   if (!errorText) return null;
