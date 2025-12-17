@@ -27,10 +27,10 @@ export const Default: Story = {
   name: 'Default (pathItems prop)',
   args: {
     pathItems: [
-      { title: 'First Level Navigation', href: '#' },
-      { title: 'Second Level Navigation', href: '#' },
-      { title: 'Third Level Navigation', href: '#' },
-      { title: 'Current Page Name' },
+      { label: 'First Level Navigation', href: '#' },
+      { label: 'Second Level Navigation', href: '#' },
+      { label: 'Third Level Navigation', href: '#' },
+      { label: 'Current Page Name' },
     ],
   },
 };
@@ -39,9 +39,9 @@ export const CustomSeparator: Story = {
   args: {
     separator: '/',
     pathItems: [
-      { title: 'Home', href: '#' },
-      { title: 'Library', href: '#' },
-      { title: 'Data' },
+      { label: 'Home', href: '#' },
+      { label: 'Library', href: '#' },
+      { label: 'Data' },
     ],
   },
 };
@@ -49,9 +49,9 @@ export const CustomSeparator: Story = {
 export const DisabledItem: Story = {
   args: {
     pathItems: [
-      { title: 'Home', href: '#' },
-      { title: 'Section (disabled)', href: '#', disabled: true },
-      { title: 'Current Page' },
+      { label: 'Home', href: '#' },
+      { label: 'Section (disabled)', href: '#', disabled: true },
+      { label: 'Current Page' },
     ],
   },
 };
@@ -61,7 +61,7 @@ export const CompositionAPI: Story = {
   render: () => (
     <DialBreadcrumb>
       <DialBreadcrumbItem
-        title="Home"
+        label="Home"
         href="#"
         onClick={(e) => {
           e.preventDefault();
@@ -69,7 +69,7 @@ export const CompositionAPI: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="Section"
+        label="Section"
         href="#"
         onClick={(e) => {
           e.preventDefault();
@@ -77,7 +77,7 @@ export const CompositionAPI: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="Design System"
+        label="Design System"
         href="#"
         onClick={(e) => {
           e.preventDefault();
@@ -85,7 +85,7 @@ export const CompositionAPI: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="Components"
+        label="Components"
         href="#"
         onClick={(e) => {
           e.preventDefault();
@@ -93,7 +93,7 @@ export const CompositionAPI: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="Current Page"
+        label="Current Page"
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked Current Page');
@@ -109,15 +109,15 @@ export const LongLabelsTruncate: Story = {
       <DialBreadcrumb
         pathItems={[
           {
-            title: 'Very long first level navigation name that should truncate',
+            label: 'Very long first level navigation name that should truncate',
             href: '#',
           },
           {
-            title:
+            label:
               'Extremely verbose second level navigation name that also truncates',
             href: '#',
           },
-          { title: 'Current Page With A Long Name' },
+          { label: 'Current Page With A Long Name' },
         ]}
         titleClassName="max-w-[80px]"
       />
@@ -129,7 +129,7 @@ export const WithFolderIcons: Story = {
   render: () => (
     <DialBreadcrumb>
       <DialBreadcrumbItem
-        title="Projects"
+        label="Projects"
         href="#"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
         onClick={(e) => {
@@ -138,7 +138,7 @@ export const WithFolderIcons: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="2025"
+        label="2025"
         href="#"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
         onClick={(e) => {
@@ -147,7 +147,7 @@ export const WithFolderIcons: Story = {
         }}
       />
       <DialBreadcrumbItem
-        title="Design System"
+        label="Design System"
         iconBefore={<IconFolder size={16} aria-label="folder" />}
         onClick={(e) => {
           e.preventDefault();

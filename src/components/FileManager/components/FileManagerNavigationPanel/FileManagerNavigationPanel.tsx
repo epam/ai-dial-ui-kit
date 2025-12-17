@@ -131,7 +131,7 @@ export const DialFileManagerNavigationPanel: FC<
         .split('/')
         .map((s) => s.trim())
         .filter(Boolean);
-      if (!segments.length) return [{ title: '/' }];
+      if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
         const acc = segments.slice(0, index + 1);
@@ -139,7 +139,7 @@ export const DialFileManagerNavigationPanel: FC<
           typeof makeHref === 'function' ? makeHref(acc, index) : undefined;
 
         return {
-          title: segment,
+          label: segment,
           href,
           onClick: onItemClick
             ? (e: MouseEvent<HTMLAnchorElement>) => {
@@ -163,7 +163,7 @@ export const DialFileManagerNavigationPanel: FC<
 
           return [
             {
-              title: rootItemLabel,
+              label: rootItemLabel,
               href: rootItemPath,
               onClick: onItemClick
                 ? (e: MouseEvent<HTMLAnchorElement>) => {

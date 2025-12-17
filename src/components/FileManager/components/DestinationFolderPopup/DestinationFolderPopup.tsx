@@ -24,7 +24,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   addFolderLabel?: string;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
-  title?: ReactNode;
+  header?: ReactNode;
 }
 
 /**
@@ -75,7 +75,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
-  title,
+  header,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -137,7 +137,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           </div>
         </div>
       }
-      header={title ?? defaultTitle}
+      header={header ?? defaultTitle}
     >
       <DialFileManager
         {...restProps}

@@ -209,7 +209,7 @@ describe('Dial UI Kit :: FileMetadataPopup', () => {
         open={true}
         onClose={vi.fn()}
         fileMetadata={mockFile}
-        title="File Details"
+        header="File Details"
       />,
     );
 

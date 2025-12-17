@@ -37,16 +37,16 @@ export interface DialBreadcrumbProps {
  * ```tsx
  * <DialBreadcrumb
  *   pathItems={[
- *     { title: 'Home', href: '/' },
- *     { title: 'Section', href: '/section' },
- *     { title: 'Current Page' },
+ *     { label: 'Home', href: '/' },
+ *     { label: 'Section', href: '/section' },
+ *     { label: 'Current Page' },
  *   ]}
  * />
  *
  * <DialBreadcrumb>
- *   <DialBreadcrumbItem title="Home" href="/" />
- *   <DialBreadcrumbItem title="Section" href="/section" />
- *   <DialBreadcrumbItem title="Current Page" />
+ *   <DialBreadcrumbItem label="Home" href="/" />
+ *   <DialBreadcrumbItem label="Section" href="/section" />
+ *   <DialBreadcrumbItem label="Current Page" />
  * </DialBreadcrumb>
  * ```
  *
@@ -115,7 +115,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
 
     const dropdownItems: DropdownItem[] = middle.map((item, idx) => ({
       key: String(idx + 1),
-      label: typeof item.title === 'string' ? item.title : `Item ${idx + 1}`,
+      label: typeof item.label === 'string' ? item.label : `Item ${idx + 1}`,
       disabled: item.disabled,
     }));
 

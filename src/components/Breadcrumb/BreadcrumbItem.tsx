@@ -13,7 +13,7 @@ import {
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
 export interface DialBreadcrumbItemProps {
-  title: ReactNode;
+  label: ReactNode;
   href?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
@@ -25,7 +25,7 @@ export interface DialBreadcrumbItemProps {
 }
 
 export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
-  title,
+  label,
   href,
   onClick,
   disabled,
@@ -54,10 +54,10 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       );
 
   const Content =
-    typeof title === 'string' ? (
+    typeof label === 'string' ? (
       <DialEllipsisTooltip
         className={titleClassName}
-        text={title}
+        text={label}
         id="breadcrumb-item-content"
       />
     ) : (
@@ -68,7 +68,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
         )}
         aria-label="breadcrumb-item-content"
       >
-        {title}
+        {label}
       </span>
     );
 

@@ -107,6 +107,6 @@ export const CustomLabels: Story = {
     copyLabel: 'Copy Here',
     moveLabel: 'Move Here',
     hiddenFilesSwitcherLabel: 'Display hidden items',
-    title: '2 item(s) selected to copy',
+    header: '2 item(s) selected to copy',
   },
 };
