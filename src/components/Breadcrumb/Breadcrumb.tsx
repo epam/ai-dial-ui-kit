@@ -24,7 +24,7 @@ export interface DialBreadcrumbProps {
   ariaLabel?: string;
   className?: string;
   children?: ReactNode;
-  titleClassName?: string;
+  labelClassName?: string;
 }
 
 /**
@@ -55,7 +55,7 @@ export interface DialBreadcrumbProps {
  * @param [ariaLabel] - Aria label for the `<nav>` element (default: "Breadcrumb").
  * @param [className] - Additional CSS classes for the `<nav>` container.
  * @param [children] - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
- * @param [titleClassName] - Additional CSS classes applied to each item when using `pathItems` prop.
+ * @param [labelClassName] - Additional CSS classes applied to each item when using `pathItems` prop.
  */
 export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   pathItems,
@@ -63,7 +63,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   ariaLabel = 'Breadcrumb',
   className,
   children,
-  titleClassName,
+  labelClassName,
 }) => {
   const items = useMemo(() => {
     if (pathItems?.length) {
@@ -73,7 +73,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
       .filter(isValidElement)
       .map((child) => {
         const childProps = child.props as DialBreadcrumbItemProps;
-        const { titleClassName, isLast, separator, ...props } = childProps;
+        const { labelClassName, isLast, separator, ...props } = childProps;
         return props;
       });
   }, [pathItems, children]);
@@ -101,7 +101,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${index}`}
           isLast={index === items.length - 1}
           separator={separator}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
         />
       ));
     }
@@ -125,7 +125,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           {...first}
           key="item-0"
           separator={separator}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
         />
 
         <li className={mergeClasses(breadcrumbItemBaseClassName)}>
@@ -152,7 +152,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           {...preLast}
           key={`item-${items.length - 2}`}
           separator={separator}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
         />
 
         <DialBreadcrumbItem
@@ -160,11 +160,11 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${items.length - 1}`}
           isLast
           separator={separator}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
         />
       </>
     );
-  }, [items, separator, titleClassName, handleDropdownItemClick]);
+  }, [items, separator, labelClassName, handleDropdownItemClick]);
 
   return (
     <nav

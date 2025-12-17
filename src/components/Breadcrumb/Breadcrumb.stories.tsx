@@ -13,7 +13,7 @@ const meta = {
     className: { control: { type: 'text' } },
     pathItems: { control: false },
     children: { control: false },
-    titleClassName: { control: { type: 'text' } },
+    labelClassName: { control: { type: 'text' } },
   },
   args: {
     ariaLabel: 'Breadcrumb',
@@ -119,7 +119,7 @@ export const LongLabelsTruncate: Story = {
           },
           { label: 'Current Page With A Long Name' },
         ]}
-        titleClassName="max-w-[80px]"
+        labelClassName="max-w-[80px]"
       />
     </div>
   ),
