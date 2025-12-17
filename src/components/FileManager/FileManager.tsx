@@ -244,6 +244,7 @@ interface FileManagerGridContext {
 
 export interface DialFileManagerProps {
   path?: string;
+  defaultPath?: string;
   className?: string;
 
   allowedFileTypes?: DialFileAcceptType[];
@@ -251,6 +252,10 @@ export interface DialFileManagerProps {
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
   sharedByMePaths?: Set<string>;
+
+  selectedPaths?: Set<string>;
+  defaultSelectedPaths?: Set<string>;
+  onSelectedPathsChange?: (paths: Set<string>) => void;
 
   showHiddenFiles?: boolean;
   onShowHiddenFilesChange?: (value: boolean) => void;
@@ -367,10 +372,13 @@ export interface DialFileManagerProps {
  * ```
  *
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
+ * @param [defaultPath] - Initial path used in uncontrolled mode (applied only on first render)
  * @param [className] - Additional classes for the root container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
+ * @param [selectedPaths] - Controlled set of selected item paths
+ * @param [defaultSelectedPaths] - Initial selected paths used in uncontrolled mode
  *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
@@ -382,6 +390,7 @@ export interface DialFileManagerProps {
  * @param [compactViewWidthBreakpoint=DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT] - Width (px) below which the component switches to compact view.
  *
  * @param [onPathChange] - Callback fired when user navigates via tree or breadcrumb
+ * @param [onSelectedPathsChange] - Callback fired when the selected paths change
  * @param [onTableFileClick] - Callback fired when a file row is clicked in the grid
  *
  * @param [onCopyFiles] - Callback fired when files copy-paste
@@ -437,10 +446,11 @@ export const DialFileManagerView: FC = () => {
 
     currentPath,
     gridRows,
-    selectedIds,
+
+    selectedPaths,
     selectedFiles,
-    setSelectedFiles,
     clearSelection,
+    setSelectedPaths: selectedPathsChangeHandler,
 
     effectiveSearchValue,
     handleBreadcrumbItemClick,
@@ -516,7 +526,6 @@ export const DialFileManagerView: FC = () => {
     searchInProgress,
     isSearchMode,
   } = useFileManagerContext();
-
   const {
     width = sidebarWidth,
     title = sidebarTitleDefault,
@@ -877,16 +886,11 @@ export const DialFileManagerView: FC = () => {
 
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {
-      const newSelectedFiles = new Map<string, DialFile>();
-      newSelectedGridRows.forEach((_gridRow, id) => {
-        const file = findNodeByPath(items, id);
-        if (file) {
-          newSelectedFiles.set(id, file);
-        }
-      });
-      setSelectedFiles(newSelectedFiles);
+      const newSelectedFiles = new Set<string>();
+      newSelectedGridRows.forEach((_gridRow, id) => newSelectedFiles.add(id));
+      selectedPathsChangeHandler(newSelectedFiles);
     },
-    [items, setSelectedFiles],
+    [selectedPathsChangeHandler],
   );
 
   const bulkActions = useBulkActions({
@@ -908,7 +912,7 @@ export const DialFileManagerView: FC = () => {
   });
 
   const renderToolbar = useCallback(() => {
-    if (toolbarOptions && selectedIds.size === 0) {
+    if (toolbarOptions && selectedPaths.size === 0) {
       return (
         <div
           className={toolbarBaseClassName}
@@ -926,7 +930,7 @@ export const DialFileManagerView: FC = () => {
       );
     }
 
-    if (selectedIds.size > 0 && bulkActionsToolbarOptions) {
+    if (selectedPaths.size > 0 && bulkActionsToolbarOptions) {
       return (
         <div
           className={toolbarBaseClassName}
@@ -935,7 +939,7 @@ export const DialFileManagerView: FC = () => {
         >
           <DialFileManagerBulkActionsToolbar
             {...bulkActionsToolbarOptions}
-            selectedCount={selectedIds.size}
+            selectedCount={selectedPaths.size}
             onClearSelection={clearSelection}
             actions={bulkActions}
           />
@@ -946,7 +950,7 @@ export const DialFileManagerView: FC = () => {
     return <div></div>;
   }, [
     bulkActionsToolbarOptions,
-    selectedIds,
+    selectedPaths,
     clearSelection,
     bulkActions,
     areHiddenFilesVisible,
@@ -1130,10 +1134,12 @@ export const DialFileManagerView: FC = () => {
       className={mergeClasses(
         containerBaseClassName,
         {
-          'gap-3 pt-4': bulkActionsToolbarOptions && selectedIds.size > 0,
+          'gap-3 pt-4': bulkActionsToolbarOptions && selectedPaths.size > 0,
           'gap-4 p-3 pt-4': isCompactView,
           'gap-2 pt-2':
-            isCompactView && bulkActionsToolbarOptions && selectedIds.size > 0,
+            isCompactView &&
+            bulkActionsToolbarOptions &&
+            selectedPaths.size > 0,
         },
         className,
       )}

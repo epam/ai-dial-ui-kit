@@ -419,6 +419,18 @@ export const itemsMock: DialFile[] = [
             items: [],
             author: 'Jessica Walker',
           },
+          {
+            id: 'design-favicon',
+            name: 'favicon.ico',
+            path: '/All files/Design/favicon',
+            parentPath: '/All files/Design',
+            nodeType: DialFileNodeType.ITEM,
+            contentType: 'image/png',
+            folderId: 'design',
+            updatedAt: '2025-01-11',
+            items: [],
+            author: 'Jessica Walker',
+          },
         ],
       },
 
