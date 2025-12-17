@@ -75,7 +75,7 @@ export interface RadioGroupPopupFieldProps
  * @param [inputClassName] - Extra classes applied to the collapsed input container
  * @param emptyValueText - Placeholder text when no value is selected
  * @param [onClose] - Callback fired when the popup closes
- * @param title - Title text shown in the popup header
+ * @param header - Title text shown in the popup header
  * @param [portalId] - Target portal id for rendering the popup
  * @param onApply - Callback fired when the Apply button is clicked
  * @param [cancelButtonTitle="Cancel"] - Text for the Cancel button

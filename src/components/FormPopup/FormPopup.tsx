@@ -33,13 +33,13 @@ export interface DialFormPopupProps extends DialPopupProps {
  * ```tsx
  * <DialFormPopup
  *   open
- *   title="Create Model"
+ *   header="Create Model"
  *   onClose={() => setOpen(false)}
  *   onSubmit={handleSubmit}
  * />
  * ```
  *
- * @param title - Title content for the header
+ * @param header - Title content for the header
  * @param [open=false] - Controls visibility of the popup
  * @param [submitLabel="Submit"] - Label for the primary action button
  * @param [cancelLabel="Cancel"] - Label for the cancel button
