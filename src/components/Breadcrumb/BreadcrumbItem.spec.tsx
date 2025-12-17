@@ -87,4 +87,32 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     expect(title).toBeInTheDocument();
     expect(title).not.toHaveAttribute('aria-label');
   });
+
+  test('calls onClick handler when clicked', () => {
+    const onClick = vi.fn();
+    render(
+      <ul>
+        <DialBreadcrumbItem label="Clickable" href="#click" onClick={onClick} />
+      </ul>,
+    );
+    const link = screen.getByRole('link', { name: 'Clickable' });
+    fireEvent.click(link);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('applies rest props to container li element', () => {
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="With Props"
+          href="#"
+          aria-label="custom-breadcrumb-item"
+          role="listitem"
+        />
+      </ul>,
+    );
+    const li = screen.getByRole('listitem', { name: 'custom-breadcrumb-item' });
+    expect(li).toBeInTheDocument();
+    expect(li).toHaveAttribute('aria-label', 'custom-breadcrumb-item');
+  });
 });
