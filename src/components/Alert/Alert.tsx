@@ -19,7 +19,7 @@ import {
 
 export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
-  message: string | ReactNode;
+  message: ReactNode;
   closable?: boolean;
   iconSize?: number;
   iconStroke?: number;
