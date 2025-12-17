@@ -133,7 +133,7 @@ export interface FileMetadataPopupOptions {
   fileMetadata?: DialFile;
   loading?: boolean;
   clearMetadata?: () => void;
-  title?: string;
+  title?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;
@@ -144,7 +144,7 @@ export interface FileMetadataPopupOptions {
 export interface FileTreeOptions
   extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
   width?: number;
-  title?: string;
+  title?: ReactNode;
   containerClassName?: string;
   additionalButtons?: ReactNode;
   collapsed?: boolean;

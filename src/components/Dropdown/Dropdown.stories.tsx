@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import type { Placement } from '@floating-ui/react';
 import {
   IconUser,
@@ -59,7 +59,7 @@ const specItems: DropdownItem[] = [
   { key: 'del', label: 'Delete', icon: <IconTrash size={16} />, danger: true },
 ];
 
-const TriggerBtn = ({ label = 'Open' }: { label?: string }) => (
+const TriggerBtn = ({ label = 'Open' }: { label?: ReactNode }) => (
   <DialButton
     variant={ButtonVariant.Primary}
     iconAfter={<IconChevronDown size={16} />}
