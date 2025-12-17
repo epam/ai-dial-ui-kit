@@ -1,12 +1,12 @@
 import { IconArrowUpRight } from '@tabler/icons-react';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialSharedEntityIndicatorProps {
-  label?: string;
+  label?: ReactNode;
   size?: number;
   className?: string;
   stroke?: number;
@@ -42,7 +42,7 @@ export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
         <IconArrowUpRight
           size={size}
           stroke={stroke}
-          aria-label={label}
+          aria-label={typeof label === 'string' ? label : undefined}
           className="bg-layer-3"
           role="img"
         />

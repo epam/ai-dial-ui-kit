@@ -24,11 +24,11 @@ export enum FormItemOrientation {
  * @param orientation - Layout orientation for the form item
  */
 export interface DialFormItemBaseProps {
-  label?: string | ReactNode;
+  label?: ReactNode;
   optional?: boolean;
   optionalText?: string;
   description?: string;
-  error?: string | ReactNode | boolean;
+  error?: ReactNode;
   captionDescription?: string;
   readonly?: boolean;
   orientation?: FormItemOrientation;

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileMetadataPopup } from './FileMetadataPopup';
-import { useState, type FC } from 'react';
+import { useState, type FC, type ReactNode } from 'react';
 import { DialButton } from '@/components/Button/Button';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import { ButtonVariant } from '@/types/button';
@@ -32,7 +32,7 @@ const mockFile: DialFile = {
 const StoryWrapper: FC<{
   loading?: boolean;
   fileMetadata?: DialFile;
-  title?: string;
+  title?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;

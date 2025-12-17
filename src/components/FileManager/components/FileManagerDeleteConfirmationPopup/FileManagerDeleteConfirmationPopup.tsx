@@ -10,7 +10,7 @@ export interface FileManagerDeleteConfirmationPopupProps {
   onConfirm: () => void;
   cancelLabel?: string;
   confirmLabel?: string;
-  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  titleRenderer?: (fileNames: string[]) => ReactNode;
   contentRenderer?: (fileNames: string[]) => ReactNode;
 }
 
