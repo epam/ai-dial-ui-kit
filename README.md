@@ -73,9 +73,10 @@ import '@epam/ai-dial-ui-kit/styles.css';
 function App() {
   return (
     <div>
-      <DialButton 
-        className="dial-primary-button"
-        onClick={() => alert('Hello AI DIAL!')}
+      <DialButton
+        label="Click me"
+        variant={ButtonVariant.Primary}
+        onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
       />
     </div>
   );
