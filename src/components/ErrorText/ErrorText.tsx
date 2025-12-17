@@ -15,12 +15,16 @@ export interface Props extends HTMLAttributes<HTMLSpanElement> {
  *
  * @param [errorText] - The error message text to display. If undefined or empty, nothing is rendered
  */
-export const DialErrorText: FC<Props> = ({ errorText, className, ...rest }) => {
+export const DialErrorText: FC<Props> = ({
+  errorText,
+  className,
+  ...props
+}) => {
   if (!errorText) return null;
 
   return (
     <span
-      {...rest}
+      {...props}
       className={mergeClasses('text-error dial-tiny mt-1', className)}
     >
       {errorText}
