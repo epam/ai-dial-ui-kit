@@ -122,7 +122,7 @@ export const Controlled: Story = {
     children: (
       <div className="p-4 text-primary">
         <div>Controlled content</div>
-        <div className="text-xs opacity-70">
+        <div className="dial-small opacity-70">
           Width is controlled by the story wrapper
         </div>
       </div>

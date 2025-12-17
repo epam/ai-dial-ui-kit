@@ -127,7 +127,7 @@ export const WithComplexLabel: Story = {
   args: {
     label: (
       <span className="flex items-center gap-1">
-        <span className="text-xs">🔥</span>
+        <span className="dial-small">🔥</span>
         <span>Hot Deal</span>
       </span>
     ),
