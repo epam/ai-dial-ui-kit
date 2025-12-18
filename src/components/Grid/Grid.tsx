@@ -400,8 +400,6 @@ export const DialGrid = <T extends object>({
       resizable: false,
       filter: false,
       floatingFilter: false,
-      suppressMenu: true,
-      borderless: true,
       cellRenderer: renderSelectCell,
       headerComponent: renderHeaderSelectCell,
     }),
