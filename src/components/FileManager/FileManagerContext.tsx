@@ -48,7 +48,9 @@ export interface FileManagerContextValue {
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
-  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions & {
+    sourceFolder?: string;
+  };
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
 

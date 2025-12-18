@@ -124,6 +124,7 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'onCreateFolder'
   | 'onCreateFolderValidate'
   | 'folderCreationValidationMessages'
+  | 'disabledPathTooltip'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
@@ -1259,6 +1260,7 @@ export const DialFileManagerView: FC = () => {
         onPathChange={(newPath) => {
           destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
         }}
+        sourceFolder={currentPath || '/'}
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}
