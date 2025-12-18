@@ -1,4 +1,4 @@
-import type { FC, MouseEventHandler, ReactNode } from 'react';
+import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   breadcrumbItemBaseClassName,
@@ -12,13 +12,13 @@ import {
 } from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
-export interface DialBreadcrumbItemProps {
+export interface DialBreadcrumbItemProps
+  extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick'> {
   label: ReactNode;
   href?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   iconBefore?: ReactNode;
-  className?: string;
   labelClassName?: string;
   isLast?: boolean;
   separator?: ReactNode;
@@ -34,6 +34,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   className,
   iconBefore,
   labelClassName,
+  ...props
 }) => {
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
@@ -73,7 +74,11 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
     );
 
   return (
-    <li className={containerClassName} aria-label="breadcrumb-item">
+    <li
+      {...props}
+      className={containerClassName}
+      aria-label={props['aria-label'] || 'breadcrumb-item'}
+    >
       {interactive ? (
         <a href={href} onClick={onClick} className={contentClassName}>
           {iconBefore}
