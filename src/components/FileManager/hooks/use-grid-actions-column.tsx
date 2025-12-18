@@ -62,8 +62,6 @@ export const useGridActionsColumn = ({
       resizable: false,
       filter: false,
       floatingFilter: false,
-      suppressMenu: true,
-      borderless: true,
       cellRenderer: renderActionsCell,
     }),
     [renderActionsCell],
