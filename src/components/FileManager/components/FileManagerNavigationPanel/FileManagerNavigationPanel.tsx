@@ -83,7 +83,7 @@ export interface DialFileManagerNavigationPanelProps
  * ```
  *
  * @param [ariaLabel="Breadcrumb"] - Aria label for the breadcrumb `<nav>`
- * @param [titleClassName] - Extra classes for breadcrumb titles
+ * @param [labelClassName] - Extra classes for breadcrumb titles
  * @param [path] - A full path string that will be split into breadcrumb items
  * @param [makeHref] - Factory to create hrefs for segments
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
@@ -102,7 +102,7 @@ export const DialFileManagerNavigationPanel: FC<
   DialFileManagerNavigationPanelProps
 > = ({
   ariaLabel = 'Breadcrumb',
-  titleClassName,
+  labelClassName,
   onItemClick,
 
   path,
@@ -131,7 +131,7 @@ export const DialFileManagerNavigationPanel: FC<
         .split('/')
         .map((s) => s.trim())
         .filter(Boolean);
-      if (!segments.length) return [{ title: '/' }];
+      if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
         const acc = segments.slice(0, index + 1);
@@ -139,7 +139,7 @@ export const DialFileManagerNavigationPanel: FC<
           typeof makeHref === 'function' ? makeHref(acc, index) : undefined;
 
         return {
-          title: segment,
+          label: segment,
           href,
           onClick: onItemClick
             ? (e: MouseEvent<HTMLAnchorElement>) => {
@@ -163,7 +163,7 @@ export const DialFileManagerNavigationPanel: FC<
 
           return [
             {
-              title: rootItemLabel,
+              label: rootItemLabel,
               href: rootItemPath,
               onClick: onItemClick
                 ? (e: MouseEvent<HTMLAnchorElement>) => {
@@ -218,7 +218,7 @@ export const DialFileManagerNavigationPanel: FC<
         <DialBreadcrumb
           pathItems={breadcrumbPathItems}
           ariaLabel={ariaLabel}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
           className={breadcrumbClassName}
         />
       </div>
@@ -229,7 +229,7 @@ export const DialFileManagerNavigationPanel: FC<
     breadcrumbPathItems,
     isSearchExpanded,
     isCompactView,
-    titleClassName,
+    labelClassName,
     onSearchChange,
   ]);
 

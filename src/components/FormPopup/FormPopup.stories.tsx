@@ -10,7 +10,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     open: { control: false },
-    title: { control: { type: 'text' } },
+    header: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
     submitClassName: { control: { type: 'text' } },
     dividers: { control: { type: 'boolean' } },
@@ -23,7 +23,7 @@ const meta = {
     onCancel: { action: 'onCancel', control: false },
   },
   args: {
-    title: 'Create Entity',
+    header: 'Create Entity',
     submitLabel: 'Create',
     cancelLabel: 'Cancel',
   },

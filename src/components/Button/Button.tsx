@@ -36,9 +36,18 @@ export interface DialButtonProps
  * />
  * ```
  *
+ * @example
+ * ```tsx
+ * <DialButton
+ *   label={<span>Custom <strong>Label</strong></span>}
+ *   aria-label="Custom Label"
+ *   onClick={handleClick}
+ * />
+ * ```
+ *
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
- * @param [label] - The text content of the button
+ * @param [label] - The content of the button. Can be any React node.
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text

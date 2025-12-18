@@ -96,7 +96,7 @@ export const FileManagerDeleteConfirmationPopup: FC<
   return (
     <DialConfirmationPopup
       open={open}
-      title={title}
+      header={title}
       confirmLabel={confirmLabel}
       cancelLabel={cancelLabel}
       variant={ConfirmationPopupVariant.Danger}

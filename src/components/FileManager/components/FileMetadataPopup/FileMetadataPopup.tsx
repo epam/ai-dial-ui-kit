@@ -2,7 +2,6 @@ import { DialPopup } from '@/components/Popup/Popup';
 import { PopupSize } from '@/types/popup';
 import { type FC, type ReactNode } from 'react';
 import type { DialFile } from '@/models/file';
-import { DialFileName } from '@/components/FileName/FileName';
 import { DialSkeleton } from '@/components/Skeleton/Skeleton';
 import { DialSkeletonVariant } from '@/types/skeleton';
 import { formatBytes, formatDate } from '@/components/FileManager/utils';
@@ -21,7 +20,7 @@ export interface FileMetadataPopupProps {
   onClose: () => void;
   fileMetadata?: DialFile;
   loading?: boolean;
-  title?: ReactNode;
+  header?: ReactNode;
   nameLabel?: string;
   pathLabel?: string;
   modifiedDateLabel?: string;
@@ -69,7 +68,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
   onClose,
   fileMetadata,
   loading = false,
-  title = 'Information',
+  header = 'Information',
   nameLabel = 'Name:',
   pathLabel = 'Path:',
   modifiedDateLabel = 'Modified Date:',
@@ -83,7 +82,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
       open={open}
       onClose={onClose}
       size={PopupSize.Sm}
-      title={title}
+      header={header}
       dividers={false}
     >
       <div className="px-6 py-4">
@@ -137,9 +136,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
             <>
               <div className={LABEL_CLASS}>{nameLabel}</div>
               <div className={VALUE_CLASS}>
-                <DialEllipsisTooltip
-                  text={<DialFileName name={fileMetadata.name} iconSize={16} />}
-                />
+                <DialEllipsisTooltip text={fileMetadata.name} />
               </div>
 
               <div className={LABEL_CLASS}>{modifiedDateLabel}</div>

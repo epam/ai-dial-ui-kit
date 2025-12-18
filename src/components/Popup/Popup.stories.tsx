@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     open: { control: false },
-    title: { control: { type: 'text' } },
+    header: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
     overlayClassName: { control: { type: 'text' } },
     titleClassName: { control: { type: 'text' } },
@@ -21,7 +21,7 @@ const meta = {
     onClose: { action: 'onClose', control: false },
   },
   args: {
-    title: 'Title',
+    header: 'Title',
     dividers: true,
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
     footer: (
@@ -78,13 +78,13 @@ export const WithoutDividers: Story = {
 
 export const WithoutTitle: Story = {
   render: StatefulRender,
-  args: { title: undefined },
+  args: { header: undefined },
 };
 
 export const WithLongTitle: Story = {
   render: StatefulRender,
   args: {
-    title:
+    header:
       'This is a very long title that should wrap onto multiple lines to demonstrate text wrapping behavior in the popup header. It might even be long enough to require truncation with an ellipsis if it exceeds a certain length',
   },
 };
@@ -130,7 +130,7 @@ export const WithoutHeaderAndDismiss: Story = {
   render: StatefulRender,
   args: {
     className: '!w-[280px]',
-    title: undefined,
+    header: undefined,
     footer: undefined,
     dividers: false,
     headerClassName: 'hidden',

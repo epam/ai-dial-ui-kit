@@ -9,9 +9,17 @@ import { ButtonVariant } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { useState, useCallback, type FC, useRef, type ReactNode } from 'react';
+import {
+  useState,
+  useCallback,
+  type FC,
+  useRef,
+  type ReactNode,
+  useMemo,
+} from 'react';
 import { DestinationFolderMode } from '@/types/file-manager';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -24,7 +32,9 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   addFolderLabel?: string;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
-  title?: ReactNode;
+  header?: ReactNode;
+  sourceFolder?: string;
+  disabledPathTooltip?: string;
 }
 
 /**
@@ -62,6 +72,8 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param rootItem - Root folder item
  * @param path - Current path in the File Manager
  * @param onPathChange - Callback fired when the path changes
+ * @param [sourceFolder] - The source folder path for move operations
+ * @param [disabledPathTooltip="Unavailable for the original path. Please select another folder"] - Tooltip text when destination is disabled
  */
 export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
@@ -75,7 +87,10 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
-  title,
+  header,
+  sourceFolder,
+  disabledPathTooltip = 'Unavailable for the original path. Please select another folder',
+  path,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -87,6 +102,14 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
 
   const defaultTitle =
     mode === DestinationFolderMode.Copy ? 'Copy to' : 'Move to';
+
+  const isDestinationDisabled = useMemo(() => {
+    if (!path || !sourceFolder) {
+      return false;
+    }
+
+    return sourceFolder === path;
+  }, [path, sourceFolder]);
 
   return (
     <DialPopup
@@ -116,7 +139,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               }}
             >
               <DialSwitch
-                title={hiddenFilesSwitcherLabel}
+                label={hiddenFilesSwitcherLabel}
                 isOn={showHiddenFiles}
                 onChange={handleShowHiddenFilesChange}
                 switchId="hidden-files-switch"
@@ -129,19 +152,32 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               label="Cancel"
               variant={ButtonVariant.Secondary}
             />
-            <DialButton
-              onClick={onConfirm}
-              label={mode === 'copy' ? copyLabel : moveLabel}
-              variant={ButtonVariant.Primary}
-            />
+            {isDestinationDisabled ? (
+              <DialTooltip tooltip={disabledPathTooltip}>
+                <DialButton
+                  onClick={onConfirm}
+                  label={mode === 'copy' ? copyLabel : moveLabel}
+                  variant={ButtonVariant.Primary}
+                  disabled={isDestinationDisabled}
+                  aria-disabled={isDestinationDisabled}
+                />
+              </DialTooltip>
+            ) : (
+              <DialButton
+                onClick={onConfirm}
+                label={mode === 'copy' ? copyLabel : moveLabel}
+                variant={ButtonVariant.Primary}
+              />
+            )}
           </div>
         </div>
       }
-      title={title ?? defaultTitle}
+      header={header ?? defaultTitle}
     >
       <DialFileManager
         {...restProps}
         actionsRef={fileManagerActionRef}
+        path={path}
         showHiddenFiles={showHiddenFiles}
         onShowHiddenFilesChange={handleShowHiddenFilesChange}
         treeOptions={{

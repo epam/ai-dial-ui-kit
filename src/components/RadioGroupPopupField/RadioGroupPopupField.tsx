@@ -24,7 +24,7 @@ export interface RadioGroupPopupFieldProps
     Pick<DialRadioGroupProps, 'radioButtons'>,
     Pick<DialPopupProps, 'onClose' | 'portalId' | 'size'> {
   customInputValue?: string;
-  title: string;
+  header: string;
   cancelButtonTitle?: string;
   applyButtonTitle?: string;
   isValid: boolean;
@@ -49,7 +49,7 @@ export interface RadioGroupPopupFieldProps
  * <DialRadioGroupPopupField
  *   fieldTitle="Status"
  *   htmlFor="status"
- *   title="Select status"
+ *   header="Select status"
  *   emptyValueText="None"
  *   radioButtons={[
  *     { id: 'draft', name: 'Draft' },
@@ -75,7 +75,7 @@ export interface RadioGroupPopupFieldProps
  * @param [inputClassName] - Extra classes applied to the collapsed input container
  * @param emptyValueText - Placeholder text when no value is selected
  * @param [onClose] - Callback fired when the popup closes
- * @param title - Title text shown in the popup header
+ * @param header - Title text shown in the popup header
  * @param [portalId] - Target portal id for rendering the popup
  * @param onApply - Callback fired when the Apply button is clicked
  * @param [cancelButtonTitle="Cancel"] - Text for the Cancel button
@@ -97,7 +97,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   inputClassName,
   emptyValueText,
   onClose,
-  title,
+  header,
   portalId,
   onApply,
   cancelButtonTitle = 'Cancel',
@@ -143,7 +143,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
         <DialPopup
           open={isOpen}
           onClose={onClosePopup}
-          title={title}
+          header={header}
           portalId={portalId}
           size={size}
           footer={

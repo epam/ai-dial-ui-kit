@@ -38,7 +38,7 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
-    path: 'All files',
+    defaultPath: 'All files',
     items: itemsMock,
     treeOptions: {
       expandedPaths: new Set<string>([
@@ -170,6 +170,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
   });
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
   const [loadedPaths, setLoadedPaths] = useState<Set<string>>(new Set());
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>();
 
   const updateItemNameByPath = useCallback(
     (items: DialFile[], path: string, newName: string): DialFile[] => {
@@ -276,7 +277,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
       >
         <DialFileManager
           {...args}
-          allowedFileTypes={['.svg', 'text/plain', 'application/pdf']}
+          allowedFileTypes={['.ico', '.svg', 'text/plain', 'application/pdf']}
           onPathChange={(path) => {
             if (path) {
               setLoadedPaths((prev) => new Set(prev).add(path));
@@ -290,6 +291,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
               'All files/Empty folder',
             ])
           }
+          selectedPaths={selectedPaths}
+          onSelectedPathsChange={setSelectedPaths}
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,
@@ -553,7 +556,6 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Item',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
@@ -717,7 +719,6 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Items',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',

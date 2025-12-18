@@ -16,7 +16,7 @@ const meta = {
       control: { type: 'radio' },
       options: [ConfirmationPopupVariant.Info, ConfirmationPopupVariant.Danger],
     },
-    title: { control: { type: 'text' } },
+    header: { control: { type: 'text' } },
     description: { control: { type: 'text' } },
     descriptionClassName: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
@@ -31,7 +31,7 @@ const meta = {
     onCancel: { action: 'onCancel', control: false },
   },
   args: {
-    title: 'Title',
+    header: 'Title',
     description: 'Body area',
   },
 } satisfies Meta<DialConfirmationPopupProps>;
@@ -85,7 +85,7 @@ export const Danger: Story = {
   render: StatefulRender,
   args: {
     variant: ConfirmationPopupVariant.Danger,
-    title: 'Confirm Deletion',
+    header: 'Confirm Deletion',
     description: (
       <div className="space-y-2">
         <p>Are you sure you want to delete this item?</p>
@@ -115,7 +115,7 @@ export const PrimarySave: Story = {
   render: StatefulRender,
   args: {
     variant: ConfirmationPopupVariant.Info,
-    title: 'Unsaved Changes',
+    header: 'Unsaved Changes',
     description:
       'You have unsaved changes. Do you want to save them before leaving?',
     confirmLabel: 'Save',
@@ -149,7 +149,7 @@ export const Loading: Story = {
   render: StatefulRender,
   args: {
     isLoading: true,
-    title: 'Processing…',
+    header: 'Processing…',
     confirmLabel: 'Save',
     onClose: () => null,
     onConfirm: () => null,

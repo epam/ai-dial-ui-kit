@@ -12,6 +12,7 @@ import { DialFileNodeType } from '@/models/file';
 import {
   collectAllDescendants,
   findFolderForPath,
+  findNodeByPath,
   formatBytes,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
@@ -37,6 +38,7 @@ import { useFolderCreation } from './hooks/use-folder-creation';
 import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
 import { useFileMetadata } from './hooks/use-file-metadata';
 import { useFileSearch } from './hooks/use-file-search';
+import { usePathsSelection } from './hooks/use-paths-selection';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -62,7 +64,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   items = [],
   rootItem,
   path,
+  defaultPath,
   filesLoading,
+  selectedPaths,
+  defaultSelectedPaths,
+  onSelectedPathsChange,
   showHiddenFiles,
   onShowHiddenFilesChange,
   treeOptions,
@@ -100,18 +106,32 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   clearSearchResults,
   allowedFileTypes,
 }) => {
-  const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
-    new Map(),
-  );
+  const {
+    selectedPaths: effectiveSelectedPaths,
+    clearSelection,
+    setSelectedPaths,
+  } = usePathsSelection({
+    selectedPaths,
+    defaultSelectedPaths,
+    onSelectedPathsChange,
+  });
 
-  const selectedIds = useMemo(
-    () => new Set(selectedFiles.keys()),
-    [selectedFiles],
-  );
-  const clearSelection = useCallback(() => setSelectedFiles(new Map()), []);
+  const selectedFiles = useMemo(() => {
+    const map = new Map<string, DialFile>();
+
+    effectiveSelectedPaths.forEach((path) => {
+      const file = findNodeByPath(items, path);
+      if (file) {
+        map.set(path, file);
+      }
+    });
+
+    return map;
+  }, [effectiveSelectedPaths, items]);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
+    defaultPath,
     onPathChange,
     onSelectionClear: clearSelection,
   });
@@ -498,7 +518,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       ...destinationFolderPopupOptions,
       destinationFolderPath,
       setDestinationFolderPath,
-      title: destinationFolderTitle,
+      header: destinationFolderTitle,
       onCreateFolder,
       onCreateFolderValidate,
       folderCreationValidationMessages,
@@ -518,9 +538,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     toggleTreeCollapse,
     setIsTreeCollapsed,
 
-    selectedIds,
+    selectedPaths: effectiveSelectedPaths,
     selectedFiles,
-    setSelectedFiles,
+    setSelectedPaths,
     clearSelection,
 
     currentFolder,

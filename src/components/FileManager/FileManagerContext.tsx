@@ -48,7 +48,9 @@ export interface FileManagerContextValue {
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
-  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions & {
+    sourceFolder?: string;
+  };
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
 
@@ -68,9 +70,9 @@ export interface FileManagerContextValue {
   toggleTreeCollapse: () => void;
   setIsTreeCollapsed: (value: boolean) => void;
 
-  selectedIds: Set<string>;
+  selectedPaths: Set<string>;
   selectedFiles: Map<string, DialFile>;
-  setSelectedFiles: (next: Map<string, DialFile>) => void;
+  setSelectedPaths: (paths: Set<string>) => void;
   clearSelection: () => void;
 
   currentFolder?: DialFile;
