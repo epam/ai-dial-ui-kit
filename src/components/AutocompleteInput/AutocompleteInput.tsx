@@ -13,10 +13,9 @@ import classNames from 'classnames';
 
 export interface DialAutocompleteInputProps
   extends DialAutocompleteInputValueProps {
-  placeholder?: string;
-  updateSelected: (items: string[]) => void;
   containerClassName?: string;
   inputClassName?: string;
+  onChange: (items: string[]) => void;
 }
 
 /**
@@ -30,7 +29,7 @@ export interface DialAutocompleteInputProps
  * <DialAutocompleteInput
  *   placeholder="Type to add items"
  *   selectedItems={['Item 1', 'Item 2']}
- *   updateSelected={(items) => console.log(items)}
+ *   onChange={(items) => console.log(items)}
  *   containerClassName="custom-container-class"
  *   inputClassName="custom-input-class"
  *   listClassName="custom-list-class"
@@ -40,7 +39,7 @@ export interface DialAutocompleteInputProps
  *
  * @param [placeholder] - The placeholder text displayed in the input field when no items are selected.
  * @param [selectedItems=[]] - An array of strings representing the currently selected items.
- * @param updateSelected - A callback function that updates the list of selected items. Called when items are added or removed.
+ * @param onChange - A callback function that updates the list of selected items. Called when items are added or removed.
  * @param [listClassName] - Additional CSS classes applied to the `<ul>` element containing the list of selected items.
  * @param [listElementClassName] - Additional CSS classes applied to each `<li>` element representing an individual selected item.
  * @param [containerClassName] - Additional CSS classes applied to the container `<div>` element wrapping the input and list.
@@ -49,18 +48,18 @@ export interface DialAutocompleteInputProps
 export const DialAutocompleteInput: FC<DialAutocompleteInputProps> = ({
   placeholder = '',
   selectedItems = [],
-  updateSelected,
   listClassName,
   listElementClassName,
   containerClassName,
   inputClassName,
+  onChange,
 }) => {
   const [value, setValue] = useState('');
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
-        updateSelected([...selectedItems, e.currentTarget.value]);
+        onChange([...selectedItems, e.currentTarget.value]);
         setValue('');
       }
 
@@ -69,10 +68,10 @@ export const DialAutocompleteInput: FC<DialAutocompleteInputProps> = ({
         selectedItems.length &&
         !value
       ) {
-        updateSelected(selectedItems.slice(0, -1));
+        onChange(selectedItems.slice(0, -1));
       }
     },
-    [selectedItems, updateSelected, value],
+    [selectedItems, onChange, value],
   );
 
   const onInputChange = useCallback(

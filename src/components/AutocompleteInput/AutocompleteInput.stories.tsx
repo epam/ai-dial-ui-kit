@@ -15,7 +15,7 @@ const InteractiveAutocomplete = (args: DialAutocompleteInputProps) => {
       <DialAutocompleteInput
         {...args}
         selectedItems={selectedItems}
-        updateSelected={setSelectedItems}
+        onChange={setSelectedItems}
       />
     </div>
   );
@@ -43,7 +43,7 @@ const meta: Meta<typeof DialAutocompleteInput> = {
       control: { type: 'object' },
       description: 'Array of currently selected items',
     },
-    updateSelected: {
+    onChange: {
       action: 'updateSelected',
       control: false,
       description: 'Callback triggered when selected items change',
@@ -96,7 +96,7 @@ export const AllVariants: Story = {
         label: 'Empty',
         args: {
           placeholder: 'Type and press Enter...',
-          updateSelected: (items) => items,
+          onChange: (items) => items,
         },
       },
       {
@@ -104,7 +104,7 @@ export const AllVariants: Story = {
         args: {
           placeholder: 'Add more...',
           selectedItems: ['React', 'Next.js', 'Tailwind'],
-          updateSelected: (items) => items,
+          onChange: (items) => items,
         },
       },
       {
@@ -115,7 +115,7 @@ export const AllVariants: Story = {
             'Supercalifragilisticexpialidocious',
             'ExtremelyLongWordWithoutSpaces',
           ],
-          updateSelected: (items) => items,
+          onChange: (items) => items,
         },
       },
     ];

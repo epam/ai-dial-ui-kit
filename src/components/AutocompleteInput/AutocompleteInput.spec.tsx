@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialAutocompleteInput', () => {
     render(
       <DialAutocompleteInput
         placeholder="autocomplete"
-        updateSelected={mockUpdateSelected}
+        onChange={mockUpdateSelected}
       />,
     );
     const input = screen.getByRole('textbox', { name: '' });
@@ -25,7 +25,7 @@ describe('Dial UI Kit :: DialAutocompleteInput', () => {
     render(
       <DialAutocompleteInput
         placeholder="autocomplete"
-        updateSelected={mockUpdateSelected}
+        onChange={mockUpdateSelected}
       />,
     );
     const input = screen.getByRole('textbox', { name: '' });
@@ -38,7 +38,7 @@ describe('Dial UI Kit :: DialAutocompleteInput', () => {
     render(
       <DialAutocompleteInput
         placeholder="autocomplete"
-        updateSelected={mockUpdateSelected}
+        onChange={mockUpdateSelected}
         selectedItems={[...selectedItems]}
       />,
     );
@@ -53,7 +53,7 @@ describe('Dial UI Kit :: DialAutocompleteInput', () => {
     render(
       <DialAutocompleteInput
         placeholder="autocomplete"
-        updateSelected={mockUpdateSelected}
+        onChange={mockUpdateSelected}
         selectedItems={[...initialSelected]}
       />,
     );
