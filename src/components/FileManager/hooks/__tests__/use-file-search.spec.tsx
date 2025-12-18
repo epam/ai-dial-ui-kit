@@ -248,13 +248,16 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
     expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('query');
   });
 
-  it('clears search when path changes', () => {
+  it('clears search when path changes', async () => {
     const clearSearchResults = vi.fn();
+    const onNavigationPanelSearchChange = vi.fn();
+
     const { result, rerender } = renderHook(
       ({ currentPath }) =>
         useFileSearch({
           currentPath,
           clearSearchResults,
+          onNavigationPanelSearchChange,
           allItems: [mockFolderWithItems],
         }),
       { initialProps: { currentPath: '/test' } },
@@ -265,11 +268,49 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
     });
 
     expect(result.current.isSearchMode).toBe(true);
+    expect(result.current.searchValue).toBe('file');
 
     rerender({ currentPath: '/test/other' });
 
-    waitFor(() => {
+    await waitFor(() => {
+      expect(result.current.isSearchMode).toBe(false);
+      expect(result.current.searchValue).toBe('');
+      expect(result.current.effectiveSearchValue).toBe('');
       expect(clearSearchResults).toHaveBeenCalled();
+      expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('');
+    });
+  });
+
+  it('clears search when path changes with external search', async () => {
+    const clearSearchResults = vi.fn();
+    const onNavigationPanelSearchChange = vi.fn();
+    const onSearchFiles = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ currentPath }) =>
+        useFileSearch({
+          currentPath,
+          clearSearchResults,
+          onNavigationPanelSearchChange,
+          onSearchFiles,
+        }),
+      { initialProps: { currentPath: '/test' } },
+    );
+
+    act(() => {
+      result.current.handleSearchChange('file');
+    });
+
+    expect(result.current.isSearchMode).toBe(true);
+    expect(onSearchFiles).toHaveBeenCalledWith('/test', 'file');
+
+    rerender({ currentPath: '/test/other' });
+
+    await waitFor(() => {
+      expect(result.current.isSearchMode).toBe(false);
+      expect(result.current.searchValue).toBe('');
+      expect(clearSearchResults).toHaveBeenCalled();
+      expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('');
     });
   });
 
@@ -308,10 +349,13 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
 
   it('handles handleSearchClear correctly', () => {
     const clearSearchResults = vi.fn();
+    const onNavigationPanelSearchChange = vi.fn();
+
     const { result } = renderHook(() =>
       useFileSearch({
         currentPath: '/test',
         clearSearchResults,
+        onNavigationPanelSearchChange,
         allItems: [mockFolderWithItems],
       }),
     );
@@ -325,12 +369,13 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
 
     act(() => {
       result.current.handleSearchClear();
-      result.current.setSearchValue('');
     });
 
+    expect(result.current.searchValue).toBe('');
     expect(result.current.effectiveSearchValue).toBe('');
     expect(result.current.searchResultsRows).toEqual([]);
     expect(clearSearchResults).toHaveBeenCalled();
+    expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('');
   });
 
   it('returns search results when searchInProgress is true', () => {
@@ -461,5 +506,49 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
     });
 
     expect(result.current.searchValue).toBe('query');
+  });
+
+  it('does not clear search when path stays the same', () => {
+    const clearSearchResults = vi.fn();
+    const { result, rerender } = renderHook(
+      ({ currentPath }) =>
+        useFileSearch({
+          currentPath,
+          clearSearchResults,
+          allItems: [mockFolderWithItems],
+        }),
+      { initialProps: { currentPath: '/test' } },
+    );
+
+    act(() => {
+      result.current.handleSearchChange('file');
+    });
+
+    expect(result.current.isSearchMode).toBe(true);
+
+    // Re-render with same path
+    rerender({ currentPath: '/test' });
+
+    expect(result.current.isSearchMode).toBe(true);
+    expect(result.current.searchValue).toBe('file');
+    expect(clearSearchResults).not.toHaveBeenCalled();
+  });
+
+  it('clears search only when search is active and path changes', async () => {
+    const clearSearchResults = vi.fn();
+    const { rerender } = renderHook(
+      ({ currentPath }) =>
+        useFileSearch({
+          currentPath,
+          clearSearchResults,
+          allItems: [mockFolderWithItems],
+        }),
+      { initialProps: { currentPath: '/test' } },
+    );
+
+    // Path changes but no search active
+    rerender({ currentPath: '/test/other' });
+
+    expect(clearSearchResults).not.toHaveBeenCalled();
   });
 });
