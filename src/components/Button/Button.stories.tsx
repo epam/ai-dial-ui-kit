@@ -6,7 +6,7 @@ import {
   DialErrorButton,
   DialNeutralButton,
   DialPrimaryButton,
-} from './Buttons';
+} from './ButtonWrappers';
 
 const meta = {
   title: 'Form/Button',

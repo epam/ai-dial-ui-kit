@@ -13,7 +13,7 @@ import {
 import { DialLoader } from '@/components/Loader/Loader';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 import { PopupSize } from '@/types/popup';
-import { DialNeutralButton } from '@/components/Button/Buttons';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 
 export interface DialConfirmationPopupProps extends DialPopupProps {
   description?: ReactNode;

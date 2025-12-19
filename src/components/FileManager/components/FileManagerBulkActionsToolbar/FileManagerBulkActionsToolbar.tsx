@@ -1,10 +1,13 @@
 import type { FC } from 'react';
 import { DialButton } from '@/components/Button/Button';
-import { DialNeutralButton } from '@/components/Button/Buttons';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/ButtonWrappers';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance } from '@/types/button';
 import { IconX, IconDotsVertical } from '@tabler/icons-react';
 import { ACTIONS_GAP, CONTAINER_PADDING } from './constants';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
@@ -107,11 +110,11 @@ export const DialFileManagerBulkActionsToolbar: FC<
         aria-label="File bulk actions"
       >
         <div ref={leftSectionRef}>
-          <DialButton
+          <DialPrimaryButton
             label={selectionLabel}
             onClick={onClearSelection}
             textClassName="text-accent-primary whitespace-nowrap"
-            variant={ButtonVariant.Tertiary}
+            appearance={ButtonAppearance.Ghost}
             iconBefore={
               <IconX {...BASE_ICON_PROPS} className="text-accent-primary" />
             }

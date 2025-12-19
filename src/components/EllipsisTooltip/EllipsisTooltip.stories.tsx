@@ -4,7 +4,7 @@ import {
   DialEllipsisTooltip,
   type DialEllipsisTooltipProps,
 } from './EllipsisTooltip';
-import { DialNeutralButton } from '@/components/Button/Buttons';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 
 const meta = {
   title: 'Overlay/EllipsisTooltip',

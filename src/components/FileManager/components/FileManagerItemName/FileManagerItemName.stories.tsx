@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DialItemType } from '@/types/item';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileManagerItemName } from './FileManagerItemName';
-import { DialNeutralButton } from '@/components/Button/Buttons';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 
 const meta: Meta<typeof DialFileManagerItemName> = {
   title: 'FileManager/components/FileManagerItemName',

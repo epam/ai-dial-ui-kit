@@ -1,4 +1,4 @@
-import { DialPrimaryButton } from '@/components/Button/Buttons';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import {

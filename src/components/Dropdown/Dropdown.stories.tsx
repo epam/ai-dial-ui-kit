@@ -20,7 +20,7 @@ import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import {
   DialNeutralButton,
   DialPrimaryButton,
-} from '@/components/Button/Buttons';
+} from '@/components/Button/ButtonWrappers';
 import { type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [

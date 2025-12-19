@@ -15,7 +15,7 @@ import {
 import type { DropTargetMonitor } from 'react-dnd';
 import { useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { DialPrimaryButton } from '@/components/Button/Buttons';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 export interface DialEmptyFileAreaProps {
   emptyTextFirstLine?: string;

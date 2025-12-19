@@ -1,4 +1,4 @@
-import { DialPrimaryButton } from '@/components/Button/Buttons';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialLoader } from '@/components/Loader/Loader';
 import { ButtonAppearance } from '@/types/button';
 import { PopupSize } from '@/types/popup';

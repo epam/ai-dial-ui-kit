@@ -7,7 +7,7 @@ import { PopupSize } from '@/types/popup';
 import {
   DialPrimaryButton,
   DialNeutralButton,
-} from '@/components/Button/Buttons';
+} from '@/components/Button/ButtonWrappers';
 import { ButtonAppearance } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
@@ -121,7 +121,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
-      className={'md:!h-[800px]'}
+      className="md:!h-[800px]"
       footer={
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">

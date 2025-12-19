@@ -1,4 +1,4 @@
-import { DialPrimaryButton } from '@/components/Button/Buttons';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type FC, type ReactNode } from 'react';

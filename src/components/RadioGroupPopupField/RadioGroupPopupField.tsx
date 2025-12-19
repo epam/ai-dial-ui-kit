@@ -4,7 +4,7 @@ import { useCallback, useState, type FC } from 'react';
 import {
   DialPrimaryButton,
   DialNeutralButton,
-} from '@/components/Button/Buttons';
+} from '@/components/Button/ButtonWrappers';
 import {
   DialFieldLabel,
   type DialFieldLabelProps,

@@ -1,4 +1,4 @@
-import { DialPrimaryButton } from '@/components/Button/Buttons';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconSettings } from '@tabler/icons-react';
 import { useState } from 'react';

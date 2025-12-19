@@ -3,7 +3,7 @@ import { useCallback, type FC, type ReactNode } from 'react';
 import {
   DialNeutralButton,
   DialPrimaryButton,
-} from '@/components/Button/Buttons';
+} from '@/components/Button/ButtonWrappers';
 import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import { DialLoader } from '@/components/Loader/Loader';
 import { PopupSize } from '@/types/popup';

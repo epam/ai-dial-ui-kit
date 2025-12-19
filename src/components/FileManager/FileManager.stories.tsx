@@ -8,8 +8,7 @@ import {
 import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
 import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
-import { ButtonVariant } from '@/types/button';
-import { DialPrimaryButton } from '@/components/Button/Button';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialPopup } from '@/components/Popup/Popup';
 import {
   DialFileNodeType,

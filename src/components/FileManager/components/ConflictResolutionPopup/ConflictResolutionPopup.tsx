@@ -3,7 +3,7 @@ import { PopupSize } from '@/types/popup';
 import {
   DialPrimaryButton,
   DialNeutralButton,
-} from '@/components/Button/Buttons';
+} from '@/components/Button/ButtonWrappers';
 import { type FC, useState, useMemo, useCallback } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';

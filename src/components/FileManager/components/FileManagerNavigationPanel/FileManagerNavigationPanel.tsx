@@ -13,7 +13,7 @@ import {
 import { DialSearch, type DialSearchProps } from '@/components/Search/Search';
 import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 
-import { DialNeutralButton } from '@/components/Button/Buttons';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconArrowLeft } from '@tabler/icons-react';

@@ -32,6 +32,11 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
+export {
+  DialErrorButton,
+  DialNeutralButton,
+  DialPrimaryButton,
+} from './components/Button/ButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 

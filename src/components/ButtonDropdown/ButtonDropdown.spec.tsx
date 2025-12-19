@@ -11,13 +11,7 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
   ];
 
   test('Should render with title and button icon', () => {
-    render(
-      <DialButtonDropdown
-        title="Settings"
-        variant={ButtonVariant.Primary}
-        items={items}
-      />,
-    );
+    render(<DialButtonDropdown title="Settings" items={items} />);
     const button = screen.getByRole('button', { name: 'Settings' });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('dial-primary-solid-button');
