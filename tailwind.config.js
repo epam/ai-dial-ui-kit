@@ -28,6 +28,7 @@ const backgroundsColors = {
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };
 
+// TODO: review button colors
 const buttonsBgColors = {
   'controls-solid-primary': 'var(--controls-bg-solid-primary, #3970DA)',
   'controls-solid-primary-hover':
@@ -86,6 +87,7 @@ const placeholderColor = {
   primary: 'var(--text-primary, #F3F4F6)',
 };
 
+// TODO: need review
 const buttonsTextColors = {
   'controls-solid': 'var(--controls-text-solid, #FCFCFC)',
   'controls-solid-disable': 'var(--controls-text-solid-disable, #333942)',
