@@ -21,9 +21,15 @@ import type { DialUploadFileItem } from '@/models/file-manager';
 import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
+  DialFileManagerTabs,
 } from '@/types/file-manager';
 import { PopupSize } from '@/types/popup';
 import { FileManagerColumnKey } from '@/types/file-manager';
+import {
+  IconBuildingCommunity,
+  IconFileDescription,
+  IconUsers,
+} from '@tabler/icons-react';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -1217,6 +1223,86 @@ export const WithSearchInPopup: Story = {
       description: {
         story:
           'File Manager with search functionality inside a popup. Local search is enabled by default.',
+      },
+    },
+  },
+};
+
+const EmptyStatePerTabComponent = (args: DialFileManagerProps) => {
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  const emptyState = useMemo(() => {
+    switch (activeTab) {
+      case DialFileManagerTabs.MyFiles:
+        return {
+          icon: (
+            <IconFileDescription
+              size={100}
+              stroke={0.5}
+              className="text-secondary"
+            />
+          ),
+          title: "You don't have any files",
+          description: 'Upload or drag and drop files',
+        };
+
+      case DialFileManagerTabs.Shared:
+        return {
+          icon: (
+            <IconUsers size={100} stroke={0.5} className="text-secondary" />
+          ),
+          title: 'Nothing has been shared with you',
+          description: 'Ask teammates to share files or upload your own',
+        };
+
+      case DialFileManagerTabs.Organization:
+        return {
+          icon: (
+            <IconBuildingCommunity
+              size={100}
+              stroke={0.5}
+              className="text-secondary"
+            />
+          ),
+          title: 'No organization files found',
+          description: 'Files shared within your organization will appear here',
+        };
+
+      default:
+        return undefined;
+    }
+  }, [activeTab]);
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialFileManager
+        {...args}
+        items={[]}
+        emptyStateIcon={emptyState?.icon}
+        emptyStateTitle={emptyState?.title}
+        emptyStateDescription={emptyState?.description}
+        toolbarOptions={{
+          ...args.toolbarOptions,
+          tabs: tabs,
+          activeTab: activeTab,
+          onTabChange: handleTabChange,
+        }}
+      />
+    </div>
+  );
+};
+
+export const EmptyStatePerTab: Story = {
+  render: EmptyStatePerTabComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates how the File Manager displays different empty states depending on the active tab. The example configures unique icons, titles, and descriptions for the "My Files", "Shared with Me", and "Organization" tabs, and shows how to control the active tab via toolbar options.',
       },
     },
   },

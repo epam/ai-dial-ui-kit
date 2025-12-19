@@ -269,4 +269,53 @@ describe('Dial UI Kit :: FileManager', () => {
       expect(rowsAfter).toBe(rowsBefore + 1);
     });
   });
+
+  test('shows My Files empty state when My Files tab active', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={[]}
+        toolbarOptions={{
+          tabs: [
+            { id: 'my_files', label: 'My Files' },
+            { id: 'shared', label: 'Shared with Me' },
+            { id: 'organization', label: 'Organization' },
+          ],
+          activeTab: 'my_files',
+        }}
+      />,
+    );
+
+    expect(screen.getByText("You don't have any files")).toBeInTheDocument();
+    expect(
+      screen.getByText('Upload or drag and drop files'),
+    ).toBeInTheDocument();
+  });
+
+  test('custom title + description override default empty state for active tab', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={[]}
+        emptyStateTitle="Custom title goes here"
+        emptyStateDescription="Custom description text"
+        toolbarOptions={{
+          tabs: [
+            { id: 'my_files', label: 'My Files' },
+            { id: 'shared', label: 'Shared with Me' },
+            { id: 'organization', label: 'Organization' },
+          ],
+          activeTab: 'my_files',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Custom title goes here')).toBeInTheDocument();
+    expect(screen.getByText('Custom description text')).toBeInTheDocument();
+
+    expect(
+      screen.queryByText("You don't have any files"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Upload or drag and drop files'),
+    ).not.toBeInTheDocument();
+  });
 });
