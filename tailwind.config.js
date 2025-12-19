@@ -51,6 +51,7 @@ const borderColors = {
   primary: 'var(--stroke-primary, #69727C)',
   secondary: 'var(--stroke-secondary, #222932)',
   tertiary: 'var(--stroke-tertiary, #090D13)',
+  focus: 'var(--stroke-focus, #F3F4F6)',
   error: 'var(--stroke-error, #F76464)',
   warning: 'var(--stroke-warning, #EEC840)',
   info: 'var(--stroke-info, #74A4FF)',
