@@ -40,7 +40,7 @@ const meta = {
         ButtonAppearance.Ghost,
         ButtonAppearance.Link,
         ButtonAppearance.Solid,
-        ButtonAppearance.Outline,
+        ButtonAppearance.Outlined,
       ],
       description: 'Button appearance',
     },
@@ -294,7 +294,7 @@ export const AllVariants: Story = {
           <div className="font-bold mb-2 text-primary">Error Solid</div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} />
-            <DialErrorButton {...smallProps} size={ButtonSize.Small} disabled />
+            <DialErrorButton {...smallProps} size={ButtonSize.Small} />
           </div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} disabled />

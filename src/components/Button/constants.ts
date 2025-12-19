@@ -13,12 +13,16 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
 
   [ButtonVariant.Error]: {
     [ButtonAppearance.Solid]: 'dial-error-solid-button',
-    [ButtonAppearance.Ghost]: '',
+    [ButtonAppearance.Ghost]: 'dial-error-ghost-button',
   },
 
-  [ButtonVariant.Success]: { [ButtonAppearance.Ghost]: '' },
-  [ButtonVariant.Secondary]: {
-    [ButtonAppearance.Ghost]: '',
+  [ButtonVariant.Success]: {
+    [ButtonAppearance.Ghost]: 'dial-success-ghost-button',
   },
-  [ButtonVariant.Tertiary]: { [ButtonAppearance.Ghost]: '' },
+  [ButtonVariant.Secondary]: {
+    [ButtonAppearance.Ghost]: 'dial-secondary-ghost-button',
+  },
+  [ButtonVariant.Tertiary]: {
+    [ButtonAppearance.Ghost]: 'dial-tertiary-ghost-button',
+  },
 };
