@@ -24,8 +24,9 @@ export const variantConfig: Record<
     cancelVariant: ButtonVariant.Secondary,
   },
   [ConfirmationPopupVariant.Danger]: {
+    // TODO: rename to Error after implement Design system changes
     container: 'dial-danger-popup',
-    confirmVariant: ButtonVariant.Danger,
+    confirmVariant: ButtonVariant.Error,
     cancelVariant: ButtonVariant.Secondary,
   },
 };
