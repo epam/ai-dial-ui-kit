@@ -1,54 +1,129 @@
-.dial-display1 {
+.dial-display1-text {
   @apply font-semibold text-[32px]/[48px];
 }
 
-.dial-display2 {
+.dial-display2-text {
   @apply font-semibold text-[28px]/[40px];
 }
 
-.dial-h1 {
+.dial-h1-text {
   @apply font-semibold text-[22px]/[32px];
 }
 
-.dial-h2 {
+.dial-h2-text {
   @apply font-semibold text-[20px]/[28px];
 }
 
-.dial-h3 {
+.dial-h3-text {
   @apply font-semibold text-[18px]/[26px];
 }
 
-.dial-body {
+.dial-body-text {
   @apply font-normal text-[16px]/[24px];
 }
 
-.dial-body-semi {
+.dial-body-semi-text {
   @apply dial-body font-semibold;
 }
 
-.dial-small {
+.dial-small-text {
   @apply font-normal text-[14px]/[20px];
 }
 
-.dial-small-semi {
+.dial-small-semi-text {
   @apply dial-small font-semibold;
 }
 
-.dial-tiny {
+.dial-tiny-text {
   @apply font-normal text-[12px]/[16px];
 }
 
-.dial-tiny-semi {
+.dial-tiny-semi-text {
   @apply dial-tiny font-semibold;
 }
 
-.dial-caption {
+.dial-caption-text {
   @apply font-normal text-[10px]/[12px];
 }
 
 // Fira Code
-.dial-code {
+.dial-code-text {
   @apply font-normal text-[14px]/[20px];
+}
+
+// -----------------------------------------
+// old styles below, need to be deprecated
+// -----------------------------------------
+.dial-h1 {
+  @apply font-semibold;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.dial-h2 {
+  @apply font-normal;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.dial-h3 {
+  @apply font-semibold;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.dial-body {
+  @apply font-normal;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.dial-small {
+  @apply font-normal;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.dial-small-semi {
+  font-size: 14px;
+  line-height: 16px;
+  @apply font-semibold;
+}
+
+.dial-small-medium {
+  @apply font-normal;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.dial-small-150 {
+  @apply font-normal;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.dial-tiny {
+  @apply font-normal;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.dial-tiny-150 {
+  @apply font-normal;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.dial-tiny-semi {
+  @apply font-semibold;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.dial-caption {
+  @apply font-normal;
+  font-size: 10px;
+  line-height: 12px;
 }
 
 h1 {
@@ -61,17 +136,4 @@ h2 {
 
 h3 {
   @apply dial-h3;
-}
-
-/// remove
-.dial-small-medium {
-  @apply font-normal;
-  font-size: 14px;
-  line-height: 16px;
-}
-
-.dial-small-150 {
-  @apply font-normal;
-  font-size: 14px;
-  line-height: 21px;
 }
