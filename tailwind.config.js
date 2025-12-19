@@ -28,7 +28,6 @@ const backgroundsColors = {
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };
 
-// TODO: review button colors
 const buttonsBgColors = {
   'controls-solid-primary': 'var(--controls-bg-solid-primary, #3970DA)',
   'controls-solid-primary-hover':
