@@ -16,6 +16,10 @@
   @apply cursor-not-allowed;
 }
 
+.dial-button-solid-disable {
+  @apply dial-base-button-disable text-controls-solid-disable bg-controls-solid-disable;
+}
+
 .dial-primary-solid-button {
   @apply dial-base-button bg-controls-solid-primary text-controls-solid;
 
@@ -25,7 +29,7 @@
   }
 
   &:disabled {
-    @apply dial-base-button-disable text-controls-solid-disable bg-controls-solid-disable;
+    @apply dial-button-solid-disable;
   }
 }
 
@@ -66,8 +70,7 @@
   &:focus {
     @apply bg-controls-link-primary-hover;
   }
-F
-  &:disabled {
+  F &:disabled {
     @apply dial-base-button-disable text-controls-disable;
   }
 }
@@ -108,19 +111,15 @@ F
   }
 }
 
-.dial-error-button {
-  @apply dial-base-button bg-red-400 text-primary;
+.dial-error-solid-button {
+  @apply dial-base-button bg-controls-solid-error text-controls-solid;
 
   &:hover,
   &:focus {
-    @apply bg-red-800;
-  }
-
-  &:focus {
-    @apply border-hover;
+    @apply bg-controls-solid-error-hover;
   }
 
   &:disabled {
-    @apply dial-base-button-disable;
+    @apply dial-button-solid-disable;
   }
 }

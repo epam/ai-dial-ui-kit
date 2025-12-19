@@ -7,7 +7,7 @@ import type {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import type { ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export interface DialButtonProps
@@ -16,6 +16,8 @@ export interface DialButtonProps
     HTMLButtonElement
   > {
   variant?: ButtonVariant;
+  size?: ButtonSize;
+  appearance?: ButtonAppearance;
   textClassName?: string;
   label?: ReactNode;
   iconBefore?: ReactNode;
@@ -49,6 +51,8 @@ export interface DialButtonProps
  *
  * @param [label] - The content of the button. Can be any React node.
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
+ * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
+ * @param [size=ButtonSize.Standard] - Defines the size of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
@@ -56,7 +60,9 @@ export interface DialButtonProps
  */
 export const DialButton: FC<DialButtonProps> = ({
   label,
-  variant,
+  variant = ButtonVariant.Primary,
+  appearance = ButtonAppearance.Solid,
+  size = ButtonSize.Standard,
   className,
   textClassName,
   iconAfter,
@@ -66,14 +72,13 @@ export const DialButton: FC<DialButtonProps> = ({
   ...props
 }) => {
   const btnTextClassName = classNames(
-    'dial-small-semi',
-    iconAfter ? 'mr-2' : '',
-    iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
     textClassName,
   );
+
   const btnClassName = classNames(
-    variant && variantClassMap[variant],
+    variantClassMap[variant][appearance],
+    size === ButtonSize.Small && 'dial-base-button-small',
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
