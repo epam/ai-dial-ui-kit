@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialLabelledText, type DialLabelledTextProps } from './LabelledText';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 const meta: Meta<typeof DialLabelledText> = {
   title: 'Data Display/LabelledText',
@@ -47,7 +48,7 @@ export const WithContentAfterText: Story = {
   args: {
     label: 'With Action',
     text: 'Copy this value',
-    postfix: <button style={{ marginLeft: 8 }}>Copy</button>,
+    postfix: <DialPrimaryButton label="Copy" style={{ marginLeft: 8 }} />,
   },
 };
 

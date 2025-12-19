@@ -1,4 +1,4 @@
-import { ButtonAppearance, ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { DialButton, type DialButtonProps } from './Button';
@@ -106,22 +106,6 @@ export const WithReactNodeLabel: Story = {
   },
 };
 
-export const WithIconAsLabel: Story = {
-  args: {
-    label: <IconArrowRight size={20} />,
-    variant: ButtonVariant.Secondary,
-    'aria-label': 'Arrow button',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Button with an icon as the label content. Requires aria-label for accessibility.',
-      },
-    },
-  },
-};
-
 export const WithComplexLabel: Story = {
   args: {
     label: (
@@ -143,14 +127,6 @@ export const WithComplexLabel: Story = {
   },
 };
 
-export const WithBothIcons: Story = {
-  args: {
-    label: 'Action',
-    iconAfter: <IconArrowRight size={20} />,
-    iconBefore: <IconArrowLeft size={20} />,
-  },
-};
-
 export const WithCustomTextStyling: Story = {
   args: {
     label: 'Custom Text Styling',
@@ -164,14 +140,6 @@ export const WithCustomTextStyling: Story = {
           'Demonstrates the textClassName prop which allows custom styling of the button text while keeping the button container styling intact.',
       },
     },
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: 'Disabled Button',
-    variant: ButtonVariant.Tertiary,
-    disabled: true,
   },
 };
 
@@ -190,7 +158,7 @@ export const Hover: Story = {
 export const Focus: Story = {
   args: {
     label: 'Focus Button',
-    variant: ButtonVariant.Secondary,
+    variant: ButtonVariant.Primary,
   },
   parameters: {
     pseudo: {
@@ -202,7 +170,7 @@ export const Focus: Story = {
 export const Active: Story = {
   args: {
     label: 'Active Button',
-    variant: ButtonVariant.Tertiary,
+    variant: ButtonVariant.Primary,
   },
   parameters: {
     pseudo: {
@@ -213,18 +181,37 @@ export const Active: Story = {
 
 export const AllVariants: Story = {
   render: () => {
+    const props = {
+      label: 'Button',
+      iconAfter: <IconArrowRight size={20} />,
+      iconBefore: <IconArrowLeft size={20} />,
+    };
     return (
       <div className="flex flex-row gap-x-12">
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Primary Solid</div>
-          <DialPrimaryButton label="Button" />
-          <DialPrimaryButton label="Button" disabled />
+
+          <div className="flex flex-row gap-x-6">
+            <DialPrimaryButton {...props} />
+            <DialPrimaryButton {...props} size={ButtonSize.Small} />
+          </div>
+
+          <div className="flex flex-row gap-x-6">
+            <DialPrimaryButton {...props} disabled />
+            <DialPrimaryButton {...props} size={ButtonSize.Small} disabled />
+          </div>
         </div>
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Neutral Outlined</div>
-          <DialNeutralButton label="Button" />
-          <DialNeutralButton label="Button" disabled />
+          <div className="flex flex-row gap-x-6">
+            <DialNeutralButton {...props} />
+            <DialNeutralButton {...props} size={ButtonSize.Small} />
+          </div>
+          <div className="flex flex-row gap-x-6">
+            <DialNeutralButton {...props} disabled />
+            <DialNeutralButton {...props} size={ButtonSize.Small} disabled />
+          </div>
         </div>
 
         <div className="flex flex-col gap-y-6">
@@ -232,29 +219,54 @@ export const AllVariants: Story = {
           <DialPrimaryButton
             label="Button"
             appearance={ButtonAppearance.Ghost}
+            iconAfter={<IconArrowRight size={20} />}
+            iconBefore={<IconArrowLeft size={20} />}
           />
           <DialPrimaryButton
             label="Button"
             appearance={ButtonAppearance.Ghost}
+            iconAfter={<IconArrowRight size={20} />}
+            iconBefore={<IconArrowLeft size={20} />}
+            disabled
           />
         </div>
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Primary Link</div>
-          <DialPrimaryButton
-            label="Button"
-            appearance={ButtonAppearance.Link}
-          />
-          <DialPrimaryButton
-            label="Button"
-            appearance={ButtonAppearance.Link}
-          />
+          <div className="flex flex-row gap-x-6">
+            <DialPrimaryButton {...props} appearance={ButtonAppearance.Link} />
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Link}
+              size={ButtonSize.Small}
+            />
+          </div>
+
+          <div className="flex flex-row gap-x-6">
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Link}
+              disabled
+            />
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Link}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Error Solid</div>
-          <DialErrorButton label="Button" />
-          <DialErrorButton label="Button" />
+          <div className="flex flex-row gap-x-6">
+            <DialErrorButton {...props} />
+            <DialErrorButton {...props} size={ButtonSize.Small} disabled />
+          </div>
+          <div className="flex flex-row gap-x-6">
+            <DialErrorButton {...props} disabled />
+            <DialErrorButton {...props} size={ButtonSize.Small} disabled />
+          </div>
         </div>
       </div>
     );

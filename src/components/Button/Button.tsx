@@ -50,7 +50,7 @@ export interface DialButtonProps
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
  * @param [label] - The content of the button. Can be any React node.
- * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
+ * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ButtonSize.Standard] - Defines the size of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
@@ -78,7 +78,7 @@ export const DialButton: FC<DialButtonProps> = ({
 
   const btnClassName = classNames(
     variant && variantClassMap[variant][appearance],
-    size === ButtonSize.Small && 'dial-base-button-small',
+    size === ButtonSize.Small && 'dial-button-small',
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );

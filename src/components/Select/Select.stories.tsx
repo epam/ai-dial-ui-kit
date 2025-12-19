@@ -3,6 +3,7 @@ import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
 import { SelectSize, SelectVariant } from '@/types/select';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -168,14 +169,7 @@ export const WithFooterClickCallback: Story = {
         </span>
       </div>
     ),
-    footer: (
-      <button
-        type="button"
-        className="w-full px-3 py-2 border-t text-left hover:bg-layer-2 transition-colors"
-      >
-        <span className="dial-small text-primary font-medium">Apply</span>
-      </button>
-    ),
+    footer: <DialPrimaryButton label="Apply" />,
     onFooterClick: (e) => {
       console.info('Footer clicked', e);
     },

@@ -5,8 +5,8 @@
   @apply dial-small-text;
 }
 
-.dial-base-button-small {
-  @apply px-2 h-[24px];
+.dial-button-small {
+  @apply px-2 min-h-[24px];
 }
 
 .dial-base-button-disable {

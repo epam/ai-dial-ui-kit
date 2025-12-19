@@ -1,4 +1,7 @@
-import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/ButtonWrappers';
 import { DialLoader } from '@/components/Loader/Loader';
 import { ButtonAppearance } from '@/types/button';
 import { PopupSize } from '@/types/popup';
@@ -26,12 +29,8 @@ const meta = {
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
     footer: (
       <div className="px-6 py-4 flex justify-end gap-2">
-        <button className="px-3 py-1 rounded border border-tertiary text-secondary hover:text-primary">
-          Button label
-        </button>
-        <button className="px-3 py-1 rounded bg-accent-primary text-white">
-          Button label
-        </button>
+        <DialNeutralButton label="Button label" />
+        <DialPrimaryButton label="Button label" />
       </div>
     ),
   },
@@ -45,12 +44,10 @@ const StatefulRender = (args: DialPopupProps & { buttonLabel?: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button
-        className="px-3 py-2 rounded bg-accent-primary text-white hover:opacity-90"
+      <DialPrimaryButton
+        label={args.buttonLabel || 'Open Popup'}
         onClick={() => setOpen(true)}
-      >
-        {args.buttonLabel || 'Open Popup'}
-      </button>
+      />
 
       <DialPopup
         {...args}

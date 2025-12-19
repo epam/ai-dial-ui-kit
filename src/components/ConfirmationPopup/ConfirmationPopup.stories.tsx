@@ -5,6 +5,7 @@ import {
   type DialConfirmationPopupProps,
 } from './ConfirmationPopup';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 const meta = {
   title: 'Overlay/ConfirmationPopup',
@@ -46,12 +47,10 @@ const StatefulRender = (
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button
-        className="px-3 py-2 rounded bg-accent-primary text-white hover:opacity-90"
+      <DialPrimaryButton
         onClick={() => setOpen(true)}
-      >
-        {args.buttonLabel || 'Open Confirmation'}
-      </button>
+        label={args.buttonLabel || 'Open Confirmation'}
+      />
 
       <DialConfirmationPopup
         {...args}
@@ -167,12 +166,10 @@ export const CustomFooter: Story = {
     footer: (
       <div className="flex justify-between items-center px-6 py-3">
         <span className="text-secondary dial-small-150">Custom footer</span>
-        <button
-          className="px-3 py-1.5 rounded bg-accent-primary text-primary hover:opacity-90 dial-small"
+        <DialPrimaryButton
+          label="Action"
           onClick={() => alert('Custom action')}
-        >
-          Action
-        </button>
+        />
       </div>
     ),
     onClose: () => null,
