@@ -4,7 +4,7 @@
   @apply dial-small-medium;
 
   min-width: 38px;
-  min-height: 38px;
+  min-height: 40px;
 }
 
 .dial-base-button-disable {
@@ -64,7 +64,7 @@
   }
 }
 
-.dial-danger-button {
+.dial-error-button {
   @apply dial-base-button bg-red-400 text-primary;
 
   &:hover,

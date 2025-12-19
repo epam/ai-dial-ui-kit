@@ -11,7 +11,7 @@ const items: DropdownItem[] = [
   { key: 'profile', label: 'Profile' },
   { key: 'settings', label: 'Settings' },
   { key: 'd1', type: DropdownItemType.Divider },
-  { key: 'danger', label: 'Danger', danger: true },
+  { key: 'error', label: 'Error', danger: true },
   { key: 'logout', label: 'Logout' },
 ];
 
@@ -123,15 +123,15 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
-  test('danger item has proper class and overlay width hugs content', () => {
+  test('error item has proper class and overlay width hugs content', () => {
     render(
       <DialDropdown menu={{ items }}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
     openByClick();
-    const dangerItem = screen.getByRole('menuitem', { name: 'Danger' });
-    expect(dangerItem).toHaveClass('text-error');
+    const errorItem = screen.getByRole('menuitem', { name: 'Error' });
+    expect(errorItem).toHaveClass('text-error');
     const menuEl = screen.getByRole('menu');
     expect(menuEl).toHaveClass('w-max');
   });

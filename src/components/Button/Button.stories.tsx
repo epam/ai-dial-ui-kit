@@ -80,10 +80,10 @@ export const TertiaryButton: Story = {
   },
 };
 
-export const DangerButton: Story = {
+export const ErrorButton: Story = {
   args: {
-    label: 'Danger Button',
-    variant: ButtonVariant.Danger,
+    label: 'Error Button',
+    variant: ButtonVariant.Error,
   },
 };
 
@@ -238,7 +238,7 @@ export const AllVariants: Story = {
         variant: ButtonVariant.Secondary,
       },
       { key: 'tertiary', label: 'Tertiary', variant: ButtonVariant.Tertiary },
-      { key: 'danger', label: 'Danger', variant: ButtonVariant.Danger },
+      { key: 'error', label: 'Error', variant: ButtonVariant.Error },
     ];
 
     const states = [
