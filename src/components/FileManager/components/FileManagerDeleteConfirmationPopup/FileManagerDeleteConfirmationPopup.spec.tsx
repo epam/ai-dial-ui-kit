@@ -359,7 +359,7 @@ describe('Dial UI Kit :: FileManagerDeleteConfirmationPopup', () => {
     );
 
     const deleteButton = screen.getByRole('button', { name: /delete/i });
-    expect(deleteButton).toHaveClass('dial-error-button');
+    expect(deleteButton).toHaveClass('dial-danger-button');
   });
 
   it('displays files with unique keys', () => {
