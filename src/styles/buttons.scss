@@ -38,7 +38,8 @@
 }
 
 .dial-neutral-outlined-button {
-  @apply bg-transparent border-primary text-controls-solid dial-base-button;
+  @apply dial-base-button bg-transparent text-controls-solid;
+  @apply border-primary;
 
   &:hover,
   &:focus {
@@ -50,7 +51,7 @@
   }
 
   &:disabled {
-    @apply dial-base-button-disable text-controls-disable;
+    @apply dial-base-button-disable text-controls-disable bg-transparent;
   }
 }
 
@@ -63,7 +64,7 @@
   }
 
   &:disabled {
-    @apply dial-base-button-disable text-controls-disable;
+    @apply dial-base-button-disable text-controls-disable bg-transparent;
   }
 }
 

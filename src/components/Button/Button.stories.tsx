@@ -182,9 +182,15 @@ export const Active: Story = {
 export const AllVariants: Story = {
   render: () => {
     const props = {
-      label: 'Button',
+      label: 'Standard',
       iconAfter: <IconArrowRight size={20} />,
       iconBefore: <IconArrowLeft size={20} />,
+    };
+
+    const smallProps = {
+      label: 'Small',
+      iconAfter: <IconArrowRight size={16} />,
+      iconBefore: <IconArrowLeft size={16} />,
     };
     return (
       <div className="flex flex-row gap-x-12">
@@ -193,12 +199,16 @@ export const AllVariants: Story = {
 
           <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} />
-            <DialPrimaryButton {...props} size={ButtonSize.Small} />
+            <DialPrimaryButton {...smallProps} size={ButtonSize.Small} />
           </div>
 
           <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} disabled />
-            <DialPrimaryButton {...props} size={ButtonSize.Small} disabled />
+            <DialPrimaryButton
+              {...smallProps}
+              size={ButtonSize.Small}
+              disabled
+            />
           </div>
         </div>
 
@@ -206,11 +216,15 @@ export const AllVariants: Story = {
           <div className="font-bold mb-2 text-primary">Neutral Outlined</div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialNeutralButton {...props} />
-            <DialNeutralButton {...props} size={ButtonSize.Small} />
+            <DialNeutralButton {...smallProps} size={ButtonSize.Small} />
           </div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialNeutralButton {...props} disabled />
-            <DialNeutralButton {...props} size={ButtonSize.Small} disabled />
+            <DialNeutralButton
+              {...smallProps}
+              size={ButtonSize.Small}
+              disabled
+            />
           </div>
         </div>
 
@@ -219,7 +233,7 @@ export const AllVariants: Story = {
           <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} appearance={ButtonAppearance.Ghost} />
             <DialPrimaryButton
-              {...props}
+              {...smallProps}
               appearance={ButtonAppearance.Ghost}
               size={ButtonSize.Small}
             />
@@ -232,7 +246,7 @@ export const AllVariants: Story = {
               disabled
             />
             <DialPrimaryButton
-              {...props}
+              {...smallProps}
               appearance={ButtonAppearance.Ghost}
               size={ButtonSize.Small}
               disabled
@@ -245,7 +259,7 @@ export const AllVariants: Story = {
           <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} appearance={ButtonAppearance.Link} />
             <DialPrimaryButton
-              {...props}
+              {...smallProps}
               appearance={ButtonAppearance.Link}
               size={ButtonSize.Small}
             />
@@ -258,7 +272,7 @@ export const AllVariants: Story = {
               disabled
             />
             <DialPrimaryButton
-              {...props}
+              {...smallProps}
               appearance={ButtonAppearance.Link}
               size={ButtonSize.Small}
               disabled
@@ -270,11 +284,11 @@ export const AllVariants: Story = {
           <div className="font-bold mb-2 text-primary">Error Solid</div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} />
-            <DialErrorButton {...props} size={ButtonSize.Small} disabled />
+            <DialErrorButton {...smallProps} size={ButtonSize.Small} disabled />
           </div>
           <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} disabled />
-            <DialErrorButton {...props} size={ButtonSize.Small} disabled />
+            <DialErrorButton {...smallProps} size={ButtonSize.Small} disabled />
           </div>
         </div>
       </div>
