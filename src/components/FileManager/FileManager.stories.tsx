@@ -21,7 +21,15 @@ import type { DialUploadFileItem } from '@/models/file-manager';
 import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
+  DialFileManagerTabs,
 } from '@/types/file-manager';
+import { PopupSize } from '@/types/popup';
+import { FileManagerColumnKey } from '@/types/file-manager';
+import {
+  IconBuildingCommunity,
+  IconFileDescription,
+  IconUsers,
+} from '@tabler/icons-react';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -36,17 +44,16 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
-    path: '/All files/Folder 4',
+    defaultPath: 'All files',
     items: itemsMock,
     treeOptions: {
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
-        '/All files/Design/Icons/SVG',
-        '/All files/Folder 4',
-        '/All files/Media',
-        '/All files/Projects',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
+        'All files/Design/Icons/SVG',
+        'All files/Media',
+        'All files/Projects',
       ]),
     },
     navigationPanelOptions: {
@@ -63,14 +70,14 @@ export const Basic: Story = {};
 
 export const PreselectedNode: Story = {
   args: {
-    path: '/All files/Design/Icons/SVG/24px/logo.svg',
+    path: 'All files/Design/Icons/SVG/24px/logo.svg',
     treeOptions: {
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
-        '/All files/Design/Icons/SVG',
-        '/All files/Design/Icons/SVG/24px',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
+        'All files/Design/Icons/SVG',
+        'All files/Design/Icons/SVG/24px',
       ]),
     },
   },
@@ -95,6 +102,14 @@ const WithSearchControlledComponent = (args: DialFileManagerProps) => {
 
 export const WithSearchControlled: Story = {
   render: WithSearchControlledComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with controlled search input. Parent component manages search state. Uses local search by default.',
+      },
+    },
+  },
 };
 
 export const GridWithoutFilters: Story = {
@@ -160,6 +175,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
     organization: 'Organization',
   });
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
+  const [loadedPaths, setLoadedPaths] = useState<Set<string>>(new Set());
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>();
 
   const updateItemNameByPath = useCallback(
     (items: DialFile[], path: string, newName: string): DialFile[] => {
@@ -235,6 +252,22 @@ const PopupComponent = (args: DialFileManagerProps) => {
     return null;
   }, []);
 
+  const rootFolder = rootItem;
+  switch (activeTab) {
+    case 'my_files':
+      rootFolder.label = 'My Files';
+      break;
+    case 'shared':
+      rootFolder.label = 'Shared with Me';
+      break;
+    case 'organization':
+      rootFolder.label = 'Organization';
+      break;
+    default:
+      rootFolder.label = 'Files';
+      break;
+  }
+
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
       <DialButton
@@ -246,13 +279,37 @@ const PopupComponent = (args: DialFileManagerProps) => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
       >
         <DialFileManager
           {...args}
+          allowedFileTypes={['.ico', '.svg', 'text/plain', 'application/pdf']}
+          onPathChange={(path) => {
+            if (path) {
+              setLoadedPaths((prev) => new Set(prev).add(path));
+            }
+            args.onPathChange?.(path);
+          }}
           items={itemsMock}
+          sharedByMePaths={
+            new Set([
+              'All files/Design/Icons/SVG/24px/alert.svg',
+              'All files/Empty folder',
+            ])
+          }
+          selectedPaths={selectedPaths}
+          onSelectedPathsChange={setSelectedPaths}
           destinationFolderPopupOptions={{
             destinationFolderPath: destinationPath,
             setDestinationFolderPath: setDestinationPath,
+            getCopyHeader: (itemsCount, itemName) =>
+              itemsCount === 1 && itemName
+                ? `Copy "${itemName}"`
+                : `Copy ${itemsCount} item(s)`,
+            getMoveHeader: (itemsCount, itemName) =>
+              itemsCount === 1 && itemName
+                ? `Move "${itemName}"`
+                : `Move ${itemsCount} item(s)`,
           }}
           gridOptions={{
             ...(args.gridOptions ?? {}),
@@ -284,7 +341,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
             },
           }}
           bulkActionsToolbarOptions={{
-            selectionLabel: 'items selected',
+            getSelectionLabel: (selectedCount: number) =>
+              `${selectedCount} item(s) selected`,
             actionLabels: {
               duplicate: 'Duplicate',
               copy: 'Copy to',
@@ -296,7 +354,8 @@ const PopupComponent = (args: DialFileManagerProps) => {
           treeOptions={{
             ...(args.treeOptions ?? {}),
             collapsed: false,
-            expandedPaths: new Set<string>([rootItem.path]),
+            expandedPaths: new Set<string>([rootFolder.path]),
+            loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
               duplicate: 'Duplicate',
@@ -344,7 +403,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               'A folder with this name already exists in this location',
           }}
           maxFileSize={10 * 1024 * 1024} // 10MB
-          rootItem={rootItem}
+          rootItem={rootFolder}
         />
       </DialPopup>
     </div>
@@ -410,9 +469,9 @@ export const TreeCollapsedControlled: Story = {
 const rootItem: DialRootFolder = {
   id: 'root',
   folderId: 'root',
-  path: '/All files',
+  path: 'All files',
   name: 'All files',
-  breadcrumbLabel: 'My Workspace',
+  label: 'My Workspace',
   nodeType: DialFileNodeType.FOLDER,
   items: itemsMock,
 };
@@ -422,9 +481,9 @@ const WithRootItemComponent = (args: DialFileManagerProps) => {
     () => ({
       ...args.treeOptions,
       expandedPaths: new Set<string>([
-        '/All files',
-        '/All files/Design',
-        '/All files/Design/Icons',
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
       ]),
     }),
     [args.treeOptions],
@@ -434,7 +493,7 @@ const WithRootItemComponent = (args: DialFileManagerProps) => {
       <DialFileManager
         {...args}
         rootItem={rootItem}
-        path="/All files/Design/Icons"
+        path="All files/Design/Icons"
         treeOptions={treeOptions}
       />
     </div>
@@ -479,8 +538,8 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
       designFolder.items.push({
         id: 'duplicate-test-1',
         name: 'alert.svg',
-        path: '/All files/Design/alert.svg',
-        parentPath: '/All files/Design',
+        path: 'All files/Design/alert.svg',
+        parentPath: 'All files/Design',
         nodeType: DialFileNodeType.ITEM,
         resourceType: DialFileResourceType.FILE,
         extension: 'svg',
@@ -503,7 +562,6 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Item',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
@@ -527,7 +585,8 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             duplicate: 'Duplicate',
             copy: 'Copy to',
@@ -539,11 +598,11 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
         treeOptions={{
           ...(args.treeOptions ?? {}),
           expandedPaths: new Set<string>([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
         }}
         onCopyFiles={(items, destinationFolder) => {
@@ -614,8 +673,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-1',
           name: 'alert.svg',
-          path: '/All files/Design/alert.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/alert.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -627,8 +686,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-2',
           name: 'settings.svg',
-          path: '/All files/Design/settings.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/settings.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -640,8 +699,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         {
           id: 'duplicate-test-3',
           name: 'logo.svg',
-          path: '/All files/Design/logo.svg',
-          parentPath: '/All files/Design',
+          path: 'All files/Design/logo.svg',
+          parentPath: 'All files/Design',
           nodeType: DialFileNodeType.ITEM,
           resourceType: DialFileResourceType.FILE,
           extension: 'svg',
@@ -660,13 +719,12 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
       <DialFileManager
         {...args}
         items={itemsWithMultipleDuplicates}
-        path="/All files/Design/Icons/SVG/24px"
+        path="All files/Design/Icons/SVG/24px"
         destinationFolderPopupOptions={{
           destinationFolderPath: destinationPath,
           setDestinationFolderPath: setDestinationPath,
         }}
         conflictResolutionPopupOptions={{
-          title: 'Replace Or Duplicate Items',
           actionLabels: {
             [DialFileManagerConflictActions.Replace]: 'Replace',
             [DialFileManagerConflictActions.Duplicate]: 'Duplicate',
@@ -685,7 +743,8 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
           },
         }}
         bulkActionsToolbarOptions={{
-          selectionLabel: 'items selected',
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
           actionLabels: {
             copy: 'Copy to',
             move: 'Move to',
@@ -693,11 +752,11 @@ const WithMultipleConflictsComponent = (args: DialFileManagerProps) => {
         }}
         treeOptions={{
           expandedPaths: new Set<string>([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
         }}
         onCopyFiles={(items, destinationFolder) => {
@@ -736,6 +795,514 @@ export const WithMultipleConflicts: Story = {
           '2. Click "Copy to" action\n' +
           '3. Select /All files/Design as destination\n' +
           '4. Click "Copy" - conflict popup should show multiple files',
+      },
+    },
+  },
+};
+
+export const WithCustomVisibleColumns: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [
+        FileManagerColumnKey.Name,
+        FileManagerColumnKey.UpdatedAt,
+        FileManagerColumnKey.Author,
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager with custom visible columns (without Size column)',
+      },
+    },
+  },
+};
+
+export const OnlyNameColumn: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [FileManagerColumnKey.Name],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager showing only Name column',
+      },
+    },
+  },
+};
+
+const WithFileMetadataComponent = (args: DialFileManagerProps) => {
+  const [fileMetadata, setFileMetadata] = useState<DialFile | undefined>();
+  const [metadataLoading, setMetadataLoading] = useState(false);
+
+  const handleGetInfo = useCallback(async (file: DialFile) => {
+    setMetadataLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setFileMetadata(file);
+    setMetadataLoading(false);
+  }, []);
+
+  const handleCloseMetadata = useCallback(() => {
+    setFileMetadata(undefined);
+    setMetadataLoading(false);
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          actionLabels: {
+            info: 'Info',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+          ]),
+        }}
+        fileMetadataPopupOptions={{
+          fileMetadata,
+          loading: metadataLoading,
+          clearMetadata: handleCloseMetadata,
+        }}
+        onGetInfo={handleGetInfo}
+      />
+    </div>
+  );
+};
+
+export const WithFileMetadata: Story = {
+  render: WithFileMetadataComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with file metadata popup. Right-click on any file and select "Info" to view metadata. Shows loading skeleton for 1.5 seconds.',
+      },
+    },
+  },
+};
+
+const WithFileMetadataInPopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [fileMetadata, setFileMetadata] = useState<DialFile | undefined>();
+  const [metadataLoading, setMetadataLoading] = useState(false);
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  const handleGetInfo = useCallback(async (file: DialFile) => {
+    setMetadataLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setFileMetadata(file);
+    setMetadataLoading(false);
+  }, []);
+
+  const handleCloseMetadata = useCallback(() => {
+    setFileMetadata(undefined);
+    setMetadataLoading(false);
+  }, []);
+
+  const rootFolder: DialRootFolder = useMemo(() => {
+    const folder = { ...rootItem };
+    switch (activeTab) {
+      case 'my_files':
+        folder.label = 'My Files';
+        break;
+      case 'shared':
+        folder.label = 'Shared with Me';
+        break;
+      case 'organization':
+        folder.label = 'Organization';
+        break;
+      default:
+        folder.label = 'Files';
+        break;
+    }
+    return folder;
+  }, [activeTab]);
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        label="Toggle File Manager"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
+      >
+        <DialFileManager
+          {...args}
+          items={itemsMock}
+          rootItem={rootFolder}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+            actionLabels: {
+              info: 'Info',
+              duplicate: 'Duplicate',
+              copy: 'Copy to',
+              move: 'Move to',
+              download: 'Download',
+              delete: 'Delete',
+              rename: 'Rename',
+            },
+          }}
+          toolbarOptions={{
+            ...(args.toolbarOptions ?? {}),
+            tabs: tabs,
+            activeTab: activeTab,
+            onTabChange: handleTabChange,
+          }}
+          treeOptions={{
+            ...(args.treeOptions ?? {}),
+            collapsed: false,
+            expandedPaths: new Set<string>([rootFolder.path]),
+          }}
+          fileMetadataPopupOptions={{
+            fileMetadata,
+            loading: metadataLoading,
+            clearMetadata: handleCloseMetadata,
+          }}
+          onGetInfo={handleGetInfo}
+          onCopyFiles={(items, destinationFolder) => {
+            alert(
+              `Copying files: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')} to ${destinationFolder}`,
+            );
+          }}
+          onMoveToFiles={(items, sourceFolder, destinationFolder) => {
+            alert(
+              `Moving files from ${sourceFolder} to ${destinationFolder}: ${items
+                .map((f) => f.sourceUrl)
+                .join(', ')}`,
+            );
+          }}
+          onDeleteFiles={(items, sourceFolder) => {
+            alert(
+              `Deleting ${items.length} file(s) from ${sourceFolder}: ${items.map((f) => f.sourceUrl).join(', ')}`,
+            );
+          }}
+          onDownloadFiles={(items) => {
+            alert(
+              `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
+            );
+          }}
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const InPopupWithMetadata: Story = {
+  render: WithFileMetadataInPopupComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager in a popup with file metadata support. Right-click on any file and select "Info" to view its metadata.',
+      },
+    },
+  },
+};
+
+export const WithUnshareAction: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+            info: 'Info',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            rename: 'Rename',
+            download: 'Download',
+            delete: 'Delete',
+          },
+        }}
+        onUnshareFile={(file) => {
+          alert(`Unsharing file: ${file.name}`);
+        }}
+      />
+    </div>
+  ),
+};
+
+export const WithOwnerColumn: Story = {
+  args: {
+    gridOptions: {
+      visibleColumns: [
+        FileManagerColumnKey.Name,
+        FileManagerColumnKey.UpdatedAt,
+        FileManagerColumnKey.Size,
+        FileManagerColumnKey.Owner,
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'File Manager with Owner column instead of Author.',
+      },
+    },
+  },
+};
+
+const WithLocalSearchComponent = (args: DialFileManagerProps) => {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        navigationPanelOptions={{
+          ...args.navigationPanelOptions,
+          searchable: true,
+          value: query,
+          onSearchChange: (v) => setQuery(String(v ?? '')),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithLocalSearch: Story = {
+  render: WithLocalSearchComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with local search functionality. Search works across all files and folders in the tree without external API calls. Try searching for "svg", "design", or "alert".',
+      },
+    },
+  },
+};
+
+const WithServerSearchComponent = (args: DialFileManagerProps) => {
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<DialFile[]>([]);
+  const [searchInProgress, setSearchInProgress] = useState(false);
+
+  const handleSearch = useCallback((_folder: string, _searchQuery: string) => {
+    setSearchInProgress(true);
+
+    // Simulate API call that returns ALL files
+    setTimeout(() => {
+      const allFiles: DialFile[] = [];
+      const traverse = (items: DialFile[]) => {
+        items.forEach((item) => {
+          allFiles.push(item);
+          if (item.items) {
+            traverse(item.items);
+          }
+        });
+      };
+      traverse(itemsMock);
+
+      setSearchResults(allFiles);
+      setSearchInProgress(false);
+    }, 800);
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setSearchResults([]);
+    setSearchInProgress(false);
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        navigationPanelOptions={{
+          ...args.navigationPanelOptions,
+          searchable: true,
+          value: query,
+          onSearchChange: (v) => setQuery(String(v ?? '')),
+        }}
+        onSearchFiles={handleSearch}
+        searchResults={searchResults}
+        searchInProgress={searchInProgress}
+        clearSearchResults={clearSearch}
+      />
+    </div>
+  );
+};
+
+export const WithServerSearch: Story = {
+  render: WithServerSearchComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with server-side search. The API is called once to fetch all files from the current folder. Further filtering by typed characters happens locally in the browser. Shows loading state during initial fetch. Try searching for "svg" or "alert".',
+      },
+    },
+  },
+};
+
+const WithSearchInPopupComponent = (args: DialFileManagerProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialButton
+        onClick={() => setIsOpen(!isOpen)}
+        variant={ButtonVariant.Primary}
+        label="Toggle File Manager with Search"
+      />
+      <DialPopup
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="w-[1000px] !h-[600px]"
+        size={PopupSize.Lg}
+      >
+        <DialFileManager
+          {...args}
+          items={itemsMock}
+          navigationPanelOptions={{
+            searchable: true,
+            value: query,
+            onSearchChange: (v) => setQuery(String(v ?? '')),
+          }}
+          gridOptions={{
+            ...(args.gridOptions ?? {}),
+            filterable: false,
+          }}
+          treeOptions={{
+            ...(args.treeOptions ?? {}),
+            collapsed: false,
+            expandedPaths: new Set<string>(['All files']),
+          }}
+        />
+      </DialPopup>
+    </div>
+  );
+};
+
+export const WithSearchInPopup: Story = {
+  render: WithSearchInPopupComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with search functionality inside a popup. Local search is enabled by default.',
+      },
+    },
+  },
+};
+
+const EmptyStatePerTabComponent = (args: DialFileManagerProps) => {
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
+    my_files: 'My Files',
+    shared: 'Shared with Me',
+    organization: 'Organization',
+  });
+
+  const emptyState = useMemo(() => {
+    switch (activeTab) {
+      case DialFileManagerTabs.MyFiles:
+        return {
+          icon: (
+            <IconFileDescription
+              size={100}
+              stroke={0.5}
+              className="text-secondary"
+            />
+          ),
+          title: "You don't have any files",
+          description: 'Upload or drag and drop files',
+        };
+
+      case DialFileManagerTabs.Shared:
+        return {
+          icon: (
+            <IconUsers size={100} stroke={0.5} className="text-secondary" />
+          ),
+          title: 'Nothing has been shared with you',
+          description: 'Ask teammates to share files or upload your own',
+        };
+
+      case DialFileManagerTabs.Organization:
+        return {
+          icon: (
+            <IconBuildingCommunity
+              size={100}
+              stroke={0.5}
+              className="text-secondary"
+            />
+          ),
+          title: 'No organization files found',
+          description: 'Files shared within your organization will appear here',
+        };
+
+      default:
+        return undefined;
+    }
+  }, [activeTab]);
+
+  return (
+    <div className="h-[640px] w-full flex items-center justify-center">
+      <DialFileManager
+        {...args}
+        items={[]}
+        emptyStateIcon={emptyState?.icon}
+        emptyStateTitle={emptyState?.title}
+        emptyStateDescription={emptyState?.description}
+        toolbarOptions={{
+          ...args.toolbarOptions,
+          tabs: tabs,
+          activeTab: activeTab,
+          onTabChange: handleTabChange,
+        }}
+      />
+    </div>
+  );
+};
+
+export const EmptyStatePerTab: Story = {
+  render: EmptyStatePerTabComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates how the File Manager displays different empty states depending on the active tab. The example configures unique icons, titles, and descriptions for the "My Files", "Shared with Me", and "Organization" tabs, and shows how to control the active tab via toolbar options.',
       },
     },
   },

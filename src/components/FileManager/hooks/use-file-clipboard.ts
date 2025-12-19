@@ -17,6 +17,8 @@ export interface UseFileClipboardOptions {
   onCopySuccess?: () => void;
   onMoveSuccess?: () => void;
   onDuplicateSuccess?: () => void;
+  getCopyHeader?: (itemsCount: number, itemName?: string) => string;
+  getMoveHeader?: (itemsCount: number, itemName?: string) => string;
 }
 
 export const useFileClipboard = ({
@@ -26,6 +28,8 @@ export const useFileClipboard = ({
   onCopySuccess,
   onMoveSuccess,
   onDuplicateSuccess,
+  getCopyHeader,
+  getMoveHeader,
 }: UseFileClipboardOptions) => {
   const [openDestinationFolderPopup, setOpenDestinationFolderPopup] =
     useState<boolean>(false);
@@ -106,13 +110,14 @@ export const useFileClipboard = ({
   );
 
   const handleMoveTo = useCallback(
-    (destinationFolder: string, sourceFolder: string) => {
+    (destinationFolder: string, sourceFolder?: string) => {
+      const sourceFolderPath =
+        sourceFolder || (operationMetadata?.sourceFolder ?? '/');
+
       const result = startConflictResolution(destinationFolder, movedFiles, {
         type: DestinationFolderMode.Move,
-        sourceFolder,
+        sourceFolderPath,
       });
-
-      setOperationMetadata({ type: DestinationFolderMode.Move, sourceFolder });
 
       if (!result.hasConflicts) {
         const resolvedItems = resolveConflictsWithStrategy(
@@ -120,7 +125,7 @@ export const useFileClipboard = ({
           movedFiles,
           true,
         );
-        onMoveToFiles?.(resolvedItems, sourceFolder, destinationFolder);
+        onMoveToFiles?.(resolvedItems, sourceFolderPath, destinationFolder);
         onMoveSuccess?.();
         clearState();
       }
@@ -132,6 +137,7 @@ export const useFileClipboard = ({
       onMoveToFiles,
       onMoveSuccess,
       clearState,
+      operationMetadata,
     ],
   );
 
@@ -182,13 +188,37 @@ export const useFileClipboard = ({
     }
   }, [clearState, hasActiveConflictRef]);
 
-  const handleSetCopiedFiles = useCallback((files: DialFile[]) => {
-    setCopiedFiles(files);
-  }, []);
+  const [destinationFolderTitle, setDestinationFolderTitle] =
+    useState<string>();
 
-  const handleSetMovedFiles = useCallback((files: DialFile[]) => {
-    setMovedFiles(files);
-  }, []);
+  const handleSetCopiedFiles = useCallback(
+    (files: DialFile[]) => {
+      setCopiedFiles(files);
+      if (getCopyHeader && files.length > 0) {
+        setDestinationFolderTitle(getCopyHeader(files.length, files[0]?.name));
+      } else {
+        setDestinationFolderTitle(undefined);
+      }
+    },
+    [getCopyHeader],
+  );
+
+  const handleSetMovedFiles = useCallback(
+    (files: DialFile[]) => {
+      setMovedFiles(files);
+      setOperationMetadata({
+        type: DestinationFolderMode.Move,
+        sourceFolder: files[0]?.folderId,
+      });
+
+      if (getMoveHeader && files.length > 0) {
+        setDestinationFolderTitle(getMoveHeader(files.length, files[0]?.name));
+      } else {
+        setDestinationFolderTitle(undefined);
+      }
+    },
+    [getMoveHeader, setOperationMetadata],
+  );
 
   return {
     handleDuplicate,
@@ -198,6 +228,7 @@ export const useFileClipboard = ({
     handleMoveTo,
     openDestinationFolderPopup,
     destinationFolderMode,
+    destinationFolderTitle,
     handleSetCopiedFiles,
     handleSetMovedFiles,
     clearState,

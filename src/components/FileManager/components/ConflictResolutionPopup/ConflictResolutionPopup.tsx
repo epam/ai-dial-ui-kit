@@ -35,7 +35,6 @@ export interface ConflictResolutionPopupProps {
   onDuplicate: () => void;
   onDecideForEach?: (decisions: FileConflictDecision[]) => void;
   conflictingFiles: DialFile[];
-  title?: string;
   singleFileTitle?: string;
   multipleFilesTitle?: string;
   message?: string;
@@ -113,7 +112,6 @@ interface ConflictGridRow {
  * @param onDuplicate - Callback fired when Duplicate/Duplicate All is confirmed
  * @param [onDecideForEach] - Callback fired when individual decisions are confirmed; receives array of decisions
  * @param conflictingFiles - Array of files with name conflicts
- * @param [title] - Custom title (overrides singleFileTitle and multipleFilesTitle)
  * @param [singleFileTitle="Replace Or Duplicate Item"] - Title for single file conflicts
  * @param [multipleFilesTitle="Replace Or Duplicate Items"] - Title for multiple file conflicts
  * @param [message] - Custom message (overrides default conflict description)
@@ -427,7 +425,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       open={open}
       onClose={onClose}
       size={PopupSize.Md}
-      title={title}
+      header={title}
       dividers={false}
       footer={
         <div className="flex justify-end gap-3 py-4 px-6">

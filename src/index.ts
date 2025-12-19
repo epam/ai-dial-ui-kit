@@ -20,9 +20,10 @@ export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
 export { DialResizableContainer } from './components/ResizableContainer/ResizableContainer';
 export { DialConditionalResizableContainer } from './components/ResizableContainer/ConditionalResizableContainer';
+export { DialSkeleton } from './components/Skeleton/Skeleton';
 
 // Grid
-export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
+export { DialGrid } from './components/Grid/Grid';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -96,10 +97,16 @@ export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,
+  FileManagerColumnKey,
 } from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
 export { ResizableContainerSide } from './types/resizable-container';
+export {
+  DialSkeletonVariant,
+  DialSkeletonAvatarSize,
+  DialSkeletonAvatarShape,
+} from './types/skeleton';
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
@@ -127,6 +134,8 @@ export {
   type DialCopiedItem,
   type DialDeletedItem,
   type DialUploadFileItem,
+  type DialFileManagerActionsRef,
+  type DialFileAcceptType,
 } from './models/file-manager';
 
 // Utils

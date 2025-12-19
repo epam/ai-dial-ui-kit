@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState, type FC } from 'react';
 import { DialAlert, type DialAlertProps } from './Alert';
 import { AlertVariant } from '@/types/alert';
 
@@ -10,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A contextual feedback component for displaying important messages with optional close button.',
+          'A contextual feedback component for displaying important messages with optional close button. Supports all standard HTML div attributes for enhanced accessibility.',
       },
     },
   },
@@ -36,6 +37,14 @@ const meta = {
     closable: {
       control: { type: 'boolean' },
       description: 'Whether the close button should be shown',
+    },
+    iconSize: {
+      control: { type: 'number' },
+      description: 'Size of the icon displayed in the alert',
+    },
+    iconStroke: {
+      control: { type: 'number' },
+      description: 'Stroke width of the icon displayed in the alert',
     },
     onClose: {
       control: false,
@@ -81,7 +90,7 @@ export const LongMessage: Story = {
   args: {
     variant: AlertVariant.Warning,
     message:
-      'This is a long alert message that should wrap onto multiple lines to demonstrate the alert’s behavior with longer text content. Please pay attention to how the layout adjusts accordingly.',
+      "This is a long alert message that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly.",
     closable: true,
   },
   parameters: {
@@ -97,14 +106,167 @@ export const LongMessage: Story = {
 export const CustomClass: Story = {
   args: {
     variant: AlertVariant.Info,
-    message: 'Alert with custom CSS class',
-    className: 'border-dashed w-[250px] bg-layer-2',
+    message: (
+      <span>
+        Alert with <span className="italic">custom CSS class</span>
+      </span>
+    ),
+    iconSize: 12,
+    iconStroke: 1,
+    className: 'py-1 px-2 border-dashed dial-tiny-sensory w-[250px] bg-layer-2',
   },
   parameters: {
     docs: {
       description: {
         story:
           'An example of an alert with a custom CSS class applied to change its border style.',
+      },
+    },
+  },
+};
+
+const WithAccessibilityComponent: FC = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <DialAlert
+        variant={AlertVariant.Info}
+        message="Polite announcement (default)"
+        aria-live="polite"
+        id="polite-alert"
+      />
+      <DialAlert
+        variant={AlertVariant.Error}
+        message="Assertive announcement for critical errors"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="assertive-alert"
+      />
+      <DialAlert
+        variant={AlertVariant.Warning}
+        message="Alert with custom ID"
+        id="custom-alert"
+      />
+    </div>
+  );
+};
+
+export const WithAccessibility: Story = {
+  render: () => <WithAccessibilityComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Examples of alerts with enhanced accessibility attributes like `aria-live`, `aria-atomic`, and custom IDs.',
+      },
+    },
+  },
+};
+
+const InteractiveComponent: FC = () => {
+  const [alerts, setAlerts] = useState([
+    { id: 1, variant: AlertVariant.Info, message: 'First alert' },
+    { id: 2, variant: AlertVariant.Success, message: 'Second alert' },
+    { id: 3, variant: AlertVariant.Warning, message: 'Third alert' },
+  ]);
+
+  const removeAlert = (id: number) => {
+    setAlerts((prev) => prev.filter((alert) => alert.id !== id));
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="text-secondary dial-small mb-2">
+        Click close buttons to remove alerts
+      </div>
+      {alerts.map((alert) => (
+        <DialAlert
+          key={alert.id}
+          variant={alert.variant}
+          message={alert.message}
+          closable
+          onClose={() => removeAlert(alert.id)}
+        />
+      ))}
+      {alerts.length === 0 && (
+        <div className="text-secondary dial-small">All alerts closed</div>
+      )}
+    </div>
+  );
+};
+
+export const Interactive: Story = {
+  render: () => <InteractiveComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An interactive example showing multiple closable alerts that can be dismissed. Demonstrates state management and dynamic alert rendering.',
+      },
+    },
+  },
+};
+
+const WithCustomHandlersComponent: FC = () => {
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <DialAlert
+        variant={AlertVariant.Info}
+        message={
+          hovered ? 'Mouse is hovering over this alert!' : 'Hover over me'
+        }
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{ transition: 'all 0.3s' }}
+      />
+      <DialAlert
+        variant={AlertVariant.Success}
+        message={
+          clicked ? 'Alert was clicked!' : 'Click anywhere on this alert'
+        }
+        onClick={() => setClicked(true)}
+        style={{ cursor: 'pointer' }}
+      />
+      {clicked && (
+        <div className="text-secondary dial-small">
+          ✓ Alert click event triggered
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const WithCustomHandlers: Story = {
+  render: () => <WithCustomHandlersComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates using standard HTML event handlers like `onClick`, `onMouseEnter`, and `onMouseLeave` on alerts.',
+      },
+    },
+  },
+};
+
+export const WithInlineStyles: Story = {
+  args: {
+    variant: AlertVariant.Warning,
+    message: 'Alert with inline styles',
+    style: {
+      maxWidth: '400px',
+      margin: '0 auto',
+      backgroundColor: '#423189',
+      borderColor: '#6C5DD3',
+      color: '#FFFFFF',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Example of using inline `style` prop to customize alert appearance.',
       },
     },
   },
@@ -117,13 +279,34 @@ export const AllVariants: Story = {
       <DialAlert variant={AlertVariant.Success} message="Success alert" />
       <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
       <DialAlert variant={AlertVariant.Error} message="Error alert" />
+      <div className="text-primary mt-2">Customized</div>
+      <DialAlert
+        variant={AlertVariant.Info}
+        iconSize={14}
+        className="py-1 px-2 w-fit"
+        message={
+          <span className="dial-tiny">
+            <b>Small</b> info alert
+          </span>
+        }
+      />
+      <DialAlert
+        closable
+        variant={AlertVariant.Error}
+        message="Closable error alert"
+      />
+      <DialAlert
+        variant={AlertVariant.Success}
+        message="Alert with custom ID"
+        id="success-notification"
+      />
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'A showcase of all alert variants (Info, Success, Warning, Error).',
+          'A comprehensive showcase of all alert variants with various configurations including custom IDs.',
       },
     },
   },

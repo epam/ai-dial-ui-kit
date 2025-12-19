@@ -35,6 +35,8 @@ const defaultActionLabels = {
   [DialFileManagerActions.Rename]: 'Rename',
   [DialFileManagerActions.Download]: 'Download',
   [DialFileManagerActions.Delete]: 'Delete',
+  [DialFileManagerActions.Info]: 'Info',
+  [DialFileManagerActions.Unshare]: 'Unshare',
 };
 
 const mockMouseEvent = {} as MouseEvent<Element, globalThis.MouseEvent>;
@@ -50,6 +52,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -57,7 +61,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(menuItems).toEqual([]);
   });
 
-  test('returns function that returns all actions when all labels provided', () => {
+  test('returns function that returns all actions when all labels provided for file', () => {
     const { result } = renderHook(() =>
       useGridContextMenu({
         actionLabels: defaultActionLabels,
@@ -67,11 +71,13 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
     const menuItems = result.current(testFile);
-    expect(menuItems).toHaveLength(6);
+    expect(menuItems).toHaveLength(8);
     expect(menuItems.map((item) => item.key)).toEqual([
       DialFileManagerActions.Duplicate,
       DialFileManagerActions.Copy,
@@ -79,6 +85,36 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       DialFileManagerActions.Download,
       DialFileManagerActions.Delete,
       DialFileManagerActions.Rename,
+      DialFileManagerActions.Info,
+      DialFileManagerActions.Unshare,
+    ]);
+  });
+
+  test('returns function that returns all actions except Info for folder', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: defaultActionLabels,
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(testFolder);
+    expect(menuItems).toHaveLength(7);
+    expect(menuItems.map((item) => item.key)).toEqual([
+      DialFileManagerActions.Duplicate,
+      DialFileManagerActions.Copy,
+      DialFileManagerActions.Move,
+      DialFileManagerActions.Download,
+      DialFileManagerActions.Delete,
+      DialFileManagerActions.Rename,
+      DialFileManagerActions.Unshare,
     ]);
   });
 
@@ -98,6 +134,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -121,6 +159,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -146,6 +186,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -171,6 +213,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -196,6 +240,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload,
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -221,6 +267,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename,
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -246,6 +294,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete,
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -276,6 +326,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete,
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -289,6 +341,109 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(onDelete).toHaveBeenCalledWith(fileWithoutParent, '');
   });
 
+  test('info action calls onInfo with file', () => {
+    const onInfo = vi.fn();
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Info]: 'Info' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo,
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(testFile);
+    const infoAction = menuItems[0];
+    infoAction.onClick?.({
+      key: infoAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onInfo).toHaveBeenCalledTimes(1);
+    expect(onInfo).toHaveBeenCalledWith(testFile);
+  });
+
+  test('info action is not shown for folders', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Info]: 'Info' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(testFolder);
+    expect(menuItems).toHaveLength(0);
+    expect(
+      menuItems.find((item) => item.key === DialFileManagerActions.Info),
+    ).toBeUndefined();
+  });
+
+  test('unshare action calls onUnshare with file', () => {
+    const onUnshare = vi.fn();
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Unshare]: 'Unshare' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare,
+      }),
+    );
+
+    const menuItems = result.current(testFile);
+    const unshareAction = menuItems[0];
+    unshareAction.onClick?.({
+      key: unshareAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onUnshare).toHaveBeenCalledTimes(1);
+    expect(onUnshare).toHaveBeenCalledWith(testFile);
+  });
+
+  test('unshare action works with folders', () => {
+    const onUnshare = vi.fn();
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Unshare]: 'Unshare' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare,
+      }),
+    );
+
+    const menuItems = result.current(testFolder);
+    const unshareAction = menuItems[0];
+    unshareAction.onClick?.({
+      key: unshareAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onUnshare).toHaveBeenCalledTimes(1);
+    expect(onUnshare).toHaveBeenCalledWith(testFolder);
+  });
+
   test('menu items have correct properties', () => {
     const { result } = renderHook(() =>
       useGridContextMenu({
@@ -299,6 +454,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -320,6 +477,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       onDownload: vi.fn(),
       onRename: vi.fn(),
       onDelete: vi.fn(),
+      onInfo: vi.fn(),
+      onUnshare: vi.fn(),
     };
 
     const { result, rerender } = renderHook(
@@ -348,6 +507,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
@@ -361,7 +522,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(onMove).toHaveBeenCalledWith(testFolder);
   });
 
-  test('returns different menu items for different files', () => {
+  test('returns different menu items for files and folders', () => {
     const { result } = renderHook(() =>
       useGridContextMenu({
         actionLabels: defaultActionLabels,
@@ -371,14 +532,25 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
       }),
     );
 
-    const menuItems1 = result.current(testFile);
-    const menuItems2 = result.current(testFolder);
+    const fileMenuItems = result.current(testFile);
+    const folderMenuItems = result.current(testFolder);
 
-    expect(menuItems1).toHaveLength(menuItems2.length);
-    expect(menuItems1.map((i) => i.key)).toEqual(menuItems2.map((i) => i.key));
+    // File should have Info action
+    expect(fileMenuItems).toHaveLength(8);
+    expect(
+      fileMenuItems.find((i) => i.key === DialFileManagerActions.Info),
+    ).toBeDefined();
+
+    // Folder should not have Info action
+    expect(folderMenuItems).toHaveLength(7);
+    expect(
+      folderMenuItems.find((i) => i.key === DialFileManagerActions.Info),
+    ).toBeUndefined();
   });
 
   test('updates when callbacks change', () => {
@@ -395,6 +567,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
           onDownload: vi.fn(),
           onRename: vi.fn(),
           onDelete: vi.fn(),
+          onInfo: vi.fn(),
+          onUnshare: vi.fn(),
         }),
       { initialProps: { onDuplicate: onDuplicate1 } },
     );
@@ -424,6 +598,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       onDownload: vi.fn(),
       onRename: vi.fn(),
       onDelete: vi.fn(),
+      onInfo: vi.fn(),
+      onUnshare: vi.fn(),
     };
 
     const { result } = renderHook(() =>
@@ -440,5 +616,107 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     const menuItems2 = menuBuilder(testFile);
 
     expect(menuItems1).toHaveLength(menuItems2.length);
+  });
+
+  test('includes info and unshare in action labels list', () => {
+    const partialLabels = {
+      [DialFileManagerActions.Info]: 'Info',
+      [DialFileManagerActions.Unshare]: 'Unshare',
+    };
+
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: partialLabels,
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(testFile);
+    expect(menuItems).toHaveLength(2);
+    expect(menuItems.map((item) => item.key)).toEqual([
+      DialFileManagerActions.Info,
+      DialFileManagerActions.Unshare,
+    ]);
+  });
+
+  test('updates when onInfo callback changes', () => {
+    const onInfo1 = vi.fn();
+    const onInfo2 = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ onInfo }) =>
+        useGridContextMenu({
+          actionLabels: { [DialFileManagerActions.Info]: 'Info' },
+          onDuplicate: vi.fn(),
+          onCopy: vi.fn(),
+          onMove: vi.fn(),
+          onDownload: vi.fn(),
+          onRename: vi.fn(),
+          onDelete: vi.fn(),
+          onInfo,
+          onUnshare: vi.fn(),
+        }),
+      { initialProps: { onInfo: onInfo1 } },
+    );
+
+    let menuItems = result.current(testFile);
+    menuItems[0].onClick?.({
+      key: menuItems[0].key,
+      domEvent: mockMouseEvent,
+    });
+    expect(onInfo1).toHaveBeenCalledWith(testFile);
+
+    rerender({ onInfo: onInfo2 });
+
+    menuItems = result.current(testFile);
+    menuItems[0].onClick?.({
+      key: menuItems[0].key,
+      domEvent: mockMouseEvent,
+    });
+    expect(onInfo2).toHaveBeenCalledWith(testFile);
+  });
+
+  test('updates when onUnshare callback changes', () => {
+    const onUnshare1 = vi.fn();
+    const onUnshare2 = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ onUnshare }) =>
+        useGridContextMenu({
+          actionLabels: { [DialFileManagerActions.Unshare]: 'Unshare' },
+          onDuplicate: vi.fn(),
+          onCopy: vi.fn(),
+          onMove: vi.fn(),
+          onDownload: vi.fn(),
+          onRename: vi.fn(),
+          onDelete: vi.fn(),
+          onInfo: vi.fn(),
+          onUnshare,
+        }),
+      { initialProps: { onUnshare: onUnshare1 } },
+    );
+
+    let menuItems = result.current(testFile);
+    menuItems[0].onClick?.({
+      key: menuItems[0].key,
+      domEvent: mockMouseEvent,
+    });
+    expect(onUnshare1).toHaveBeenCalledWith(testFile);
+
+    rerender({ onUnshare: onUnshare2 });
+
+    menuItems = result.current(testFile);
+    menuItems[0].onClick?.({
+      key: menuItems[0].key,
+      domEvent: mockMouseEvent,
+    });
+    expect(onUnshare2).toHaveBeenCalledWith(testFile);
   });
 });

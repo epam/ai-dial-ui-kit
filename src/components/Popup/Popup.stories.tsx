@@ -2,6 +2,9 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialPopup, type DialPopupProps } from './Popup';
 import { PopupSize } from '@/types/popup';
+import { DialLoader } from '@/components/Loader/Loader';
+import { DialButton } from '@/components/Button/Button';
+import { ButtonVariant } from '@/types/button';
 
 const meta = {
   title: 'Overlay/Popup',
@@ -9,16 +12,16 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     open: { control: false },
-    title: { control: { type: 'text' } },
+    header: { control: { type: 'text' } },
     className: { control: { type: 'text' } },
     overlayClassName: { control: { type: 'text' } },
-    headingClassName: { control: { type: 'text' } },
+    titleClassName: { control: { type: 'text' } },
     dividers: { control: { type: 'boolean' } },
     footer: { control: { type: 'text' } },
     onClose: { action: 'onClose', control: false },
   },
   args: {
-    title: 'Title',
+    header: 'Title',
     dividers: true,
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
     footer: (
@@ -75,13 +78,13 @@ export const WithoutDividers: Story = {
 
 export const WithoutTitle: Story = {
   render: StatefulRender,
-  args: { title: undefined },
+  args: { header: undefined },
 };
 
 export const WithLongTitle: Story = {
   render: StatefulRender,
   args: {
-    title:
+    header:
       'This is a very long title that should wrap onto multiple lines to demonstrate text wrapping behavior in the popup header. It might even be long enough to require truncation with an ellipsis if it exceeds a certain length',
   },
 };
@@ -90,7 +93,7 @@ export const CustomClasses: Story = {
   render: StatefulRender,
   args: {
     className: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
-    headingClassName: 'font-medium bg-red-400',
+    titleClassName: 'font-medium bg-red-400',
   },
 };
 
@@ -121,4 +124,30 @@ export const DifferentSizes: Story = {
     </div>
   ),
   args: {},
+};
+
+export const WithoutHeaderAndDismiss: Story = {
+  render: StatefulRender,
+  args: {
+    className: '!w-[280px]',
+    header: undefined,
+    footer: undefined,
+    dividers: false,
+    headerClassName: 'hidden',
+    closeOnOutsideClick: false,
+    children: (
+      <div className="flex items-center flex-col gap-6 p-9">
+        <DialLoader size={120} />
+        <div className="flex flex-col gap-2 text-center text-primary">
+          <div className="text-lg font-semibold">Moving items</div>
+          <div className="text-sm">8 of 24 items moved...</div>
+        </div>
+        <DialButton
+          className="w-fit"
+          variant={ButtonVariant.Tertiary}
+          label="Cancel"
+        />
+      </div>
+    ),
+  },
 };

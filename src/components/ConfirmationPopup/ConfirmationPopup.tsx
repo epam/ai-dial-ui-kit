@@ -16,7 +16,7 @@ import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 
 export interface DialConfirmationPopupProps extends DialPopupProps {
-  description?: string | ReactNode;
+  description?: ReactNode;
   descriptionClassName?: string;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -39,7 +39,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * ```tsx
  * <ConfirmationModal
  *   open
- *   title="Delete item?"
+ *   header="Delete item?"
  *   description="This action cannot be undone."
  *   confirmLabel="Delete"
  *   onClose={() => setOpen(false)}
@@ -47,7 +47,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * />
  * ```
  *
- * @param title - Title content for the header
+ * @param header - Title content for the header
  * @param [description] - Secondary text (ignored when `children` set)
  * @param [descriptionClassName] - Custom CSS class for the description
  * @param [open=false] - Controls visibility of the popup
@@ -66,7 +66,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
  * @param [size=PopupSize.Sm] - Size of the popup
  */
 export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
-  title,
+  header,
   description,
   descriptionClassName,
   open = false,
@@ -131,7 +131,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   return (
     <DialPopup
       open={open}
-      title={title}
+      header={header}
       className={classNames(variantConfig[variant].container, className)}
       dividers={dividers}
       onClose={() => onClose?.()}

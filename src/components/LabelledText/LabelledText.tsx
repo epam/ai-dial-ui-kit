@@ -6,6 +6,7 @@ import { DialTooltip } from '@/components/Tooltip/Tooltip';
 export interface DialLabelledTextProps {
   label: string;
   text?: string;
+  tooltip?: string;
   children?: ReactNode;
   postfix?: ReactNode;
 }
@@ -21,14 +22,16 @@ export interface DialLabelledTextProps {
  * />
  * ```
  *
- * @param label - The main label text for the field
+ * @param [label] - The main label text for the field
  * @param [text] - Optional tooltip and secondary text
+ * @param [tooltip] - Optional tooltip different from main text
  * @param [children] - Custom content to render instead of the default text/tooltip
  * @param [postfix] - Element to display after the text (e.g., an asterisk)
  */
 export const DialLabelledText: FC<DialLabelledTextProps> = ({
   label,
   text,
+  tooltip,
   children,
   postfix,
 }) => {
@@ -41,7 +44,10 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
         children
       ) : (
         <div className="flex flex-row items-center">
-          <DialTooltip triggerClassName="text-primary" tooltip={text}>
+          <DialTooltip
+            triggerClassName="text-primary"
+            tooltip={tooltip || text}
+          >
             {text}
           </DialTooltip>
 

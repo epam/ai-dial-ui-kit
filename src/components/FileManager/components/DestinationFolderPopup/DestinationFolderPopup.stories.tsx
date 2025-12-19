@@ -66,12 +66,17 @@ const meta: Meta<DestinationFolderPopupProps> = {
     copyLabel: { control: 'text' },
     moveLabel: { control: 'text' },
     hiddenFilesSwitcherLabel: { control: 'text' },
+    disabledPathTooltip: { control: 'text' },
+    sourceFolder: { control: 'text' },
+    destinationFolderPath: { control: 'text' },
   },
   args: {
     mode: 'copy',
     copyLabel: 'Copy',
     moveLabel: 'Move',
     hiddenFilesSwitcherLabel: 'Show hidden files',
+    disabledPathTooltip:
+      'Unavailable for the original path. Please select another folder',
     items: itemsMock,
     rootItem: {
       id: 'root',
@@ -79,7 +84,7 @@ const meta: Meta<DestinationFolderPopupProps> = {
       path: '/',
       folderId: 'root-folder',
       nodeType: DialFileNodeType.FOLDER,
-      breadcrumbLabel: 'Root',
+      label: 'Root',
     },
     path: '/',
   },
@@ -107,5 +112,26 @@ export const CustomLabels: Story = {
     copyLabel: 'Copy Here',
     moveLabel: 'Move Here',
     hiddenFilesSwitcherLabel: 'Display hidden items',
+    header: '2 item(s) selected to copy',
+  },
+};
+
+export const DisabledDestination: Story = {
+  args: {
+    mode: 'move',
+    sourceFolder: '/Documents',
+    path: '/Documents',
+    header: 'Moving 1 item: Project Files',
+  },
+};
+
+export const CustomDisabledTooltip: Story = {
+  args: {
+    mode: 'copy',
+    sourceFolder: '/Photos/2024',
+    path: '/Photos/2024',
+    disabledPathTooltip:
+      'Cannot copy to the same location. Choose a different folder.',
+    header: 'Copying 3 items',
   },
 };

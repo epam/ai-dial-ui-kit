@@ -77,7 +77,7 @@ const meta = {
     valueClassName: { control: { type: 'text' } },
     inputClassName: { control: { type: 'text' } },
     emptyValueText: { control: { type: 'text' } },
-    title: { control: { type: 'text' } },
+    header: { control: { type: 'text' } },
     portalId: { control: { type: 'text' } },
     cancelButtonTitle: { control: { type: 'text' } },
     applyButtonTitle: { control: { type: 'text' } },
@@ -98,7 +98,7 @@ const meta = {
   args: {
     fieldTitle: 'Status',
     htmlFor: 'status',
-    title: 'Select status',
+    header: 'Select status',
     emptyValueText: 'None',
     radioButtons: demoOptions,
     selectedValue: 'option-1',

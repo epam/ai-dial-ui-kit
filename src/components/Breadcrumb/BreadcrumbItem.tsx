@@ -1,4 +1,4 @@
-import type { FC, MouseEventHandler, ReactNode } from 'react';
+import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   breadcrumbItemBaseClassName,
@@ -12,20 +12,20 @@ import {
 } from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
-export interface DialBreadcrumbItemProps {
-  title: ReactNode;
+export interface DialBreadcrumbItemProps
+  extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick'> {
+  label: ReactNode;
   href?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   disabled?: boolean;
   iconBefore?: ReactNode;
-  className?: string;
-  titleClassName?: string;
+  labelClassName?: string;
   isLast?: boolean;
   separator?: ReactNode;
 }
 
 export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
-  title,
+  label,
   href,
   onClick,
   disabled,
@@ -33,7 +33,8 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   separator = defaultSeparator,
   className,
   iconBefore,
-  titleClassName,
+  labelClassName,
+  ...props
 }) => {
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
@@ -54,21 +55,30 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       );
 
   const Content =
-    typeof title === 'string' ? (
-      <DialEllipsisTooltip className={titleClassName} text={title} />
+    typeof label === 'string' ? (
+      <DialEllipsisTooltip
+        className={labelClassName}
+        text={label}
+        id="breadcrumb-item-content"
+      />
     ) : (
       <span
         className={mergeClasses(
           'flex-1 min-w-0 max-w-full truncate',
-          titleClassName,
+          labelClassName,
         )}
+        aria-label="breadcrumb-item-content"
       >
-        {title}
+        {label}
       </span>
     );
 
   return (
-    <li className={containerClassName}>
+    <li
+      {...props}
+      className={containerClassName}
+      aria-label={props['aria-label'] || 'breadcrumb-item'}
+    >
       {interactive ? (
         <a href={href} onClick={onClick} className={contentClassName}>
           {iconBefore}
@@ -86,7 +96,9 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       )}
 
       {!isLast && (
-        <span className={breadcrumbSeparatorClassName}>{separator}</span>
+        <span className={breadcrumbSeparatorClassName} aria-label="separator">
+          {separator}
+        </span>
       )}
     </li>
   );

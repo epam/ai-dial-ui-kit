@@ -8,9 +8,11 @@ export enum DialFileManagerActions {
   Duplicate = 'duplicate',
   Copy = 'copy',
   Move = 'move',
-  Rename = 'rename',
   Download = 'download',
   Delete = 'delete',
+  Rename = 'rename',
+  Info = 'info',
+  Unshare = 'unshare',
 }
 
 export enum DialFileManagerConflictActions {
@@ -28,4 +30,20 @@ export enum DialFileManagerConflictStrategies {
 export enum DestinationFolderMode {
   Copy = 'copy',
   Move = 'move',
+}
+
+export enum FileManagerRenameTriggerView {
+  Tree = 'tree',
+  Grid = 'grid',
+}
+
+export enum FileManagerColumnKey {
+  Name = 'name',
+  UpdatedAt = 'updatedAt',
+  Size = 'size',
+  Author = 'author',
+  // Dial Chat–specific field required to show the owner of shared files and folders
+  Owner = 'owner',
+  Path = 'path',
+  Actions = '__actions',
 }

@@ -14,7 +14,7 @@ export enum FormItemOrientation {
 /**
  * Base properties for form item components providing layout, labeling, and validation display
  *
- * @param label - The label text or element to display for the form item
+ * @param [label] - The label text or element to display for the form item
  * @param optional - Whether the field is optional (displays optional indicator)
  * @param optionalText - Custom text to display for optional fields (default: "(Optional)")
  * @param description - Description text to display below the label
@@ -24,11 +24,11 @@ export enum FormItemOrientation {
  * @param orientation - Layout orientation for the form item
  */
 export interface DialFormItemBaseProps {
-  label?: string | ReactNode;
+  label?: ReactNode;
   optional?: boolean;
   optionalText?: string;
   description?: string;
-  error?: string | ReactNode | boolean;
+  error?: ReactNode;
   captionDescription?: string;
   readonly?: boolean;
   orientation?: FormItemOrientation;

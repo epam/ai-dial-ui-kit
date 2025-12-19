@@ -9,7 +9,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-a"
         inputId="radio-a"
-        title="Option A"
+        label="Option A"
       />,
     );
     const radio = screen.getByRole('radio', { name: 'Option A' });
@@ -31,7 +31,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-y"
         inputId="radio-y"
-        title="With classes"
+        label="With classes"
         className="custom-input"
         labelClassName="custom-label"
         description="desc text"
@@ -51,7 +51,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-b"
         inputId="radio-b"
-        title="Option B"
+        label="Option B"
         onChange={onChange}
       />,
     );
@@ -67,7 +67,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-c"
         inputId="radio-c"
-        title="Option C"
+        label="Option C"
         disabled
         onChange={onChange}
       />,
@@ -84,7 +84,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-d"
         inputId="radio-d"
-        title="Option D"
+        label="Option D"
         description="Extra details"
         checked={false}
       />,
@@ -96,7 +96,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-d"
         inputId="radio-d"
-        title="Option D"
+        label="Option D"
         description="Extra details"
         checked
       />,
@@ -110,7 +110,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-e"
         inputId="radio-e"
-        title="Option E"
+        label="Option E"
         description="Desc"
         checked
       />,
@@ -126,7 +126,7 @@ describe('Dial UI Kit :: DialRadioButton', () => {
         name="group1"
         value="opt-f"
         inputId="radio-f"
-        title="Option F"
+        label="Option F"
         checked
         onChange={onChange}
       />,

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { useCallback, type ChangeEvent, type FC } from 'react';
+import { useCallback, type ChangeEvent, type FC, type ReactNode } from 'react';
 
 export interface DialSwitchProps {
-  title?: string;
+  label?: ReactNode;
   switchId: string;
   isOn?: boolean;
   disabled?: boolean;
@@ -16,7 +16,7 @@ export interface DialSwitchProps {
  * ```tsx
  * <DialSwitch
  *   switchId="switch"
- *   title="Toggle"
+ *   label="Toggle"
  *   isOn={true}
  *   disabled={false}
  *   onChange={(value) => console.log(value)}
@@ -30,7 +30,7 @@ export interface DialSwitchProps {
  * @param [onChange] - Callback function called when the switch value changes
  */
 export const DialSwitch: FC<DialSwitchProps> = ({
-  title,
+  label,
   switchId,
   isOn = false,
   disabled,
@@ -58,7 +58,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   );
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row items-center" role="switch">
       <input
         type="checkbox"
         onChange={onClick}
@@ -79,7 +79,17 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           )}
         ></span>
       </label>
-      {title && <span className="pl-2 dial-small text-primary">{title}</span>}
+      {label && (
+        <span
+          className={classNames(
+            'pl-2 dial-small',
+            disabled ? 'text-secondary' : 'text-primary',
+          )}
+          aria-label="switch-title"
+        >
+          {label}
+        </span>
+      )}
     </div>
   );
 };

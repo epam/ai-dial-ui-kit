@@ -10,7 +10,7 @@ import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { isHiddenDotFile } from '../../utils';
+import { isHiddenDotFile } from '@/components/FileManager/utils';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
@@ -20,9 +20,13 @@ export interface DialFoldersTreeProps {
   items: DialFile[];
   expandedPaths?: Set<string>;
   loadingPaths?: Set<string>;
+  loadedPaths?: Set<string>;
+  sharedByMePaths?: Set<string>;
   selectedPath?: string;
   renamedPath?: string;
   showFiles?: boolean;
+  rootItemPath?: string;
+  rootItemLabel?: string;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
@@ -106,6 +110,8 @@ export interface DialFoldersTreeProps {
  * @param [items] - Array of folder and file nodes to display in the tree.
  * @param [expandedPaths] - Set of folder paths that should be expanded.
  * @param [loadingPaths] - Set of folder paths currently loading (shows spinner or placeholder).
+ * @param [loadedPaths] - Set of folder paths that have loaded.
+ * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges).
  * @param [selectedPath] - Path representing the currently selected folder or file.
  * @param [renamedPath] - Path of the folder or file currently being edited.
  * @param [showFiles=false] - Whether to show files in addition to folders.
@@ -118,7 +124,8 @@ export interface DialFoldersTreeProps {
  * @param [onRenameValidate] - Function to validate the new name during editing. Should return an error string or `null` if valid.
  * @param [getContextMenuItems] - Function returning context menu items for a given node.
  * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
- *
+ * @param [rootItemPath] - Path of the folder to treat as the custom root node (no context menu, special label).
+ * @param [rootItemLabel] - Label to display for the root node instead of its actual name.
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
  * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
@@ -131,12 +138,16 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   showFiles = false,
   expandedPaths: externalExpandedPaths,
   loadingPaths = new Set(),
+  loadedPaths = new Set(),
+  sharedByMePaths = new Set(),
   selectedPath,
   emptyStateTitle = 'No Folders',
   emptyStateDescription,
   emptyStateIcon,
   areHiddenFilesVisible = false,
   renamedPath,
+  rootItemLabel,
+  rootItemPath,
   onItemClick,
   getContextMenuItems,
   onRenameSave,
@@ -173,6 +184,10 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const isSelected = selectedPath === path;
       const isLoading = loadingPaths.has(path);
       const isRenaming = renamedPath === path;
+      const isLoaded = loadedPaths.has(path);
+      const isSharedByMe = sharedByMePaths.has(path);
+      const isRootFolder =
+        rootItemPath && rootItemLabel && path === rootItemPath && isFolder;
 
       const validateHandler =
         onRenameValidate && ((value: string) => onRenameValidate(value, node));
@@ -181,11 +196,11 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         ? 'bg-accent-primary-alpha border-l-2 border-l-accent-primary rounded'
         : 'border-l-2 border-l-transparent';
 
-      const menuItems = getContextMenuItems?.(node) ?? [];
+      const menuItems = isRootFolder ? [] : (getContextMenuItems?.(node) ?? []);
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
-          <div className="flex flex-col min-w-fit w-full">
+          <div className="flex flex-col w-full" aria-label="folder">
             <DialDropdown
               trigger={[DropdownTrigger.ContextMenu]}
               className="w-full"
@@ -198,6 +213,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                   'py-1 gap-[2px] dial-small flex justify-between hover:bg-accent-primary-alpha rounded group/item w-full mb-[2px] relative',
                   selectedClass,
                 )}
+                aria-selected={isSelected}
               >
                 {!isRenaming && (
                   <div
@@ -216,25 +232,28 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                         className={classNames(
                           'flex-shrink-0',
                           isExpanded && 'rotate-90 transition-all',
-                          !hasValidItems && 'text-transparent',
+                          isLoaded && !hasValidItems && 'text-transparent',
                         )}
                       />
                     )}
                     <DialFileManagerItemName
                       elementId={`${path}-tree-item`}
-                      name={name}
+                      name={isRootFolder ? rootItemLabel : name}
                       type={isFolder ? DialItemType.Folder : DialItemType.File}
                       loading={isLoading}
-                      editing={isRenaming}
-                      onSave={onRenameSave}
-                      onCancel={onRenameCancel}
-                      validate={validateHandler}
+                      shared={isSharedByMe}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                      {...(!isRootFolder && {
+                        editing: isRenaming,
+                        onSave: onRenameSave,
+                        onCancel: onRenameCancel,
+                        validate: validateHandler,
+                      })}
                     />
                   </>
                 </div>
 
-                {menuItems.length > 0 && !isRenaming && (
+                {menuItems.length > 0 && !isRenaming && !isRootFolder && (
                   <div className="flex-1 flex justify-end">
                     <DialDropdown
                       placement="bottom-start"
@@ -260,7 +279,10 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   };
 
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto">
+    <div
+      className="flex-1 w-full h-full overflow-y-auto"
+      aria-label="folders-tree"
+    >
       {items.length > 0 ? (
         renderTree(items, 0)
       ) : (

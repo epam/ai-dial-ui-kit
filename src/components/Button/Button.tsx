@@ -17,7 +17,7 @@ export interface DialButtonProps
   > {
   variant?: ButtonVariant;
   textClassName?: string;
-  label?: string;
+  label?: ReactNode;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
   hideTitleOnMobile?: boolean;
@@ -36,9 +36,18 @@ export interface DialButtonProps
  * />
  * ```
  *
+ * @example
+ * ```tsx
+ * <DialButton
+ *   label={<span>Custom <strong>Label</strong></span>}
+ *   aria-label="Custom Label"
+ *   onClick={handleClick}
+ * />
+ * ```
+ *
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
- * @param [label] - The text content of the button
+ * @param [label] - The content of the button. Can be any React node.
  * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text
@@ -65,7 +74,7 @@ export const DialButton: FC<DialButtonProps> = ({
   );
   const btnClassName = classNames(
     variant && variantClassMap[variant],
-    'focus-visible:outline outline-offset-0',
+    'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
 
@@ -74,7 +83,7 @@ export const DialButton: FC<DialButtonProps> = ({
       {...props}
       type={type}
       className={btnClassName}
-      aria-label={label || props['aria-label']}
+      aria-label={(typeof label === 'string' && label) || props['aria-label']}
     >
       <DialIcon icon={iconBefore} />
       {label && <span className={btnTextClassName}>{label}</span>}

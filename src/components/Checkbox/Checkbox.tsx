@@ -1,20 +1,27 @@
 import { IconCheck, IconMinus } from '@tabler/icons-react';
 import classNames from 'classnames';
-import { type ChangeEvent, type FC, type ReactNode, useCallback } from 'react';
+import {
+  type ChangeEvent,
+  type FC,
+  type ReactNode,
+  useCallback,
+  type LabelHTMLAttributes,
+} from 'react';
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 
-export interface DialCheckboxProps {
+export interface DialCheckboxProps
+  extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
   id: string;
-  label?: string | ReactNode;
+  label?: ReactNode;
   checked: boolean;
   disabled?: boolean;
   indeterminate?: boolean;
   ariaLabel?: string;
   onChange?: (value?: boolean, id?: string) => void;
-  className?: string;
 }
+
 /**
  * A Checkbox component with styling options
  *
@@ -47,6 +54,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   ariaLabel,
   onChange,
   className,
+  ...labelProps
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,8 +64,8 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   );
 
   const checkboxClassName = classNames(
-    'flex flex-row items-center cursor-pointer text-accent-primary small-medium flex-1 min-w-0',
-    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded before:mr-2'}`,
+    'flex flex-row items-center cursor-pointer text-accent-primary small-medium min-w-0',
+    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded'}`,
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',
@@ -65,7 +73,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   );
 
   const iconClassName = classNames(
-    'mr-2 border rounded',
+    'border rounded',
     disabled ? 'bg-layer-4 border-icon-secondary' : '',
   );
 
@@ -80,11 +88,16 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
   };
 
   return (
-    <label className={checkboxClassName} htmlFor={id}>
+    <label
+      {...labelProps}
+      className={checkboxClassName}
+      htmlFor={id}
+      aria-description={labelProps['aria-description'] || 'checkbox-container'}
+    >
       {renderIcon()}
       {label &&
         (typeof label === 'string' ? (
-          <DialEllipsisTooltip text={label} className="text-primary" />
+          <DialEllipsisTooltip text={label} className="ml-2 text-primary" />
         ) : (
           label
         ))}

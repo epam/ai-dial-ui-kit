@@ -11,7 +11,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     ariaLabel: { control: { type: 'text' } },
-    titleClassName: { control: { type: 'text' } },
+    labelClassName: { control: { type: 'text' } },
     breadcrumbClassName: { control: { type: 'text' } },
 
     path: { control: 'text' },
@@ -56,7 +56,7 @@ export const WithItemClick: Story = {
         {...args}
         onItemClick={handleItemClick}
         makeHref={(segments, index) =>
-          '#' + '/' + segments.slice(0, index + 1).join('/')
+          '#' + segments.slice(0, index + 1).join('/')
         }
       />
     );
@@ -78,7 +78,7 @@ export const WithLinks: Story = {
       {...args}
       // Make all but the last breadcrumb items clickable
       makeHref={(segments, index) =>
-        '#' + '/' + segments.slice(0, index + 1).join('/')
+        '#' + segments.slice(0, index + 1).join('/')
       }
     />
   ),
@@ -106,5 +106,17 @@ export const DisabledReadonlyInvalid: Story = {
     disabled: false,
     readonly: false,
     invalid: true,
+  },
+};
+
+export const CompactView: Story = {
+  args: {
+    isCompactView: true,
+    searchable: true,
+    path: 'Organization/Folder 4',
+    elementId: 'compact-search',
+  },
+  render: (args) => {
+    return <DialFileManagerNavigationPanel {...args} />;
   },
 };

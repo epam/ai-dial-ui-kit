@@ -6,8 +6,14 @@ import {
   useRef,
 } from 'react';
 import { DialFileNodeType, type DialFile } from '@/models/file';
-import type { DialUploadFileItem } from '@/models/file-manager';
-import { FILES_DATA_TRANSFER_TYPE } from '../constants';
+import type {
+  DialFileAcceptType,
+  DialUploadFileItem,
+} from '@/models/file-manager';
+import { FILES_DATA_TRANSFER_TYPE } from '@/components/FileManager/constants';
+import { useConflictResolution } from './use-conflict-resolution';
+import type { FileConflictDecision } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
+import { isFileAccepted } from '../utils';
 
 export interface FileUploadValidationResult {
   valid: boolean;
@@ -17,6 +23,7 @@ export interface FileUploadValidationResult {
 export interface FileUploadValidationMessages {
   duplicateFiles?: string;
   oversizedFiles?: string;
+  unsupportedFiles?: string;
   validationFailed?: string;
   validationError?: string;
 }
@@ -32,6 +39,7 @@ export interface UseFileUploadOptions {
     destinationFolder: string,
   ) => FileUploadValidationResult | Promise<FileUploadValidationResult>;
   maxFileSize?: number;
+  allowedFileTypes?: DialFileAcceptType[];
   validationMessages?: FileUploadValidationMessages;
   onUploadArchive?: (
     file: File,
@@ -50,6 +58,7 @@ export const useFileUpload = ({
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
+  allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
 }: UseFileUploadOptions = {}) => {
@@ -59,6 +68,68 @@ export const useFileUpload = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const destinationFolderRef = useRef<string>('');
   const existingFilesRef = useRef<DialFile[]>([]);
+
+  const [pendingUploadFiles, setPendingUploadFiles] = useState<
+    Map<string, DialUploadFileItem>
+  >(new Map());
+
+  const [uploadMetadata, setUploadMetadata] = useState<{
+    destinationFolder: string;
+  } | null>(null);
+
+  const filterAcceptedFiles = useCallback(
+    (files: DialUploadFileItem[]) => {
+      if (!allowedFileTypes || allowedFileTypes.includes('*/*')) return files;
+
+      return files.filter(({ fileContent, name }) =>
+        isFileAccepted(allowedFileTypes, fileContent.type, name),
+      );
+    },
+    [allowedFileTypes],
+  );
+
+  const {
+    conflictingFiles,
+    conflictResolutionOpen,
+    hasActiveConflictRef,
+    startConflictResolution,
+    closeConflictResolution,
+    openConflictResolution,
+    handleReplaceAll: baseHandleReplaceAll,
+    handleDuplicateAll: baseHandleDuplicateAll,
+    handleDecideForEach: baseHandleDecideForEach,
+  } = useConflictResolution({
+    getDestinationFiles: () => existingFilesRef.current,
+    onResolve: (items, destinationFolder) => {
+      if (!uploadMetadata) return;
+
+      const uploadItems = items
+        .map((item) => {
+          const originalFile = pendingUploadFiles.get(item.sourceUrl);
+          if (!originalFile) {
+            return;
+          }
+
+          const finalName = item.destinationUrl.split('/').pop()!;
+
+          return {
+            fileContent: originalFile.fileContent,
+            name: finalName,
+          };
+        })
+        .filter(Boolean) as DialUploadFileItem[];
+
+      if (uploadItems.length > 0) {
+        onUploadFiles?.(uploadItems, destinationFolder);
+      }
+      clearUploadState();
+    },
+  });
+
+  const clearUploadState = useCallback(() => {
+    setPendingUploadFiles(new Map());
+    setUploadMetadata(null);
+  }, []);
 
   useEffect(() => {
     let dragCounter = 0;
@@ -102,18 +173,6 @@ export const useFileUpload = ({
     };
   }, []);
 
-  const checkForDuplicates = useCallback(
-    (files: DialUploadFileItem[], existingFiles: DialFile[]): string[] => {
-      const existingNames = new Set(
-        existingFiles.map((f) => f.name.toLowerCase()),
-      );
-      return files
-        .filter((file) => existingNames.has(file.name.toLowerCase()))
-        .map((file) => file.name);
-    },
-    [],
-  );
-
   const checkFileSize = useCallback(
     (files: DialUploadFileItem[]): string[] => {
       if (!maxFileSize) return [];
@@ -124,6 +183,21 @@ export const useFileUpload = ({
     [maxFileSize],
   );
 
+  const convertUploadItemsToDialFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string): DialFile[] => {
+      return files.map((file) => ({
+        id: file.name,
+        name: file.name,
+        folderId: destinationFolder,
+        path: file.name,
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: destinationFolder,
+        contentLength: file.fileContent.size,
+      }));
+    },
+    [],
+  );
+
   const handleUpload = useCallback(
     async (
       files: DialUploadFileItem[],
@@ -131,15 +205,7 @@ export const useFileUpload = ({
       existingFiles: DialFile[],
     ) => {
       setUploadError(undefined);
-
-      const duplicates = checkForDuplicates(files, existingFiles);
-      if (duplicates.length > 0) {
-        const message =
-          validationMessages.duplicateFiles ||
-          `Files with the same name already exist: ${duplicates.join(', ')}`;
-        setUploadError(message);
-        return false;
-      }
+      existingFilesRef.current = existingFiles;
 
       const oversizedFiles = checkFileSize(files);
       if (oversizedFiles.length > 0) {
@@ -176,20 +242,61 @@ export const useFileUpload = ({
         }
       }
 
-      if (onUploadFiles) {
-        onUploadFiles(files, destinationFolder);
+      const filesMap = new Map(files.map((f) => [f.name, f]));
+      setPendingUploadFiles(filesMap);
+
+      const dialFiles = convertUploadItemsToDialFiles(files, destinationFolder);
+
+      setUploadMetadata({ destinationFolder });
+
+      const result = startConflictResolution(destinationFolder, dialFiles, {
+        destinationFolder,
+      });
+
+      if (result.hasConflicts) {
+        return false;
       }
+
+      onUploadFiles?.(files, destinationFolder);
+      clearUploadState();
       return true;
     },
     [
       onUploadFiles,
       onValidateUpload,
-      checkForDuplicates,
       checkFileSize,
       maxFileSize,
       validationMessages,
+      convertUploadItemsToDialFiles,
+      startConflictResolution,
+      clearUploadState,
     ],
   );
+
+  const handleConflictReplace = useCallback(() => {
+    baseHandleReplaceAll();
+    clearUploadState();
+  }, [baseHandleReplaceAll, clearUploadState]);
+
+  const handleConflictDuplicate = useCallback(() => {
+    baseHandleDuplicateAll();
+    clearUploadState();
+  }, [baseHandleDuplicateAll, clearUploadState]);
+
+  const handleConflictDecideForEach = useCallback(
+    (decisions: FileConflictDecision[]) => {
+      baseHandleDecideForEach(decisions);
+      clearUploadState();
+    },
+    [baseHandleDecideForEach, clearUploadState],
+  );
+
+  const handleCloseConflictResolution = useCallback(() => {
+    closeConflictResolution();
+    if (!hasActiveConflictRef.current) {
+      clearUploadState();
+    }
+  }, [closeConflictResolution, hasActiveConflictRef, clearUploadState]);
 
   const handleDragEnter = useCallback((e: DragEvent) => {
     e.preventDefault();
@@ -242,15 +349,28 @@ export const useFileUpload = ({
       }
 
       const files = Array.from(e.dataTransfer.files);
-      if (files.length > 0) {
-        const uploadItems: DialUploadFileItem[] = files.map((file) => ({
-          fileContent: file,
-          name: file.name,
-        }));
-        await handleUpload(uploadItems, destinationFolder, existingFiles);
+      if (files.length === 0) {
+        return;
       }
+
+      const uploadItems: DialUploadFileItem[] = files.map((file) => ({
+        fileContent: file,
+        name: file.name,
+      }));
+
+      const acceptedItems = filterAcceptedFiles(uploadItems);
+
+      if (acceptedItems.length === 0) {
+        setUploadError(
+          validationMessages.unsupportedFiles ||
+            'Selected files are not supported',
+        );
+        return;
+      }
+
+      await handleUpload(acceptedItems, destinationFolder, existingFiles);
     },
-    [handleUpload],
+    [handleUpload, filterAcceptedFiles, validationMessages],
   );
 
   useEffect(() => {
@@ -265,6 +385,12 @@ export const useFileUpload = ({
       fileInputRef.current = input;
     }
 
+    if (allowedFileTypes && allowedFileTypes.length > 0) {
+      input.accept = allowedFileTypes.join(',');
+    } else {
+      input.removeAttribute('accept');
+    }
+
     const handleChange = async () => {
       if (!input?.files?.length) return;
 
@@ -274,8 +400,19 @@ export const useFileUpload = ({
         name: file.name,
       }));
 
+      const acceptedItems = filterAcceptedFiles(uploadItems);
+
+      if (acceptedItems.length === 0) {
+        setUploadError(
+          validationMessages.unsupportedFiles ||
+            'Selected files are not supported',
+        );
+        input.value = '';
+        return;
+      }
+
       await handleUpload(
-        uploadItems,
+        acceptedItems,
         destinationFolderRef.current,
         existingFilesRef.current,
       );
@@ -295,7 +432,7 @@ export const useFileUpload = ({
         fileInputRef.current = null;
       }
     };
-  }, [handleUpload]);
+  }, [allowedFileTypes, filterAcceptedFiles, handleUpload, validationMessages]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
@@ -375,5 +512,14 @@ export const useFileUpload = ({
     openFileDialog,
     openArchiveDialog,
     fileInputRef,
+
+    uploadConflictingFiles: conflictingFiles,
+    uploadConflictResolutionOpen: conflictResolutionOpen,
+    hasActiveUploadConflictRef: hasActiveConflictRef,
+    openUploadConflictResolution: openConflictResolution,
+    closeUploadConflictResolution: handleCloseConflictResolution,
+    handleUploadConflictReplace: handleConflictReplace,
+    handleUploadConflictDuplicate: handleConflictDuplicate,
+    handleUploadConflictDecideForEach: handleConflictDecideForEach,
   };
 };

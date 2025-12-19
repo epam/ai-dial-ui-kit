@@ -12,6 +12,8 @@ export interface DialFile extends DialModifiedEntity {
   path: string;
   name: string;
   folderId: string;
+  // Dial Chat–specific field required to show the owner of shared files and folders
+  owner?: string;
   author?: string;
   nextToken?: string;
   extension?: string;
@@ -39,5 +41,5 @@ export enum DialFilePermission {
 }
 
 export interface DialRootFolder extends DialFile {
-  breadcrumbLabel: string;
+  label: string;
 }

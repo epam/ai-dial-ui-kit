@@ -1,5 +1,10 @@
-import classNames from 'classnames';
-import { useMemo, type FC, type MouseEvent } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type FC,
+  type MouseEvent,
+} from 'react';
 
 import {
   DialBreadcrumb,
@@ -13,6 +18,11 @@ import {
   breadcrumbContainerClassName,
   searchContainerWrapperClassName,
 } from './constants';
+import { mergeClasses } from '@/utils/merge-classes';
+import { DialButton } from '@/components/Button/Button';
+import { ButtonVariant } from '@/types/button';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileManagerNavigationPanelProps
   extends Omit<
@@ -43,6 +53,7 @@ export interface DialFileManagerNavigationPanelProps
   onSearchChange?: (value: string) => void;
   searchClassName?: string;
   searchContainerClassName?: string;
+  isCompactView?: boolean;
 }
 
 /**
@@ -67,12 +78,12 @@ export interface DialFileManagerNavigationPanelProps
  * // With clickable parents
  * <FileManagerNavigationPanel
  *   path="Org/Design/Assets"
- *   makeHref={(segments, i) => '#' + '/' + segments.slice(0, i + 1).join('/')}
+ *   makeHref={(segments, i) => '#' + segments.slice(0, i + 1).join('/')}
  * />
  * ```
  *
  * @param [ariaLabel="Breadcrumb"] - Aria label for the breadcrumb `<nav>`
- * @param [titleClassName] - Extra classes for breadcrumb titles
+ * @param [labelClassName] - Extra classes for breadcrumb titles
  * @param [path] - A full path string that will be split into breadcrumb items
  * @param [makeHref] - Factory to create hrefs for segments
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
@@ -85,12 +96,13 @@ export interface DialFileManagerNavigationPanelProps
  * @param [onSearchChange] - Callback fired when the search value changes
  * @param [searchClassName] - Extra classes for the search input element
  * @param [searchContainerClassName] - Extra classes for the search container
+ * @param [isCompactView=false] - Whether the component should render in compact mode
  */
 export const DialFileManagerNavigationPanel: FC<
   DialFileManagerNavigationPanelProps
 > = ({
   ariaLabel = 'Breadcrumb',
-  titleClassName,
+  labelClassName,
   onItemClick,
 
   path,
@@ -110,6 +122,7 @@ export const DialFileManagerNavigationPanel: FC<
   onSearchChange,
   searchClassName,
   searchContainerClassName,
+  isCompactView = false,
 }) => {
   const breadcrumbPathItems: DialBreadcrumbPathItem[] | undefined =
     useMemo(() => {
@@ -118,7 +131,7 @@ export const DialFileManagerNavigationPanel: FC<
         .split('/')
         .map((s) => s.trim())
         .filter(Boolean);
-      if (!segments.length) return [{ title: '/' }];
+      if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
         const acc = segments.slice(0, index + 1);
@@ -126,7 +139,7 @@ export const DialFileManagerNavigationPanel: FC<
           typeof makeHref === 'function' ? makeHref(acc, index) : undefined;
 
         return {
-          title: segment,
+          label: segment,
           href,
           onClick: onItemClick
             ? (e: MouseEvent<HTMLAnchorElement>) => {
@@ -150,7 +163,7 @@ export const DialFileManagerNavigationPanel: FC<
 
           return [
             {
-              title: rootItemLabel,
+              label: rootItemLabel,
               href: rootItemPath,
               onClick: onItemClick
                 ? (e: MouseEvent<HTMLAnchorElement>) => {
@@ -167,22 +180,80 @@ export const DialFileManagerNavigationPanel: FC<
       return items;
     }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
 
-  return (
-    <div className={classNames(panelBaseClassName, className)}>
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
+  const expandSearch = useCallback(() => {
+    if (!isSearchExpanded) {
+      setIsSearchExpanded(true);
+      const searchElement = document.getElementById(elementId);
+      if (searchElement) {
+        searchElement.focus();
+      }
+    }
+  }, [elementId, isSearchExpanded]);
+
+  const handleSearchBlur = useCallback(() => {
+    if (!value || String(value).trim() === '') {
+      onSearchChange?.('');
+    }
+  }, [value, onSearchChange]);
+
+  const renderNavigation = useCallback(() => {
+    if (isCompactView && isSearchExpanded) {
+      return (
+        <DialButton
+          className="!p-[9px]"
+          variant={ButtonVariant.Secondary}
+          iconBefore={<IconArrowLeft {...BASE_ICON_PROPS} />}
+          onClick={() => {
+            setIsSearchExpanded(false);
+            onSearchChange?.('');
+          }}
+        />
+      );
+    }
+
+    return (
       <div className={breadcrumbContainerClassName}>
         <DialBreadcrumb
           pathItems={breadcrumbPathItems}
           ariaLabel={ariaLabel}
-          titleClassName={titleClassName}
+          labelClassName={labelClassName}
           className={breadcrumbClassName}
         />
       </div>
+    );
+  }, [
+    ariaLabel,
+    breadcrumbClassName,
+    breadcrumbPathItems,
+    isSearchExpanded,
+    isCompactView,
+    labelClassName,
+    onSearchChange,
+  ]);
 
+  return (
+    <div
+      className={mergeClasses(
+        panelBaseClassName,
+        {
+          'gap-3': isCompactView,
+        },
+        className,
+      )}
+      aria-label="navigation-panel"
+    >
+      {renderNavigation()}
       {searchable && (
         <div
-          className={searchContainerWrapperClassName}
+          className={mergeClasses(searchContainerWrapperClassName, {
+            'w-[38px]': isCompactView && !isSearchExpanded,
+            'w-full': isCompactView && isSearchExpanded,
+          })}
           role="search"
           aria-label="Search"
+          onClick={expandSearch}
         >
           <DialSearch
             elementId={elementId}
@@ -190,9 +261,12 @@ export const DialFileManagerNavigationPanel: FC<
             onChange={onSearchChange}
             disabled={disabled}
             readonly={readonly}
+            onBlur={handleSearchBlur}
             invalid={invalid}
             className={searchClassName}
-            containerClassName={searchContainerClassName}
+            containerClassName={mergeClasses(searchContainerClassName, {
+              'p-[10px]': isCompactView,
+            })}
           />
         </div>
       )}

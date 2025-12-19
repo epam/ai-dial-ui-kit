@@ -44,6 +44,7 @@ import {
 import { type DropdownItem } from '@/models/dropdown';
 import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { DropdownItemType } from '@/types/dropdown';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DropdownMenuProps {
   items: DropdownItem[];
@@ -321,7 +322,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           <>{typeof menu.header === 'function' ? menu.header() : menu.header}</>
         )}
 
-        <div role="none" className="py-1">
+        <div role="none" className="py-1" aria-label="dropdown">
           {menu.items.map((it) => {
             if (it.type === DropdownItemType.Divider) {
               return (
@@ -330,6 +331,19 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                   role="separator"
                   className={dropdownDividerClassName}
                 />
+              );
+            }
+            if (it.type === DropdownItemType.PlainText) {
+              return (
+                <div
+                  key={it.key}
+                  className={mergeClasses(
+                    'px-3 py-2 text-secondary dial-caption',
+                    it.className,
+                  )}
+                >
+                  {it.label}
+                </div>
               );
             }
             return (
@@ -342,6 +356,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                   dropdownItemBaseClassName,
                   it.disabled && dropdownItemDisabledClassName,
                   it.danger && dropdownItemDangerClassName,
+                  it.className,
                 )}
                 disabled={it.disabled}
                 onClick={handleItemClick(it)}
@@ -362,6 +377,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                     it.danger && 'text-error',
                     it.disabled && 'text-secondary',
                   )}
+                  aria-labelledby="item-text"
                 >
                   {it.label}
                 </span>

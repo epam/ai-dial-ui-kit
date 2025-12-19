@@ -18,7 +18,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
   labelClassName?: string;
   errorClassName?: string;
   children: ReactNode;
-  value?: ReactNode | string;
+  value?: ReactNode;
   defaultEmptyText?: string;
 }
 

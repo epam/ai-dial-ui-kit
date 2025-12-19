@@ -4,7 +4,7 @@ import { DialFormPopup } from './FormPopup';
 
 describe('Dial UI Kit :: FormPopup', () => {
   const baseProps = {
-    title: 'Create Model',
+    header: 'Create Model',
     open: true,
     submitLabel: 'Submit',
     onClose: vi.fn(),

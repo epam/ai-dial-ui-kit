@@ -46,6 +46,11 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const sharedByMePaths = new Set<string>([
+  '/root/Images/icon.svg',
+  '/root/Videos',
+]);
+
 const mockFolders: DialFile[] = [
   {
     name: 'Root Folder',
@@ -176,6 +181,9 @@ export const Default: Story = {
     items: mockFolders,
     expandedPaths: new Set(),
     showFiles: false,
+    rootItemLabel: 'My workspace',
+    rootItemPath: '/root',
+    sharedByMePaths,
   },
   render: (args) => {
     const Wrapper = () => {
@@ -287,6 +295,7 @@ export const Default: Story = {
             items={items}
             expandedPaths={expanded}
             loadingPaths={loading}
+            loadedPaths={loaded}
             selectedPath={selected}
             renamedPath={renaming}
             onItemClick={handleItemClick}
@@ -308,6 +317,7 @@ export const WithExpandedFolders: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Documents', '/root/Videos']),
     showFiles: false,
+    sharedByMePaths,
     getContextMenuItems: getMenuFunction({}),
   },
 };
@@ -317,6 +327,7 @@ export const WithFilesVisible: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Images']),
     showFiles: true,
+    sharedByMePaths,
     getContextMenuItems: getMenuFunction({}),
   },
 };
@@ -326,6 +337,7 @@ export const WithLoaders: Story = {
     items: mockFolders,
     expandedPaths: new Set(['/root', '/root/Images']),
     loadingPaths: new Set(['/root/Documents']),
+    sharedByMePaths,
     getContextMenuItems: getMenuFunction({}),
   },
 };

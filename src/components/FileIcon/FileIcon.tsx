@@ -12,7 +12,7 @@ export interface DialFileIconProps {
   stroke?: number;
   className?: string;
   decorative?: boolean;
-  label?: string;
+  label?: ReactNode;
   indicator?: ReactNode;
 }
 
@@ -58,7 +58,9 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
   });
 
   const computedLabel =
-    label ?? `${normalized.slice(1).toUpperCase()} file icon`;
+    typeof label === 'string'
+      ? label
+      : `${normalized.slice(1).toUpperCase()} file icon`;
 
   return (
     <span

@@ -1,32 +1,21 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, within } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DialFileManagerBulkActionsToolbar } from './FileManagerBulkActionsToolbar';
-import type { DialButtonProps } from '@/components/Button/Button';
-import type { DialDropdownProps } from '@/components/Dropdown/Dropdown';
-import type { DropdownItem } from '@/models/dropdown';
 
-vi.mock('@/components/Button/Button', () => ({
-  DialButton: ({ label, onClick, iconBefore }: DialButtonProps) => (
-    <button data-testid={`button-${label}`} onClick={onClick}>
-      {label}
-      {iconBefore && <span data-testid="icon">{true}</span>}
-    </button>
-  ),
-}));
-
-vi.mock('@/components/Dropdown/Dropdown', () => ({
-  DialDropdown: ({ children, menu }: DialDropdownProps) => (
-    <div data-testid="dropdown">
-      {children}
-      <div data-testid="dropdown-items">
-        {menu?.items.map((i: DropdownItem) => i.label).join(',')}
-      </div>
-    </div>
-  ),
-}));
-
-vi.mock('@/hooks/use-is-tablet-screen', () => ({
+vi.mock('@/hooks/use-is-mobile-screen', () => ({
   useIsMobileScreen: vi.fn(() => false),
+}));
+
+vi.mock('@/hooks/use-flexible-actions', () => ({
+  useFlexibleActions: vi.fn(({ actions }) => ({
+    refs: {
+      containerRef: { current: null },
+      leftSectionRef: { current: null },
+      measureRef: { current: null },
+    },
+    visibleActions: actions,
+    hiddenActions: [],
+  })),
 }));
 
 describe('Dial UI Kit :: DialFileManagerBulkActionsToolbar', () => {
@@ -38,15 +27,21 @@ describe('Dial UI Kit :: DialFileManagerBulkActionsToolbar', () => {
 
   it('renders selected label button and calls onClearSelection', () => {
     const onClear = vi.fn();
+    const getLabel = vi.fn((count: number) => `${count} files selected`);
+
     render(
       <DialFileManagerBulkActionsToolbar
-        selectionLabel="3 files selected"
+        getSelectionLabel={getLabel}
         onClearSelection={onClear}
         actions={actions}
+        selectedCount={3}
       />,
     );
 
-    const selectedButton = screen.getByTestId('button-3 files selected');
+    expect(getLabel).toHaveBeenCalledWith(3);
+
+    const toolbar = screen.getByRole('toolbar');
+    const selectedButton = within(toolbar).getByText('3 files selected');
     expect(selectedButton).toBeInTheDocument();
 
     fireEvent.click(selectedButton);
@@ -56,44 +51,61 @@ describe('Dial UI Kit :: DialFileManagerBulkActionsToolbar', () => {
   it('renders all action buttons', () => {
     render(
       <DialFileManagerBulkActionsToolbar
-        selectionLabel="3 files selected"
+        getSelectionLabel={(count) => `${count} selected`}
         onClearSelection={vi.fn()}
         actions={actions}
+        selectedCount={3}
       />,
     );
 
+    const toolbar = screen.getByRole('toolbar');
+
     actions.forEach((action) => {
       expect(
-        screen.getAllByTestId(`button-${action.title}`)?.[1],
+        within(toolbar).getByRole('button', { name: action.title }),
       ).toBeInTheDocument();
     });
   });
 
   it('calls action onClick handler when action button is clicked', () => {
+    const mockOnClick = vi.fn();
+    const actionsWithMock = [
+      { key: 'download', title: 'Download', onClick: vi.fn() },
+      { key: 'delete', title: 'Delete', onClick: mockOnClick },
+      { key: 'share', title: 'Share', onClick: vi.fn() },
+    ];
+
     render(
       <DialFileManagerBulkActionsToolbar
-        selectionLabel="3 files selected"
+        getSelectionLabel={(count) => `${count} selected`}
         onClearSelection={vi.fn()}
-        actions={actions}
+        actions={actionsWithMock}
+        selectedCount={3}
       />,
     );
 
-    const deleteButton = screen.getAllByTestId('button-Delete')?.[1];
+    const toolbar = screen.getByRole('toolbar');
+    const deleteButton = within(toolbar).getByRole('button', {
+      name: 'Delete',
+    });
     expect(deleteButton).toBeInTheDocument();
     fireEvent.click(deleteButton);
-    expect(actions[1].onClick).toHaveBeenCalled();
+    expect(mockOnClick).toHaveBeenCalled();
   });
 
-  it('renders icons inside buttons', () => {
+  it('renders toolbar with proper accessibility attributes', () => {
     render(
       <DialFileManagerBulkActionsToolbar
-        selectionLabel="3 files selected"
+        getSelectionLabel={(count) => `${count} selected`}
         onClearSelection={vi.fn()}
         actions={actions}
+        selectedCount={3}
       />,
     );
 
-    const icons = screen.getAllByTestId('icon');
-    expect(icons.length).toBeGreaterThan(0);
+    const toolbar = screen.getByRole('toolbar', {
+      name: 'File bulk actions',
+    });
+    expect(toolbar).toBeInTheDocument();
   });
 });

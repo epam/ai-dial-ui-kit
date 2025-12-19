@@ -19,19 +19,22 @@ import {
   popupHeaderClassName,
   popupSizeClassMap,
 } from './constants';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialPopupProps {
   open?: boolean;
-  title?: string | ReactNode;
+  header?: ReactNode;
   portalId?: string;
   className?: string;
   overlayClassName?: string;
-  headingClassName?: string;
+  titleClassName?: string;
+  headerClassName?: string;
   dividers?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
   size?: PopupSize;
+  closeOnOutsideClick?: boolean;
 }
 
 /**
@@ -59,29 +62,33 @@ export interface DialPopupProps {
  * ```
  *
  * @param [open=false] - Controls visibility of the popup
- * @param [title] - Optional title rendered in the header
+ * @param [header] - Optional title rendered in the header
  * @param [portalId] - Optional portal container id
  * @param [className] - Additional CSS classes applied to the popup container
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
- * @param [headingClassName] - Additional CSS classes applied to the title element
+ * @param [titleClassName] - Additional CSS classes applied to the title element
+ * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [dividers=true] - Whether to render separators between sections
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
+ * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
-  title,
+  header,
   portalId,
   className,
   overlayClassName,
-  headingClassName,
+  titleClassName,
+  headerClassName,
   dividers = true,
   children,
   footer,
   onClose,
   size = PopupSize.Md,
+  closeOnOutsideClick = true,
 }) => {
   const { refs, context } = useFloating({
     open,
@@ -91,15 +98,15 @@ export const DialPopup: FC<DialPopupProps> = ({
   });
 
   const role = useRole(context, { role: 'dialog' });
-  const dismiss = useDismiss(context, { outsidePress: true });
+  const dismiss = useDismiss(context, { outsidePress: closeOnOutsideClick });
   const { getFloatingProps } = useInteractions([role, dismiss]);
 
   if (!open) return null;
 
   const headingId =
-    typeof title === 'string' ? 'dial-popup-heading' : undefined;
+    typeof header === 'string' ? 'dial-popup-heading' : undefined;
 
-  const renderTitle = (title?: ReactNode | string) => {
+  const renderTitle = (title?: ReactNode) => {
     if (!title) return <span /* empty element to balance the close button */ />;
 
     return typeof title === 'string' ? (
@@ -107,7 +114,7 @@ export const DialPopup: FC<DialPopupProps> = ({
         id={headingId}
         className={classNames(
           'flex-1 min-w-0 mr-3 truncate dial-h3 text-primary',
-          headingClassName,
+          titleClassName,
         )}
       >
         <DialTooltip tooltip={title}>{title}</DialTooltip>
@@ -136,14 +143,19 @@ export const DialPopup: FC<DialPopupProps> = ({
               className,
             )}
           >
-            <div className={popupHeaderClassName}>
-              {renderTitle(title)}
+            <div
+              className={mergeClasses(popupHeaderClassName, headerClassName)}
+            >
+              {renderTitle(header)}
               <DialCloseButton
                 ariaLabel="Close dialog"
                 onClose={(e) => onClose?.(e)}
               />
             </div>
-            <div className="flex-grow overflow-auto">
+            <div
+              className="flex-grow overflow-auto"
+              aria-label="popup-description"
+            >
               {/* Body area */}
               {children}
             </div>

@@ -1,4 +1,10 @@
-import { createContext, type DragEvent, type RefObject } from 'react';
+import {
+  createContext,
+  type DragEvent,
+  type ReactNode,
+  type Ref,
+  type RefObject,
+} from 'react';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
@@ -11,11 +17,16 @@ import type {
   DeleteConfirmationOptions,
   DialFileManagerDestinationFolderPopupOptions,
   DialFileManagerConflictResolutionPopupOptions,
+  FileMetadataPopupOptions,
 } from './FileManager';
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
 import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
 import type { DestinationFolderMode } from '@/types/file-manager';
+import type {
+  DialFileAcceptType,
+  DialFileManagerActionsRef,
+} from '@/models/file-manager';
 
 export interface FileManagerGridRow {
   id: string;
@@ -27,12 +38,15 @@ export interface FileManagerGridRow {
   nodeType: DialFileNodeType;
   extension?: string;
   isTemporary?: boolean;
+  owner?: string;
+  contentType?: string;
 }
 
 export interface FileManagerContextValue {
   className?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
+  allowedFileTypes?: DialFileAcceptType[];
   filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;
@@ -40,8 +54,13 @@ export interface FileManagerContextValue {
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
-  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions & {
+    sourceFolder?: string;
+  };
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
+  fileMetadataPopupOptions?: FileMetadataPopupOptions;
+
+  compactViewWidthBreakpoint?: number;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
@@ -57,16 +76,16 @@ export interface FileManagerContextValue {
   toggleTreeCollapse: () => void;
   setIsTreeCollapsed: (value: boolean) => void;
 
-  selectedIds: Set<string>;
+  selectedPaths: Set<string>;
   selectedFiles: Map<string, DialFile>;
-  setSelectedFiles: (next: Map<string, DialFile>) => void;
+  setSelectedPaths: (paths: Set<string>) => void;
   clearSelection: () => void;
 
   currentFolder?: DialFile;
   gridRows: FileManagerGridRow[];
 
   handleCopyTo: (destinationFolder: string) => void;
-  handleMoveTo: (destinationFolder: string, sourceFolder: string) => void;
+  handleMoveTo: (destinationFolder: string, sourceFolder?: string) => void;
   handleDuplicate: (files: DialFile[]) => void;
   handleOpenDestinationFolderPopup: (mode: DestinationFolderMode) => void;
   handleCloseDestinationFolderPopup: () => void;
@@ -81,6 +100,7 @@ export interface FileManagerContextValue {
   onRenameSave: (value: string) => void;
   onRenameCancel: () => void;
   onRenameValidate: (value: string, item: DialFile) => string | null;
+  getDisplayName: (item: DialFile) => string;
 
   openDeleteConfirmation: (items: DialFile[], parentFolderPath: string) => void;
   closeDeleteConfirmation: () => void;
@@ -130,6 +150,37 @@ export interface FileManagerContextValue {
   handleConflictReplace: () => void;
   handleConflictDuplicate: () => void;
   handleConflictDecideForEach: (decisions: FileConflictDecision[]) => void;
+
+  uploadConflictingFiles: DialFile[];
+  uploadConflictResolutionOpen: boolean;
+  closeUploadConflictResolution: () => void;
+  handleUploadConflictReplace: () => void;
+  handleUploadConflictDuplicate: () => void;
+  handleUploadConflictDecideForEach: (
+    decisions: FileConflictDecision[],
+  ) => void;
+
+  isMetadataPopupOpen: boolean;
+  selectedFileForMetadata?: DialFile;
+  openMetadataPopup: (file: DialFile) => void;
+  closeMetadataPopup: () => void;
+  onGetInfo?: (file: DialFile) => void | Promise<void>;
+
+  onUnshareFile?: (file: DialFile) => void | Promise<void>;
+
+  actionsRef?: Ref<DialFileManagerActionsRef>;
+
+  sharedByMePaths?: Set<string>;
+
+  onSearchFiles?: (folder: string, query: string) => void;
+  searchInProgress?: boolean;
+  searchResults?: DialFile[];
+  clearSearchResults?: () => void;
+  isSearchMode: boolean;
+
+  emptyStateIcon?: ReactNode;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
 }
 
 export const FileManagerContext = createContext<

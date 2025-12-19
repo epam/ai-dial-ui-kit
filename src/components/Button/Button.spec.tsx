@@ -4,12 +4,29 @@ import { DialButton } from './Button';
 import { ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
-  test('Should render with label and be accessible by role', () => {
+  test('Should render with string label and be accessible by role', () => {
     render(<DialButton label="Click me" />);
     expect(
       screen.getByRole('button', { name: 'Click me' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+
+  test('Should render with ReactNode label and aria-label', () => {
+    render(
+      <DialButton
+        label={
+          <span>
+            Custom <strong>Label</strong>
+          </span>
+        }
+        aria-label="Custom button"
+      />,
+    );
+    const button = screen.getByRole('button', { name: 'Custom button' });
+    expect(button).toBeInTheDocument();
+    expect(screen.getByText('Custom', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('Label')).toBeInTheDocument();
   });
 
   test('Should call onClick when clicked', () => {
@@ -39,14 +56,17 @@ describe('Dial UI Kit :: DialButton', () => {
   test('Should render without label when only icons are provided', () => {
     render(
       <DialButton
-        iconBefore={<span data-testid="icon">Icon</span>}
+        iconBefore={
+          <span role="img" aria-label="icon">
+            Icon
+          </span>
+        }
         aria-label="Icon button"
       />,
     );
-    expect(
-      screen.getByRole('button', { name: 'Icon button' }),
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('icon')).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: 'Icon button' });
+    expect(button).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'icon' })).toBeInTheDocument();
     expect(screen.queryByText('Icon button')).not.toBeInTheDocument();
   });
 
@@ -112,11 +132,11 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(titleSpan).not.toHaveClass('ml-2');
   });
 
-  test('Should use aria-label when label is not provided', () => {
+  test('Should use aria-label when label is ReactNode', () => {
     render(
       <DialButton
+        label={<span>Icon Label</span>}
         aria-label="Custom aria label"
-        iconBefore={<span>Icon</span>}
       />,
     );
     expect(
@@ -124,11 +144,24 @@ describe('Dial UI Kit :: DialButton', () => {
     ).toBeInTheDocument();
   });
 
-  test('Should prefer label over native "aria-label" from properties for aria-label', () => {
+  test('Should prefer string label over native "aria-label" from properties for aria-label', () => {
     render(<DialButton label="Button label" aria-label="Aria label" />);
-    expect(
-      screen.getByRole('button', { name: 'Button label' }),
-    ).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: 'Button label' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('aria-label', 'Button label');
+  });
+
+  test('Should use aria-label prop when label is ReactNode', () => {
+    render(
+      <DialButton
+        label={<span>React Node Label</span>}
+        aria-label="Accessible label"
+      />,
+    );
+    const button = screen.getByRole('button', { name: 'Accessible label' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('aria-label', 'Accessible label');
+    expect(screen.getByText('React Node Label')).toBeInTheDocument();
   });
 
   test('Should have correct button type', () => {

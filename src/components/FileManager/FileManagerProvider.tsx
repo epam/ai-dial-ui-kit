@@ -12,6 +12,8 @@ import { DialFileNodeType } from '@/models/file';
 import {
   collectAllDescendants,
   findFolderForPath,
+  findNodeByPath,
+  formatBytes,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
@@ -31,22 +33,12 @@ import {
 import type { DialFileManagerProps } from './FileManager';
 import { useItemRenaming } from './hooks/use-item-renaming';
 import { useExpandedPaths } from './components/FoldersTree/hooks/use-expanded-paths';
-import { IconCopyMinus } from '@tabler/icons-react';
-import { DialButton } from '@/components/Button/Button';
 import { useNewActions } from './hooks/use-new-actions';
 import { useFolderCreation } from './hooks/use-folder-creation';
-
-/**
- * Formats bytes into a short, human-readable string.
- */
-const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '-';
-  const KB = 1024;
-  const MB = KB * 1024;
-  if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
-  if (bytes >= KB) return `${(bytes / KB).toFixed(0)} KB`;
-  return `${bytes} bytes`;
-};
+import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tree-additional-buttons';
+import { useFileMetadata } from './hooks/use-file-metadata';
+import { useFileSearch } from './hooks/use-file-search';
+import { usePathsSelection } from './hooks/use-paths-selection';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -72,7 +64,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   items = [],
   rootItem,
   path,
+  defaultPath,
   filesLoading,
+  selectedPaths,
+  defaultSelectedPaths,
+  onSelectedPathsChange,
   showHiddenFiles,
   onShowHiddenFilesChange,
   treeOptions,
@@ -93,24 +89,53 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
+  uploadValidationMessages,
   maxFileSize,
   onUploadArchive,
   onCreateFolder,
   onCreateFolderValidate,
   folderCreationValidationMessages,
-}) => {
-  const [selectedFiles, setSelectedFiles] = useState<Map<string, DialFile>>(
-    new Map(),
-  );
+  fileMetadataPopupOptions,
+  onGetInfo,
+  onUnshareFile,
+  actionsRef,
+  sharedByMePaths,
+  onSearchFiles,
+  searchResults,
+  searchInProgress,
+  clearSearchResults,
+  allowedFileTypes,
 
-  const selectedIds = useMemo(
-    () => new Set(selectedFiles.keys()),
-    [selectedFiles],
-  );
-  const clearSelection = useCallback(() => setSelectedFiles(new Map()), []);
+  emptyStateIcon,
+  emptyStateTitle,
+  emptyStateDescription,
+}) => {
+  const {
+    selectedPaths: effectiveSelectedPaths,
+    clearSelection,
+    setSelectedPaths,
+  } = usePathsSelection({
+    selectedPaths,
+    defaultSelectedPaths,
+    onSelectedPathsChange,
+  });
+
+  const selectedFiles = useMemo(() => {
+    const map = new Map<string, DialFile>();
+
+    effectiveSelectedPaths.forEach((path) => {
+      const file = findNodeByPath(items, path);
+      if (file) {
+        map.set(path, file);
+      }
+    });
+
+    return map;
+  }, [effectiveSelectedPaths, items]);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
+    defaultPath,
     onPathChange,
     onSelectionClear: clearSelection,
   });
@@ -152,6 +177,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     renameSaveHandler,
     renameCancelHandler,
     renameValidateHandler,
+    getDisplayName,
   } = useItemRenaming({
     items,
     onRenameValidate,
@@ -159,17 +185,23 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onMoveToFiles,
   });
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  useEffect(() => {
-    const external = navigationPanelOptions?.value;
-    if (external != null) {
-      setSearchValue(String(external));
-    }
-  }, [navigationPanelOptions?.value]);
-
-  const effectiveSearchValue = String(
-    navigationPanelOptions?.value ?? searchValue ?? '',
-  ).trim();
+  const {
+    isSearchMode,
+    searchValue,
+    effectiveSearchValue,
+    setSearchValue,
+    handleSearchChange,
+    searchResultsRows,
+  } = useFileSearch({
+    onSearchFiles,
+    clearSearchResults,
+    currentPath,
+    searchResults,
+    searchInProgress,
+    navigationPanelValue: navigationPanelOptions?.value,
+    onNavigationPanelSearchChange: navigationPanelOptions?.onSearchChange,
+    allItems: items,
+  });
 
   const currentFolder = useMemo(
     () => findFolderForPath(items, currentPath) ?? items[0],
@@ -186,6 +218,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSetCopiedFiles,
     handleSetMovedFiles,
     destinationFolderMode,
+    destinationFolderTitle,
     conflictingFiles,
     conflictResolutionOpen,
     closeConflictResolution,
@@ -203,6 +236,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCopySuccess: clearSelection,
     onMoveSuccess: clearSelection,
     onDuplicateSuccess: clearSelection,
+    getCopyHeader: destinationFolderPopupOptions?.getCopyHeader,
+    getMoveHeader: destinationFolderPopupOptions?.getMoveHeader,
   });
 
   useEffect(() => {
@@ -251,11 +286,20 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openFileDialog: openFileDialogBase,
     fileInputRef,
     openArchiveDialog,
+
+    uploadConflictingFiles,
+    uploadConflictResolutionOpen,
+    closeUploadConflictResolution,
+    handleUploadConflictReplace,
+    handleUploadConflictDuplicate,
+    handleUploadConflictDecideForEach,
   } = useFileUpload({
     onUploadFiles,
     onValidateUpload,
     maxFileSize,
     onUploadArchive,
+    allowedFileTypes,
+    validationMessages: uploadValidationMessages,
   });
 
   const handleDrop = useCallback(
@@ -278,6 +322,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const existingFiles = currentFolder?.items ?? [];
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -300,6 +345,45 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
+    if (isSearchMode) {
+      const source = searchResultsRows;
+
+      if (!areHiddenFilesVisible) {
+        const filtered = source.filter((node) => !isHiddenDotFile(node));
+        return filtered.map((node) => ({
+          id: node.id ?? node.path,
+          name: node.name ?? node.path.split('/').pop() ?? '',
+          updatedAt: node.updatedAt,
+          size:
+            node.nodeType === DialFileNodeType.ITEM
+              ? formatBytes(node.contentLength)
+              : '',
+          author: node.author,
+          path: node.path,
+          nodeType: node.nodeType,
+          extension: node.extension,
+          isTemporary: false,
+          owner: node.owner,
+        }));
+      }
+
+      return source.map((node) => ({
+        id: node.id ?? node.path,
+        name: node.name ?? node.path.split('/').pop() ?? '',
+        updatedAt: node.updatedAt,
+        size:
+          node.nodeType === DialFileNodeType.ITEM
+            ? formatBytes(node.contentLength)
+            : '',
+        author: node.author,
+        path: node.path,
+        nodeType: node.nodeType,
+        extension: node.extension,
+        isTemporary: false,
+        owner: node.owner,
+      }));
+    }
+
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
 
     const directChildren = currentFolder?.items ?? [];
@@ -311,19 +395,21 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       source = source.filter((node) => !isHiddenDotFile(node));
     }
 
-    const mapped = source.map((node) => ({
+    const mapped: FileManagerGridRow[] = source.map((node) => ({
       id: node.id ?? node.path,
       name: node.name ?? node.path.split('/').pop() ?? '',
       updatedAt: node.updatedAt,
       size:
         node.nodeType === DialFileNodeType.ITEM
           ? formatBytes(node.contentLength)
-          : '-',
+          : '',
       author: node.author,
       path: node.path,
       nodeType: node.nodeType,
       extension: node.extension,
       isTemporary: false,
+      owner: node.owner,
+      contentType: node.contentType,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -331,12 +417,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         id: newFolderTempId,
         name: '',
         updatedAt: undefined,
-        size: '-',
+        size: '',
         author: undefined,
         path: newFolderTempId,
         nodeType: DialFileNodeType.FOLDER,
         extension: undefined,
         isTemporary: true,
+        owner: undefined,
       });
     }
 
@@ -357,6 +444,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       );
     });
   }, [
+    isSearchMode,
+    searchResultsRows,
     currentFolder,
     effectiveSearchValue,
     areHiddenFilesVisible,
@@ -378,15 +467,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     [handlePathChange],
   );
 
-  const handleSearchChange = useCallback(
-    (value?: string) => {
-      const next = String(value ?? '');
-      setSearchValue(next);
-      navigationPanelOptions?.onSearchChange?.(next);
-    },
-    [navigationPanelOptions],
-  );
-
   const handleTableRowClick = useCallback(
     (row: FileManagerGridRow) => {
       if (row.nodeType === DialFileNodeType.FOLDER) {
@@ -403,25 +483,35 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onExpandedPathsChange: treeOptions?.onExpandedPathsChange,
   });
 
+  const { additionalButtons } = useTreeAdditionalButtons({
+    collapseAll,
+    expandedPathsLength: expandedPaths.size,
+    additionalButtons: treeOptions?.additionalButtons,
+  });
+
+  const {
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup,
+  } = useFileMetadata({ onGetInfo });
+
+  const handleCloseMetadataPopup = useCallback(() => {
+    closeMetadataPopup();
+    fileMetadataPopupOptions?.clearMetadata?.();
+  }, [closeMetadataPopup, fileMetadataPopupOptions]);
+
   const value: FileManagerContextValue = {
     className,
     items,
+    allowedFileTypes,
     rootItem,
     filesLoading,
     treeOptions: {
       ...treeOptions,
       expandedPaths,
       onExpandedPathsChange: setExpandedPaths,
-      additionalButtons: (
-        <>
-          {treeOptions?.additionalButtons}
-          <DialButton
-            className="hover:text-accent-primary p-1"
-            onClick={collapseAll}
-            iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
-          />
-        </>
-      ),
+      additionalButtons,
     },
     navigationPanelOptions,
     gridOptions,
@@ -429,13 +519,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
     destinationFolderPopupOptions: {
+      ...destinationFolderPopupOptions,
       destinationFolderPath,
       setDestinationFolderPath,
-      addFolderLabel: destinationFolderPopupOptions?.addFolderLabel,
-      copyLabel: destinationFolderPopupOptions?.copyLabel,
-      moveLabel: destinationFolderPopupOptions?.moveLabel,
-      hiddenFilesSwitcherLabel:
-        destinationFolderPopupOptions?.hiddenFilesSwitcherLabel,
+      header: destinationFolderTitle,
+      onCreateFolder,
+      onCreateFolderValidate,
+      folderCreationValidationMessages,
     },
 
     currentPath,
@@ -452,9 +542,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     toggleTreeCollapse,
     setIsTreeCollapsed,
 
-    selectedIds,
+    selectedPaths: effectiveSelectedPaths,
     selectedFiles,
-    setSelectedFiles,
+    setSelectedPaths,
     clearSelection,
 
     currentFolder,
@@ -478,6 +568,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,
     onRenameValidate: renameValidateHandler,
+    getDisplayName,
 
     openDeleteConfirmation,
     closeDeleteConfirmation,
@@ -523,6 +614,35 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+
+    uploadConflictingFiles,
+    uploadConflictResolutionOpen,
+    closeUploadConflictResolution,
+    handleUploadConflictReplace,
+    handleUploadConflictDuplicate,
+    handleUploadConflictDecideForEach,
+
+    fileMetadataPopupOptions,
+    isMetadataPopupOpen,
+    selectedFileForMetadata,
+    openMetadataPopup,
+    closeMetadataPopup: handleCloseMetadataPopup,
+    onGetInfo,
+
+    onUnshareFile,
+
+    actionsRef,
+    sharedByMePaths,
+
+    onSearchFiles,
+    searchInProgress,
+    searchResults,
+    clearSearchResults,
+    isSearchMode,
+
+    emptyStateIcon,
+    emptyStateTitle,
+    emptyStateDescription,
   };
 
   return (

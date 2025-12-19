@@ -34,7 +34,7 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
   test('creates hrefs via `makeHref` and invokes `onItemClick` with href (click a non-last segment)', () => {
     const onItemClick = vi.fn();
     const makeHref = (segments: string[], index: number) =>
-      '/' + segments.slice(0, index + 1).join('/');
+      segments.slice(0, index + 1).join('/');
 
     render(
       <DialFileManagerNavigationPanel
@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     const deptLink = screen.getByRole('link', { name: 'Dept' });
     fireEvent.click(deptLink);
     expect(onItemClick).toHaveBeenCalledTimes(1);
-    expect(onItemClick).toHaveBeenCalledWith('/Org/Dept');
+    expect(onItemClick).toHaveBeenCalledWith('Org/Dept');
   });
 
   test('renders search when `searchable` is true and reflects controlled value', () => {
@@ -107,5 +107,43 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
       screen.getByRole('navigation', { name: 'Breadcrumb' }),
     ).toBeInTheDocument();
     expect(screen.getByText('/')).toBeInTheDocument();
+  });
+
+  test('search container has small width initially in compact view', () => {
+    render(
+      <DialFileManagerNavigationPanel path="Root" isCompactView searchable />,
+    );
+    const searchContainer = screen.getByRole('search');
+    expect(searchContainer).toHaveClass('w-[38px]');
+  });
+
+  test('search container expands to full width when clicked in compact view', () => {
+    render(
+      <DialFileManagerNavigationPanel path="Root" isCompactView searchable />,
+    );
+    const searchContainer = screen.getByRole('search');
+
+    fireEvent.click(searchContainer);
+    expect(searchContainer).toHaveClass('w-full');
+  });
+
+  test('renders back button instead of breadcrumb when compact view & search expanded', () => {
+    render(
+      <DialFileManagerNavigationPanel
+        path="Root/Folder"
+        isCompactView
+        searchable
+      />,
+    );
+    const searchContainer = screen.getByRole('search');
+
+    fireEvent.click(searchContainer);
+
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+    const backButton = screen.getByRole('button');
+    expect(backButton).toBeInTheDocument();
+
+    fireEvent.click(backButton);
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 });

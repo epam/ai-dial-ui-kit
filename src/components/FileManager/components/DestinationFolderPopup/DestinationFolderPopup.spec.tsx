@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
@@ -36,7 +36,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -56,7 +56,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -77,7 +77,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -98,7 +98,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -120,7 +120,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -144,7 +144,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -167,7 +167,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -191,7 +191,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -212,7 +212,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -234,7 +234,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -255,7 +255,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -275,7 +275,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -303,7 +303,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -324,7 +324,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
@@ -352,12 +352,98 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
 
     expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+  });
+
+  test('renders custom copy header when getCopyHeader is provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        header="Copying 2 items"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Copying 2 items')).toBeInTheDocument();
+  });
+
+  test('renders custom move header when getMoveHeader is provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        header="Moving 2 items: Documents"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Moving 2 items: Documents')).toBeInTheDocument();
+  });
+
+  test('renders default copy header when getCopyHeader is not provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Copy to')).toBeInTheDocument();
+  });
+
+  test('renders default move header when getMoveHeader is not provided', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Move to')).toBeInTheDocument();
   });
 
   test('collapses tree and expands root path by default', () => {
@@ -372,11 +458,111 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
           path: '/',
           folderId: 'root-folder',
           nodeType: DialFileNodeType.FOLDER,
-          breadcrumbLabel: 'Root',
+          label: 'Root',
         }}
       />,
     );
 
     expect(screen.getByText('Documents')).toBeInTheDocument();
+  });
+
+  test('clicking Add folder inserts a new placeholder folder entry', async () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        emptyStateTitle="Empty folder"
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Empty folder')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /add folder/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Empty folder')).not.toBeInTheDocument();
+      expect(screen.getAllByRole('row').length).toBeGreaterThan(0);
+    });
+  });
+
+  test('disables button when destination matches source folder', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Documents"
+      />,
+    );
+
+    const moveButton = screen.getByRole('button', { name: 'Move' });
+    expect(moveButton).toBeDisabled();
+  });
+
+  test('enables button when destination differs from source folder', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Photos"
+      />,
+    );
+
+    const moveButton = screen.getByRole('button', { name: 'Move' });
+    expect(moveButton).not.toBeDisabled();
+  });
+
+  test('displays tooltip when button is disabled', async () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Documents"
+        disabledPathTooltip="Cannot copy to the same location"
+      />,
+    );
+
+    const copyButton = screen.getByRole('button', { name: 'Copy' });
+    expect(copyButton).toBeDisabled();
   });
 });

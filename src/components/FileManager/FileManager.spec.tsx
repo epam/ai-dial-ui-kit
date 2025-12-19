@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DialFileManager } from './FileManager';
 import { itemsMock } from './__mocks__/files';
+import type { DialFileManagerActionsRef } from '@/models/file-manager';
 
 interface GridRowLike {
   name?: string;
@@ -65,7 +66,11 @@ vi.mock('@/components/Grid/Grid', () => {
     });
 
     return (
-      <div className={className} data-testid="dial-grid-mock">
+      <div
+        className={className}
+        role={'grid'}
+        aria-label="File Manager Grid View"
+      >
         <table role="table">
           {!filtersDisabled && (
             <thead>
@@ -176,14 +181,14 @@ describe('Dial UI Kit :: FileManager', () => {
     renderWithinSizedShell(
       <DialFileManager
         items={itemsMock}
-        path="/All files/Design/Icons/SVG/24px"
+        defaultPath="/All files/Design/Icons/SVG/24px"
         treeOptions={{
           expandedPaths: new Set([
-            '/All files',
-            '/All files/Design',
-            '/All files/Design/Icons',
-            '/All files/Design/Icons/SVG',
-            '/All files/Design/Icons/SVG/24px',
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
           ]),
           showFiles: true,
         }}
@@ -202,9 +207,9 @@ describe('Dial UI Kit :: FileManager', () => {
     renderWithinSizedShell(
       <DialFileManager
         items={itemsMock}
-        path="/All files"
+        defaultPath="All files"
         treeOptions={{
-          expandedPaths: new Set(['/All files', '/All files/Media']),
+          expandedPaths: new Set(['All files', 'All files/Media']),
           showFiles: true,
         }}
       />,
@@ -236,5 +241,81 @@ describe('Dial UI Kit :: FileManager', () => {
     const grid = await waitForGridTable();
     const textboxesInsideGrid = within(grid).queryAllByRole('textbox');
     expect(textboxesInsideGrid.length).toBe(0);
+  });
+
+  test('actionsRef.createFolder adds a new row to the grid', async () => {
+    const actionsRef = React.createRef<DialFileManagerActionsRef>();
+
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        path="/All files"
+        actionsRef={actionsRef}
+        treeOptions={{
+          expandedPaths: new Set(['/All files']),
+          showFiles: true,
+        }}
+      />,
+    );
+
+    const rowsBefore = screen.getAllByRole('row').length;
+
+    expect(actionsRef.current).not.toBeNull();
+    expect(typeof actionsRef.current?.createFolder).toBe('function');
+    actionsRef.current?.createFolder();
+
+    await waitFor(() => {
+      const rowsAfter = screen.getAllByRole('row').length;
+      expect(rowsAfter).toBe(rowsBefore + 1);
+    });
+  });
+
+  test('shows My Files empty state when My Files tab active', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={[]}
+        toolbarOptions={{
+          tabs: [
+            { id: 'my_files', label: 'My Files' },
+            { id: 'shared', label: 'Shared with Me' },
+            { id: 'organization', label: 'Organization' },
+          ],
+          activeTab: 'my_files',
+        }}
+      />,
+    );
+
+    expect(screen.getByText("You don't have any files")).toBeInTheDocument();
+    expect(
+      screen.getByText('Upload or drag and drop files'),
+    ).toBeInTheDocument();
+  });
+
+  test('custom title + description override default empty state for active tab', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={[]}
+        emptyStateTitle="Custom title goes here"
+        emptyStateDescription="Custom description text"
+        toolbarOptions={{
+          tabs: [
+            { id: 'my_files', label: 'My Files' },
+            { id: 'shared', label: 'Shared with Me' },
+            { id: 'organization', label: 'Organization' },
+          ],
+          activeTab: 'my_files',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Custom title goes here')).toBeInTheDocument();
+    expect(screen.getByText('Custom description text')).toBeInTheDocument();
+
+    expect(
+      screen.queryByText("You don't have any files"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Upload or drag and drop files'),
+    ).not.toBeInTheDocument();
   });
 });

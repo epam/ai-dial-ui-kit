@@ -7,6 +7,7 @@ export interface UseGridSelectionProps<T extends object> {
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   rowData?: T[];
   getRowId: (row: T) => string;
+  disabledRowIds?: Set<string>;
 }
 
 export const useGridSelection = <T extends object>({
@@ -16,6 +17,7 @@ export const useGridSelection = <T extends object>({
   onSelectionChangeWithMap,
   rowData = [],
   getRowId,
+  disabledRowIds,
 }: UseGridSelectionProps<T>) => {
   const [internalSelectedRows, setInternalSelectedRows] = useState<
     Map<string, T>
@@ -27,6 +29,16 @@ export const useGridSelection = <T extends object>({
     [currentSelectedRows],
   );
 
+  const isRowDisabled = useCallback(
+    (row: T) => disabledRowIds?.has(getRowId(row)) ?? false,
+    [disabledRowIds, getRowId],
+  );
+
+  const enabledRows = useMemo(
+    () => rowData.filter((row) => !isRowDisabled(row)),
+    [rowData, isRowDisabled],
+  );
+
   const isControlled =
     selectedRowIds !== undefined || selectedRows !== undefined;
 
@@ -35,7 +47,7 @@ export const useGridSelection = <T extends object>({
       const newMap = new Map<string, T>();
       rowData.forEach((row) => {
         const id = getRowId(row);
-        if (selectedRowIds.has(id)) {
+        if (selectedRowIds.has(id) && !disabledRowIds?.has(id)) {
           newMap.set(id, row);
         }
       });
@@ -48,11 +60,23 @@ export const useGridSelection = <T extends object>({
         setInternalSelectedRows(newMap);
       }
     }
-  }, [selectedRowIds, selectedRows, rowData, getRowId, internalSelectedRows]);
+  }, [
+    selectedRowIds,
+    selectedRows,
+    rowData,
+    getRowId,
+    disabledRowIds,
+    internalSelectedRows,
+  ]);
 
   const handleSelectionToggle = useCallback(
     (row: T, checked: boolean) => {
       const rowId = getRowId(row);
+
+      if (disabledRowIds?.has(rowId)) {
+        return;
+      }
+
       const newMap = new Map(currentSelectedRows);
 
       if (checked) {
@@ -65,19 +89,16 @@ export const useGridSelection = <T extends object>({
         setInternalSelectedRows(newMap);
       }
 
-      if (onSelectionChangeWithMap) {
-        onSelectionChangeWithMap(newMap);
-      }
+      onSelectionChangeWithMap?.(newMap);
 
       if (onSelectionChange) {
-        const ids = new Set(newMap.keys());
-        const rows = Array.from(newMap.values());
-        onSelectionChange(ids, rows);
+        onSelectionChange(new Set(newMap.keys()), Array.from(newMap.values()));
       }
     },
     [
       currentSelectedRows,
       getRowId,
+      disabledRowIds,
       isControlled,
       onSelectionChange,
       onSelectionChangeWithMap,
@@ -85,25 +106,25 @@ export const useGridSelection = <T extends object>({
   );
 
   const headerCheckboxState = useMemo(() => {
-    if (!rowData.length) return 'unchecked';
-    const allSelected = rowData.every((row) =>
-      currentSelectedIds.has(getRowId(row)),
-    );
-    const someSelected = rowData.some((row) =>
-      currentSelectedIds.has(getRowId(row)),
-    );
+    if (!enabledRows.length) return 'unchecked';
 
-    if (allSelected) return 'checked';
-    if (someSelected) return 'indeterminate';
-    return 'unchecked';
-  }, [rowData, currentSelectedIds, getRowId]);
+    const enabledIds = enabledRows.map(getRowId);
+
+    const selectedEnabledCount = enabledIds.filter((id) =>
+      currentSelectedIds.has(id),
+    ).length;
+
+    if (selectedEnabledCount === 0) return 'unchecked';
+    if (selectedEnabledCount === enabledIds.length) return 'checked';
+    return 'indeterminate';
+  }, [enabledRows, currentSelectedIds, getRowId]);
 
   const handleHeaderCheckboxChange = useCallback(
     (checked?: boolean) => {
       const newMap = new Map<string, T>();
 
       if (checked) {
-        rowData.forEach((row) => {
+        enabledRows.forEach((row) => {
           const id = getRowId(row);
           newMap.set(id, row);
         });
@@ -124,7 +145,7 @@ export const useGridSelection = <T extends object>({
       }
     },
     [
-      rowData,
+      enabledRows,
       getRowId,
       isControlled,
       onSelectionChange,

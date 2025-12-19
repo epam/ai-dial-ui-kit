@@ -12,7 +12,7 @@ const ControlledGroup: FC = () => {
         name="plan-group"
         value="basic"
         inputId="plan-basic"
-        title="Basic"
+        label="Basic"
         description="Good for starters"
         checked={selected === 'basic'}
         onChange={() => setSelected('basic')}
@@ -21,7 +21,7 @@ const ControlledGroup: FC = () => {
         name="plan-group"
         value="pro"
         inputId="plan-pro"
-        title="Pro"
+        label="Pro"
         description="Advanced features and support"
         checked={selected === 'pro'}
         onChange={() => setSelected('pro')}
@@ -56,7 +56,7 @@ const ManyOptionsGroup: FC = () => {
           name="plans-many"
           value={o.value}
           inputId={`plans-many-${o.value}`}
-          title={o.title}
+          label={o.title}
           description={o.description}
           checked={value === o.value}
           onChange={() => setValue(o.value)}
@@ -74,7 +74,7 @@ const meta = {
   argTypes: {
     name: { control: { type: 'text' } },
     value: { control: { type: 'text' } },
-    title: { control: { type: 'text' } },
+    label: { control: { type: 'text' } },
     description: { control: { type: 'text' } },
     inputId: { control: { type: 'text' } },
     checked: { control: { type: 'boolean' } },
@@ -87,7 +87,7 @@ const meta = {
     name: 'plan',
     value: 'basic',
     inputId: 'radio-basic',
-    title: 'Basic plan',
+    label: 'Basic plan',
     checked: false,
     disabled: false,
   },
@@ -109,7 +109,7 @@ export const Disabled: Story = { args: { disabled: true } };
 
 export const WithoutLabel: Story = {
   args: {
-    title: undefined,
+    label: undefined,
     checked: true,
     description: 'No label, description still visible when checked.',
   },
@@ -117,7 +117,7 @@ export const WithoutLabel: Story = {
 
 export const LongLabelAndDescription: Story = {
   args: {
-    title:
+    label:
       'A very long label that should wrap onto multiple lines to demonstrate text wrapping behavior in the radio label',
     checked: true,
     descriptionClassName: 'text-secondary',
@@ -137,7 +137,7 @@ export const DisabledChecked: Story = {
   args: {
     disabled: true,
     checked: true,
-    title: 'Disabled & checked',
+    label: 'Disabled & checked',
     description: 'This option is locked by policy.',
   },
 };

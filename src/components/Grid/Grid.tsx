@@ -44,8 +44,10 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   ariaLabel?: string;
   withSelectionColumn?: boolean;
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
+  disabledRowIds?: Set<string>;
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
+  selectionOnHover?: boolean;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
@@ -56,6 +58,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   emptyStateDescription?: string;
   loading?: boolean;
   wrapperBorder?: boolean;
+  withoutHeaderBorders?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -133,7 +136,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [ariaLabel='Data grid'] - Accessible label for the grid region
  * @param [withSelectionColumn=true] - Whether to show the checkbox selection column
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
+ * @param [disabledRowIds] - Set of row IDs that should be disabled. Disabled rows are non-interactive and cannot be selected. IDs must match values from `getRowId`.
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
+ * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
+ * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
@@ -144,6 +150,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  *   providing additional context or instructions (e.g., "No data found" or "Try adjusting your filters").
  * @param [loading=false] - When true, shows AG-Grid's native loading overlay
  * @param [wrapperBorder=true] - Whether to apply a border around the grid container
+ * @param [withoutHeaderBorders=false] - Whether to hide the header row borders
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -154,8 +161,10 @@ export const DialGrid = <T extends object>({
   ariaLabel = 'Data grid',
   withSelectionColumn = true,
   wrapCustomCellRenderers = true,
+  disabledRowIds,
   selectedRowIds,
   selectedRows,
+  selectionOnHover = true,
   onSelectionChange,
   onSelectionChangeWithMap,
   getRowId = (row: T) =>
@@ -167,6 +176,7 @@ export const DialGrid = <T extends object>({
   emptyStateDescription = "Sorry, we couldn't find any results for your search.",
   loading = false,
   wrapperBorder = true,
+  withoutHeaderBorders = false,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -185,6 +195,7 @@ export const DialGrid = <T extends object>({
     onSelectionChangeWithMap,
     rowData,
     getRowId,
+    disabledRowIds,
   });
 
   const themeParams = useMemo(
@@ -205,12 +216,16 @@ export const DialGrid = <T extends object>({
 
   const getRowClass = useCallback(
     (params: RowClassParams<T>) => {
-      if (params.data) {
-        const rowId = getRowId(params.data);
-        return currentSelectedIds.has(rowId) ? 'ag-row-selected' : '';
-      }
+      if (!params.data) return '';
+
+      const rowId = getRowId(params.data);
+
+      return classNames({
+        'ag-row-selected': currentSelectedIds.has(rowId),
+        'opacity-50': disabledRowIds?.has(rowId),
+      });
     },
-    [currentSelectedIds, getRowId],
+    [currentSelectedIds, disabledRowIds, getRowId],
   );
 
   const renderHeaderSelectCell = useCallback(() => {
@@ -218,25 +233,43 @@ export const DialGrid = <T extends object>({
     const indeterminate = headerCheckboxState === 'indeterminate';
     const checkboxId = 'header-select-all';
 
+    const hasEnabledRows =
+      rowData?.some((row) => !disabledRowIds?.has(getRowId(row))) ?? false;
+
     return (
       <div className="flex items-center justify-center h-full header-checkbox-container">
         <DialCheckbox
           id={checkboxId}
           ariaLabel="Select all rows"
           checked={checked}
+          disabled={!hasEnabledRows}
+          aria-disabled={!hasEnabledRows}
           indeterminate={indeterminate}
-          className={`dial-header-select ${headerCheckboxState}`}
+          className={classNames(
+            `dial-header-select ${headerCheckboxState}`,
+            !selectionOnHover && 'dial-header-select-visible',
+          )}
           onChange={handleHeaderCheckboxChange}
         />
       </div>
     );
-  }, [headerCheckboxState, handleHeaderCheckboxChange]);
+  }, [
+    headerCheckboxState,
+    rowData,
+    selectionOnHover,
+    handleHeaderCheckboxChange,
+    disabledRowIds,
+    getRowId,
+  ]);
 
   const renderDataCell = useCallback(
     (p: ICellRendererParams<T, unknown>) => {
       if (p.data) {
-        const items = getContextMenuItems?.(p.data) ?? [];
+        const rowId = getRowId(p.data);
+        const disabled = disabledRowIds?.has(rowId);
         const valueText = p.value == null ? '' : String(p.value);
+        const items = getContextMenuItems?.(p.data) ?? [];
+
         return (
           <DialDropdown
             trigger={[DropdownTrigger.ContextMenu]}
@@ -244,6 +277,7 @@ export const DialGrid = <T extends object>({
             anchorToMouse
             matchReferenceWidth
             className="w-full"
+            disabled={disabled}
           >
             <span className="block min-w-0 h-full max-w-full">
               <DialEllipsisTooltip
@@ -255,34 +289,47 @@ export const DialGrid = <T extends object>({
         );
       }
     },
-    [getContextMenuItems],
+    [getContextMenuItems, disabledRowIds, getRowId],
   );
 
   const renderSelectCell = useCallback(
     (p: ICellRendererParams<T, unknown>) => {
       if (!p.data) return null;
+
       const rowId = getRowId(p.data);
       const checked = currentSelectedIds.has(rowId);
+      const disabled = disabledRowIds?.has(rowId);
       const checkboxId = `row-select-${rowId}`;
 
       return (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center size-full">
           <DialCheckbox
             key={`${rowId}-${checked}`}
             id={checkboxId}
             ariaLabel="Select row"
             checked={checked}
-            className="dial-row-select"
+            disabled={disabled}
+            aria-disabled={disabled}
+            className={classNames(
+              'dial-row-select',
+              !selectionOnHover && 'dial-row-select-visible',
+              disabled && 'opacity-50 cursor-not-allowed',
+            )}
             onChange={(next) => {
-              if (p.data) {
-                handleSelectionToggle(p.data, !!next);
-              }
+              if (disabled || !p.data) return;
+              handleSelectionToggle(p.data, !!next);
             }}
           />
         </div>
       );
     },
-    [currentSelectedIds, getRowId, handleSelectionToggle],
+    [
+      currentSelectedIds,
+      disabledRowIds,
+      getRowId,
+      handleSelectionToggle,
+      selectionOnHover,
+    ],
   );
 
   const wrapRendererIfNeeded = useCallback(
@@ -313,6 +360,9 @@ export const DialGrid = <T extends object>({
           content = renderDataCell(p);
         }
 
+        const rowId = p.data ? getRowId(p.data) : null;
+        const disabled = rowId ? disabledRowIds?.has(rowId) : false;
+
         return (
           <DialDropdown
             trigger={[DropdownTrigger.ContextMenu]}
@@ -320,6 +370,7 @@ export const DialGrid = <T extends object>({
             anchorToMouse
             matchReferenceWidth
             className="w-full h-full"
+            disabled={disabled}
           >
             <span className="block min-w-0 max-w-full flex-1">{content}</span>
           </DialDropdown>
@@ -328,23 +379,27 @@ export const DialGrid = <T extends object>({
 
       return { ...col, cellRenderer: Wrapped };
     },
-    [getContextMenuItems, renderDataCell, wrapCustomCellRenderers],
+    [
+      disabledRowIds,
+      getContextMenuItems,
+      getRowId,
+      renderDataCell,
+      wrapCustomCellRenderers,
+    ],
   );
 
   const selectCol: ColDef<T> = useMemo(
     () => ({
       colId: '__select',
       headerName: '',
-      width: 40,
-      minWidth: 40,
+      width: 44,
+      minWidth: 44,
       suppressSizeToFit: true,
       lockPosition: true,
       sortable: false,
       resizable: false,
       filter: false,
       floatingFilter: false,
-      suppressMenu: true,
-      borderless: true,
       cellRenderer: renderSelectCell,
       headerComponent: renderHeaderSelectCell,
     }),
@@ -419,6 +474,7 @@ export const DialGrid = <T extends object>({
         gridBaseClassName,
         className,
         withSelectionColumn && 'with-selection-column',
+        withoutHeaderBorders && 'dial-without-header-borders',
       )}
       aria-label={ariaLabel}
       role="region"

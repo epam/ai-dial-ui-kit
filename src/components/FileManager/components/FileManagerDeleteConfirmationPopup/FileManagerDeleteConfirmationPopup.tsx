@@ -10,7 +10,7 @@ export interface FileManagerDeleteConfirmationPopupProps {
   onConfirm: () => void;
   cancelLabel?: string;
   confirmLabel?: string;
-  titleRenderer?: (fileNames: string[]) => ReactNode | string;
+  titleRenderer?: (fileNames: string[]) => ReactNode;
   contentRenderer?: (fileNames: string[]) => ReactNode;
 }
 
@@ -50,13 +50,15 @@ export const FileManagerDeleteConfirmationPopup: FC<
         {itemsToDelete.length === 1 ? (
           <>
             Do you want to delete file or folder{' '}
-            <span className="text-primary">"{itemsToDelete[0].name}"</span>?
+            <span className="text-primary break-all">
+              "{itemsToDelete[0].name}"
+            </span>
+            ?
           </>
         ) : (
           <>
             Do you want to delete the following{' '}
-            <span className="text-primary">{itemsToDelete.length}</span> item
-            {itemsToDelete.length !== 1 ? 's' : ''}?
+            <span className="text-primary">{itemsToDelete.length}</span> items?
           </>
         )}
       </p>
@@ -94,7 +96,7 @@ export const FileManagerDeleteConfirmationPopup: FC<
   return (
     <DialConfirmationPopup
       open={open}
-      title={title}
+      header={title}
       confirmLabel={confirmLabel}
       cancelLabel={cancelLabel}
       variant={ConfirmationPopupVariant.Danger}
