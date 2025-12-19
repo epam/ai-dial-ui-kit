@@ -94,11 +94,10 @@ const buttonsTextColors = {
   'controls-outlined': 'var(--controls-text-outlined, #FCFCFC)',
   'controls-link-primary-hover':
     'var(--controls-text-link-primary-hover, #3970DA)',
-  'controls-disable': 'var(--controls-text-disable, #5B6570)',
+  'controls-disable': 'var(--controls-disable, #5B6570)',
 
   // TODO: old names, need to remove
   'controls-primary': 'var(--controls-primary, #FCFCFC)',
-  'controls-disable': 'var(--controls-disable, #333942)',
 };
 
 /** @type {import('tailwindcss').Config} */
