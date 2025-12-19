@@ -1,30 +1,74 @@
 .dial-base-button {
-  @apply flex flex-row items-center px-3 py-2;
+  @apply flex flex-row items-center px-3 gap-x-2;
+  @apply min-h-[40px] min-w-[38px];
   @apply rounded border border-solid border-transparent;
-  @apply dial-small-medium;
+  @apply dial-small-text;
 
-  min-width: 38px;
-  min-height: 38px;
+  &-small {
+    @apply px-2 h-[24px];
+  }
+  &:focus {
+    @apply border-focus;
+  }
 }
 
 .dial-base-button-disable {
-  @apply cursor-not-allowed text-controls-disable bg-controls-disable;
+  @apply cursor-not-allowed;
 }
 
-.dial-primary-button {
-  @apply dial-base-button bg-controls-accent text-controls-primary;
+.dial-primary-solid-button {
+  @apply dial-base-button bg-controls-solid-primary text-controls-solid;
 
   &:hover,
   &:focus {
-    @apply bg-controls-accent-hover;
+    @apply bg-controls-solid-primary-hover;
   }
 
+  &:disabled {
+    @apply dial-base-button-disable text-controls-solid-disable bg-controls-solid-disable;
+  }
+}
+
+.dial-neutral-outlined-button {
+  @apply dial-base-button bg-transparent border-primary text-controls-solid;
+
+  &:hover,
   &:focus {
-    @apply border-hover;
+    @apply bg-controls-outlined-neutral-hover;
   }
 
   &:disabled {
     @apply dial-base-button-disable;
+  }
+
+  &:disabled {
+    @apply dial-base-button-disable text-controls-disable;
+  }
+}
+
+.dial-primary-ghost-button {
+  @apply dial-base-button bg-transparent text-accent-primary;
+
+  &:hover,
+  &:focus {
+    @apply bg-accent-primary-alpha;
+  }
+
+  &:disabled {
+    @apply dial-base-button-disable text-controls-disable;
+  }
+}
+
+.dial-primary-link-button {
+  @apply dial-base-button bg-transparent text-accent-primary px-2 h-[24px];
+
+  &:hover,
+  &:focus {
+    @apply bg-controls-link-primary-hover;
+  }
+F
+  &:disabled {
+    @apply dial-base-button-disable text-controls-disable;
   }
 }
 
@@ -64,7 +108,7 @@
   }
 }
 
-.dial-danger-button {
+.dial-error-button {
   @apply dial-base-button bg-red-400 text-primary;
 
   &:hover,

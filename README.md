@@ -244,7 +244,7 @@ export default function Home() {
       <DialButton
         onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
         label="Click me"
-        className="dial-primary-button"
+        className="dial-primary-solid-button"
       />
     </div>
   );
