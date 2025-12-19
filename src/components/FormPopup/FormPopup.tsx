@@ -1,9 +1,11 @@
 import { useCallback, type FC, type ReactNode } from 'react';
 
-import { DialButton } from '@/components/Button/Button';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/Buttons';
 import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import { DialLoader } from '@/components/Loader/Loader';
-import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 
 import {
@@ -73,13 +75,11 @@ export const DialFormPopup: FC<DialFormPopupProps> = ({
 }) => {
   const defaultFooter = !isLoading ? (
     <div className={actionsBaseClassName}>
-      <DialButton
-        variant={ButtonVariant.Secondary}
+      <DialNeutralButton
         label={cancelLabel}
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
-      <DialButton
-        variant={ButtonVariant.Primary}
+      <DialPrimaryButton
         className={submitClassName}
         label={submitLabel}
         disabled={disableSubmitButton}

@@ -23,7 +23,6 @@ const backgroundsColors = {
 
   // TODO: need review and change names
   'red-400': 'var(--bg-red-400, #F76464)',
-  'red-800': 'var(--bg-red-800, #AE2F2F)',
   'orange-400': 'var(--bg-orange-400, #D97C27)',
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };

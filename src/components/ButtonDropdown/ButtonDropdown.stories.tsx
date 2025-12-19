@@ -97,7 +97,7 @@ export const AllVariants: Story = {
       <div className="flex flex-row items-center">
         <div className="text-primary pr-4 py-2">Default</div>
         <DialButtonDropdown
-          title={'Actions'}
+          title="Actions"
           variant={ButtonVariant.Secondary}
           items={dropdownItems}
         />
@@ -106,7 +106,7 @@ export const AllVariants: Story = {
       <div className="flex flex-row items-center">
         <div className="text-primary pr-4 py-2">Long names</div>
         <DialButtonDropdown
-          title={'Actions'}
+          title="Actions"
           variant={ButtonVariant.Secondary}
           items={longDropdownItems}
         />

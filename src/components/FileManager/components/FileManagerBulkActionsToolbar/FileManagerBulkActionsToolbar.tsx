@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { DialButton } from '@/components/Button/Button';
+import { DialNeutralButton } from '@/components/Button/Buttons';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
@@ -90,11 +91,10 @@ export const DialFileManagerBulkActionsToolbar: FC<
         className="absolute top-0 left-0 invisible pointer-events-none overflow-hidden whitespace-nowrap flex gap-3"
       >
         {actions.map(({ key, icon, title }) => (
-          <DialButton
+          <DialNeutralButton
             key={key}
             iconBefore={icon}
             label={title}
-            variant={ButtonVariant.Secondary}
             hideTitleOnMobile
           />
         ))}
@@ -137,12 +137,11 @@ export const DialFileManagerBulkActionsToolbar: FC<
           )}
 
           {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
-            <DialButton
+            <DialNeutralButton
               className="!p-[9px]"
               key={key}
               iconBefore={icon}
               label={title}
-              variant={ButtonVariant.Secondary}
               hideTitleOnMobile
               disabled={disabled}
               onClick={(domEvent) => onClick?.({ key, domEvent })}

@@ -1,13 +1,12 @@
+import { DialPrimaryButton } from '@/components/Button/Button';
+import { itemsMock } from '@/components/FileManager/__mocks__/files';
+import { DialFileNodeType } from '@/models/file';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import {
   DestinationFolderPopup,
   type DestinationFolderPopupProps,
 } from './DestinationFolderPopup';
-import { DialFileNodeType } from '@/models/file';
-import { itemsMock } from '@/components/FileManager/__mocks__/files';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
 
 const StoryWrapper = (args: DestinationFolderPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +19,9 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Open Destination Folder Popup"
-          variant={ButtonVariant.Primary}
         />
       )}
 

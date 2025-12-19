@@ -5,6 +5,10 @@ import type { DropdownItem } from '@/models/dropdown';
 import type { ColDef } from 'ag-grid-community';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialButton } from '@/components/Button/Button';
+import {
+  DialPrimaryButton,
+  DialNeutralButton,
+} from '@/components/Button/Buttons';
 import { ButtonVariant } from '@/types/button';
 import { DropdownItemType } from '@/types/dropdown';
 import {
@@ -259,13 +263,11 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
             onClick={() => setSelectedIds(new Set(['2']))}
             label="Select row 2"
           />
-          <DialButton
-            variant={ButtonVariant.Secondary}
+          <DialNeutralButton
             onClick={() => setSelectedIds(new Set())}
             label="Clear selection"
           />
-          <DialButton
-            variant={ButtonVariant.Primary}
+          <DialPrimaryButton
             onClick={() => setSelectedIds(new Set(['1', '2', '3']))}
             label="Select all"
           />

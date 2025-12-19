@@ -9,7 +9,7 @@ import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
 import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { ButtonVariant } from '@/types/button';
-import { DialButton } from '@/components/Button/Button';
+import { DialPrimaryButton } from '@/components/Button/Button';
 import { DialPopup } from '@/components/Popup/Popup';
 import {
   DialFileNodeType,
@@ -270,10 +270,9 @@ const PopupComponent = (args: DialFileManagerProps) => {
 
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
-      <DialButton
-        onClick={() => setIsOpen(!isOpen)}
-        variant={ButtonVariant.Primary}
+      <DialPrimaryButton
         label="Toggle File Manager"
+        onClick={() => setIsOpen(!isOpen)}
       />
       <DialPopup
         open={isOpen}
@@ -444,9 +443,8 @@ const TreeCollapsedControlledComponent = (args: DialFileManagerProps) => {
   return (
     <div className="h-[640px] flex flex-col gap-4">
       <div className="flex gap-2 items-center p-4">
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsCollapsed(!isCollapsed)}
-          variant={ButtonVariant.Primary}
           label={isCollapsed ? 'Expand Tree' : 'Collapse Tree'}
         />
       </div>
@@ -941,10 +939,9 @@ const WithFileMetadataInPopupComponent = (args: DialFileManagerProps) => {
 
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
-      <DialButton
-        onClick={() => setIsOpen(!isOpen)}
-        variant={ButtonVariant.Primary}
+      <DialPrimaryButton
         label="Toggle File Manager"
+        onClick={() => setIsOpen(!isOpen)}
       />
       <DialPopup
         open={isOpen}
@@ -1182,10 +1179,9 @@ const WithSearchInPopupComponent = (args: DialFileManagerProps) => {
 
   return (
     <div className="h-[640px] w-full flex items-center justify-center">
-      <DialButton
-        onClick={() => setIsOpen(!isOpen)}
-        variant={ButtonVariant.Primary}
+      <DialPrimaryButton
         label="Toggle File Manager with Search"
+        onClick={() => setIsOpen(!isOpen)}
       />
       <DialPopup
         open={isOpen}

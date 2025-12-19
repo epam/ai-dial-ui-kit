@@ -1,9 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FileMetadataPopup } from './FileMetadataPopup';
-import { useState, type FC, type ReactNode } from 'react';
-import { DialButton } from '@/components/Button/Button';
+import { DialPrimaryButton } from '@/components/Button/Buttons';
 import { DialFileNodeType, type DialFile } from '@/models/file';
-import { ButtonVariant } from '@/types/button';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState, type FC, type ReactNode } from 'react';
+import { FileMetadataPopup } from './FileMetadataPopup';
 
 const meta: Meta<typeof FileMetadataPopup> = {
   title: 'FileManager/components/FileMetadataPopup',
@@ -44,10 +43,9 @@ const StoryWrapper: FC<{
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show File Information"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -100,11 +98,7 @@ const LoadingThenDataComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
-          onClick={handleOpen}
-          label="Show File Information"
-          variant={ButtonVariant.Primary}
-        />
+        <DialPrimaryButton onClick={handleOpen} label="Show File Information" />
       )}
       <FileMetadataPopup
         open={isOpen}
@@ -146,10 +140,9 @@ const SmallFileComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show Small File Info"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -191,10 +184,9 @@ const LargeFileComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show Large File Info"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -235,10 +227,9 @@ const NoAuthorComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show File Without Author"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -280,10 +271,9 @@ const EncodedPathComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show File with Encoded Path"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -325,10 +315,9 @@ const SpecialCharactersPathComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show File with Special Characters"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -358,10 +347,9 @@ const CustomLabelsComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show Custom Labels"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -396,10 +384,9 @@ const NoFileDataComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show Empty Popup"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup
@@ -444,10 +431,9 @@ const RealisticLoadingComponent: FC = () => {
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={simulateFileLoad}
           label="Load File Information"
-          variant={ButtonVariant.Primary}
         />
       )}
       <FileMetadataPopup

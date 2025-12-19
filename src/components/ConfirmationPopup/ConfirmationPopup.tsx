@@ -12,8 +12,8 @@ import {
 } from './constants';
 import { DialLoader } from '@/components/Loader/Loader';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
-import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
+import { DialNeutralButton } from '@/components/Button/Buttons';
 
 export interface DialConfirmationPopupProps extends DialPopupProps {
   description?: ReactNode;
@@ -87,8 +87,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
 }) => {
   const defaultFooter = !isLoading ? (
     <div className={actionsBaseClassName}>
-      <DialButton
-        variant={ButtonVariant.Secondary}
+      <DialNeutralButton
         label={cancelLabel}
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />

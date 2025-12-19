@@ -1,3 +1,5 @@
+import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { ButtonAppearance } from '@/types/button';
 import classNames from 'classnames';
 import {
   useCallback,
@@ -13,9 +15,7 @@ import {
 import type { DropTargetMonitor } from 'react-dnd';
 import { useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialPrimaryButton } from '@/components/Button/Buttons';
 
 export interface DialEmptyFileAreaProps {
   emptyTextFirstLine?: string;
@@ -194,8 +194,8 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
             <p className="mb-0.5">{emptyTextSecondLine}</p>
           )}
           {emptyButtonLabel && (
-            <DialButton
-              variant={ButtonVariant.Tertiary}
+            <DialPrimaryButton
+              appearance={ButtonAppearance.Ghost}
               label={emptyButtonLabel}
               onClick={() => fileInputRef.current?.click()}
             />

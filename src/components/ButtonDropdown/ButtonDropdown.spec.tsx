@@ -20,7 +20,7 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     );
     const button = screen.getByRole('button', { name: 'Settings' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('dial-primary-button');
+    expect(button).toHaveClass('dial-primary-solid-button');
   });
 
   test('Should display chevron down icon initially', () => {

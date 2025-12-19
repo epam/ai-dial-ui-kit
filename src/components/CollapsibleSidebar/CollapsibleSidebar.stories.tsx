@@ -1,12 +1,12 @@
+import { DialPrimaryButton } from '@/components/Button/Buttons';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { IconSettings } from '@tabler/icons-react';
+import { useState } from 'react';
 import {
   DialCollapsibleSidebar,
   type DialCollapsibleSidebarProps,
 } from './CollapsibleSidebar';
 import { DialButton } from '@/components/Button/Button';
-import { IconSettings } from '@tabler/icons-react';
-import { ButtonVariant } from '@/types/button';
-import { useState } from 'react';
 
 const BarContent = (
   <div className="flex flex-col gap-4">
@@ -14,11 +14,7 @@ const BarContent = (
     <p className="text-secondary">
       You can place any custom content here — text, lists, buttons, etc.
     </p>
-    <DialButton
-      label="Action"
-      className="w-fit"
-      variant={ButtonVariant.Primary}
-    />
+    <DialPrimaryButton label="Action" className="w-fit" />
   </div>
 );
 
