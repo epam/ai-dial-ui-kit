@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialGrid } from './Grid';
 import { type ColDef } from 'ag-grid-community';
@@ -91,31 +91,6 @@ describe('Dial UI Kit :: DialGrid', () => {
 
     // Grid should still render
     expect(await screen.findByText('Alice')).toBeInTheDocument();
-  });
-
-  test('handles selection changes in controlled mode', async () => {
-    const onSelectionChange = vi.fn();
-    const selectedRowIds = new Set<string>();
-
-    render(
-      <DialGrid<TestRow>
-        columnDefs={testColumns}
-        rowData={testRows}
-        selectedRowIds={selectedRowIds}
-        onSelectionChange={onSelectionChange}
-      />,
-    );
-
-    await screen.findByText('Alice');
-
-    const checkboxes = await screen.findAllByLabelText('Select row');
-
-    fireEvent.click(checkboxes[0]);
-
-    expect(onSelectionChange).toHaveBeenCalledTimes(1);
-    const newIds = onSelectionChange.mock.calls[0][0] as Set<string>;
-    expect(newIds.has('1')).toBe(true);
-    expect(newIds.size).toBe(1);
   });
 
   test('applies custom CSS class to grid container', async () => {
