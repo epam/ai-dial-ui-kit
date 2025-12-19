@@ -28,15 +28,22 @@ const backgroundsColors = {
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };
 
-// TODO: review button colors
 const buttonsBgColors = {
+  'controls-solid-primary': 'var(--controls-bg-solid-primary, #3970DA)',
+  'controls-solid-primary-hover':
+    'var(--controls-bg-solid-primary-hover, #215DD0)',
+  'controls-solid-error': 'var(--controls-bg-solid-error, #CC4545)',
+  'controls-solid-error-hover': 'var(--controls-bg-solid-error-hover, #AE2F2F)',
+  'controls-solid-disable': 'var(--controls-bg-solid-disable, #69727C)',
+  'controls-outlined-neutral-hover':
+    'var(--controls-bg-outlined-neutral-hover, #333942)',
+
+  // TODO: old names, need to remove
   'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
   'controls-accent-hover': 'var(--controls-bg-accent-hover, #4878D2)',
   'controls-accent-alpha': 'var(--controls-bg-accent-alpha, #5C8DEA2B)',
-  'controls-secondary': 'var(--controls-secondary, #333942)',
   'controls-disable': 'var(--controls-bg-disable, #7F8792)',
   'controls-enable-primary': 'var(--controls-enable-primary, #FCFCFC)',
-  'controls-enable-secondary': 'var(--controls-enable-secondary, #FCFCFC)',
 };
 
 const borderColors = {
@@ -79,10 +86,16 @@ const placeholderColor = {
   primary: 'var(--text-primary, #F3F4F6)',
 };
 
-// TODO: need review
 const buttonsTextColors = {
+  'controls-solid': 'var(--controls-text-solid, #FCFCFC)',
+  'controls-solid-disable': 'var(--controls-text-solid-disable, #333942)',
+  'controls-outlined': 'var(--controls-text-outlined, #FCFCFC)',
+  'controls-link-primary-hover':
+    'var(--controls-text-link-primary-hover, #3970DA)',
+  'controls-disable': 'var(--controls-text-disable, #5B6570)',
+
+  // TODO: old names, need to remove
   'controls-primary': 'var(--controls-primary, #FCFCFC)',
-  'controls-accent': 'var(--controls-accent, #5c8dea)',
   'controls-disable': 'var(--controls-disable, #333942)',
 };
 
