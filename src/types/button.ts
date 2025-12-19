@@ -11,7 +11,7 @@ export enum ButtonVariant {
   Tertiary = 'tertiary',
 }
 
-export enum ButtonType {
+export enum ButtonAppearance {
   Solid = 'solid',
   Outlined = 'outlined',
   Ghost = 'ghost',

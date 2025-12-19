@@ -238,7 +238,7 @@ export const AllVariants: Story = {
         variant: ButtonVariant.Secondary,
       },
       { key: 'tertiary', label: 'Tertiary', variant: ButtonVariant.Tertiary },
-      { key: 'danger', label: 'Danger', variant: ButtonVariant.Error },
+      { key: 'error', label: 'Error', variant: ButtonVariant.Error },
     ];
 
     const states = [
