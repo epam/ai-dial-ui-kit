@@ -191,12 +191,12 @@ export const AllVariants: Story = {
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Primary Solid</div>
 
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} />
             <DialPrimaryButton {...props} size={ButtonSize.Small} />
           </div>
 
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} disabled />
             <DialPrimaryButton {...props} size={ButtonSize.Small} disabled />
           </div>
@@ -204,11 +204,11 @@ export const AllVariants: Story = {
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Neutral Outlined</div>
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialNeutralButton {...props} />
             <DialNeutralButton {...props} size={ButtonSize.Small} />
           </div>
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialNeutralButton {...props} disabled />
             <DialNeutralButton {...props} size={ButtonSize.Small} disabled />
           </div>
@@ -216,24 +216,33 @@ export const AllVariants: Story = {
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Primary Ghost</div>
-          <DialPrimaryButton
-            label="Button"
-            appearance={ButtonAppearance.Ghost}
-            iconAfter={<IconArrowRight size={20} />}
-            iconBefore={<IconArrowLeft size={20} />}
-          />
-          <DialPrimaryButton
-            label="Button"
-            appearance={ButtonAppearance.Ghost}
-            iconAfter={<IconArrowRight size={20} />}
-            iconBefore={<IconArrowLeft size={20} />}
-            disabled
-          />
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton {...props} appearance={ButtonAppearance.Ghost} />
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Ghost}
+              size={ButtonSize.Small}
+            />
+          </div>
+
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Ghost}
+              disabled
+            />
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Ghost}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Primary Link</div>
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton {...props} appearance={ButtonAppearance.Link} />
             <DialPrimaryButton
               {...props}
@@ -242,7 +251,7 @@ export const AllVariants: Story = {
             />
           </div>
 
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialPrimaryButton
               {...props}
               appearance={ButtonAppearance.Link}
@@ -259,11 +268,11 @@ export const AllVariants: Story = {
 
         <div className="flex flex-col gap-y-6">
           <div className="font-bold mb-2 text-primary">Error Solid</div>
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} />
             <DialErrorButton {...props} size={ButtonSize.Small} disabled />
           </div>
-          <div className="flex flex-row gap-x-6">
+          <div className="flex flex-row gap-x-6 items-center">
             <DialErrorButton {...props} disabled />
             <DialErrorButton {...props} size={ButtonSize.Small} disabled />
           </div>

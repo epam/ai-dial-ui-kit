@@ -8,7 +8,6 @@ import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { DialSelect } from '@/components/Select/Select';
 import { FormItemOrientation } from '@/types/form-item';
 import { dialFormItemBaseArgTypes } from '@/constants/storybook/form-item';
-import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 interface Option {
   label: string;

@@ -78,7 +78,7 @@ export const DialButton: FC<DialButtonProps> = ({
 
   const btnClassName = classNames(
     variant && variantClassMap[variant][appearance],
-    size === ButtonSize.Small && 'dial-button-small',
+    size === ButtonSize.Small ? 'dial-button-small' : 'dial-button-standard',
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
