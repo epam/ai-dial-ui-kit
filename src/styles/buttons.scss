@@ -63,6 +63,10 @@
     @apply bg-accent-primary-alpha;
   }
 
+  &:active {
+    @apply border-accent-primary;
+  }
+
   &:disabled {
     @apply dial-base-button-disable text-controls-disable bg-transparent;
   }

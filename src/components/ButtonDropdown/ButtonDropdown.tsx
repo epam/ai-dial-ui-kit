@@ -4,7 +4,7 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 import type { DropdownItem } from '@/models/dropdown';
 import { buttonChevronDown, buttonChevronUp } from './constants';
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 
 export interface DialButtonDropdownProps extends DialButtonProps {
   items: DropdownItem[];
@@ -22,12 +22,12 @@ export interface DialButtonDropdownProps extends DialButtonProps {
  * />
  * ```
  *
- * @param [title] - The text content of the button
- * @param [variant] - Defines the visual style of the button
+ * Inherits all props from DialButton.
  * @param [items] - DropdownItems with actions
  */
 export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
   variant,
+  appearance,
   ...props
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -47,6 +47,7 @@ export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
           {...props}
           iconAfter={icon}
           variant={variant || ButtonVariant.Primary}
+          appearance={appearance || ButtonAppearance.Solid}
         />
       </DialDropdown>
     </div>

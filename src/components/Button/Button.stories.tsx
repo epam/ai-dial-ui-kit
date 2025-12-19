@@ -34,6 +34,16 @@ const meta = {
       ],
       description: 'Button style variant',
     },
+    appearance: {
+      control: { type: 'select' },
+      options: [
+        ButtonAppearance.Ghost,
+        ButtonAppearance.Link,
+        ButtonAppearance.Solid,
+        ButtonAppearance.Outline,
+      ],
+      description: 'Button appearance',
+    },
     textClassName: {
       control: { type: 'text' },
       description:

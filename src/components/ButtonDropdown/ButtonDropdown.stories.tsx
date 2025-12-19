@@ -3,7 +3,7 @@ import {
   DialButtonDropdown,
   type DialButtonDropdownProps,
 } from './ButtonDropdown';
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 
 const dropdownItems = [
   {
@@ -53,6 +53,16 @@ const meta: Meta<typeof DialButtonDropdown> = {
       ],
       description: 'Button style variant',
     },
+    appearance: {
+      control: { type: 'select' },
+      options: [
+        ButtonAppearance.Ghost,
+        ButtonAppearance.Link,
+        ButtonAppearance.Solid,
+        ButtonAppearance.Outlined,
+      ],
+      description: 'Button appearance',
+    },
 
     title: {
       control: { type: 'text' },
@@ -75,7 +85,8 @@ const Example = (args: DialButtonDropdownProps) => {
 export const Default: Story = {
   args: {
     title: 'Actions',
-    variant: ButtonVariant.Secondary,
+    variant: ButtonVariant.Neutral,
+    appearance: ButtonAppearance.Outlined,
     items: dropdownItems,
   },
   render: Example,
@@ -84,7 +95,8 @@ export const Default: Story = {
 export const DefaultWithLongActions: Story = {
   args: {
     title: 'Actions',
-    variant: ButtonVariant.Secondary,
+    variant: ButtonVariant.Neutral,
+    appearance: ButtonAppearance.Outlined,
     items: longDropdownItems,
   },
   render: Example,
@@ -98,7 +110,8 @@ export const AllVariants: Story = {
         <div className="text-primary pr-4 py-2">Default</div>
         <DialButtonDropdown
           title="Actions"
-          variant={ButtonVariant.Secondary}
+          variant={ButtonVariant.Neutral}
+          appearance={ButtonAppearance.Outlined}
           items={dropdownItems}
         />
       </div>
@@ -107,7 +120,8 @@ export const AllVariants: Story = {
         <div className="text-primary pr-4 py-2">Long names</div>
         <DialButtonDropdown
           title="Actions"
-          variant={ButtonVariant.Secondary}
+          variant={ButtonVariant.Neutral}
+          appearance={ButtonAppearance.Outlined}
           items={longDropdownItems}
         />
       </div>

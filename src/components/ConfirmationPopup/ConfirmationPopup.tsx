@@ -92,7 +92,8 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
       <DialButton
-        variant={variantConfig[variant].confirmVariant}
+        variant={variantConfig[variant].confirm?.variant}
+        appearance={variantConfig[variant].confirm?.appearance}
         className={confirmClassName}
         label={confirmLabel}
         disabled={disableConfirmButton}
