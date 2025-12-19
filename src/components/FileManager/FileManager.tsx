@@ -1149,7 +1149,7 @@ export const DialFileManagerView: FC = () => {
         title={emptyStateTitle}
         description={emptyStateDescription}
         descriptionClassName="text-sm"
-        containerClassName="gap-3 absolute size-full bg-layer-2 border rounded-[4px] border-primary z-40"
+        containerClassName="gap-3 size-full bg-layer-2 border rounded-[4px] border-primary"
         titleClassName="mt-2 !text-lg"
         icon={
           emptyStateIcon || (
@@ -1210,55 +1210,60 @@ export const DialFileManagerView: FC = () => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
-            {gridRows.length === 0 && !isSearchMode && emptyStateRenderer()}
-            <DialGrid<GridRow>
-              columnDefs={columnDefs}
-              rowData={gridRows}
-              getRowId={(row) => row.path}
-              loading={filesLoading || searchInProgress}
-              getContextMenuItems={getGridContextMenuItems}
-              withoutHeaderBorders={isCompactView}
-              selectionOnHover={!isCompactView}
-              className={classNames(
-                isDragging ? 'border border-dashed border-accent-primary' : '',
-                isDraggingOverWindow && !isDragging
-                  ? 'border border-dashed border-primary'
-                  : '',
-              )}
-              {...forwardedGridOptions}
-              additionalGridOptions={{
-                ...forwardedGridOptions.additionalGridOptions,
-                onCellClicked: cellClickHandler,
-                headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                ...(isCompactView
-                  ? {
-                      getRowHeight: (params) =>
-                        params.data?.nodeType === DialFileNodeType.FOLDER
-                          ? COMPACT_VIEW_HEADER_HEIGHT
-                          : COMPACT_VIEW_FILE_ROW_HEIGHT,
-                    }
-                  : {}),
-                context: {
-                  cancelFolderCreation,
-                  saveFolderCreation,
-                  getDisplayName,
-                  onRenameCancel,
-                  onRenameSave,
-                  onRenameValidate,
-                  renameTriggerView,
-                  validateFolderName,
-                  renamedItem,
-                  renamedPath,
-                  newFolderTempId,
-                  sharedByMePaths,
-                } as FileManagerGridContext,
-              }}
-              selectedRows={selectedGridRows}
-              onSelectionChangeWithMap={handleSelectionChange}
-              wrapperBorder={!isDragging && !isDraggingOverWindow}
-              disabledRowIds={disabledGridRowIds}
-            />
+            {gridRows.length === 0 && !isSearchMode ? (
+              emptyStateRenderer()
+            ) : (
+              <DialGrid<GridRow>
+                columnDefs={columnDefs}
+                rowData={gridRows}
+                getRowId={(row) => row.path}
+                loading={filesLoading || searchInProgress}
+                getContextMenuItems={getGridContextMenuItems}
+                withoutHeaderBorders={isCompactView}
+                selectionOnHover={!isCompactView}
+                className={classNames(
+                  isDragging
+                    ? 'border border-dashed border-accent-primary'
+                    : '',
+                  isDraggingOverWindow && !isDragging
+                    ? 'border border-dashed border-primary'
+                    : '',
+                )}
+                {...forwardedGridOptions}
+                additionalGridOptions={{
+                  ...forwardedGridOptions.additionalGridOptions,
+                  onCellClicked: cellClickHandler,
+                  headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  ...(isCompactView
+                    ? {
+                        getRowHeight: (params) =>
+                          params.data?.nodeType === DialFileNodeType.FOLDER
+                            ? COMPACT_VIEW_HEADER_HEIGHT
+                            : COMPACT_VIEW_FILE_ROW_HEIGHT,
+                      }
+                    : {}),
+                  context: {
+                    cancelFolderCreation,
+                    saveFolderCreation,
+                    getDisplayName,
+                    onRenameCancel,
+                    onRenameSave,
+                    onRenameValidate,
+                    renameTriggerView,
+                    validateFolderName,
+                    renamedItem,
+                    renamedPath,
+                    newFolderTempId,
+                    sharedByMePaths,
+                  } as FileManagerGridContext,
+                }}
+                selectedRows={selectedGridRows}
+                onSelectionChangeWithMap={handleSelectionChange}
+                wrapperBorder={!isDragging && !isDraggingOverWindow}
+                disabledRowIds={disabledGridRowIds}
+              />
+            )}
           </section>
         </div>
       </div>
