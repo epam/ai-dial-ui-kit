@@ -3,18 +3,36 @@ import type { FC } from 'react';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { DialButton, type DialButtonProps } from './Button';
 
-type ButtonWrapperProps = Omit<DialButtonProps, 'variant'>;
+type ButtonVariantProps = Omit<DialButtonProps, 'variant'>;
 
-const ButtonWrapperCreator = (
+const ButtonVariantCreator = (
   variant: ButtonVariant,
   defaultAppearance: ButtonAppearance,
-): FC<ButtonWrapperProps> => {
-  const ButtonWrapper: FC<ButtonWrapperProps> = ({ appearance, ...props }) => {
+): FC<ButtonVariantProps> => {
+  const ButtonWrapper: FC<ButtonVariantProps> = ({ appearance, ...props }) => {
     return (
       <DialButton
         {...props}
         variant={variant}
         appearance={appearance || defaultAppearance}
+      />
+    );
+  };
+  return ButtonWrapper;
+};
+
+type ButtonAppearanceProps = Omit<DialButtonProps, 'appearance'>;
+
+const ButtonAppearanceCreator = (
+  appearance: ButtonAppearance,
+  defaultVariant: ButtonVariant,
+): FC<ButtonAppearanceProps> => {
+  const ButtonWrapper: FC<ButtonAppearanceProps> = ({ variant, ...props }) => {
+    return (
+      <DialButton
+        {...props}
+        variant={variant || defaultVariant}
+        appearance={appearance}
       />
     );
   };
@@ -33,7 +51,7 @@ const ButtonWrapperCreator = (
  *
  * Inherits all properties from the `DialButtonProps`
  */
-export const DialPrimaryButton = ButtonWrapperCreator(
+export const DialPrimaryButton = ButtonVariantCreator(
   ButtonVariant.Primary,
   ButtonAppearance.Solid,
 );
@@ -50,7 +68,7 @@ export const DialPrimaryButton = ButtonWrapperCreator(
  *
  * Inherits all properties from the `DialButtonProps`
  */
-export const DialNeutralButton = ButtonWrapperCreator(
+export const DialNeutralButton = ButtonVariantCreator(
   ButtonVariant.Neutral,
   ButtonAppearance.Outlined,
 );
@@ -67,7 +85,39 @@ export const DialNeutralButton = ButtonWrapperCreator(
  *
  * Inherits all properties from the `DialButtonProps`
  */
-export const DialErrorButton = ButtonWrapperCreator(
+export const DialErrorButton = ButtonVariantCreator(
   ButtonVariant.Error,
   ButtonAppearance.Outlined,
+);
+/** A Link Button component with predefined link appearance
+ * @example
+ * ```tsx
+ * <DialLinkButton
+ *  label="Click me"
+ *  onClick={handleClick}
+ *  className="custom-button"
+ * />
+ * ```
+ *
+ * Inherits all properties from the `DialButtonProps`
+ */
+export const DialLinkButton = ButtonAppearanceCreator(
+  ButtonAppearance.Link,
+  ButtonVariant.Primary,
+);
+/** A Ghost Button component with predefined ghost appearance
+ * @example
+ * ```tsx
+ * <DialGhostButton
+ *  label="Click me"
+ *  onClick={handleClick}
+ *  className="custom-button"
+ * />
+ * ```
+ *
+ * Inherits all properties from the `DialButtonProps`
+ */
+export const DialGhostButton = ButtonAppearanceCreator(
+  ButtonAppearance.Ghost,
+  ButtonVariant.Primary,
 );
