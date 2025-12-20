@@ -105,6 +105,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   searchInProgress,
   clearSearchResults,
   allowedFileTypes,
+
+  emptyStateIcon,
+  emptyStateTitle,
+  emptyStateDescription,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -635,6 +639,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     searchResults,
     clearSearchResults,
     isSearchMode,
+
+    emptyStateIcon,
+    emptyStateTitle,
+    emptyStateDescription,
   };
 
   return (

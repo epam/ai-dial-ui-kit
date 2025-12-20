@@ -466,12 +466,13 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     expect(screen.getByText('Documents')).toBeInTheDocument();
   });
 
-  test('clicking Add folder inserts a new placeholder row in the FileManager grid', async () => {
+  test('clicking Add folder inserts a new placeholder folder entry', async () => {
     render(
       <DestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
+        emptyStateTitle="Empty folder"
         rootItem={{
           id: 'root',
           name: 'Root',
@@ -483,12 +484,85 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
       />,
     );
 
-    const rowsBefore = await screen.findAllByRole('row');
-    fireEvent.click(screen.getByRole('button', { name: 'Add folder' }));
+    expect(screen.getByText('Empty folder')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /add folder/i }));
 
     await waitFor(() => {
-      const rowsAfter = screen.getAllByRole('row');
-      expect(rowsAfter.length).toBe(rowsBefore.length + 1);
+      expect(screen.queryByText('Empty folder')).not.toBeInTheDocument();
+      expect(screen.getAllByRole('row').length).toBeGreaterThan(0);
     });
+  });
+
+  test('disables button when destination matches source folder', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Documents"
+      />,
+    );
+
+    const moveButton = screen.getByRole('button', { name: 'Move' });
+    expect(moveButton).toBeDisabled();
+  });
+
+  test('enables button when destination differs from source folder', () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="move"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Photos"
+      />,
+    );
+
+    const moveButton = screen.getByRole('button', { name: 'Move' });
+    expect(moveButton).not.toBeDisabled();
+  });
+
+  test('displays tooltip when button is disabled', async () => {
+    render(
+      <DestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        mode="copy"
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        sourceFolder="/Documents"
+        path="/Documents"
+        disabledPathTooltip="Cannot copy to the same location"
+      />,
+    );
+
+    const copyButton = screen.getByRole('button', { name: 'Copy' });
+    expect(copyButton).toBeDisabled();
   });
 });

@@ -63,6 +63,7 @@ export function useFileSearch({
   const hasCalledSearchRef = useRef<boolean>(false);
   const isSearchModeRef = useRef<boolean>(false);
   const allFilesCache = useRef<DialFile[]>([]);
+  const prevPathRef = useRef<string | undefined>(currentPath);
 
   useEffect(() => {
     if (navigationPanelValue != null) {
@@ -105,8 +106,10 @@ export function useFileSearch({
     hasCalledSearchRef.current = false;
     isSearchModeRef.current = false;
     allFilesCache.current = [];
+    setSearchValue('');
+    onNavigationPanelSearchChange?.('');
     clearSearchResults?.();
-  }, [clearSearchResults]);
+  }, [clearSearchResults, onNavigationPanelSearchChange]);
 
   const handleSearchChange = useCallback(
     (value?: string) => {
@@ -124,10 +127,14 @@ export function useFileSearch({
   );
 
   useEffect(() => {
-    if (isSearchModeRef.current) {
-      handleSearchClear();
+    if (prevPathRef.current !== currentPath) {
+      prevPathRef.current = currentPath;
+
+      if (isSearchModeRef.current || effectiveSearchValue) {
+        handleSearchClear();
+      }
     }
-  }, [currentPath, handleSearchClear]);
+  }, [currentPath, handleSearchClear, effectiveSearchValue]);
 
   // Cache all files when search results arrive
   useEffect(() => {

@@ -60,6 +60,7 @@ import {
 import {
   IconCopy,
   IconDownload,
+  IconFileDescription,
   IconPencilMinus,
   IconTrashX,
 } from '@tabler/icons-react';
@@ -104,6 +105,7 @@ import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { DialNoDataContent } from '../NoDataContent/NoDataContent';
 
 type GridRow = FileManagerGridRow;
 
@@ -124,6 +126,7 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'onCreateFolder'
   | 'onCreateFolderValidate'
   | 'folderCreationValidationMessages'
+  | 'disabledPathTooltip'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
@@ -324,6 +327,10 @@ export interface DialFileManagerProps {
   searchInProgress?: boolean;
   searchResults?: DialFile[];
   clearSearchResults?: () => void;
+
+  emptyStateIcon?: ReactNode;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
 }
 
 /**
@@ -406,6 +413,10 @@ export interface DialFileManagerProps {
  * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
  *
  * @param allowedFileTypes - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
+ *
+ * @param [emptyStateIcon] - Optional icon for empty state
+ * @param [emptyStateTitle] - Optional title text displayed when there are no files.
+ * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -525,6 +536,10 @@ export const DialFileManagerView: FC = () => {
     actionsRef,
     searchInProgress,
     isSearchMode,
+
+    emptyStateIcon,
+    emptyStateTitle = "You don't have any files",
+    emptyStateDescription = 'Upload or drag and drop files',
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -1128,6 +1143,28 @@ export const DialFileManagerView: FC = () => {
     [renamedPath, handleTableRowClick],
   );
 
+  const emptyStateRenderer = useCallback(
+    () => (
+      <DialNoDataContent
+        title={emptyStateTitle}
+        description={emptyStateDescription}
+        descriptionClassName="text-sm"
+        containerClassName="gap-3 size-full bg-layer-2 border rounded-[4px] border-primary"
+        titleClassName="mt-2 !text-lg"
+        icon={
+          emptyStateIcon || (
+            <IconFileDescription
+              size={100}
+              stroke={0.5}
+              className="text-secondary"
+            />
+          )
+        }
+      />
+    ),
+    [emptyStateDescription, emptyStateIcon, emptyStateTitle],
+  );
+
   return (
     <section
       ref={containerRef}
@@ -1173,54 +1210,60 @@ export const DialFileManagerView: FC = () => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
-            <DialGrid<GridRow>
-              columnDefs={columnDefs}
-              rowData={gridRows}
-              getRowId={(row) => row.path}
-              loading={filesLoading || searchInProgress}
-              getContextMenuItems={getGridContextMenuItems}
-              withoutHeaderBorders={isCompactView}
-              selectionOnHover={!isCompactView}
-              className={classNames(
-                isDragging ? 'border border-dashed border-accent-primary' : '',
-                isDraggingOverWindow && !isDragging
-                  ? 'border border-dashed border-primary'
-                  : '',
-              )}
-              {...forwardedGridOptions}
-              additionalGridOptions={{
-                ...forwardedGridOptions.additionalGridOptions,
-                onCellClicked: cellClickHandler,
-                headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                ...(isCompactView
-                  ? {
-                      getRowHeight: (params) =>
-                        params.data?.nodeType === DialFileNodeType.FOLDER
-                          ? COMPACT_VIEW_HEADER_HEIGHT
-                          : COMPACT_VIEW_FILE_ROW_HEIGHT,
-                    }
-                  : {}),
-                context: {
-                  cancelFolderCreation,
-                  saveFolderCreation,
-                  getDisplayName,
-                  onRenameCancel,
-                  onRenameSave,
-                  onRenameValidate,
-                  renameTriggerView,
-                  validateFolderName,
-                  renamedItem,
-                  renamedPath,
-                  newFolderTempId,
-                  sharedByMePaths,
-                } as FileManagerGridContext,
-              }}
-              selectedRows={selectedGridRows}
-              onSelectionChangeWithMap={handleSelectionChange}
-              wrapperBorder={!isDragging && !isDraggingOverWindow}
-              disabledRowIds={disabledGridRowIds}
-            />
+            {gridRows.length === 0 && !isSearchMode ? (
+              emptyStateRenderer()
+            ) : (
+              <DialGrid<GridRow>
+                columnDefs={columnDefs}
+                rowData={gridRows}
+                getRowId={(row) => row.path}
+                loading={filesLoading || searchInProgress}
+                getContextMenuItems={getGridContextMenuItems}
+                withoutHeaderBorders={isCompactView}
+                selectionOnHover={!isCompactView}
+                className={classNames(
+                  isDragging
+                    ? 'border border-dashed border-accent-primary'
+                    : '',
+                  isDraggingOverWindow && !isDragging
+                    ? 'border border-dashed border-primary'
+                    : '',
+                )}
+                {...forwardedGridOptions}
+                additionalGridOptions={{
+                  ...forwardedGridOptions.additionalGridOptions,
+                  onCellClicked: cellClickHandler,
+                  headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  ...(isCompactView
+                    ? {
+                        getRowHeight: (params) =>
+                          params.data?.nodeType === DialFileNodeType.FOLDER
+                            ? COMPACT_VIEW_HEADER_HEIGHT
+                            : COMPACT_VIEW_FILE_ROW_HEIGHT,
+                      }
+                    : {}),
+                  context: {
+                    cancelFolderCreation,
+                    saveFolderCreation,
+                    getDisplayName,
+                    onRenameCancel,
+                    onRenameSave,
+                    onRenameValidate,
+                    renameTriggerView,
+                    validateFolderName,
+                    renamedItem,
+                    renamedPath,
+                    newFolderTempId,
+                    sharedByMePaths,
+                  } as FileManagerGridContext,
+                }}
+                selectedRows={selectedGridRows}
+                onSelectionChangeWithMap={handleSelectionChange}
+                wrapperBorder={!isDragging && !isDraggingOverWindow}
+                disabledRowIds={disabledGridRowIds}
+              />
+            )}
           </section>
         </div>
       </div>
@@ -1259,6 +1302,7 @@ export const DialFileManagerView: FC = () => {
         onPathChange={(newPath) => {
           destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
         }}
+        sourceFolder={currentPath || '/'}
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}

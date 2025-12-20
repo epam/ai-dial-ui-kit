@@ -1,6 +1,7 @@
-import type { FC } from 'react';
+import { mergeClasses } from '@/utils/merge-classes';
+import type { FC, HTMLAttributes } from 'react';
 
-export interface Props {
+export interface Props extends HTMLAttributes<HTMLSpanElement> {
   errorText?: string;
 }
 
@@ -14,8 +15,19 @@ export interface Props {
  *
  * @param [errorText] - The error message text to display. If undefined or empty, nothing is rendered
  */
-export const DialErrorText: FC<Props> = ({ errorText }) => {
+export const DialErrorText: FC<Props> = ({
+  errorText,
+  className,
+  ...props
+}) => {
+  if (!errorText) return null;
+
   return (
-    errorText && <span className="text-error dial-tiny mt-1">{errorText}</span>
+    <span
+      {...props}
+      className={mergeClasses('text-error dial-tiny mt-1', className)}
+    >
+      {errorText}
+    </span>
   );
 };

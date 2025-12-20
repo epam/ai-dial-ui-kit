@@ -1,4 +1,10 @@
-import { createContext, type DragEvent, type Ref, type RefObject } from 'react';
+import {
+  createContext,
+  type DragEvent,
+  type ReactNode,
+  type Ref,
+  type RefObject,
+} from 'react';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type {
@@ -48,7 +54,9 @@ export interface FileManagerContextValue {
   toolbarOptions?: ToolbarOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
-  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions;
+  destinationFolderPopupOptions?: DialFileManagerDestinationFolderPopupOptions & {
+    sourceFolder?: string;
+  };
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
 
@@ -169,6 +177,10 @@ export interface FileManagerContextValue {
   searchResults?: DialFile[];
   clearSearchResults?: () => void;
   isSearchMode: boolean;
+
+  emptyStateIcon?: ReactNode;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
 }
 
 export const FileManagerContext = createContext<

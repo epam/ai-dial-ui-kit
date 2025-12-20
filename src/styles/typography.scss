@@ -1,3 +1,55 @@
+.dial-display1-text {
+  @apply font-semibold text-[32px]/[48px];
+}
+
+.dial-display2-text {
+  @apply font-semibold text-[28px]/[40px];
+}
+
+.dial-h1-text {
+  @apply font-semibold text-[22px]/[32px];
+}
+
+.dial-h2-text {
+  @apply font-semibold text-[20px]/[28px];
+}
+
+.dial-h3-text {
+  @apply font-semibold text-[18px]/[26px];
+}
+
+.dial-body-text {
+  @apply font-normal text-[16px]/[24px];
+}
+
+.dial-body-semi-text {
+  @apply dial-body font-semibold;
+}
+
+.dial-small-text {
+  @apply font-normal text-[14px]/[20px];
+}
+
+.dial-small-semi-text {
+  @apply dial-small font-semibold;
+}
+
+.dial-tiny-text {
+  @apply font-normal text-[12px]/[16px];
+}
+
+.dial-tiny-semi-text {
+  @apply dial-tiny font-semibold;
+}
+
+.dial-caption-text {
+  @apply font-normal text-[10px]/[12px];
+}
+
+.dial-code-text {
+  @apply font-normal text-[14px]/[20px];
+}
+
 .dial-h1 {
   @apply font-semibold;
   font-size: 20px;
