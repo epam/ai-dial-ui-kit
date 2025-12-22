@@ -97,7 +97,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   folderCreationValidationMessages,
   fileMetadataPopupOptions,
   onGetInfo,
-  onUnshareFile,
+  onUnshareFiles,
   actionsRef,
   sharedByMePaths,
   onSearchFiles,
@@ -629,7 +629,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeMetadataPopup: handleCloseMetadataPopup,
     onGetInfo,
 
-    onUnshareFile,
+    onUnshareFiles,
 
     actionsRef,
     sharedByMePaths,
