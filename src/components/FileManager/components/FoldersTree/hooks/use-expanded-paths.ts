@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 
 export interface UseExpandedPathsOptions {
   expandedPaths?: Set<string>;
@@ -22,6 +22,12 @@ export const useExpandedPaths = (options?: UseExpandedPathsOptions) => {
         : internalExpandedPaths,
     [isControlled, options?.expandedPaths, internalExpandedPaths],
   );
+
+  useEffect(() => {
+    if (isControlled && options?.expandedPaths) {
+      setInternalExpandedPaths(new Set(options.expandedPaths));
+    }
+  }, [isControlled, options?.expandedPaths]);
 
   const setExpandedPaths = useCallback(
     (newSet: Set<string>) => {
