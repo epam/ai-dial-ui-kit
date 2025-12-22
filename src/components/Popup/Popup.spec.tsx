@@ -110,4 +110,16 @@ describe('Dial UI Kit :: DialPopup', () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  test('does not render close button when hasCloseButton is false', () => {
+    render(
+      <DialPopup open header="No Close" hasCloseButton={false}>
+        <div>Body</div>
+      </DialPopup>,
+    );
+
+    expect(
+      screen.queryByRole('button', { name: 'Close dialog' }),
+    ).not.toBeInTheDocument();
+  });
 });

@@ -151,3 +151,8 @@ export const WithoutHeaderAndDismiss: Story = {
     ),
   },
 };
+
+export const WithoutCloseButton: Story = {
+  render: StatefulRender,
+  args: { hasCloseButton: false },
+};
