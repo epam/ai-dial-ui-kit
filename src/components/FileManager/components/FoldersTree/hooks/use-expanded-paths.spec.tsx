@@ -250,4 +250,34 @@ describe('Dial UI Kit :: FileManager :: useExpandedPaths', () => {
     expect(initialPaths.size).toBe(1);
     expect(initialPaths.has('/folder2')).toBe(false);
   });
+
+  it('syncs internal expandedPaths when external expandedPaths changes in controlled mode', () => {
+    const onExpandedPathsChange = vi.fn();
+    const initialPaths = new Set<string>(['/folder1']);
+
+    const { result, rerender } = renderHook(
+      ({ paths }) =>
+        useExpandedPaths({
+          expandedPaths: paths,
+          onExpandedPathsChange,
+        }),
+      { initialProps: { paths: initialPaths } },
+    );
+
+    expect(result.current.expandedPaths).toEqual(initialPaths);
+
+    const updatedPaths = new Set<string>(['/folder1', '/folder2']);
+
+    rerender({ paths: updatedPaths });
+
+    expect(result.current.expandedPaths).toEqual(updatedPaths);
+
+    act(() => {
+      result.current.togglePath('/folder3');
+    });
+
+    expect(onExpandedPathsChange).toHaveBeenCalledWith(
+      new Set<string>(['/folder1', '/folder2', '/folder3']),
+    );
+  });
 });
