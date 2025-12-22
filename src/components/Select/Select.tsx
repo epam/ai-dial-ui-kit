@@ -443,7 +443,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                         <DialCheckbox
                           id={`${elementId || listId}-${opt.value}`}
                           label={
-                            <span className="flex w-full flex-1 min-w-0 items-center gap-2 text-primary">
+                            <span className="flex w-full flex-1 pl-2 min-w-0 items-center gap-2 text-primary">
                               {opt.icon && <DialIcon icon={opt.icon} />}
                               <span className="truncate">{opt.label}</span>
                             </span>
