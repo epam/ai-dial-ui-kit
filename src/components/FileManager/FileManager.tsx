@@ -218,6 +218,7 @@ export type BulkActionsToolbarOptions = Omit<
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
+    [DialFileManagerActions.Unshare]?: string;
   };
 };
 
@@ -320,7 +321,7 @@ export interface DialFileManagerProps {
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
-  onUnshareFile?: (file: DialFile) => void | Promise<void>;
+  onUnshareFiles?: (files: DialFile[]) => void | Promise<void>;
   actionsRef?: Ref<DialFileManagerActionsRef>;
 
   onSearchFiles?: (folder: string, query: string) => void;
@@ -531,7 +532,7 @@ export const DialFileManagerView: FC = () => {
     selectedFileForMetadata,
     closeMetadataPopup,
 
-    onUnshareFile,
+    onUnshareFiles,
 
     actionsRef,
     searchInProgress,
@@ -850,7 +851,7 @@ export const DialFileManagerView: FC = () => {
                 className="text-secondary"
               />
             ),
-            onClick: () => onUnshareFile?.(file),
+            onClick: () => onUnshareFiles?.([file]),
           });
         }
         if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
@@ -876,7 +877,7 @@ export const DialFileManagerView: FC = () => {
       onTreeRename,
       openDeleteConfirmation,
       treeOptions,
-      onUnshareFile,
+      onUnshareFiles,
     ],
   );
 
@@ -923,6 +924,7 @@ export const DialFileManagerView: FC = () => {
     onDownload: handleDownloadFiles,
     onRename: onGridRename,
     onDelete: openDeleteConfirmation,
+    onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
   });
 
@@ -1071,7 +1073,7 @@ export const DialFileManagerView: FC = () => {
     onDelete: (file, parentFolderPath) =>
       openDeleteConfirmation([file], parentFolderPath),
     onInfo: (file) => openMetadataPopup(file),
-    onUnshare: (file) => onUnshareFile?.(file),
+    onUnshare: (file) => onUnshareFiles?.([file]),
   });
 
   const getGridContextMenuItems = useCallback(
