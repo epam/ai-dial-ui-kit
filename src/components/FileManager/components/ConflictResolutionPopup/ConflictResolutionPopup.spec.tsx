@@ -369,4 +369,36 @@ describe('Dial UI Kit :: ConflictResolutionPopup', () => {
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
+
+  it('applies correct width for single file mode', () => {
+    render(
+      <ConflictResolutionPopup
+        open
+        conflictingFiles={singleFile}
+        onReplace={vi.fn()}
+        onDuplicate={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const dialog = screen.getByRole('dialog');
+
+    expect(dialog).toHaveClass('dial-sm-popup');
+  });
+
+  it('applies correct width for multiple files mode', () => {
+    render(
+      <ConflictResolutionPopup
+        open
+        conflictingFiles={multipleFiles}
+        onReplace={vi.fn()}
+        onDuplicate={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const dialog = screen.getByRole('dialog');
+
+    expect(dialog).toHaveClass('w-[600px]');
+  });
 });
