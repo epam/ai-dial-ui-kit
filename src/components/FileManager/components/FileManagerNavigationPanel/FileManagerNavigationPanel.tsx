@@ -183,14 +183,14 @@ export const DialFileManagerNavigationPanel: FC<
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const expandSearch = useCallback(() => {
-    if (!isSearchExpanded) {
+    if (isCompactView && !isSearchExpanded) {
       setIsSearchExpanded(true);
       const searchElement = document.getElementById(elementId);
       if (searchElement) {
         searchElement.focus();
       }
     }
-  }, [elementId, isSearchExpanded]);
+  }, [elementId, isSearchExpanded, isCompactView]);
 
   const handleSearchBlur = useCallback(() => {
     if (!value || String(value).trim() === '') {
