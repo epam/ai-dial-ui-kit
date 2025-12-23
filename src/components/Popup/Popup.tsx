@@ -34,6 +34,7 @@ export interface DialPopupProps {
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
   size?: PopupSize;
+  hideClose?: boolean;
   closeOnOutsideClick?: boolean;
 }
 
@@ -73,7 +74,8 @@ export interface DialPopupProps {
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
- * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside
+ * @param [hideClose=false] Whether the close button is hidden in the header (default: false)
+ * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside (default: true)
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -88,6 +90,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   footer,
   onClose,
   size = PopupSize.Md,
+  hideClose = false,
   closeOnOutsideClick = true,
 }) => {
   const { refs, context } = useFloating({
@@ -147,10 +150,12 @@ export const DialPopup: FC<DialPopupProps> = ({
               className={mergeClasses(popupHeaderClassName, headerClassName)}
             >
               {renderTitle(header)}
-              <DialCloseButton
-                ariaLabel="Close dialog"
-                onClose={(e) => onClose?.(e)}
-              />
+              {!hideClose && (
+                <DialCloseButton
+                  ariaLabel="Close dialog"
+                  onClose={(e) => onClose?.(e)}
+                />
+              )}
             </div>
             <div
               className="flex-grow overflow-auto"

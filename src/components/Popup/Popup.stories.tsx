@@ -134,7 +134,7 @@ export const WithoutHeaderAndDismiss: Story = {
     footer: undefined,
     dividers: false,
     headerClassName: 'hidden',
-    closeOnOutsideClick: false,
+    hideClose: true,
     children: (
       <div className="flex items-center flex-col gap-6 p-9">
         <DialLoader size={120} />
@@ -150,4 +150,9 @@ export const WithoutHeaderAndDismiss: Story = {
       </div>
     ),
   },
+};
+
+export const WithoutCloseButton: Story = {
+  render: StatefulRender,
+  args: { hideClose: true },
 };
