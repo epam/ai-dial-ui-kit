@@ -70,7 +70,7 @@ export interface DialFileManagerNavigationPanelProps
  * <FileManagerNavigationPanel
  *   path="Organization/Folder 4"
  *   searchable
- *   elementId="fm-search"
+ *   elementId="file-manager-search"
  *   value={query}
  *   onSearchChange={(val) => setQuery(val)}
  * />
@@ -91,7 +91,7 @@ export interface DialFileManagerNavigationPanelProps
  * @param [breadcrumbClassName] - ClassName forwarded to inner `DialBreadcrumb`
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
- * @param [elementId="fm-search"] - DOM id for the internal DialSearch input
+ * @param [elementId="file-manager-search"] - DOM id for the internal DialSearch input
  * @param [size=SearchSize.Base] - Size of the search input (from DialSearchProps)
  * @param [onSearchChange] - Callback fired when the search value changes
  * @param [searchClassName] - Extra classes for the search input element
@@ -115,7 +115,7 @@ export const DialFileManagerNavigationPanel: FC<
 
   searchable = true,
   value,
-  elementId = 'fm-search',
+  elementId = 'file-manager-search',
   disabled,
   readonly,
   invalid,

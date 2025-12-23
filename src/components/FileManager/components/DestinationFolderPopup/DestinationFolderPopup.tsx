@@ -190,7 +190,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           ...restProps.gridOptions,
         }}
         navigationPanelOptions={{
-          elementId: 'fm-destination-search',
+          elementId: 'file-manager-destination-search',
           ...restProps.navigationPanelOptions,
         }}
         onUploadFiles={onUploadFiles}
