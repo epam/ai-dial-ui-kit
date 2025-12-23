@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { DialFile } from '@/models/file';
+import { DialFilePermission, type DialFile } from '@/models/file';
 import { DialFileManagerActions } from '@/types/file-manager';
 import type { DialActionDropdownItem } from '@/components/FileManager/components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
 import { IconCopy, IconDownload, IconTrashX } from '@tabler/icons-react';
@@ -91,11 +91,18 @@ export const useBulkActions = ({
     }
 
     if (actionLabels[DialFileManagerActions.Delete]) {
+      const isDisabled = selectedFilesArray.some(
+        (file) =>
+          file.permissions &&
+          !file.permissions.includes(DialFilePermission.WRITE),
+      );
+
       actions.push({
         key: DialFileManagerActions.Delete,
         label: actionLabels[DialFileManagerActions.Delete],
         title: actionLabels[DialFileManagerActions.Delete],
         icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
+        disabled: isDisabled,
         onClick: () => {
           const currentFolderPath = getCurrentFolderPath();
           onDelete(selectedFilesArray, currentFolderPath);
