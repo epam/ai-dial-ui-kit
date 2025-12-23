@@ -5,6 +5,7 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { MouseEvent } from 'react';
+import { DialFilePermission } from '@/models/file';
 
 const testFile: DialFile = {
   id: '1',
@@ -26,6 +27,21 @@ const testFolder: DialFile = {
   nodeType: DialFileNodeType.FOLDER,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
+};
+
+const fileWithWritePermission: DialFile = {
+  ...testFile,
+  permissions: [DialFilePermission.WRITE],
+};
+
+const fileWithoutWritePermission: DialFile = {
+  ...testFile,
+  permissions: [],
+};
+
+const fileWithoutPermissions: DialFile = {
+  ...testFile,
+  permissions: undefined,
 };
 
 const defaultActionLabels = {
@@ -718,5 +734,70 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       domEvent: mockMouseEvent,
     });
     expect(onUnshare2).toHaveBeenCalledWith(testFile);
+  });
+
+  test('delete action is not shown when file lacks WRITE permission', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithoutWritePermission);
+
+    expect(menuItems).toHaveLength(0);
+    expect(
+      menuItems.find((item) => item.key === DialFileManagerActions.Delete),
+    ).toBeUndefined();
+  });
+
+  test('delete action is shown when file has WRITE permission', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithWritePermission);
+
+    expect(menuItems).toHaveLength(1);
+    expect(menuItems[0].key).toBe(DialFileManagerActions.Delete);
+  });
+
+  test('delete action is shown when file has no permissions defined', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithoutPermissions);
+
+    expect(menuItems).toHaveLength(1);
+    expect(menuItems[0].key).toBe(DialFileManagerActions.Delete);
   });
 });
