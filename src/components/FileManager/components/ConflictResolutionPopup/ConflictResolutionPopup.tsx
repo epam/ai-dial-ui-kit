@@ -424,7 +424,8 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
     <DialPopup
       open={open}
       onClose={onClose}
-      size={PopupSize.Md}
+      size={isSingleFile ? PopupSize.Sm : PopupSize.Md}
+      className={classNames([!isSingleFile && 'w-[600px]'])}
       header={title}
       dividers={false}
       footer={
