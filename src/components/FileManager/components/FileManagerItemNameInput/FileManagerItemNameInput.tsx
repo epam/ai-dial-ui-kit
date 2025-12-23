@@ -130,6 +130,7 @@ export const DialFileManagerItemNameInput: FC<
         value={name}
         onChange={onChange}
         invalid={inputInvalid}
+        hideTooltip={inputInvalid}
         iconAfter={getInputIconAfter()}
         inputRef={inputRef}
       />
