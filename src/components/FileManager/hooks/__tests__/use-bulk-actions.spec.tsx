@@ -5,6 +5,7 @@ import { DialFileManagerActions } from '@/types/file-manager';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { MouseEvent } from 'react';
+import { DialFilePermission } from '@/models/file';
 
 const testFiles: DialFile[] = [
   {
@@ -35,6 +36,21 @@ const testFiles: DialFile[] = [
     updatedAt: '2024-01-01T00:00:00Z',
   },
 ];
+
+const writableFile: DialFile = {
+  ...testFiles[0],
+  permissions: [DialFilePermission.WRITE],
+};
+
+const readOnlyFile: DialFile = {
+  ...testFiles[1],
+  permissions: [],
+};
+
+const noPermissionsFile: DialFile = {
+  ...testFiles[2],
+  permissions: undefined,
+};
 
 const defaultActionLabels = {
   [DialFileManagerActions.Duplicate]: 'Duplicate',
@@ -397,5 +413,82 @@ describe('Dial UI Kit :: useBulkActions', () => {
       domEvent: mockMouseEvent,
     });
     expect(onDuplicate).toHaveBeenLastCalledWith([testFiles[0], testFiles[1]]);
+  });
+
+  test('delete action is disabled when at least one file lacks WRITE permission', () => {
+    const selectedFiles = new Map<string, DialFile>([
+      [writableFile.path, writableFile],
+      [readOnlyFile.path, readOnlyFile],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+      }),
+    );
+
+    const deleteAction = result.current[0];
+
+    expect(deleteAction.disabled).toBe(true);
+  });
+
+  test('delete action is enabled when all files have WRITE permission', () => {
+    const selectedFiles = new Map<string, DialFile>([
+      [writableFile.path, writableFile],
+      [
+        testFiles[1].path,
+        { ...testFiles[1], permissions: [DialFilePermission.WRITE] },
+      ],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+      }),
+    );
+
+    const deleteAction = result.current[0];
+
+    expect(deleteAction.disabled).toBe(false);
+  });
+
+  test('delete action is enabled when files have no permissions defined', () => {
+    const selectedFiles = new Map<string, DialFile>([
+      [noPermissionsFile.path, noPermissionsFile],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: { [DialFileManagerActions.Delete]: 'Delete' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+      }),
+    );
+
+    const deleteAction = result.current[0];
+
+    expect(deleteAction.disabled).toBe(false);
   });
 });
