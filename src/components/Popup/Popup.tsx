@@ -34,7 +34,8 @@ export interface DialPopupProps {
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
   size?: PopupSize;
-  closable?: boolean;
+  hideClose?: boolean;
+  closeOnOutsideClick?: boolean;
 }
 
 /**
@@ -73,7 +74,8 @@ export interface DialPopupProps {
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
- * @param [closable=true] Whether the close button is rendered in the header and the popup can be closed when clicking outside(default: true)
+ * @param [hideClose=false] Whether the close button is hidden in the header (default: false)
+ * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside (default: true)
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -88,7 +90,8 @@ export const DialPopup: FC<DialPopupProps> = ({
   footer,
   onClose,
   size = PopupSize.Md,
-  closable = true,
+  hideClose = false,
+  closeOnOutsideClick = true,
 }) => {
   const { refs, context } = useFloating({
     open,
@@ -98,7 +101,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   });
 
   const role = useRole(context, { role: 'dialog' });
-  const dismiss = useDismiss(context, { outsidePress: closable });
+  const dismiss = useDismiss(context, { outsidePress: closeOnOutsideClick });
   const { getFloatingProps } = useInteractions([role, dismiss]);
 
   if (!open) return null;
@@ -147,7 +150,7 @@ export const DialPopup: FC<DialPopupProps> = ({
               className={mergeClasses(popupHeaderClassName, headerClassName)}
             >
               {renderTitle(header)}
-              {closable && (
+              {!hideClose && (
                 <DialCloseButton
                   ariaLabel="Close dialog"
                   onClose={(e) => onClose?.(e)}

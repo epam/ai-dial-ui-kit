@@ -92,15 +92,15 @@ describe('Dial UI Kit :: DialPopup', () => {
     expect(header).toHaveClass('custom-header-class');
   });
 
-  test('does not close on outside click when closable is false', () => {
+  test('does not close on outside click when closeOnOutsideClick is false', () => {
     const onClose = vi.fn();
 
     render(
       <DialPopup
         open
         header="Outside click disabled"
-        closable={false}
         onClose={onClose}
+        closeOnOutsideClick={false}
       >
         <div>Body</div>
       </DialPopup>,
@@ -111,9 +111,9 @@ describe('Dial UI Kit :: DialPopup', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  test('does not render close button when closable is false', () => {
+  test('does not render close button when hideClose is true', () => {
     render(
-      <DialPopup open header="No Close" closable={false}>
+      <DialPopup open header="No Close" hideClose>
         <div>Body</div>
       </DialPopup>,
     );
