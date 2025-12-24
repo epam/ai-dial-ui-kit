@@ -413,7 +413,7 @@ export interface DialFileManagerProps {
  *
  * @param [actionsRef] - Ref exposing a limited set of imperative File Manager actions (e.g., creating a folder). Allows parent components to trigger internal behaviors programmatically. This ref is not a DOM ref and should be used only for invoking the component’s public actions API.
  *
- * @param allowedFileTypes - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
+ * @param [allowedFileTypes] - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
  *
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when there are no files.

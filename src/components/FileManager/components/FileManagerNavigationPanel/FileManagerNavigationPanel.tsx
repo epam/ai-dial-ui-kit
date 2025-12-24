@@ -23,6 +23,7 @@ import { DialButton } from '@/components/Button/Button';
 import { ButtonVariant } from '@/types/button';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { getSegments } from '@/utils/path';
 
 export interface DialFileManagerNavigationPanelProps
   extends Omit<
@@ -130,16 +131,10 @@ export const DialFileManagerNavigationPanel: FC<
   const breadcrumbPathItems: DialBreadcrumbPathItem[] | undefined =
     useMemo(() => {
       if (!path) return undefined;
-      let segments = path
-        .split('/')
-        .map((s) => s.trim())
-        .filter(Boolean);
+      let segments = getSegments(path);
 
       if (breadcrumbsHiddenPathPart) {
-        const hiddenSegments = breadcrumbsHiddenPathPart
-          .split('/')
-          .map((s) => s.trim())
-          .filter(Boolean);
+        const hiddenSegments = getSegments(breadcrumbsHiddenPathPart);
 
         if (hiddenSegments.length) {
           const hiddenIndex = segments.findIndex((_, idx) =>
