@@ -46,6 +46,7 @@ export interface DialFileManagerNavigationPanelProps
   onItemClick?: (href?: string) => void;
   rootItemPath?: string;
   rootItemLabel?: string;
+  breadcrumbsHiddenPathPart?: string;
 
   searchable?: boolean;
   value?: string | number | null;
@@ -89,6 +90,7 @@ export interface DialFileManagerNavigationPanelProps
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
  * @param [className] - Additional classes for the panel container
  * @param [breadcrumbClassName] - ClassName forwarded to inner `DialBreadcrumb`
+ * @param [breadcrumbsHiddenPathPart] - A slash-separated path fragment whose segments will be omitted from the rendered breadcrumb trail.
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
  * @param [elementId="file-manager-search"] - DOM id for the internal DialSearch input
@@ -109,6 +111,7 @@ export const DialFileManagerNavigationPanel: FC<
   makeHref,
   rootItemPath,
   rootItemLabel,
+  breadcrumbsHiddenPathPart,
 
   className,
   breadcrumbClassName,
@@ -127,10 +130,31 @@ export const DialFileManagerNavigationPanel: FC<
   const breadcrumbPathItems: DialBreadcrumbPathItem[] | undefined =
     useMemo(() => {
       if (!path) return undefined;
-      const segments = path
+      let segments = path
         .split('/')
         .map((s) => s.trim())
         .filter(Boolean);
+
+      if (breadcrumbsHiddenPathPart) {
+        const hiddenSegments = breadcrumbsHiddenPathPart
+          .split('/')
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+        if (hiddenSegments.length) {
+          const hiddenIndex = segments.findIndex((_, idx) =>
+            hiddenSegments.every((seg, hIdx) => segments[idx + hIdx] === seg),
+          );
+
+          if (hiddenIndex !== -1) {
+            segments = [
+              ...segments.slice(0, hiddenIndex),
+              ...segments.slice(hiddenIndex + hiddenSegments.length),
+            ];
+          }
+        }
+      }
+
       if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
@@ -178,7 +202,14 @@ export const DialFileManagerNavigationPanel: FC<
       }
 
       return items;
-    }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
+    }, [
+      path,
+      breadcrumbsHiddenPathPart,
+      rootItemPath,
+      rootItemLabel,
+      makeHref,
+      onItemClick,
+    ]);
 
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
