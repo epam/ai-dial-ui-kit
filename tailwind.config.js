@@ -5,7 +5,7 @@ const backgroundsColors = {
   'layer-2': 'var(--bg-layer-2, #141A23)',
   'layer-3': 'var(--bg-layer-3, #222932)',
   'layer-4': 'var(--bg-layer-4, #333942)',
-  blackout: 'var(--bg-blackout, #090D13B2)',
+  blackout: 'var(--bg-blackout, #090D13B3)',
   error: 'var(--bg-error, #402027)',
   warning: 'var(--bg-warning, #3F3D25)',
   info: 'var(--bg-info, #1C2C47)',
@@ -115,7 +115,7 @@ module.exports = {
 
     extend: {
       boxShadow: {
-        DEFAULT: '0 0 4px 0 var(--bg-blackout, #090D13B2)',
+        DEFAULT: '0 0 4px 0 var(--bg-blackout, #090D13B3)',
       },
       borderRadius: {
         DEFAULT: '4px',
