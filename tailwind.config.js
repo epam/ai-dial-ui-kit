@@ -101,9 +101,8 @@ const buttonsTextColors = {
 };
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  important: true,
-  content: ['./src/**/*.{html,js,ts,tsx,yaml}'],
+export default {
+  content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
   theme: {
     backgroundColor: { ...backgroundsColors, ...buttonsBgColors },
     borderColor: borderColors,
