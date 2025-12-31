@@ -99,8 +99,8 @@ describe('Dial UI Kit :: DialPopup', () => {
       <DialPopup
         open
         header="Outside click disabled"
-        closeOnOutsideClick={false}
         onClose={onClose}
+        closeOnOutsideClick={false}
       >
         <div>Body</div>
       </DialPopup>,
@@ -109,5 +109,17 @@ describe('Dial UI Kit :: DialPopup', () => {
     fireEvent.mouseDown(document.body);
 
     expect(onClose).not.toHaveBeenCalled();
+  });
+
+  test('does not render close button when hideClose is true', () => {
+    render(
+      <DialPopup open header="No Close" hideClose>
+        <div>Body</div>
+      </DialPopup>,
+    );
+
+    expect(
+      screen.queryByRole('button', { name: 'Close dialog' }),
+    ).not.toBeInTheDocument();
   });
 });

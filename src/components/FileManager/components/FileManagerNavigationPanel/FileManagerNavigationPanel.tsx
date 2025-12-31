@@ -16,6 +16,7 @@ import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
+import { getSegments } from '@/utils/path';
 import { IconArrowLeft } from '@tabler/icons-react';
 import {
   breadcrumbContainerClassName,
@@ -45,6 +46,7 @@ export interface DialFileManagerNavigationPanelProps
   onItemClick?: (href?: string) => void;
   rootItemPath?: string;
   rootItemLabel?: string;
+  breadcrumbsHiddenPathPart?: string;
 
   searchable?: boolean;
   value?: string | number | null;
@@ -69,7 +71,7 @@ export interface DialFileManagerNavigationPanelProps
  * <FileManagerNavigationPanel
  *   path="Organization/Folder 4"
  *   searchable
- *   elementId="fm-search"
+ *   elementId="file-manager-search"
  *   value={query}
  *   onSearchChange={(val) => setQuery(val)}
  * />
@@ -88,9 +90,10 @@ export interface DialFileManagerNavigationPanelProps
  * @param [onItemClick] - Callback fired when a breadcrumb item is clicked
  * @param [className] - Additional classes for the panel container
  * @param [breadcrumbClassName] - ClassName forwarded to inner `DialBreadcrumb`
+ * @param [breadcrumbsHiddenPathPart] - A slash-separated path fragment whose segments will be omitted from the rendered breadcrumb trail.
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
- * @param [elementId="fm-search"] - DOM id for the internal DialSearch input
+ * @param [elementId="file-manager-search"] - DOM id for the internal DialSearch input
  * @param [size=SearchSize.Base] - Size of the search input (from DialSearchProps)
  * @param [onSearchChange] - Callback fired when the search value changes
  * @param [searchClassName] - Extra classes for the search input element
@@ -108,13 +111,14 @@ export const DialFileManagerNavigationPanel: FC<
   makeHref,
   rootItemPath,
   rootItemLabel,
+  breadcrumbsHiddenPathPart,
 
   className,
   breadcrumbClassName,
 
   searchable = true,
   value,
-  elementId = 'fm-search',
+  elementId = 'file-manager-search',
   disabled,
   readonly,
   invalid,
@@ -126,10 +130,25 @@ export const DialFileManagerNavigationPanel: FC<
   const breadcrumbPathItems: DialBreadcrumbPathItem[] | undefined =
     useMemo(() => {
       if (!path) return undefined;
-      const segments = path
-        .split('/')
-        .map((s) => s.trim())
-        .filter(Boolean);
+      let segments = getSegments(path);
+
+      if (breadcrumbsHiddenPathPart) {
+        const hiddenSegments = getSegments(breadcrumbsHiddenPathPart);
+
+        if (hiddenSegments.length) {
+          const hiddenIndex = segments.findIndex((_, idx) =>
+            hiddenSegments.every((seg, hIdx) => segments[idx + hIdx] === seg),
+          );
+
+          if (hiddenIndex !== -1) {
+            segments = [
+              ...segments.slice(0, hiddenIndex),
+              ...segments.slice(hiddenIndex + hiddenSegments.length),
+            ];
+          }
+        }
+      }
+
       if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
@@ -177,19 +196,26 @@ export const DialFileManagerNavigationPanel: FC<
       }
 
       return items;
-    }, [path, makeHref, onItemClick, rootItemPath, rootItemLabel]);
+    }, [
+      path,
+      breadcrumbsHiddenPathPart,
+      rootItemPath,
+      rootItemLabel,
+      makeHref,
+      onItemClick,
+    ]);
 
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const expandSearch = useCallback(() => {
-    if (!isSearchExpanded) {
+    if (isCompactView && !isSearchExpanded) {
       setIsSearchExpanded(true);
       const searchElement = document.getElementById(elementId);
       if (searchElement) {
         searchElement.focus();
       }
     }
-  }, [elementId, isSearchExpanded]);
+  }, [elementId, isSearchExpanded, isCompactView]);
 
   const handleSearchBlur = useCallback(() => {
     if (!value || String(value).trim() === '') {

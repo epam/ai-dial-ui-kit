@@ -186,6 +186,10 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           withSelectionColumn: false,
           ...restProps.gridOptions,
         }}
+        navigationPanelOptions={{
+          elementId: 'file-manager-destination-search',
+          ...restProps.navigationPanelOptions,
+        }}
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}

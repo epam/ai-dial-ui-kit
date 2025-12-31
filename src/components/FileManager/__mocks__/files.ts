@@ -175,6 +175,7 @@ export const itemsMock: DialFile[] = [
                         contentLength: 5120,
                         author: authors[0],
                         owner: owners[0],
+                        permissions: [DialFilePermission.READ],
                       },
                       {
                         id: 'ico-settings',
@@ -190,6 +191,10 @@ export const itemsMock: DialFile[] = [
                         contentLength: 61440 * 1000,
                         author: authors[3],
                         owner: owners[2],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.WRITE,
+                        ],
                       },
                       {
                         id: '.hidden-file',

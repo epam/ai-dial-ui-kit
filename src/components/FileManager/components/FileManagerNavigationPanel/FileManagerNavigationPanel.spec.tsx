@@ -146,4 +146,53 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     fireEvent.click(backButton);
     expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
+
+  test('hides breadcrumbHiddenPathPart from breadcrumb segments', () => {
+    render(
+      <DialFileManagerNavigationPanel
+        path="files/user123/appdata/mindmap/Project"
+        breadcrumbsHiddenPathPart="appdata/mindmap"
+      />,
+    );
+
+    expect(screen.getByText('files')).toBeInTheDocument();
+    expect(screen.getByText('user123')).toBeInTheDocument();
+    expect(screen.getByText('Project')).toBeInTheDocument();
+
+    expect(screen.queryByText('appdata')).not.toBeInTheDocument();
+    expect(screen.queryByText('mindmap')).not.toBeInTheDocument();
+  });
+
+  test('does not modify breadcrumb when breadcrumbHiddenPathPart is not found', () => {
+    render(
+      <DialFileManagerNavigationPanel
+        path="Org/Team/Folder"
+        breadcrumbsHiddenPathPart="non/existing/path"
+      />,
+    );
+
+    expect(screen.getByText('Org')).toBeInTheDocument();
+    expect(screen.getByText('Team')).toBeInTheDocument();
+    expect(screen.getByText('Folder')).toBeInTheDocument();
+  });
+
+  test('creates correct hrefs after hiding breadcrumbHiddenPathPart', () => {
+    const onItemClick = vi.fn();
+    const makeHref = (segments: string[], index: number) =>
+      segments.slice(0, index + 1).join('/');
+
+    render(
+      <DialFileManagerNavigationPanel
+        path="files/u1/appdata/mindmap/Project/Sub"
+        breadcrumbsHiddenPathPart="appdata/mindmap"
+        makeHref={makeHref}
+        onItemClick={onItemClick}
+      />,
+    );
+
+    const projectLink = screen.getByRole('link', { name: 'Project' });
+    fireEvent.click(projectLink);
+
+    expect(onItemClick).toHaveBeenCalledWith('files/u1/Project');
+  });
 });

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { type DialFile } from '@/models/file';
+import { DialFilePermission, type DialFile } from '@/models/file';
 import { DialFileManagerActions } from '@/types/file-manager';
 import type { DropdownItem } from '@/models/dropdown';
 import {
@@ -105,7 +105,14 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Delete]) {
+      const emptyOrWritePermissions =
+        !file.permissions ||
+        file.permissions.includes(DialFilePermission.WRITE);
+
+      if (
+        actionLabels[DialFileManagerActions.Delete] &&
+        emptyOrWritePermissions
+      ) {
         items.push({
           key: DialFileManagerActions.Delete,
           label: actionLabels[DialFileManagerActions.Delete],

@@ -1052,8 +1052,20 @@ export const WithUnshareAction: Story = {
             delete: 'Delete',
           },
         }}
-        onUnshareFile={(file) => {
-          alert(`Unsharing file: ${file.name}`);
+        bulkActionsToolbarOptions={{
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
+          actionLabels: {
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            unshare: 'Unshare',
+          },
+        }}
+        onUnshareFiles={(files) => {
+          alert(`Unsharing file: ${files.map((f) => f.name).join(',')}`);
         }}
       />
     </div>
