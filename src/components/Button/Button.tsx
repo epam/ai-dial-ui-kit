@@ -8,7 +8,7 @@ import type {
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
-import { variantClassMap } from './constants';
+import { getButtonClassNames } from './utils';
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -77,7 +77,7 @@ export const DialButton: FC<DialButtonProps> = ({
   );
 
   const btnClassName = classNames(
-    variant && variantClassMap[variant][appearance],
+    variant && getButtonClassNames(variant, appearance),
     size === ButtonSize.Small ? 'dial-button-small' : 'dial-button-standard',
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
