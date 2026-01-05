@@ -29,6 +29,8 @@ export interface DialTabsProps {
   screenThreshold?: ScreenResolution;
   smallScreenContainerClassName?: string;
   smallScreenDropdownItemClassName?: string;
+  desktopDropdownClassName?: string;
+  desktopTabClassName?: string;
 }
 
 /**
@@ -71,6 +73,8 @@ export interface DialTabsProps {
  *   in small-screen (collapsed) mode.
  * @param [smallScreenDropdownItemClassName] - Optional CSS class applied to individual dropdown
  *   items in small-screen mode.
+ * @param [desktopDropdownClassName] - Optional CSS class applied to dropdown button in non small-screen mode.
+ * @param [desktopTabClassName] - Optional CSS class applied to tab in non small-screed mode.
  *
  * @remarks
  * - Automatically detects horizontal overflow via `ResizeObserver` and shows a dropdown when needed.
@@ -85,6 +89,8 @@ export const DialTabs: FC<DialTabsProps> = ({
   screenThreshold = ScreenResolution.Tablet,
   smallScreenContainerClassName,
   smallScreenDropdownItemClassName,
+  desktopDropdownClassName,
+  desktopTabClassName,
 }) => {
   // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
@@ -219,7 +225,7 @@ export const DialTabs: FC<DialTabsProps> = ({
               active={activeTab === tab.id}
               onClick={onClick}
               horizontal={isHorizontal}
-              className="w-full"
+              className={mergeClasses('w-full', desktopTabClassName)}
             />
           </div>
         ))}
@@ -242,18 +248,19 @@ export const DialTabs: FC<DialTabsProps> = ({
                     onClick(id);
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full rounded-none h-[32px] items-center px-3 py-2"
+                  className="w-full rounded-none h-8 items-center px-3 py-2"
                 />
               ))
             }
           >
             <DialButton
               iconBefore={<IconDotsVertical size={18} />}
-              className={classNames(
+              className={mergeClasses(
                 'w-8 h-8 flex items-center justify-center rounded border',
                 isDropdownOpen
                   ? 'bg-layer-4 border-transparent'
                   : 'border-primary',
+                desktopDropdownClassName,
               )}
             />
           </DialDropdown>

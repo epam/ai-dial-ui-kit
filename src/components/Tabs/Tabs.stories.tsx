@@ -69,6 +69,18 @@ const meta: Meta<typeof DialTabs> = {
       description:
         'Callback fired when a tab is clicked. Receives the tab’s ID as a parameter.',
     },
+    smallScreenContainerClassName: {
+      control: 'text',
+    },
+    smallScreenDropdownItemClassName: {
+      control: 'text',
+    },
+    desktopDropdownClassName: {
+      control: 'text',
+    },
+    desktopTabClassName: {
+      control: 'text',
+    },
   },
 };
 export default meta;
@@ -129,6 +141,16 @@ export const WithInvalidTab: Story = {
     })),
     activeTab: 'details',
     orientation: TabOrientation.Horizontal,
+  },
+};
+
+export const StyledDesktopTabs: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: manySampleTabs,
+    activeTab: 'details',
+    desktopDropdownClassName: 'bg-layer-4 w-10 h-8 border-none',
+    desktopTabClassName: 'h-8 px-3',
   },
 };
 
