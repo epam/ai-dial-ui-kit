@@ -120,3 +120,57 @@ export const CompactView: Story = {
     return <DialFileManagerNavigationPanel {...args} />;
   },
 };
+
+export const WithHiddenPathPart: Story = {
+  args: {
+    path: 'files/user123/appdata/mindmap/Project/Subfolder',
+    breadcrumbsHiddenPathPart: 'appdata/mindmap',
+  },
+  render: (args) => (
+    <DialFileManagerNavigationPanel
+      {...args}
+      makeHref={(segments, index) =>
+        '#' + segments.slice(0, index + 1).join('/')
+      }
+      onItemClick={(href) => {
+        alert('Clicked breadcrumb item with href: ' + href);
+      }}
+    />
+  ),
+};
+
+export const WithRootItem: Story = {
+  args: {
+    path: 'Organization/Department/Team/Project',
+    rootItemPath: 'Organization',
+    rootItemLabel: 'My Organization',
+  },
+  render: (args) => (
+    <DialFileManagerNavigationPanel
+      {...args}
+      makeHref={(segments, index) =>
+        '#' + segments.slice(0, index + 1).join('/')
+      }
+    />
+  ),
+};
+
+export const WithHiddenPathAndRootItem: Story = {
+  args: {
+    path: 'files/user123/appdata/mindmap/Project/Subfolder',
+    breadcrumbsHiddenPathPart: 'appdata/mindmap',
+    rootItemPath: 'files/user123',
+    rootItemLabel: 'My Files',
+  },
+  render: (args) => (
+    <DialFileManagerNavigationPanel
+      {...args}
+      makeHref={(segments, index) =>
+        '#' + segments.slice(0, index + 1).join('/')
+      }
+      onItemClick={(href) => {
+        alert('Clicked breadcrumb item with href: ' + href);
+      }}
+    />
+  ),
+};

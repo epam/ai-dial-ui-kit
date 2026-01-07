@@ -131,7 +131,9 @@ export const DialFileManagerNavigationPanel: FC<
     useMemo(() => {
       if (!path) return undefined;
       let segments = getSegments(path);
+      const originalSegments = [...segments];
 
+      let hiddenSegmentsCount = 0;
       if (breadcrumbsHiddenPathPart) {
         const hiddenSegments = getSegments(breadcrumbsHiddenPathPart);
 
@@ -141,6 +143,7 @@ export const DialFileManagerNavigationPanel: FC<
           );
 
           if (hiddenIndex !== -1) {
+            hiddenSegmentsCount = hiddenSegments.length;
             segments = [
               ...segments.slice(0, hiddenIndex),
               ...segments.slice(hiddenIndex + hiddenSegments.length),
@@ -152,9 +155,16 @@ export const DialFileManagerNavigationPanel: FC<
       if (!segments.length) return [{ label: '/' }];
 
       const items = segments.map((segment, index) => {
-        const acc = segments.slice(0, index + 1);
+        const originalIndex =
+          index < segments.length - hiddenSegmentsCount
+            ? index
+            : index + hiddenSegmentsCount;
+
+        const acc = originalSegments.slice(0, originalIndex + 1);
         const href =
-          typeof makeHref === 'function' ? makeHref(acc, index) : undefined;
+          typeof makeHref === 'function'
+            ? makeHref(acc, originalIndex)
+            : undefined;
 
         return {
           label: segment,
