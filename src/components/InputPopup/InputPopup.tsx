@@ -97,7 +97,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
       >
         <div
           className={classNames(
-            'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
+            'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between cursor-pointer',
             inputClassName,
             disabled && 'dial-input-disable',
             (errorText || invalid) && 'dial-input-error',
