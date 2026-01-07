@@ -193,6 +193,8 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
     const projectLink = screen.getByRole('link', { name: 'Project' });
     fireEvent.click(projectLink);
 
-    expect(onItemClick).toHaveBeenCalledWith('files/u1/Project');
+    expect(onItemClick).toHaveBeenCalledWith(
+      'files/u1/appdata/mindmap/Project',
+    );
   });
 });
