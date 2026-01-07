@@ -1212,7 +1212,7 @@ export const DialFileManagerView: FC = () => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
-            {gridRows.length === 0 && !isSearchMode ? (
+            {gridRows.length === 0 && !isSearchMode && !filesLoading ? (
               emptyStateRenderer()
             ) : (
               <DialGrid<GridRow>
