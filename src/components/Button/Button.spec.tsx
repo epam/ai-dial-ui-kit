@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialButton } from './Button';
-import { ButtonVariant } from '@/index';
+import { ButtonAppearance, ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
   test('Should render with string label and be accessible by role', () => {
@@ -106,32 +106,6 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(titleSpan).not.toHaveClass('hidden');
   });
 
-  test('Should apply correct spacing classes with icons', () => {
-    render(
-      <DialButton
-        label="Spacing test"
-        iconBefore={<span>Before</span>}
-        iconAfter={<span>After</span>}
-      />,
-    );
-    const titleSpan = screen.getByText('Spacing test');
-    expect(titleSpan).toHaveClass('mr-2', 'ml-2');
-  });
-
-  test('Should apply correct spacing with only iconBefore', () => {
-    render(<DialButton label="Before only" iconBefore={<span>Before</span>} />);
-    const titleSpan = screen.getByText('Before only');
-    expect(titleSpan).toHaveClass('ml-2');
-    expect(titleSpan).not.toHaveClass('mr-2');
-  });
-
-  test('Should apply correct spacing with only iconAfter', () => {
-    render(<DialButton label="After only" iconAfter={<span>After</span>} />);
-    const titleSpan = screen.getByText('After only');
-    expect(titleSpan).toHaveClass('mr-2');
-    expect(titleSpan).not.toHaveClass('ml-2');
-  });
-
   test('Should use aria-label when label is ReactNode', () => {
     render(
       <DialButton
@@ -186,14 +160,36 @@ describe('Dial UI Kit :: DialButton', () => {
   });
 
   test.each([
-    [ButtonVariant.Primary, 'dial-primary-button'],
-    [ButtonVariant.Secondary, 'dial-secondary-button'],
-    [ButtonVariant.Tertiary, 'dial-tertiary-button'],
-  ])('applies mapped class for variant %s', (variant, expectedClass) => {
-    render(<DialButton label="Click me" variant={variant} />);
+    [
+      ButtonVariant.Primary,
+      ButtonAppearance.Solid,
+      'dial-primary-solid-button',
+    ],
+    [
+      ButtonVariant.Primary,
+      ButtonAppearance.Ghost,
+      'dial-primary-ghost-button',
+    ],
+    [ButtonVariant.Primary, ButtonAppearance.Link, 'dial-primary-link-button'],
+    [
+      ButtonVariant.Neutral,
+      ButtonAppearance.Outlined,
+      'dial-neutral-outlined-button',
+    ],
+  ])(
+    'applies mapped class for variant %s',
+    (variant, appearance, expectedClass) => {
+      render(
+        <DialButton
+          label="Click me"
+          variant={variant}
+          appearance={appearance}
+        />,
+      );
 
-    const btn = screen.getByRole('button', { name: 'Click me' });
-    expect(btn).toBeInTheDocument();
-    expect(btn).toHaveClass(expectedClass);
-  });
+      const btn = screen.getByRole('button', { name: 'Click me' });
+      expect(btn).toBeInTheDocument();
+      expect(btn).toHaveClass(expectedClass);
+    },
+  );
 });

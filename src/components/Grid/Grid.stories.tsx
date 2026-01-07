@@ -4,8 +4,11 @@ import { DialGrid, type DialGridProps } from './Grid';
 import type { DropdownItem } from '@/models/dropdown';
 import type { ColDef } from 'ag-grid-community';
 import { DialFileName } from '@/components/FileName/FileName';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import {
+  DialPrimaryButton,
+  DialNeutralButton,
+} from '@/components/Button/ButtonWrappers';
+import { ButtonAppearance } from '@/types/button';
 import { DropdownItemType } from '@/types/dropdown';
 import {
   IconClipboardCopy,
@@ -254,18 +257,16 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
           Selected IDs: {Array.from(selectedIds).join(', ') || 'None'}
         </p>
         <div className="flex gap-2 mb-2">
-          <DialButton
-            variant={ButtonVariant.Tertiary}
+          <DialPrimaryButton
+            appearance={ButtonAppearance.Ghost}
             onClick={() => setSelectedIds(new Set(['2']))}
             label="Select row 2"
           />
-          <DialButton
-            variant={ButtonVariant.Secondary}
+          <DialNeutralButton
             onClick={() => setSelectedIds(new Set())}
             label="Clear selection"
           />
-          <DialButton
-            variant={ButtonVariant.Primary}
+          <DialPrimaryButton
             onClick={() => setSelectedIds(new Set(['1', '2', '3']))}
             label="Select all"
           />

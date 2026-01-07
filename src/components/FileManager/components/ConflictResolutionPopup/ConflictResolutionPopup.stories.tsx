@@ -1,14 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
-import { ConflictResolutionPopup } from './ConflictResolutionPopup';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
 import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
+import { ConflictResolutionPopup } from './ConflictResolutionPopup';
 
 const singleFile: DialFile = {
   id: '1',
@@ -93,10 +92,9 @@ const StoryWrapper = ({
   return (
     <div className="w-full h-[100px] flex items-center justify-center">
       {!isOpen && (
-        <DialButton
+        <DialPrimaryButton
           onClick={() => setIsOpen(true)}
           label="Show Conflict Resolution Popup"
-          variant={ButtonVariant.Primary}
         />
       )}
 

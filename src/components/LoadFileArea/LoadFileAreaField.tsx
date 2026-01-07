@@ -1,10 +1,10 @@
-import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
-import { IconPlus, IconTrashX } from '@tabler/icons-react';
-import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
-import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialFieldLabel } from '@/components/Field/Field';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import { BASE_ICON_PROPS } from '@/constants/icon';
+import { ButtonAppearance } from '@/types/button';
+import { IconPlus, IconTrashX } from '@tabler/icons-react';
+import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
+import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
   fieldTitle: string;
@@ -115,8 +115,8 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
         />
         {multiple && !!files?.length && (
           <div className="flex flex-row items-center gap-x-2">
-            <DialButton
-              variant={ButtonVariant.Tertiary}
+            <DialPrimaryButton
+              appearance={ButtonAppearance.Ghost}
               className="!text-error"
               iconBefore={<IconTrashX {...BASE_ICON_PROPS} />}
               label={deleteAllButtonLabel}
@@ -124,8 +124,8 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
             />
 
             {(maxFilesCount ? maxFilesCount > files?.length : true) && (
-              <DialButton
-                variant={ButtonVariant.Tertiary}
+              <DialPrimaryButton
+                appearance={ButtonAppearance.Ghost}
                 iconBefore={<IconPlus {...BASE_ICON_PROPS} />}
                 label={addButtonLabel}
                 onClick={onAddFiles}

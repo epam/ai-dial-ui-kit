@@ -32,6 +32,11 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
+export {
+  DialErrorButton,
+  DialNeutralButton,
+  DialPrimaryButton,
+} from './components/Button/ButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
@@ -79,7 +84,7 @@ export { DialFileManager } from './components/FileManager/FileManager';
 
 // Types
 export { AlertVariant } from './types/alert';
-export { ButtonVariant } from './types/button';
+export { ButtonVariant, ButtonAppearance, ButtonSize } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';

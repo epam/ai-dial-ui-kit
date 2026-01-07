@@ -62,7 +62,7 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   ...restProps
 }) => {
   const wrapIcon = (icon: ReactNode) => (
-    <span className={'inline-flex relative text-secondary'} role="img">
+    <span className="inline-flex relative text-secondary" role="img">
       {icon}
       {shared && (
         <span className="absolute -bottom-0.5 -left-0.5">

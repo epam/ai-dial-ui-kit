@@ -17,8 +17,10 @@ import {
 
 import { DialDropdown, type DialDropdownProps } from './Dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/ButtonWrappers';
 import { type DropdownItem } from '@/models/dropdown';
 
 const items: DropdownItem[] = [
@@ -60,11 +62,7 @@ const specItems: DropdownItem[] = [
 ];
 
 const TriggerBtn = ({ label = 'Open' }: { label?: ReactNode }) => (
-  <DialButton
-    variant={ButtonVariant.Primary}
-    iconAfter={<IconChevronDown size={16} />}
-    label={label}
-  />
+  <DialPrimaryButton iconAfter={<IconChevronDown size={16} />} label={label} />
 );
 
 const PLACEMENTS: Placement[] = [
@@ -150,8 +148,7 @@ const ControlledExample = (args: DialDropdownProps) => {
   return (
     <div className="flex items-center gap-2">
       <span ref={controllerRef}>
-        <DialButton
-          variant={ButtonVariant.Secondary}
+        <DialNeutralButton
           label={open ? 'Close Dropdown' : 'Open Dropdown'}
           onClick={() => setOpen((v) => !v)}
         />
@@ -194,8 +191,7 @@ export const SecondaryEllipsisTrigger: Story = {
   name: 'Secondary trigger (ellipsis)',
   args: {
     children: (
-      <DialButton
-        variant={ButtonVariant.Secondary}
+      <DialNeutralButton
         aria-label="More actions"
         iconBefore={<IconDots size={16} />}
       />
@@ -312,16 +308,11 @@ const FooterActionsExample = (args: DialDropdownProps) => {
         footer: () => (
           <div className="px-2 pb-2 pt-1 border-t border-divider">
             <div className="flex items-center justify-end gap-2">
-              <DialButton
-                variant={ButtonVariant.Secondary}
+              <DialNeutralButton
                 label="Cancel"
                 onClick={() => setOpen(false)}
               />
-              <DialButton
-                variant={ButtonVariant.Primary}
-                label="Apply"
-                onClick={() => setOpen(false)}
-              />
+              <DialPrimaryButton label="Apply" onClick={() => setOpen(false)} />
             </div>
           </div>
         ),
@@ -363,10 +354,7 @@ export const ClickNearCursor: Story = {
   },
   render: (args) => (
     <DialDropdown {...args}>
-      <DialButton
-        variant={ButtonVariant.Primary}
-        label="Click me (opens near cursor)"
-      />
+      <DialPrimaryButton label="Click me (opens near cursor)" />
     </DialDropdown>
   ),
 };
@@ -377,10 +365,7 @@ export const CompareWidthModes: Story = {
   render: (args) => (
     <div className="flex gap-6">
       <DialDropdown {...args} matchReferenceWidth>
-        <DialButton
-          variant={ButtonVariant.Secondary}
-          label="Match trigger width"
-        />
+        <DialNeutralButton label="Match trigger width" />
       </DialDropdown>
       <DialDropdown
         {...args}
@@ -392,10 +377,7 @@ export const CompareWidthModes: Story = {
           </div>
         )}
       >
-        <DialButton
-          variant={ButtonVariant.Secondary}
-          label="Hug content width"
-        />
+        <DialNeutralButton label="Hug content width" />
       </DialDropdown>
     </div>
   ),

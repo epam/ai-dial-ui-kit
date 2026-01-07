@@ -1,82 +1,154 @@
 .dial-base-button {
-  @apply flex flex-row items-center px-3 py-2;
+  @apply flex flex-row items-center gap-x-2 justify-center;
+  @apply min-w-[38px];
   @apply rounded border border-solid border-transparent;
-  @apply dial-small-medium;
-
-  min-width: 38px;
-  min-height: 38px;
 }
 
-.dial-base-button-disable {
-  @apply cursor-not-allowed text-controls-disable bg-controls-disable;
+.dial-base-button:focus {
+  @apply border-focus;
 }
 
-.dial-primary-button {
-  @apply dial-base-button bg-controls-accent text-controls-primary;
+.dial-button-small {
+  @apply px-2 min-h-[24px] dial-tiny-text;
+}
+
+.dial-button-standard {
+  @apply px-3 min-h-[40px] dial-small-text;
+}
+
+.dial-button-disable {
+  @apply cursor-not-allowed;
+}
+
+.dial-button-solid-disable {
+  @apply dial-button-disable text-controls-solid-disable bg-controls-solid-disable;
+}
+
+.dial-primary-solid-button {
+  @apply dial-base-button bg-controls-solid-primary text-controls-solid;
 
   &:hover,
   &:focus {
-    @apply bg-controls-accent-hover;
-  }
-
-  &:focus {
-    @apply border-hover;
-  }
-
-  &:disabled {
-    @apply dial-base-button-disable;
+    @apply bg-controls-solid-primary-hover;
   }
 }
 
-.dial-secondary-button {
-  @apply dial-base-button bg-transparent text-primary;
+.dial-primary-ghost-button {
+  @apply text-accent-primary;
+
+  &:hover,
+  &:focus {
+    @apply bg-accent-primary-alpha;
+  }
+
+  &:active {
+    @apply border-accent-primary;
+  }
+}
+
+.dial-primary-link-button {
+  @apply dial-base-button bg-transparent text-accent-primary px-2 h-[24px];
+
+  &:hover,
+  &:focus {
+    @apply text-controls-link-primary-hover;
+  }
+
+  &:disabled {
+    @apply dial-button-disable text-controls-disable;
+  }
+}
+
+.dial-neutral-outlined-button {
+  @apply dial-base-button bg-transparent text-controls-solid;
   @apply border-primary;
 
   &:hover,
   &:focus {
-    @apply bg-layer-4;
-  }
-
-  &:focus {
-    @apply border-hover;
+    @apply bg-controls-outlined-neutral-hover;
   }
 
   &:disabled {
-    @apply dial-base-button-disable;
+    @apply dial-button-disable text-controls-disable bg-transparent;
   }
 }
 
-.dial-tertiary-button {
-  @apply dial-base-button text-accent-primary bg-transparent;
+.dial-error-solid-button {
+  @apply dial-base-button bg-controls-solid-error text-controls-solid;
 
   &:hover,
   &:focus {
-    @apply bg-controls-accent-alpha;
+    @apply bg-controls-solid-error-hover;
+  }
+}
+
+.dial-error-ghost-button {
+  @apply text-error;
+
+  &:hover,
+  &:focus {
+    @apply bg-error;
   }
 
-  &:focus,
   &:active {
-    @apply border-accent-primary;
-  }
-
-  &:disabled {
-    @apply dial-base-button-disable;
+    @apply border-error;
   }
 }
 
-.dial-error-button {
-  @apply dial-base-button bg-red-400 text-primary;
+.dial-success-ghost-button {
+  @apply text-accent-secondary;
+  &:hover,
+  &:focus {
+    @apply bg-accent-secondary-alpha;
+  }
+
+  &:active {
+    @apply border-accent-secondary;
+  }
+}
+
+.dial-secondary-ghost-button {
+  @apply text-secondary;
+  &:hover,
+  &:focus {
+    @apply bg-accent-secondary-alpha text-accent-secondary;
+  }
+
+  &:active {
+    @apply border-accent-secondary text-accent-secondary;
+  }
+}
+
+.dial-tertiary-ghost-button {
+  @apply text-secondary;
 
   &:hover,
   &:focus {
-    @apply bg-red-800;
+    @apply bg-accent-tertiary-alpha text-accent-tertiary;
   }
 
-  &:focus {
-    @apply border-hover;
+  &:active {
+    @apply border-accent-tertiary text-accent-tertiary;
   }
+}
 
-  &:disabled {
-    @apply dial-base-button-disable;
-  }
+.dial-primary-ghost-button,
+.dial-success-ghost-button,
+.dial-secondary-ghost-button,
+.dial-tertiary-ghost-button,
+.dial-error-ghost-button {
+  @apply dial-base-button bg-transparent;
+}
+
+.dial-primary-ghost-button:disabled,
+.dial-success-ghost-button:disabled,
+.dial-secondary-ghost-button:disabled,
+.dial-tertiary-ghost-button:disabled,
+.dial-error-ghost-button:disabled {
+  @apply dial-button-disable text-controls-disable bg-transparent;
+}
+
+.dial-primary-solid-button:disabled,
+.dial-error-solid-button:disabled {
+  @apply dial-button-solid-disable;
 }

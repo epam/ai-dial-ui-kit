@@ -1,7 +1,9 @@
 import { DialPopup } from '@/components/Popup/Popup';
 import { PopupSize } from '@/types/popup';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import {
+  DialPrimaryButton,
+  DialNeutralButton,
+} from '@/components/Button/ButtonWrappers';
 import { type FC, useState, useMemo, useCallback } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
@@ -430,16 +432,8 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       dividers={false}
       footer={
         <div className="flex justify-end gap-3 py-4 px-6">
-          <DialButton
-            onClick={onClose}
-            label={cancelLabel}
-            variant={ButtonVariant.Secondary}
-          />
-          <DialButton
-            onClick={handleConfirm}
-            label={confirmLabel}
-            variant={ButtonVariant.Primary}
-          />
+          <DialNeutralButton onClick={onClose} label={cancelLabel} />
+          <DialPrimaryButton onClick={handleConfirm} label={confirmLabel} />
         </div>
       }
     >

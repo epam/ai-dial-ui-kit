@@ -1,4 +1,10 @@
+import classNames from 'classnames';
 import { useCallback, useState, type FC } from 'react';
+
+import {
+  DialPrimaryButton,
+  DialNeutralButton,
+} from '@/components/Button/ButtonWrappers';
 import {
   DialFieldLabel,
   type DialFieldLabelProps,
@@ -7,16 +13,13 @@ import {
   DialInputPopup,
   type DialInputPopupProps,
 } from '@/components/InputPopup/InputPopup';
+import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
 import {
   DialRadioGroup,
   type DialRadioGroupProps,
 } from '@/components/RadioGroup/RadioGroup';
-import classNames from 'classnames';
-import { DialPopup, type DialPopupProps } from '@/components/Popup/Popup';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
-import { RadioGroupOrientation } from '@/types/radio-group';
 import { PopupSize } from '@/types/popup';
+import { RadioGroupOrientation } from '@/types/radio-group';
 
 export interface RadioGroupPopupFieldProps
   extends Pick<DialFieldLabelProps, 'fieldTitle' | 'htmlFor'>,
@@ -148,13 +151,11 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           size={size}
           footer={
             <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
-              <DialButton
-                variant={ButtonVariant.Secondary}
+              <DialNeutralButton
                 label={cancelButtonTitle}
                 onClick={onClosePopup}
               />
-              <DialButton
-                variant={ButtonVariant.Primary}
+              <DialPrimaryButton
                 label={applyButtonTitle}
                 onClick={onApplyValue}
                 disabled={!isValid}

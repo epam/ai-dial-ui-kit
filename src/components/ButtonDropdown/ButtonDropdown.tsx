@@ -4,6 +4,7 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
 import type { DropdownItem } from '@/models/dropdown';
 import { buttonChevronDown, buttonChevronUp } from './constants';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 
 export interface DialButtonDropdownProps extends DialButtonProps {
   items: DropdownItem[];
@@ -16,16 +17,19 @@ export interface DialButtonDropdownProps extends DialButtonProps {
  * ```tsx
  * <DialButtonDropdown
  *   title="Click me"
- *   variant={ButtonVariant.Secondary}
+ *   variant={ButtonVariant.Neutral}
  *   items={[{ key: 'profile', label: 'Profile' }, { key: 'logout', label: 'Logout' }]}
  * />
  * ```
  *
- * @param [title] - The text content of the button
- * @param [variant] - Defines the visual style of the button
+ * Inherits all props from DialButton.
  * @param [items] - DropdownItems with actions
  */
-export const DialButtonDropdown: FC<DialButtonDropdownProps> = (props) => {
+export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
+  variant,
+  appearance,
+  ...props
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const icon = useMemo(() => {
     return isDropdownOpen ? buttonChevronUp : buttonChevronDown;
@@ -39,7 +43,12 @@ export const DialButtonDropdown: FC<DialButtonDropdownProps> = (props) => {
         }}
         onOpenChange={(open) => setIsDropdownOpen(open)}
       >
-        <DialButton {...props} iconAfter={icon} />
+        <DialButton
+          {...props}
+          iconAfter={icon}
+          variant={variant || ButtonVariant.Primary}
+          appearance={appearance || ButtonAppearance.Solid}
+        />
       </DialDropdown>
     </div>
   );

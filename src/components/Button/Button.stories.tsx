@@ -1,8 +1,12 @@
+import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialButton, type DialButtonProps } from './Button';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { ButtonVariant } from '@/types/button';
-import { Fragment } from 'react/jsx-runtime';
+import { DialButton, type DialButtonProps } from './Button';
+import {
+  DialErrorButton,
+  DialNeutralButton,
+  DialPrimaryButton,
+} from './ButtonWrappers';
 
 const meta = {
   title: 'Form/Button',
@@ -29,6 +33,16 @@ const meta = {
         ButtonVariant.Tertiary,
       ],
       description: 'Button style variant',
+    },
+    appearance: {
+      control: { type: 'select' },
+      options: [
+        ButtonAppearance.Ghost,
+        ButtonAppearance.Link,
+        ButtonAppearance.Solid,
+        ButtonAppearance.Outlined,
+      ],
+      description: 'Button appearance',
     },
     textClassName: {
       control: { type: 'text' },
@@ -59,31 +73,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const PrimaryButton: Story = {
+export const PrimarySolidButton: Story = {
   args: {
-    label: 'Primary Button',
+    label: 'Primary Solid Button',
     variant: ButtonVariant.Primary,
   },
 };
 
-export const SecondaryButton: Story = {
+export const NeutralOutlinedButton: Story = {
   args: {
-    label: 'Secondary Button',
-    variant: ButtonVariant.Secondary,
+    label: 'Neutral Outlined Button',
+    variant: ButtonVariant.Neutral,
+    appearance: ButtonAppearance.Outlined,
   },
 };
 
-export const TertiaryButton: Story = {
+export const ErrorSolidButton: Story = {
   args: {
-    label: 'Tertiary Button',
-    variant: ButtonVariant.Tertiary,
-  },
-};
-
-export const ErrorButton: Story = {
-  args: {
-    label: 'Error Button',
+    label: 'Error Solid Button',
     variant: ButtonVariant.Error,
+    appearance: ButtonAppearance.Solid,
   },
 };
 
@@ -102,22 +111,6 @@ export const WithReactNodeLabel: Story = {
       description: {
         story:
           'Demonstrates that label can accept ReactNode for more complex content. Remember to provide aria-label for accessibility when using ReactNode.',
-      },
-    },
-  },
-};
-
-export const WithIconAsLabel: Story = {
-  args: {
-    label: <IconArrowRight size={20} />,
-    variant: ButtonVariant.Secondary,
-    'aria-label': 'Arrow button',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Button with an icon as the label content. Requires aria-label for accessibility.',
       },
     },
   },
@@ -144,30 +137,6 @@ export const WithComplexLabel: Story = {
   },
 };
 
-export const WithBothIcons: Story = {
-  args: {
-    label: 'Action',
-    iconAfter: <IconArrowRight size={16} />,
-    iconBefore: <IconArrowLeft size={16} />,
-  },
-};
-
-export const WithIconBefore: Story = {
-  args: {
-    label: 'Save',
-    iconBefore: <IconArrowLeft size={16} />,
-    variant: ButtonVariant.Primary,
-  },
-};
-
-export const WithIconAfter: Story = {
-  args: {
-    label: 'Alert',
-    iconAfter: <IconArrowRight size={16} />,
-    className: 'dial-tertiary-button',
-  },
-};
-
 export const WithCustomTextStyling: Story = {
   args: {
     label: 'Custom Text Styling',
@@ -181,14 +150,6 @@ export const WithCustomTextStyling: Story = {
           'Demonstrates the textClassName prop which allows custom styling of the button text while keeping the button container styling intact.',
       },
     },
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: 'Disabled Button',
-    variant: ButtonVariant.Tertiary,
-    disabled: true,
   },
 };
 
@@ -207,7 +168,7 @@ export const Hover: Story = {
 export const Focus: Story = {
   args: {
     label: 'Focus Button',
-    variant: ButtonVariant.Secondary,
+    variant: ButtonVariant.Primary,
   },
   parameters: {
     pseudo: {
@@ -219,7 +180,7 @@ export const Focus: Story = {
 export const Active: Story = {
   args: {
     label: 'Active Button',
-    variant: ButtonVariant.Tertiary,
+    variant: ButtonVariant.Primary,
   },
   parameters: {
     pseudo: {
@@ -230,78 +191,120 @@ export const Active: Story = {
 
 export const AllVariants: Story = {
   render: () => {
-    const variants = [
-      { key: 'primary', label: 'Primary', variant: ButtonVariant.Primary },
-      {
-        key: 'secondary',
-        label: 'Secondary',
-        variant: ButtonVariant.Secondary,
-      },
-      { key: 'tertiary', label: 'Tertiary', variant: ButtonVariant.Tertiary },
-      { key: 'error', label: 'Error', variant: ButtonVariant.Error },
-    ];
+    const props = {
+      label: 'Standard',
+      iconAfter: <IconArrowRight size={20} />,
+      iconBefore: <IconArrowLeft size={20} />,
+    };
 
-    const states = [
-      { key: 'default', label: 'Default' },
-      { key: 'hover', label: 'Hover' },
-      { key: 'focus', label: 'Focus' },
-      { key: 'active', label: 'Active' },
-      { key: 'disable', label: 'Disable' },
-    ];
-
+    const smallProps = {
+      label: 'Small',
+      iconAfter: <IconArrowRight size={16} />,
+      iconBefore: <IconArrowLeft size={16} />,
+    };
     return (
-      <div className="p-4 max-w-[1200px]">
-        <div className="grid grid-cols-5 gap-8">
-          {/* header row */}
-          <div></div>
-          {variants.map((v) => (
-            <div
-              key={v.key}
-              className={'text-primary text-center font-semibold'}
-            >
-              {v.label}
-            </div>
-          ))}
+      <div className="flex flex-row gap-x-12">
+        <div className="flex flex-col gap-y-6">
+          <div className="font-bold mb-2 text-primary">Primary Solid</div>
 
-          {states.map((state) => (
-            <Fragment key={state.key}>
-              <div className="text-primary text-right pr-4 py-2">
-                {state.label}
-              </div>
-              {variants.map((v) => {
-                const commonProps = {
-                  label: 'Button label',
-                  variant: v.variant,
-                  iconBefore: <IconArrowLeft size={16} />,
-                  iconAfter: <IconArrowRight size={16} />,
-                };
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton {...props} />
+            <DialPrimaryButton {...smallProps} size={ButtonSize.Small} />
+          </div>
 
-                return (
-                  <div
-                    key={v.key}
-                    className={`flex justify-center ${
-                      state.key !== 'default' ? `state-${state.key}` : ''
-                    }`}
-                  >
-                    <DialButton
-                      {...commonProps}
-                      disabled={state.key === 'disable'}
-                    />
-                  </div>
-                );
-              })}
-            </Fragment>
-          ))}
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton {...props} disabled />
+            <DialPrimaryButton
+              {...smallProps}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-6">
+          <div className="font-bold mb-2 text-primary">Neutral Outlined</div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialNeutralButton {...props} />
+            <DialNeutralButton {...smallProps} size={ButtonSize.Small} />
+          </div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialNeutralButton {...props} disabled />
+            <DialNeutralButton
+              {...smallProps}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-6">
+          <div className="font-bold mb-2 text-primary">Primary Ghost</div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton {...props} appearance={ButtonAppearance.Ghost} />
+            <DialPrimaryButton
+              {...smallProps}
+              appearance={ButtonAppearance.Ghost}
+              size={ButtonSize.Small}
+            />
+          </div>
+
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Ghost}
+              disabled
+            />
+            <DialPrimaryButton
+              {...smallProps}
+              appearance={ButtonAppearance.Ghost}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-6">
+          <div className="font-bold mb-2 text-primary">Primary Link</div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton {...props} appearance={ButtonAppearance.Link} />
+            <DialPrimaryButton
+              {...smallProps}
+              appearance={ButtonAppearance.Link}
+              size={ButtonSize.Small}
+            />
+          </div>
+
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialPrimaryButton
+              {...props}
+              appearance={ButtonAppearance.Link}
+              disabled
+            />
+            <DialPrimaryButton
+              {...smallProps}
+              appearance={ButtonAppearance.Link}
+              size={ButtonSize.Small}
+              disabled
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-6">
+          <div className="font-bold mb-2 text-primary">Error Solid</div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialErrorButton {...props} />
+            <DialErrorButton {...smallProps} size={ButtonSize.Small} />
+          </div>
+          <div className="flex flex-row gap-x-6 items-center">
+            <DialErrorButton {...props} disabled />
+            <DialErrorButton {...smallProps} size={ButtonSize.Small} disabled />
+          </div>
         </div>
       </div>
     );
   },
   parameters: {
-    pseudo: {
-      hover: ['.state-hover button'],
-      focus: ['.state-focus button'],
-      active: ['.state-active button'],
-    },
     docs: {
       description: {
         story:

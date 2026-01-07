@@ -67,17 +67,13 @@ npm install @epam/ai-dial-ui-kit
 ### Basic Usage
 
 ```tsx
-import { DialButton } from '@epam/ai-dial-ui-kit';
+import { DialPrimaryButton } from '@epam/ai-dial-ui-kit';
 import '@epam/ai-dial-ui-kit/styles.css';
 
 function App() {
   return (
     <div>
-      <DialButton
-        label="Click me"
-        variant={ButtonVariant.Primary}
-        onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
-      />
+      <DialPrimaryButton onClick={() => alert('Hello AI DIAL!')} />
     </div>
   );
 }
@@ -235,17 +231,13 @@ import "@epam/ai-dial-ui-kit/styles.css";
 ```tsx
 // app/page.tsx
 "use client";
-import { DialButton } from "@epam/ai-dial-ui-kit";
+import { DialPrimaryButton } from "@epam/ai-dial-ui-kit";
 
 export default function Home() {
   return (
     <div className="w-full h-full flex flex-col gap-3 items-center justify-center">
       <h1>Test library</h1>
-      <DialButton
-        onClick={() => console.log("Next.js + AI DIAL UI Kit!")}
-        label="Click me"
-        className="dial-primary-button"
-      />
+      <DialPrimaryButton onClick={() => alert('Hello AI DIAL!')} />
     </div>
   );
 }
@@ -259,7 +251,7 @@ export default function Home() {
 
 ```tsx
 // ✅ Good - Tree shakable imports
-import { DialButton, DialInput } from '@epam/ai-dial-ui-kit';
+import { DialPrimaryButton, DialInput } from '@epam/ai-dial-ui-kit';
 import '@epam/ai-dial-ui-kit/styles.css'; // Import styles separately
 
 // ❌ Avoid - Imports entire library

@@ -1,4 +1,4 @@
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 
 export const actionsBaseClassName = 'flex justify-end gap-2 px-6 py-4';
@@ -14,19 +14,37 @@ export const variantConfig: Record<
   ConfirmationPopupVariant,
   {
     container?: string;
-    confirmVariant: ButtonVariant;
+    confirm?: {
+      variant: ButtonVariant;
+      appearance: ButtonAppearance;
+    };
     confirmClassName?: string;
-    cancelVariant: ButtonVariant;
+    cancel?: {
+      variant: ButtonVariant;
+      appearance: ButtonAppearance;
+    };
   }
 > = {
   [ConfirmationPopupVariant.Info]: {
-    confirmVariant: ButtonVariant.Primary,
-    cancelVariant: ButtonVariant.Secondary,
+    confirm: {
+      variant: ButtonVariant.Primary,
+      appearance: ButtonAppearance.Solid,
+    },
+    cancel: {
+      variant: ButtonVariant.Neutral,
+      appearance: ButtonAppearance.Outlined,
+    },
   },
   [ConfirmationPopupVariant.Danger]: {
     // TODO: rename to Error after implement Design system changes
     container: 'dial-danger-popup',
-    confirmVariant: ButtonVariant.Error,
-    cancelVariant: ButtonVariant.Secondary,
+    confirm: {
+      variant: ButtonVariant.Error,
+      appearance: ButtonAppearance.Solid,
+    },
+    cancel: {
+      variant: ButtonVariant.Neutral,
+      appearance: ButtonAppearance.Outlined,
+    },
   },
 };

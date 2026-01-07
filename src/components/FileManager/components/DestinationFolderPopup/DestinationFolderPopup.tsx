@@ -4,8 +4,11 @@ import {
   type DialFileManagerProps,
 } from '@/components/FileManager/FileManager';
 import { PopupSize } from '@/types/popup';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import {
+  DialPrimaryButton,
+  DialNeutralButton,
+} from '@/components/Button/ButtonWrappers';
+import { ButtonAppearance } from '@/types/button';
 import { IconFolderPlus } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
@@ -118,13 +121,13 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
-      className={'md:!h-[800px]'}
+      className="md:!h-[800px]"
       footer={
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">
-            <DialButton
+            <DialPrimaryButton
               label={addFolderLabel}
-              variant={ButtonVariant.Tertiary}
+              appearance={ButtonAppearance.Ghost}
               iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
               onClick={() => {
                 fileManagerActionRef.current?.createFolder();
@@ -147,26 +150,20 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
             </div>
           </div>
           <div className="flex space-x-4">
-            <DialButton
-              onClick={onClose}
-              label="Cancel"
-              variant={ButtonVariant.Secondary}
-            />
+            <DialNeutralButton onClick={onClose} label="Cancel" />
             {isDestinationDisabled ? (
               <DialTooltip tooltip={disabledPathTooltip}>
-                <DialButton
+                <DialPrimaryButton
                   onClick={onConfirm}
                   label={mode === 'copy' ? copyLabel : moveLabel}
-                  variant={ButtonVariant.Primary}
                   disabled={isDestinationDisabled}
                   aria-disabled={isDestinationDisabled}
                 />
               </DialTooltip>
             ) : (
-              <DialButton
+              <DialPrimaryButton
                 onClick={onConfirm}
                 label={mode === 'copy' ? copyLabel : moveLabel}
-                variant={ButtonVariant.Primary}
               />
             )}
           </div>

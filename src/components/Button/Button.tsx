@@ -7,8 +7,8 @@ import type {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import type { ButtonVariant } from '@/types/button';
-import { variantClassMap } from './constants';
+import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
+import { getButtonClassNames } from './utils';
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -16,6 +16,8 @@ export interface DialButtonProps
     HTMLButtonElement
   > {
   variant?: ButtonVariant;
+  size?: ButtonSize;
+  appearance?: ButtonAppearance;
   textClassName?: string;
   label?: ReactNode;
   iconBefore?: ReactNode;
@@ -48,7 +50,9 @@ export interface DialButtonProps
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
  * @param [label] - The content of the button. Can be any React node.
- * @param [variant=ButtonVariant.Primary] - Defines the visual style of the button
+ * @param [variant] - Defines the visual style of the button
+ * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
+ * @param [size=ButtonSize.Standard] - Defines the size of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
@@ -57,6 +61,8 @@ export interface DialButtonProps
 export const DialButton: FC<DialButtonProps> = ({
   label,
   variant,
+  appearance = ButtonAppearance.Solid,
+  size = ButtonSize.Standard,
   className,
   textClassName,
   iconAfter,
@@ -66,14 +72,13 @@ export const DialButton: FC<DialButtonProps> = ({
   ...props
 }) => {
   const btnTextClassName = classNames(
-    'dial-small-semi',
-    iconAfter ? 'mr-2' : '',
-    iconBefore ? 'ml-2' : '',
     hideTitleOnMobile ? 'hidden sm:inline' : 'inline',
     textClassName,
   );
+
   const btnClassName = classNames(
-    variant && variantClassMap[variant],
+    variant && getButtonClassNames(variant, appearance),
+    size === ButtonSize.Small ? 'dial-button-small' : 'dial-button-standard',
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );

@@ -4,8 +4,7 @@ import {
   DialEllipsisTooltip,
   type DialEllipsisTooltipProps,
 } from './EllipsisTooltip';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 
 const meta = {
   title: 'Overlay/EllipsisTooltip',
@@ -121,9 +120,8 @@ function DynamicResizeExample(args: DialEllipsisTooltipProps) {
   const [narrow, setNarrow] = useState(true);
   return (
     <div className="flex flex-col items-center gap-3">
-      <DialButton
+      <DialNeutralButton
         onClick={() => setNarrow((v) => !v)}
-        variant={ButtonVariant.Secondary}
         label={`Toggle width (${narrow ? 'narrow' : 'wide'})`}
       />
       <div className={narrow ? 'w-40' : 'w-auto'}>

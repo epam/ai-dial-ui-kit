@@ -23,7 +23,6 @@ const backgroundsColors = {
 
   // TODO: need review and change names
   'red-400': 'var(--bg-red-400, #F76464)',
-  'red-800': 'var(--bg-red-800, #AE2F2F)',
   'orange-400': 'var(--bg-orange-400, #D97C27)',
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };
@@ -87,7 +86,6 @@ const placeholderColor = {
   primary: 'var(--text-primary, #F3F4F6)',
 };
 
-// TODO: need review
 const buttonsTextColors = {
   'controls-solid': 'var(--controls-text-solid, #FCFCFC)',
   'controls-solid-disable': 'var(--controls-text-solid-disable, #333942)',

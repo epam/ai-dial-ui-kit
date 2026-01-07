@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialPopup, type DialPopupProps } from './Popup';
-import { PopupSize } from '@/types/popup';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/ButtonWrappers';
 import { DialLoader } from '@/components/Loader/Loader';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance } from '@/types/button';
+import { PopupSize } from '@/types/popup';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
+import { DialPopup, type DialPopupProps } from './Popup';
 
 const meta = {
   title: 'Overlay/Popup',
@@ -26,12 +29,8 @@ const meta = {
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
     footer: (
       <div className="px-6 py-4 flex justify-end gap-2">
-        <button className="px-3 py-1 rounded border border-tertiary text-secondary hover:text-primary">
-          Button label
-        </button>
-        <button className="px-3 py-1 rounded bg-accent-primary text-white">
-          Button label
-        </button>
+        <DialNeutralButton label="Button label" />
+        <DialPrimaryButton label="Button label" />
       </div>
     ),
   },
@@ -45,12 +44,10 @@ const StatefulRender = (args: DialPopupProps & { buttonLabel?: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button
-        className="px-3 py-2 rounded bg-accent-primary text-white hover:opacity-90"
+      <DialPrimaryButton
+        label={args.buttonLabel || 'Open Popup'}
         onClick={() => setOpen(true)}
-      >
-        {args.buttonLabel || 'Open Popup'}
-      </button>
+      />
 
       <DialPopup
         {...args}
@@ -142,9 +139,9 @@ export const WithoutHeaderAndDismiss: Story = {
           <div className="text-lg font-semibold">Moving items</div>
           <div className="text-sm">8 of 24 items moved...</div>
         </div>
-        <DialButton
+        <DialPrimaryButton
           className="w-fit"
-          variant={ButtonVariant.Tertiary}
+          appearance={ButtonAppearance.Ghost}
           label="Cancel"
         />
       </div>

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
 import { DialFormItem, type DialFormItemProps } from './FormItem';
 
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialInput } from '@/components/Input/Input';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { DialSelect } from '@/components/Select/Select';
@@ -109,13 +110,7 @@ const BasicFormExample = (args: DialFormItemProps) => {
           onChange={(v) => setAgree(Boolean(v))}
         />
       </DialFormItem>
-
-      <button
-        type="submit"
-        className="px-3 py-2 rounded bg-accent-primary text-white"
-      >
-        Submit
-      </button>
+      <DialPrimaryButton type="submit" label="Submit" />
     </form>
   );
 };
@@ -154,13 +149,11 @@ const WithValidationExample = (args: DialFormItemProps) => {
         />
       </DialFormItem>
 
-      <button
+      <DialPrimaryButton
         type="submit"
-        className="px-3 py-2 rounded bg-accent-primary text-white disabled:opacity-60"
+        label="Send Invite"
         disabled={!isValid}
-      >
-        Send Invite
-      </button>
+      />
     </form>
   );
 };
@@ -195,12 +188,7 @@ const SelectBasicExample = (args: DialFormItemProps) => {
         />
       </DialFormItem>
 
-      <button
-        type="submit"
-        className="px-3 py-2 rounded bg-accent-primary text-white"
-      >
-        Save
-      </button>
+      <DialPrimaryButton type="submit" label="Save" />
     </form>
   );
 };
@@ -235,12 +223,7 @@ const SelectHorizontalExample = (args: DialFormItemProps) => {
         />
       </DialFormItem>
 
-      <button
-        type="submit"
-        className="px-3 py-2 rounded bg-accent-primary text-white"
-      >
-        Save
-      </button>
+      <DialPrimaryButton type="submit" label="Save" />
     </form>
   );
 };
@@ -288,13 +271,7 @@ const SelectWithValidationExample = (args: DialFormItemProps) => {
         />
       </DialFormItem>
 
-      <button
-        type="submit"
-        className="px-3 py-2 rounded bg-accent-primary text-white disabled:opacity-60"
-        disabled={!isValid}
-      >
-        Create
-      </button>
+      <DialPrimaryButton type="submit" label="Create" disabled={!isValid} />
     </form>
   );
 };

@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { DialItemType } from '@/types/item';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialFileManagerItemName } from './FileManagerItemName';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
 
 const meta: Meta<typeof DialFileManagerItemName> = {
   title: 'FileManager/components/FileManagerItemName',
@@ -42,10 +41,9 @@ const EditableWrapper = (props: Story['args']) => {
         onCancel={() => setEditing(false)}
       />
 
-      <DialButton
+      <DialNeutralButton
         className="Edit name"
         onClick={() => setEditing(true)}
-        variant={ButtonVariant.Secondary}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { DialButtonDropdown } from './ButtonDropdown';
-import { ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { DropdownItem } from '@/models/dropdown';
 
 describe('Dial UI Kit :: DialButtonDropdown', () => {
@@ -11,36 +11,31 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
   ];
 
   test('Should render with title and button icon', () => {
-    render(
-      <DialButtonDropdown
-        title="Settings"
-        variant={ButtonVariant.Primary}
-        items={items}
-      />,
-    );
+    render(<DialButtonDropdown title="Settings" items={items} />);
     const button = screen.getByRole('button', { name: 'Settings' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('dial-primary-button');
+    expect(button).toHaveClass('dial-primary-solid-button');
   });
 
   test('Should display chevron down icon initially', () => {
     render(
       <DialButtonDropdown
         title="Menu"
-        variant={ButtonVariant.Secondary}
+        variant={ButtonVariant.Neutral}
+        appearance={ButtonAppearance.Outlined}
         items={items}
       />,
     );
     const button = screen.getByRole('button', { name: 'Menu' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('dial-secondary-button');
+    expect(button).toHaveClass('dial-neutral-outlined-button');
   });
 
   test('Should toggle dropdown on button click', () => {
     render(
       <DialButtonDropdown
         title="Dropdown"
-        variant={ButtonVariant.Tertiary}
+        appearance={ButtonAppearance.Ghost}
         items={items}
       />,
     );
@@ -62,7 +57,8 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     render(
       <DialButtonDropdown
         title="Account"
-        variant={ButtonVariant.Secondary}
+        variant={ButtonVariant.Neutral}
+        appearance={ButtonAppearance.Outlined}
         items={items}
       />,
     );
@@ -79,11 +75,12 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     render(
       <DialButtonDropdown
         title="Button Variant Test"
-        variant={ButtonVariant.Secondary}
+        variant={ButtonVariant.Neutral}
+        appearance={ButtonAppearance.Outlined}
         items={items}
       />,
     );
     const button = screen.getByRole('button', { name: 'Button Variant Test' });
-    expect(button).toHaveClass('dial-secondary-button');
+    expect(button).toHaveClass('dial-neutral-outlined-button');
   });
 });

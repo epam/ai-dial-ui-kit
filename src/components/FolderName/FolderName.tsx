@@ -51,7 +51,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
-      <span className={'inline-flex relative text-secondary'} role="img">
+      <span className="inline-flex relative text-secondary" role="img">
         {getIcon()}
         {shared && (
           <span className="absolute -bottom-0.5 -left-0.5">

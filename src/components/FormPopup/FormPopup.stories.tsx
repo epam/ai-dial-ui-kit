@@ -1,8 +1,9 @@
-import { useState, useMemo, type ReactNode } from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFormPopup, type DialFormPopupProps } from './FormPopup';
-import { DialInput } from '@/components/Input/Input';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
+import { DialInput } from '@/components/Input/Input';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useMemo, useState, type ReactNode } from 'react';
+import { DialFormPopup, type DialFormPopupProps } from './FormPopup';
 
 const meta = {
   title: 'Overlay/FormPopup',
@@ -36,12 +37,7 @@ const FormExample = (args: DialFormPopupProps & { children?: ReactNode }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button
-        className="px-3 py-2 rounded bg-accent-primary text-white hover:opacity-90"
-        onClick={() => setOpen(true)}
-      >
-        Open Form
-      </button>
+      <DialPrimaryButton label="Open Form" onClick={() => setOpen(true)} />
 
       <DialFormPopup
         {...args}

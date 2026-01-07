@@ -10,20 +10,19 @@ import {
   DialBreadcrumb,
   type DialBreadcrumbProps,
 } from '@/components/Breadcrumb/Breadcrumb';
-import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 import { DialSearch, type DialSearchProps } from '@/components/Search/Search';
+import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
 
+import { DialNeutralButton } from '@/components/Button/ButtonWrappers';
+import { BASE_ICON_PROPS } from '@/constants/icon';
+import { mergeClasses } from '@/utils/merge-classes';
+import { getSegments } from '@/utils/path';
+import { IconArrowLeft } from '@tabler/icons-react';
 import {
-  panelBaseClassName,
   breadcrumbContainerClassName,
+  panelBaseClassName,
   searchContainerWrapperClassName,
 } from './constants';
-import { mergeClasses } from '@/utils/merge-classes';
-import { DialButton } from '@/components/Button/Button';
-import { ButtonVariant } from '@/types/button';
-import { IconArrowLeft } from '@tabler/icons-react';
-import { BASE_ICON_PROPS } from '@/constants/icon';
-import { getSegments } from '@/utils/path';
 
 export interface DialFileManagerNavigationPanelProps
   extends Omit<
@@ -227,9 +226,8 @@ export const DialFileManagerNavigationPanel: FC<
   const renderNavigation = useCallback(() => {
     if (isCompactView && isSearchExpanded) {
       return (
-        <DialButton
+        <DialNeutralButton
           className="!p-[9px]"
-          variant={ButtonVariant.Secondary}
           iconBefore={<IconArrowLeft {...BASE_ICON_PROPS} />}
           onClick={() => {
             setIsSearchExpanded(false);
