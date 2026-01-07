@@ -36,6 +36,8 @@ export {
   DialErrorButton,
   DialNeutralButton,
   DialPrimaryButton,
+  DialGhostButton,
+  DialLinkButton,
 } from './components/Button/ButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
