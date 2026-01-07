@@ -1,7 +1,10 @@
-import { type FC } from 'react';
 import { IconTrashX } from '@tabler/icons-react';
+import { type FC } from 'react';
+
+import { type DialButtonProps } from '@/components/Button/Button';
+import { DialErrorButton } from '@/components/Button/ButtonWrappers';
 import { BASE_ICON_PROPS } from '@/constants/icon';
-import { DialButton, type DialButtonProps } from '@/components/Button/Button';
+import { ButtonAppearance } from '@/types/button';
 
 export interface DialRemoveButtonProps
   extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
@@ -11,8 +14,8 @@ export interface DialRemoveButtonProps
 /**
  * A specialized button component for removal or delete actions.
  *
- * Renders a `DialButton` with a predefined trash icon (`IconTrashX`) as the leading icon.
- * Additional props are passed directly to the underlying `DialButton`.
+ * Renders a `DialErrorButton` with a predefined trash icon (`IconTrashX`) as the leading icon.
+ * Additional props are passed directly to the underlying `DialErrorButton`.
  * @example
  * <DialRemoveButton
  *   label="Delete item"
@@ -29,8 +32,9 @@ export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
   ...props
 }) => {
   return (
-    <DialButton
+    <DialErrorButton
       {...props}
+      appearance={ButtonAppearance.Ghost}
       iconBefore={
         <IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />
       }
