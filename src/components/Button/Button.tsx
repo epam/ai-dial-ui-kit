@@ -76,9 +76,11 @@ export const DialButton: FC<DialButtonProps> = ({
     textClassName,
   );
 
+  const isOnlyIcon = !variant && !label && (iconAfter || iconBefore);
   const btnClassName = classNames(
     variant && getButtonClassNames(variant, appearance),
     size === ButtonSize.Small ? 'dial-button-small' : 'dial-button-standard',
+    !isOnlyIcon && (size === ButtonSize.Small ? 'px-2' : 'px-3'),
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );

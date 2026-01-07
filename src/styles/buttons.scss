@@ -9,11 +9,11 @@
 }
 
 .dial-button-small {
-  @apply px-2 min-h-[24px] dial-tiny-text;
+  @apply min-h-[24px] dial-tiny-text;
 }
 
 .dial-button-standard {
-  @apply px-3 min-h-[40px] dial-small-text;
+  @apply min-h-[40px] dial-small-text;
 }
 
 .dial-button-disable {
