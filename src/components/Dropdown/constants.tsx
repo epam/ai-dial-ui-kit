@@ -8,7 +8,6 @@ export const dropdownBaseClassName = classNames(
 
 export const dropdownListBaseClassName = classNames(
   'z-[53] overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-none',
-  'w-max',
 );
 
 export const dropdownItemBaseClassName = classNames(
