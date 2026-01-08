@@ -6,7 +6,8 @@ import type { DropdownItem } from '@/models/dropdown';
 import { buttonChevronDown, buttonChevronUp } from './constants';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 
-export interface DialButtonDropdownProps extends DialButtonProps {
+export interface DialButtonDropdownProps
+  extends Omit<DialButtonProps, 'iconAfter'> {
   items: DropdownItem[];
 }
 
@@ -28,6 +29,7 @@ export interface DialButtonDropdownProps extends DialButtonProps {
 export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
   variant,
   appearance,
+  items,
   ...props
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -39,7 +41,7 @@ export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
     <div>
       <DialDropdown
         menu={{
-          items: props.items,
+          items,
         }}
         onOpenChange={(open) => setIsDropdownOpen(open)}
       >
