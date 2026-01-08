@@ -60,6 +60,7 @@ export interface DialSelectProps {
   className?: string;
   listClassName?: string;
   closable?: boolean;
+  invalid?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
   dismissRef?: Ref<unknown>;
@@ -109,6 +110,7 @@ export interface DialSelectProps {
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
  * @param [emptyStateIcon] - Icon to display when there are no options.
+ * @param [invalid] - Whether the select is in an invalid state, affecting styling.
  * @param [disabled=false] - Disable the control.
  * @param [className] - Additional CSS classes for the trigger.
  * @param [listClassName] - Additional CSS classes for the list dropdown.
@@ -135,6 +137,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   searchable = false,
   searchPlaceholder,
   selectAll = false,
+  invalid,
   selectAllLabel = 'Select all',
   emptyStateTitle = 'No options available',
   emptyStateDescription,
@@ -524,6 +527,7 @@ export const DialSelect: FC<DialSelectProps> = ({
           size === SelectSize.Sm
             ? 'min-h-[25px] px-1.5 py-1'
             : 'min-h-[38px] px-3 py-2',
+          invalid && 'dial-input-error',
           variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
           className,
         )}

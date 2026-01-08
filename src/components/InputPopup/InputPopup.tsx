@@ -56,7 +56,7 @@ export interface DialInputPopupProps {
  * @param [inputClassName] - Additional CSS classes applied to the input container.
  * @param [elementId] - A unique identifier for the input element, useful for accessibility and testing.
  * @param [errorText] - An optional error message displayed below the input when an error state is present.
- * @param [invalid] - Whether the input is in an invalid state, affecting styling. Applyed automatically if errorText is provided.
+ * @param [invalid] - Whether the input is in an invalid state, affecting styling. Applied automatically if errorText is provided.
  * @param [emptyValueText] - The text displayed when no value is selected and placeholder is not provided.
  */
 export const DialInputPopup: FC<DialInputPopupProps> = ({
