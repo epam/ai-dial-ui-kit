@@ -58,6 +58,7 @@ export interface DialSelectProps {
   emptyStateIcon?: ReactNode;
   disabled?: boolean;
   className?: string;
+  listClassName?: string;
   closable?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
@@ -110,6 +111,7 @@ export interface DialSelectProps {
  * @param [emptyStateIcon] - Icon to display when there are no options.
  * @param [disabled=false] - Disable the control.
  * @param [className] - Additional CSS classes for the trigger.
+ * @param [listClassName] - Additional CSS classes for the list dropdown.
  * @param [closable=false] - Show a close button in the dropdown header.
  * @param [header] - Custom node/function rendered above the options.
  * @param [footer] - Custom node/function rendered below the options.
@@ -139,6 +141,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   emptyStateIcon,
   disabled = false,
   className,
+  listClassName,
   closable = false,
   header,
   footer,
@@ -362,6 +365,7 @@ export const DialSelect: FC<DialSelectProps> = ({
       placement="bottom-start"
       allowedPlacements={['bottom-start', 'top-start']}
       maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
+      listClassName={listClassName}
       renderOverlay={() => (
         <div
           id={`list-${elementId || listId}`}
