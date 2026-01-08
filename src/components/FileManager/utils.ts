@@ -70,7 +70,7 @@ export const isHiddenDotFile = (node: DialFile) => {
  * ```
  */
 export const formatBytes = (bytes?: number): string => {
-  if (!bytes || bytes <= 0) return '';
+  if (!bytes || bytes <= 0) return '0 bytes';
   const KB = 1024;
   const MB = KB * 1024;
   if (bytes >= MB) return `${(bytes / MB).toFixed(1)} MB`;
