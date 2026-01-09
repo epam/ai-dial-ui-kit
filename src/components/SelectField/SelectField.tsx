@@ -103,6 +103,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
         className={selectClassName}
         value={value}
         elementId={elementId}
+        invalid={!!error}
         {...restSelectProps}
       />
     </DialFormItem>
