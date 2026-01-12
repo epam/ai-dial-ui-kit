@@ -32,6 +32,11 @@ const meta = {
       { value: 'SSE', label: 'Server-Sent Events (SSE)' },
       { value: 'WS', label: 'WebSocket' },
       { value: 'LP', label: 'Long Polling' },
+      {
+        value: 'SLN',
+        label:
+          'Some long label to show different behavior of list items fit in available space',
+      },
     ],
   },
 } satisfies Meta<DialSelectFieldProps>;
@@ -49,6 +54,7 @@ export const Single: Story = {
           {...args}
           value={value}
           onChange={(v) => setValue(v as string)}
+          listClassName="w-[320px]"
         />
       </div>
     );

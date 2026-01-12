@@ -8,14 +8,6 @@
   @apply border-focus;
 }
 
-.dial-button-small {
-  @apply min-h-[24px] dial-tiny-text;
-}
-
-.dial-button-standard {
-  @apply min-h-[40px] dial-small-text;
-}
-
 .dial-button-disable {
   @apply cursor-not-allowed;
 }
@@ -60,7 +52,7 @@
 }
 
 .dial-neutral-outlined-button {
-  @apply dial-base-button bg-transparent text-controls-solid;
+  @apply dial-base-button bg-transparent text-controls-outlined;
   @apply border-primary;
 
   &:hover,

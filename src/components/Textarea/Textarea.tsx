@@ -65,7 +65,7 @@ export const DialTextarea: FC<DialTextareaProps> = ({
         disabled={disabled}
         className={classNames(
           'dial-textarea dial-input px-3 py-2',
-          invalid ? 'dial-input-error' : '',
+          invalid && 'dial-input-error',
           disabled && 'dial-input-disable',
           readonly && 'dial-input-readonly',
           className,
