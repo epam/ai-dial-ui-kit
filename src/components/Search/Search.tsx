@@ -110,7 +110,7 @@ export const DialSearch: FC<DialSearchProps> = ({
       <input
         id={elementId}
         type="text"
-        autoComplete="off"
+        autoComplete="new-password"
         placeholder={placeholder}
         value={query ?? ''}
         disabled={disabled}
