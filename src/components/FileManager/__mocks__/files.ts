@@ -172,7 +172,7 @@ export const itemsMock: DialFile[] = [
                         contentType: 'image/svg+xml',
                         folderId: 'icons-svg-24',
                         updatedAt: '2025-01-10',
-                        contentLength: 5120,
+                        contentLength: 0,
                         author: authors[0],
                         owner: owners[0],
                         permissions: [DialFilePermission.READ],
