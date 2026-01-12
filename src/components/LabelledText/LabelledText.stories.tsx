@@ -49,6 +49,7 @@ export const WithContentAfterText: Story = {
     label: 'With Action',
     text: 'Copy this value',
     postfix: <DialPrimaryButton label="Copy" style={{ marginLeft: 8 }} />,
+    className: 'max-w-none',
   },
 };
 

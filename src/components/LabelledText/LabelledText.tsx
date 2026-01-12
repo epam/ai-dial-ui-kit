@@ -9,6 +9,7 @@ export interface DialLabelledTextProps {
   tooltip?: string;
   children?: ReactNode;
   postfix?: ReactNode;
+  className?: string;
 }
 /**
  * A label component for form fields with optional tooltip, content, and custom elements.
@@ -27,6 +28,7 @@ export interface DialLabelledTextProps {
  * @param [tooltip] - Optional tooltip different from main text
  * @param [children] - Custom content to render instead of the default text/tooltip
  * @param [postfix] - Element to display after the text (e.g., an asterisk)
+ * @param [className] - Additional CSS classes for the container element.
  */
 export const DialLabelledText: FC<DialLabelledTextProps> = ({
   label,
@@ -34,10 +36,15 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
   tooltip,
   children,
   postfix,
+  className,
 }) => {
   return (
     <div
-      className={classNames('flex flex-col', children ? '' : 'max-w-[200px]')}
+      className={classNames(
+        'flex flex-col',
+        children ? '' : 'max-w-[200px]',
+        className,
+      )}
     >
       <label className="dial-tiny mb-2 text-secondary">{label}</label>
       {children ? (
