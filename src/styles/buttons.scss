@@ -39,7 +39,7 @@
 }
 
 .dial-primary-link-button {
-  @apply dial-base-button bg-transparent text-accent-primary px-2 h-[24px];
+  @apply dial-base-button bg-transparent text-accent-primary px-2;
 
   &:hover,
   &:focus {
