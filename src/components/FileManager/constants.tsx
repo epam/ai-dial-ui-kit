@@ -1,5 +1,5 @@
 export const containerBaseClassName =
-  'w-full h-full grid grid-rows-[auto_1fr] gap-5 p-6 overflow-hidden min-w-0 bg-layer-2';
+  'w-full h-full grid grid-rows-[auto_1fr] gap-5 p-6 overflow-hidden min-w-0 bg-layer-1';
 
 export const toolbarBaseClassName =
   'w-full text-secondary flex items-center gap-2';
