@@ -125,7 +125,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('error item has proper class and overlay width hugs content', () => {
     render(
-      <DialDropdown menu={{ items }}>
+      <DialDropdown menu={{ items }} matchReferenceWidth={false}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
