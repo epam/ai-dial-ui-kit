@@ -1,7 +1,8 @@
-import { IconArrowUpRight } from '@tabler/icons-react';
 import type { FC, ReactNode } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
+
+import ArrowUpRightIcon from '@/assets/icons/arrow-up-right.svg?react';
 
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -26,22 +27,23 @@ export interface DialSharedEntityIndicatorProps {
  * @param [label="Shared entity"] - Accessible label for assistive tech
  * @param [size=10] - Pixel size for the icon
  * @param [className] - Additional Tailwind classes appended to the container
- * @param [stroke=2] - Stroke width for the icon
+ * @param [stroke=1.5] - Stroke width for the icon
  *
  */
 export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
   label = 'Shared entity',
   size = 10,
   className,
-  stroke = 2,
+  stroke = 1.5,
 }) => {
   return (
     <DialIcon
       className={mergeClasses('text-accent-primary', className)}
       icon={
-        <IconArrowUpRight
-          size={size}
-          stroke={stroke}
+        <ArrowUpRightIcon
+          width={size}
+          height={size}
+          strokeWidth={stroke}
           aria-label={typeof label === 'string' ? label : undefined}
           className="bg-layer-3"
           role="img"
