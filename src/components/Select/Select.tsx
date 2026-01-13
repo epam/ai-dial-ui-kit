@@ -424,7 +424,11 @@ export const DialSelect: FC<DialSelectProps> = ({
               ? !inlineSearch && (
                   <div className="px-2 py-3">
                     <DialNoDataContent
-                      icon={emptyStateIcon ?? <IconClipboardX size={24} />}
+                      icon={
+                        emptyStateIcon ?? (
+                          <IconClipboardX size={24} stroke={0.5} />
+                        )
+                      }
                       title={emptyStateTitle}
                       description={emptyStateDescription}
                     />
