@@ -1,3 +1,4 @@
+import { ScreenType } from '@/types/screen';
 import { getScreenType } from '@/utils/mobile';
 import { useEffect, useState } from 'react';
 
@@ -20,9 +21,16 @@ import { useEffect, useState } from 'react';
  * }
  */
 export const useScreenType = () => {
-  const [type, setType] = useState(getScreenType());
+  const [type, setType] = useState<ScreenType>(() => {
+    if (typeof window === 'undefined') {
+      return ScreenType.Desktop;
+    }
+    return getScreenType();
+  });
 
   useEffect(() => {
+    setType(getScreenType());
+
     const resizeListener = () => setType(getScreenType());
     window.addEventListener('resize', resizeListener);
     return () => window.removeEventListener('resize', resizeListener);
