@@ -17,7 +17,7 @@ const meta = {
   args: {
     label: 'Shared entity',
     size: 10,
-    stroke: 2,
+    stroke: 1.5,
   },
 } satisfies Meta<DialSharedEntityIndicatorProps>;
 

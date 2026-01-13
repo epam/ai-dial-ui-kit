@@ -38,7 +38,7 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
     });
     expect(svg.getAttribute('width')).toBe('10');
     expect(svg.getAttribute('height')).toBe('10');
-    expect(svg.getAttribute('stroke-width')).toBe('2');
+    expect(svg.getAttribute('stroke-width')).toBe('1.5');
   });
 
   test('respects provided size and stroke props', () => {

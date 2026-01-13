@@ -2,8 +2,8 @@ export const gridBaseClassName = 'h-full';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--controls-bg-accent, #5C8DEA)',
-  backgroundColor: 'var(--bg-layer-2, #141A23)',
-  oddRowBackgroundColor: 'var(--bg-layer-3, #222932)',
+  backgroundColor: 'var(--bg-layer-3, #222932)',
+  oddRowBackgroundColor: 'var(--bg-layer-4, #333942)',
   borderColor: 'var(--bg-layer-4, #333942)',
   rowBorder: '1px solid var(--stroke-tertiary, #090D13)',
   borderRadius: 3,
