@@ -364,6 +364,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
           extension: node.extension,
           isTemporary: false,
           owner: node.owner,
+          // permissions: node.permissions,
         }));
       }
 
@@ -381,6 +382,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         extension: node.extension,
         isTemporary: false,
         owner: node.owner,
+        // permissions: node.permissions,
       }));
     }
 
