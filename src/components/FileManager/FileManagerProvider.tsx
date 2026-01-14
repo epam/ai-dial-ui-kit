@@ -89,6 +89,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
+  dragAndDropEnabled,
   uploadValidationMessages,
   maxFileSize,
   onUploadArchive,
@@ -300,6 +301,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onUploadArchive,
     allowedFileTypes,
     validationMessages: uploadValidationMessages,
+    dragAndDropEnabled,
   });
 
   const handleDrop = useCallback(
