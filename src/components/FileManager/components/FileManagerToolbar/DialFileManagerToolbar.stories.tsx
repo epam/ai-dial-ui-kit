@@ -130,3 +130,28 @@ export const WithoutNewButton: Story = {
     return <StoryWrapper />;
   },
 };
+
+export const WithDisabledNewButton: Story = {
+  render: () => {
+    const StoryWrapper = () => {
+      const [activeTab, setActiveTab] = useState('organization');
+      const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
+
+      return (
+        <div className="p-4 border rounded-lg bg-background">
+          <DialFileManagerToolbar
+            tabs={mockTabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={setAreHiddenFilesVisible}
+            isNewButtonVisible
+            isNewButtonDisabled
+          />
+        </div>
+      );
+    };
+
+    return <StoryWrapper />;
+  },
+};
