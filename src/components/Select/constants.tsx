@@ -1,7 +1,7 @@
 import { IconChevronDown } from '@tabler/icons-react';
 
 export const selectTriggerBaseClassName =
-  'dial-input flex w-full items-center justify-between gap-2 dial-small';
+  'dial-input flex w-full items-center justify-between gap-2 dial-small cursor-pointer';
 
 export const selectOverlayBaseClassName = 'w-full rounded flex flex-col';
 
