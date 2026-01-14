@@ -140,4 +140,23 @@ describe('Dial UI Kit :: DialFileManagerToolbar', () => {
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
     expect(screen.getByText(customLabel)).toBeInTheDocument();
   });
+
+  it('disables new button when isNewButtonDisabled is true', () => {
+    render(
+      <DialFileManagerToolbar
+        tabs={mockTabs}
+        activeTab="tab1"
+        areHiddenFilesVisible={false}
+        onTabChange={vi.fn()}
+        onToggleHiddenFiles={vi.fn()}
+        isNewButtonVisible={true}
+        isNewButtonDisabled={true}
+        newButtonLabel="New"
+        newButtonDropdownItems={[{ key: '1', label: 'New File' }]}
+      />,
+    );
+
+    const newButton = screen.getByRole('button', { name: /new/i });
+    expect(newButton).toBeDisabled();
+  });
 });

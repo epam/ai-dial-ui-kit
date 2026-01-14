@@ -438,7 +438,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       }
     >
       <div className="px-6 py-4">
-        <p className="text-secondary mb-4">{displayMessage}</p>
+        <p className="text-secondary mb-4 break-words">{displayMessage}</p>
 
         {isSingleFile ? (
           <DialRadioGroup

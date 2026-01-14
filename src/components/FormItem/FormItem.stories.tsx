@@ -92,7 +92,7 @@ const BasicFormExample = (args: DialFormItemProps) => {
           elementId="name"
           placeholder="John Doe"
           value={name}
-          onChange={setName}
+          onChange={(name) => setName(name ?? '')}
         />
       </DialFormItem>
 
@@ -144,7 +144,7 @@ const WithValidationExample = (args: DialFormItemProps) => {
           type="email"
           placeholder="name@company.com"
           value={email}
-          onChange={setEmail}
+          onChange={(value) => setEmail(value ?? '')}
           invalid={email.length > 0 && !isValid}
         />
       </DialFormItem>
@@ -252,7 +252,7 @@ const SelectWithValidationExample = (args: DialFormItemProps) => {
           elementId="name"
           placeholder="Entity name"
           value={name}
-          onChange={setName}
+          onChange={(name) => setName(name ?? '')}
         />
       </DialFormItem>
 
