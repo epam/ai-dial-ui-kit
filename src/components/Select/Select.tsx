@@ -575,7 +575,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             />
           </div>
         ) : (
-          <div className="flex min-w-0 items-center gap-2 text-primary">
+          <div className="flex w-full min-w-0 items-center gap-2 text-primary">
             {renderSelectedValue()}
           </div>
         )}
