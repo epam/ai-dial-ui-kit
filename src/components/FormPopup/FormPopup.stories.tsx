@@ -84,7 +84,7 @@ export const SimpleForm: Story = {
                 elementId="name"
                 placeholder="Type a name…"
                 value={name}
-                onChange={setName}
+                onChange={(value) => setName(value ?? '')}
               />
             </div>
 
@@ -110,7 +110,7 @@ export const WithValidationAndDividers: Story = {
   },
   render: (args) => {
     const WithValidationInner = () => {
-      const [email, setEmail] = useState('');
+      const [email, setEmail] = useState<string>('');
       const [subscribe, setSubscribe] = useState(true);
 
       const isEmailValid = useMemo(
@@ -133,7 +133,7 @@ export const WithValidationAndDividers: Story = {
                 type="email"
                 placeholder="name@company.com"
                 value={email}
-                onChange={setEmail}
+                onChange={(value) => setEmail(value ?? '')}
                 invalid={email.length > 0 && !isEmailValid}
               />
               {!isEmailValid && email && (
