@@ -17,6 +17,14 @@ const singleFile: DialFile = {
   parentPath: '/Design/Icons',
 } as DialFile;
 
+const singleFileWithLongName: DialFile = {
+  id: '1',
+  name: '6afef8c65740fe16e022d90cfc5942f6f7961e0b06b64851c638a01210243068.png',
+  path: '/Design/Icons/6afef8c65740fe16e022d90cfc5942f6f7961e0b06b64851c638a01210243068.png',
+  nodeType: DialFileNodeType.ITEM,
+  parentPath: '/Design/Icons',
+} as DialFile;
+
 const multipleFiles: DialFile[] = [
   {
     id: '1',
@@ -164,6 +172,12 @@ type Story = StoryObj<typeof meta>;
 export const SingleFileConflict: Story = {
   args: {
     conflictingFiles: [singleFile],
+  },
+};
+
+export const SingleFileConflictWithLongName: Story = {
+  args: {
+    conflictingFiles: [singleFileWithLongName],
   },
 };
 
