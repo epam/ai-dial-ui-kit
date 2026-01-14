@@ -63,6 +63,9 @@ export interface DialSelectProps {
   invalid?: boolean;
   header?: ReactNode | (() => ReactNode);
   footer?: ReactNode | (() => ReactNode);
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onInlineQueryChange?: (query: string) => void;
   dismissRef?: Ref<unknown>;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChange?: (next: string | string[]) => void;
@@ -117,9 +120,12 @@ export interface DialSelectProps {
  * @param [closable=false] - Show a close button in the dropdown header.
  * @param [header] - Custom node/function rendered above the options.
  * @param [footer] - Custom node/function rendered below the options.
+ * @param [open] - Controlled open state of the dropdown. When provided, makes the dropdown controlled.
+ * @param [onOpenChange] - Called when the dropdown open state changes.
  * @param [onClose] - Called when the dropdown close button is clicked.
  * @param [onChange] - Called when the selection changes.
  * @param [inlineSearch=false] - Render a plain input inside trigger (single mode only).
+ * @param [onInlineQueryChange] - Called when the inline search query changes
  * @param [onFooterClick] - Called when the footer element is clicked. When provided, automatically closes the dropdown.
  * @param [dismissRef] - Ref object to expose a `dismiss` method to programmatically close the select.
  */
@@ -153,13 +159,36 @@ export const DialSelect: FC<DialSelectProps> = ({
   inlineSearch = false,
   dismissRef,
   onFooterClick,
+  open,
+  onOpenChange,
+  onInlineQueryChange,
 }) => {
   const listId = useId();
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState(
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isControlledOpen = open !== undefined;
+  const isOpen = isControlledOpen ? !!open : uncontrolledOpen;
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (!isControlledOpen) setUncontrolledOpen(next);
+      onOpenChange?.(next);
+    },
+    [isControlledOpen, onOpenChange],
+  );
+
+  const [query, setInternalQuery] = useState(
     inlineSearch ? customSelectedValue || '' : '',
   );
   const inlineSearchInputRef = useRef<HTMLInputElement>(null);
+  const setQuery = useCallback(
+    (next: string) => {
+      if (next !== query) {
+        setInternalQuery(next);
+        onInlineQueryChange?.(next);
+      }
+    },
+    [onInlineQueryChange, query],
+  );
 
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = useState<
@@ -179,12 +208,13 @@ export const DialSelect: FC<DialSelectProps> = ({
   }, [options, query]);
 
   useEffect(() => {
-    if (!open && !inlineSearch) setQuery('');
-  }, [inlineSearch, open]);
+    if (!isOpen && !inlineSearch) setQuery('');
+  }, [inlineSearch, isOpen, setQuery]);
 
   useEffect(() => {
-    if (inlineSearch) setQuery(customSelectedValue || '');
-  }, [customSelectedValue, inlineSearch]);
+    if (inlineSearch && !isOpen && customSelectedValue)
+      setQuery(customSelectedValue || '');
+  }, [customSelectedValue, inlineSearch, isOpen, setQuery]);
 
   const setSelection = useCallback(
     (next: string | string[]) => {
@@ -194,20 +224,39 @@ export const DialSelect: FC<DialSelectProps> = ({
     [isControlled, onChange],
   );
 
-  const handleToggle = (val: string) => {
-    if (multiple) {
-      const set = new Set(selectedValues);
-      if (set.has(val)) {
-        set.delete(val);
-      } else {
-        set.add(val);
+  const handleToggle = useCallback(
+    (val: string) => {
+      if (multiple) {
+        const set = new Set(selectedValues);
+        if (set.has(val)) {
+          set.delete(val);
+        } else {
+          set.add(val);
+        }
+        setSelection(Array.from(set));
+        return;
       }
-      setSelection(Array.from(set));
-    } else {
       setSelection(val);
+      if (inlineSearch) {
+        const selectedOption = options.find((o) => o.value === val);
+        if (selectedOption) {
+          setQuery(selectedOption.label);
+          onInlineQueryChange?.(selectedOption.label);
+        }
+      }
       setOpen(false);
-    }
-  };
+    },
+    [
+      multiple,
+      setSelection,
+      inlineSearch,
+      setOpen,
+      selectedValues,
+      options,
+      setQuery,
+      onInlineQueryChange,
+    ],
+  );
 
   const handleRemoveTag = useCallback(
     (event: MouseEvent<HTMLButtonElement>, val: string) => {
@@ -266,7 +315,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   const hasSelection = selectedValues.length > 0;
 
   useEffect(() => {
-    if (open && inlineSearch && !multiple && !disabled) {
+    if (isOpen && inlineSearch && !multiple && !disabled) {
       requestAnimationFrame(() => {
         const el = inlineSearchInputRef.current;
         if (!el) return;
@@ -275,7 +324,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         el.setSelectionRange?.(len, len);
       });
     }
-  }, [open, inlineSearch, multiple, disabled]);
+  }, [isOpen, inlineSearch, multiple, disabled]);
 
   const singleSelectedValue =
     !multiple && hasSelection ? selectedValues[0] : undefined;
@@ -356,21 +405,21 @@ export const DialSelect: FC<DialSelectProps> = ({
     setQuery(
       selectedValues.length === 1 ? (singleSelectedOption?.label ?? query) : '',
     );
-  }, [query, selectedValues.length, singleSelectedOption]);
+  }, [query, selectedValues.length, setQuery, singleSelectedOption?.label]);
 
   const handleTriggerAction = useCallback(() => {
     if (disabled) return;
-    setOpen((v) => !v);
+    setOpen(!isOpen);
 
     if (inlineSearch && !multiple) {
       setInlineSearchQuery();
       inlineSearchInputRef.current?.focus();
     }
-  }, [disabled, inlineSearch, multiple, setInlineSearchQuery]);
+  }, [disabled, inlineSearch, isOpen, multiple, setInlineSearchQuery, setOpen]);
 
   return (
     <DialDropdown
-      open={open}
+      open={isOpen}
       onOpenChange={handleClose}
       disabled={disabled}
       closable={closable}
@@ -531,7 +580,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         tabIndex={0}
         aria-roledescription="button to open select list"
         aria-haspopup="listbox"
-        aria-expanded={open}
+        aria-expanded={isOpen}
         aria-controls={`list-${elementId || listId}`}
         className={mergeClasses(
           selectTriggerBaseClassName,
@@ -595,7 +644,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         {!inlineSearch && (
           <DialIcon
             icon={selectChevronIcon}
-            className={classNames('text-primary', open && 'rotate-180')}
+            className={classNames('text-primary', isOpen && 'rotate-180')}
           />
         )}
       </div>
