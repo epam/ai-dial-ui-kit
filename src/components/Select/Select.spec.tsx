@@ -28,7 +28,7 @@ const openSelect = () => {
 
 describe('Dial UI Kit :: DialSelect', () => {
   test('renders placeholder and toggles aria-expanded on open/close', () => {
-    const { container } = renderSelect();
+    renderSelect();
 
     const trigger = screen.getByRole('button', { name: /select/i });
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -41,7 +41,7 @@ describe('Dial UI Kit :: DialSelect', () => {
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
 
     // ensure trigger text updated
-    expect(container.querySelector('button')).toHaveTextContent('Option 1');
+    expect(trigger).toHaveTextContent('Option 1');
   });
 
   test('fires onChange in single mode and closes afterwards', () => {
