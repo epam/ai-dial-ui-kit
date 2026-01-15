@@ -13,20 +13,27 @@ interface UseGridActionsColumnProps {
   isRowDisabled: (
     row: FileManagerGridRow,
     allowedFileTypes?: DialFileAcceptType[],
+    maxSelectableFileSize?: number,
   ) => boolean;
   allowedFileTypes?: DialFileAcceptType[];
+  maxSelectableFileSize?: number;
 }
 
 export const useGridActionsColumn = ({
   getContextMenuItems,
   isRowDisabled,
   allowedFileTypes,
+  maxSelectableFileSize,
 }: UseGridActionsColumnProps) => {
   const renderActionsCell = useCallback(
     (p: ICellRendererParams<FileManagerGridRow, unknown>) => {
       if (!p.data) return null;
 
-      const disabled = isRowDisabled(p.data, allowedFileTypes);
+      const disabled = isRowDisabled(
+        p.data,
+        allowedFileTypes,
+        maxSelectableFileSize,
+      );
 
       if (disabled) return null;
 
@@ -48,7 +55,12 @@ export const useGridActionsColumn = ({
         </DialDropdown>
       );
     },
-    [allowedFileTypes, getContextMenuItems, isRowDisabled],
+    [
+      allowedFileTypes,
+      maxSelectableFileSize,
+      getContextMenuItems,
+      isRowDisabled,
+    ],
   );
 
   const actionsColumnDef: ColDef<FileManagerGridRow> = useMemo(

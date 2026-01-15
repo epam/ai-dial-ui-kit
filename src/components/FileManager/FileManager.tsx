@@ -257,6 +257,7 @@ export interface DialFileManagerProps {
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
   sharedByMePaths?: Set<string>;
+  maxSelectableFileSize?: number;
 
   selectedPaths?: Set<string>;
   defaultSelectedPaths?: Set<string>;
@@ -422,6 +423,8 @@ export interface DialFileManagerProps {
  *
  * @param [allowedFileTypes] - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
  *
+ * @param [maxSelectableFileSize] - Maximum allowed file size for selection in bytes
+ *
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when there are no files.
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
@@ -456,6 +459,7 @@ export const DialFileManagerView: FC = () => {
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
     sharedByMePaths,
     allowedFileTypes,
+    maxSelectableFileSize,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -603,13 +607,22 @@ export const DialFileManagerView: FC = () => {
   }, [isSearchMode, visibleColumns]);
 
   const isRowDisabled = useCallback(
-    (row: FileManagerGridRow, allowedFileTypes?: DialFileAcceptType[]) => {
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      const isFileSizeAccepted =
+        row.nodeType === DialFileNodeType.FOLDER ||
+        !row.contentLength ||
+        typeof maxSelectableFileSize !== 'number' ||
+        row.contentLength <= maxSelectableFileSize;
       const isFileTypeAccepted =
         row.nodeType === DialFileNodeType.FOLDER ||
         !row.contentType ||
         isFileAccepted(allowedFileTypes, row.contentType, row.name);
 
-      return !isFileTypeAccepted;
+      return !isFileTypeAccepted || !isFileSizeAccepted;
     },
     [],
   );
@@ -914,10 +927,12 @@ export const DialFileManagerView: FC = () => {
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
     gridRows
-      .filter((row) => isRowDisabled(row, allowedFileTypes))
+      .filter((row) =>
+        isRowDisabled(row, allowedFileTypes, maxSelectableFileSize),
+      )
       .forEach((row) => ids.add(row.path));
     return ids;
-  }, [allowedFileTypes, gridRows, isRowDisabled]);
+  }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {
