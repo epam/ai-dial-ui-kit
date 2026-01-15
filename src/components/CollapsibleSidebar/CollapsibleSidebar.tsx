@@ -125,7 +125,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       </div>
       <div className={titleClass}>{title}</div>
       <div
-        className={mergeClasses('border-t border-primary h-12', buttonClass)}
+        className={mergeClasses('border-t border-tertiary h-12', buttonClass)}
       >
         {opened && additionalButtons}
         <DialButton
