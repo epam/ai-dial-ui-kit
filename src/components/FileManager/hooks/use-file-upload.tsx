@@ -29,7 +29,7 @@ export interface FileUploadValidationMessages {
 }
 
 export interface UseFileUploadOptions {
-  dragAndDropEnabled?: boolean;
+  uploadEnabled?: boolean;
   onUploadFiles?: (
     files: DialUploadFileItem[],
     destinationFolder: string,
@@ -62,7 +62,7 @@ export const useFileUpload = ({
   allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
-  dragAndDropEnabled = true,
+  uploadEnabled = true,
 }: UseFileUploadOptions = {}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggingOverWindow, setIsDraggingOverWindow] = useState(false);
@@ -90,12 +90,10 @@ export const useFileUpload = ({
     [allowedFileTypes],
   );
 
-  useEffect(() => {
-    if (dragAndDropEnabled) return;
-
-    setIsDragging(false);
-    setIsDraggingOverWindow(false);
-  }, [dragAndDropEnabled]);
+  const clearUploadState = useCallback(() => {
+    setPendingUploadFiles(new Map());
+    setUploadMetadata(null);
+  }, []);
 
   const {
     conflictingFiles,
@@ -110,6 +108,10 @@ export const useFileUpload = ({
   } = useConflictResolution({
     getDestinationFiles: () => existingFilesRef.current,
     onResolve: (items, destinationFolder) => {
+      if (!uploadEnabled) {
+        clearUploadState();
+        return;
+      }
       if (!uploadMetadata) return;
 
       const uploadItems = items
@@ -135,13 +137,19 @@ export const useFileUpload = ({
     },
   });
 
-  const clearUploadState = useCallback(() => {
-    setPendingUploadFiles(new Map());
-    setUploadMetadata(null);
-  }, []);
+  useEffect(() => {
+    if (uploadEnabled) return;
+
+    setIsDragging(false);
+    setIsDraggingOverWindow(false);
+    setUploadError(undefined);
+
+    closeConflictResolution();
+    clearUploadState();
+  }, [uploadEnabled, closeConflictResolution, clearUploadState]);
 
   useEffect(() => {
-    if (!dragAndDropEnabled) return;
+    if (!uploadEnabled) return;
 
     let dragCounter = 0;
 
@@ -182,7 +190,7 @@ export const useFileUpload = ({
       window.removeEventListener('drop', handleWindowDrop);
       window.removeEventListener('dragover', handleWindowDragOver);
     };
-  }, [dragAndDropEnabled]);
+  }, [uploadEnabled]);
 
   const checkFileSize = useCallback(
     (files: DialUploadFileItem[]): string[] => {
@@ -215,6 +223,8 @@ export const useFileUpload = ({
       destinationFolder: string,
       existingFiles: DialFile[],
     ) => {
+      if (!uploadEnabled) return false;
+
       setUploadError(undefined);
       existingFilesRef.current = existingFiles;
 
@@ -273,6 +283,7 @@ export const useFileUpload = ({
       return true;
     },
     [
+      uploadEnabled,
       onUploadFiles,
       onValidateUpload,
       checkFileSize,
@@ -311,7 +322,7 @@ export const useFileUpload = ({
 
   const handleDragEnter = useCallback(
     (e: DragEvent) => {
-      if (!dragAndDropEnabled) return;
+      if (!uploadEnabled) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -320,12 +331,12 @@ export const useFileUpload = ({
         setIsDragging(true);
       }
     },
-    [dragAndDropEnabled],
+    [uploadEnabled],
   );
 
   const handleDragLeave = useCallback(
     (e: DragEvent) => {
-      if (!dragAndDropEnabled) return;
+      if (!uploadEnabled) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -343,12 +354,12 @@ export const useFileUpload = ({
         setIsDragging(false);
       }
     },
-    [dragAndDropEnabled],
+    [uploadEnabled],
   );
 
   const handleDragOver = useCallback(
     (e: DragEvent) => {
-      if (!dragAndDropEnabled) return;
+      if (!uploadEnabled) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -357,7 +368,7 @@ export const useFileUpload = ({
         e.dataTransfer.dropEffect = 'copy';
       }
     },
-    [dragAndDropEnabled],
+    [uploadEnabled],
   );
 
   const handleDrop = useCallback(
@@ -366,7 +377,7 @@ export const useFileUpload = ({
       destinationFolder: string,
       existingFiles: DialFile[],
     ) => {
-      if (!dragAndDropEnabled) return;
+      if (!uploadEnabled) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -398,7 +409,7 @@ export const useFileUpload = ({
 
       await handleUpload(acceptedItems, destinationFolder, existingFiles);
     },
-    [dragAndDropEnabled, filterAcceptedFiles, handleUpload, validationMessages],
+    [uploadEnabled, filterAcceptedFiles, handleUpload, validationMessages],
   );
 
   useEffect(() => {
@@ -420,6 +431,11 @@ export const useFileUpload = ({
     }
 
     const handleChange = async () => {
+      if (!uploadEnabled) {
+        if (input) input.value = '';
+        return;
+      }
+
       if (!input?.files?.length) return;
 
       const files = Array.from(input.files);
@@ -460,10 +476,18 @@ export const useFileUpload = ({
         fileInputRef.current = null;
       }
     };
-  }, [allowedFileTypes, filterAcceptedFiles, handleUpload, validationMessages]);
+  }, [
+    uploadEnabled,
+    allowedFileTypes,
+    filterAcceptedFiles,
+    handleUpload,
+    validationMessages,
+  ]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
+      if (!uploadEnabled) return;
+
       destinationFolderRef.current = destinationFolder;
       existingFilesRef.current = existingFiles;
 
@@ -471,12 +495,12 @@ export const useFileUpload = ({
         fileInputRef.current.click();
       }
     },
-    [],
+    [uploadEnabled],
   );
 
   const openArchiveDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
-      if (!onUploadArchive) return;
+      if (!onUploadArchive || !uploadEnabled) return;
 
       // Only allow one .zip file
       const input = document.createElement('input');
@@ -520,7 +544,7 @@ export const useFileUpload = ({
       document.body.appendChild(input);
       input.click();
     },
-    [onUploadArchive, validationMessages],
+    [uploadEnabled, onUploadArchive, validationMessages],
   );
 
   const clearError = useCallback(() => {

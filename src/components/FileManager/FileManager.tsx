@@ -317,7 +317,7 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
-  dragAndDropEnabled?: boolean;
+  uploadEnabled?: boolean;
 
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
@@ -413,7 +413,7 @@ export interface DialFileManagerProps {
  * @param [onValidateUpload] - Callback to validate files before upload
  * @param [maxFileSize] - Maximum allowed file size for uploads in bytes
  * @param [uploadValidationMessages] - Custom validation messages for file uploads
- * @param [dragAndDropEnabled=true] - Whether drag-and-drop uploads are enabled
+ * @param [uploadEnabled=true] - Whether files uploads are enabled
  *
  * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges) in the tree and grid.
  *
