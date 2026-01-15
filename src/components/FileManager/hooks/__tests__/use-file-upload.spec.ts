@@ -1167,4 +1167,171 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       );
     });
   });
+
+  describe('uploadEnabled', () => {
+    beforeEach(() => {
+      vi.mocked(window.addEventListener).mockClear?.();
+      vi.mocked(window.removeEventListener).mockClear?.();
+    });
+
+    it('does not set up window event listeners when disabled', () => {
+      renderHook(() => useFileUpload({ uploadEnabled: false }));
+
+      expect(window.addEventListener).not.toHaveBeenCalled();
+    });
+
+    it('does nothing in drag handlers when disabled', async () => {
+      const onUploadFiles = vi.fn();
+      const { result } = renderHook(() =>
+        useFileUpload({ onUploadFiles, uploadEnabled: false }),
+      );
+
+      const files = [createMockFile('file1.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+          dropEffect: '',
+        },
+        currentTarget: {
+          getBoundingClientRect: () => ({
+            left: 0,
+            right: 100,
+            top: 0,
+            bottom: 100,
+          }),
+        },
+        clientX: -10,
+        clientY: 50,
+      } as unknown as DragEvent;
+
+      act(() => {
+        result.current.handleDragEnter(mockEvent);
+      });
+      expect(result.current.isDragging).toBe(false);
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+      expect(mockEvent.stopPropagation).not.toHaveBeenCalled();
+
+      act(() => {
+        result.current.handleDragOver(mockEvent);
+      });
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+      expect(mockEvent.stopPropagation).not.toHaveBeenCalled();
+      expect(mockEvent.dataTransfer.dropEffect).toBe('');
+
+      act(() => {
+        result.current.handleDragLeave(mockEvent);
+      });
+      expect(result.current.isDragging).toBe(false);
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).not.toHaveBeenCalled();
+      expect(result.current.uploadError).toBeUndefined();
+    });
+
+    it('does not open file dialog when disabled', () => {
+      const { result } = renderHook(() =>
+        useFileUpload({ uploadEnabled: false }),
+      );
+
+      const clickSpy = vi
+        .spyOn(HTMLInputElement.prototype, 'click')
+        .mockImplementation(() => undefined);
+
+      act(() => {
+        result.current.openFileDialog('/folder', mockExistingFiles);
+      });
+
+      expect(clickSpy).not.toHaveBeenCalled();
+      clickSpy.mockRestore();
+    });
+
+    it('does not upload when handleUpload is called programmatically and disabled', async () => {
+      const onUploadFiles = vi.fn();
+
+      const { result } = renderHook(() =>
+        useFileUpload({ onUploadFiles, uploadEnabled: false }),
+      );
+
+      const files = [
+        { fileContent: createMockFile('file1.txt', 10), name: 'file1.txt' },
+      ];
+
+      let ok = true;
+
+      await act(async () => {
+        ok = await result.current.handleUpload(files, '/folder', []);
+      });
+
+      expect(ok).toBe(false);
+      expect(onUploadFiles).not.toHaveBeenCalled();
+      expect(result.current.uploadError).toBeUndefined();
+    });
+
+    it('does not open archive dialog when disabled', () => {
+      const onUploadArchive = vi.fn();
+      const { result } = renderHook(() =>
+        useFileUpload({ onUploadArchive, uploadEnabled: false }),
+      );
+
+      act(() => {
+        result.current.openArchiveDialog('/folder', mockExistingFiles);
+      });
+
+      const input = document.body.querySelector(
+        'input[accept=".zip,application/zip"]',
+      ) as HTMLInputElement | null;
+
+      expect(input).toBeNull();
+      expect(onUploadArchive).not.toHaveBeenCalled();
+    });
+
+    it('removes window listeners and resets states when toggled off', () => {
+      const { result, rerender } = renderHook(
+        ({ enabled }: { enabled: boolean }) =>
+          useFileUpload({ uploadEnabled: enabled }),
+        { initialProps: { enabled: true } },
+      );
+
+      const dragEnterEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: { types: ['Files'] },
+      } as unknown as DragEvent;
+
+      act(() => {
+        result.current.handleDragEnter(dragEnterEvent);
+      });
+      expect(result.current.isDragging).toBe(true);
+
+      rerender({ enabled: false });
+
+      expect(result.current.isDragging).toBe(false);
+      expect(result.current.isDraggingOverWindow).toBe(false);
+      expect(result.current.uploadError).toBeUndefined();
+
+      expect(window.removeEventListener).toHaveBeenCalledWith(
+        'dragenter',
+        expect.any(Function),
+      );
+      expect(window.removeEventListener).toHaveBeenCalledWith(
+        'dragleave',
+        expect.any(Function),
+      );
+      expect(window.removeEventListener).toHaveBeenCalledWith(
+        'drop',
+        expect.any(Function),
+      );
+      expect(window.removeEventListener).toHaveBeenCalledWith(
+        'dragover',
+        expect.any(Function),
+      );
+    });
+  });
 });

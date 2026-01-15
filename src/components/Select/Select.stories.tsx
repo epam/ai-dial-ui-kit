@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
 import { SelectSize, SelectVariant } from '@/types/select';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
+import { useState, useRef } from 'react';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -78,8 +80,11 @@ const meta = {
     disabled: { control: { type: 'boolean' } },
     className: { control: { type: 'text' } },
     closable: { control: { type: 'boolean' } },
+    open: { control: { type: 'boolean' } },
+    onOpenChange: { control: false },
     onClose: { control: false },
     onChange: { control: false },
+    onInlineQueryChange: { control: false },
   },
   args: {
     options: baseOptions,
@@ -214,6 +219,72 @@ export const InlineSearch: Story = {
   args: {
     inlineSearch: true,
     searchPlaceholder: 'Display name',
+  },
+};
+
+const productsMockOptions: SelectOption[] = [
+  { value: 'laptop', label: 'Laptop' },
+  { value: 'smartphone', label: 'Smartphone' },
+  { value: 'tablet', label: 'Tablet' },
+  { value: 'smartwatch', label: 'Smartwatch' },
+  { value: 'headphones', label: 'Headphones' },
+  { value: 'camera', label: 'Camera' },
+  { value: 'printer', label: 'Printer' },
+  { value: 'monitor', label: 'Monitor' },
+  { value: 'keyboard', label: 'Keyboard' },
+  { value: 'mouse', label: 'Mouse' },
+];
+export const InlineWithExternalRequest: Story = {
+  name: 'Inline search with external request',
+  args: {
+    inlineSearch: true,
+    searchPlaceholder: 'Start typing device name, e.g. smartphone...',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Simulates fetching options from an external source based on user input with debounce. Uses controlled open ',
+      },
+    },
+  },
+  render: (args) => {
+    const [options, setOptions] = useState<SelectOption[]>([]);
+    const [open, setOpen] = useState(false);
+    const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
+
+    const handleSearch = (query: string) => {
+      // Clear previous timeout
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Simulate an API request with debounce
+      debounceTimeoutRef.current = setTimeout(() => {
+        const filtered = query.length
+          ? productsMockOptions.filter((option) =>
+              option.label.toLowerCase().includes(query.toLowerCase()),
+            )
+          : [];
+        setOptions(filtered);
+      }, 300);
+    };
+
+    return (
+      <div className="w-[320px]">
+        <DialSelect
+          {...args}
+          options={options}
+          onInlineQueryChange={(v) => {
+            handleSearch(v as string);
+          }}
+          open={open}
+          onOpenChange={setOpen}
+        />
+      </div>
+    );
   },
 };
 
