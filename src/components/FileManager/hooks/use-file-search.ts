@@ -11,6 +11,7 @@ export interface UseFileSearchOptions {
   navigationPanelValue?: string | number | null;
   onNavigationPanelSearchChange?: (value: string) => void;
   allItems?: DialFile[];
+  activeTab?: string;
 }
 
 export interface UseFileSearchReturn {
@@ -58,12 +59,14 @@ export function useFileSearch({
   navigationPanelValue,
   onNavigationPanelSearchChange,
   allItems = [],
+  activeTab,
 }: UseFileSearchOptions): UseFileSearchReturn {
   const [searchValue, setSearchValue] = useState<string>('');
   const hasCalledSearchRef = useRef<boolean>(false);
   const isSearchModeRef = useRef<boolean>(false);
   const allFilesCache = useRef<DialFile[]>([]);
   const prevPathRef = useRef<string | undefined>(currentPath);
+  const prevActiveTabRef = useRef<string | undefined>(activeTab);
 
   useEffect(() => {
     if (navigationPanelValue != null) {
@@ -127,14 +130,27 @@ export function useFileSearch({
   );
 
   useEffect(() => {
-    if (prevPathRef.current !== currentPath) {
+    if (
+      prevPathRef.current !== currentPath ||
+      prevActiveTabRef.current !== activeTab
+    ) {
       prevPathRef.current = currentPath;
+      prevActiveTabRef.current = activeTab;
 
-      if (isSearchModeRef.current || effectiveSearchValue) {
-        handleSearchClear();
-      }
+      // Always clear search when path or tab changes, regardless of search mode state
+      hasCalledSearchRef.current = false;
+      isSearchModeRef.current = false;
+      allFilesCache.current = [];
+      setSearchValue('');
+      onNavigationPanelSearchChange?.('');
+      clearSearchResults?.();
     }
-  }, [currentPath, handleSearchClear, effectiveSearchValue]);
+  }, [
+    currentPath,
+    activeTab,
+    onNavigationPanelSearchChange,
+    clearSearchResults,
+  ]);
 
   // Cache all files when search results arrive
   useEffect(() => {
