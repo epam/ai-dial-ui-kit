@@ -36,8 +36,8 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
     const svg = screen.getByRole('img', {
       name: 'Shared entity',
     });
-    expect(svg.getAttribute('width')).toBe('10');
-    expect(svg.getAttribute('height')).toBe('10');
+    expect(svg.getAttribute('width')).toBe('14');
+    expect(svg.getAttribute('height')).toBe('14');
     expect(svg.getAttribute('stroke-width')).toBe('1.5');
   });
 

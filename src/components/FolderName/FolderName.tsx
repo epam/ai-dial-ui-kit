@@ -58,10 +58,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         {getIcon()}
         {shared && (
           <span className="absolute z-50 -bottom-0.5 -left-0.5">
-            <DialSharedEntityIndicator
-              size={14}
-              className={sharedIndicatorClassName}
-            />
+            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
           </span>
         )}
       </span>
