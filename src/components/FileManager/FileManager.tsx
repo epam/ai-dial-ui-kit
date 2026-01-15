@@ -317,6 +317,7 @@ export interface DialFileManagerProps {
     name: string,
     destinationFolder: string,
   ) => void;
+  uploadEnabled?: boolean;
 
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
   onGetInfo?: (file: DialFile) => void | Promise<void>;
@@ -408,6 +409,11 @@ export interface DialFileManagerProps {
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
+ * @param [onUploadFiles] - Callback fired when files are uploaded
+ * @param [onValidateUpload] - Callback to validate files before upload
+ * @param [maxFileSize] - Maximum allowed file size for uploads in bytes
+ * @param [uploadValidationMessages] - Custom validation messages for file uploads
+ * @param [uploadEnabled=true] - Whether files uploads are enabled
  *
  * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges) in the tree and grid.
  *
@@ -1103,13 +1109,16 @@ export const DialFileManagerView: FC = () => {
       );
     }
 
-    // In compact view, we display only one main column (with name and details).
-    // We also append a system column for the actions button.
-    if (isCompactView) {
-      columns = columns.slice(0, 1);
-      columns.push(actionsColumnDef);
-    } else {
-      columns.push(actionsColumnDef);
+    // Always add actions column if action labels are provided
+    if (gridOptions?.actionLabels) {
+      // In compact view, we display only one main column (with name and details).
+      // We also append a system column for the actions button.
+      if (isCompactView) {
+        columns = columns.slice(0, 1);
+        columns.push(actionsColumnDef);
+      } else {
+        columns.push(actionsColumnDef);
+      }
     }
 
     if (filterable) return columns;
@@ -1126,6 +1135,7 @@ export const DialFileManagerView: FC = () => {
     actionsColumnDef,
     userColumnDefs,
     effectiveVisibleColumns,
+    gridOptions?.actionLabels,
   ]);
 
   const cellClickHandler = useCallback(
@@ -1294,7 +1304,12 @@ export const DialFileManagerView: FC = () => {
         mode={destinationFolderMode}
         items={items}
         rootItem={rootItem}
-        gridOptions={{ columnDefs: columnDefs, loading: filesLoading }}
+        gridOptions={{
+          columnDefs: columnDefs.filter(
+            (col) => col.colId !== FileManagerColumnKey.Actions,
+          ),
+          loading: filesLoading,
+        }}
         onUploadFiles={onUploadFiles}
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
