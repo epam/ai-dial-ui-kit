@@ -295,6 +295,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
               'All files/Empty folder',
               'All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
               '/All files/Design/ThisIsAVeryLongFolderNameWithoutSpacesToTestTheUIBehaviorInDifferentComponents',
+              'All files/Deep Nest',
             ])
           }
           selectedPaths={selectedPaths}

@@ -25,8 +25,6 @@ import {
   COMPACT_VIEW_HEADER_HEIGHT,
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
-  gridRowHoverGroupClassName,
-  gridSharedIndicatorClassName,
 } from './constants';
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -236,6 +234,7 @@ interface FileManagerGridContext {
   renamedItem?: DialFile;
   renameTriggerView: FileManagerRenameTriggerView;
   sharedByMePaths?: Set<string>;
+  selectedPaths?: Set<string>;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -628,9 +627,16 @@ export const DialFileManagerView: FC = () => {
             cancelFolderCreation,
             newFolderTempId,
             sharedByMePaths,
+            selectedPaths,
           } = params.context;
 
           const isSharedByMe = sharedByMePaths?.has(params.data.path);
+          const isSelected = selectedPaths?.has(params.data.path);
+
+          const sharedIndicatorClassName = mergeClasses([
+            'group-hover/grid-row:bg-accent-primary-alpha',
+            isSelected && 'bg-accent-primary-alpha',
+          ]);
 
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
@@ -640,7 +646,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`new-folder-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
-                sharedIndicatorClassName={gridSharedIndicatorClassName}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
@@ -680,7 +686,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`rename-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
-                sharedIndicatorClassName={gridSharedIndicatorClassName}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={(value) => onRenameValidate(value, renamedItem)}
                 onSave={onRenameSave}
@@ -701,7 +707,7 @@ export const DialFileManagerView: FC = () => {
                 nodeType={type}
                 size={params.data.size}
                 shared={isSharedByMe}
-                sharedIndicatorClassName={gridSharedIndicatorClassName}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
                 dateOptions={dateOptions}
@@ -713,14 +719,14 @@ export const DialFileManagerView: FC = () => {
             <DialFolderName
               name={params.data.name}
               shared={isSharedByMe}
-              sharedIndicatorClassName={gridSharedIndicatorClassName}
+              sharedIndicatorClassName={sharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ) : (
             <DialFileName
               name={params.data.name}
               shared={isSharedByMe}
-              sharedIndicatorClassName={gridSharedIndicatorClassName}
+              sharedIndicatorClassName={sharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
@@ -1244,7 +1250,7 @@ export const DialFileManagerView: FC = () => {
                   onCellClicked: cellClickHandler,
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                  rowClass: [gridRowHoverGroupClassName],
+                  rowClass: 'group/grid-row',
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>
@@ -1266,6 +1272,7 @@ export const DialFileManagerView: FC = () => {
                     renamedPath,
                     newFolderTempId,
                     sharedByMePaths,
+                    selectedPaths,
                   } as FileManagerGridContext,
                 }}
                 selectedRows={selectedGridRows}
