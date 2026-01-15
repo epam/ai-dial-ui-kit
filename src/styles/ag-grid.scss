@@ -96,6 +96,12 @@
       @apply bg-transparent;
     }
   }
+
+  .ag-row-selected {
+    &.ag-row-hover:not(.ag-full-width-row):before {
+      @apply bg-transparent;
+    }
+  }
 }
 
 .with-selection-column {

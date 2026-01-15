@@ -68,6 +68,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   onSave,
   onCancel,
   inputContainerClassName,
+  sharedIndicatorClassName,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -88,6 +89,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           shared={shared}
           iconSize={iconSize}
           className="max-w-[428px] truncate"
+          sharedIndicatorClassName={sharedIndicatorClassName}
         />
       );
     }
@@ -98,6 +100,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         name={name}
         shared={shared}
         iconSize={iconSize}
+        sharedIndicatorClassName={sharedIndicatorClassName}
       />
     );
   }
@@ -113,6 +116,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
       onChange={onChange}
       iconSize={iconSize}
       inputContainerClassName={inputContainerClassName}
+      sharedIndicatorClassName={sharedIndicatorClassName}
     />
   );
 };

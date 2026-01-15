@@ -9,10 +9,11 @@ import { DialLoader } from '@/components/Loader/Loader';
 
 export interface DialFolderNameProps {
   name: string;
-  className?: string;
   shared?: boolean;
   loading?: boolean;
   iconSize?: number;
+  className?: string;
+  sharedIndicatorClassName?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ export interface DialFolderNameProps {
  * @param shared - If true, shows shared indicator. Default: false.
  * @param loading - If true, shows loading state. Default: false.
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
+ * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
@@ -36,6 +38,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   shared = false,
   loading = false,
   iconSize = BASE_ICON_SIZE,
+  sharedIndicatorClassName,
 }) => {
   const getIcon = () => {
     if (loading) {
@@ -54,8 +57,8 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
       <span className="inline-flex relative text-secondary" role="img">
         {getIcon()}
         {shared && (
-          <span className="absolute -bottom-0.5 -left-0.5">
-            <DialSharedEntityIndicator />
+          <span className="absolute z-50 -bottom-0.5 -left-0.5">
+            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
           </span>
         )}
       </span>
