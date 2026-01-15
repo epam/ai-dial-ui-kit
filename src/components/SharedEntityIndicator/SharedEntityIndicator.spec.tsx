@@ -18,7 +18,7 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
   });
 
   test('accepts custom className', () => {
-    render(<DialSharedEntityIndicator className="rounded-full p-1" />);
+    render(<DialSharedEntityIndicator containerClassName="rounded-full p-1" />);
     expect(
       screen.getByRole('img', { name: 'Shared entity' }).parentElement,
     ).toHaveClass('rounded-full', 'p-1');
@@ -36,8 +36,8 @@ describe('Dial UI Kit :: DialSharedEntityIndicator', () => {
     const svg = screen.getByRole('img', {
       name: 'Shared entity',
     });
-    expect(svg.getAttribute('width')).toBe('10');
-    expect(svg.getAttribute('height')).toBe('10');
+    expect(svg.getAttribute('width')).toBe('14');
+    expect(svg.getAttribute('height')).toBe('14');
     expect(svg.getAttribute('stroke-width')).toBe('1.5');
   });
 

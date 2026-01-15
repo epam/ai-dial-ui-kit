@@ -242,6 +242,10 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       type={isFolder ? DialItemType.Folder : DialItemType.File}
                       loading={isLoading}
                       shared={isSharedByMe}
+                      sharedIndicatorClassName={mergeClasses(
+                        'group-hover/item:bg-accent-primary-alpha',
+                        isSelected && 'bg-accent-primary-alpha',
+                      )}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                       {...(!isRootFolder && {
                         editing: isRenaming,

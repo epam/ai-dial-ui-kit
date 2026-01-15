@@ -24,6 +24,7 @@ export interface DialFileManagerItemNameInputProps {
   inputIconAfter?: ReactNode;
   inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
+  sharedIndicatorClassName?: string;
 }
 
 /**
@@ -71,6 +72,7 @@ export interface DialFileManagerItemNameInputProps {
  * @param {string} [props.inputContainerClassName] - Additional CSS classes applied to the input container.
  * @param {Ref<HTMLInputElement>} [props.inputRef] - Ref to access the underlying input element.
  * @param {(value: string) => void} [props.onChange] - Callback fired when input value changes.
+ * @param {string} [props.sharedIndicatorClassName] - Additional CSS classes for the shared indicator.
  */
 export const DialFileManagerItemNameInput: FC<
   DialFileManagerItemNameInputProps
@@ -91,6 +93,7 @@ export const DialFileManagerItemNameInput: FC<
   inputIconAfter,
   inputRef,
   onChange,
+  sharedIndicatorClassName,
 }) => {
   const getInputIconAfter = () => {
     if (!inputInvalid) return null;
@@ -120,6 +123,7 @@ export const DialFileManagerItemNameInput: FC<
         stroke={iconStroke}
         loading={loading}
         shared={shared}
+        sharedIndicatorClassName={sharedIndicatorClassName}
       />
       <DialInput
         containerClassName={mergeClasses(

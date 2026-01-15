@@ -234,6 +234,7 @@ interface FileManagerGridContext {
   renamedItem?: DialFile;
   renameTriggerView: FileManagerRenameTriggerView;
   sharedByMePaths?: Set<string>;
+  selectedPaths?: Set<string>;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -256,6 +257,7 @@ export interface DialFileManagerProps {
   rootItem?: DialRootFolder;
   filesLoading?: boolean;
   sharedByMePaths?: Set<string>;
+  maxSelectableFileSize?: number;
 
   selectedPaths?: Set<string>;
   defaultSelectedPaths?: Set<string>;
@@ -421,6 +423,8 @@ export interface DialFileManagerProps {
  *
  * @param [allowedFileTypes] - Allowed file types (same format as the HTML `<input accept>` attribute). Controls upload filtering and which items are disabled in the File Manager UI. Supports MIME types, wildcards (e.g. `image/*`), and extensions (e.g. `.svg`).
  *
+ * @param [maxSelectableFileSize] - Maximum allowed file size for selection in bytes
+ *
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when there are no files.
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
@@ -455,6 +459,7 @@ export const DialFileManagerView: FC = () => {
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
     sharedByMePaths,
     allowedFileTypes,
+    maxSelectableFileSize,
 
     areHiddenFilesVisible,
     toggleHiddenFilesVisibility,
@@ -602,13 +607,22 @@ export const DialFileManagerView: FC = () => {
   }, [isSearchMode, visibleColumns]);
 
   const isRowDisabled = useCallback(
-    (row: FileManagerGridRow, allowedFileTypes?: DialFileAcceptType[]) => {
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      const isFileSizeAccepted =
+        row.nodeType === DialFileNodeType.FOLDER ||
+        !row.contentLength ||
+        typeof maxSelectableFileSize !== 'number' ||
+        row.contentLength <= maxSelectableFileSize;
       const isFileTypeAccepted =
         row.nodeType === DialFileNodeType.FOLDER ||
         !row.contentType ||
         isFileAccepted(allowedFileTypes, row.contentType, row.name);
 
-      return !isFileTypeAccepted;
+      return !isFileTypeAccepted || !isFileSizeAccepted;
     },
     [],
   );
@@ -632,9 +646,16 @@ export const DialFileManagerView: FC = () => {
             cancelFolderCreation,
             newFolderTempId,
             sharedByMePaths,
+            selectedPaths,
           } = params.context;
 
           const isSharedByMe = sharedByMePaths?.has(params.data.path);
+          const isSelected = selectedPaths?.has(params.data.path);
+
+          const sharedIndicatorClassName = mergeClasses([
+            'group-hover/grid-row:bg-accent-primary-alpha',
+            isSelected && 'bg-accent-primary-alpha',
+          ]);
 
           if (params.data?.isTemporary && params.data.id === newFolderTempId) {
             return (
@@ -644,6 +665,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`new-folder-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
@@ -683,6 +705,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`rename-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={(value) => onRenameValidate(value, renamedItem)}
                 onSave={onRenameSave}
@@ -703,6 +726,7 @@ export const DialFileManagerView: FC = () => {
                 nodeType={type}
                 size={params.data.size}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={sharedIndicatorClassName}
                 updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
                 dateOptions={dateOptions}
@@ -714,12 +738,14 @@ export const DialFileManagerView: FC = () => {
             <DialFolderName
               name={params.data.name}
               shared={isSharedByMe}
+              sharedIndicatorClassName={sharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ) : (
             <DialFileName
               name={params.data.name}
               shared={isSharedByMe}
+              sharedIndicatorClassName={sharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
@@ -904,10 +930,12 @@ export const DialFileManagerView: FC = () => {
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
     gridRows
-      .filter((row) => isRowDisabled(row, allowedFileTypes))
+      .filter((row) =>
+        isRowDisabled(row, allowedFileTypes, maxSelectableFileSize),
+      )
       .forEach((row) => ids.add(row.path));
     return ids;
-  }, [allowedFileTypes, gridRows, isRowDisabled]);
+  }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {
@@ -1010,14 +1038,14 @@ export const DialFileManagerView: FC = () => {
           onResize={sidebarResizingHandler}
           minWidth={FOLDERS_TREE_PANEL_MIN_WIDTH}
           maxWidth={FOLDERS_TREE_PANEL_MAX_WIDTH}
-          enabled={isTreeCollapsed}
+          enabled={!isTreeCollapsed}
         >
           <DialCollapsibleSidebar
             width={sidebarCurrentWidth}
             title={header}
             containerClassName={containerClassName}
             additionalButtons={additionalButtons}
-            isOpened={isTreeCollapsed}
+            isOpened={!isTreeCollapsed}
             onToggle={toggleTreeCollapse}
           >
             <DialFoldersTree
@@ -1250,6 +1278,7 @@ export const DialFileManagerView: FC = () => {
                   onCellClicked: cellClickHandler,
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  rowClass: 'group/grid-row',
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>
@@ -1271,6 +1300,7 @@ export const DialFileManagerView: FC = () => {
                     renamedPath,
                     newFolderTempId,
                     sharedByMePaths,
+                    selectedPaths,
                   } as FileManagerGridContext,
                 }}
                 selectedRows={selectedGridRows}

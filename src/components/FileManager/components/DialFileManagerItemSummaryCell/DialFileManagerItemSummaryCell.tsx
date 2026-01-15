@@ -15,6 +15,7 @@ interface DialFileManagerItemSummaryCellProps {
   shared?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
+  sharedIndicatorClassName?: string;
 }
 
 /**
@@ -58,6 +59,7 @@ interface DialFileManagerItemSummaryCellProps {
  * @param updatedAt - Date or timestamp passed to `DialDateCellRenderer`. If invalid or missing, renders `"—"`.
  * @param dateLocale - Optional locale override for date formatting (e.g., `"fr-FR"`).
  * @param dateOptions - Optional `Intl.DateTimeFormat` configuration (e.g., `{ timeZone: 'UTC' }`).
+ * @params sharedIndicatorClassName - Optional CSS classes for the shared indicator.
  */
 export const DialFileManagerItemSummaryCell: FC<
   DialFileManagerItemSummaryCellProps
@@ -70,6 +72,7 @@ export const DialFileManagerItemSummaryCell: FC<
   dateLocale,
   dateOptions,
   shared,
+  sharedIndicatorClassName,
 }) => {
   return (
     <div className="flex">
@@ -84,6 +87,7 @@ export const DialFileManagerItemSummaryCell: FC<
           elementId={id}
           shared={shared}
           iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+          sharedIndicatorClassName={sharedIndicatorClassName}
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">
               <span>{size}</span>

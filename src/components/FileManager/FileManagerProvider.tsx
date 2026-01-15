@@ -106,6 +106,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   searchInProgress,
   clearSearchResults,
   allowedFileTypes,
+  maxSelectableFileSize,
 
   emptyStateIcon,
   emptyStateTitle,
@@ -360,6 +361,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
             node.nodeType === DialFileNodeType.ITEM
               ? formatBytes(node.contentLength)
               : '',
+          contentLength: node.contentLength,
           author: node.author,
           path: node.path,
           nodeType: node.nodeType,
@@ -412,6 +414,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       isTemporary: false,
       owner: node.owner,
       contentType: node.contentType,
+      contentLength: node.contentLength,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -507,6 +510,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     className,
     items,
     allowedFileTypes,
+    maxSelectableFileSize,
     rootItem,
     filesLoading,
     treeOptions: {

@@ -40,6 +40,7 @@ export interface FileManagerGridRow {
   isTemporary?: boolean;
   owner?: string;
   contentType?: string;
+  contentLength?: number;
 }
 
 export interface FileManagerContextValue {
@@ -47,6 +48,7 @@ export interface FileManagerContextValue {
   items: DialFile[];
   rootItem?: DialRootFolder;
   allowedFileTypes?: DialFileAcceptType[];
+  maxSelectableFileSize?: number;
   filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;

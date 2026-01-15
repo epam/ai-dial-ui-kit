@@ -16,6 +16,7 @@ export interface DialFileManagerItemIconProps
   name: string;
   shared?: boolean;
   loading?: boolean;
+  sharedIndicatorClassName?: string;
 }
 
 /**
@@ -53,12 +54,14 @@ export interface DialFileManagerItemIconProps
  * @param {boolean} [props.decorative] - Whether the icon is decorative (for accessibility).
  * @param {string} [props.label] - Accessible label for screen readers.
  * @param {ReactNode} [props.indicator] - Optional indicator to display over the icon.
+ * @param {string} [props.sharedIndicatorClassName] - Optional CSS class for the shared indicator.
  */
 export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   name,
   type,
   shared = false,
   loading = false,
+  sharedIndicatorClassName,
   ...restProps
 }) => {
   const wrapIcon = (icon: ReactNode) => (
@@ -66,7 +69,7 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
       {icon}
       {shared && (
         <span className="absolute -bottom-0.5 -left-0.5">
-          <DialSharedEntityIndicator />
+          <DialSharedEntityIndicator className={sharedIndicatorClassName} />
         </span>
       )}
     </span>
@@ -84,7 +87,11 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
         {...restProps}
         extension={extension ?? ''}
         className="text-secondary"
-        indicator={shared ? <DialSharedEntityIndicator /> : null}
+        indicator={
+          shared ? (
+            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+          ) : null
+        }
         label="File type icon"
       />
     );
