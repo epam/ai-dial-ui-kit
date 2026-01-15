@@ -29,7 +29,7 @@ import {
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
-import { DialFileNodeType } from '@/models/file';
+import { DialFileNodeType, DialFilePermission } from '@/models/file';
 import {
   DialFoldersTree,
   type DialFoldersTreeProps,
@@ -886,7 +886,10 @@ export const DialFileManagerView: FC = () => {
             onClick: () => onUnshareFiles?.([file]),
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Delete]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Delete] &&
+          file.permissions?.includes(DialFilePermission.WRITE)
+        ) {
           items.push({
             key: 'delete',
             label: treeOptions.actionLabels[DialFileManagerActions.Delete],
