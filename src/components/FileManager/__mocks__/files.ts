@@ -149,8 +149,14 @@ export const itemsMock: DialFile[] = [
                 path: 'All files/Design/Icons/SVG',
                 parentPath: 'All files/Design/Icons',
                 nodeType: DialFileNodeType.FOLDER,
-                folderId: 'design-icons',
-                updatedAt: '2025-01-06',
+                folderId: 'icons',
+                updatedAt: '2025-01-10',
+                author: 'Michael Chen',
+                owner: owners[0],
+                permissions: [
+                  DialFilePermission.READ,
+                  DialFilePermission.WRITE,
+                ],
                 items: [
                   {
                     id: 'icons-svg-24',
@@ -159,7 +165,13 @@ export const itemsMock: DialFile[] = [
                     parentPath: 'All files/Design/Icons/SVG',
                     nodeType: DialFileNodeType.FOLDER,
                     folderId: 'icons-svg',
-                    updatedAt: '2025-01-06',
+                    updatedAt: '2025-01-10',
+                    author: 'Michael Chen',
+                    owner: owners[0],
+                    permissions: [
+                      DialFilePermission.READ,
+                      DialFilePermission.WRITE,
+                    ],
                     items: [
                       {
                         id: 'ico-alert',
@@ -210,6 +222,7 @@ export const itemsMock: DialFile[] = [
                         contentLength: 128,
                         author: authors[2],
                         owner: owners[3],
+                        permissions: [DialFilePermission.READ],
                       },
                       {
                         id: '.hidden-folder',
@@ -235,6 +248,7 @@ export const itemsMock: DialFile[] = [
                             contentLength: 256,
                             author: authors[2],
                             owner: owners[3],
+                            permissions: [DialFilePermission.READ],
                           },
                         ],
                       },
@@ -252,6 +266,7 @@ export const itemsMock: DialFile[] = [
                         contentLength: 12,
                         author: authors[2],
                         owner: owners[5],
+                        permissions: [DialFilePermission.READ],
                       },
                       {
                         id: 'logo-svg',
@@ -267,6 +282,10 @@ export const itemsMock: DialFile[] = [
                         contentLength: 5120,
                         author: authors[3],
                         owner: owners[6],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.WRITE,
+                        ],
                       },
                       {
                         id: 'logo-extended-svg',
@@ -282,6 +301,10 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[2],
                         owner: owners[7],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.SHARE,
+                        ],
                       },
                       {
                         id: 'logo-extended-svg-2',
@@ -297,6 +320,11 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[2],
                         owner: owners[8],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.WRITE,
+                          DialFilePermission.SHARE,
+                        ],
                       },
                       {
                         id: 'logo-extended-svg-3',
@@ -312,6 +340,7 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[2],
                         owner: owners[9],
+                        permissions: [DialFilePermission.READ],
                       },
                       {
                         id: 'logo-extended-svg-4',
@@ -327,6 +356,10 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[3],
                         owner: owners[10],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.WRITE,
+                        ],
                       },
                       {
                         id: 'logo-svg-5',
@@ -342,6 +375,7 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[2],
                         owner: owners[4],
+                        permissions: [DialFilePermission.READ],
                       },
                       {
                         id: 'logo-svg-6',
@@ -357,6 +391,10 @@ export const itemsMock: DialFile[] = [
                         contentLength: 15120,
                         author: authors[1],
                         owner: owners[5],
+                        permissions: [
+                          DialFilePermission.READ,
+                          DialFilePermission.WRITE,
+                        ],
                       },
                     ],
                   },
@@ -368,8 +406,15 @@ export const itemsMock: DialFile[] = [
                 path: 'All files/Design/Icons/PNG',
                 parentPath: 'All files/Design/Icons',
                 nodeType: DialFileNodeType.FOLDER,
-                folderId: 'design-icons',
+                folderId: 'icons',
                 updatedAt: '2025-01-06',
+                author: 'Amanda Rodriguez',
+                owner: owners[2],
+                permissions: [
+                  DialFilePermission.READ,
+                  DialFilePermission.WRITE,
+                  DialFilePermission.SHARE,
+                ],
                 items: [
                   {
                     id: 'png-hero',
@@ -383,6 +428,10 @@ export const itemsMock: DialFile[] = [
                     folderId: 'icons-png',
                     updatedAt: '2025-01-06',
                     author: 'Amanda Rodriguez',
+                    permissions: [
+                      DialFilePermission.READ,
+                      DialFilePermission.SHARE,
+                    ],
                   },
                 ],
               },
@@ -395,7 +444,10 @@ export const itemsMock: DialFile[] = [
             parentPath: 'All files/Design',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'design',
-            updatedAt: '2025-01-11',
+            updatedAt: '2025-01-12',
+            author: 'Steven Martinez',
+            owner: owners[3],
+            permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
             items: [
               {
                 id: 'mock-home',
@@ -409,6 +461,10 @@ export const itemsMock: DialFile[] = [
                 folderId: 'design-mockups',
                 updatedAt: '2025-01-12',
                 author: 'Steven Martinez',
+                permissions: [
+                  DialFilePermission.READ,
+                  DialFilePermission.WRITE,
+                ],
               },
             ],
           },
@@ -423,6 +479,7 @@ export const itemsMock: DialFile[] = [
             updatedAt: '2025-01-11',
             items: [],
             author: 'Jessica Walker',
+            permissions: [DialFilePermission.READ],
           },
           {
             id: 'design-favicon',
@@ -435,6 +492,7 @@ export const itemsMock: DialFile[] = [
             updatedAt: '2025-01-11',
             items: [],
             author: 'Jessica Walker',
+            permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
           },
         ],
       },
@@ -448,6 +506,13 @@ export const itemsMock: DialFile[] = [
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-13',
+        author: 'Matthew Lewis',
+        owner: owners[5],
+        permissions: [
+          DialFilePermission.READ,
+          DialFilePermission.WRITE,
+          DialFilePermission.SHARE,
+        ],
         items: [
           {
             id: 'inside-hidden-root',
@@ -461,6 +526,7 @@ export const itemsMock: DialFile[] = [
             folderId: 'hidden-root-folder',
             updatedAt: '2025-01-13',
             author: 'Matthew Lewis',
+            permissions: [DialFilePermission.READ],
           },
           {
             id: '.hidden-file-in-hidden-folder',
@@ -474,6 +540,7 @@ export const itemsMock: DialFile[] = [
             folderId: 'hidden-root-folder',
             updatedAt: '2025-01-13',
             author: 'Laura Young',
+            permissions: [DialFilePermission.READ, DialFilePermission.SHARE],
           },
         ],
       },
@@ -487,6 +554,7 @@ export const itemsMock: DialFile[] = [
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-04',
+        permissions: [DialFilePermission.READ],
         items: [
           {
             id: 'media-photos',
@@ -495,7 +563,10 @@ export const itemsMock: DialFile[] = [
             parentPath: 'All files/Media',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'media',
-            updatedAt: '2025-01-08',
+            updatedAt: '2025-01-14',
+            author: 'Brian Hall',
+            owner: owners[6],
+            permissions: [DialFilePermission.READ],
             items: [
               {
                 id: 'photos-2025',
@@ -505,6 +576,9 @@ export const itemsMock: DialFile[] = [
                 nodeType: DialFileNodeType.FOLDER,
                 folderId: 'media-photos',
                 updatedAt: '2025-01-14',
+                author: 'Brian Hall',
+                owner: owners[6],
+                permissions: [DialFilePermission.READ],
                 items: [
                   {
                     id: 'photo-team',
@@ -518,6 +592,7 @@ export const itemsMock: DialFile[] = [
                     folderId: 'photos-2025',
                     updatedAt: '2025-01-14',
                     author: 'Brian Hall',
+                    permissions: [DialFilePermission.READ],
                   },
                 ],
               },
@@ -531,6 +606,9 @@ export const itemsMock: DialFile[] = [
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'media',
             updatedAt: '2025-01-09',
+            author: 'Michelle Allen',
+            owner: owners[8],
+            permissions: [DialFilePermission.READ],
             items: [
               {
                 id: 'video-promo',
@@ -544,6 +622,10 @@ export const itemsMock: DialFile[] = [
                 folderId: 'media-video',
                 updatedAt: '2025-01-09',
                 author: 'Michelle Allen',
+                permissions: [
+                  DialFilePermission.READ,
+                  DialFilePermission.WRITE,
+                ],
               },
             ],
           },
@@ -559,6 +641,9 @@ export const itemsMock: DialFile[] = [
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
         updatedAt: '2025-01-01',
+        author: 'Richard King',
+        owner: owners[10],
+        permissions: [DialFilePermission.READ],
         items: [
           {
             id: 'f1-notes',
@@ -572,6 +657,7 @@ export const itemsMock: DialFile[] = [
             folderId: 'f1',
             updatedAt: '2025-01-02',
             author: 'Richard King',
+            permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
           },
         ],
       },
@@ -582,7 +668,10 @@ export const itemsMock: DialFile[] = [
         parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
-        updatedAt: '2025-01-02',
+        updatedAt: '2025-01-04',
+        author: 'David Brown',
+        owner: owners[2],
+        permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
         items: [
           {
             id: 'f2-a',
@@ -591,7 +680,14 @@ export const itemsMock: DialFile[] = [
             parentPath: 'All files/Folder 2',
             nodeType: DialFileNodeType.FOLDER,
             folderId: 'f2',
-            updatedAt: '2025-01-02',
+            updatedAt: '2025-01-03',
+            author: 'Susan Wright',
+            owner: owners[0],
+            permissions: [
+              DialFilePermission.READ,
+              DialFilePermission.WRITE,
+              DialFilePermission.SHARE,
+            ],
             items: [
               {
                 id: 'f2-a-1',
@@ -605,19 +701,36 @@ export const itemsMock: DialFile[] = [
                 folderId: 'f2-a',
                 updatedAt: '2025-01-03',
                 author: 'Susan Wright',
+                permissions: [DialFilePermission.READ],
               },
             ],
+          },
+          {
+            id: 'f2-b',
+            name: 'Sub B',
+            path: 'All files/Folder 2/Sub B',
+            parentPath: 'All files/Folder 2',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'f2',
+            updatedAt: '2025-01-04',
+            author: 'David Brown',
+            owner: owners[1],
+            permissions: [DialFilePermission.READ],
+            items: [],
           },
         ],
       },
       {
-        id: 'long-f1',
+        id: 'long-folder-name',
         name: 'This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
         path: 'All files/This is a very long folder name designed to test the maximum width limit in the folders tree component and see how text overflow is handled in the UI',
         parentPath: 'All files',
         nodeType: DialFileNodeType.FOLDER,
         folderId: 'root',
-        updatedAt: '2025-01-01',
+        updatedAt: '2025-01-02',
+        author: 'Thomas Scott',
+        owner: owners[3],
+        permissions: [DialFilePermission.READ],
         items: [
           {
             id: 'long-f1-notes',
@@ -632,6 +745,11 @@ export const itemsMock: DialFile[] = [
             folderId: 'f1',
             updatedAt: '2025-01-02',
             author: 'Thomas Scott',
+            permissions: [
+              DialFilePermission.READ,
+              DialFilePermission.WRITE,
+              DialFilePermission.SHARE,
+            ],
           },
         ],
       },
