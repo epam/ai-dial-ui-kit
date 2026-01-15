@@ -1035,14 +1035,14 @@ export const DialFileManagerView: FC = () => {
           onResize={sidebarResizingHandler}
           minWidth={FOLDERS_TREE_PANEL_MIN_WIDTH}
           maxWidth={FOLDERS_TREE_PANEL_MAX_WIDTH}
-          enabled={isTreeCollapsed}
+          enabled={!isTreeCollapsed}
         >
           <DialCollapsibleSidebar
             width={sidebarCurrentWidth}
             title={header}
             containerClassName={containerClassName}
             additionalButtons={additionalButtons}
-            isOpened={isTreeCollapsed}
+            isOpened={!isTreeCollapsed}
             onToggle={toggleTreeCollapse}
           >
             <DialFoldersTree
