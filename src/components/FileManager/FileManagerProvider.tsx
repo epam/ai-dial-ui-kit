@@ -203,6 +203,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     navigationPanelValue: navigationPanelOptions?.value,
     onNavigationPanelSearchChange: navigationPanelOptions?.onSearchChange,
     allItems: items,
+    activeTab: toolbarOptions?.activeTab,
   });
 
   const currentFolder = useMemo(

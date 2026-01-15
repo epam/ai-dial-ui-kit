@@ -534,21 +534,95 @@ describe('Dial UI Kit :: FileManager :: useFileSearch', () => {
     expect(clearSearchResults).not.toHaveBeenCalled();
   });
 
-  it('clears search only when search is active and path changes', async () => {
+  it('clears search when activeTab changes', async () => {
     const clearSearchResults = vi.fn();
-    const { rerender } = renderHook(
-      ({ currentPath }) =>
+    const onNavigationPanelSearchChange = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ activeTab }) =>
+        useFileSearch({
+          currentPath: '/test',
+          activeTab,
+          clearSearchResults,
+          onNavigationPanelSearchChange,
+          allItems: [mockFolderWithItems],
+        }),
+      { initialProps: { activeTab: 'tab1' } },
+    );
+
+    act(() => {
+      result.current.handleSearchChange('file');
+    });
+
+    expect(result.current.isSearchMode).toBe(true);
+    expect(result.current.searchValue).toBe('file');
+
+    rerender({ activeTab: 'tab2' });
+
+    await waitFor(() => {
+      expect(result.current.isSearchMode).toBe(false);
+      expect(result.current.searchValue).toBe('');
+      expect(result.current.effectiveSearchValue).toBe('');
+      expect(clearSearchResults).toHaveBeenCalled();
+      expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('');
+    });
+  });
+
+  it('clears search when both path and activeTab change', async () => {
+    const clearSearchResults = vi.fn();
+    const onNavigationPanelSearchChange = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ currentPath, activeTab }) =>
         useFileSearch({
           currentPath,
+          activeTab,
+          clearSearchResults,
+          onNavigationPanelSearchChange,
+          allItems: [mockFolderWithItems],
+        }),
+      { initialProps: { currentPath: '/test', activeTab: 'tab1' } },
+    );
+
+    act(() => {
+      result.current.handleSearchChange('file');
+    });
+
+    expect(result.current.isSearchMode).toBe(true);
+
+    rerender({ currentPath: '/test/other', activeTab: 'tab2' });
+
+    await waitFor(() => {
+      expect(result.current.isSearchMode).toBe(false);
+      expect(result.current.searchValue).toBe('');
+      expect(clearSearchResults).toHaveBeenCalled();
+      expect(onNavigationPanelSearchChange).toHaveBeenCalledWith('');
+    });
+  });
+
+  it('does not clear search when activeTab stays the same', () => {
+    const clearSearchResults = vi.fn();
+    const { result, rerender } = renderHook(
+      ({ activeTab }) =>
+        useFileSearch({
+          currentPath: '/test',
+          activeTab,
           clearSearchResults,
           allItems: [mockFolderWithItems],
         }),
-      { initialProps: { currentPath: '/test' } },
+      { initialProps: { activeTab: 'tab1' } },
     );
 
-    // Path changes but no search active
-    rerender({ currentPath: '/test/other' });
+    act(() => {
+      result.current.handleSearchChange('file');
+    });
 
+    expect(result.current.isSearchMode).toBe(true);
+
+    rerender({ activeTab: 'tab1' });
+
+    expect(result.current.isSearchMode).toBe(true);
+    expect(result.current.searchValue).toBe('file');
     expect(clearSearchResults).not.toHaveBeenCalled();
   });
 });
