@@ -603,13 +603,22 @@ export const DialFileManagerView: FC = () => {
   }, [isSearchMode, visibleColumns]);
 
   const isRowDisabled = useCallback(
-    (row: FileManagerGridRow, allowedFileTypes?: DialFileAcceptType[]) => {
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxFileSize?: number,
+    ) => {
+      const isFileSizeAccepted =
+        row.nodeType === DialFileNodeType.FOLDER ||
+        !row.contentLength ||
+        !maxFileSize ||
+        row.contentLength <= maxFileSize;
       const isFileTypeAccepted =
         row.nodeType === DialFileNodeType.FOLDER ||
         !row.contentType ||
         isFileAccepted(allowedFileTypes, row.contentType, row.name);
 
-      return !isFileTypeAccepted;
+      return !isFileTypeAccepted || !isFileSizeAccepted;
     },
     [],
   );
@@ -914,10 +923,10 @@ export const DialFileManagerView: FC = () => {
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
     gridRows
-      .filter((row) => isRowDisabled(row, allowedFileTypes))
+      .filter((row) => isRowDisabled(row, allowedFileTypes, maxFileSize))
       .forEach((row) => ids.add(row.path));
     return ids;
-  }, [allowedFileTypes, gridRows, isRowDisabled]);
+  }, [allowedFileTypes, maxFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
     (newSelectedGridRows: Map<string, GridRow>) => {

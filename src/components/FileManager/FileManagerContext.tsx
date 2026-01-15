@@ -40,6 +40,7 @@ export interface FileManagerGridRow {
   isTemporary?: boolean;
   owner?: string;
   contentType?: string;
+  contentLength?: number;
 }
 
 export interface FileManagerContextValue {
