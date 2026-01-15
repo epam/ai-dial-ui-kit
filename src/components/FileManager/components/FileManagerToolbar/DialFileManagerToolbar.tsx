@@ -21,6 +21,7 @@ export interface DialFileManagerToolbarProps {
   showHiddenFilesLabel?: string;
   hideHiddenFilesLabel?: string;
   isNewButtonVisible?: boolean;
+  isNewButtonDisabled?: boolean;
   newButtonVariant?: ButtonVariant;
   newButtonDropdownItems?: DropdownItem[];
   newButtonLabel?: string;
@@ -68,6 +69,7 @@ export interface DialFileManagerToolbarProps {
  * @param [onTabChange] - Callback fired when the user switches between tabs. Receives the selected tab ID.
  * @param [onToggleHiddenFiles] - Callback fired when the hidden files visibility is toggled. Receives the new visibility state.
  * @param [isNewButtonVisible] - Whether the "New" button or dropdown should be displayed.
+ * @param [isNewButtonDisabled] - Whether the "New" button is disabled.
  * @param [newButtonVariant=ButtonVariant.Secondary] - Visual style variant for the new button.
  * @param [newButtonDropdownItems=[]] - Dropdown items available under the new button. If empty, a single new button is shown instead.
  * @param [newButtonLabel='New'] - Label text for the new button.
@@ -86,6 +88,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   areHiddenFilesVisible,
   onToggleHiddenFiles,
   isNewButtonVisible,
+  isNewButtonDisabled,
   newButtonVariant = ButtonVariant.Secondary,
   newButtonDropdownItems = [],
   newButtonLabel = 'New',
@@ -147,6 +150,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
             label={newButtonLabel}
             variant={newButtonVariant}
             items={newButtonDropdownItems}
+            disabled={isNewButtonDisabled}
           />
         </>
       )}
@@ -175,6 +179,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
           label={newButtonLabel}
           variant={newButtonVariant}
           items={newButtonDropdownItems}
+          disabled={isNewButtonDisabled}
         />
       ) : null}
     </>

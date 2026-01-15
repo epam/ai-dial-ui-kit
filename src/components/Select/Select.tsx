@@ -352,11 +352,21 @@ export const DialSelect: FC<DialSelectProps> = ({
     },
   }));
 
-  const setInlineSearchQuery = () => {
+  const setInlineSearchQuery = useCallback(() => {
     setQuery(
       selectedValues.length === 1 ? (singleSelectedOption?.label ?? query) : '',
     );
-  };
+  }, [query, selectedValues.length, singleSelectedOption]);
+
+  const handleTriggerAction = useCallback(() => {
+    if (disabled) return;
+    setOpen((v) => !v);
+
+    if (inlineSearch && !multiple) {
+      setInlineSearchQuery();
+      inlineSearchInputRef.current?.focus();
+    }
+  }, [disabled, inlineSearch, multiple, setInlineSearchQuery]);
 
   return (
     <DialDropdown
@@ -424,7 +434,11 @@ export const DialSelect: FC<DialSelectProps> = ({
               ? !inlineSearch && (
                   <div className="px-2 py-3">
                     <DialNoDataContent
-                      icon={emptyStateIcon ?? <IconClipboardX size={24} />}
+                      icon={
+                        emptyStateIcon ?? (
+                          <IconClipboardX size={24} stroke={0.5} />
+                        )
+                      }
                       title={emptyStateTitle}
                       description={emptyStateDescription}
                     />
@@ -516,8 +530,10 @@ export const DialSelect: FC<DialSelectProps> = ({
         </div>
       )}
     >
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
+        aria-roledescription="button to open select list"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={`list-${elementId || listId}`}
@@ -539,12 +555,12 @@ export const DialSelect: FC<DialSelectProps> = ({
           }
         }}
         onClick={() => {
-          if (disabled) return;
-          setOpen((v) => !v);
-
-          if (inlineSearch && !multiple) {
-            setInlineSearchQuery();
-            inlineSearchInputRef.current?.focus();
+          handleTriggerAction();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === ' ' || e.code === 'Space') {
+            e.preventDefault();
+            handleTriggerAction();
           }
         }}
       >
@@ -575,7 +591,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             />
           </div>
         ) : (
-          <div className="flex min-w-0 items-center gap-2 text-primary">
+          <div className="flex w-full min-w-0 items-center gap-2 text-primary">
             {renderSelectedValue()}
           </div>
         )}
@@ -586,7 +602,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             className={classNames('text-primary', open && 'rotate-180')}
           />
         )}
-      </button>
+      </div>
     </DialDropdown>
   );
 };
