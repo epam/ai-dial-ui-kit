@@ -106,6 +106,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   searchInProgress,
   clearSearchResults,
   allowedFileTypes,
+  maxSelectableFileSize,
 
   emptyStateIcon,
   emptyStateTitle,
@@ -509,6 +510,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     className,
     items,
     allowedFileTypes,
+    maxSelectableFileSize,
     rootItem,
     filesLoading,
     treeOptions: {
