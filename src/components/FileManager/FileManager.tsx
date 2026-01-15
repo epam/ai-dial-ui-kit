@@ -25,6 +25,8 @@ import {
   COMPACT_VIEW_HEADER_HEIGHT,
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+  gridRowHoverGroupClassName,
+  gridSharedIndicatorClassName,
 } from './constants';
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -638,6 +640,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`new-folder-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={gridSharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={validateFolderName}
                 onSave={saveFolderCreation}
@@ -677,6 +680,7 @@ export const DialFileManagerView: FC = () => {
                 elementId={`rename-${params.data.id}`}
                 editing={true}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={gridSharedIndicatorClassName}
                 iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                 validate={(value) => onRenameValidate(value, renamedItem)}
                 onSave={onRenameSave}
@@ -697,6 +701,7 @@ export const DialFileManagerView: FC = () => {
                 nodeType={type}
                 size={params.data.size}
                 shared={isSharedByMe}
+                sharedIndicatorClassName={gridSharedIndicatorClassName}
                 updatedAt={params.data.updatedAt}
                 dateLocale={dateLocale}
                 dateOptions={dateOptions}
@@ -708,12 +713,14 @@ export const DialFileManagerView: FC = () => {
             <DialFolderName
               name={params.data.name}
               shared={isSharedByMe}
+              sharedIndicatorClassName={gridSharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           ) : (
             <DialFileName
               name={params.data.name}
               shared={isSharedByMe}
+              sharedIndicatorClassName={gridSharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             />
           );
@@ -1237,6 +1244,7 @@ export const DialFileManagerView: FC = () => {
                   onCellClicked: cellClickHandler,
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+                  rowClass: [gridRowHoverGroupClassName],
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>

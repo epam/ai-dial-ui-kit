@@ -18,6 +18,11 @@ export const treeBaseClassName =
 export const gridBaseClassName =
   'flex-1 w-full rounded text-secondary overflow-auto min-h-0 min-w-0';
 
+export const gridRowHoverGroupClassName = 'group/grid-row';
+
+export const gridSharedIndicatorClassName =
+  'group-hover/grid-row:bg-accent-primary-alpha';
+
 export const sidebarWidth = 280;
 export const sidebarTitleDefault = 'Files';
 
