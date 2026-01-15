@@ -48,6 +48,7 @@ export interface FileManagerContextValue {
   items: DialFile[];
   rootItem?: DialRootFolder;
   allowedFileTypes?: DialFileAcceptType[];
+  maxSelectableFileSize?: number;
   filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
   navigationPanelOptions?: NavigationPanelOptions;
