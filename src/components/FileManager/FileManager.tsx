@@ -336,6 +336,8 @@ export interface DialFileManagerProps {
   emptyStateIcon?: ReactNode;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
+
+  sharedWithMeIds?: string[];
 }
 
 /**
@@ -429,6 +431,8 @@ export interface DialFileManagerProps {
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when there are no files.
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
+ *
+ * @param [sharedWithMeIds] - Optional list of file IDs that are shared with the current user.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -553,6 +557,8 @@ export const DialFileManagerView: FC = () => {
     emptyStateIcon,
     emptyStateTitle = "You don't have any files",
     emptyStateDescription = 'Upload or drag and drop files',
+
+    sharedWithMeIds,
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -873,7 +879,10 @@ export const DialFileManagerView: FC = () => {
             onClick: () => onTreeRename(file.path),
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Unshare]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Unshare] &&
+          sharedWithMeIds?.includes(file.path)
+        ) {
           items.push({
             key: 'unshare',
             label: treeOptions.actionLabels[DialFileManagerActions.Unshare],
@@ -914,6 +923,7 @@ export const DialFileManagerView: FC = () => {
       openDeleteConfirmation,
       treeOptions,
       onUnshareFiles,
+      sharedWithMeIds,
     ],
   );
 
@@ -964,6 +974,7 @@ export const DialFileManagerView: FC = () => {
     onDelete: openDeleteConfirmation,
     onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
+    sharedWithMeIds,
   });
 
   const renderToolbar = useCallback(() => {
@@ -1113,6 +1124,7 @@ export const DialFileManagerView: FC = () => {
       openDeleteConfirmation([file], parentFolderPath),
     onInfo: (file) => openMetadataPopup(file),
     onUnshare: (file) => onUnshareFiles?.([file]),
+    sharedWithMeIds,
   });
 
   const getGridContextMenuItems = useCallback(

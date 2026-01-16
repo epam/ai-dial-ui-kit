@@ -111,6 +111,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   emptyStateIcon,
   emptyStateTitle,
   emptyStateDescription,
+
+  sharedWithMeIds,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -650,6 +652,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateIcon,
     emptyStateTitle,
     emptyStateDescription,
+
+    sharedWithMeIds,
   };
 
   return (

@@ -27,6 +27,7 @@ export interface UseBulkActionsProps {
   onRename: (filePath: string) => void;
   onDelete: (files: DialFile[], parentFolderPath: string) => void;
   getCurrentFolderPath: () => string;
+  sharedWithMeIds?: string[];
 }
 
 export const useBulkActions = ({
@@ -39,6 +40,7 @@ export const useBulkActions = ({
   onUnshare,
   onDelete,
   getCurrentFolderPath,
+  sharedWithMeIds,
 }: UseBulkActionsProps): DialActionDropdownItem[] => {
   return useMemo(() => {
     const actions: DialActionDropdownItem[] = [];
@@ -121,10 +123,15 @@ export const useBulkActions = ({
     }
 
     if (actionLabels[DialFileManagerActions.Unshare] && onUnshare) {
+      const disabled = selectedFilesArray.some(
+        (file) => !sharedWithMeIds?.includes(file.path),
+      );
+
       actions.push({
         key: DialFileManagerActions.Unshare,
         label: actionLabels[DialFileManagerActions.Unshare],
         title: actionLabels[DialFileManagerActions.Unshare],
+        disabled,
         icon: (
           <IconUnshare
             width={BASE_ICON_PROPS.size}
@@ -147,5 +154,6 @@ export const useBulkActions = ({
     onDelete,
     onDownload,
     onUnshare,
+    sharedWithMeIds,
   ]);
 };

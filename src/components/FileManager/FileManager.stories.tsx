@@ -1070,6 +1070,7 @@ export const WithUnshareAction: Story = {
         onUnshareFiles={(files) => {
           alert(`Unsharing file: ${files.map((f) => f.name).join(',')}`);
         }}
+        sharedWithMeIds={['All files/Design']}
       />
     </div>
   ),
