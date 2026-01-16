@@ -1245,6 +1245,7 @@ export const DialFileManagerView: FC = () => {
             value={effectiveSearchValue}
             onSearchChange={handleSearchChange}
             isCompactView={isCompactView}
+            labelClassName="dial-tiny"
           />
 
           <section
