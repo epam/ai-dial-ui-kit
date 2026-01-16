@@ -33,6 +33,10 @@
         }
       }
     }
+
+    .ag-column-last::after {
+      @apply border-0;
+    }
   }
 
   .ag-cell {
