@@ -1045,6 +1045,7 @@ export const DialFileManagerView: FC = () => {
             width={sidebarCurrentWidth}
             title={header}
             containerClassName={containerClassName}
+            titleClassName="dial-body-text text-primary"
             additionalButtons={additionalButtons}
             isOpened={!isTreeCollapsed}
             onToggle={toggleTreeCollapse}

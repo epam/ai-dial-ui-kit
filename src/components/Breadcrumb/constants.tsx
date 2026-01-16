@@ -6,7 +6,7 @@ export const breadcrumbListClassName =
   'flex flex-nowrap items-center gap-2 min-w-0 px-0 py-0 whitespace-nowrap';
 
 export const breadcrumbItemBaseClassName =
-  'flex items-center gap-2 min-w-0 shrink-0 dial-small';
+  'flex items-center gap-2 min-w-0 shrink-0 dial-tiny';
 
 export const breadcrumbItemVisibleClassName =
   'max-w-[20%] basis-[20%] flex-none';
