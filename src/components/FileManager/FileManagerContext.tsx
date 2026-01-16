@@ -183,6 +183,8 @@ export interface FileManagerContextValue {
   emptyStateIcon?: ReactNode;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
+
+  sharedWithMeIds?: string[];
 }
 
 export const FileManagerContext = createContext<

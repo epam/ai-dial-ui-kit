@@ -34,6 +34,7 @@ export interface UseGridContextMenuProps {
   onDelete: (file: DialFile, parentFolderPath: string) => void;
   onInfo: (file: DialFile) => void;
   onUnshare: (file: DialFile) => void;
+  sharedWithMeIds?: string[];
 }
 
 export const useGridContextMenu = ({
@@ -46,6 +47,7 @@ export const useGridContextMenu = ({
   onDelete,
   onInfo,
   onUnshare,
+  sharedWithMeIds,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -146,7 +148,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Unshare]) {
+      if (
+        actionLabels[DialFileManagerActions.Unshare] &&
+        sharedWithMeIds?.includes(file.path)
+      ) {
         items.push({
           key: DialFileManagerActions.Unshare,
           label: actionLabels[DialFileManagerActions.Unshare],
@@ -173,5 +178,6 @@ export const useGridContextMenu = ({
     onDelete,
     onInfo,
     onUnshare,
+    sharedWithMeIds,
   ]);
 };
