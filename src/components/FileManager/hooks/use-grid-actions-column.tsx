@@ -7,6 +7,7 @@ import { useCallback, useMemo } from 'react';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import type { DropdownItem } from '@/models/dropdown';
 import type { DialFileAcceptType } from '@/models/file-manager';
+import { mergeClasses } from '@/utils/merge-classes';
 
 interface UseGridActionsColumnProps {
   getContextMenuItems: (row: FileManagerGridRow) => DropdownItem[];
@@ -17,6 +18,7 @@ interface UseGridActionsColumnProps {
   ) => boolean;
   allowedFileTypes?: DialFileAcceptType[];
   maxSelectableFileSize?: number;
+  buttonClassName?: string;
 }
 
 export const useGridActionsColumn = ({
@@ -24,6 +26,7 @@ export const useGridActionsColumn = ({
   isRowDisabled,
   allowedFileTypes,
   maxSelectableFileSize,
+  buttonClassName,
 }: UseGridActionsColumnProps) => {
   const renderActionsCell = useCallback(
     (p: ICellRendererParams<FileManagerGridRow, unknown>) => {
@@ -46,7 +49,7 @@ export const useGridActionsColumn = ({
           placement="bottom-start"
           allowedPlacements={['top-start', 'top-end', 'bottom-start']}
           menu={{ items }}
-          className="sticky right-0"
+          className={mergeClasses('sticky right-0', buttonClassName)}
         >
           <DialIcon
             className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
@@ -58,6 +61,7 @@ export const useGridActionsColumn = ({
     [
       allowedFileTypes,
       maxSelectableFileSize,
+      buttonClassName,
       getContextMenuItems,
       isRowDisabled,
     ],
