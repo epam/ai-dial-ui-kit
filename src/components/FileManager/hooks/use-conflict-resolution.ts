@@ -18,28 +18,27 @@ export interface ConflictResolutionResult {
 const resolveNameConflict = (
   originalName: string,
   existingNames: Set<string>,
+  type: DialFileNodeType,
 ): string => {
   if (!existingNames.has(originalName)) {
     return originalName;
   }
 
-  const lastDotIndex = originalName.lastIndexOf('.');
-  const hasExtension = lastDotIndex > 0;
+  const makeCandidate =
+    type === DialFileNodeType.FOLDER
+      ? (name: string, n: number) => `${name} (${n})`
+      : (name: string, n: number) => {
+          const lastDotIndex = name.lastIndexOf('.');
+          const hasExtension = lastDotIndex > 0;
+          const base = hasExtension ? name.slice(0, lastDotIndex) : name;
+          const extension = hasExtension ? name.slice(lastDotIndex) : '';
+          return `${base} (${n})${extension}`;
+        };
 
-  const baseName = hasExtension
-    ? originalName.substring(0, lastDotIndex)
-    : originalName;
-  const extension = hasExtension ? originalName.substring(lastDotIndex) : '';
-
-  let counter = 1;
-  let newName: string;
-
-  do {
-    newName = `${baseName} (${counter})${extension}`;
-    counter++;
-  } while (existingNames.has(newName));
-
-  return newName;
+  for (let n = 1; ; n++) {
+    const candidate = makeCandidate(originalName, n);
+    if (!existingNames.has(candidate)) return candidate;
+  }
 };
 
 const getFileName = (file: DialFile): string => {
@@ -108,7 +107,7 @@ export const useConflictResolution = ({
         const finalName =
           overwrite && hasConflict
             ? originalName
-            : resolveNameConflict(originalName, existingNames);
+            : resolveNameConflict(originalName, existingNames, file.nodeType);
 
         if (!overwrite || !hasConflict) {
           existingNames.add(finalName);
@@ -149,7 +148,7 @@ export const useConflictResolution = ({
 
         const finalName = shouldOverwrite
           ? file.name
-          : resolveNameConflict(file.name, existingNames);
+          : resolveNameConflict(file.name, existingNames, file.nodeType);
 
         if (!shouldOverwrite) {
           existingNames.add(finalName);

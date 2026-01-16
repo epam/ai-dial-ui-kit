@@ -25,6 +25,7 @@ import {
   COMPACT_VIEW_HEADER_HEIGHT,
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+  actionsColumnButtonClassName,
 } from './constants';
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -1055,6 +1056,7 @@ export const DialFileManagerView: FC = () => {
             width={sidebarCurrentWidth}
             title={header}
             containerClassName={containerClassName}
+            titleClassName="dial-body-text text-primary"
             additionalButtons={additionalButtons}
             isOpened={!isTreeCollapsed}
             onToggle={toggleTreeCollapse}
@@ -1138,6 +1140,7 @@ export const DialFileManagerView: FC = () => {
     getContextMenuItems: getGridContextMenuItems,
     isRowDisabled,
     allowedFileTypes: allowedFileTypes,
+    buttonClassName: isCompactView ? '' : actionsColumnButtonClassName,
   });
 
   const baseColumns = userColumnDefs ?? defaultColumns;
@@ -1254,6 +1257,7 @@ export const DialFileManagerView: FC = () => {
             value={effectiveSearchValue}
             onSearchChange={handleSearchChange}
             isCompactView={isCompactView}
+            labelClassName="dial-tiny"
           />
 
           <section

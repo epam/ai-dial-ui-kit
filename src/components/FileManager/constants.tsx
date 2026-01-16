@@ -18,6 +18,9 @@ export const treeBaseClassName =
 export const gridBaseClassName =
   'flex-1 w-full rounded text-secondary overflow-auto min-h-0 min-w-0';
 
+export const actionsColumnButtonClassName =
+  'opacity-0 pointer-events-none group-hover/grid-row:opacity-100 group-hover/grid-row:pointer-events-auto';
+
 export const sidebarWidth = 280;
 export const sidebarTitleDefault = 'Files';
 
