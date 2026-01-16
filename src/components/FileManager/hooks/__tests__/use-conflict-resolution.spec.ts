@@ -506,4 +506,80 @@ describe('Dial UI Kit :: FileManager :: useConflictResolution', () => {
     expect(result.current.conflictResolutionOpen).toBe(false);
     expect(result.current.conflictingFiles).toEqual([]);
   });
+
+  it('resolveConflictsWithStrategy: FOLDER with dot in name is duplicated as "name (n)"', () => {
+    destinationFiles = [
+      {
+        id: '1',
+        name: 'foo.bar',
+        path: '/dest/foo.bar',
+        nodeType: DialFileNodeType.FOLDER,
+      } as DialFile,
+    ];
+
+    const { result } = renderHook(() =>
+      useConflictResolution({ getDestinationFiles }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '2',
+        name: 'foo.bar',
+        path: '/src/foo.bar',
+        nodeType: DialFileNodeType.FOLDER,
+      } as DialFile,
+    ];
+
+    const resolved = result.current.resolveConflictsWithStrategy(
+      '/dest',
+      files,
+      false,
+    );
+
+    expect(resolved).toHaveLength(1);
+    expect(resolved[0]).toEqual({
+      sourceUrl: '/src/foo.bar',
+      destinationUrl: '/dest/foo.bar (1)',
+      overwrite: false,
+      nodeType: DialFileNodeType.FOLDER,
+    });
+  });
+
+  it('resolveConflictsWithStrategy: ITEM multi-dot filename keeps last extension', () => {
+    destinationFiles = [
+      {
+        id: '1',
+        name: 'archive.tar.gz',
+        path: '/dest/archive.tar.gz',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    const { result } = renderHook(() =>
+      useConflictResolution({ getDestinationFiles }),
+    );
+
+    const files: DialFile[] = [
+      {
+        id: '2',
+        name: 'archive.tar.gz',
+        path: '/src/archive.tar.gz',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    const resolved = result.current.resolveConflictsWithStrategy(
+      '/dest',
+      files,
+      false,
+    );
+
+    expect(resolved).toHaveLength(1);
+    expect(resolved[0]).toEqual({
+      sourceUrl: '/src/archive.tar.gz',
+      destinationUrl: '/dest/archive.tar (1).gz',
+      overwrite: false,
+      nodeType: DialFileNodeType.ITEM,
+    });
+  });
 });

@@ -846,6 +846,7 @@ export const DialFileManagerView: FC = () => {
             width={sidebarCurrentWidth}
             title={header}
             containerClassName={containerClassName}
+            titleClassName="dial-body-text text-primary"
             additionalButtons={additionalButtons}
             isOpened={!isTreeCollapsed}
             onToggle={toggleTreeCollapse}
@@ -1015,6 +1016,7 @@ export const DialFileManagerView: FC = () => {
             value={effectiveSearchValue}
             onSearchChange={handleSearchChange}
             isCompactView={isCompactView}
+            labelClassName="dial-tiny"
           />
 
           <section
