@@ -4,8 +4,22 @@ import { useDialFileManagerTabs } from '@/components/FileManager/hooks/use-file-
 import { DialFileManagerTabs } from '@/types/file-manager';
 
 describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
-  it('initializes with MyFiles as active tab', () => {
+  it('initializes with MyFiles as active tab by default', () => {
     const { result } = renderHook(() => useDialFileManagerTabs());
+    expect(result.current.activeTab).toBe(DialFileManagerTabs.MyFiles);
+  });
+
+  it('initializes with custom initial tab', () => {
+    const { result } = renderHook(() =>
+      useDialFileManagerTabs(undefined, DialFileManagerTabs.Shared),
+    );
+    expect(result.current.activeTab).toBe(DialFileManagerTabs.Shared);
+  });
+
+  it('falls back to MyFiles when invalid initial tab is provided', () => {
+    const { result } = renderHook(() =>
+      useDialFileManagerTabs(undefined, 'invalid_tab' as DialFileManagerTabs),
+    );
     expect(result.current.activeTab).toBe(DialFileManagerTabs.MyFiles);
   });
 
@@ -86,5 +100,19 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
     expect(typeof result.current.activeTab).toBe('string');
     expect(typeof result.current.handleTabChange).toBe('function');
     expect(result.current.tabs).toBeUndefined();
+  });
+
+  it('respects initialTab with custom labels', () => {
+    const tabLabels = {
+      [DialFileManagerTabs.MyFiles]: 'My Files',
+      [DialFileManagerTabs.Shared]: 'Shared With Me',
+      [DialFileManagerTabs.Organization]: 'Public Files',
+    };
+
+    const { result } = renderHook(() =>
+      useDialFileManagerTabs(tabLabels, DialFileManagerTabs.Organization),
+    );
+
+    expect(result.current.activeTab).toBe(DialFileManagerTabs.Organization);
   });
 });

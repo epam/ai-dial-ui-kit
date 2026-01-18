@@ -4,10 +4,16 @@ import { useMemo, useState } from 'react';
 
 export const useDialFileManagerTabs = (
   tabLabels?: Record<DialFileManagerTabs, string>,
+  initialTab: DialFileManagerTabs = DialFileManagerTabs.MyFiles,
 ) => {
-  const [activeTab, setActiveTab] = useState<DialFileManagerTabs>(
-    DialFileManagerTabs.MyFiles,
-  );
+  const validInitialTab = Object.values(DialFileManagerTabs).includes(
+    initialTab,
+  )
+    ? initialTab
+    : DialFileManagerTabs.MyFiles;
+
+  const [activeTab, setActiveTab] =
+    useState<DialFileManagerTabs>(validInitialTab);
 
   const handleTabChange = (tab: DialFileManagerTabs) => {
     setActiveTab(tab);
