@@ -30,6 +30,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     );
     expect(result.current.conflictResolutionOpen).toBe(false);
     expect(result.current.conflictingFiles).toEqual([]);
+    expect(result.current.sourceFolder).toBeUndefined();
   });
 
   it('handleOpenDestinationFolderPopup with copy mode', () => {
@@ -74,7 +75,8 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         {
           id: '1',
           name: 'file.txt',
-          path: '/file.txt',
+          path: '/folder/file.txt',
+          parentPath: '/folder',
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
@@ -84,12 +86,87 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(true);
+    expect(result.current.sourceFolder).toBe('/folder');
 
     act(() => {
       result.current.handleCloseDestinationFolderPopup();
     });
 
     expect(result.current.openDestinationFolderPopup).toBe(false);
+    expect(result.current.sourceFolder).toBeUndefined();
+  });
+
+  it('handleSetCopiedFiles sets sourceFolder from parentPath', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({ getDestinationFiles, getSourceFiles }),
+    );
+
+    const copiedFiles: DialFile[] = [
+      {
+        id: '1',
+        name: 'a.txt',
+        path: '/source/folder/a.txt',
+        parentPath: '/source/folder',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+      {
+        id: '2',
+        name: 'b.txt',
+        path: '/source/folder/b.txt',
+        parentPath: '/source/folder',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetCopiedFiles(copiedFiles);
+    });
+
+    expect(result.current.sourceFolder).toBe('/source/folder');
+  });
+
+  it('handleSetCopiedFiles falls back to folderId if parentPath is missing', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({ getDestinationFiles, getSourceFiles }),
+    );
+
+    const copiedFiles: DialFile[] = [
+      {
+        id: '1',
+        name: 'a.txt',
+        path: '/a.txt',
+        folderId: '/root',
+        nodeType: DialFileNodeType.ITEM,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetCopiedFiles(copiedFiles);
+    });
+
+    expect(result.current.sourceFolder).toBe('/root');
+  });
+
+  it('handleSetMovedFiles sets sourceFolder from parentPath', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({ getDestinationFiles, getSourceFiles }),
+    );
+
+    const movedFiles: DialFile[] = [
+      {
+        id: '1',
+        name: 'm1',
+        path: '/source/m1',
+        parentPath: '/source',
+        nodeType: DialFileNodeType.FOLDER,
+      } as DialFile,
+    ];
+
+    act(() => {
+      result.current.handleSetMovedFiles(movedFiles);
+    });
+
+    expect(result.current.sourceFolder).toBe('/source');
   });
 
   it('handleCopyTo without conflicts calls onCopyFiles and onCopySuccess', () => {
@@ -101,12 +178,14 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '1',
         name: 'a.txt',
         path: '/src/a.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
         id: '2',
         name: 'b.txt',
         path: '/src/b.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -166,12 +245,14 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '2',
         name: 'a.txt',
         path: '/src/a.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
         id: '3',
         name: 'b.txt',
         path: '/src/b.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -216,6 +297,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '2',
         name: 'file.txt',
         path: '/src/file.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -274,6 +356,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '2',
         name: 'file.txt',
         path: '/src/file.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -344,18 +427,21 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '4',
         name: 'a.txt',
         path: '/src/a.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
         id: '5',
         name: 'b.txt',
         path: '/src/b.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
         id: '6',
         name: 'c.txt',
         path: '/src/c.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -507,6 +593,32 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
     expect(onDuplicateSuccess).toHaveBeenCalledTimes(1);
   });
 
+  it('clearState resets sourceFolder', () => {
+    const { result } = renderHook(() =>
+      useFileClipboard({ getDestinationFiles, getSourceFiles }),
+    );
+
+    act(() => {
+      result.current.handleSetCopiedFiles([
+        {
+          id: '1',
+          name: 'test.txt',
+          path: '/folder/test.txt',
+          parentPath: '/folder',
+          nodeType: DialFileNodeType.ITEM,
+        } as DialFile,
+      ]);
+    });
+
+    expect(result.current.sourceFolder).toBe('/folder');
+
+    act(() => {
+      result.current.clearState();
+    });
+
+    expect(result.current.sourceFolder).toBeUndefined();
+  });
+
   it('clearState is called after handleCloseDestinationFolderPopup', () => {
     const onCopyFiles = vi.fn();
     const { result } = renderHook(() =>
@@ -519,6 +631,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
           id: '1',
           name: 'test.txt',
           path: '/test.txt',
+          parentPath: '/',
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
@@ -553,12 +666,14 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '1',
         name: 'document.txt',
         path: '/src/document.txt',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
       {
         id: '2',
         name: 'image.png',
         path: '/src/image.png',
+        parentPath: '/src',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -591,6 +706,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '1',
         name: 'folder',
         path: '/src/folder',
+        parentPath: '/src',
         nodeType: DialFileNodeType.FOLDER,
       } as DialFile,
     ];
@@ -618,6 +734,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '1',
         name: 'file.txt',
         path: '/file.txt',
+        parentPath: '/',
         nodeType: DialFileNodeType.ITEM,
       } as DialFile,
     ];
@@ -642,6 +759,7 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         id: '1',
         name: 'folder',
         path: '/folder',
+        parentPath: '/',
         nodeType: DialFileNodeType.FOLDER,
       } as DialFile,
     ];
@@ -686,7 +804,8 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
         {
           id: '1',
           name: 'file.txt',
-          path: '/file.txt',
+          path: '/folder/file.txt',
+          parentPath: '/folder',
           nodeType: DialFileNodeType.ITEM,
         } as DialFile,
       ]);
@@ -698,7 +817,6 @@ describe('Dial UI Kit :: FileManager :: useFileClipboard', () => {
       result.current.clearState();
     });
 
-    // After clearState, copiedFiles are empty, but title remains until handleSetCopiedFiles is called again
     act(() => {
       result.current.handleSetCopiedFiles([]);
     });

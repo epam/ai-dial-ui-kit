@@ -37,6 +37,7 @@ export const useFileClipboard = ({
   const [movedFiles, setMovedFiles] = useState<DialFile[]>([]);
   const [destinationFolderMode, setDestinationFolderMode] =
     useState<DestinationFolderMode>(DestinationFolderMode.Copy);
+  const [sourceFolder, setSourceFolder] = useState<string | undefined>();
 
   const [operationMetadata, setOperationMetadata] = useState<{
     type: DestinationFolderMode.Copy | DestinationFolderMode.Move;
@@ -78,6 +79,7 @@ export const useFileClipboard = ({
     setCopiedFiles([]);
     setMovedFiles([]);
     setOperationMetadata(null);
+    setSourceFolder(undefined);
   }, []);
 
   const handleCopyTo = useCallback(
@@ -194,6 +196,9 @@ export const useFileClipboard = ({
   const handleSetCopiedFiles = useCallback(
     (files: DialFile[]) => {
       setCopiedFiles(files);
+      const sourcePath = files[0]?.parentPath ?? files[0]?.folderId;
+      setSourceFolder(sourcePath);
+
       if (getCopyHeader && files.length > 0) {
         setDestinationFolderTitle(getCopyHeader(files.length, files[0]?.name));
       } else {
@@ -206,9 +211,12 @@ export const useFileClipboard = ({
   const handleSetMovedFiles = useCallback(
     (files: DialFile[]) => {
       setMovedFiles(files);
+      const sourcePath = files[0]?.parentPath ?? files[0]?.folderId;
+      setSourceFolder(sourcePath);
+
       setOperationMetadata({
         type: DestinationFolderMode.Move,
-        sourceFolder: files[0]?.folderId,
+        sourceFolder: sourcePath,
       });
 
       if (getMoveHeader && files.length > 0) {
@@ -217,7 +225,7 @@ export const useFileClipboard = ({
         setDestinationFolderTitle(undefined);
       }
     },
-    [getMoveHeader, setOperationMetadata],
+    [getMoveHeader],
   );
 
   return {
@@ -239,5 +247,6 @@ export const useFileClipboard = ({
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+    sourceFolder,
   };
 };

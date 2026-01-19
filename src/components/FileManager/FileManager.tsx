@@ -1443,12 +1443,16 @@ export const DialFileManagerView: FC = () => {
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
         path={
-          destinationFolderPopupOptions?.destinationFolderPath || currentPath
+          destinationFolderPopupOptions?.destinationFolderPath ??
+          destinationFolderPopupOptions?.sourceFolder ??
+          currentPath
         }
         onPathChange={(newPath) => {
           destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
         }}
-        sourceFolder={currentPath || '/'}
+        sourceFolder={
+          destinationFolderPopupOptions?.sourceFolder ?? currentPath
+        }
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}
