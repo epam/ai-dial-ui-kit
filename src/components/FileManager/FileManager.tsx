@@ -205,10 +205,7 @@ export interface GridOptions
   };
 }
 
-export interface NewAction {
-  label: string;
-  icon?: React.ReactNode;
-}
+export type NewAction = Pick<DropdownItem, 'label' | 'icon'>;
 
 export type ToolbarOptions = Omit<
   DialFileManagerToolbarProps,
