@@ -160,6 +160,47 @@ export const WithTabsControlled: Story = {
   render: WithTabsControlledComponent,
 };
 
+const WithTabsInitialTabComponent = (args: DialFileManagerProps) => {
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs(
+    {
+      my_files: 'My Files',
+      shared: 'Shared with Me',
+      organization: 'Organization',
+    },
+    DialFileManagerTabs.Shared,
+  );
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        toolbarOptions={{
+          ...args.toolbarOptions,
+          tabs: tabs,
+          activeTab: activeTab,
+          onTabChange: handleTabChange,
+        }}
+        gridOptions={{
+          ...args.gridOptions,
+          filterable: false,
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithTabsInitialTab: Story = {
+  render: WithTabsInitialTabComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with tabs that starts with "Shared with Me" tab as initial active tab. The `initialTab` parameter allows you to control which tab is selected by default.',
+      },
+    },
+  },
+};
+
 export const HandleTableFileClick: Story = {
   args: {
     onTableFileClick: (file) => alert(`File clicked: ${file.name}`),
