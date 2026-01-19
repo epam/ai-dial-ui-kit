@@ -892,14 +892,6 @@ export const DialFileManagerView: FC = () => {
           });
         }
 
-        if (treeOptions.actionLabels[DialFileManagerActions.Duplicate]) {
-          items.push({
-            key: 'duplicate',
-            label: treeOptions.actionLabels[DialFileManagerActions.Duplicate],
-            icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
-            onClick: () => handleDuplicate([file]),
-          });
-        }
         if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
           items.push({
             key: DestinationFolderMode.Copy,
