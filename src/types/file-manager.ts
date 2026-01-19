@@ -5,6 +5,8 @@ export enum DialFileManagerTabs {
 }
 
 export enum DialFileManagerActions {
+  AddSibling = 'addSibling',
+  AddChild = 'addChild',
   Duplicate = 'duplicate',
   Copy = 'copy',
   Move = 'move',

@@ -376,10 +376,10 @@ const PopupComponent = (args: DialFileManagerProps) => {
             tabs: tabs,
             activeTab: activeTab,
             onTabChange: handleTabChange,
-            newActionLabels: {
-              newFolder: 'New Folder',
-              uploadFiles: 'Upload Files',
-              uploadArchive: 'Upload Archive',
+            newActions: {
+              newFolder: { label: 'New Folder' },
+              uploadFiles: { label: 'Upload Files' },
+              uploadArchive: { label: 'Upload Archive' },
             },
           }}
           bulkActionsToolbarOptions={{
@@ -1358,4 +1358,48 @@ export const EmptyStatePerTab: Story = {
       },
     },
   },
+};
+
+export const WithoutNavigationPanel: Story = {
+  args: { showNavigationPanel: false },
+};
+
+export const WithInsertSiblingChildrenActions: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            addSibling: 'Add Sibling',
+            addChild: 'Add Child',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            addSibling: 'Add Sibling',
+            addChild: 'Add Child',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        onAddChild={(files) => {
+          alert(`Adding child to: ${files.map((f) => f.name).join(',')}`);
+        }}
+        onAddSibling={(files) => {
+          alert(`Adding sibling to: ${files.map((f) => f.name).join(',')}`);
+        }}
+      />
+    </div>
+  ),
 };
