@@ -12,11 +12,17 @@ import {
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
+import AddChild from '@/assets/icons/add-child.svg?react';
+import AddSibling from '@/assets/icons/add-sibling.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileNodeType } from '@/models/file';
+import { DropdownItemType } from '@/types/dropdown';
 
 export interface UseGridContextMenuProps {
   actionLabels?: {
+    [DialFileManagerActions.AddSibling]?: string;
+    [DialFileManagerActions.AddChild]?: string;
+    [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Rename]?: string;
@@ -35,6 +41,8 @@ export interface UseGridContextMenuProps {
   onInfo: (file: DialFile) => void;
   onUnshare: (file: DialFile) => void;
   sharedWithMeIds?: string[];
+  onAddSibling?: (file: DialFile) => void;
+  onAddChild?: (file: DialFile) => void;
 }
 
 export const useGridContextMenu = ({
@@ -48,6 +56,8 @@ export const useGridContextMenu = ({
   onInfo,
   onUnshare,
   sharedWithMeIds,
+  onAddSibling,
+  onAddChild,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -55,6 +65,48 @@ export const useGridContextMenu = ({
 
       if (!actionLabels) {
         return items;
+      }
+
+      if (
+        actionLabels[DialFileManagerActions.AddSibling] &&
+        typeof onAddSibling === 'function'
+      ) {
+        items.push({
+          key: 'addSibling',
+          label: actionLabels[DialFileManagerActions.AddSibling],
+          icon: (
+            <AddSibling
+              width={BASE_ICON_PROPS.size}
+              height={BASE_ICON_PROPS.size}
+              className="text-secondary"
+            />
+          ),
+          onClick: () => onAddSibling(file),
+        });
+      }
+
+      if (
+        actionLabels[DialFileManagerActions.AddChild] &&
+        typeof onAddChild === 'function'
+      ) {
+        items.push(
+          {
+            key: 'addChild',
+            label: actionLabels[DialFileManagerActions.AddChild],
+            icon: (
+              <AddChild
+                width={BASE_ICON_PROPS.size}
+                height={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onAddChild(file),
+          },
+          {
+            key: 'divider',
+            type: DropdownItemType.Divider,
+          },
+        );
       }
 
       if (actionLabels[DialFileManagerActions.Duplicate]) {
@@ -170,12 +222,14 @@ export const useGridContextMenu = ({
     };
   }, [
     actionLabels,
+    onAddSibling,
+    onAddChild,
     onDuplicate,
     onCopy,
     onMove,
     onDownload,
-    onRename,
     onDelete,
+    onRename,
     onInfo,
     onUnshare,
     sharedWithMeIds,

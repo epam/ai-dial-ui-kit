@@ -15,7 +15,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
   it('returns empty actions when labels object is undefined', () => {
     const { result } = renderHook(() =>
-      useNewActions({ newActionLabels: undefined }),
+      useNewActions({ newActions: undefined }),
     );
 
     expect(result.current.newActions).toEqual([]);
@@ -26,34 +26,34 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     {
       label: 'newFolder',
       actionKey: 'new-folder',
-      actionLabel: 'New Folder',
+      actionConfig: { label: 'New Folder' },
       callbackName: 'onCreateFolder' as const,
     },
     {
       label: 'uploadFiles',
       actionKey: 'upload-file',
-      actionLabel: 'Upload Files',
+      actionConfig: { label: 'Upload Files' },
       callbackName: 'onUploadFiles' as const,
     },
     {
       label: 'uploadArchive',
       actionKey: 'upload-archive',
-      actionLabel: 'Upload Archive',
+      actionConfig: { label: 'Upload Archive' },
       callbackName: 'onUploadArchive' as const,
     },
   ])(
     'creates $label action when label is provided',
-    ({ actionKey, actionLabel, label }) => {
+    ({ actionKey, actionConfig, label }) => {
       const { result } = renderHook(() =>
         useNewActions({
-          newActionLabels: { [label]: actionLabel },
+          newActions: { [label]: actionConfig },
         }),
       );
 
       expect(result.current.newActions).toHaveLength(1);
       expect(result.current.newActions[0]).toMatchObject({
         key: actionKey,
-        label: actionLabel,
+        label: actionConfig.label,
       });
       expect(result.current.isNewButtonVisible).toBe(true);
     },
@@ -63,28 +63,28 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     {
       label: 'newFolder',
       actionKey: 'new-folder',
-      actionLabel: 'New Folder',
+      actionConfig: { label: 'New Folder' },
       callbackName: 'onCreateFolder' as const,
     },
     {
       label: 'uploadFiles',
       actionKey: 'upload-file',
-      actionLabel: 'Upload Files',
+      actionConfig: { label: 'Upload Files' },
       callbackName: 'onUploadFiles' as const,
     },
     {
       label: 'uploadArchive',
       actionKey: 'upload-archive',
-      actionLabel: 'Upload Archive',
+      actionConfig: { label: 'Upload Archive' },
       callbackName: 'onUploadArchive' as const,
     },
   ])(
     'calls $callbackName when $label action is clicked',
-    ({ label, actionKey, actionLabel, callbackName }) => {
+    ({ label, actionKey, actionConfig, callbackName }) => {
       const callback = vi.fn();
       const { result } = renderHook(() =>
         useNewActions({
-          newActionLabels: { [label]: actionLabel },
+          newActions: { [label]: actionConfig },
           [callbackName]: callback,
         }),
       );
@@ -99,23 +99,27 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   );
 
   it.each([
-    { label: 'newFolder', actionKey: 'new-folder', actionLabel: 'New Folder' },
+    {
+      label: 'newFolder',
+      actionKey: 'new-folder',
+      actionConfig: { label: 'New Folder' },
+    },
     {
       label: 'uploadFiles',
       actionKey: 'upload-file',
-      actionLabel: 'Upload Files',
+      actionConfig: { label: 'Upload Files' },
     },
     {
       label: 'uploadArchive',
       actionKey: 'upload-archive',
-      actionLabel: 'Upload Archive',
+      actionConfig: { label: 'Upload Archive' },
     },
   ])(
     'does not throw when $label is clicked without callback',
-    ({ label, actionKey, actionLabel }) => {
+    ({ label, actionKey, actionConfig }) => {
       const { result } = renderHook(() =>
         useNewActions({
-          newActionLabels: { [label]: actionLabel },
+          newActions: { [label]: actionConfig },
         }),
       );
 
@@ -131,10 +135,10 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('creates all actions when all labels are provided', () => {
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: {
-          newFolder: 'New Folder',
-          uploadFiles: 'Upload Files',
-          uploadArchive: 'Upload Archive',
+        newActions: {
+          newFolder: { label: 'New Folder' },
+          uploadFiles: { label: 'Upload Files' },
+          uploadArchive: { label: 'Upload Archive' },
         },
       }),
     );
@@ -146,10 +150,10 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('maintains correct order: newFolder, uploadFiles, uploadArchive', () => {
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: {
-          uploadArchive: 'Upload Archive',
-          newFolder: 'New Folder',
-          uploadFiles: 'Upload Files',
+        newActions: {
+          uploadArchive: { label: 'Upload Archive' },
+          newFolder: { label: 'New Folder' },
+          uploadFiles: { label: 'Upload Files' },
         },
       }),
     );
@@ -166,10 +170,10 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: {
-          newFolder: 'New Folder',
-          uploadFiles: 'Upload Files',
-          uploadArchive: 'Upload Archive',
+        newActions: {
+          newFolder: { label: 'New Folder' },
+          uploadFiles: { label: 'Upload Files' },
+          uploadArchive: { label: 'Upload Archive' },
         },
         onCreateFolder,
         onUploadFiles,
@@ -198,23 +202,29 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it.each([
     {
       description: 'newFolder and uploadFiles',
-      labels: { newFolder: 'New Folder', uploadFiles: 'Upload Files' },
+      actions: {
+        newFolder: { label: 'New Folder' },
+        uploadFiles: { label: 'Upload Files' },
+      },
       expectedKeys: ['new-folder', 'upload-file'],
     },
     {
       description: 'uploadFiles and uploadArchive',
-      labels: { uploadFiles: 'Upload Files', uploadArchive: 'Upload Archive' },
+      actions: {
+        uploadFiles: { label: 'Upload Files' },
+        uploadArchive: { label: 'Upload Archive' },
+      },
       expectedKeys: ['upload-file', 'upload-archive'],
     },
     {
       description: 'only newFolder',
-      labels: { newFolder: 'New Folder' },
+      actions: { newFolder: { label: 'New Folder' } },
       expectedKeys: ['new-folder'],
     },
-  ])('creates only $description actions', ({ labels, expectedKeys }) => {
+  ])('creates only $description actions', ({ actions, expectedKeys }) => {
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: labels,
+        newActions: actions,
       }),
     );
 
@@ -226,13 +236,13 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   });
 
   it.each([
-    { label: 'newFolder', actionLabel: 'New Folder' },
-    { label: 'uploadFiles', actionLabel: 'Upload Files' },
-    { label: 'uploadArchive', actionLabel: 'Upload Archive' },
-  ])('includes icon for $label action', ({ label, actionLabel }) => {
+    { label: 'newFolder', action: { label: 'New Folder' } },
+    { label: 'uploadFiles', action: { label: 'Upload Files' } },
+    { label: 'uploadArchive', action: { label: 'Upload Archive' } },
+  ])('includes icon for $label action', ({ label, action }) => {
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: { [label]: actionLabel },
+        newActions: { [label]: action },
       }),
     );
 
@@ -241,7 +251,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
   it('memoizes newActions array when dependencies do not change', () => {
     const props = {
-      newActionLabels: { newFolder: 'New Folder' },
+      newActionLabels: { newFolder: { label: 'New Folder' } },
       onCreateFolder: vi.fn(),
     };
 
@@ -257,18 +267,18 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('returns new reference when labels change', () => {
     const { result, rerender } = renderHook((props) => useNewActions(props), {
       initialProps: {
-        newActionLabels: { newFolder: 'New Folder' },
+        newActions: { newFolder: { label: 'New Folder' } },
       },
     });
 
     const firstResult = result.current;
 
     rerender({
-      newActionLabels: { newFolder: 'Create Folder' },
+      newActions: { newFolder: { label: 'New Folder' } },
     });
 
     expect(result.current.newActions).not.toBe(firstResult.newActions);
-    expect(result.current.newActions[0].label).toBe('Create Folder');
+    expect(result.current.newActions[0].label).toBe('New Folder');
   });
 
   it('isNewButtonVisible is false when no actions', () => {
@@ -280,7 +290,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('isNewButtonVisible is true when at least one action exists', () => {
     const { result } = renderHook(() =>
       useNewActions({
-        newActionLabels: { newFolder: 'New Folder' },
+        newActions: { newFolder: { label: 'New Folder' } },
       }),
     );
 

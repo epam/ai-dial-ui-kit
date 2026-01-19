@@ -72,6 +72,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showHiddenFiles,
   onShowHiddenFilesChange,
   treeOptions,
+  showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
   gridOptions,
@@ -86,6 +87,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onDeleteFiles,
   onDownloadFiles,
   onRenameValidate,
+  onAddSibling,
+  onAddChild,
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
@@ -333,7 +336,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const { newActions, isNewButtonVisible } = useNewActions({
-    newActionLabels: toolbarOptions?.newActionLabels,
+    newActions: toolbarOptions?.newActions,
     onUploadFiles: openFileDialog,
     onUploadArchive: openArchiveUpload,
     onCreateFolder: startFolderCreation,
@@ -511,6 +514,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onExpandedPathsChange: setExpandedPaths,
       additionalButtons,
     },
+    showNavigationPanel,
     navigationPanelOptions,
     gridOptions,
     toolbarOptions,
@@ -558,6 +562,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleCloseDestinationFolderPopup,
     handleOpenDestinationFolderPopup,
     destinationFolderMode,
+    handleAddSibling: onAddSibling,
+    handleAddChild: onAddChild,
 
     handleDownloadFiles,
 
