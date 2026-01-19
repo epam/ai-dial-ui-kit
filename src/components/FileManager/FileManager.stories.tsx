@@ -58,7 +58,13 @@ const meta = {
     navigationPanelOptions: {
       searchable: true,
     },
-    toolbarOptions: {},
+    toolbarOptions: {
+      newActions: {
+        newFolder: { label: 'New Folder' },
+        uploadFiles: { label: 'Upload Files' },
+        uploadArchive: { label: 'Upload Archive' },
+      },
+    },
   },
 } satisfies Meta<DialFileManagerProps>;
 
