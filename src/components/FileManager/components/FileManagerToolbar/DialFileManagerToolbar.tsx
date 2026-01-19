@@ -25,6 +25,7 @@ export interface DialFileManagerToolbarProps {
   newButtonVariant?: ButtonVariant;
   newButtonDropdownItems?: DropdownItem[];
   newButtonLabel?: string;
+  showHiddenFilesToggle?: boolean;
   onTabChange?: (id: DialFileManagerTabs) => void;
   onToggleHiddenFiles?: (value: boolean) => void;
 }
@@ -95,6 +96,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   hiddenFilesSwitcherLabel = 'Hidden files',
   showHiddenFilesLabel = 'Show hidden files',
   hideHiddenFilesLabel = 'Hide hidden files',
+  showHiddenFilesToggle = true,
 }) => {
   const isMobile = useIsMobileScreen();
 
@@ -136,12 +138,14 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
 
   const renderDesktopActions = () => (
     <>
-      <DialSwitch
-        switchId="hidden-files-switch"
-        label={hiddenFilesSwitcherLabel}
-        isOn={areHiddenFilesVisible}
-        onChange={onToggleHiddenFiles}
-      />
+      {showHiddenFilesToggle && (
+        <DialSwitch
+          switchId="hidden-files-switch"
+          label={hiddenFilesSwitcherLabel}
+          isOn={areHiddenFilesVisible}
+          onChange={onToggleHiddenFiles}
+        />
+      )}
 
       {isNewButtonVisible && (
         <>

@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import { IconFile, IconFileZip, IconFolder } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
+import type { NewAction } from '../FileManager';
 
 export interface UseNewActionsProps {
-  newActionLabels?: {
-    uploadFiles?: string;
-    newFolder?: string;
-    uploadArchive?: string;
+  newActions?: {
+    uploadFiles?: NewAction;
+    newFolder?: NewAction;
+    uploadArchive?: NewAction;
   };
   onUploadFiles?: () => void;
   onCreateFolder?: () => void;
@@ -20,23 +21,28 @@ export interface UseNewActionsResult {
 }
 
 export const useNewActions = ({
-  newActionLabels,
+  newActions,
   onUploadFiles,
   onCreateFolder,
   onUploadArchive,
 }: UseNewActionsProps): UseNewActionsResult => {
-  const newActions = useMemo(() => {
+  const newActionItems = useMemo(() => {
     const actions: DropdownItem[] = [];
 
-    if (!newActionLabels) {
+    if (!newActions) {
       return actions;
     }
 
-    if (newActionLabels.newFolder) {
+    if (newActions.newFolder) {
       actions.push({
         key: 'new-folder',
-        label: newActionLabels.newFolder,
-        icon: <IconFolder {...BASE_ICON_PROPS} className="text-secondary" />,
+        label: newActions.newFolder.label,
+        icon:
+          newActions?.newFolder?.icon !== undefined ? (
+            newActions?.newFolder?.icon
+          ) : (
+            <IconFolder {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
         onClick: () => {
           if (onCreateFolder) {
             onCreateFolder();
@@ -45,11 +51,16 @@ export const useNewActions = ({
       });
     }
 
-    if (newActionLabels.uploadFiles) {
+    if (newActions.uploadFiles) {
       actions.push({
         key: 'upload-file',
-        label: newActionLabels.uploadFiles,
-        icon: <IconFile {...BASE_ICON_PROPS} className="text-secondary" />,
+        label: newActions.uploadFiles.label,
+        icon:
+          newActions?.uploadFiles?.icon !== undefined ? (
+            newActions?.uploadFiles?.icon
+          ) : (
+            <IconFile {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
         onClick: () => {
           if (onUploadFiles) {
             onUploadFiles();
@@ -58,11 +69,16 @@ export const useNewActions = ({
       });
     }
 
-    if (newActionLabels.uploadArchive) {
+    if (newActions.uploadArchive) {
       actions.push({
         key: 'upload-archive',
-        label: newActionLabels.uploadArchive,
-        icon: <IconFileZip {...BASE_ICON_PROPS} className="text-secondary" />,
+        label: newActions.uploadArchive.label,
+        icon:
+          newActions?.uploadArchive?.icon !== undefined ? (
+            newActions?.uploadArchive?.icon
+          ) : (
+            <IconFileZip {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
         onClick: () => {
           if (onUploadArchive) {
             onUploadArchive();
@@ -72,9 +88,12 @@ export const useNewActions = ({
     }
 
     return actions;
-  }, [newActionLabels, onUploadFiles, onCreateFolder, onUploadArchive]);
+  }, [newActions, onCreateFolder, onUploadFiles, onUploadArchive]);
 
-  const isNewButtonVisible = useMemo(() => newActions.length > 0, [newActions]);
+  const isNewButtonVisible = useMemo(
+    () => newActionItems?.length > 0,
+    [newActionItems],
+  );
 
-  return { newActions, isNewButtonVisible };
+  return { newActions: newActionItems, isNewButtonVisible };
 };
