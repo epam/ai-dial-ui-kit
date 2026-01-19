@@ -788,7 +788,11 @@ export const DialFileManagerView: FC = () => {
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
-          return <DialEllipsisTooltip text={params.data.path} />;
+          if (!rootItem) {
+            return <DialEllipsisTooltip text={params.data.path} />;
+          }
+          const path = params.data.path.replace(rootItem.path, rootItem.label);
+          return <DialEllipsisTooltip text={path} />;
         },
       },
       {
@@ -831,7 +835,7 @@ export const DialFileManagerView: FC = () => {
         },
       },
     ];
-  }, [dateLocale, dateOptions, isCompactView]);
+  }, [dateLocale, dateOptions, isCompactView, rootItem]);
 
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
