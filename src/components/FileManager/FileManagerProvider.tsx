@@ -230,6 +230,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+    sourceFolder,
   } = useFileClipboard({
     getDestinationFiles: (path: string) => {
       const folder = findFolderForPath(items, path);
@@ -244,18 +245,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getCopyHeader: destinationFolderPopupOptions?.getCopyHeader,
     getMoveHeader: destinationFolderPopupOptions?.getMoveHeader,
   });
-
-  useEffect(() => {
-    if (openDestinationFolderPopup && !destinationFolderPath) {
-      setDestinationFolderPath(currentPath ?? rootItem?.path ?? '/');
-    }
-  }, [
-    openDestinationFolderPopup,
-    destinationFolderPath,
-    currentPath,
-    rootItem?.path,
-    setDestinationFolderPath,
-  ]);
 
   useEffect(() => {
     if (!openDestinationFolderPopup) {
@@ -535,6 +524,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onCreateFolder,
       onCreateFolderValidate,
       folderCreationValidationMessages,
+      sourceFolder,
     },
 
     currentPath,
