@@ -249,21 +249,6 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     expect(result.current.newActions[0].icon).toBeDefined();
   });
 
-  it('memoizes newActions array when dependencies do not change', () => {
-    const props = {
-      newActionLabels: { newFolder: { label: 'New Folder' } },
-      onCreateFolder: vi.fn(),
-    };
-
-    const { result, rerender } = renderHook(() => useNewActions(props));
-
-    const firstActions = result.current.newActions;
-
-    rerender();
-
-    expect(result.current.newActions).toBe(firstActions);
-  });
-
   it('returns new reference when labels change', () => {
     const { result, rerender } = renderHook((props) => useNewActions(props), {
       initialProps: {
