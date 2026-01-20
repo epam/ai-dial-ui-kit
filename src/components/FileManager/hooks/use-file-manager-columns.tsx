@@ -46,6 +46,9 @@ export interface UseFileManagerColumnsArgs {
 
   hasActions: boolean;
   actionsColumnDef: ColDef<GridRow>;
+
+  rootItemPath?: string;
+  rootItemLabel?: string;
 }
 
 export interface UseFileManagerColumnsResult {
@@ -83,6 +86,8 @@ export function useFileManagerColumns({
   isCompactView,
   hasActions,
   actionsColumnDef,
+  rootItemLabel,
+  rootItemPath,
 }: UseFileManagerColumnsArgs): UseFileManagerColumnsResult {
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
@@ -215,7 +220,11 @@ export function useFileManagerColumns({
         flex: 1,
         minWidth: 200,
         cellRenderer: (params: { data: GridRow }) => {
-          return <DialEllipsisTooltip text={params.data.path} />;
+          if (!rootItemPath || !rootItemLabel) {
+            return <DialEllipsisTooltip text={params.data.path} />;
+          }
+          const path = params.data.path.replace(rootItemPath, rootItemLabel);
+          return <DialEllipsisTooltip text={path} />;
         },
       },
       {
@@ -258,7 +267,7 @@ export function useFileManagerColumns({
         },
       },
     ];
-  }, [dateLocale, dateOptions, isCompactView]);
+  }, [dateLocale, dateOptions, isCompactView, rootItemLabel, rootItemPath]);
 
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
     let columns = userColumnDefs ?? defaultColumns;

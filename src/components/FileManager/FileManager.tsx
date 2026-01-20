@@ -1023,6 +1023,8 @@ export const DialFileManagerView: FC = () => {
     isCompactView,
     hasActions: !!gridOptions?.actionLabels,
     actionsColumnDef,
+    rootItemLabel: rootItem?.label,
+    rootItemPath: rootItem?.path,
   });
 
   const cellClickHandler = useCallback(
