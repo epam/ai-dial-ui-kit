@@ -72,6 +72,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showHiddenFiles,
   onShowHiddenFilesChange,
   treeOptions,
+  showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
   gridOptions,
@@ -86,6 +87,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onDeleteFiles,
   onDownloadFiles,
   onRenameValidate,
+  onAddSibling,
+  onAddChild,
   renameValidationMessages,
   onUploadFiles,
   onValidateUpload,
@@ -111,6 +114,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   emptyStateIcon,
   emptyStateTitle,
   emptyStateDescription,
+
+  sharedWithMeIds,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -228,6 +233,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleConflictReplace,
     handleConflictDuplicate,
     handleConflictDecideForEach,
+    sourceFolder,
   } = useFileClipboard({
     getDestinationFiles: (path: string) => {
       const folder = findFolderForPath(items, path);
@@ -242,18 +248,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getCopyHeader: destinationFolderPopupOptions?.getCopyHeader,
     getMoveHeader: destinationFolderPopupOptions?.getMoveHeader,
   });
-
-  useEffect(() => {
-    if (openDestinationFolderPopup && !destinationFolderPath) {
-      setDestinationFolderPath(currentPath ?? rootItem?.path ?? '/');
-    }
-  }, [
-    openDestinationFolderPopup,
-    destinationFolderPath,
-    currentPath,
-    rootItem?.path,
-    setDestinationFolderPath,
-  ]);
 
   useEffect(() => {
     if (!openDestinationFolderPopup) {
@@ -342,7 +336,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const { newActions, isNewButtonVisible } = useNewActions({
-    newActionLabels: toolbarOptions?.newActionLabels,
+    newActions: toolbarOptions?.newActions,
     onUploadFiles: openFileDialog,
     onUploadArchive: openArchiveUpload,
     onCreateFolder: startFolderCreation,
@@ -520,6 +514,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onExpandedPathsChange: setExpandedPaths,
       additionalButtons,
     },
+    showNavigationPanel,
     navigationPanelOptions,
     gridOptions,
     toolbarOptions,
@@ -533,6 +528,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onCreateFolder,
       onCreateFolderValidate,
       folderCreationValidationMessages,
+      sourceFolder,
     },
 
     currentPath,
@@ -566,6 +562,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleCloseDestinationFolderPopup,
     handleOpenDestinationFolderPopup,
     destinationFolderMode,
+    handleAddSibling: onAddSibling,
+    handleAddChild: onAddChild,
 
     handleDownloadFiles,
 
@@ -650,6 +648,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateIcon,
     emptyStateTitle,
     emptyStateDescription,
+
+    sharedWithMeIds,
   };
 
   return (

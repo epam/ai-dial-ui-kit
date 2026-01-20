@@ -29,6 +29,9 @@ import {
   IconFileDescription,
   IconUsers,
 } from '@tabler/icons-react';
+import type { FileManagerGridRow } from './FileManagerContext';
+import type { ColDef } from 'ag-grid-community';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -58,7 +61,13 @@ const meta = {
     navigationPanelOptions: {
       searchable: true,
     },
-    toolbarOptions: {},
+    toolbarOptions: {
+      newActions: {
+        newFolder: { label: 'New Folder' },
+        uploadFiles: { label: 'Upload Files' },
+        uploadArchive: { label: 'Upload Archive' },
+      },
+    },
   },
 } satisfies Meta<DialFileManagerProps>;
 
@@ -158,6 +167,47 @@ const WithTabsControlledComponent = (args: DialFileManagerProps) => {
 
 export const WithTabsControlled: Story = {
   render: WithTabsControlledComponent,
+};
+
+const WithTabsInitialTabComponent = (args: DialFileManagerProps) => {
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs(
+    {
+      my_files: 'My Files',
+      shared: 'Shared with Me',
+      organization: 'Organization',
+    },
+    DialFileManagerTabs.Shared,
+  );
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        toolbarOptions={{
+          ...args.toolbarOptions,
+          tabs: tabs,
+          activeTab: activeTab,
+          onTabChange: handleTabChange,
+        }}
+        gridOptions={{
+          ...args.gridOptions,
+          filterable: false,
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithTabsInitialTab: Story = {
+  render: WithTabsInitialTabComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with tabs that starts with "Shared with Me" tab as initial active tab. The `initialTab` parameter allows you to control which tab is selected by default.',
+      },
+    },
+  },
 };
 
 export const HandleTableFileClick: Story = {
@@ -335,10 +385,10 @@ const PopupComponent = (args: DialFileManagerProps) => {
             tabs: tabs,
             activeTab: activeTab,
             onTabChange: handleTabChange,
-            newActionLabels: {
-              newFolder: 'New Folder',
-              uploadFiles: 'Upload Files',
-              uploadArchive: 'Upload Archive',
+            newActions: {
+              newFolder: { label: 'New Folder' },
+              uploadFiles: { label: 'Upload Files' },
+              uploadArchive: { label: 'Upload Archive' },
             },
           }}
           bulkActionsToolbarOptions={{
@@ -1070,6 +1120,7 @@ export const WithUnshareAction: Story = {
         onUnshareFiles={(files) => {
           alert(`Unsharing file: ${files.map((f) => f.name).join(',')}`);
         }}
+        sharedWithMeIds={['All files/Design']}
       />
     </div>
   ),
@@ -1313,6 +1364,117 @@ export const EmptyStatePerTab: Story = {
       description: {
         story:
           'Demonstrates how the File Manager displays different empty states depending on the active tab. The example configures unique icons, titles, and descriptions for the "My Files", "Shared with Me", and "Organization" tabs, and shows how to control the active tab via toolbar options.',
+      },
+    },
+  },
+};
+
+export const WithoutNavigationPanel: Story = {
+  args: { showNavigationPanel: false },
+};
+
+export const WithInsertSiblingChildrenActions: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            addSibling: 'Add Sibling',
+            addChild: 'Add Child',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            addSibling: 'Add Sibling',
+            addChild: 'Add Child',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+        }}
+        onAddChild={(files) => {
+          alert(`Adding child to: ${files.map((f) => f.name).join(',')}`);
+        }}
+        onAddSibling={(files) => {
+          alert(`Adding sibling to: ${files.map((f) => f.name).join(',')}`);
+        }}
+      />
+    </div>
+  ),
+};
+
+const WithCustomColumnsComponent = (args: DialFileManagerProps) => {
+  const customColumns = useMemo<ColDef<FileManagerGridRow>[]>(() => {
+    return [
+      {
+        colId: 'nodeType',
+        field: 'nodeType',
+        headerName: 'Type',
+        width: 120,
+        suppressSizeToFit: true,
+        cellRenderer: (params: { data: FileManagerGridRow }) => {
+          return params.data.nodeType === DialFileNodeType.FOLDER
+            ? 'Folder'
+            : 'File';
+        },
+      },
+      {
+        colId: FileManagerColumnKey.UpdatedAt,
+        field: 'updatedAt',
+        headerName: 'Modified Date',
+        width: 168,
+        suppressSizeToFit: true,
+        cellRenderer: DialDateCellRenderer,
+        cellRendererParams: {
+          locale: 'en-US',
+          options: {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          },
+        },
+      },
+      {
+        colId: FileManagerColumnKey.Size,
+        field: 'size',
+        headerName: 'Size',
+        width: 120,
+        suppressSizeToFit: false,
+      },
+    ];
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...args.gridOptions,
+          columnDefs: customColumns,
+          filterable: false,
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithCustomColumns: Story = {
+  render: WithCustomColumnsComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with custom columns including a Type column that shows whether the item is a File or Folder.',
       },
     },
   },

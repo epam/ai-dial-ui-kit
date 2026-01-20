@@ -155,3 +155,70 @@ export const WithDisabledNewButton: Story = {
     return <StoryWrapper />;
   },
 };
+
+export const WithTextNewActions: Story = {
+  render: () => {
+    const StoryWrapper = () => {
+      const [activeTab, setActiveTab] = useState('organization');
+      const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
+
+      const mockCreateItems = [
+        {
+          key: 'new-folder',
+          label: 'New folder',
+          icon: null,
+          onClick: () => alert('Create new folder'),
+        },
+        {
+          key: 'upload-files',
+          label: 'Upload files',
+          icon: null,
+          onClick: () => alert('Upload files'),
+        },
+      ];
+
+      return (
+        <div className="p-4 border rounded-lg bg-background">
+          <DialFileManagerToolbar
+            tabs={mockTabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={setAreHiddenFilesVisible}
+            isNewButtonVisible
+            newButtonDropdownItems={mockCreateItems}
+          />
+        </div>
+      );
+    };
+
+    return <StoryWrapper />;
+  },
+};
+
+export const WithoutHiddenFilesToggle: Story = {
+  render: () => {
+    const StoryWrapper = () => {
+      const [activeTab, setActiveTab] = useState('organization');
+      const [areHiddenFilesVisible, setAreHiddenFilesVisible] = useState(false);
+
+      return (
+        <div className="p-4 border rounded-lg bg-background">
+          <DialFileManagerToolbar
+            tabs={mockTabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            areHiddenFilesVisible={areHiddenFilesVisible}
+            onToggleHiddenFiles={setAreHiddenFilesVisible}
+            isNewButtonVisible
+            newButtonVariant={ButtonVariant.Primary}
+            newButtonDropdownItems={mockCreateItems}
+            showHiddenFilesToggle={false}
+          />
+        </div>
+      );
+    };
+
+    return <StoryWrapper />;
+  },
+};

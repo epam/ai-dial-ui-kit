@@ -64,6 +64,8 @@ import {
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
+import AddChild from '@/assets/icons/add-child.svg?react';
+import AddSibling from '@/assets/icons/add-sibling.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { FileManagerProvider } from './FileManagerProvider';
 import { useFileManagerContext } from './hooks/use-file-manager-context';
@@ -99,6 +101,7 @@ import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger
 import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
 import { DialNoDataContent } from '../NoDataContent/NoDataContent';
+import { DropdownItemType } from '@/types/dropdown';
 import {
   useFileManagerColumns,
   type FileManagerGridContext,
@@ -153,6 +156,8 @@ export interface FileTreeOptions
   loadedPaths?: Set<string>;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   actionLabels?: {
+    [DialFileManagerActions.AddSibling]?: string;
+    [DialFileManagerActions.AddChild]?: string;
     [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Rename]?: string;
@@ -183,6 +188,8 @@ export interface GridOptions
   dateOptions?: Intl.DateTimeFormatOptions;
   visibleColumns?: FileManagerColumnKey[];
   actionLabels?: {
+    [DialFileManagerActions.AddSibling]?: string;
+    [DialFileManagerActions.AddChild]?: string;
     [DialFileManagerActions.Duplicate]?: string;
     [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Rename]?: string;
@@ -194,15 +201,18 @@ export interface GridOptions
   };
 }
 
+export type NewAction = Pick<DropdownItem, 'label' | 'icon'>;
+
 export type ToolbarOptions = Omit<
   DialFileManagerToolbarProps,
   'areHiddenFilesVisible' | 'onToggleHiddenFiles'
 > & {
-  newActionLabels?: {
-    uploadFiles?: string;
-    newFolder?: string;
-    uploadArchive?: string;
+  newActions?: {
+    uploadFiles?: NewAction;
+    newFolder?: NewAction;
+    uploadArchive?: NewAction;
   };
+  showHiddenFilesToggle?: boolean;
 };
 
 export type BulkActionsToolbarOptions = Omit<
@@ -246,7 +256,10 @@ export interface DialFileManagerProps {
 
   treeOptions?: FileTreeOptions;
   toolbarOptions?: ToolbarOptions;
+
+  showNavigationPanel?: boolean;
   navigationPanelOptions?: NavigationPanelOptions;
+
   gridOptions?: GridOptions;
   bulkActionsToolbarOptions?: BulkActionsToolbarOptions;
   deleteConfirmationOptions?: DeleteConfirmationOptions;
@@ -266,6 +279,8 @@ export interface DialFileManagerProps {
   ) => void;
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
   onDownloadFiles?: (items: DialFile[]) => void;
+  onAddSibling?: (items: DialFile[]) => void;
+  onAddChild?: (items: DialFile[]) => void;
 
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   renameValidationMessages?: RenameValidationMessages;
@@ -313,6 +328,8 @@ export interface DialFileManagerProps {
   emptyStateIcon?: ReactNode;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
+
+  sharedWithMeIds?: string[];
 }
 
 /**
@@ -370,6 +387,7 @@ export interface DialFileManagerProps {
  * @param [defaultSelectedPaths] - Initial selected paths used in uncontrolled mode
  *
  * @param [treeOptions] - Options that configure the collapsible sidebar and folders tree
+ * @param [showNavigationPanel] - Determines whether to display the navigation panel.
  * @param [navigationPanelOptions] - Options for the breadcrumb and search panel (value/onSearchChange for controlled search)
  * @param [toolbarOptions] - Options for the file manager toolbar
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag and date locale/options
@@ -385,6 +403,8 @@ export interface DialFileManagerProps {
  * @param [onCopyFiles] - Callback fired when files copy-paste
  * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
  * @param [onDeleteFiles] - Callback fired when files are deleted
+ * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
+ * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
@@ -406,6 +426,8 @@ export interface DialFileManagerProps {
  * @param [emptyStateIcon] - Optional icon for empty state
  * @param [emptyStateTitle] - Optional title text displayed when there are no files.
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
+ *
+ * @param [sharedWithMeIds] - Optional list of file IDs that are shared with the current user.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -427,7 +449,10 @@ export const DialFileManagerView: FC = () => {
     rootItem,
     filesLoading,
     treeOptions,
+
+    showNavigationPanel,
     navigationPanelOptions,
+
     gridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
@@ -468,6 +493,8 @@ export const DialFileManagerView: FC = () => {
     handleDuplicate,
     handleCopyTo,
     handleMoveTo,
+    handleAddSibling,
+    handleAddChild,
 
     handleDownloadFiles,
 
@@ -530,6 +557,8 @@ export const DialFileManagerView: FC = () => {
     emptyStateIcon,
     emptyStateTitle = "You don't have any files",
     emptyStateDescription = 'Upload or drag and drop files',
+
+    sharedWithMeIds,
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -609,6 +638,48 @@ export const DialFileManagerView: FC = () => {
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
       if (treeOptions?.actionLabels) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
+          typeof handleAddSibling === 'function'
+        ) {
+          items.push({
+            key: 'addSibling',
+            label: treeOptions.actionLabels[DialFileManagerActions.AddSibling],
+            icon: (
+              <AddSibling
+                width={BASE_ICON_PROPS.size}
+                height={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => handleAddSibling([file]),
+          });
+        }
+
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.AddChild] &&
+          typeof handleAddChild === 'function'
+        ) {
+          items.push(
+            {
+              key: 'addChild',
+              label: treeOptions.actionLabels[DialFileManagerActions.AddChild],
+              icon: (
+                <AddChild
+                  width={BASE_ICON_PROPS.size}
+                  height={BASE_ICON_PROPS.size}
+                  className="text-secondary"
+                />
+              ),
+              onClick: () => handleAddChild([file]),
+            },
+            {
+              key: 'divider',
+              type: DropdownItemType.Divider,
+            },
+          );
+        }
+
         if (treeOptions.actionLabels[DialFileManagerActions.Duplicate]) {
           items.push({
             key: 'duplicate',
@@ -617,6 +688,7 @@ export const DialFileManagerView: FC = () => {
             onClick: () => handleDuplicate([file]),
           });
         }
+
         if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
           items.push({
             key: DestinationFolderMode.Copy,
@@ -674,7 +746,10 @@ export const DialFileManagerView: FC = () => {
             onClick: () => onTreeRename(file.path),
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Unshare]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Unshare] &&
+          sharedWithMeIds?.includes(file.path)
+        ) {
           items.push({
             key: 'unshare',
             label: treeOptions.actionLabels[DialFileManagerActions.Unshare],
@@ -706,15 +781,18 @@ export const DialFileManagerView: FC = () => {
       return items;
     },
     [
-      handleDownloadFiles,
+      treeOptions?.actionLabels,
+      handleAddSibling,
+      handleAddChild,
       handleDuplicate,
-      handleOpenDestinationFolderPopup,
       handleSetCopiedFiles,
+      handleOpenDestinationFolderPopup,
       handleSetMovedFiles,
+      handleDownloadFiles,
       onTreeRename,
-      openDeleteConfirmation,
-      treeOptions,
       onUnshareFiles,
+      sharedWithMeIds,
+      openDeleteConfirmation,
     ],
   );
 
@@ -765,6 +843,7 @@ export const DialFileManagerView: FC = () => {
     onDelete: openDeleteConfirmation,
     onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
+    sharedWithMeIds,
   });
 
   const renderToolbar = useCallback(() => {
@@ -914,6 +993,9 @@ export const DialFileManagerView: FC = () => {
       openDeleteConfirmation([file], parentFolderPath),
     onInfo: (file) => openMetadataPopup(file),
     onUnshare: (file) => onUnshareFiles?.([file]),
+    sharedWithMeIds,
+    onAddChild: (file) => handleAddChild?.([file]),
+    onAddSibling: (file) => handleAddSibling?.([file]),
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1006,18 +1088,20 @@ export const DialFileManagerView: FC = () => {
             'gap-3': isCompactView,
           })}
         >
-          <DialFileManagerNavigationPanel
-            {...(navigationPanelOptions ?? {})}
-            makeHref={(segments) => segments.join('/')}
-            path={currentPath}
-            onItemClick={handleBreadcrumbItemClick}
-            rootItemPath={rootItem?.path}
-            rootItemLabel={rootItem?.label}
-            value={effectiveSearchValue}
-            onSearchChange={handleSearchChange}
-            isCompactView={isCompactView}
-            labelClassName="dial-tiny"
-          />
+          {showNavigationPanel && (
+            <DialFileManagerNavigationPanel
+              {...(navigationPanelOptions ?? {})}
+              makeHref={(segments) => segments.join('/')}
+              path={currentPath}
+              onItemClick={handleBreadcrumbItemClick}
+              rootItemPath={rootItem?.path}
+              rootItemLabel={rootItem?.label}
+              value={effectiveSearchValue}
+              onSearchChange={handleSearchChange}
+              isCompactView={isCompactView}
+              labelClassName="dial-tiny"
+            />
+          )}
 
           <section
             role="region"
@@ -1122,12 +1206,16 @@ export const DialFileManagerView: FC = () => {
         onValidateUpload={onValidateUpload}
         maxFileSize={maxFileSize}
         path={
-          destinationFolderPopupOptions?.destinationFolderPath || currentPath
+          destinationFolderPopupOptions?.destinationFolderPath ??
+          destinationFolderPopupOptions?.sourceFolder ??
+          currentPath
         }
         onPathChange={(newPath) => {
           destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
         }}
-        sourceFolder={currentPath || '/'}
+        sourceFolder={
+          destinationFolderPopupOptions?.sourceFolder ?? currentPath
+        }
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}

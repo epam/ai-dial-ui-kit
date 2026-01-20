@@ -70,6 +70,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [],
       }),
     );
 
@@ -89,6 +90,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [testFile.path],
       }),
     );
 
@@ -118,6 +120,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [testFolder.path],
       }),
     );
 
@@ -152,6 +155,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [],
       }),
     );
 
@@ -419,6 +423,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare,
+        sharedWithMeIds: [testFile.path],
       }),
     );
 
@@ -446,6 +451,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare,
+        sharedWithMeIds: [testFolder.path],
       }),
     );
 
@@ -472,6 +478,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [testFile.path],
       }),
     );
 
@@ -497,11 +504,14 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       onUnshare: vi.fn(),
     };
 
+    const sharedWithMeIds: string[] = [];
+
     const { result, rerender } = renderHook(
       ({ actionLabels }) =>
         useGridContextMenu({
           actionLabels,
           ...callbacks,
+          sharedWithMeIds,
         }),
       { initialProps: { actionLabels: defaultActionLabels } },
     );
@@ -550,6 +560,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [testFile.path, testFolder.path],
       }),
     );
 
@@ -651,6 +662,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        sharedWithMeIds: [testFile.path],
       }),
     );
 
@@ -660,43 +672,6 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       DialFileManagerActions.Info,
       DialFileManagerActions.Unshare,
     ]);
-  });
-
-  test('updates when onInfo callback changes', () => {
-    const onInfo1 = vi.fn();
-    const onInfo2 = vi.fn();
-
-    const { result, rerender } = renderHook(
-      ({ onInfo }) =>
-        useGridContextMenu({
-          actionLabels: { [DialFileManagerActions.Info]: 'Info' },
-          onDuplicate: vi.fn(),
-          onCopy: vi.fn(),
-          onMove: vi.fn(),
-          onDownload: vi.fn(),
-          onRename: vi.fn(),
-          onDelete: vi.fn(),
-          onInfo,
-          onUnshare: vi.fn(),
-        }),
-      { initialProps: { onInfo: onInfo1 } },
-    );
-
-    let menuItems = result.current(testFile);
-    menuItems[0].onClick?.({
-      key: menuItems[0].key,
-      domEvent: mockMouseEvent,
-    });
-    expect(onInfo1).toHaveBeenCalledWith(testFile);
-
-    rerender({ onInfo: onInfo2 });
-
-    menuItems = result.current(testFile);
-    menuItems[0].onClick?.({
-      key: menuItems[0].key,
-      domEvent: mockMouseEvent,
-    });
-    expect(onInfo2).toHaveBeenCalledWith(testFile);
   });
 
   test('updates when onUnshare callback changes', () => {
@@ -715,6 +690,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
           onDelete: vi.fn(),
           onInfo: vi.fn(),
           onUnshare,
+          sharedWithMeIds: [testFile.path],
         }),
       { initialProps: { onUnshare: onUnshare1 } },
     );

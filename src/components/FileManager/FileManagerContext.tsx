@@ -51,6 +51,7 @@ export interface FileManagerContextValue {
   maxSelectableFileSize?: number;
   filesLoading?: boolean;
   treeOptions?: FileTreeOptions;
+  showNavigationPanel?: boolean;
   navigationPanelOptions?: NavigationPanelOptions;
   gridOptions?: GridOptions;
   toolbarOptions?: ToolbarOptions;
@@ -95,6 +96,8 @@ export interface FileManagerContextValue {
   destinationFolderMode: DestinationFolderMode;
   handleSetCopiedFiles: (files: DialFile[]) => void;
   handleSetMovedFiles: (files: DialFile[]) => void;
+  handleAddSibling?: (files: DialFile[]) => void;
+  handleAddChild?: (files: DialFile[]) => void;
 
   renamedPath?: string;
   renamedItem?: DialFile;
@@ -183,6 +186,8 @@ export interface FileManagerContextValue {
   emptyStateIcon?: ReactNode;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
+
+  sharedWithMeIds?: string[];
 }
 
 export const FileManagerContext = createContext<
