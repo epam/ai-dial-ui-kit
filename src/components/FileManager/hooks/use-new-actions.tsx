@@ -3,6 +3,7 @@ import { IconFile, IconFileZip, IconFolder } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
 import type { NewAction } from '../FileManager';
+import { DialFilePermission, type DialFile } from '@/models/file';
 
 export interface UseNewActionsProps {
   newActions?: {
@@ -10,6 +11,7 @@ export interface UseNewActionsProps {
     newFolder?: NewAction;
     uploadArchive?: NewAction;
   };
+  currentFolder?: DialFile;
   onUploadFiles?: () => void;
   onCreateFolder?: () => void;
   onUploadArchive?: () => void;
@@ -18,10 +20,12 @@ export interface UseNewActionsProps {
 export interface UseNewActionsResult {
   newActions: DropdownItem[];
   isNewButtonVisible: boolean;
+  isNewButtonDisabled: boolean;
 }
 
 export const useNewActions = ({
   newActions,
+  currentFolder,
   onUploadFiles,
   onCreateFolder,
   onUploadArchive,
@@ -95,5 +99,14 @@ export const useNewActions = ({
     [newActionItems],
   );
 
-  return { newActions: newActionItems, isNewButtonVisible };
+  const isNewButtonDisabled = useMemo(
+    () => !currentFolder?.permissions?.includes(DialFilePermission.WRITE),
+    [currentFolder],
+  );
+
+  return {
+    newActions: newActionItems,
+    isNewButtonVisible,
+    isNewButtonDisabled,
+  };
 };

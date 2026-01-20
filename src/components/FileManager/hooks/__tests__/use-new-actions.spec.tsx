@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useNewActions } from '@/components/FileManager/hooks/use-new-actions';
 import type { MouseEvent } from 'react';
+import { DialFilePermission, type DialFile } from '@/models/file';
 
 describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   const mockMouseEvent = {} as MouseEvent<Element, globalThis.MouseEvent>;
@@ -280,5 +281,127 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     );
 
     expect(result.current.isNewButtonVisible).toBe(true);
+  });
+
+  it('isNewButtonDisabled is true when currentFolder is undefined', () => {
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: undefined,
+      }),
+    );
+
+    expect(result.current.isNewButtonDisabled).toBe(true);
+  });
+
+  it('isNewButtonDisabled is true when currentFolder.permissions is undefined', () => {
+    const folder = { id: '1' } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: folder,
+      }),
+    );
+
+    expect(result.current.isNewButtonDisabled).toBe(true);
+  });
+
+  it('isNewButtonDisabled is true when currentFolder does not include WRITE permission', () => {
+    const folder = {
+      id: '1',
+      permissions: [DialFilePermission.READ],
+    } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: folder,
+      }),
+    );
+
+    expect(result.current.isNewButtonDisabled).toBe(true);
+  });
+
+  it('isNewButtonDisabled is false when currentFolder includes WRITE permission', () => {
+    const folder = {
+      id: '1',
+      permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
+    } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: folder,
+      }),
+    );
+
+    expect(result.current.isNewButtonDisabled).toBe(false);
+  });
+
+  it('isNewButtonDisabled updates when currentFolder changes', () => {
+    const folderWithoutWrite = {
+      id: '1',
+      permissions: [DialFilePermission.READ],
+    } as DialFile;
+
+    const folderWithWrite = {
+      id: '2',
+      permissions: [DialFilePermission.WRITE],
+    } as DialFile;
+
+    const { result, rerender } = renderHook((props) => useNewActions(props), {
+      initialProps: {
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: folderWithoutWrite,
+      },
+    });
+
+    expect(result.current.isNewButtonDisabled).toBe(true);
+
+    rerender({
+      newActions: { newFolder: { label: 'New Folder' } },
+      currentFolder: folderWithWrite,
+    });
+
+    expect(result.current.isNewButtonDisabled).toBe(false);
+  });
+
+  it('isNewButtonDisabled does not depend on newActions (still true with WRITE missing, even if actions exist)', () => {
+    const folder = {
+      id: '1',
+      permissions: [DialFilePermission.READ],
+    } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: {
+          newFolder: { label: 'New Folder' },
+          uploadFiles: { label: 'Upload Files' },
+          uploadArchive: { label: 'Upload Archive' },
+        },
+        currentFolder: folder,
+      }),
+    );
+
+    expect(result.current.isNewButtonVisible).toBe(true);
+    expect(result.current.isNewButtonDisabled).toBe(true);
+  });
+
+  it('isNewButtonDisabled is true even when there are no actions (disabled state is permission-based)', () => {
+    const folder = {
+      id: '1',
+      permissions: [DialFilePermission.WRITE],
+    } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: undefined,
+        currentFolder: folder,
+      }),
+    );
+
+    expect(result.current.isNewButtonVisible).toBe(false);
+    expect(result.current.isNewButtonDisabled).toBe(false);
   });
 });
