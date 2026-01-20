@@ -522,6 +522,7 @@ export const DialFileManagerView: FC = () => {
     maxFileSize,
     newActions,
     isNewButtonVisible,
+    isNewButtonDisabled,
     newFolderTempId,
     cancelFolderCreation,
     saveFolderCreation,
@@ -859,6 +860,7 @@ export const DialFileManagerView: FC = () => {
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
             isNewButtonVisible={isNewButtonVisible}
+            isNewButtonDisabled={isNewButtonDisabled}
             newButtonDropdownItems={newActions}
           />
         </div>
@@ -892,6 +894,7 @@ export const DialFileManagerView: FC = () => {
     toggleHiddenFilesVisibility,
     toolbarOptions,
     isNewButtonVisible,
+    isNewButtonDisabled,
     newActions,
   ]);
 

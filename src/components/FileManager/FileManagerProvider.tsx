@@ -335,12 +335,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     validationMessages: folderCreationValidationMessages,
   });
 
-  const { newActions, isNewButtonVisible } = useNewActions({
-    newActions: toolbarOptions?.newActions,
-    onUploadFiles: openFileDialog,
-    onUploadArchive: openArchiveUpload,
-    onCreateFolder: startFolderCreation,
-  });
+  const { newActions, isNewButtonVisible, isNewButtonDisabled } = useNewActions(
+    {
+      newActions: toolbarOptions?.newActions,
+      currentFolder,
+      onUploadFiles: openFileDialog,
+      onUploadArchive: openArchiveUpload,
+      onCreateFolder: startFolderCreation,
+    },
+  );
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
     if (isSearchMode) {
@@ -604,6 +607,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     newActions,
     isNewButtonVisible,
+    isNewButtonDisabled,
 
     isCreatingFolder,
     newFolderTempId,

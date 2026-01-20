@@ -138,6 +138,7 @@ export interface FileManagerContextValue {
 
   newActions: DropdownItem[];
   isNewButtonVisible: boolean;
+  isNewButtonDisabled: boolean;
 
   openFileDialog: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;
