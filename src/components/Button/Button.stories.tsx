@@ -1,9 +1,12 @@
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import type { ReactNode } from 'react';
 import { DialButton, type DialButtonProps } from './Button';
 import {
   DialErrorButton,
+  DialGhostButton,
+  DialLinkButton,
   DialNeutralButton,
   DialPrimaryButton,
 } from './ButtonWrappers';
@@ -27,11 +30,7 @@ const meta = {
     },
     variant: {
       control: { type: 'select' },
-      options: [
-        ButtonVariant.Primary,
-        ButtonVariant.Secondary,
-        ButtonVariant.Tertiary,
-      ],
+      options: Object.values(ButtonVariant),
       description: 'Button style variant',
     },
     appearance: {
@@ -43,6 +42,11 @@ const meta = {
         ButtonAppearance.Outlined,
       ],
       description: 'Button appearance',
+    },
+    size: {
+      control: { type: 'select' },
+      options: [ButtonSize.Standard, ButtonSize.Small],
+      description: 'Button size',
     },
     textClassName: {
       control: { type: 'text' },
@@ -65,6 +69,8 @@ const meta = {
   args: {
     label: 'Button',
     variant: ButtonVariant.Primary,
+    appearance: ButtonAppearance.Solid,
+    size: ButtonSize.Standard,
     disabled: false,
     hideTitleOnMobile: false,
   },
@@ -191,116 +197,82 @@ export const Active: Story = {
 
 export const AllVariants: Story = {
   render: () => {
-    const props = {
+    const baseProps: DialButtonProps = {
       label: 'Standard',
       iconAfter: <IconArrowRight size={20} />,
       iconBefore: <IconArrowLeft size={20} />,
     };
 
-    const smallProps = {
+    const smallProps: DialButtonProps = {
       label: 'Small',
       iconAfter: <IconArrowRight size={16} />,
       iconBefore: <IconArrowLeft size={16} />,
+      size: ButtonSize.Small,
     };
+
+    const blocks: {
+      title: string;
+      render: (p: DialButtonProps) => ReactNode;
+    }[] = [
+      {
+        title: 'Primary · Solid',
+        render: (p) => (
+          <DialPrimaryButton {...p} appearance={ButtonAppearance.Solid} />
+        ),
+      },
+      {
+        title: 'Primary · Ghost',
+        render: (p) => (
+          <DialPrimaryButton {...p} appearance={ButtonAppearance.Ghost} />
+        ),
+      },
+      {
+        title: 'Primary · Link',
+        render: (p) => (
+          <DialPrimaryButton {...p} appearance={ButtonAppearance.Link} />
+        ),
+      },
+      {
+        title: 'Neutral · Outlined',
+        render: (p) => (
+          <DialNeutralButton {...p} appearance={ButtonAppearance.Outlined} />
+        ),
+      },
+      {
+        title: 'Error · Solid',
+        render: (p) => (
+          <DialErrorButton {...p} appearance={ButtonAppearance.Solid} />
+        ),
+      },
+      {
+        title: 'Error · Outlined',
+        render: (p) => (
+          <DialErrorButton {...p} appearance={ButtonAppearance.Outlined} />
+        ),
+      },
+      {
+        title: 'Ghost Wrapper (Primary)',
+        render: (p) => <DialGhostButton {...p} />,
+      },
+      {
+        title: 'Link Wrapper (Primary)',
+        render: (p) => <DialLinkButton {...p} />,
+      },
+    ];
+
     return (
-      <div className="flex flex-row gap-x-12">
-        <div className="flex flex-col gap-y-6">
-          <div className="font-bold mb-2 text-primary">Primary Solid</div>
-
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton {...props} />
-            <DialPrimaryButton {...smallProps} size={ButtonSize.Small} />
+      <div className="flex flex-col gap-8">
+        {blocks.map(({ title, render }) => (
+          <div key={title} className="flex flex-col gap-4">
+            <div className="font-bold text-primary">{title}</div>
+            <div className="flex flex-row flex-wrap gap-4 items-center">
+              {render(baseProps)}
+              {render({ ...baseProps, disabled: true })}
+              {render(smallProps)}
+              {render({ ...smallProps, disabled: true })}
+            </div>
           </div>
-
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton {...props} disabled />
-            <DialPrimaryButton
-              {...smallProps}
-              size={ButtonSize.Small}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-y-6">
-          <div className="font-bold mb-2 text-primary">Neutral Outlined</div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialNeutralButton {...props} />
-            <DialNeutralButton {...smallProps} size={ButtonSize.Small} />
-          </div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialNeutralButton {...props} disabled />
-            <DialNeutralButton
-              {...smallProps}
-              size={ButtonSize.Small}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-y-6">
-          <div className="font-bold mb-2 text-primary">Primary Ghost</div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton {...props} appearance={ButtonAppearance.Ghost} />
-            <DialPrimaryButton
-              {...smallProps}
-              appearance={ButtonAppearance.Ghost}
-              size={ButtonSize.Small}
-            />
-          </div>
-
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton
-              {...props}
-              appearance={ButtonAppearance.Ghost}
-              disabled
-            />
-            <DialPrimaryButton
-              {...smallProps}
-              appearance={ButtonAppearance.Ghost}
-              size={ButtonSize.Small}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-y-6">
-          <div className="font-bold mb-2 text-primary">Primary Link</div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton {...props} appearance={ButtonAppearance.Link} />
-            <DialPrimaryButton
-              {...smallProps}
-              appearance={ButtonAppearance.Link}
-              size={ButtonSize.Small}
-            />
-          </div>
-
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialPrimaryButton
-              {...props}
-              appearance={ButtonAppearance.Link}
-              disabled
-            />
-            <DialPrimaryButton
-              {...smallProps}
-              appearance={ButtonAppearance.Link}
-              size={ButtonSize.Small}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-y-6">
-          <div className="font-bold mb-2 text-primary">Error Solid</div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialErrorButton {...props} />
-            <DialErrorButton {...smallProps} size={ButtonSize.Small} />
-          </div>
-          <div className="flex flex-row gap-x-6 items-center">
-            <DialErrorButton {...props} disabled />
-            <DialErrorButton {...smallProps} size={ButtonSize.Small} disabled />
-          </div>
-        </div>
+        ))}
       </div>
     );
   },
@@ -308,7 +280,114 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          'All button variants (Primary, Secondary, Tertiary, Danger) across all states.',
+          'Matrix of primary/neutral/error variants with solid, ghost, link, and outlined appearances, shown in standard and small sizes with enabled/disabled states.',
+      },
+    },
+  },
+};
+
+export const SmallPrimaryButton: Story = {
+  args: {
+    label: 'Small Primary',
+    variant: ButtonVariant.Primary,
+    size: ButtonSize.Small,
+  },
+};
+
+export const WithIconsBeforeAfter: Story = {
+  args: {
+    label: 'With Icons',
+    variant: ButtonVariant.Primary,
+    iconBefore: <IconArrowLeft size={20} />,
+    iconAfter: <IconArrowRight size={20} />,
+  },
+};
+
+export const IconOnlyButton: Story = {
+  args: {
+    variant: ButtonVariant.Primary,
+    iconBefore: <IconArrowRight size={20} />,
+    'aria-label': 'Next',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Icon-only button. Provide `aria-label` for accessibility when no text label is present.',
+      },
+    },
+  },
+};
+
+export const HideTitleOnMobile: Story = {
+  args: {
+    label: 'Hidden on mobile',
+    variant: ButtonVariant.Primary,
+    hideTitleOnMobile: true,
+    iconBefore: <IconArrowLeft size={20} />,
+    iconAfter: <IconArrowRight size={20} />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Shows how `hideTitleOnMobile` keeps the label hidden on small screens while still rendering icons.',
+      },
+    },
+  },
+};
+
+export const CustomTextClassName: Story = {
+  args: {
+    label: 'Custom text class',
+    variant: ButtonVariant.Primary,
+    textClassName: 'uppercase tracking-widest font-semibold',
+  },
+};
+
+export const SubmitTypeButton: Story = {
+  args: {
+    label: 'Submit',
+    variant: ButtonVariant.Primary,
+    type: 'submit',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates using the native `type` prop (`submit`, `button`, `reset`).',
+      },
+    },
+  },
+};
+
+export const LinkWrapperButton: Story = {
+  render: (args) => <DialLinkButton {...args} />,
+  args: {
+    label: 'Link Button',
+    iconAfter: <IconArrowRight size={20} />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Preconfigured Link appearance via `DialLinkButton` wrapper (primary variant by default).',
+      },
+    },
+  },
+};
+
+export const GhostWrapperButton: Story = {
+  render: (args) => <DialGhostButton {...args} />,
+  args: {
+    label: 'Ghost Button',
+    iconBefore: <IconArrowLeft size={20} />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Preconfigured Ghost appearance via `DialGhostButton` wrapper (primary variant by default).',
       },
     },
   },
