@@ -29,6 +29,9 @@ import {
   IconFileDescription,
   IconUsers,
 } from '@tabler/icons-react';
+import type { FileManagerGridRow } from './FileManagerContext';
+import type { ColDef } from 'ag-grid-community';
+import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -1408,4 +1411,71 @@ export const WithInsertSiblingChildrenActions: Story = {
       />
     </div>
   ),
+};
+
+const WithCustomColumnsComponent = (args: DialFileManagerProps) => {
+  const customColumns = useMemo<ColDef<FileManagerGridRow>[]>(() => {
+    return [
+      {
+        colId: 'nodeType',
+        field: 'nodeType',
+        headerName: 'Type',
+        width: 120,
+        suppressSizeToFit: true,
+        cellRenderer: (params: { data: FileManagerGridRow }) => {
+          return params.data.nodeType === DialFileNodeType.FOLDER
+            ? 'Folder'
+            : 'File';
+        },
+      },
+      {
+        colId: FileManagerColumnKey.UpdatedAt,
+        field: 'updatedAt',
+        headerName: 'Modified Date',
+        width: 168,
+        suppressSizeToFit: true,
+        cellRenderer: DialDateCellRenderer,
+        cellRendererParams: {
+          locale: 'en-US',
+          options: {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          },
+        },
+      },
+      {
+        colId: FileManagerColumnKey.Size,
+        field: 'size',
+        headerName: 'Size',
+        width: 120,
+        suppressSizeToFit: false,
+      },
+    ];
+  }, []);
+
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...args.gridOptions,
+          columnDefs: customColumns,
+          filterable: false,
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithCustomColumns: Story = {
+  render: WithCustomColumnsComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager with custom columns including a Type column that shows whether the item is a File or Folder.',
+      },
+    },
+  },
 };
