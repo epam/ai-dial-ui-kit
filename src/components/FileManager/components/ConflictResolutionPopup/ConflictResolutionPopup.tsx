@@ -431,7 +431,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       header={title}
       dividers={false}
       footer={
-        <div className="flex justify-end gap-3 py-4 px-6 border-t border-stroke">
+        <div className="flex justify-end gap-3 py-4 px-6 border-t border-tertiary">
           <DialNeutralButton onClick={onClose} label={cancelLabel} />
           <DialPrimaryButton onClick={handleConfirm} label={confirmLabel} />
         </div>
