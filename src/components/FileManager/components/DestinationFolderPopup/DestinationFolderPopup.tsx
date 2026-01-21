@@ -23,6 +23,7 @@ import {
 import { DestinationFolderMode } from '@/types/file-manager';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -176,6 +177,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     >
       <DialFileManager
         {...restProps}
+        className={mergeClasses(restProps.className, 'bg-layer-2')}
         actionsRef={fileManagerActionRef}
         path={path}
         showHiddenFiles={showHiddenFiles}
