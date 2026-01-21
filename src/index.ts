@@ -147,3 +147,10 @@ export {
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
+
+// Constants
+export {
+  NAME_COLUMN,
+  SIZE_COLUMN,
+  UPDATED_AT_COLUMN,
+} from './constants/file-grid-columns';

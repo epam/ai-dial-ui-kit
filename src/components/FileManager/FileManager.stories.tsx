@@ -407,6 +407,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ...(args.treeOptions ?? {}),
             collapsed: false,
             expandedPaths: new Set<string>([rootFolder.path]),
+            header: 'Folder tree',
             loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),
