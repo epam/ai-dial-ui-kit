@@ -343,6 +343,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onUploadFiles: openFileDialog,
       onUploadArchive: openArchiveUpload,
       onCreateFolder: startFolderCreation,
+      isNewButtonDisabled: toolbarOptions?.isNewButtonDisabled,
     },
   );
 

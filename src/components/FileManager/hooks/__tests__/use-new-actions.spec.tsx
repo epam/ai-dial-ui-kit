@@ -339,30 +339,36 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     expect(result.current.isNewButtonDisabled).toBe(false);
   });
 
-  it('isNewButtonDisabled updates when currentFolder changes', () => {
-    const folderWithoutWrite = {
+  it('isNewButtonDisabled respects external override when true', () => {
+    const folder = {
       id: '1',
-      permissions: [DialFilePermission.READ],
-    } as DialFile;
-
-    const folderWithWrite = {
-      id: '2',
       permissions: [DialFilePermission.WRITE],
     } as DialFile;
 
-    const { result, rerender } = renderHook((props) => useNewActions(props), {
-      initialProps: {
+    const { result } = renderHook(() =>
+      useNewActions({
         newActions: { newFolder: { label: 'New Folder' } },
-        currentFolder: folderWithoutWrite,
-      },
-    });
+        currentFolder: folder,
+        isNewButtonDisabled: true,
+      }),
+    );
 
     expect(result.current.isNewButtonDisabled).toBe(true);
+  });
 
-    rerender({
-      newActions: { newFolder: { label: 'New Folder' } },
-      currentFolder: folderWithWrite,
-    });
+  it('isNewButtonDisabled remains false when external override is false and permissions allow', () => {
+    const folder = {
+      id: '1',
+      permissions: [DialFilePermission.WRITE],
+    } as DialFile;
+
+    const { result } = renderHook(() =>
+      useNewActions({
+        newActions: { newFolder: { label: 'New Folder' } },
+        currentFolder: folder,
+        isNewButtonDisabled: false,
+      }),
+    );
 
     expect(result.current.isNewButtonDisabled).toBe(false);
   });

@@ -67,6 +67,7 @@ const meta = {
         uploadFiles: { label: 'Upload Files' },
         uploadArchive: { label: 'Upload Archive' },
       },
+      disabledNewButtonTooltip: 'Uploads are not allowed in this folder',
     },
   },
 } satisfies Meta<DialFileManagerProps>;
