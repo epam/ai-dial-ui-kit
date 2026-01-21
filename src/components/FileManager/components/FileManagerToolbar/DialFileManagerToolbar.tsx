@@ -12,6 +12,7 @@ import { DialFileManagerTabs } from '@/types/file-manager';
 import { ScreenResolution } from '@/types/tab';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
 export interface DialFileManagerToolbarProps {
   tabs?: TabModel[];
@@ -28,6 +29,7 @@ export interface DialFileManagerToolbarProps {
   showHiddenFilesToggle?: boolean;
   onTabChange?: (id: DialFileManagerTabs) => void;
   onToggleHiddenFiles?: (value: boolean) => void;
+  disabledNewButtonTooltip?: string;
 }
 
 /**
@@ -74,6 +76,7 @@ export interface DialFileManagerToolbarProps {
  * @param [newButtonVariant=ButtonVariant.Secondary] - Visual style variant for the new button.
  * @param [newButtonDropdownItems=[]] - Dropdown items available under the new button. If empty, a single new button is shown instead.
  * @param [newButtonLabel='New'] - Label text for the new button.
+ * @param [disabledNewButtonTooltip] - Tooltip text to show when the new button is disabled.
  *
  * @remarks
  * - Tabs are rendered via `DialTabs`.
@@ -97,6 +100,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   showHiddenFilesLabel = 'Show hidden files',
   hideHiddenFilesLabel = 'Hide hidden files',
   showHiddenFilesToggle = true,
+  disabledNewButtonTooltip,
 }) => {
   const isMobile = useIsMobileScreen();
 
@@ -152,12 +156,20 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
       )}
 
       {isNewButtonVisible && (
-        <DialButtonDropdown
-          label={newButtonLabel}
-          variant={newButtonVariant}
-          items={newButtonDropdownItems}
-          disabled={isNewButtonDisabled}
-        />
+        <DialTooltip
+          tooltip={
+            isNewButtonDisabled && disabledNewButtonTooltip
+              ? disabledNewButtonTooltip
+              : undefined
+          }
+        >
+          <DialButtonDropdown
+            label={newButtonLabel}
+            variant={newButtonVariant}
+            items={newButtonDropdownItems}
+            disabled={isNewButtonDisabled}
+          />
+        </DialTooltip>
       )}
     </>
   );
@@ -180,12 +192,20 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
       </DialDropdown>
 
       {isNewButtonVisible ? (
-        <DialButtonDropdown
-          label={newButtonLabel}
-          variant={newButtonVariant}
-          items={newButtonDropdownItems}
-          disabled={isNewButtonDisabled}
-        />
+        <DialTooltip
+          tooltip={
+            isNewButtonDisabled && disabledNewButtonTooltip
+              ? disabledNewButtonTooltip
+              : undefined
+          }
+        >
+          <DialButtonDropdown
+            label={newButtonLabel}
+            variant={newButtonVariant}
+            items={newButtonDropdownItems}
+            disabled={isNewButtonDisabled}
+          />
+        </DialTooltip>
       ) : null}
     </>
   );
