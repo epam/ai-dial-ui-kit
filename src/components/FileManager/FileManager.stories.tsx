@@ -67,6 +67,7 @@ const meta = {
         uploadFiles: { label: 'Upload Files' },
         uploadArchive: { label: 'Upload Archive' },
       },
+      disabledNewButtonTooltip: 'Uploads are not allowed in this folder',
     },
   },
 } satisfies Meta<DialFileManagerProps>;
@@ -406,6 +407,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
             ...(args.treeOptions ?? {}),
             collapsed: false,
             expandedPaths: new Set<string>([rootFolder.path]),
+            header: 'Folder tree',
             loadedPaths,
             actionLabels: {
               ...(args.treeOptions?.actionLabels ?? {}),

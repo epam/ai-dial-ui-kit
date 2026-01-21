@@ -15,6 +15,7 @@ export interface UseNewActionsProps {
   onUploadFiles?: () => void;
   onCreateFolder?: () => void;
   onUploadArchive?: () => void;
+  isNewButtonDisabled?: boolean;
 }
 
 export interface UseNewActionsResult {
@@ -29,6 +30,7 @@ export const useNewActions = ({
   onUploadFiles,
   onCreateFolder,
   onUploadArchive,
+  isNewButtonDisabled: isNewButtonDisabledExternal,
 }: UseNewActionsProps): UseNewActionsResult => {
   const newActionItems = useMemo(() => {
     const actions: DropdownItem[] = [];
@@ -100,8 +102,10 @@ export const useNewActions = ({
   );
 
   const isNewButtonDisabled = useMemo(
-    () => !currentFolder?.permissions?.includes(DialFilePermission.WRITE),
-    [currentFolder],
+    () =>
+      !currentFolder?.permissions?.includes(DialFilePermission.WRITE) ||
+      !!isNewButtonDisabledExternal,
+    [currentFolder, isNewButtonDisabledExternal],
   );
 
   return {

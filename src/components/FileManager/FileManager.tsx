@@ -1228,6 +1228,7 @@ export const DialFileManagerView: FC = () => {
         sourceFolder={
           destinationFolderPopupOptions?.sourceFolder ?? currentPath
         }
+        treeOptions={{ header: treeOptions?.header }}
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}
