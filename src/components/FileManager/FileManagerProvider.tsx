@@ -298,6 +298,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     allowedFileTypes,
     validationMessages: uploadValidationMessages,
     uploadEnabled,
+    currentFolder,
   });
 
   const handleDrop = useCallback(
