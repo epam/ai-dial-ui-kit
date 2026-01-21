@@ -1,18 +1,15 @@
-import { mergeClasses } from '@/utils/merge-classes';
 import { useMemo } from 'react';
 import type { ColDef, SuppressKeyboardEventParams } from 'ag-grid-community';
-import { DialFileNodeType, type DialFile } from '@/models/file';
-import { DialFileName } from '@/components/FileName/FileName';
-import { DialFolderName } from '@/components/FolderName/FolderName';
-import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { type DialFile } from '@/models/file';
 import { FileManagerRenameTriggerView } from '@/types/file-manager';
-import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
-import { DialItemType } from '@/types/item';
-import { DialFileManagerItemSummaryCell } from '@/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell';
 import { FileManagerColumnKey } from '@/types/file-manager';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
-import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
+import {
+  NAME_COLUMN,
+  UPDATED_AT_COLUMN,
+  SIZE_COLUMN,
+} from '@/constants/file-grid-columns';
 
 type GridRow = FileManagerGridRow;
 
@@ -36,7 +33,14 @@ export interface FileManagerGridContext {
 }
 
 export interface UseFileManagerColumnsArgs {
-  userColumnDefs?: ColDef<GridRow>[];
+  userColumnDefs?: (
+    | ColDef<GridRow>
+    | ((
+        dateLocale: Intl.LocalesArgument,
+        dateOptions: Intl.DateTimeFormatOptions | undefined,
+        isCompactView: boolean,
+      ) => ColDef<GridRow, unknown>)
+  )[];
   filterable: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
@@ -91,128 +95,7 @@ export function useFileManagerColumns({
 }: UseFileManagerColumnsArgs): UseFileManagerColumnsResult {
   const defaultColumns = useMemo<ColDef<GridRow>[]>(() => {
     return [
-      {
-        colId: FileManagerColumnKey.Name,
-        field: 'name',
-        headerName: 'Name',
-        flex: 1,
-        minWidth: 200,
-        cellRenderer: (params: {
-          data: GridRow;
-          context: FileManagerGridContext;
-        }) => {
-          const type = params.data.nodeType;
-          const {
-            saveFolderCreation,
-            validateFolderName,
-            cancelFolderCreation,
-            newFolderTempId,
-            sharedByMePaths,
-            selectedPaths,
-          } = params.context;
-
-          const isSharedByMe = sharedByMePaths?.has(params.data.path);
-          const isSelected = selectedPaths?.has(params.data.path);
-
-          const sharedIndicatorClassName = mergeClasses([
-            'group-hover/grid-row:bg-accent-primary-alpha',
-            isSelected && 'bg-accent-primary-alpha',
-          ]);
-
-          if (params.data?.isTemporary && params.data.id === newFolderTempId) {
-            return (
-              <DialFileManagerItemName
-                name=""
-                type={DialItemType.Folder}
-                elementId={`new-folder-${params.data.id}`}
-                editing={true}
-                shared={isSharedByMe}
-                sharedIndicatorClassName={sharedIndicatorClassName}
-                iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-                validate={validateFolderName}
-                onSave={saveFolderCreation}
-                onCancel={cancelFolderCreation}
-                inputContainerClassName={mergeClasses([
-                  '!h-9',
-                  isCompactView && type === DialFileNodeType.ITEM && '!h-10',
-                ])}
-              />
-            );
-          }
-
-          const {
-            renameTriggerView,
-            renamedPath,
-            renamedItem,
-            getDisplayName,
-            onRenameValidate,
-            onRenameSave,
-            onRenameCancel,
-          } = params.context;
-
-          const isBeingRenamed =
-            renameTriggerView === FileManagerRenameTriggerView.Grid &&
-            renamedPath === params.data?.path;
-
-          if (isBeingRenamed && renamedItem && params.data) {
-            const displayName = getDisplayName(renamedItem);
-            return (
-              <DialFileManagerItemName
-                name={displayName}
-                type={
-                  type === DialFileNodeType.FOLDER
-                    ? DialItemType.Folder
-                    : DialItemType.File
-                }
-                elementId={`rename-${params.data.id}`}
-                editing={true}
-                shared={isSharedByMe}
-                sharedIndicatorClassName={sharedIndicatorClassName}
-                iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-                validate={(value) => onRenameValidate(value, renamedItem)}
-                onSave={onRenameSave}
-                onCancel={onRenameCancel}
-                inputContainerClassName={mergeClasses([
-                  '!h-9',
-                  isCompactView && type === DialFileNodeType.ITEM && '!h-10',
-                ])}
-              />
-            );
-          }
-
-          if (isCompactView) {
-            return (
-              <DialFileManagerItemSummaryCell
-                id={params.data.id}
-                name={params.data.name}
-                nodeType={type}
-                size={params.data.size}
-                shared={isSharedByMe}
-                sharedIndicatorClassName={sharedIndicatorClassName}
-                updatedAt={params.data.updatedAt}
-                dateLocale={dateLocale}
-                dateOptions={dateOptions}
-              />
-            );
-          }
-
-          return type === DialFileNodeType.FOLDER ? (
-            <DialFolderName
-              name={params.data.name}
-              shared={isSharedByMe}
-              sharedIndicatorClassName={sharedIndicatorClassName}
-              iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-            />
-          ) : (
-            <DialFileName
-              name={params.data.name}
-              shared={isSharedByMe}
-              sharedIndicatorClassName={sharedIndicatorClassName}
-              iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-            />
-          );
-        },
-      },
+      NAME_COLUMN('Name')(dateLocale, dateOptions, isCompactView),
       {
         colId: FileManagerColumnKey.Path,
         field: 'path',
@@ -227,25 +110,8 @@ export function useFileManagerColumns({
           return <DialEllipsisTooltip text={path} />;
         },
       },
-      {
-        colId: FileManagerColumnKey.UpdatedAt,
-        field: 'updatedAt',
-        headerName: 'Modified Date',
-        width: 168,
-        suppressSizeToFit: true,
-        cellRenderer: DialDateCellRenderer,
-        cellRendererParams: {
-          locale: dateLocale,
-          options: dateOptions,
-        },
-      },
-      {
-        colId: FileManagerColumnKey.Size,
-        field: 'size',
-        headerName: 'Size',
-        width: 120,
-        suppressSizeToFit: true,
-      },
+      UPDATED_AT_COLUMN('Modified Date')(dateLocale, dateOptions),
+      SIZE_COLUMN('Size'),
       {
         colId: FileManagerColumnKey.Author,
         field: 'author',
@@ -270,9 +136,25 @@ export function useFileManagerColumns({
   }, [dateLocale, dateOptions, isCompactView, rootItemLabel, rootItemPath]);
 
   const columnDefs = useMemo<ColDef<GridRow>[]>(() => {
-    let columns = userColumnDefs ?? defaultColumns;
+    const processedUserColumns = userColumnDefs?.map(
+      (
+        column:
+          | ColDef<FileManagerGridRow, unknown>
+          | ((
+              dateLocale: Intl.LocalesArgument,
+              dateOptions: Intl.DateTimeFormatOptions | undefined,
+              isCompactView: boolean,
+            ) => ColDef<FileManagerGridRow, unknown>),
+      ) => {
+        return typeof column === 'function'
+          ? column(dateLocale, dateOptions, isCompactView)
+          : column;
+      },
+    );
 
-    if (!userColumnDefs) {
+    let columns = processedUserColumns ?? defaultColumns;
+
+    if (!processedUserColumns) {
       columns = columns.filter(
         (col) =>
           col.colId &&
@@ -307,6 +189,8 @@ export function useFileManagerColumns({
     });
   }, [
     actionsColumnDef,
+    dateLocale,
+    dateOptions,
     defaultColumns,
     effectiveVisibleColumns,
     filterable,
