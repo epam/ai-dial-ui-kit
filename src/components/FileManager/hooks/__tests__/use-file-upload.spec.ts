@@ -3,7 +3,24 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { useFileUpload } from '@/components/FileManager/hooks/use-file-upload';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import { DialFilePermission } from '@/models/file';
 import type { DragEvent } from 'react';
+
+const writableFolder: DialFile = {
+  id: 'folder',
+  name: 'folder',
+  path: '/folder',
+  nodeType: DialFileNodeType.FOLDER,
+  folderId: '',
+  permissions: [DialFilePermission.WRITE],
+};
+
+const renderUseFileUpload = (
+  options: Parameters<typeof useFileUpload>[0] = {},
+) =>
+  renderHook(() =>
+    useFileUpload({ currentFolder: writableFolder, ...options }),
+  );
 
 describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   // Create a mock File with the specified size without consuming memory
@@ -46,7 +63,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   it('initializes with default state', () => {
-    const { result } = renderHook(() => useFileUpload());
+    const { result } = renderUseFileUpload();
 
     expect(result.current.isDragging).toBe(false);
     expect(result.current.isDraggingOverWindow).toBe(false);
@@ -72,7 +89,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   it('sets up window event listeners on mount', () => {
-    renderHook(() => useFileUpload());
+    renderUseFileUpload();
 
     expect(window.addEventListener).toHaveBeenCalledWith(
       'dragenter',
@@ -93,7 +110,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   });
 
   it('removes window event listeners on unmount', () => {
-    const { unmount } = renderHook(() => useFileUpload());
+    const { unmount } = renderUseFileUpload();
 
     unmount();
 
@@ -117,7 +134,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
   describe('handleDragEnter', () => {
     it('sets isDragging to true when dragging files', () => {
-      const { result } = renderHook(() => useFileUpload());
+      const { result } = renderUseFileUpload();
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -137,7 +154,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
 
     it('does not set isDragging when not dragging files', () => {
-      const { result } = renderHook(() => useFileUpload());
+      const { result } = renderUseFileUpload();
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -157,7 +174,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
   describe('handleDragLeave', () => {
     it('sets isDragging to false when leaving drop zone', () => {
-      const { result } = renderHook(() => useFileUpload());
+      const { result } = renderUseFileUpload();
 
       const enterEvent = {
         preventDefault: vi.fn(),
@@ -196,7 +213,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
 
     it('does not set isDragging to false when still inside drop zone', () => {
-      const { result } = renderHook(() => useFileUpload());
+      const { result } = renderUseFileUpload();
 
       const enterEvent = {
         preventDefault: vi.fn(),
@@ -235,7 +252,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
   describe('handleDragOver', () => {
     it('prevents default and sets dropEffect to copy', () => {
-      const { result } = renderHook(() => useFileUpload());
+      const { result } = renderUseFileUpload();
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -259,7 +276,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   describe('handleDrop', () => {
     it('calls onUploadFiles with valid files when no conflicts', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [
         createMockFile('file1.txt', 1024),
@@ -291,7 +308,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('does not call onUploadFiles when not dragging files', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -311,7 +328,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('does not call onUploadFiles when no files', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const mockEvent = {
         preventDefault: vi.fn(),
@@ -333,7 +350,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   describe('duplicate file validation', () => {
     it('opens conflict resolution popup when uploading duplicate files', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [createMockFile('existing.txt', 1024)];
 
@@ -366,7 +383,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('allows uploading files with different names', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [createMockFile('newfile.txt', 1024)];
 
@@ -394,7 +411,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('handles conflict resolution - replace', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [createMockFile('existing.txt', 1024)];
 
@@ -434,7 +451,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('handles conflict resolution - duplicate', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [createMockFile('existing.txt', 1024)];
 
@@ -476,9 +493,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('shows error when file exceeds max size', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024; // 1KB
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+      });
 
       const files = [createMockFile('large.txt', 2048)];
 
@@ -503,15 +521,13 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('uses custom oversized error message', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024;
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          maxFileSize,
-          validationMessages: {
-            oversizedFiles: 'Custom: Files too large',
-          },
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+        validationMessages: {
+          oversizedFiles: 'Custom: Files too large',
+        },
+      });
 
       const files = [createMockFile('large.txt', 2048)];
 
@@ -534,9 +550,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('allows uploading files within size limit', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 2048;
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+      });
 
       const files = [createMockFile('small.txt', 1024)];
 
@@ -559,7 +576,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('skips size validation when maxFileSize is not set', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [createMockFile('large.txt', 999999)];
 
@@ -588,9 +605,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         valid: false,
       });
 
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, onValidateUpload }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        onValidateUpload,
+      });
 
       const files = [createMockFile('test.txt', 1024)];
 
@@ -616,9 +634,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const onUploadFiles = vi.fn();
       const onValidateUpload = vi.fn().mockRejectedValue(new Error('Error'));
 
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, onValidateUpload }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        onValidateUpload,
+      });
 
       const files = [createMockFile('test.txt', 1024)];
 
@@ -645,15 +664,13 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       const onUploadFiles = vi.fn();
       const onValidateUpload = vi.fn().mockRejectedValue(new Error('Error'));
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          onValidateUpload,
-          validationMessages: {
-            validationError: 'Custom: Validation error',
-          },
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        onValidateUpload,
+        validationMessages: {
+          validationError: 'Custom: Validation error',
+        },
+      });
 
       const files = [createMockFile('test.txt', 1024)];
 
@@ -681,9 +698,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         valid: true,
       });
 
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, onValidateUpload }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        onValidateUpload,
+      });
 
       const files = [createMockFile('test.txt', 1024)];
 
@@ -711,9 +729,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('clears upload error', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024;
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+      });
 
       const files = [createMockFile('large.txt', 2048)];
 
@@ -744,9 +763,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('checks size before conflicts', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024;
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+      });
 
       const files = [createMockFile('existing.txt', 2048)];
 
@@ -780,9 +800,11 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       });
       const maxFileSize = 1024;
 
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, onValidateUpload, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        onValidateUpload,
+        maxFileSize,
+      });
 
       const files = [createMockFile('large.txt', 2048)];
 
@@ -810,7 +832,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
   describe('multiple files handling', () => {
     it('opens conflict popup for multiple conflicting files', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() => useFileUpload({ onUploadFiles }));
+      const { result } = renderUseFileUpload({ onUploadFiles });
 
       const files = [
         createMockFile('existing.txt', 1024),
@@ -850,9 +872,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('validates all files and shows all oversized names', async () => {
       const onUploadFiles = vi.fn();
       const maxFileSize = 1024;
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, maxFileSize }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        maxFileSize,
+      });
 
       const files = [
         createMockFile('large1.txt', 2048),
@@ -886,7 +909,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('calls onUploadArchive with selected archive when folder does not exist', () => {
       const onUploadArchive = vi.fn();
 
-      const { result } = renderHook(() => useFileUpload({ onUploadArchive }));
+      const { result } = renderUseFileUpload({ onUploadArchive });
 
       act(() => {
         result.current.openArchiveDialog('/folder', mockExistingFiles);
@@ -934,12 +957,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         },
       ];
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadArchive,
-          validationMessages,
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadArchive,
+        validationMessages,
+      });
 
       act(() => {
         result.current.openArchiveDialog('/folder', existingFilesWithFolder);
@@ -974,12 +995,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('blocks upload when all files are not accepted', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['application/pdf'],
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['application/pdf'],
+      });
 
       const files = [new File([''], 'test.txt', { type: 'text/plain' })];
 
@@ -1005,15 +1024,13 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('uses custom unsupportedFiles validation message', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['image/*'],
-          validationMessages: {
-            unsupportedFiles: 'Custom unsupported message',
-          },
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['image/*'],
+        validationMessages: {
+          unsupportedFiles: 'Custom unsupported message',
+        },
+      });
 
       const files = [new File([''], 'doc.pdf', { type: 'application/pdf' })];
 
@@ -1037,12 +1054,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('allows upload when file matches accept MIME type', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['text/plain'],
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['text/plain'],
+      });
 
       const file = new File([''], 'test.txt', { type: 'text/plain' });
 
@@ -1069,12 +1084,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('allows upload when file matches accept extension', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['.pdf'],
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['.pdf'],
+      });
 
       const file = new File([''], 'doc.pdf', { type: '' });
 
@@ -1098,12 +1111,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('filters out unsupported files and uploads only accepted ones', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['text/plain'],
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['text/plain'],
+      });
 
       const files = [
         new File([''], 'a.txt', { type: 'text/plain' }),
@@ -1133,12 +1144,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('does not filter files when accept contains */*', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({
-          onUploadFiles,
-          allowedFileTypes: ['*/*'],
-        }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        allowedFileTypes: ['*/*'],
+      });
 
       const files = [
         new File([''], 'a.txt', { type: 'text/plain' }),
@@ -1175,16 +1184,17 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
 
     it('does not set up window event listeners when disabled', () => {
-      renderHook(() => useFileUpload({ uploadEnabled: false }));
+      renderUseFileUpload({ uploadEnabled: false });
 
       expect(window.addEventListener).not.toHaveBeenCalled();
     });
 
     it('does nothing in drag handlers when disabled', async () => {
       const onUploadFiles = vi.fn();
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, uploadEnabled: false }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        uploadEnabled: false,
+      });
 
       const files = [createMockFile('file1.txt', 1024)];
 
@@ -1236,9 +1246,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
 
     it('does not open file dialog when disabled', () => {
-      const { result } = renderHook(() =>
-        useFileUpload({ uploadEnabled: false }),
-      );
+      const { result } = renderUseFileUpload({ uploadEnabled: false });
 
       const clickSpy = vi
         .spyOn(HTMLInputElement.prototype, 'click')
@@ -1255,9 +1263,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('does not upload when handleUpload is called programmatically and disabled', async () => {
       const onUploadFiles = vi.fn();
 
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadFiles, uploadEnabled: false }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        uploadEnabled: false,
+      });
 
       const files = [
         { fileContent: createMockFile('file1.txt', 10), name: 'file1.txt' },
@@ -1276,9 +1285,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
 
     it('does not open archive dialog when disabled', () => {
       const onUploadArchive = vi.fn();
-      const { result } = renderHook(() =>
-        useFileUpload({ onUploadArchive, uploadEnabled: false }),
-      );
+      const { result } = renderUseFileUpload({
+        onUploadArchive,
+        uploadEnabled: false,
+      });
 
       act(() => {
         result.current.openArchiveDialog('/folder', mockExistingFiles);
@@ -1295,7 +1305,10 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     it('removes window listeners and resets states when toggled off', () => {
       const { result, rerender } = renderHook(
         ({ enabled }: { enabled: boolean }) =>
-          useFileUpload({ uploadEnabled: enabled }),
+          useFileUpload({
+            uploadEnabled: enabled,
+            currentFolder: writableFolder,
+          }),
         { initialProps: { enabled: true } },
       );
 
