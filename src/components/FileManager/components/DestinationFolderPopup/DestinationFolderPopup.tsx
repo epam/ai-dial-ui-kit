@@ -38,6 +38,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   header?: ReactNode;
   sourceFolder?: string;
   disabledPathTooltip?: string;
+  collapsedFileTree?: boolean;
 }
 
 /**
@@ -77,6 +78,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param onPathChange - Callback fired when the path changes
  * @param [sourceFolder] - The source folder path for move operations
  * @param [disabledPathTooltip="Unavailable for the original path. Please select another folder"] - Tooltip text when destination is disabled
+ * @param [collapsedFileTree=false] - Whether the file tree should be initially collapsed
  */
 export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
@@ -94,6 +96,7 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   sourceFolder,
   disabledPathTooltip = 'Unavailable for the original path. Please select another folder',
   path,
+  collapsedFileTree = false,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -179,8 +182,9 @@ export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onShowHiddenFilesChange={handleShowHiddenFilesChange}
         treeOptions={{
           ...restProps.treeOptions,
-          collapsed: true,
+          collapsed: collapsedFileTree,
           expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
+          header: restProps.treeOptions?.header,
         }}
         gridOptions={{
           withSelectionColumn: false,
