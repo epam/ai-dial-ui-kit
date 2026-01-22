@@ -117,11 +117,7 @@ export function isFileAccepted(
   contentType: string,
   fileName?: string,
 ): boolean {
-  if (
-    !allowedFileTypes ||
-    allowedFileTypes.length === 0 ||
-    allowedFileTypes.includes('*/*')
-  ) {
+  if (!allowedFileTypes || allowedFileTypes.includes('*/*')) {
     return true;
   }
 
