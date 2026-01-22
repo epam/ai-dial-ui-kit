@@ -182,7 +182,14 @@ export type NavigationPanelOptions = Omit<
 
 export interface GridOptions
   extends Omit<DialGridProps<GridRow>, 'rowData' | 'columnDefs'> {
-  columnDefs?: ColDef<GridRow>[];
+  columnDefs?: (
+    | ColDef<GridRow>
+    | ((
+        dateLocale: Intl.LocalesArgument,
+        dateOptions: Intl.DateTimeFormatOptions | undefined,
+        isCompactView: boolean,
+      ) => ColDef<GridRow, unknown>)
+  )[];
   filterable?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
