@@ -138,13 +138,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               }}
             />
             <div className="border border-l border-primary my-2" />
-            <div
-              className="inline-flex items-center cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleShowHiddenFilesChange(!showHiddenFiles);
-              }}
-            >
+            <div className="inline-flex items-center cursor-pointer">
               <DialSwitch
                 label={hiddenFilesSwitcherLabel}
                 isOn={showHiddenFiles}
