@@ -283,10 +283,7 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
     const switchElement = screen.getByRole('checkbox');
     expect(switchElement).not.toBeChecked();
 
-    const switchContainer = switchElement.closest('.inline-flex');
-    if (switchContainer) {
-      fireEvent.click(switchContainer);
-    }
+    fireEvent.click(switchElement);
 
     expect(switchElement).toBeChecked();
   });
@@ -332,10 +329,7 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
     const switchElement = screen.getByRole('checkbox');
     expect(switchElement).not.toBeChecked();
 
-    const switchContainer = switchElement.closest('.inline-flex');
-    if (switchContainer) {
-      fireEvent.click(switchContainer);
-    }
+    fireEvent.click(switchElement);
 
     expect(switchElement).toBeChecked();
   });
