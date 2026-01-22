@@ -178,7 +178,7 @@ export const DialInput: FC<DialInputProps> = ({
         <input
           ref={ref}
           type={type}
-          autoComplete="new-password"
+          autoComplete="off"
           id={elementId}
           placeholder={placeholder}
           value={defaultValue ? undefined : (value ?? '')}
