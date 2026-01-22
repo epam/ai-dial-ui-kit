@@ -81,7 +81,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param [disabledPathTooltip="Unavailable for the original path. Please select another folder"] - Tooltip text when destination is disabled
  * @param [collapsedFileTree=false] - Whether the file tree should be initially collapsed
  */
-export const DestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
+export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
   onConfirm,
   open,

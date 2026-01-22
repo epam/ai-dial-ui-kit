@@ -72,7 +72,7 @@ import { useFileManagerContext } from './hooks/use-file-manager-context';
 import type { FileManagerGridRow } from './FileManagerContext';
 import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
 import {
-  DestinationFolderPopup,
+  DialDestinationFolderPopup,
   type DestinationFolderPopupProps,
 } from './components/DestinationFolderPopup/DestinationFolderPopup';
 import { useBulkActions } from './hooks/use-bulk-actions';
@@ -1191,7 +1191,7 @@ export const DialFileManagerView: FC = () => {
         onClose={closeDeleteConfirmation}
         onConfirm={confirmDelete}
       />
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         {...destinationFolderPopupOptions}
         open={openDestinationFolderPopup}
         onClose={handleCloseDestinationFolderPopup}

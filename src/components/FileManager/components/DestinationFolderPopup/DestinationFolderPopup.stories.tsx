@@ -3,7 +3,7 @@ import { DialFileNodeType } from '@/models/file';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import {
-  DestinationFolderPopup,
+  DialDestinationFolderPopup,
   type DestinationFolderPopupProps,
 } from './DestinationFolderPopup';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
@@ -25,7 +25,7 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
         />
       )}
 
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         {...args}
         open={isOpen}
         path={currentPath}
@@ -52,7 +52,7 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
 
 const meta: Meta<DestinationFolderPopupProps> = {
   title: 'FileManager/components/DestinationFolderPopup',
-  component: DestinationFolderPopup,
+  component: DialDestinationFolderPopup,
   parameters: {
     layout: 'fullscreen',
   },
