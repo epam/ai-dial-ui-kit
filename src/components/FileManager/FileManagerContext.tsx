@@ -32,7 +32,7 @@ export interface FileManagerGridRow {
   id: string;
   name: string;
   updatedAt?: string;
-  size?: string;
+  size?: number;
   author?: string;
   path: string;
   nodeType: DialFileNodeType;

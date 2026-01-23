@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { DestinationFolderPopup } from './DestinationFolderPopup';
+import { DialDestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import { AlertVariant } from '@/types/alert';
 
 const mockFiles: DialFile[] = [
   {
@@ -23,10 +24,10 @@ const mockFiles: DialFile[] = [
   },
 ];
 
-describe('Dial UI Kit :: DestinationFolderPopup', () => {
+describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
   test('renders popup when open is true', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -46,7 +47,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('does not render popup when open is false', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={false}
         onClose={vi.fn()}
         items={mockFiles}
@@ -66,7 +67,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('displays Copy button label in copy mode', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
@@ -87,7 +88,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('displays Move button label in move mode', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -108,7 +109,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('displays custom copy label', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
@@ -132,7 +133,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('displays custom move label', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -157,7 +158,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
   test('calls onClose when Cancel button is clicked', () => {
     const onClose = vi.fn();
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={onClose}
         items={mockFiles}
@@ -179,7 +180,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
   test('calls onConfirm when confirm button is clicked', () => {
     const onConfirm = vi.fn();
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         onConfirm={onConfirm}
@@ -202,7 +203,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders Add folder button', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -224,7 +225,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders hidden files switch with default label', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -244,7 +245,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders hidden files switch with custom label', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         hiddenFilesSwitcherLabel="Display hidden items"
@@ -265,7 +266,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('toggles hidden files visibility when switch is clicked', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -283,17 +284,14 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     const switchElement = screen.getByRole('checkbox');
     expect(switchElement).not.toBeChecked();
 
-    const switchContainer = switchElement.closest('.inline-flex');
-    if (switchContainer) {
-      fireEvent.click(switchContainer);
-    }
+    fireEvent.click(switchElement);
 
     expect(switchElement).toBeChecked();
   });
 
   test('renders FileManager with provided items', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -314,7 +312,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('passes showHiddenFiles prop to FileManager', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -332,17 +330,14 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
     const switchElement = screen.getByRole('checkbox');
     expect(switchElement).not.toBeChecked();
 
-    const switchContainer = switchElement.closest('.inline-flex');
-    if (switchContainer) {
-      fireEvent.click(switchContainer);
-    }
+    fireEvent.click(switchElement);
 
     expect(switchElement).toBeChecked();
   });
 
   test('renders with default mode as copy', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -362,7 +357,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders custom copy header when getCopyHeader is provided', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
@@ -384,7 +379,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders custom move header when getMoveHeader is provided', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -406,7 +401,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders default copy header when getCopyHeader is not provided', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
@@ -427,7 +422,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('renders default move header when getMoveHeader is not provided', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -448,7 +443,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('collapses tree and expands root path by default', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -468,7 +463,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('clicking Add folder inserts a new placeholder folder entry', async () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         items={mockFiles}
@@ -495,7 +490,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('disables button when destination matches source folder', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -519,7 +514,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('enables button when destination differs from source folder', () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="move"
@@ -543,7 +538,7 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
   test('displays tooltip when button is disabled', async () => {
     render(
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         open={true}
         onClose={vi.fn()}
         mode="copy"
@@ -564,5 +559,35 @@ describe('Dial UI Kit :: DestinationFolderPopup', () => {
 
     const copyButton = screen.getByRole('button', { name: 'Copy' });
     expect(copyButton).toBeDisabled();
+  });
+
+  test('renders alert when alertProps provided', () => {
+    render(
+      <DialDestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        alertProps={{
+          message: 'Action unavailable in this folder',
+          variant: AlertVariant.Warning,
+          closable: true,
+        }}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Action unavailable in this folder',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Close alert' }),
+    ).toBeInTheDocument();
   });
 });

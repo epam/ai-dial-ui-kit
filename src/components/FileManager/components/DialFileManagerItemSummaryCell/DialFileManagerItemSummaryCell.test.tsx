@@ -7,7 +7,7 @@ const baseProps = {
   id: '1',
   name: 'Example File.txt',
   nodeType: DialFileNodeType.ITEM,
-  size: '15 KB',
+  size: 15000,
   updatedAt: '2025-07-20T00:00:00Z',
 };
 

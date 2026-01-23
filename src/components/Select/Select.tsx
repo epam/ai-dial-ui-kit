@@ -636,7 +636,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               ref={inlineSearchInputRef}
               disabled={disabled}
               aria-disabled={disabled}
-              autoComplete="new-password"
+              autoComplete="off"
             />
           </div>
         ) : (

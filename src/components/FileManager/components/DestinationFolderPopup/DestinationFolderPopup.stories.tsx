@@ -3,10 +3,11 @@ import { DialFileNodeType } from '@/models/file';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import {
-  DestinationFolderPopup,
+  DialDestinationFolderPopup,
   type DestinationFolderPopupProps,
 } from './DestinationFolderPopup';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
+import { AlertVariant } from '@/types/alert';
 
 const StoryWrapper = (args: DestinationFolderPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,7 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
         />
       )}
 
-      <DestinationFolderPopup
+      <DialDestinationFolderPopup
         {...args}
         open={isOpen}
         path={currentPath}
@@ -52,7 +53,7 @@ const StoryWrapper = (args: DestinationFolderPopupProps) => {
 
 const meta: Meta<DestinationFolderPopupProps> = {
   title: 'FileManager/components/DestinationFolderPopup',
-  component: DestinationFolderPopup,
+  component: DialDestinationFolderPopup,
   parameters: {
     layout: 'fullscreen',
   },
@@ -131,5 +132,19 @@ export const CustomDisabledTooltip: Story = {
     disabledPathTooltip:
       'Cannot copy to the same location. Choose a different folder.',
     header: 'Copying 3 items',
+  },
+};
+
+export const WithAlert: Story = {
+  args: {
+    mode: 'move',
+    header: 'Moving items',
+    alertProps: {
+      variant: AlertVariant.Warning,
+      message:
+        'You cannot move items to the current folder. Choose another one.',
+    },
+    sourceFolder: '/Documents',
+    path: '/Documents',
   },
 };
