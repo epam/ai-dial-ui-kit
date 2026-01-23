@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialBreadcrumb } from './Breadcrumb';
 import { DialBreadcrumbItem } from './BreadcrumbItem';
 import { IconFolder } from '@tabler/icons-react';
+import { useState } from 'react';
 
 const meta = {
   title: 'Navigation/Breadcrumb',
@@ -14,6 +16,7 @@ const meta = {
     pathItems: { control: false },
     children: { control: false },
     labelClassName: { control: { type: 'text' } },
+    onBeforeNavigate: { control: false },
   },
   args: {
     ariaLabel: 'Breadcrumb',
@@ -101,6 +104,55 @@ export const CompositionAPI: Story = {
       />
     </DialBreadcrumb>
   ),
+};
+
+export const WithNavigationGuard: Story = {
+  name: 'With Navigation Guard (Unsaved Changes)',
+  render: () => {
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(true);
+
+    const handleBeforeNavigate = async () => {
+      if (!hasUnsavedChanges) {
+        return true;
+      }
+
+      // Simulate a confirmation dialog
+      const userConfirmed = window.confirm(
+        'You have unsaved changes. Do you want to leave this page?',
+      );
+
+      if (userConfirmed) {
+        setHasUnsavedChanges(false);
+      }
+
+      return userConfirmed;
+    };
+
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={hasUnsavedChanges}
+              onChange={(e) => setHasUnsavedChanges(e.target.checked)}
+            />
+            <span className="dial-small text-primary">
+              Has unsaved changes (try clicking breadcrumb items)
+            </span>
+          </label>
+        </div>
+        <DialBreadcrumb
+          pathItems={[
+            { label: 'Home', href: '#' },
+            { label: 'Projects', href: '#' },
+            { label: 'Current Project (with unsaved changes)' },
+          ]}
+          onBeforeNavigate={handleBeforeNavigate}
+        />
+      </div>
+    );
+  },
 };
 
 export const LongLabelsTruncate: Story = {
