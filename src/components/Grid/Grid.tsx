@@ -50,6 +50,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
   selectionOnHover?: boolean;
+  onGridApiChange?: (api: GridApi<T>) => void;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
@@ -144,6 +145,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
  * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
+ * @param [onGridApiChange] - Callback invoked when the grid API becomes available
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
  * @param [filterPlaceholder='Enter value'] - Placeholder text for column filter inputs
@@ -170,6 +172,7 @@ export const DialGrid = <T extends object>({
   selectionOnHover = true,
   onSelectionChange,
   onSelectionChangeWithMap,
+  onGridApiChange,
   getRowId = (row: T) =>
     String((row as Record<string, unknown>).id || JSON.stringify(row)),
   alternateOddRowColors = false,
@@ -470,6 +473,7 @@ export const DialGrid = <T extends object>({
 
     setGridApi(e.api);
     additionalGridOptions?.onGridReady?.(e);
+    onGridApiChange?.(e.api);
   };
 
   useEffect(() => {
