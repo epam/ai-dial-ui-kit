@@ -70,14 +70,14 @@ export const useGridSelection = <T extends object>({
   ]);
 
   const handleSelectionToggle = useCallback(
-    (row: T, checked: boolean) => {
+    (row: T, checked: boolean, isSingleSelect?: boolean) => {
       const rowId = getRowId(row);
 
       if (disabledRowIds?.has(rowId)) {
         return;
       }
 
-      const newMap = new Map(currentSelectedRows);
+      const newMap = isSingleSelect ? new Map() : new Map(currentSelectedRows);
 
       if (checked) {
         newMap.set(rowId, row);
