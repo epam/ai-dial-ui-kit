@@ -13,7 +13,6 @@ import {
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
-  formatBytes,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
@@ -358,10 +357,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
           id: node.id ?? node.path,
           name: node.name ?? node.path.split('/').pop() ?? '',
           updatedAt: node.updatedAt,
-          size:
-            node.nodeType === DialFileNodeType.ITEM
-              ? formatBytes(node.contentLength)
-              : '',
+          size: node.contentLength,
           contentLength: node.contentLength,
           author: node.author,
           path: node.path,
@@ -377,10 +373,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         id: node.id ?? node.path,
         name: node.name ?? node.path.split('/').pop() ?? '',
         updatedAt: node.updatedAt,
-        size:
-          node.nodeType === DialFileNodeType.ITEM
-            ? formatBytes(node.contentLength)
-            : '',
+        size: node.contentLength,
         author: node.author,
         path: node.path,
         nodeType: node.nodeType,
@@ -406,10 +399,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       id: node.id ?? node.path,
       name: node.name ?? node.path.split('/').pop() ?? '',
       updatedAt: node.updatedAt,
-      size:
-        node.nodeType === DialFileNodeType.ITEM
-          ? formatBytes(node.contentLength)
-          : '',
+      size: node.contentLength,
       author: node.author,
       path: node.path,
       nodeType: node.nodeType,
@@ -425,7 +415,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         id: newFolderTempId,
         name: '',
         updatedAt: undefined,
-        size: '',
         author: undefined,
         path: newFolderTempId,
         nodeType: DialFileNodeType.FOLDER,

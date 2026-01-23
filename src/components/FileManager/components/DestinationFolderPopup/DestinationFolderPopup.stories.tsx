@@ -7,6 +7,7 @@ import {
   type DestinationFolderPopupProps,
 } from './DestinationFolderPopup';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
+import { AlertVariant } from '@/types/alert';
 
 const StoryWrapper = (args: DestinationFolderPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,5 +132,19 @@ export const CustomDisabledTooltip: Story = {
     disabledPathTooltip:
       'Cannot copy to the same location. Choose a different folder.',
     header: 'Copying 3 items',
+  },
+};
+
+export const WithAlert: Story = {
+  args: {
+    mode: 'move',
+    header: 'Moving items',
+    alertProps: {
+      variant: AlertVariant.Warning,
+      message:
+        'You cannot move items to the current folder. Choose another one.',
+    },
+    sourceFolder: '/Documents',
+    path: '/Documents',
   },
 };

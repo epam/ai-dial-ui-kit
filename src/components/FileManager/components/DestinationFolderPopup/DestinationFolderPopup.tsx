@@ -24,6 +24,7 @@ import { DestinationFolderMode } from '@/types/file-manager';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialAlert, type DialAlertProps } from '@/components/Alert/Alert';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -40,6 +41,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   sourceFolder?: string;
   disabledPathTooltip?: string;
   collapsedFileTree?: boolean;
+  alertProps?: DialAlertProps;
 }
 
 /**
@@ -98,6 +100,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   disabledPathTooltip = 'Unavailable for the original path. Please select another folder',
   path,
   collapsedFileTree = false,
+  alertProps,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -169,31 +172,40 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
       }
       header={header ?? defaultTitle}
     >
-      <DialFileManager
-        {...restProps}
-        className={mergeClasses(restProps.className, 'bg-layer-2')}
-        actionsRef={fileManagerActionRef}
-        path={path}
-        showHiddenFiles={showHiddenFiles}
-        onShowHiddenFilesChange={handleShowHiddenFilesChange}
-        treeOptions={{
-          ...restProps.treeOptions,
-          collapsed: collapsedFileTree,
-          expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
-          header: restProps.treeOptions?.header,
-        }}
-        gridOptions={{
-          withSelectionColumn: false,
-          ...restProps.gridOptions,
-        }}
-        navigationPanelOptions={{
-          elementId: 'file-manager-destination-search',
-          ...restProps.navigationPanelOptions,
-        }}
-        onUploadFiles={onUploadFiles}
-        onValidateUpload={onValidateUpload}
-        maxFileSize={maxFileSize}
-      />
+      <div className="bg-layer-2 h-full flex flex-col">
+        {alertProps && (
+          <div className="px-4 pt-4">
+            <DialAlert {...alertProps} />
+          </div>
+        )}
+        <div className="flex-1 min-h-0">
+          <DialFileManager
+            {...restProps}
+            className={mergeClasses(restProps.className, 'bg-layer-2 h-full')}
+            actionsRef={fileManagerActionRef}
+            path={path}
+            showHiddenFiles={showHiddenFiles}
+            onShowHiddenFilesChange={handleShowHiddenFilesChange}
+            treeOptions={{
+              ...restProps.treeOptions,
+              collapsed: collapsedFileTree,
+              expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
+              header: restProps.treeOptions?.header,
+            }}
+            gridOptions={{
+              withSelectionColumn: false,
+              ...restProps.gridOptions,
+            }}
+            navigationPanelOptions={{
+              elementId: 'file-manager-destination-search',
+              ...restProps.navigationPanelOptions,
+            }}
+            onUploadFiles={onUploadFiles}
+            onValidateUpload={onValidateUpload}
+            maxFileSize={maxFileSize}
+          />
+        </div>
+      </div>
     </DialPopup>
   );
 };
