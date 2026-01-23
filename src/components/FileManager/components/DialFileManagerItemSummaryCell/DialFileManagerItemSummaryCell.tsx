@@ -5,12 +5,13 @@ import { DialFileNodeType } from '@/models/file';
 import { DialItemType } from '@/types/item';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 import { IconCircleFilled } from '@tabler/icons-react';
+import { formatBytes } from '@/components/FileManager/utils';
 
 interface DialFileManagerItemSummaryCellProps {
   id: string;
   name: string;
   nodeType: DialFileNodeType;
-  size?: string;
+  size?: number;
   updatedAt?: string;
   shared?: boolean;
   dateLocale?: Intl.LocalesArgument;
@@ -90,7 +91,9 @@ export const DialFileManagerItemSummaryCell: FC<
           sharedIndicatorClassName={sharedIndicatorClassName}
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">
-              <span>{size}</span>
+              <span>
+                {nodeType === DialFileNodeType.ITEM ? formatBytes(size) : ''}
+              </span>
               {updatedAt && size && (
                 <IconCircleFilled size={2} className="text-secondary" />
               )}
