@@ -128,7 +128,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
-      className="md:!h-[800px]"
+      className="md:!h-[800px] !bg-layer-2"
       footer={
         <div className="flex justify-between space-x-2 py-4 px-6">
           <div className="flex space-x-4">

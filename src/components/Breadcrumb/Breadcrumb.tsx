@@ -13,7 +13,10 @@ import {
   DialBreadcrumbItem,
   type DialBreadcrumbItemProps,
 } from './BreadcrumbItem';
-import type { DialBreadcrumbPathItem } from '@/models/breadcrumb';
+import type {
+  DialBreadcrumbPathItem,
+  NavigationGuard,
+} from '@/models/breadcrumb';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { IconDots } from '@tabler/icons-react';
 import type { DropdownItem } from '@/models/dropdown';
@@ -25,6 +28,7 @@ export interface DialBreadcrumbProps {
   className?: string;
   children?: ReactNode;
   labelClassName?: string;
+  onBeforeNavigate?: NavigationGuard;
 }
 
 /**
@@ -56,6 +60,23 @@ export interface DialBreadcrumbProps {
  * @param [className] - Additional CSS classes for the `<nav>` container.
  * @param [children] - Alternatively, compose with `<DialBreadcrumbItem/>` as children.
  * @param [labelClassName] - Additional CSS classes applied to each item when using `pathItems` prop.
+ * @param [onBeforeNavigate] - Navigation guard called before navigating to a breadcrumb item.
+ *  Guard function called before navigating to a different breadcrumb item.
+ *  Return `true` to allow navigation, `false` to prevent it.
+ *  Can return a Promise for async checks (e.g., showing a confirmation dialog).
+ *
+ *  @example
+ *  ```tsx
+ *  <DialBreadcrumb
+ *    pathItems={items}
+ *    onBeforeNavigate={async () => {
+ *      if (hasUnsavedChanges) {
+ *        return await confirmLeave();
+ *      }
+ *      return true;
+ *    }}
+ *  />
+ *  ```
  */
 export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   pathItems,
@@ -64,6 +85,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   className,
   children,
   labelClassName,
+  onBeforeNavigate,
 }) => {
   const items = useMemo(() => {
     if (pathItems?.length) {
@@ -79,16 +101,26 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
   }, [pathItems, children]);
 
   const handleDropdownItemClick = useCallback(
-    (info: { key: string; domEvent: MouseEvent }) => {
+    async (info: { key: string; domEvent: MouseEvent }) => {
       const index = parseInt(info.key, 10);
       const item = items[index];
+
+      // Check navigation guard before proceeding
+      if (onBeforeNavigate) {
+        const canNavigate = await onBeforeNavigate();
+        if (!canNavigate) {
+          info.domEvent.preventDefault();
+          return;
+        }
+      }
+
       if (item.onClick) {
         item.onClick(info.domEvent as MouseEvent<HTMLAnchorElement>);
       } else if (item.href) {
         window.location.href = item.href;
       }
     },
-    [items],
+    [items, onBeforeNavigate],
   );
 
   const content = useMemo(() => {
@@ -102,6 +134,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           isLast={index === items.length - 1}
           separator={separator}
           labelClassName={labelClassName}
+          onBeforeNavigate={onBeforeNavigate}
         />
       ));
     }
@@ -126,6 +159,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key="item-0"
           separator={separator}
           labelClassName={labelClassName}
+          onBeforeNavigate={onBeforeNavigate}
         />
 
         <li className={mergeClasses(breadcrumbItemBaseClassName)}>
@@ -153,6 +187,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           key={`item-${items.length - 2}`}
           separator={separator}
           labelClassName={labelClassName}
+          onBeforeNavigate={onBeforeNavigate}
         />
 
         <DialBreadcrumbItem
@@ -161,10 +196,17 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
           isLast
           separator={separator}
           labelClassName={labelClassName}
+          onBeforeNavigate={onBeforeNavigate}
         />
       </>
     );
-  }, [items, separator, labelClassName, handleDropdownItemClick]);
+  }, [
+    items,
+    separator,
+    labelClassName,
+    handleDropdownItemClick,
+    onBeforeNavigate,
+  ]);
 
   return (
     <nav
