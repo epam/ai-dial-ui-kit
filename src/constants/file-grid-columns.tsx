@@ -11,6 +11,7 @@ import { FileManagerColumnKey } from '@/types/file-manager';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import type { FileManagerGridContext } from '@/components/FileManager/hooks/use-file-manager-columns';
+import { formatBytes } from '@/components/FileManager/utils';
 
 type GridRow = FileManagerGridRow;
 
@@ -169,4 +170,9 @@ export const SIZE_COLUMN = (headerName: string) => ({
   headerName: headerName,
   width: 120,
   suppressSizeToFit: true,
+  cellRenderer: (params: { data: GridRow }) => {
+    return params.data.nodeType === DialFileNodeType.ITEM
+      ? formatBytes(params.data.contentLength)
+      : '';
+  },
 });
