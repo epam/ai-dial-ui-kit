@@ -27,6 +27,7 @@ import { DialItemType } from '@/types/item';
 import { DialFileNodeType } from '@/models/file';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
+import { GridSelectionMode } from '@/models/selection-mode';
 
 interface Row {
   id: string;
@@ -217,6 +218,12 @@ export const WithoutContextMenu: Story = {
     selectedRowIds: undefined,
     onSelectionChange: undefined,
     getContextMenuItems: undefined,
+  },
+};
+
+export const WithRadioButtonSelection: Story = {
+  args: {
+    selectionMode: GridSelectionMode.RADIO_BUTTON,
   },
 };
 
