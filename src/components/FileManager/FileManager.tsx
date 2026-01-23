@@ -852,6 +852,7 @@ export const DialFileManagerView: FC = () => {
     onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
     sharedWithMeIds,
+    onClearSelection: clearSelection,
   });
 
   const renderToolbar = useCallback(() => {
