@@ -76,6 +76,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -97,6 +98,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -120,6 +122,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -154,6 +157,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -181,7 +185,9 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -212,6 +218,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -240,6 +247,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -267,6 +275,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -298,6 +307,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete,
+        onClearSelection: vi.fn(),
         getCurrentFolderPath,
       }),
     );
@@ -329,6 +339,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -354,6 +365,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
       onRename: vi.fn(),
       onDelete: vi.fn(),
       getCurrentFolderPath: () => '/test',
+      onClearSelection: vi.fn(),
     };
 
     const { result, rerender } = renderHook(
@@ -361,6 +373,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         useBulkActions({
           selectedFiles,
           actionLabels: defaultActionLabels,
+
           ...callbacks,
         }),
       { initialProps: { selectedFiles } },
@@ -394,6 +407,8 @@ describe('Dial UI Kit :: useBulkActions', () => {
           onMove: vi.fn(),
           onDownload: vi.fn(),
           onRename: vi.fn(),
+          onUnshare: vi.fn(),
+          onClearSelection: vi.fn(),
           onDelete: vi.fn(),
           getCurrentFolderPath: () => '/test',
         }),
@@ -432,6 +447,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onRename: vi.fn(),
         onDelete: vi.fn(),
         getCurrentFolderPath: () => '/test',
+        onClearSelection: vi.fn(),
       }),
     );
 
@@ -456,6 +472,8 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onDuplicate: vi.fn(),
         onCopy: vi.fn(),
         onMove: vi.fn(),
+        onUnshare: vi.fn(),
+        onClearSelection: vi.fn(),
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
@@ -483,6 +501,7 @@ describe('Dial UI Kit :: useBulkActions', () => {
         onDownload: vi.fn(),
         onRename: vi.fn(),
         onDelete: vi.fn(),
+        onClearSelection: vi.fn(),
         getCurrentFolderPath: () => '/test',
       }),
     );
@@ -490,5 +509,39 @@ describe('Dial UI Kit :: useBulkActions', () => {
     const deleteAction = result.current[0];
 
     expect(deleteAction.disabled).toBe(false);
+  });
+
+  test('unshare action calls onUnshare and onClearSelection with selected files', () => {
+    const onUnshare = vi.fn();
+    const onClearSelection = vi.fn();
+    const selectedFiles = new Map<string, DialFile>([
+      [testFiles[0].path, testFiles[0]],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: { [DialFileManagerActions.Unshare]: 'Unshare' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+        onUnshare,
+        onClearSelection,
+      }),
+    );
+
+    const unshareAction = result.current[0];
+    unshareAction.onClick?.({
+      key: unshareAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onUnshare).toHaveBeenCalledTimes(1);
+    expect(onUnshare).toHaveBeenCalledWith([testFiles[0]]);
+    expect(onClearSelection).toHaveBeenCalledTimes(1);
   });
 });
