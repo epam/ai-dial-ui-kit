@@ -510,4 +510,38 @@ describe('Dial UI Kit :: useBulkActions', () => {
 
     expect(deleteAction.disabled).toBe(false);
   });
+
+  test('unshare action calls onUnshare and onClearSelection with selected files', () => {
+    const onUnshare = vi.fn();
+    const onClearSelection = vi.fn();
+    const selectedFiles = new Map<string, DialFile>([
+      [testFiles[0].path, testFiles[0]],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: { [DialFileManagerActions.Unshare]: 'Unshare' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+        onUnshare,
+        onClearSelection,
+      }),
+    );
+
+    const unshareAction = result.current[0];
+    unshareAction.onClick?.({
+      key: unshareAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onUnshare).toHaveBeenCalledTimes(1);
+    expect(onUnshare).toHaveBeenCalledWith([testFiles[0]]);
+    expect(onClearSelection).toHaveBeenCalledTimes(1);
+  });
 });
