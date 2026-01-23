@@ -3,6 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialDestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import { AlertVariant } from '@/types/alert';
 
 const mockFiles: DialFile[] = [
   {
@@ -558,5 +559,35 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
 
     const copyButton = screen.getByRole('button', { name: 'Copy' });
     expect(copyButton).toBeDisabled();
+  });
+
+  test('renders alert when alertProps provided', () => {
+    render(
+      <DialDestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        alertProps={{
+          message: 'Action unavailable in this folder',
+          variant: AlertVariant.Warning,
+          closable: true,
+        }}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Action unavailable in this folder',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Close alert' }),
+    ).toBeInTheDocument();
   });
 });
