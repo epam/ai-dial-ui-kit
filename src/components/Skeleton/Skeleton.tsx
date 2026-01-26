@@ -1,4 +1,9 @@
-import { type FC, type HTMLAttributes } from 'react';
+import {
+  type CSSProperties,
+  type FC,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   DialSkeletonVariant,
@@ -18,7 +23,7 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
       };
   showTitle?: boolean | { width?: string };
   loading?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
   variant?: DialSkeletonVariant;
   width?: string | number;
   height?: string | number;
@@ -110,7 +115,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
       variant === DialSkeletonVariant.Text && 'rounded',
     );
 
-    const style: React.CSSProperties = {};
+    const style: CSSProperties = {};
     if (width) style.width = typeof width === 'number' ? `${width}px` : width;
     if (height)
       style.height = typeof height === 'number' ? `${height}px` : height;

@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react';
  * The value updates automatically when the element is resized.
  *
  * @param {number} breakpoint - The width in pixels used as the threshold. `isBelowBreakpoint` is true when the element's width is less than this value.
- * @returns {{ containerRef: React.RefObject<HTMLElement>, isBelowBreakpoint: boolean }} An object containing the ref to attach to your element and the boolean indicating if it is smaller than the breakpoint.
+ * @returns {{ containerRef: RefObject<HTMLElement>, isBelowBreakpoint: boolean }} An object containing the ref to attach to your element and the boolean indicating if it is smaller than the breakpoint.
  *
  * @example
  * const { containerRef, isBelowBreakpoint } = useWidthBreakpoint(600);
