@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialIconButton } from './IconButton';
-import { ButtonAppearance, ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialIconButton', () => {
   test('Should render with string label and be accessible by role', () => {
