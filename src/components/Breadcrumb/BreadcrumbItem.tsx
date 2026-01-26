@@ -11,6 +11,7 @@ import {
   breadcrumbItemLastClassName,
 } from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import type { NavigationGuard } from '@/models/breadcrumb';
 
 export interface DialBreadcrumbItemProps
   extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick'> {
@@ -22,6 +23,7 @@ export interface DialBreadcrumbItemProps
   labelClassName?: string;
   isLast?: boolean;
   separator?: ReactNode;
+  onBeforeNavigate?: NavigationGuard;
 }
 
 export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
@@ -34,8 +36,24 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   className,
   iconBefore,
   labelClassName,
+  onBeforeNavigate,
   ...props
 }) => {
+  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Check navigation guard before proceeding
+    if (onBeforeNavigate && !isLast) {
+      const canNavigate = await onBeforeNavigate();
+      if (!canNavigate) {
+        e.preventDefault();
+        return;
+      }
+    }
+
+    // Call original onClick if provided
+    if (onClick) {
+      onClick(e);
+    }
+  };
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
     isLast ? breadcrumbItemLastClassName : breadcrumbItemVisibleClassName,
@@ -57,14 +75,14 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   const Content =
     typeof label === 'string' ? (
       <DialEllipsisTooltip
-        className={labelClassName}
+        className={mergeClasses('cursor-pointer', labelClassName)}
         text={label}
         id="breadcrumb-item-content"
       />
     ) : (
       <span
         className={mergeClasses(
-          'flex-1 min-w-0 max-w-full truncate',
+          'flex-1 min-w-0 max-w-full truncate cursor-pointer',
           labelClassName,
         )}
         aria-label="breadcrumb-item-content"
@@ -80,7 +98,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       aria-label={props['aria-label'] || 'breadcrumb-item'}
     >
       {interactive ? (
-        <a href={href} onClick={onClick} className={contentClassName}>
+        <a href={href} onClick={handleClick} className={contentClassName}>
           {iconBefore}
           {Content}
         </a>

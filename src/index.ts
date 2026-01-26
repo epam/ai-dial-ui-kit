@@ -155,6 +155,7 @@ export {
   type DialFileManagerActionsRef,
   type DialFileAcceptType,
 } from './models/file-manager';
+export { GridSelectionMode } from './models/selection-mode';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';
