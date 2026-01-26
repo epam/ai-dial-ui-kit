@@ -1,4 +1,3 @@
-// TODO: review ButtonVariant to ButtonColor?
 export enum ButtonVariant {
   // Common
   Primary = 'primary',
