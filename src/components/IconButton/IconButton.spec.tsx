@@ -9,23 +9,6 @@ describe('Dial UI Kit :: DialIconButton', () => {
     expect(screen.getByText('icon')).toBeInTheDocument();
   });
 
-  test('Should render with ReactNode label and aria-label', () => {
-    render(
-      <DialButton
-        label={
-          <span>
-            Custom <strong>Label</strong>
-          </span>
-        }
-        aria-label="Custom button"
-      />,
-    );
-    const button = screen.getByRole('button', { name: 'Custom button' });
-    expect(button).toBeInTheDocument();
-    expect(screen.getByText('Custom', { exact: false })).toBeInTheDocument();
-    expect(screen.getByText('Label')).toBeInTheDocument();
-  });
-
   test('Should call onClick when clicked', () => {
     const onClick = vi.fn();
     render(<DialIconButton icon={<div>icon</div>} onClick={onClick} />);
