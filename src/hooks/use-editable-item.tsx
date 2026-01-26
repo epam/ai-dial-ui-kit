@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react';
 
 export interface UseEditableItemOptions {
   value: string;
@@ -10,7 +16,7 @@ export interface UseEditableItemOptions {
 }
 
 interface UseEditableItemResult {
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: RefObject<HTMLInputElement | null>;
   value: string;
   onChange: (newValue?: string) => void;
   invalid: boolean;
@@ -31,7 +37,7 @@ interface UseEditableItemResult {
  * @param {boolean} [options.restoreOnCancel=true] - Whether to restore the original value on cancel.
  *
  * @returns {Object} An object containing state and handlers for editable input.
- * @returns {React.RefObject<HTMLInputElement>} return.inputRef - Ref to the editable input element.
+ * @returns {RefObject<HTMLInputElement>} return.inputRef - Ref to the editable input element.
  * @returns {string} return.value - Current input value.
  * @returns {(newValue?: string) => void} return.onChange - Change handler for the input value.
  * @returns {boolean} return.invalid - Whether the current value is invalid.
