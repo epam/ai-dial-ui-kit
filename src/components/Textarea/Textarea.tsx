@@ -15,7 +15,7 @@ export interface DialTextareaProps
     Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
     HTMLTextAreaElement
   > {
-  containerClassName?: string;
+  containerClassName?: string; // TODO: need?
   invalid?: boolean;
   disableTooltip?: boolean; // TODO: review after approve Design system
   onChange?: (value: string) => void;
