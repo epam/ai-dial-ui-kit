@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ResizableContainerSide } from '@/types/resizable-container';
 import { IconGripVertical } from '@tabler/icons-react';
 import {
@@ -8,7 +8,7 @@ import {
 } from './ResizableContainer';
 
 const InteractiveResizable = (args: DialResizableContainerProps) => {
-  const content = (args.children as React.ReactNode) ?? (
+  const content = (args.children as ReactNode) ?? (
     <div className="p-4 text-primary">
       <div className="font-medium">Resizable content</div>
       <div className="text-sm opacity-80">
