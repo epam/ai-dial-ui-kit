@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { DialButton } from './Button';
+import { DialButton } from '../Button';
 import { ButtonAppearance, ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
