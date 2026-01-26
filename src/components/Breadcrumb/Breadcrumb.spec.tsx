@@ -117,4 +117,157 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     const icons = screen.getAllByLabelText('icon');
     expect(icons.length).toBe(2);
   });
+
+  test('navigation guard allows navigation when returning true', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(true);
+    const onClick = vi.fn();
+
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Home', href: '#home', onClick },
+          { label: 'Current' },
+        ]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: 'Home' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('navigation guard prevents navigation when returning false', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(false);
+    const onClick = vi.fn();
+
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Home', href: '#home', onClick },
+          { label: 'Current' },
+        ]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: 'Home' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard supports async checks with Promise', async () => {
+    const onBeforeNavigate = vi.fn().mockResolvedValue(true);
+    const onClick = vi.fn();
+
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Home', href: '#home', onClick },
+          { label: 'Current' },
+        ]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: 'Home' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    // Wait for async guard to complete
+    await vi.waitFor(() => {
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('navigation guard prevents async navigation when Promise resolves to false', async () => {
+    const onBeforeNavigate = vi.fn().mockResolvedValue(false);
+    const onClick = vi.fn();
+
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Home', href: '#home', onClick },
+          { label: 'Current' },
+        ]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: 'Home' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    // Wait to ensure onClick is never called
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard is not called for last/current item', async () => {
+    const onBeforeNavigate = vi.fn();
+
+    render(
+      <DialBreadcrumb
+        pathItems={[{ label: 'Home', href: '#home' }, { label: 'Current' }]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    const currentText = screen.getByText('Current');
+    await fireEvent.click(currentText);
+
+    expect(onBeforeNavigate).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard works with composition API children', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(false);
+    const onClick = vi.fn();
+
+    render(
+      <DialBreadcrumb onBeforeNavigate={onBeforeNavigate}>
+        <DialBreadcrumbItem label="Home" href="#" onClick={onClick} />
+        <DialBreadcrumbItem label="Current" />
+      </DialBreadcrumb>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Home' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard works with collapsed dropdown items', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(false);
+
+    // Create 5+ items to trigger collapsed view with dropdown
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Home', href: '#home' },
+          { label: 'Level 2', href: '#level2' },
+          { label: 'Level 3', href: '#level3' },
+          { label: 'Level 4', href: '#level4' },
+          { label: 'Current' },
+        ]}
+        onBeforeNavigate={onBeforeNavigate}
+      />,
+    );
+
+    // Find and click the ellipsis button to open dropdown
+    const ellipsisButton = screen.getByRole('button', {
+      name: /more breadcrumbs/i,
+    });
+    await fireEvent.click(ellipsisButton);
+
+    // The dropdown items should appear - find one and try to click
+    const dropdownItem = screen.getByText('Level 2');
+    await fireEvent.click(dropdownItem);
+
+    expect(onBeforeNavigate).toHaveBeenCalled();
+  });
 });
