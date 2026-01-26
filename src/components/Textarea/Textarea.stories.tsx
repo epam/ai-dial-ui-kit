@@ -30,7 +30,7 @@ const meta = {
     },
   },
   argTypes: {
-    textareaId: {
+    id: {
       control: 'text',
       description: 'Unique identifier for the textarea element',
     },
@@ -68,7 +68,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: InteractiveTextarea,
   args: {
-    textareaId: 'default-textarea',
+    id: 'default-textarea',
     placeholder: 'Enter your text here...',
   },
 };
@@ -76,7 +76,7 @@ export const Default: Story = {
 export const WithValue: Story = {
   render: InteractiveTextarea,
   args: {
-    textareaId: 'textarea-with-value',
+    id: 'textarea-with-value',
     placeholder: 'Enter your text here...',
     value: 'This is some default text in the textarea',
   },
@@ -85,7 +85,7 @@ export const WithValue: Story = {
 export const Disabled: Story = {
   render: InteractiveTextarea,
   args: {
-    textareaId: 'disabled-textarea',
+    id: 'disabled-textarea',
     placeholder: 'This textarea is disabled',
     value: 'This textarea is disabled and cannot be edited',
     disabled: true,
@@ -95,7 +95,7 @@ export const Disabled: Story = {
 export const Invalid: Story = {
   render: InteractiveTextarea,
   args: {
-    textareaId: 'invalid-textarea',
+    id: 'invalid-textarea',
     placeholder: 'Enter valid text...',
     value: 'This text has validation errors',
     invalid: true,
@@ -104,7 +104,7 @@ export const Invalid: Story = {
 
 export const AllVariants: Story = {
   args: {
-    textareaId: 'all-variants-textarea',
+    id: 'all-variants-textarea',
     placeholder: 'Enter your text here...',
   },
   render: () => (
@@ -114,7 +114,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveTextarea
-            textareaId="default-textarea"
+            id="default-textarea"
             placeholder="Enter your text here..."
           />
         </div>
@@ -123,7 +123,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Hover</div>
           <InteractiveTextarea
-            textareaId="hover-textarea"
+            id="hover-textarea"
             className="dial-textarea-for-hover"
             placeholder="Enter your text here..."
           />
@@ -133,7 +133,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Field</div>
           <InteractiveTextarea
-            textareaId="field-textarea"
+            id="field-textarea"
             placeholder="Enter your text here..."
             value="This is some text in the textarea"
           />
@@ -143,7 +143,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Field hover</div>
           <InteractiveTextarea
-            textareaId="field-hover-textarea"
+            id="field-hover-textarea"
             placeholder="Enter your text here..."
             className="dial-textarea-for-hover"
             value="This is some text in the textarea"
@@ -154,7 +154,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Focus</div>
           <InteractiveTextarea
-            textareaId="focus-textarea"
+            id="focus-textarea"
             className="dial-textarea-for-focus"
             placeholder="Enter your text here..."
           />
@@ -164,7 +164,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Error</div>
           <InteractiveTextarea
-            textareaId="error-textarea"
+            id="error-textarea"
             placeholder="Enter your text here..."
             invalid={true}
             value="This text has validation errors"
@@ -175,7 +175,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Disabled</div>
           <InteractiveTextarea
-            textareaId="disabled-textarea"
+            id="disabled-textarea"
             placeholder="This textarea is disabled"
             disabled={true}
             value="This textarea is disabled"
@@ -186,10 +186,10 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Read-only</div>
           <InteractiveTextarea
-            textareaId="readonly-textarea"
+            id="readonly-textarea"
             placeholder="This textarea is read-only"
             value="This textarea is read-only"
-            readonly={true}
+            readOnly={true}
           />
         </div>
       </div>
