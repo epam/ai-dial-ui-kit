@@ -63,7 +63,7 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
         htmlFor={elementId}
       />
       <DialTextarea
-        textareaId={elementId}
+        id={elementId}
         className={elementClassName}
         containerClassName={elementContainerClassName}
         {...props}
