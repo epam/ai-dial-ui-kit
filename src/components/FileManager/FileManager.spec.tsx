@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React, { createRef, type ReactElement } from 'react';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
@@ -239,12 +239,12 @@ describe('Dial UI Kit :: FileManager', () => {
     );
 
     const grid = await waitForGridTable();
-    const textboxesInsideGrid = within(grid).queryAllByRole('textbox');
-    expect(textboxesInsideGrid.length).toBe(0);
+    const teaboxesInsideGrid = within(grid).queryAllByRole('textbox');
+    expect(teaboxesInsideGrid.length).toBe(0);
   });
 
   test('actionsRef.createFolder adds a new row to the grid', async () => {
-    const actionsRef = React.createRef<DialFileManagerActionsRef>();
+    const actionsRef = createRef<DialFileManagerActionsRef>();
 
     renderWithinSizedShell(
       <DialFileManager
