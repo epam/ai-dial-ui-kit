@@ -58,6 +58,7 @@
     "esbuild": "0.25.9"
   },
   "dependencies": {
+    "@epam/pdf-highlighter-kit": "^0.0.5",
     "ag-grid-community": "^34.3.0",
     "ag-grid-react": "^34.3.0",
     "re-resizable": "^6.11.2",
