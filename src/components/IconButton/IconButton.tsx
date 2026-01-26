@@ -9,6 +9,7 @@ import type {
 import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
+import { DialTooltip } from '../Tooltip/Tooltip';
 
 export interface DialIconButtonProps
   extends DetailedHTMLProps<
@@ -19,6 +20,7 @@ export interface DialIconButtonProps
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   icon: ReactNode;
+  tooltipText?: string;
 }
 
 /**
@@ -46,6 +48,7 @@ export interface DialIconButtonProps
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ButtonSize.Standard] - Defines the size of the button
+ * @param [tooltipText] - The text of icon button tooltip
  * @param icon - Icon display
  */
 export const DialIconButton: FC<DialIconButtonProps> = ({
@@ -54,6 +57,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   size = ButtonSize.Standard,
   className,
   icon,
+  tooltipText,
   type = 'button',
   ...props
 }) => {
@@ -65,13 +69,15 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   );
 
   return (
-    <button
-      {...props}
-      type={type}
-      className={btnClassName}
-      aria-label={props['aria-label']}
-    >
-      <DialIcon icon={icon} />
-    </button>
+    <DialTooltip tooltip={tooltipText}>
+      <button
+        {...props}
+        type={type}
+        className={btnClassName}
+        aria-label={props['aria-label']}
+      >
+        <DialIcon icon={icon} />
+      </button>
+    </DialTooltip>
   );
 };

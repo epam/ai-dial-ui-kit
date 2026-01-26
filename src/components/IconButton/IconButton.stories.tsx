@@ -68,14 +68,22 @@ export const PrimarySolidIconButton: Story = {
   },
 };
 
-export const NeutralOutlinedButton: Story = {
+export const NeutralOutlinedIconButton: Story = {
   args: {
     variant: ButtonVariant.Neutral,
     appearance: ButtonAppearance.Outlined,
   },
 };
 
-export const ErrorSolidButton: Story = {
+export const IconButtonWithTooltip: Story = {
+  args: {
+    tooltipText: 'Custom tooltip text',
+    variant: ButtonVariant.Neutral,
+    appearance: ButtonAppearance.Outlined,
+  },
+};
+
+export const ErrorSolidIconButton: Story = {
   args: {
     variant: ButtonVariant.Error,
     appearance: ButtonAppearance.Solid,

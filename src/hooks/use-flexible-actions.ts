@@ -97,7 +97,6 @@ export function useFlexibleActions<T extends { key: string }>({
     actionWidthsRef.current = children.map((el) =>
       Math.ceil(el.getBoundingClientRect().width),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions, ...dependencies]);
 
   useEffect(() => {
@@ -151,7 +150,6 @@ export function useFlexibleActions<T extends { key: string }>({
       if (frameId) cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions.length, direction, ...dependencies]);
 
   const hiddenActions =
