@@ -115,4 +115,143 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     expect(li).toBeInTheDocument();
     expect(li).toHaveAttribute('aria-label', 'custom-breadcrumb-item');
   });
+
+  test('navigation guard allows navigation when returning true', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(true);
+    const onClick = vi.fn();
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Guarded"
+          href="#test"
+          onClick={onClick}
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Guarded' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('navigation guard prevents navigation when returning false', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(false);
+    const onClick = vi.fn();
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Guarded"
+          href="#test"
+          onClick={onClick}
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Guarded' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard supports async checks with Promise', async () => {
+    const onBeforeNavigate = vi.fn().mockResolvedValue(true);
+    const onClick = vi.fn();
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Async Guard"
+          href="#test"
+          onClick={onClick}
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Async Guard' });
+    await fireEvent.click(link);
+
+    expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    // Wait for async guard to complete
+    await vi.waitFor(() => {
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('navigation guard is not called for last item', async () => {
+    const onBeforeNavigate = vi.fn();
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Current"
+          isLast
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const text = screen.getByText('Current');
+    await fireEvent.click(text);
+
+    expect(onBeforeNavigate).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard is not called for disabled item', async () => {
+    const onBeforeNavigate = vi.fn();
+    const onClick = vi.fn();
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Disabled"
+          href="#test"
+          onClick={onClick}
+          disabled
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const text = screen.getByText('Disabled');
+    await fireEvent.click(text);
+
+    expect(onBeforeNavigate).not.toHaveBeenCalled();
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  test('navigation guard prevents default when returning false', async () => {
+    const onBeforeNavigate = vi.fn().mockReturnValue(false);
+
+    render(
+      <ul>
+        <DialBreadcrumbItem
+          label="Link"
+          href="#test"
+          onBeforeNavigate={onBeforeNavigate}
+        />
+      </ul>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Link' });
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const preventDefault = vi.spyOn(event, 'preventDefault');
+
+    link.dispatchEvent(event);
+
+    await vi.waitFor(() => {
+      expect(onBeforeNavigate).toHaveBeenCalledTimes(1);
+    });
+
+    await vi.waitFor(() => {
+      expect(preventDefault).toHaveBeenCalled();
+    });
+  });
 });

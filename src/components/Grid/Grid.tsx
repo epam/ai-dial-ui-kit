@@ -28,12 +28,14 @@ import { DropdownTrigger } from '@/types/dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
+import { DialRadioButton } from '@/components/RadioButton/RadioButton';
 
 import { gridBaseClassName, GRID_THEME_COLORS, ROW_HEIGHT } from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { useGridSelection } from './hooks/use-grid-selection';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { IconZoomCancel } from '@tabler/icons-react';
+import { GridSelectionMode } from '@/models/selection-mode';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -48,6 +50,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   selectedRowIds?: Set<string>;
   selectedRows?: Map<string, T>;
   selectionOnHover?: boolean;
+  onGridApiChange?: (api: GridApi<T>) => void;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   onSelectionChangeWithMap?: (selectedRows: Map<string, T>) => void;
   getRowId?: (row: T) => string;
@@ -59,6 +62,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   loading?: boolean;
   wrapperBorder?: boolean;
   withoutHeaderBorders?: boolean;
+  selectionMode?: GridSelectionMode;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -141,6 +145,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [selectedRows] - Controlled selection: map of row IDs to row data for selected rows
  * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
+ * @param [onGridApiChange] - Callback invoked when the grid API becomes available
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
  * @param [alternateOddRowColors=false] - Whether to alternate background colors for odd/even rows
  * @param [filterPlaceholder='Enter value'] - Placeholder text for column filter inputs
@@ -167,6 +172,7 @@ export const DialGrid = <T extends object>({
   selectionOnHover = true,
   onSelectionChange,
   onSelectionChangeWithMap,
+  onGridApiChange,
   getRowId = (row: T) =>
     String((row as Record<string, unknown>).id || JSON.stringify(row)),
   alternateOddRowColors = false,
@@ -177,6 +183,7 @@ export const DialGrid = <T extends object>({
   loading = false,
   wrapperBorder = true,
   withoutHeaderBorders = false,
+  selectionMode = GridSelectionMode.CHECKBOX,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
@@ -229,6 +236,8 @@ export const DialGrid = <T extends object>({
   );
 
   const renderHeaderSelectCell = useCallback(() => {
+    if (selectionMode !== GridSelectionMode.CHECKBOX) return null;
+
     const checked = headerCheckboxState === 'checked';
     const indeterminate = headerCheckboxState === 'indeterminate';
     const checkboxId = 'header-select-all';
@@ -260,6 +269,7 @@ export const DialGrid = <T extends object>({
     handleHeaderCheckboxChange,
     disabledRowIds,
     getRowId,
+    selectionMode,
   ]);
 
   const renderDataCell = useCallback(
@@ -299,13 +309,33 @@ export const DialGrid = <T extends object>({
       const rowId = getRowId(p.data);
       const checked = currentSelectedIds.has(rowId);
       const disabled = disabledRowIds?.has(rowId);
-      const checkboxId = `row-select-${rowId}`;
+      const inputId = `row-select-${rowId}`;
 
+      if (selectionMode === GridSelectionMode.RADIO_BUTTON) {
+        return (
+          <div className="h-6 w-6 flex items-center justify-center">
+            <DialRadioButton
+              className="w-[18px] h-[18px]"
+              inputId={inputId}
+              checked={checked}
+              disabled={disabled}
+              name="gridradiobutton"
+              value="selected"
+              onChange={() => {
+                if (disabled || !p.data) return;
+                handleSelectionToggle(p.data, true, true);
+              }}
+            />
+          </div>
+        );
+      }
+
+      // Checkbox mode (default)
       return (
         <div className="flex items-center justify-center size-full">
           <DialCheckbox
             key={`${rowId}-${checked}`}
-            id={checkboxId}
+            id={inputId}
             ariaLabel="Select row"
             checked={checked}
             disabled={disabled}
@@ -329,6 +359,7 @@ export const DialGrid = <T extends object>({
       getRowId,
       handleSelectionToggle,
       selectionOnHover,
+      selectionMode,
     ],
   );
 
@@ -401,9 +432,12 @@ export const DialGrid = <T extends object>({
       filter: false,
       floatingFilter: false,
       cellRenderer: renderSelectCell,
-      headerComponent: renderHeaderSelectCell,
+      headerComponent:
+        selectionMode === GridSelectionMode.CHECKBOX
+          ? renderHeaderSelectCell
+          : undefined,
     }),
-    [renderSelectCell, renderHeaderSelectCell],
+    [renderSelectCell, renderHeaderSelectCell, selectionMode],
   );
 
   const computedColumnDefs = useMemo<ColDef<T>[]>(() => {
@@ -439,6 +473,7 @@ export const DialGrid = <T extends object>({
 
     setGridApi(e.api);
     additionalGridOptions?.onGridReady?.(e);
+    onGridApiChange?.(e.api);
   };
 
   useEffect(() => {

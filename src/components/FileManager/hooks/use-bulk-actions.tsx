@@ -28,6 +28,7 @@ export interface UseBulkActionsProps {
   onDelete: (files: DialFile[], parentFolderPath: string) => void;
   getCurrentFolderPath: () => string;
   sharedWithMeIds?: string[];
+  onClearSelection: () => void;
 }
 
 export const useBulkActions = ({
@@ -41,6 +42,7 @@ export const useBulkActions = ({
   onDelete,
   getCurrentFolderPath,
   sharedWithMeIds,
+  onClearSelection,
 }: UseBulkActionsProps): DialActionDropdownItem[] => {
   return useMemo(() => {
     const actions: DialActionDropdownItem[] = [];
@@ -139,7 +141,10 @@ export const useBulkActions = ({
             className="text-secondary"
           />
         ),
-        onClick: () => onUnshare(selectedFilesArray),
+        onClick: () => {
+          onUnshare(selectedFilesArray);
+          onClearSelection();
+        },
       });
     }
 
@@ -155,5 +160,6 @@ export const useBulkActions = ({
     onDownload,
     onUnshare,
     sharedWithMeIds,
+    onClearSelection,
   ]);
 };
