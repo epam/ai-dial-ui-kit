@@ -46,12 +46,13 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   readOnly,
   disableTooltip,
   onChange,
+  disabled,
   ...props
 }) => {
   const textareaClassName = classNames(
     'dial-textarea dial-input px-3 py-2',
     props.invalid && 'dial-input-error',
-    props.disabled && 'dial-input-disable',
+    disabled && 'dial-input-disable',
     readOnly && 'dial-input-readonly',
     className,
   );
@@ -62,18 +63,19 @@ export const DialTextarea: FC<DialTextareaProps> = ({
         onChange?.(event.currentTarget.value);
       }
     },
-    [],
+    [onChange, readOnly],
   );
 
   return (
     <DialTooltip
-      tooltip={props.disabled ? value : null}
+      tooltip={disabled ? value : null}
       triggerClassName={mergeClasses('flex', containerClassName)}
     >
       <textarea
         className={textareaClassName}
         onChange={onChangeValue}
         value={value}
+        disabled={disabled}
         readOnly={readOnly}
         {...props}
       />
