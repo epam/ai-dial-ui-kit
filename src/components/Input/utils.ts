@@ -18,8 +18,8 @@ const ALLOWED_INPUT_KEYS = [
 export const handleKeyDown = (
   e: KeyboardEvent<HTMLInputElement>,
   type?: string,
-  min?: number,
-  max?: number,
+  min?: number | string,
+  max?: number | string,
 ) => {
   const isNumericInput =
     type === 'number' || min !== undefined || max !== undefined;
@@ -70,11 +70,11 @@ export const handleKeyDown = (
     const numericValue = parseFloat(newValue);
 
     if (!isNaN(numericValue)) {
-      if (min !== undefined && numericValue < min) {
+      if (min !== undefined && numericValue < +min) {
         e.preventDefault();
         return;
       }
-      if (max !== undefined && numericValue > max) {
+      if (max !== undefined && numericValue > +max) {
         e.preventDefault();
         return;
       }
