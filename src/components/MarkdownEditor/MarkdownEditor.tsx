@@ -1,7 +1,4 @@
-import '@uiw/react-markdown-preview/markdown.css';
-import '@uiw/react-md-editor/markdown-editor.css';
 import MDEditor, { type PreviewType } from '@uiw/react-md-editor';
-import classNames from 'classnames';
 import type { FC } from 'react';
 
 export interface DialMarkdownEditorProps {
@@ -43,10 +40,7 @@ export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
   className,
 }) => {
   return (
-    <div
-      className={classNames('dial-markdown-editor', className)}
-      data-color-mode={theme}
-    >
+    <div data-color-mode={theme} className={className}>
       <MDEditor
         value={value}
         onChange={(val) => onChange?.(val || '')}

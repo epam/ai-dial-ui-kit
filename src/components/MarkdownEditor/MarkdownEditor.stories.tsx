@@ -1,12 +1,10 @@
+import '@uiw/react-markdown-preview/markdown.css';
+import '@uiw/react-md-editor/markdown-editor.css';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   DialMarkdownEditor,
   type DialMarkdownEditorProps,
 } from './MarkdownEditor';
-import {
-  DialMarkdownEditorContainer,
-  type DialMarkdownEditorContainerProps,
-} from './MarkdownEditorContainer';
 
 const meta = {
   title: 'Data Display/MarkdownEditor',
@@ -16,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A Markdown editor component built on top of @uiw/react-md-editor with preview capabilities and theme support.',
+          'A Markdown editor component built on top of @uiw/react-md-editor with preview capabilities and theme support. Note: If using this component in your application, you need to import the required CSS files globally: `@uiw/react-markdown-preview/markdown.css` and `@uiw/react-md-editor/markdown-editor.css`.',
       },
     },
   },
@@ -131,70 +129,4 @@ function hello() {
 `,
   },
   render: renderWithContainer,
-};
-
-// Stories for DialMarkdownEditorContainer
-const renderContainerWithWrapper = (
-  args: Partial<DialMarkdownEditorContainerProps>,
-) => (
-  <div className="w-[600px]">
-    <DialMarkdownEditorContainer {...args} />
-  </div>
-);
-
-export const ContainerDefault: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value: '# Hello World\n\nThis is a **markdown** editor container.',
-    }),
-};
-
-export const ContainerWithLabelAndHeaderContent: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value:
-        '# Hello World\n\nThis is a **markdown** editor with label and header.',
-      label: 'Content Editor',
-      headerContent: (
-        <div className="text-secondary dial-small">Additional info</div>
-      ),
-    }),
-};
-
-export const ContainerWithSwitcherAndLabel: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value:
-        '# Hello World\n\nThis is a **markdown** editor with switcher and label.',
-      label: 'Content Editor',
-      switcherLabel: 'JSON Mode',
-    }),
-};
-
-export const ContainerWithJSONMode: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value: JSON.stringify({ name: 'John', age: 30 }, null, 2),
-      switcherLabel: 'JSON Mode',
-    }),
-};
-
-export const ContainerLightTheme: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value: '# Hello World\n\nThis is a **markdown** editor with light theme.',
-      theme: 'light',
-      switcherLabel: 'JSON Mode',
-    }),
-};
-
-export const ContainerWithValidation: Story = {
-  render: () =>
-    renderContainerWithWrapper({
-      value: JSON.stringify({ name: 'John', age: 30 }, null, 2),
-      switcherLabel: 'JSON Mode',
-      onValidateJSON: (errors) => {
-        console.error('JSON validation errors:', errors);
-      },
-    }),
 };

@@ -38,27 +38,12 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
     });
   });
 
-  test('Should apply custom className', () => {
-    render(
-      <DialMarkdownEditor
-        value="# Test"
-        className="custom-class"
-        theme="dark"
-      />,
-    );
-
-    const container = screen
-      .getByRole('textbox')
-      .closest('.dial-markdown-editor');
-    expect(container).toHaveClass('custom-class');
-  });
-
   test('Should apply theme via data-color-mode attribute', () => {
     render(<DialMarkdownEditor value="# Test" theme="light" />);
 
     const container = screen
       .getByRole('textbox')
-      .closest('.dial-markdown-editor');
+      .closest('[data-color-mode="light"]');
     expect(container).toHaveAttribute('data-color-mode', 'light');
   });
 

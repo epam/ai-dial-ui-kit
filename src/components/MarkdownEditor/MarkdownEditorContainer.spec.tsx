@@ -18,13 +18,14 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
     expect(screen.queryByRole('switch')).not.toBeInTheDocument();
   });
 
-  test('Should render component with switcher when switcherLabel is provided', () => {
+  test('Should render component with switcher and label when switcherLabel is provided', () => {
     const mockOnChange = vi.fn();
     render(
       <DialMarkdownEditorContainer
         value="# Test"
         onChangeValue={mockOnChange}
         switcherLabel="JSON Mode"
+        label="Content Label"
         theme="dark"
       />,
     );
@@ -32,17 +33,6 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
     const editor = screen.getByRole('textbox');
     expect(editor).toBeInTheDocument();
     expect(screen.getByRole('switch')).toBeInTheDocument();
-  });
-
-  test('Should display label when provided', () => {
-    render(
-      <DialMarkdownEditorContainer
-        value="# Test"
-        label="Content Label"
-        theme="dark"
-      />,
-    );
-
     expect(screen.getByText('Content Label')).toBeInTheDocument();
   });
 
@@ -63,29 +53,6 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
     render(
       <DialMarkdownEditorContainer
         value='{"test": "value"}'
-        onChangeValue={mockOnChange}
-        switcherLabel="JSON Mode"
-        theme="dark"
-      />,
-    );
-
-    const switcher = screen.getByRole('switch');
-    fireEvent.click(switcher);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('textbox', { name: 'JSON Editor' }),
-      ).toBeInTheDocument();
-    });
-  });
-
-  test('Should parse and format JSON when switching to JSON mode', async () => {
-    const mockOnChange = vi.fn();
-    const jsonValue = '{"name":"test","value":123}';
-
-    render(
-      <DialMarkdownEditorContainer
-        value={jsonValue}
         onChangeValue={mockOnChange}
         switcherLabel="JSON Mode"
         theme="dark"

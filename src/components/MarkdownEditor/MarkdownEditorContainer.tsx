@@ -12,7 +12,7 @@ export interface DialMarkdownEditorContainerProps {
   onChangeValue?: (value: string) => void;
   label?: React.ReactNode;
   headerContent?: React.ReactNode;
-  switcherLabel?: string;
+  switcherLabel?: React.ReactNode;
   height?: number;
   theme?: 'light' | 'dark';
   onValidateJSON?: OnValidate;
@@ -91,10 +91,6 @@ export const DialMarkdownEditorContainer: FC<
     [onChangeValue],
   );
 
-  const onChangeContentMode = useCallback((value: boolean) => {
-    setIsJSONContentMode(value);
-  }, []);
-
   const onChangeJsonValue = useCallback(
     (v: string | undefined) => {
       setJsonValue(v);
@@ -148,7 +144,7 @@ export const DialMarkdownEditorContainer: FC<
                       isOn={isJSONContentMode}
                       label={switcherLabel}
                       switchId={switchId}
-                      onChange={onChangeContentMode}
+                      onChange={(value: boolean) => setIsJSONContentMode(value)}
                     />
                   </label>
                 )}
@@ -157,7 +153,7 @@ export const DialMarkdownEditorContainer: FC<
           )}
           {showSwitcher && isJSONContentMode ? (
             <div
-              className="border border-primary rounded dial-json-editor-container"
+              className="border border-primary rounded"
               style={{ height: `${height}px` }}
             >
               {DialJsonEditorComponent && (
