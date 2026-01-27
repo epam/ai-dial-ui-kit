@@ -193,6 +193,7 @@ export interface GridOptions
   filterable?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
+  showFiles?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
