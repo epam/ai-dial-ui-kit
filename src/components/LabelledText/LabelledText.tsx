@@ -4,8 +4,8 @@ import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
 export interface DialLabelledTextProps {
-  label: string;
-  text?: string;
+  label: ReactNode;
+  text?: ReactNode;
   tooltip?: string;
   children?: ReactNode;
   postfix?: ReactNode;

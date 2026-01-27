@@ -2,8 +2,8 @@ import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { variantClassMap } from './constants';
 
 export const getButtonClassNames = (
-  variant: ButtonVariant = ButtonVariant.Primary,
-  appearance: ButtonAppearance = ButtonAppearance.Solid,
+  variant = ButtonVariant.Primary,
+  appearance = ButtonAppearance.Solid,
 ): string => {
   const existingVariant = variantClassMap[variant]?.[appearance];
   if (!existingVariant) {
