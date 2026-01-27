@@ -32,6 +32,7 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 
 // Buttons
 export { DialButton } from './components/Button/Button';
+export { DialIconButton } from './components/IconButton/IconButton';
 export {
   DialErrorButton,
   DialNeutralButton,
@@ -39,6 +40,15 @@ export {
   DialGhostButton,
   DialLinkButton,
 } from './components/Button/ButtonWrappers';
+export {
+  DialErrorIconButton,
+  DialGhostIconButton,
+  DialNeutralIconButton,
+  DialPrimaryIconButton,
+  DialSecondaryIconButton,
+  DialSuccessIconButton,
+  DialTertiaryIconButton,
+} from './components/IconButton/IconButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
@@ -145,6 +155,7 @@ export {
   type DialFileManagerActionsRef,
   type DialFileAcceptType,
 } from './models/file-manager';
+export { GridSelectionMode } from './models/selection-mode';
 
 // Utils
 export { mergeClasses } from './utils/merge-classes';

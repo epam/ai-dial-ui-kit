@@ -1,6 +1,5 @@
 .dial-base-button {
   @apply flex flex-row items-center gap-x-2 justify-center;
-  @apply min-w-[38px];
   @apply rounded border border-solid border-transparent;
 }
 
@@ -27,6 +26,13 @@
 
 .dial-primary-ghost-button {
   @apply text-accent-primary;
+
+  &.dial-icon-button {
+    @apply text-secondary;
+    &:hover {
+      @apply text-accent-primary;
+    }
+  }
 
   &:hover,
   &:focus {

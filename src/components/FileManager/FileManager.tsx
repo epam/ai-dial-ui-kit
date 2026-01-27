@@ -9,7 +9,7 @@ import {
   type Ref,
   useImperativeHandle,
 } from 'react';
-import type { CellClickedEvent, ColDef } from 'ag-grid-community';
+import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import {
   containerBaseClassName,
   mainGridClassName,
@@ -106,6 +106,7 @@ import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
+import type { GridSelectionMode } from '@/models/selection-mode.ts';
 
 type GridRow = FileManagerGridRow;
 
@@ -195,6 +196,7 @@ export interface GridOptions
   dateOptions?: Intl.DateTimeFormatOptions;
   showFiles?: boolean;
   visibleColumns?: FileManagerColumnKey[];
+  selectionMode?: GridSelectionMode;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -278,6 +280,7 @@ export interface DialFileManagerProps {
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
+  onGridApiChange?: (api: GridApi) => void;
 
   onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
   onMoveToFiles?: (
@@ -491,6 +494,7 @@ export const DialFileManagerView: FC = () => {
     handleSearchChange,
     handleTreeItemClick,
     handleTableRowClick,
+    onGridApiChange,
 
     handleOpenDestinationFolderPopup,
     handleCloseDestinationFolderPopup,
@@ -853,6 +857,7 @@ export const DialFileManagerView: FC = () => {
     onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
     sharedWithMeIds,
+    onClearSelection: clearSelection,
   });
 
   const renderToolbar = useCallback(() => {
@@ -1136,6 +1141,7 @@ export const DialFileManagerView: FC = () => {
                 getContextMenuItems={getGridContextMenuItems}
                 withoutHeaderBorders={isCompactView}
                 selectionOnHover={!isCompactView}
+                onGridApiChange={onGridApiChange}
                 className={classNames(
                   isDragging
                     ? 'border border-dashed border-accent-primary'

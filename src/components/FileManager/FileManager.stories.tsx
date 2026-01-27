@@ -1511,3 +1511,65 @@ export const WithCustomColumns: Story = {
     },
   },
 };
+
+const ControlledSelectionComponent = (args: DialFileManagerProps) => {
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(
+    new Set(['All files/Design/Icons/SVG/24px/logo.svg']),
+  );
+
+  const selectLogo = () =>
+    setSelectedPaths(new Set(['All files/Design/Icons/SVG/24px/logo.svg']));
+
+  const selectMultiple = () =>
+    setSelectedPaths(
+      new Set([
+        'All files/Design/Icons/SVG/24px/logo.svg',
+        'All files/Design/Icons/SVG/24px/alert.svg',
+      ]),
+    );
+
+  const clearSelection = () => setSelectedPaths(new Set());
+
+  return (
+    <div className="h-[640px] flex flex-col gap-3">
+      <div className="flex gap-2 px-2">
+        <DialPrimaryButton label="Select logo.svg" onClick={selectLogo} />
+        <DialPrimaryButton label="Select multiple" onClick={selectMultiple} />
+        <DialPrimaryButton label="Clear selection" onClick={clearSelection} />
+      </div>
+      <DialFileManager
+        {...args}
+        path="All files/Design/Icons/SVG/24px"
+        items={itemsMock}
+        selectedPaths={selectedPaths}
+        onSelectedPathsChange={setSelectedPaths}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          filterable: false,
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
+          ]),
+        }}
+      />
+    </div>
+  );
+};
+
+export const ControlledSelection: Story = {
+  render: ControlledSelectionComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Grid selection is fully controlled by the parent. Use the buttons above to change the selected rows; the File Manager reflects the controlled `selectedPaths` state.',
+      },
+    },
+  },
+};
