@@ -12,7 +12,7 @@ import {
 } from './constants';
 
 export interface DialRadioGroupProps {
-  fieldTitle?: string;
+  fieldLabel?: string;
   elementId: string;
   disabled?: boolean;
   radioButtons: RadioButtonWithContent[];
@@ -41,7 +41,7 @@ export interface DialRadioGroupProps {
  * @example
  * ```tsx
  * <DialRadioGroup
- *   fieldTitle="Delivery"
+ *   fieldLabel="Delivery"
  *   elementId="delivery"
  *   orientation={RadioGroupOrientation.Column}
  *   activeRadioButton="courier"
@@ -53,7 +53,7 @@ export interface DialRadioGroupProps {
  * />
  * ```
  *
- * @param [fieldTitle] - Optional label rendered by `DialField`
+ * @param [fieldLabel] - Optional label rendered by `DialField`
  * @param elementId - Name for the underlying radio group; also used for input `name`
  * @param [radioClassName] - Additional classes applied to each radio input
  * @param [inputContainerClassName] - Additional classes applied to each radio input's container
@@ -72,7 +72,7 @@ export interface DialRadioGroupProps {
  * @param onChange - Callback fired with the selected radio id
  */
 export const DialRadioGroup: FC<DialRadioGroupProps> = ({
-  fieldTitle,
+  fieldLabel,
   radioClassName,
   containerClassName,
   selectedItemClassName,
@@ -93,7 +93,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
   return (
     <DialFormItem
       elementId={elementId}
-      label={fieldTitle}
+      label={fieldLabel}
       labelClassName={
         groupLabelClassName ? groupLabelClassName : labelClassName
       }
@@ -102,7 +102,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
     >
       <div
         role="radiogroup"
-        aria-label={fieldTitle}
+        aria-label={fieldLabel}
         aria-disabled={disabled || undefined}
         className={mergeClasses(
           optionsWrapperBaseClassName,

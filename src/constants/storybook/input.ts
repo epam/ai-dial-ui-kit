@@ -6,7 +6,7 @@ import type {
 import type { ArgTypes } from '@storybook/react';
 
 export const fieldControlArgTypes: Partial<ArgTypes<FieldControlProps>> = {
-  fieldTitle: {
+  fieldLabel: {
     control: { type: 'text' as const },
     description: 'The label text to display above the input field',
   },

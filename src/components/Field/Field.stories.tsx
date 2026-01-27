@@ -14,7 +14,7 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
+    fieldLabel: {
       control: { type: 'text' },
       description: 'The title/label text to display for the field',
     },
@@ -32,7 +32,7 @@ const meta = {
     },
   },
   args: {
-    fieldTitle: 'Field Label',
+    fieldLabel: 'Field Label',
     htmlFor: 'field-input',
     optional: false,
     optionalText: undefined,
@@ -53,14 +53,14 @@ type Story = StoryObj<typeof meta>;
 
 export const BasicLabel: Story = {
   args: {
-    fieldTitle: 'Email Address',
+    fieldLabel: 'Email Address',
     htmlFor: 'email-input',
   },
 };
 
 export const OptionalField: Story = {
   args: {
-    fieldTitle: 'Phone Number',
+    fieldLabel: 'Phone Number',
     htmlFor: 'phone-input',
     optional: true,
   },
@@ -68,16 +68,16 @@ export const OptionalField: Story = {
 
 export const WithCustomOptionalText: Story = {
   args: {
-    fieldTitle: 'Priority Level',
+    fieldLabel: 'Priority Level',
     htmlFor: 'priority-input',
     optional: true,
     optionalText: '(Not Required)',
   },
 };
 
-export const LongFieldTitle: Story = {
+export const LongFieldLabel: Story = {
   args: {
-    fieldTitle:
+    fieldLabel:
       'This is a very long field title that might wrap to multiple lines',
     htmlFor: 'long-title-input',
     optional: true,

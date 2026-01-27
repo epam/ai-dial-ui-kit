@@ -15,24 +15,19 @@ export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
  * ```tsx
  * <DialPasswordInputField
  *   elementId="password"
- *   fieldTitle="Password"
+ *   fieldLabel="Password"
  *   value={password}
  *   onChange={setPassword}
  *   errorText={error}
  *   optional={false}
  * />
  * ```
- *
- * @param elementId - Unique identifier for the input element
- * @param [fieldTitle] - The label text for the field
- * @param [value] - The current value of the input
+ * @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
  * @param [onChange] - Callback function called when the input value changes
- * @param [errorText] - Error message to display below the input
- * @param [optional=false] - Whether the field is optional
- * @param [className] - Custom CSS class for the input element
  */
 export const DialPasswordInputField: FC<DialPasswordInputFieldProps> = ({
-  fieldTitle,
+  fieldLabel,
   optional,
   elementClassName,
   elementId,
@@ -42,7 +37,7 @@ export const DialPasswordInputField: FC<DialPasswordInputFieldProps> = ({
   return (
     <div className="flex flex-col">
       <DialFieldLabel
-        fieldTitle={fieldTitle}
+        fieldLabel={fieldLabel}
         optional={optional}
         htmlFor={elementId}
       />

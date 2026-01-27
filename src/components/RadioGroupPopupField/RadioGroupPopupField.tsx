@@ -22,7 +22,7 @@ import { PopupSize } from '@/types/popup';
 import { RadioGroupOrientation } from '@/types/radio-group';
 
 export interface RadioGroupPopupFieldProps
-  extends Pick<DialFieldLabelProps, 'fieldTitle' | 'htmlFor'>,
+  extends Pick<DialFieldLabelProps, 'fieldLabel' | 'htmlFor'>,
     Omit<DialInputPopupProps, 'onOpen' | 'children'>,
     Pick<DialRadioGroupProps, 'radioButtons'>,
     Pick<DialPopupProps, 'onClose' | 'portalId' | 'size'> {
@@ -50,7 +50,7 @@ export interface RadioGroupPopupFieldProps
  * @example
  * ```tsx
  * <DialRadioGroupPopupField
- *   fieldTitle="Status"
+ *   fieldLabel="Status"
  *   htmlFor="status"
  *   header="Select status"
  *   emptyValueText="None"
@@ -68,7 +68,7 @@ export interface RadioGroupPopupFieldProps
  * />
  * ```
  *
- * @param fieldTitle - Field label text displayed above the input
+ * @param fieldLabel - Field label text displayed above the input
  * @param htmlFor - Associates the label with an input id for a11y
  * @param [readonly] - When true, the popup cannot be opened
  * @param [selectedValue] - Current value id used to resolve the displayed option name
@@ -90,7 +90,7 @@ export interface RadioGroupPopupFieldProps
  * @param [size=PopupSize.Md] - Size of the popup
  */
 export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
-  fieldTitle,
+  fieldLabel,
   htmlFor,
   disabled,
   selectedValue,
@@ -130,7 +130,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
 
   return (
     <div className="flex flex-col">
-      <DialFieldLabel fieldTitle={fieldTitle} htmlFor={htmlFor} />
+      <DialFieldLabel fieldLabel={fieldLabel} htmlFor={htmlFor} />
       <DialInputPopup
         disabled={disabled}
         open={isOpen}

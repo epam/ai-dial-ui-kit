@@ -16,7 +16,7 @@ describe('Dial UI Kit :: DialRadioGroup', () => {
   test('renders radiogroup with accessible name and radios', () => {
     render(
       <DialRadioGroup
-        fieldTitle="Attachments"
+        fieldLabel="Attachments"
         elementId="attachments"
         radioButtons={radios}
         activeRadioButton="none"

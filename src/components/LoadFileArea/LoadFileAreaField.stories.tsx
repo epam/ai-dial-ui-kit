@@ -26,7 +26,7 @@ const meta: Meta<typeof DialLoadFileAreaField> = {
     },
   },
   argTypes: {
-    fieldTitle: {
+    fieldLabel: {
       control: 'text',
       description: 'Label for the file upload field',
     },
@@ -88,7 +88,7 @@ const InteractiveLoadFileAreaField = (args: DialLoadFileAreaFieldProps) => {
 export const Empty: Story = {
   render: (args) => <InteractiveLoadFileAreaField {...args} />,
   args: {
-    fieldTitle: 'Documents',
+    fieldLabel: 'Documents',
     elementId: 'upload-docs',
     acceptTypes: 'application/pdf, application/txt, image/svg+xml',
     multiple: true,

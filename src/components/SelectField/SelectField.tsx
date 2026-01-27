@@ -27,7 +27,7 @@ export interface DialSelectFieldProps
  * ```tsx
  * <DialSelectField
  *   elementId="transport"
- *   fieldTitle="Transport"
+ *   fieldLabel="Transport"
  *   options={[
  *     { value: 'SSE', label: 'Server-Sent Events (SSE)' },
  *     { value: 'WS', label: 'WebSocket' },
@@ -41,15 +41,15 @@ export interface DialSelectFieldProps
  * - {@link DialFormItemProps} for form item props, except for htmlFor
  * - {@link DialFieldLabelProps} for label props, except for label, children, value
  *
- * @param selectClassName CSS class for the select element
- * @param containerClassName CSS class for the form item container
+ * @param [selectClassName] CSS class for the select element
+ * @param [containerClassName] CSS class for the form item container
  * @param emptyStateTitle Title to show when there are no options
  * @param restSelectProps All other DialSelect props
  * @param restFormItemProps All other DialFormItem props
  * ```
  */
 export const DialSelectField: FC<DialSelectFieldProps> = ({
-  fieldTitle,
+  fieldLabel,
   optional,
   captionDescription,
   containerClassName,
@@ -89,7 +89,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   return (
     <DialFormItem
       elementId={elementId}
-      label={fieldTitle}
+      label={fieldLabel}
       optional={optional}
       description={description}
       error={error}

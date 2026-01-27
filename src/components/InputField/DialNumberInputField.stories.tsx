@@ -67,7 +67,7 @@ const meta = {
     },
   },
   args: {
-    fieldTitle: 'Number Field',
+    fieldLabel: 'Number Field',
     elementId: 'number-input',
     optional: false,
     placeholder: 'Enter a number',
@@ -88,7 +88,7 @@ type Story = StoryObj<typeof meta>;
 
 export const BasicNumberField: Story = {
   args: {
-    fieldTitle: 'Age',
+    fieldLabel: 'Age',
     elementId: 'age-input',
     placeholder: 'Enter your age',
   },
@@ -96,7 +96,7 @@ export const BasicNumberField: Story = {
 
 export const WithValue: Story = {
   args: {
-    fieldTitle: 'Price',
+    fieldLabel: 'Price',
     elementId: 'price-input',
     placeholder: 'Enter price',
     value: 29.99,
@@ -105,7 +105,7 @@ export const WithValue: Story = {
 
 export const OptionalField: Story = {
   args: {
-    fieldTitle: 'Discount Percentage',
+    fieldLabel: 'Discount Percentage',
     elementId: 'discount-input',
     placeholder: 'Enter discount %',
     optional: true,
@@ -114,7 +114,7 @@ export const OptionalField: Story = {
 
 export const WithError: Story = {
   args: {
-    fieldTitle: 'Budget',
+    fieldLabel: 'Budget',
     elementId: 'budget-input',
     placeholder: 'Enter budget amount',
     value: -100,
@@ -125,7 +125,7 @@ export const WithError: Story = {
 
 export const DisabledField: Story = {
   args: {
-    fieldTitle: 'System Generated ID',
+    fieldLabel: 'System Generated ID',
     elementId: 'id-input',
     value: 12345,
     disabled: true,
@@ -134,7 +134,7 @@ export const DisabledField: Story = {
 
 export const ReadOnlyField: Story = {
   args: {
-    fieldTitle: 'Total Amount',
+    fieldLabel: 'Total Amount',
     elementId: 'total-input',
     value: 150.75,
     readonly: true,
@@ -143,7 +143,7 @@ export const ReadOnlyField: Story = {
 
 export const ReadOnlyWithEmptyValue: Story = {
   args: {
-    fieldTitle: 'Score',
+    fieldLabel: 'Score',
     elementId: 'score-input',
     readonly: true,
     defaultEmptyText: 'Not calculated yet',
@@ -152,7 +152,7 @@ export const ReadOnlyWithEmptyValue: Story = {
 
 export const DecimalHandling: Story = {
   args: {
-    fieldTitle: 'Precision Value',
+    fieldLabel: 'Precision Value',
     elementId: 'precision-input',
     placeholder: 'Enter decimal value',
     value: 0.005,
@@ -182,14 +182,14 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="basic-no-value"
-            fieldTitle="Basic Field"
+            fieldLabel="Basic Field"
             placeholder="Enter number"
           />
         </div>
         <div>
           <InteractiveNumberInputField
             elementId="hover-no-value"
-            fieldTitle="Hover Field"
+            fieldLabel="Hover Field"
             placeholder="Enter number"
             elementContainerClassName="dial-input-for-hover"
           />
@@ -197,7 +197,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="focus-no-value"
-            fieldTitle="Focus Field"
+            fieldLabel="Focus Field"
             placeholder="Enter number"
             elementContainerClassName="dial-input-for-focus"
           />
@@ -205,7 +205,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="disabled-no-value"
-            fieldTitle="Disabled Field"
+            fieldLabel="Disabled Field"
             placeholder="Enter number"
             disabled={true}
           />
@@ -213,7 +213,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="readonly-no-value"
-            fieldTitle="Readonly Field"
+            fieldLabel="Readonly Field"
             readonly={true}
             defaultEmptyText="No value set"
           />
@@ -223,7 +223,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="basic-value"
-            fieldTitle="Basic Field"
+            fieldLabel="Basic Field"
             placeholder="Enter number"
             value={42.5}
           />
@@ -231,7 +231,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="hover-value"
-            fieldTitle="Hover Field"
+            fieldLabel="Hover Field"
             placeholder="Enter number"
             value={42.5}
             elementContainerClassName="dial-input-for-hover"
@@ -240,7 +240,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="focus-value"
-            fieldTitle="Focus Field"
+            fieldLabel="Focus Field"
             placeholder="Enter number"
             value={42.5}
             elementContainerClassName="dial-input-for-focus"
@@ -249,7 +249,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="disabled-value"
-            fieldTitle="Disabled Field"
+            fieldLabel="Disabled Field"
             placeholder="Enter number"
             value={123}
             disabled={true}
@@ -258,7 +258,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="readonly-value"
-            fieldTitle="Readonly Field"
+            fieldLabel="Readonly Field"
             value={99.99}
             readonly={true}
           />
@@ -268,7 +268,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="basic-no-value-icon"
-            fieldTitle="Basic with Icon"
+            fieldLabel="Basic with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
           />
@@ -276,7 +276,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="hover-no-value-icon"
-            fieldTitle="Hover with Icon"
+            fieldLabel="Hover with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
             elementContainerClassName="dial-input-for-hover"
@@ -285,7 +285,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="focus-no-value-icon"
-            fieldTitle="Focus with Icon"
+            fieldLabel="Focus with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
             elementContainerClassName="dial-input-for-focus"
@@ -294,7 +294,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="disabled-no-value-icon"
-            fieldTitle="Disabled with Icon"
+            fieldLabel="Disabled with Icon"
             placeholder="Enter number"
             iconBefore={<IconSearch size={16} />}
             disabled={true}
@@ -303,7 +303,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="readonly-no-value-icon"
-            fieldTitle="Readonly with Icon"
+            fieldLabel="Readonly with Icon"
             readonly={true}
             defaultEmptyText="No value set"
           />
@@ -313,7 +313,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="basic-value-icon"
-            fieldTitle="Basic with Icon"
+            fieldLabel="Basic with Icon"
             placeholder="Enter number"
             value={0.005}
             iconBefore={<IconSearch size={16} />}
@@ -322,7 +322,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="hover-value-icon"
-            fieldTitle="Hover with Icon"
+            fieldLabel="Hover with Icon"
             placeholder="Enter number"
             value={0.005}
             iconBefore={<IconSearch size={16} />}
@@ -332,7 +332,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="focus-value-icon"
-            fieldTitle="Focus with Icon"
+            fieldLabel="Focus with Icon"
             placeholder="Enter number"
             value={0.005}
             iconBefore={<IconSearch size={16} />}
@@ -342,7 +342,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="disabled-value-icon"
-            fieldTitle="Disabled with Icon"
+            fieldLabel="Disabled with Icon"
             placeholder="Enter number"
             value={999}
             iconBefore={<IconSearch size={16} />}
@@ -352,7 +352,7 @@ export const AllVariants: Story = {
         <div>
           <InteractiveNumberInputField
             elementId="readonly-value-icon"
-            fieldTitle="Readonly with Icon"
+            fieldLabel="Readonly with Icon"
             value={0.005}
             readonly={true}
           />
@@ -376,7 +376,7 @@ export const AllVariants: Story = {
 
 export const WithMinMax: Story = {
   args: {
-    fieldTitle: 'Age',
+    fieldLabel: 'Age',
     elementId: 'age-input',
     placeholder: 'Enter your age (18-120)',
     min: 18,
@@ -395,7 +395,7 @@ export const WithMinMax: Story = {
 
 export const WithMinOnly: Story = {
   args: {
-    fieldTitle: 'Temperature',
+    fieldLabel: 'Temperature',
     elementId: 'temp-input',
     placeholder: 'Enter temperature (min: -273.15°C)',
     min: -273.15,
@@ -412,7 +412,7 @@ export const WithMinOnly: Story = {
 
 export const WithMaxOnly: Story = {
   args: {
-    fieldTitle: 'Percentage',
+    fieldLabel: 'Percentage',
     elementId: 'percentage-input',
     placeholder: 'Enter percentage (max: 100%)',
     max: 100,

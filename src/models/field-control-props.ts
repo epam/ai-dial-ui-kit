@@ -3,11 +3,11 @@ import type { ReactNode } from 'react';
 /**
  * Base properties for field controls providing label and optional status
  *
- * @param fieldTitle - The label text to display above the input field
+ * @param fieldLabel - The label text to display above the input field
  * @param optional - Whether the field is optional (displays "(Optional)" indicator when true)
  */
 export interface FieldControlProps {
-  fieldTitle?: string;
+  fieldLabel?: ReactNode;
   optional?: boolean;
 }
 

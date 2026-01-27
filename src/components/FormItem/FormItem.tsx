@@ -163,7 +163,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
         >
           <DialFieldLabel
             htmlFor={elementId}
-            fieldTitle={label}
+            fieldLabel={label}
             optional={optional}
             optionalText={optionalText}
             className={mergeClasses(

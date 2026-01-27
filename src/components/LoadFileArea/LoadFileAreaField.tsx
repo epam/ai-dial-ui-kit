@@ -7,7 +7,7 @@ import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
-  fieldTitle: string;
+  fieldLabel: string;
   elementId: string;
   deleteAllButtonLabel?: string;
   addButtonLabel?: string;
@@ -26,7 +26,7 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
  * @example
  * ```tsx
  * <DialLoadFileAreaField
- *   fieldTitle="Attachments"
+ *   fieldLabel="Attachments"
  *   elementId="attachments"
  *   files={uploadedFiles}
  *   onChange={setUploadedFiles}
@@ -38,26 +38,18 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
  *   addButtonLabel="Add more"
  * />
  * ```
- *
- * @param {DialLoadFileAreaFieldProps} props - The properties for the file area field component.
- * @param {(files: File[]) => void} props.onChange - Callback fired when files are added or removed.
- * @param {string} props.fieldTitle - The label displayed above the file upload area.
- * @param {string} props.elementId - The unique `id` used for accessibility and input association.
- * @param {File[]} [props.files] - The list of currently selected or uploaded files.
- * @param {number} [props.maxFilesCount] - The maximum number of files allowed.
- * @param {string} [props.fileFormatError] - Error message shown for invalid file formats.
- * @param {string} [props.fileCountError] - Error message shown when exceeding the file count limit.
- * @param {boolean} [props.multiple=true] - Whether multiple file uploads are allowed.
- * @param {string} [props.acceptTypes] - Comma-separated list of allowed MIME types or file extensions.
- * @param {string} [props.deleteAllButtonLabel] - Label for the "Delete All" button shown when files exist.
- * @param {string} [props.addButtonLabel] - Label for the "Add" button used to select additional files.
- * @param {object} [props.props] - Additional props passed to the underlying `DialLoadFileArea`.
+ * @params - Component properties extending:
+ * - {@link DialLoadFileAreaProps}
+ * @param fieldLabel - The label displayed above the file upload area.
+ * @param elementId - The unique `id` used for accessibility and input association.
+ * @param [deleteAllButtonLabel] - Label for the "Delete All" button shown when files exist.
+ * @param [addButtonLabel] - Label for the "Add" button used to select additional files.
  *
  * @returns {JSX.Element} A file upload field with label, action buttons, and a drag-and-drop area.
  */
 export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
   onChange,
-  fieldTitle,
+  fieldLabel,
   elementId,
   files,
   maxFilesCount,
@@ -110,7 +102,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
     <div className="h-full flex flex-col">
       <div className="flex justify-between items-center pb-1 min-h-[42px]">
         <DialFieldLabel
-          fieldTitle={`${fieldTitle}: ${multiple ? files?.length || 0 : ''}`}
+          fieldLabel={`${fieldLabel}: ${multiple ? files?.length || 0 : ''}`}
           htmlFor={elementId}
         />
         {multiple && !!files?.length && (

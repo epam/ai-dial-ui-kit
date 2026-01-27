@@ -1,17 +1,19 @@
+import { IconInfoCircle } from '@tabler/icons-react';
+import type { FC, LabelHTMLAttributes } from 'react';
+
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import { IconInfoCircle } from '@tabler/icons-react';
-import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
+import type { FieldControlProps } from '@/models/field-control-props';
 
 type NativeLabelProps = Omit<
   LabelHTMLAttributes<HTMLLabelElement>,
   'children' | 'defaultValue' | 'onChange'
 >;
 
-export interface DialFieldLabelProps extends NativeLabelProps {
-  fieldTitle?: ReactNode;
-  optional?: boolean;
+export interface DialFieldLabelProps
+  extends NativeLabelProps,
+    FieldControlProps {
   optionalText?: string;
   description?: string;
 }
@@ -22,23 +24,25 @@ export interface DialFieldLabelProps extends NativeLabelProps {
  * @example
  * ```tsx
  * // Basic field label
- * <DialFieldLabel htmlFor="email-input" fieldTitle="Email Address" />
+ * <DialFieldLabel htmlFor="email-input" fieldLabel="Email Address" />
  * ```
  *
- * @param [fieldTitle] - The title/label text to display for the field
- * @param [optional=false] - Whether the field is optional (displays "(Optional)" text if optionalText is not provided)
+ * @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
+ * - {@link LabelHTMLAttributes<HTMLLabelElement>} - Form item properties (label, error, description, etc.)
+ *
  * @param [optionalText="(Optional)"] - Custom text for optional indicator
  * @param [description] - Additional description text, displayed below the label.
  */
 export const DialFieldLabel: FC<DialFieldLabelProps> = ({
-  fieldTitle,
+  fieldLabel,
   optional,
   optionalText,
   className,
   description,
   ...props
 }) => {
-  if (!fieldTitle) return null;
+  if (!fieldLabel) return null;
 
   return (
     <label
@@ -49,10 +53,10 @@ export const DialFieldLabel: FC<DialFieldLabelProps> = ({
         !className?.includes('mb') && 'mb-2',
       )}
     >
-      {typeof fieldTitle === 'string' ? (
-        <span className="min-h-4">{fieldTitle}</span>
+      {typeof fieldLabel === 'string' ? (
+        <span className="min-h-4">{fieldLabel}</span>
       ) : (
-        fieldTitle
+        fieldLabel
       )}
       {optional && <span>{optionalText ?? '(Optional)'}</span>}
       {description && (

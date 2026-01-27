@@ -38,7 +38,7 @@ export interface DialInputFieldProps
  * ```tsx
  * <DialInputField
  *   elementId="username"
- *   fieldTitle="Username"
+ *   fieldLabel="Username"
  *   type="text"
  *   placeholder="Enter username"
  *   value="john_doe"
@@ -47,7 +47,7 @@ export interface DialInputFieldProps
  * ```
  *
  * @params - Component properties extending:
- * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
  * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
@@ -73,7 +73,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
 
   // other props
   elementId,
-  fieldTitle,
+  fieldLabel,
   errorText,
   elementClassName,
   elementContainerClassName,
@@ -83,7 +83,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
 }) => {
   return (
     <DialFormItem
-      label={label ?? fieldTitle}
+      label={label ?? fieldLabel}
       error={error ?? errorText}
       optionalText={optionalText}
       optional={optional}
@@ -120,7 +120,7 @@ export interface DialNumberInputFieldProps
  * ```tsx
  * <DialNumberInputField
  *   elementId="age"
- *   fieldTitle="Age"
+ *   fieldLabel="Age"
  *   placeholder="Enter your age"
  *   value={25}
  *   onChange={(value) => setAge(value)}
@@ -128,7 +128,7 @@ export interface DialNumberInputFieldProps
  * ```
  *
  * @params - Component properties extending:
- * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
  * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
@@ -173,7 +173,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * ```tsx
  * <DialTextInputField
  *   elementId="name"
- *   fieldTitle="Full Name"
+ *   fieldLabel="Full Name"
  *   placeholder="Enter your full name"
  *   value="John Doe"
  *   onChange={(value) => setName(value)}
@@ -181,7 +181,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * ```
  *
  * @params - Component properties extending:
- * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
  *

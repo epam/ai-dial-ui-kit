@@ -40,7 +40,7 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
+    fieldLabel: {
       control: 'text',
       description: 'The label text for the field',
     },
@@ -90,7 +90,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: InteractiveTextAreaField,
   args: {
-    fieldTitle: 'Description',
+    fieldLabel: 'Description',
     elementId: 'default-textarea-field',
     placeholder: 'Enter your description here...',
   },
@@ -99,7 +99,7 @@ export const Default: Story = {
 export const WithValue: Story = {
   render: InteractiveTextAreaField,
   args: {
-    fieldTitle: 'Comments',
+    fieldLabel: 'Comments',
     elementId: 'textarea-field-with-value',
     placeholder: 'Enter your comments...',
     value: 'This is some default text in the textarea field',
@@ -109,7 +109,7 @@ export const WithValue: Story = {
 export const Optional: Story = {
   render: InteractiveTextAreaField,
   args: {
-    fieldTitle: 'Additional Notes',
+    fieldLabel: 'Additional Notes',
     elementId: 'optional-textarea-field',
     placeholder: 'Enter additional notes (optional)...',
     optional: true,
@@ -119,7 +119,7 @@ export const Optional: Story = {
 export const WithError: Story = {
   render: InteractiveTextAreaField,
   args: {
-    fieldTitle: 'Message',
+    fieldLabel: 'Message',
     elementId: 'error-textarea-field',
     placeholder: 'Enter your message...',
     value: 'This text has validation errors',
@@ -131,7 +131,7 @@ export const WithError: Story = {
 export const Disabled: Story = {
   render: InteractiveTextAreaField,
   args: {
-    fieldTitle: 'Read-only Information',
+    fieldLabel: 'Read-only Information',
     elementId: 'disabled-textarea-field',
     placeholder: 'This field is disabled',
     value: 'This textarea field is disabled and cannot be edited',
@@ -150,7 +150,7 @@ export const FullParentHeightWithScroll = {
     },
   },
   args: {
-    fieldTitle: 'Detailed Description',
+    fieldLabel: 'Detailed Description',
     elementId: 'full-height-textarea-field',
     placeholder: 'Enter a detailed description...',
     value: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -171,7 +171,7 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 
 export const AllVariants: Story = {
   args: {
-    fieldTitle: 'Description',
+    fieldLabel: 'Description',
     elementId: 'all-variants-textarea-field',
     placeholder: 'Enter your description here...',
   },
@@ -182,7 +182,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveTextAreaField
-            fieldTitle="Description"
+            fieldLabel="Description"
             elementId="default-textarea-field"
             placeholder="Enter your description here..."
           />
@@ -192,7 +192,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Hover</div>
           <InteractiveTextAreaField
-            fieldTitle="Description"
+            fieldLabel="Description"
             elementId="hover-textarea-field"
             placeholder="Enter your description here..."
             elementClassName="dial-textarea-field-for-hover"
@@ -203,7 +203,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Field</div>
           <InteractiveTextAreaField
-            fieldTitle="Description"
+            fieldLabel="Description"
             elementId="field-textarea-field"
             placeholder="Enter your description here..."
             value="This is some text in the textarea field"
@@ -214,7 +214,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Field hover</div>
           <InteractiveTextAreaField
-            fieldTitle="Description"
+            fieldLabel="Description"
             elementId="field-hover-textarea-field"
             placeholder="Enter your description here..."
             elementClassName="dial-textarea-field-for-hover"
@@ -226,7 +226,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Focus</div>
           <InteractiveTextAreaField
-            fieldTitle="Description"
+            fieldLabel="Description"
             elementId="focus-textarea-field"
             placeholder="Enter your description here..."
             elementClassName="dial-textarea-field-for-focus"
@@ -237,7 +237,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Optional</div>
           <InteractiveTextAreaField
-            fieldTitle="Additional Notes"
+            fieldLabel="Additional Notes"
             elementId="optional-textarea-field"
             placeholder="Enter additional notes (optional)..."
             optional={true}
@@ -248,7 +248,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Error</div>
           <InteractiveTextAreaField
-            fieldTitle="Message"
+            fieldLabel="Message"
             elementId="error-textarea-field"
             placeholder="Enter your message..."
             invalid={true}
@@ -261,7 +261,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Disabled</div>
           <InteractiveTextAreaField
-            fieldTitle="Read-only Information"
+            fieldLabel="Read-only Information"
             elementId="disabled-textarea-field"
             placeholder="This field is disabled"
             disabled={true}
@@ -273,7 +273,7 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Read-only</div>
           <InteractiveTextAreaField
-            fieldTitle="Static Content"
+            fieldLabel="Static Content"
             elementId="readonly-textarea-field"
             placeholder="This field is read-only"
             value="This textarea field is read-only"

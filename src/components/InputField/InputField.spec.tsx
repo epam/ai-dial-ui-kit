@@ -7,7 +7,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         placeholder="Enter number"
         value={42.5}
       />,
@@ -22,7 +22,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         value={42.5}
       />,
     );
@@ -35,7 +35,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         optional={true}
       />,
     );
@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         errorText="This field is required"
       />,
     );
@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         onChange={onChange}
       />,
     );
@@ -75,7 +75,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         readonly={true}
         value={99.99}
       />,
@@ -89,7 +89,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         disabled={true}
       />,
     );
@@ -101,7 +101,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         min={0}
         max={100}
       />,
@@ -116,7 +116,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         min={10}
       />,
     );
@@ -130,7 +130,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
       />,
     );
 
@@ -144,7 +144,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         min={0.1}
         max={99.9}
         onChange={onChange}
@@ -164,7 +164,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     render(
       <DialNumberInputField
         elementId="test-number"
-        fieldTitle="Test Number Field"
+        fieldLabel="Test Number Field"
         min={0}
         max={1}
         onChange={onChange}
@@ -183,7 +183,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         placeholder="Enter text"
       />,
     );
@@ -196,7 +196,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         value="Sample text"
       />,
     );
@@ -208,7 +208,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         optional={true}
       />,
     );
@@ -220,7 +220,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         errorText="Invalid input"
       />,
     );
@@ -233,7 +233,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         onChange={onChange}
       />,
     );
@@ -248,7 +248,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         readonly={true}
         defaultEmptyText="No value set"
       />,
@@ -262,7 +262,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         readonly={true}
         value="Readonly text"
       />,
@@ -276,7 +276,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         disabled={true}
       />,
     );
@@ -288,7 +288,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         iconBefore={
           <span role="img" aria-label="Search">
             🔍
@@ -310,7 +310,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         containerClassName="custom-container"
         elementClassName="custom-input"
       />,
@@ -324,7 +324,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     const { container } = render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         prefix="$"
         suffix="USD"
       />,
@@ -338,7 +338,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     render(
       <DialTextInputField
         elementId="test-text"
-        fieldTitle="Test Text Field"
+        fieldLabel="Test Text Field"
         textBeforeInput="https://"
         value="example"
         textAfterInput=".com"

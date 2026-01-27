@@ -5,7 +5,7 @@ import { DialTextAreaField } from './TextAreaField';
 describe('Dial UI Kit :: DialTextAreaField', () => {
   test('Should render with basic props', () => {
     render(
-      <DialTextAreaField fieldTitle="Test Field" elementId="test-textarea" />,
+      <DialTextAreaField fieldLabel="Test Field" elementId="test-textarea" />,
     );
 
     expect(screen.getByText('Test Field')).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
     const handleChange = vi.fn();
     render(
       <DialTextAreaField
-        fieldTitle="Test Field"
+        fieldLabel="Test Field"
         elementId="test-textarea"
         onChange={handleChange}
       />,
@@ -33,7 +33,7 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
   test('Should apply custom CSS classes', () => {
     render(
       <DialTextAreaField
-        fieldTitle="Test Field"
+        fieldLabel="Test Field"
         elementId="test-textarea"
         elementClassName="custom-class"
         containerClassName="container-class"

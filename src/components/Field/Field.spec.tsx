@@ -3,10 +3,10 @@ import { describe, expect, test } from 'vitest';
 import { DialFieldLabel } from './Field';
 
 describe('Dial UI Kit :: DialFieldLabel', () => {
-  test('Should render with fieldTitle and be accessible by htmlFor', () => {
+  test('Should render with fieldLabel and be accessible by htmlFor', () => {
     render(
       <>
-        <DialFieldLabel fieldTitle="Email Address" htmlFor="email-input" />
+        <DialFieldLabel fieldLabel="Email Address" htmlFor="email-input" />
         <input id="email-input" type="text" />
       </>,
     );
@@ -17,7 +17,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     expect(labelElement).toHaveAttribute('for', 'email-input');
   });
 
-  test('Should not render when fieldTitle is not provided', () => {
+  test('Should not render when fieldLabel is not provided', () => {
     const { container } = render(<DialFieldLabel htmlFor="test-input" />);
     expect(container.firstChild).toBeNull();
   });
@@ -25,7 +25,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should display optional text when optional is true', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Optional Field"
+        fieldLabel="Optional Field"
         htmlFor="optional-input"
         optional
       />,
@@ -37,7 +37,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should display custom optionalText when provided', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Custom Optional"
+        fieldLabel="Custom Optional"
         htmlFor="custom-input"
         optional
         optionalText="(Not required)"
@@ -50,7 +50,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should not display optional text when optional is false', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Required Field"
+        fieldLabel="Required Field"
         htmlFor="required-input"
         optional={false}
       />,
@@ -62,7 +62,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should apply custom CSS class', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Styled Field"
+        fieldLabel="Styled Field"
         htmlFor="styled-input"
         className="custom-label-class"
       />,
@@ -73,7 +73,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
 
   test('Should apply default CSS classes', () => {
     render(
-      <DialFieldLabel fieldTitle="Default Field" htmlFor="default-input" />,
+      <DialFieldLabel fieldLabel="Default Field" htmlFor="default-input" />,
     );
     const label = screen.getByText('Default Field').closest('label');
     expect(label).toHaveClass('dial-tiny', 'text-secondary');
@@ -82,7 +82,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should apply default mb-2 class when className does not include mb', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Default Margin"
+        fieldLabel="Default Margin"
         htmlFor="margin-input"
         className="custom-class"
       />,
@@ -94,7 +94,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should not apply mb-2 when className includes mb', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Custom Margin"
+        fieldLabel="Custom Margin"
         htmlFor="custom-margin-input"
         className="mb-4 custom-class"
       />,
@@ -104,9 +104,9 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     expect(label).not.toHaveClass('mb-2');
   });
 
-  test('Should handle empty fieldTitle string', () => {
+  test('Should handle empty fieldLabel string', () => {
     const { container } = render(
-      <DialFieldLabel fieldTitle="" htmlFor="empty-input" />,
+      <DialFieldLabel fieldLabel="" htmlFor="empty-input" />,
     );
     expect(container.firstChild).toBeNull();
   });
@@ -114,7 +114,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should work with both optional and custom optionalText', () => {
     render(
       <DialFieldLabel
-        fieldTitle="Full Featured"
+        fieldLabel="Full Featured"
         htmlFor="full-input"
         optional
         optionalText="(Choose if needed)"
@@ -129,9 +129,9 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     expect(label).toHaveAttribute('for', 'full-input');
   });
 
-  test('returns null when fieldTitle is an empty string', () => {
+  test('returns null when fieldLabel is an empty string', () => {
     const { container } = render(
-      <DialFieldLabel htmlFor="email-input" fieldTitle="" />,
+      <DialFieldLabel htmlFor="email-input" fieldLabel="" />,
     );
     expect(container.firstChild).toBeNull();
   });

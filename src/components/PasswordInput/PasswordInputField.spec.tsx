@@ -4,14 +4,14 @@ import { DialPasswordInputField } from './PasswordInputField';
 
 describe('Dial UI Kit :: DialPasswordInputField', () => {
   it('renders the field title', () => {
-    render(<DialPasswordInputField fieldTitle="Password" elementId="pw" />);
+    render(<DialPasswordInputField fieldLabel="Password" elementId="pw" />);
     expect(screen.getByText('Password')).toBeInTheDocument();
   });
 
   it('renders error text', () => {
     render(
       <DialPasswordInputField
-        fieldTitle="Password"
+        fieldLabel="Password"
         elementId="pw"
         errorText="Error!"
       />,
@@ -21,7 +21,7 @@ describe('Dial UI Kit :: DialPasswordInputField', () => {
 
   it('renders optional label', () => {
     render(
-      <DialPasswordInputField fieldTitle="Password" elementId="pw" optional />,
+      <DialPasswordInputField fieldLabel="Password" elementId="pw" optional />,
     );
     expect(screen.getByText(/optional/i)).toBeInTheDocument();
   });
@@ -30,7 +30,7 @@ describe('Dial UI Kit :: DialPasswordInputField', () => {
     render(
       <DialPasswordInputField
         elementId="pw"
-        fieldTitle="Password"
+        fieldLabel="Password"
         value=""
         onChange={() => null}
       />,

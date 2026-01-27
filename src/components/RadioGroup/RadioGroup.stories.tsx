@@ -17,7 +17,7 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
+    fieldLabel: {
       control: { type: 'text' },
       description: 'Optional label rendered by DialField',
       table: {
@@ -139,7 +139,7 @@ const meta = {
     },
   },
   args: {
-    fieldTitle: 'Attachments',
+    fieldLabel: 'Attachments',
     elementId: 'attachments',
     radioClassName: undefined,
     labelClassName: undefined,
@@ -249,7 +249,7 @@ const ControlledExample = () => {
   const [active, setActive] = useState<'pickup' | 'courier'>('pickup');
   return (
     <DialRadioGroup
-      fieldTitle="Delivery"
+      fieldLabel="Delivery"
       elementId="delivery"
       orientation={RadioGroupOrientation.Column}
       activeRadioButton={active}
@@ -317,7 +317,7 @@ export const ManyOptions: Story = {
   render: ManyOptionsExample,
   args: {
     elementId: 'plans',
-    fieldTitle: 'Plan',
+    fieldLabel: 'Plan',
     orientation: RadioGroupOrientation.Column,
     activeRadioButton: 'team',
     onChange: () => null,
@@ -388,7 +388,7 @@ export const AllClassNames: Story = {
   render: AllClassNamesExample,
   args: {
     elementId: 'styling-demo',
-    fieldTitle: 'CSS Classes Demonstration',
+    fieldLabel: 'CSS Classes Demonstration',
     orientation: RadioGroupOrientation.Column,
     activeRadioButton: 'premium',
     containerClassName:

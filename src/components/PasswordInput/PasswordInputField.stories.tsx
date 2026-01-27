@@ -78,7 +78,7 @@ type Story = StoryObj<typeof DialPasswordInputField>;
 export const Default: Story = {
   args: {
     elementId: 'password',
-    fieldTitle: 'Password',
+    fieldLabel: 'Password',
     value: '',
   },
 };
@@ -86,7 +86,7 @@ export const Default: Story = {
 export const WithError: Story = {
   args: {
     elementId: 'password-error',
-    fieldTitle: 'Password',
+    fieldLabel: 'Password',
     errorText: 'Password is required',
     invalid: true,
   },
@@ -95,7 +95,7 @@ export const WithError: Story = {
 export const Optional: Story = {
   args: {
     elementId: 'password-optional',
-    fieldTitle: 'Password',
+    fieldLabel: 'Password',
     value: '',
     errorText: '',
     optional: true,
@@ -111,7 +111,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveInput
             elementId="password"
-            fieldTitle="Password"
+            fieldLabel="Password"
             placeholder="Placeholder"
           />
         </div>
@@ -121,7 +121,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">With Error</div>
           <InteractiveInput
             elementId="password"
-            fieldTitle="Password"
+            fieldLabel="Password"
             placeholder="Placeholder"
             invalid={true}
             errorText="Password is required"
@@ -133,7 +133,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Optional</div>
           <InteractiveInput
             elementId="password"
-            fieldTitle="Password"
+            fieldLabel="Password"
             placeholder="Placeholder"
             optional={true}
           />

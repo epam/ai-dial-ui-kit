@@ -7,7 +7,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
   test('Should render label and LoadFileArea', () => {
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         emptyTextFirstLine="empty"
         emptyButtonLabel="Browse"
@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
   test('Should render delete and add buttons when files exist', () => {
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         emptyTextFirstLine="empty"
         emptyButtonLabel="Browse"
@@ -44,7 +44,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
     const onChangeFile = vi.fn();
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         maxFilesCount={3}
         files={[new File([''], 'file1.png', { type: 'image/png' })]}
@@ -64,7 +64,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
 
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         files={[new File([''], 'file1.png', { type: 'image/png' })]}
         onChange={vi.fn()}
@@ -88,7 +88,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
   test('Should display empty texts and button label when there is an empty area', () => {
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         files={[]}
         onChange={vi.fn()}
@@ -109,7 +109,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
 
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         files={[]}
         onChange={mockOnChange}
@@ -142,7 +142,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
 
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         files={[]}
         onChange={mockOnChange}
@@ -173,7 +173,7 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
 
     render(
       <DialLoadFileAreaField
-        fieldTitle="Files"
+        fieldLabel="Files"
         elementId="file-input"
         onChange={mockOnChange}
         acceptTypes="image/jpg"

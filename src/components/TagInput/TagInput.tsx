@@ -31,7 +31,7 @@ export interface DialTagInputProps extends FieldControlProps {
  * ```tsx
  * <DialTagInput
  *   elementId="skills"
- *   fieldTitle="Skills"
+ *   fieldLabel="Skills"
  *   placeholder="Add a skill"
  *   initialTags={['React', 'TypeScript']}
  *   optional
@@ -39,19 +39,20 @@ export interface DialTagInputProps extends FieldControlProps {
  * />
  * ```
  *
+ *  @params - Component properties extending:
+ * - {@link FieldControlProps} - Field control properties (fieldLabel, optional)
+ *
  * @param elementId - Unique identifier for the input element.
- * @param [fieldTitle] - Optional label displayed above the input field.
  * @param [initialTags=[]] - Array of tags to be displayed initially.
  * @param [placeholder] - Placeholder text shown when the input is empty.
  * @param [errorText] - Error message displayed below the field when validation fails.
- * @param [optional=false] - Whether the field is optional (renders an “optional” indicator).
  * @param [invalid=false] - Whether the field should be styled as invalid.
  * @param [disabled=false] - Whether the input and remove buttons are disabled.
  * @param [onChange] - Callback fired whenever the tag list changes (tag added or removed).
  */
 export const DialTagInput: FC<DialTagInputProps> = ({
   initialTags = [],
-  fieldTitle,
+  fieldLabel,
   optional,
   elementId,
   placeholder,
@@ -105,7 +106,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   return (
     <div className={classNames('flex flex-col w-full')}>
       <DialFieldLabel
-        fieldTitle={fieldTitle}
+        fieldLabel={fieldLabel}
         optional={optional}
         htmlFor={elementId}
       />
