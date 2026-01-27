@@ -179,6 +179,8 @@ export const DialInput: FC<DialInputProps> = ({
           onChange={(event) => !readOnly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onBlur={onBlur}
+          min={min}
+          max={max}
           {...props}
         />
       </DialTooltip>

@@ -4,9 +4,7 @@ import { DialTextAreaField } from './TextAreaField';
 
 describe('Dial UI Kit :: DialTextAreaField', () => {
   test('Should render with basic props', () => {
-    render(
-      <DialTextAreaField fieldTitle="Test Field" elementId="test-textarea" />,
-    );
+    render(<DialTextAreaField fieldTitle="Test Field" id="test-textarea" />);
 
     expect(screen.getByText('Test Field')).toBeInTheDocument();
     expect(
@@ -19,7 +17,7 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
     render(
       <DialTextAreaField
         fieldTitle="Test Field"
-        elementId="test-textarea"
+        id="test-textarea"
         onChange={handleChange}
       />,
     );
@@ -34,7 +32,7 @@ describe('Dial UI Kit :: DialTextAreaField', () => {
     render(
       <DialTextAreaField
         fieldTitle="Test Field"
-        elementId="test-textarea"
+        id="test-textarea"
         elementClassName="custom-class"
         containerClassName="container-class"
       />,

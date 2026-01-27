@@ -6,7 +6,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('renders with basic props', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         placeholder="Enter number"
         value={42.5}
@@ -21,7 +21,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('renders with value', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         value={42.5}
       />,
@@ -34,7 +34,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('shows optional indicator when optional is true', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         optional={true}
       />,
@@ -46,7 +46,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('displays error text when provided', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         errorText="This field is required"
       />,
@@ -59,7 +59,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         onChange={onChange}
       />,
@@ -74,7 +74,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('renders readonly with value', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         readonly={true}
         value={99.99}
@@ -88,7 +88,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('applies disabled state correctly', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         disabled={true}
       />,
@@ -100,7 +100,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('applies min and max attributes correctly', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         min={0}
         max={100}
@@ -115,7 +115,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
   test('applies only min attribute when max is not provided', () => {
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         min={10}
       />,
@@ -128,10 +128,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
 
   test('does not apply min/max attributes when not provided', () => {
     render(
-      <DialNumberInputField
-        elementId="test-number"
-        fieldTitle="Test Number Field"
-      />,
+      <DialNumberInputField id="test-number" fieldTitle="Test Number Field" />,
     );
 
     const input = screen.getByRole('spinbutton');
@@ -143,7 +140,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         min={0.1}
         max={99.9}
@@ -163,7 +160,7 @@ describe('Dial UI Kit :: DialNumberInputField', () => {
     const onChange = vi.fn();
     render(
       <DialNumberInputField
-        elementId="test-number"
+        id="test-number"
         fieldTitle="Test Number Field"
         min={0}
         max={1}
@@ -182,7 +179,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders with basic props', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         placeholder="Enter text"
       />,
@@ -195,7 +192,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('displays value correctly', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         value="Sample text"
       />,
@@ -207,7 +204,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('shows optional indicator when optional is true', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         optional={true}
       />,
@@ -219,7 +216,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('displays error text when provided', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         errorText="Invalid input"
       />,
@@ -232,7 +229,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
     const onChange = vi.fn();
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         onChange={onChange}
       />,
@@ -247,7 +244,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders as readonly with default empty text', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         readonly={true}
         defaultEmptyText="No value set"
@@ -261,7 +258,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders readonly with value', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         readonly={true}
         value="Readonly text"
@@ -275,7 +272,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('applies disabled state correctly', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         disabled={true}
       />,
@@ -287,7 +284,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders with icons', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         iconBefore={
           <span role="img" aria-label="Search">
@@ -309,7 +306,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('applies custom CSS classes', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         containerClassName="custom-container"
         elementClassName="custom-input"
@@ -323,7 +320,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders with prefix and suffix', () => {
     const { container } = render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         prefix="$"
         suffix="USD"
@@ -337,7 +334,7 @@ describe('Dial UI Kit :: DialTextInputField', () => {
   test('renders with text before and after input', () => {
     render(
       <DialTextInputField
-        elementId="test-text"
+        id="test-text"
         fieldTitle="Test Text Field"
         textBeforeInput="https://"
         value="example"

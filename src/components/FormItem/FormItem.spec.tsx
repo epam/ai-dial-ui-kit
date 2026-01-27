@@ -16,11 +16,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
 
   test('applies custom className to container', () => {
     render(
-      <DialFormItem
-        id="with-class"
-        label="With class"
-        className="ring-1"
-      >
+      <DialFormItem id="with-class" label="With class" className="ring-1">
         <input id="with-class" />
       </DialFormItem>,
     );

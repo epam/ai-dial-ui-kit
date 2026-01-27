@@ -7,7 +7,7 @@ import { DialInput } from './Input';
 describe('Dial UI Kit :: DialInput', () => {
   test('renders with default props', () => {
     const { getByPlaceholderText } = render(
-      <DialInput elementId="test-input" placeholder="Enter text" />,
+      <DialInput id="test-input" placeholder="Enter text" />,
     );
     expect(getByPlaceholderText('Enter text')).toBeInTheDocument();
   });
@@ -16,7 +16,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        elementId="test-input-change"
+        id="test-input-change"
         placeholder="Type value here"
         onChange={handleChange}
       />,
@@ -28,7 +28,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('is disabled when disabled prop is true', () => {
     const { getByPlaceholderText } = render(
-      <DialInput elementId="test-input" placeholder="Disabled" disabled />,
+      <DialInput id="test-input" placeholder="Disabled" disabled />,
     );
     const input = getByPlaceholderText('Disabled');
     expect(input).toBeDisabled();
@@ -36,7 +36,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('renders input with placeholder', () => {
     const { getByPlaceholderText } = render(
-      <DialInput elementId="icon-input" placeholder="With icon" />,
+      <DialInput id="icon-input" placeholder="With icon" />,
     );
     expect(getByPlaceholderText('With icon')).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const after = <span>A</span>;
     const { container } = render(
       <DialInput
-        elementId="icon-input"
+        id="icon-input"
         placeholder="With icon"
         iconBefore={before}
         iconAfter={after}
@@ -61,7 +61,7 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        elementId="icon-input"
+        id="icon-input"
         placeholder="Type here"
         onChange={handleChange}
       />,
@@ -73,7 +73,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('applies hideBorder class correctly', () => {
     const { container } = render(
-      <DialInput elementId="test-input" placeholder="Test" hideBorder />,
+      <DialInput id="test-input" placeholder="Test" hideBorder />,
     );
     const inputContainer = container.querySelector('.dial-input-field');
     expect(inputContainer).toHaveClass('dial-input-no-border');
@@ -82,7 +82,7 @@ describe('Dial UI Kit :: DialInput', () => {
 
   test('applies invalid class when invalid prop is true', () => {
     const { getByPlaceholderText } = render(
-      <DialInput elementId="test-input" placeholder="Invalid input" invalid />,
+      <DialInput id="test-input" placeholder="Invalid input" invalid />,
     );
     const input = getByPlaceholderText('Invalid input');
     const container = input.parentElement?.parentElement;
@@ -94,9 +94,9 @@ describe('Dial UI Kit :: DialInput', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(
       <DialInput
-        elementId="test-input"
+        id="test-input"
         placeholder="Readonly input"
-        readonly
+        readOnly
         onChange={handleChange}
       />,
     );
@@ -108,7 +108,7 @@ describe('Dial UI Kit :: DialInput', () => {
   test('renders with min and max attributes for number input', () => {
     const { getByPlaceholderText } = render(
       <DialInput
-        elementId="test-number"
+        id="test-number"
         type="number"
         placeholder="Enter number"
         min={0}
@@ -123,7 +123,7 @@ describe('Dial UI Kit :: DialInput', () => {
   test('renders prefix and suffix text', () => {
     const { container } = render(
       <DialInput
-        elementId="test-input"
+        id="test-input"
         placeholder="Amount"
         prefix="$"
         suffix="USD"
@@ -136,7 +136,7 @@ describe('Dial UI Kit :: DialInput', () => {
   test('renders text before and after input', () => {
     render(
       <DialInput
-        elementId="test-input"
+        id="test-input"
         placeholder="domain"
         textBeforeInput="https://"
         value="123"
@@ -163,7 +163,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('');
       return (
         <DialInput
-          elementId="num"
+          id="num"
           placeholder="num"
           type="number"
           value={val}
@@ -193,7 +193,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('');
       return (
         <DialInput
-          elementId="plain"
+          id="plain"
           placeholder="plain"
           type="text"
           value={val}
@@ -215,7 +215,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('12');
       return (
         <DialInput
-          elementId="num-allowed"
+          id="num-allowed"
           placeholder="num-allowed"
           type="number"
           value={val}
@@ -243,7 +243,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('');
       return (
         <DialInput
-          elementId="min-guard"
+          id="min-guard"
           placeholder="min-guard"
           type="number"
           min={10}
@@ -267,7 +267,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('100');
       return (
         <DialInput
-          elementId="max-guard"
+          id="max-guard"
           placeholder="max-guard"
           type="number"
           max={100}
@@ -291,7 +291,7 @@ describe('Dial UI Kit :: DialInput', () => {
       const [val, setVal] = useState('150');
       return (
         <DialInput
-          elementId="cursor-range"
+          id="cursor-range"
           placeholder="cursor-range"
           max={180}
           value={val}
@@ -318,7 +318,7 @@ test('shows tooltip with value on hover', async () => {
 
   render(
     <DialInput
-      elementId="test-input"
+      id="test-input"
       value="Input value"
       placeholder="tooltip-test-value"
     />,
@@ -340,7 +340,7 @@ test('shows tooltip with tooltipText on hover', async () => {
 
   render(
     <DialInput
-      elementId="test-input"
+      id="test-input"
       value="Input value"
       tooltipText="Tooltip text"
       placeholder="tooltip-test-value"

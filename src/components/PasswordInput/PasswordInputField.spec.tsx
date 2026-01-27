@@ -4,7 +4,7 @@ import { DialPasswordInputField } from './PasswordInputField';
 
 describe('Dial UI Kit :: DialPasswordInputField', () => {
   it('renders the field title', () => {
-    render(<DialPasswordInputField fieldTitle="Password" elementId="pw" />);
+    render(<DialPasswordInputField fieldTitle="Password" id="pw" />);
     expect(screen.getByText('Password')).toBeInTheDocument();
   });
 
@@ -12,7 +12,7 @@ describe('Dial UI Kit :: DialPasswordInputField', () => {
     render(
       <DialPasswordInputField
         fieldTitle="Password"
-        elementId="pw"
+        id="pw"
         errorText="Error!"
       />,
     );
@@ -20,16 +20,14 @@ describe('Dial UI Kit :: DialPasswordInputField', () => {
   });
 
   it('renders optional label', () => {
-    render(
-      <DialPasswordInputField fieldTitle="Password" elementId="pw" optional />,
-    );
+    render(<DialPasswordInputField fieldTitle="Password" id="pw" optional />);
     expect(screen.getByText(/optional/i)).toBeInTheDocument();
   });
 
   it('toggles back to password when clicking the hide control', () => {
     render(
       <DialPasswordInputField
-        elementId="pw"
+        id="pw"
         fieldTitle="Password"
         value=""
         onChange={() => null}
