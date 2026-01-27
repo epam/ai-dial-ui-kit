@@ -7,7 +7,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 export interface DialTextareaProps {
   value?: string | number | null;
   placeholder?: string;
-  textareaId: string;
+  textareaId?: string;
   className?: string;
   containerClassName?: string;
   disabled?: boolean;

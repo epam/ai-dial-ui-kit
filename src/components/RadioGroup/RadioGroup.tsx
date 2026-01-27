@@ -92,7 +92,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
 }) => {
   return (
     <DialFormItem
-      elementId={elementId}
+      id={elementId}
       label={fieldTitle}
       labelClassName={
         groupLabelClassName ? groupLabelClassName : labelClassName

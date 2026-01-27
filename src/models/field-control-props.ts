@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
 /**
  * Base properties for field controls providing label and optional status
@@ -14,12 +14,6 @@ export interface FieldControlProps {
 /**
  * Base properties for input elements providing core input functionality
  *
- * @param elementId - Unique identifier for the input element
- * @param value - The current value of the input (string, number, or null)
- * @param defaultValue - The default value for the input
- * @param placeholder - Placeholder text shown when input is empty
- * @param disabled - Whether the input is disabled and cannot be interacted with
- * @param readonly - Whether the input is read-only (displays value as text, no input element)
  * @param invalid - Whether the input has validation errors (applies error styling)
  * @param iconAfter - Icon or element to display after the input
  * @param iconBefore - Icon or element to display before the input
@@ -28,29 +22,16 @@ export interface FieldControlProps {
  * @param prefix - Text to display inside the input on the left
  * @param suffix - Text to display inside the input on the right
  */
-export interface InputBaseProps {
-  elementId: string;
-  value?: string | number | null;
-  defaultValue?: string | number;
-  placeholder?: string;
-  disabled?: boolean;
-  readonly?: boolean;
+export interface InputBaseProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'onChange'> {
   invalid?: boolean;
-  iconAfter?: ReactNode;
+
   iconBefore?: ReactNode;
+  iconAfter?: ReactNode;
+
   textBeforeInput?: string;
   textAfterInput?: string;
+
   prefix?: string;
   suffix?: string;
-}
-
-/**
- * Properties specific to numeric input controls for validation and formatting
- *
- * @param min - Minimum allowed value for the number input
- * @param max - Maximum allowed value for the number input
- */
-export interface NumberInputBaseProps {
-  min?: number;
-  max?: number;
 }

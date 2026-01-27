@@ -5,7 +5,6 @@ import { DialInput } from '@/components/Input/Input';
 import type {
   FieldControlProps,
   InputBaseProps,
-  NumberInputBaseProps,
 } from '@/models/field-control-props';
 import type { DialFormItemBaseProps } from '@/types/form-item';
 
@@ -24,9 +23,7 @@ export interface DialInputFieldBaseProps
   containerClassName?: string;
 }
 
-export interface DialInputFieldProps
-  extends DialInputFieldBaseProps,
-    Partial<NumberInputBaseProps> {
+export interface DialInputFieldProps extends DialInputFieldBaseProps {
   type: string;
   onChange?: (value?: string | number) => void;
 }
@@ -50,7 +47,6 @@ export interface DialInputFieldProps
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param type - The HTML input type (text, email, password, number, etc.)
  * @param onChange - Callback function called when the input value changes, receives the new value
@@ -72,7 +68,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
   orientation,
 
   // other props
-  elementId,
+  id,
   fieldTitle,
   errorText,
   elementClassName,
@@ -91,13 +87,13 @@ const DialInputField: FC<DialInputFieldProps> = ({
       captionDescription={captionDescription}
       readonly={readonly}
       orientation={orientation}
-      elementId={elementId}
+      id={id}
       className={containerClassName}
       defaultEmptyText={defaultEmptyText}
       value={props.value}
     >
       <DialInput
-        elementId={elementId}
+        id={id}
         className={elementClassName}
         containerClassName={elementContainerClassName}
         invalid={errorText != null}
@@ -107,9 +103,7 @@ const DialInputField: FC<DialInputFieldProps> = ({
   );
 };
 
-export interface DialNumberInputFieldProps
-  extends DialInputFieldBaseProps,
-    Partial<NumberInputBaseProps> {
+export interface DialNumberInputFieldProps extends DialInputFieldBaseProps {
   onChange?: (value?: number | string) => void;
 }
 
@@ -131,7 +125,6 @@ export interface DialNumberInputFieldProps
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param onChange - Callback function called when the input value changes.
  *                        Returns either a number (for most values) or a string (for decimal values < 1 with leading zeros)
@@ -172,7 +165,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * Basic usage:
  * ```tsx
  * <DialTextInputField
- *   elementId="name"
+ *   id="name"
  *   fieldTitle="Full Name"
  *   placeholder="Enter your full name"
  *   value="John Doe"
@@ -183,7 +176,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * @params - Component properties extending:
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
- * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ * - {@link InputBaseProps} - Base input properties (id, value, placeholder, disabled, readOnly, invalid, etc.)
  *
  * @param onChange - Callback function called when the input value changes, receives the new string value
  */

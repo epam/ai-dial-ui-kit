@@ -25,7 +25,7 @@ const meta = {
     value: { control: 'object' },
   },
   args: {
-    elementId: 'transport',
+    id: 'transport',
     fieldTitle: 'Transport',
     placeholder: 'Pick transport',
     options: [

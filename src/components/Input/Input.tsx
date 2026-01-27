@@ -11,16 +11,11 @@ import {
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import type {
-  InputBaseProps,
-  NumberInputBaseProps,
-} from '@/models/field-control-props';
+import type { InputBaseProps } from '@/models/field-control-props';
 import { handleKeyDown } from './utils';
 import { useMergeRefs } from '@floating-ui/react';
 
-export interface DialInputProps
-  extends InputBaseProps,
-    Partial<NumberInputBaseProps> {
+export interface DialInputProps extends InputBaseProps {
   type?: string;
   containerClassName?: string;
   className?: string;
@@ -49,7 +44,6 @@ export interface DialInputProps
  *
  * @params Component properties extending:
  * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
- * - {@link NumberInputBaseProps} - Number input properties (min, max) - partial
  *
  * @param type - The HTML input type (text, password, email, number, etc.)
  * @param containerClassName - Additional CSS classes to apply to the container div
@@ -65,15 +59,12 @@ export const DialInput: FC<DialInputProps> = ({
   iconBefore,
   iconAfter,
   hideBorder,
-  value,
-  elementId,
-  placeholder = '',
   className = '',
   containerClassName,
   tooltipTriggerClassName,
   type = 'text',
-  disabled,
-  readonly,
+  value,
+  readOnly,
   invalid,
   onChange,
   min,
@@ -87,6 +78,7 @@ export const DialInput: FC<DialInputProps> = ({
   tooltipText,
   hideTooltip = false,
   inputRef,
+  ...props
 }) => {
   const innerRef = useRef<HTMLInputElement | null>(null);
   const ref = useMergeRefs([inputRef, innerRef]);
@@ -127,10 +119,10 @@ export const DialInput: FC<DialInputProps> = ({
 
       // Check range constraints for complete numbers
       if (!isNaN(numericValue)) {
-        if (min !== undefined && numericValue < min) {
+        if (min !== undefined && numericValue < +min) {
           return;
         }
-        if (max !== undefined && numericValue > max) {
+        if (max !== undefined && numericValue > +max) {
           return;
         }
       }
@@ -145,8 +137,8 @@ export const DialInput: FC<DialInputProps> = ({
         'dial-input-field flex flex-row items-center justify-between py-2',
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
-        disabled && 'dial-input-disable',
-        readonly && 'dial-input-readonly',
+        props.disabled && 'dial-input-disable',
+        readOnly && 'dial-input-readonly',
         !textBeforeInput && 'pl-3',
         !textAfterInput && 'pr-3',
         containerClassName,
@@ -161,7 +153,7 @@ export const DialInput: FC<DialInputProps> = ({
             className="overflow-hidden overflow-ellipsis dial-small"
             value={textBeforeInput}
             disabled={true}
-            elementId={textBeforeInput + 'textBefore'}
+            id={textBeforeInput + 'textBefore'}
           />
         </div>
       )}
@@ -179,20 +171,15 @@ export const DialInput: FC<DialInputProps> = ({
           ref={ref}
           type={type}
           autoComplete="off"
-          id={elementId}
-          placeholder={placeholder}
           value={defaultValue ? undefined : (value ?? '')}
-          disabled={disabled}
           className={classNames(
             'border-0 bg-transparent w-full truncate',
             className,
           )}
-          onChange={(event) => !readonly && handleChange?.(event)}
+          onChange={(event) => !readOnly && handleChange?.(event)}
           onKeyDown={onKeyDown}
           onBlur={onBlur}
-          min={min}
-          max={max}
-          defaultValue={defaultValue}
+          {...props}
         />
       </DialTooltip>
 
@@ -208,7 +195,7 @@ export const DialInput: FC<DialInputProps> = ({
             containerClassName="rounded-l-none border-l-0"
             value={textAfterInput}
             disabled={true}
-            elementId={textAfterInput + 'textAfter'}
+            id={textAfterInput + 'textAfter'}
           />
         </div>
       )}

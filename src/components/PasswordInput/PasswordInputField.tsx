@@ -22,20 +22,16 @@ export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
  *   optional={false}
  * />
  * ```
+ * @params - Component properties extending:
+ * - {@link DialInputFieldBaseProps} - Base input properties (id, value, placeholder, disabled, readOnly, invalid, etc.)
  *
- * @param elementId - Unique identifier for the input element
- * @param [fieldTitle] - The label text for the field
- * @param [value] - The current value of the input
  * @param [onChange] - Callback function called when the input value changes
- * @param [errorText] - Error message to display below the input
- * @param [optional=false] - Whether the field is optional
- * @param [className] - Custom CSS class for the input element
  */
 export const DialPasswordInputField: FC<DialPasswordInputFieldProps> = ({
   fieldTitle,
   optional,
   elementClassName,
-  elementId,
+  id,
   errorText,
   ...props
 }) => {
@@ -44,11 +40,11 @@ export const DialPasswordInputField: FC<DialPasswordInputFieldProps> = ({
       <DialFieldLabel
         fieldTitle={fieldTitle}
         optional={optional}
-        htmlFor={elementId}
+        htmlFor={id}
       />
       <DialPasswordInput
         className={elementClassName}
-        elementId={elementId}
+        id={id}
         invalid={!!errorText}
         {...props}
       />

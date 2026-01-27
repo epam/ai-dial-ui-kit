@@ -6,7 +6,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
   test('renders label through FormItem and associates aria-labelledby', () => {
     render(
       <DialSelectField
-        elementId="transport"
+        id="transport"
         fieldTitle="Transport"
         options={[
           { value: 'SSE', label: 'Server-Sent Events (SSE)' },
@@ -23,7 +23,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
   test('applies containerClassName to FormItem wrapper', () => {
     render(
       <DialSelectField
-        elementId="styled"
+        id="styled"
         fieldTitle="Styled"
         containerClassName="ring-1"
         options={[{ value: 'x', label: 'X' }]}
@@ -35,7 +35,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
   test('shows error text via FormItem when error provided', () => {
     render(
       <DialSelectField
-        elementId="err"
+        id="err"
         fieldTitle="With error"
         error="Selection required"
         options={[{ value: 'x', label: 'X' }]}
@@ -48,7 +48,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
   test('renders captionDescription when provided', () => {
     render(
       <DialSelectField
-        elementId="cap"
+        id="cap"
         fieldTitle="With caption"
         captionDescription="Helper caption"
         options={[{ value: 'x', label: 'X' }]}
@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
   test('renders readonly state with selected option label', () => {
     render(
       <DialSelectField
-        elementId="ro"
+        id="ro"
         fieldTitle="Readonly"
         readonly
         value="WS"

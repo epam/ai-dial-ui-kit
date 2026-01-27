@@ -130,7 +130,7 @@ export const DialFileManagerItemNameInput: FC<
           '!h-6 py-[1px] pl-[7px] pr-[7px]',
           inputContainerClassName,
         )}
-        elementId={elementId}
+        id={elementId}
         value={name}
         onChange={onChange}
         invalid={inputInvalid}

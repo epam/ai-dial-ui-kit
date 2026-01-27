@@ -1,7 +1,6 @@
 import type {
   FieldControlProps,
   InputBaseProps,
-  NumberInputBaseProps,
 } from '@/models/field-control-props';
 import type { ArgTypes } from '@storybook/react';
 
@@ -18,7 +17,7 @@ export const fieldControlArgTypes: Partial<ArgTypes<FieldControlProps>> = {
 };
 
 export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
-  elementId: {
+  id: {
     control: { type: 'text' as const },
     description: 'Unique identifier for the input element',
   },
@@ -38,7 +37,7 @@ export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
     control: { type: 'boolean' as const },
     description: 'Whether the input is disabled and cannot be interacted with',
   },
-  readonly: {
+  readOnly: {
     control: { type: 'boolean' as const },
     description:
       'Whether the input is read-only (displays value as text, no input element)',
@@ -74,14 +73,13 @@ export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
   },
 };
 
-export const numberInputBaseArgTypes: Partial<ArgTypes<NumberInputBaseProps>> =
-  {
-    min: {
-      control: { type: 'number' as const },
-      description: 'Minimum allowed value for the number input',
-    },
-    max: {
-      control: { type: 'number' as const },
-      description: 'Maximum allowed value for the number input',
-    },
-  };
+export const numberInputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
+  min: {
+    control: { type: 'number' as const },
+    description: 'Minimum allowed value for the number input',
+  },
+  max: {
+    control: { type: 'number' as const },
+    description: 'Maximum allowed value for the number input',
+  },
+};

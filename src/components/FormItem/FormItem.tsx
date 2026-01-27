@@ -11,7 +11,7 @@ import { containerBaseClassName, orientationClassMap } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialFormItemProps extends DialFormItemBaseProps {
-  elementId: string;
+  id?: string;
   labelVisuallyHidden?: boolean;
   className?: string;
   childrenClassName?: string;
@@ -73,7 +73,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
  */
 export const DialFormItem: FC<DialFormItemProps> = ({
-  elementId,
+  id: elementId,
   label,
   optional,
   optionalText,
