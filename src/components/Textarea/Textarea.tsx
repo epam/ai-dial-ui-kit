@@ -47,11 +47,12 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   disableTooltip,
   onChange,
   disabled,
+  invalid,
   ...props
 }) => {
   const textareaClassName = classNames(
     'dial-textarea dial-input px-3 py-2',
-    props.invalid && 'dial-input-error',
+    invalid && 'dial-input-error',
     disabled && 'dial-input-disable',
     readOnly && 'dial-input-readonly',
     className,
