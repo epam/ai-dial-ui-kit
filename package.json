@@ -27,7 +27,8 @@
     "*.css",
     "*.scss",
     "./src/styles/*",
-    "./src/components/JsonEditor/*"
+    "./src/components/JsonEditor/*",
+    "./src/components/MarkdownEditor/*"
   ],
   "scripts": {
     "dev": "vite",
@@ -68,6 +69,8 @@
     "@floating-ui/react": "^0.27.16",
     "@monaco-editor/react": "^4.7.0",
     "@tabler/icons-react": "^3.36.1",
+    "@uiw/react-markdown-preview": "^5.1.5",
+    "@uiw/react-md-editor": "^4.0.11",
     "classnames": "^2.5.1",
     "monaco-editor": "^0.52.2",
     "react": "^19.1.0",

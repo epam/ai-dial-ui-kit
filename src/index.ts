@@ -56,6 +56,10 @@ export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 export { DialTextarea } from './components/Textarea/Textarea';
 export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
 
+// Markdown Editor
+export { DialMarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
+export { DialMarkdownEditorContainer } from './components/MarkdownEditor/MarkdownEditorContainer';
+
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
 
