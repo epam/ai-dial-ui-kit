@@ -89,6 +89,20 @@ export const TooLongText: Story = {
   },
 };
 
+export const Details: Story = {
+  args: {
+    tab: {
+      id: 'analytics',
+      label: 'Analytics',
+    },
+    active: false,
+    horizontal: true,
+    onClick: () => null,
+    className: 'w-[200px]',
+    details: <p className="text-small text-secondary">Details</p>,
+  },
+};
+
 export const OrientationVariants: Story = {
   render: () => {
     const TabDemo = () => {
