@@ -11,7 +11,7 @@ import type { PreviewType } from '@uiw/react-md-editor';
 
 import { type DialJsonEditorProps } from '@/components/JsonEditor/JsonEditor';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { EDITOR_THEMES } from '@/types/editor';
+import { EditorThemes } from '@/types/editor';
 import { DialMarkdownEditor } from './MarkdownEditor';
 import { DialFieldLabel } from '../Field/Field';
 
@@ -22,7 +22,7 @@ export interface DialMarkdownEditorContainerProps {
   headerContent?: ReactNode;
   switcherLabel?: ReactNode;
   height?: number;
-  theme?: EDITOR_THEMES;
+  theme?: EditorThemes;
   onValidateJSON?: OnValidate;
   preview?: PreviewType;
 }
@@ -56,7 +56,7 @@ export interface DialMarkdownEditorContainerProps {
  * @param [headerContent] - Optional content to display in the header
  * @param [switcherLabel] - Optional label for the mode switcher (if not provided, switcher is hidden)
  * @param [height=300] - Height of the editor in pixels
- * @param [theme='dark'] - Theme for the editor (EDITOR_THEMES.dark or EDITOR_THEMES.light)
+ * @param [theme='dark'] - Theme for the editor (EditorThemes.dark or EditorThemes.light)
  * @param [onValidateJSON] - Callback fired when JSON validation occurs
  * @param [preview='edit'] - Preview mode for Markdown editor
  */
@@ -69,7 +69,7 @@ export const DialMarkdownEditorContainer: FC<
   headerContent,
   switcherLabel,
   height = 300,
-  theme = EDITOR_THEMES.dark,
+  theme = EditorThemes.dark,
   onValidateJSON,
   preview = 'edit',
 }) => {

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialMarkdownEditor } from './MarkdownEditor';
-import { EDITOR_THEMES } from '@/types/editor';
+import { EditorThemes } from '@/types/editor';
 
 describe('Dial UI Kit :: DialMarkdownEditor', () => {
   test('Should render the Markdown Editor', () => {
@@ -10,7 +10,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
       <DialMarkdownEditor
         value="# Test"
         onChange={mockOnChange}
-        theme={EDITOR_THEMES.dark}
+        theme={EditorThemes.dark}
       />,
     );
 
@@ -27,7 +27,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
       <DialMarkdownEditor
         value={initialValue}
         onChange={mockOnChange}
-        theme={EDITOR_THEMES.dark}
+        theme={EditorThemes.dark}
       />,
     );
 
@@ -40,7 +40,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
   });
 
   test('Should apply theme via data-color-mode attribute', () => {
-    render(<DialMarkdownEditor value="# Test" theme={EDITOR_THEMES.light} />);
+    render(<DialMarkdownEditor value="# Test" theme={EditorThemes.light} />);
 
     const container = screen
       .getByRole('textbox')
@@ -49,7 +49,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
   });
 
   test('Should use default height when not provided', () => {
-    render(<DialMarkdownEditor value="# Test" theme={EDITOR_THEMES.dark} />);
+    render(<DialMarkdownEditor value="# Test" theme={EditorThemes.dark} />);
 
     const editor = screen.getByRole('textbox');
     expect(editor).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
       <DialMarkdownEditor
         value="# Test"
         height={500}
-        theme={EDITOR_THEMES.dark}
+        theme={EditorThemes.dark}
       />,
     );
 
@@ -69,7 +69,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
   });
 
   test('Should use default preview mode when not provided', () => {
-    render(<DialMarkdownEditor value="# Test" theme={EDITOR_THEMES.dark} />);
+    render(<DialMarkdownEditor value="# Test" theme={EditorThemes.dark} />);
 
     const editor = screen.getByRole('textbox');
     expect(editor).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
       <DialMarkdownEditor
         value=""
         onChange={mockOnChange}
-        theme={EDITOR_THEMES.dark}
+        theme={EditorThemes.dark}
       />,
     );
 
