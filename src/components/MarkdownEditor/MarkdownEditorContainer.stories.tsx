@@ -5,6 +5,7 @@ import {
   DialMarkdownEditorContainer,
   type DialMarkdownEditorContainerProps,
 } from './MarkdownEditorContainer';
+import { EDITOR_THEMES } from '@/types/editor';
 
 const meta = {
   title: 'Data Display/MarkdownEditorContainer',
@@ -62,7 +63,7 @@ const meta = {
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor container.',
     height: 300,
-    theme: 'dark',
+    theme: EDITOR_THEMES.dark,
     preview: 'edit',
   },
 } satisfies Meta<DialMarkdownEditorContainerProps>;
@@ -119,7 +120,7 @@ export const LightTheme: Story = {
   render: () =>
     renderContainerWithWrapper({
       value: '# Hello World\n\nThis is a **markdown** editor with light theme.',
-      theme: 'light',
+      theme: EDITOR_THEMES.light,
       switcherLabel: 'JSON Mode',
     }),
 };

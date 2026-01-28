@@ -1,3 +1,4 @@
+import { EDITOR_THEMES } from '@/types/editor';
 import MDEditor, { type PreviewType } from '@uiw/react-md-editor';
 import type { FC } from 'react';
 
@@ -6,7 +7,7 @@ export interface DialMarkdownEditorProps {
   onChange?: (value: string) => void;
   height?: number;
   preview?: PreviewType;
-  theme?: 'light' | 'dark';
+  theme?: EDITOR_THEMES;
   className?: string;
 }
 
@@ -36,7 +37,7 @@ export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
   onChange,
   height = 300,
   preview = 'edit',
-  theme = 'dark',
+  theme = EDITOR_THEMES.dark,
   className,
 }) => {
   return (

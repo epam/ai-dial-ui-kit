@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useId, useState, type FC } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+  type FC,
+  type ReactNode,
+} from 'react';
 import type { OnValidate } from '@monaco-editor/react';
 import type { PreviewType } from '@uiw/react-md-editor';
 
@@ -6,15 +13,16 @@ import { type DialJsonEditorProps } from '@/components/JsonEditor/JsonEditor';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { EDITOR_THEMES } from '@/types/editor';
 import { DialMarkdownEditor } from './MarkdownEditor';
+import { DialFieldLabel } from '../Field/Field';
 
 export interface DialMarkdownEditorContainerProps {
   value?: string;
   onChangeValue?: (value: string) => void;
-  label?: React.ReactNode;
-  headerContent?: React.ReactNode;
-  switcherLabel?: React.ReactNode;
+  label?: ReactNode;
+  headerContent?: ReactNode;
+  switcherLabel?: ReactNode;
   height?: number;
-  theme?: 'light' | 'dark';
+  theme?: EDITOR_THEMES;
   onValidateJSON?: OnValidate;
   preview?: PreviewType;
 }
@@ -48,7 +56,7 @@ export interface DialMarkdownEditorContainerProps {
  * @param [headerContent] - Optional content to display in the header
  * @param [switcherLabel] - Optional label for the mode switcher (if not provided, switcher is hidden)
  * @param [height=300] - Height of the editor in pixels
- * @param [theme='dark'] - Theme for the editor ('light' or 'dark')
+ * @param [theme='dark'] - Theme for the editor (EDITOR_THEMES.dark or EDITOR_THEMES.light)
  * @param [onValidateJSON] - Callback fired when JSON validation occurs
  * @param [preview='edit'] - Preview mode for Markdown editor
  */
@@ -61,13 +69,12 @@ export const DialMarkdownEditorContainer: FC<
   headerContent,
   switcherLabel,
   height = 300,
-  theme = 'dark',
+  theme = EDITOR_THEMES.dark,
   onValidateJSON,
   preview = 'edit',
 }) => {
   const switchId = useId();
   const [isJSONContentMode, setIsJSONContentMode] = useState(false);
-  const [jsonValue, setJsonValue] = useState<string | undefined>(undefined);
   const [DialJsonEditorComponent, setDialJsonEditorComponent] =
     useState<React.ComponentType<DialJsonEditorProps> | null>(null);
 
@@ -85,16 +92,8 @@ export const DialMarkdownEditorContainer: FC<
   }, [isJSONContentMode]);
 
   const onChangeContent = useCallback(
-    (content: string) => {
-      onChangeValue?.(content);
-    },
-    [onChangeValue],
-  );
-
-  const onChangeJsonValue = useCallback(
-    (v: string | undefined) => {
-      setJsonValue(v);
-      onChangeValue?.(v as string);
+    (content: string | undefined) => {
+      onChangeValue?.(content as string);
     },
     [onChangeValue],
   );
@@ -106,24 +105,7 @@ export const DialMarkdownEditorContainer: FC<
     [onValidateJSON],
   );
 
-  useEffect(() => {
-    if (isJSONContentMode && value) {
-      try {
-        const parsed = JSON.parse(value);
-        if (typeof parsed === 'object') {
-          setJsonValue(JSON.stringify(parsed, null, 2));
-        } else {
-          setJsonValue(value);
-        }
-      } catch {
-        setJsonValue(value);
-      }
-    }
-  }, [isJSONContentMode, value]);
-
   const showSwitcher = Boolean(switcherLabel);
-  const currentTheme =
-    theme === 'light' ? EDITOR_THEMES.light : EDITOR_THEMES.dark;
 
   return (
     <div className="h-full flex flex-col w-full">
@@ -131,11 +113,7 @@ export const DialMarkdownEditorContainer: FC<
         <div>
           {(label || headerContent || showSwitcher) && (
             <div className="flex justify-between items-center mb-2">
-              {label && (
-                <div className="flex items-center dial-tiny text-secondary mb-1">
-                  {label}
-                </div>
-              )}
+              {label && <DialFieldLabel fieldTitle={label} />}
               <div className="flex items-center gap-2 flex-1 justify-end">
                 {headerContent}
                 {showSwitcher && (
@@ -158,10 +136,10 @@ export const DialMarkdownEditorContainer: FC<
             >
               {DialJsonEditorComponent && (
                 <DialJsonEditorComponent
-                  value={jsonValue}
-                  onChange={onChangeJsonValue}
+                  value={value}
+                  onChange={onChangeContent}
                   onValidateJSON={handleValidateJSON}
-                  currentTheme={currentTheme}
+                  currentTheme={theme}
                 />
               )}
             </div>

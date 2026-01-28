@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialMarkdownEditorContainer } from './MarkdownEditorContainer';
+import { EDITOR_THEMES } from '@/types/editor';
 
 describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
   test('Should render component without switcher when switcherLabel is not provided', () => {
@@ -9,7 +10,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
       <DialMarkdownEditorContainer
         value="# Test"
         onChangeValue={mockOnChange}
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -26,7 +27,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
         onChangeValue={mockOnChange}
         switcherLabel="JSON Mode"
         label="Content Label"
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -41,7 +42,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
       <DialMarkdownEditorContainer
         value="# Test"
         headerContent={<div>Header Content</div>}
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -55,7 +56,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
         value='{"test": "value"}'
         onChangeValue={mockOnChange}
         switcherLabel="JSON Mode"
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -75,7 +76,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
       <DialMarkdownEditorContainer
         value="# Test"
         onChangeValue={mockOnChange}
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -94,7 +95,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
         value='{"test": "value"}'
         onChangeValue={mockOnChange}
         switcherLabel="JSON Mode"
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
@@ -123,7 +124,7 @@ describe('Dial UI Kit :: DialMarkdownEditorContainer', () => {
         value='{"test": "value"}'
         switcherLabel="JSON Mode"
         onValidateJSON={mockOnValidate}
-        theme="dark"
+        theme={EDITOR_THEMES.dark}
       />,
     );
 
