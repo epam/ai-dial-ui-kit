@@ -99,6 +99,20 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     onChange?.(newTags);
   };
 
+  const renderCaption = () => {
+    if (errorText) {
+      return <DialErrorText errorText={errorText} />;
+    }
+    if (captionDescription) {
+      return (
+        <div className="dial-tiny text-secondary mt-1">
+          {captionDescription}
+        </div>
+      );
+    }
+    return null;
+  };
+
   useEffect(() => {
     const observer = new ResizeObserver(() => {
       if (containerRef.current) {
@@ -155,13 +169,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           />
         </div>
       </div>
-      {errorText ? (
-        <DialErrorText errorText={errorText} />
-      ) : captionDescription ? (
-        <div className={'dial-tiny text-secondary mt-1'}>
-          {captionDescription}
-        </div>
-      ) : null}
+      {renderCaption()}
     </div>
   );
 };
