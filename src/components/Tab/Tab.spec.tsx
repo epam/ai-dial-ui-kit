@@ -187,19 +187,4 @@ describe('Dial UI Kit :: DialTab', () => {
     const tab = screen.getByRole('tab');
     expect(tab.className).toMatch(/h-\[38px\]/);
   });
-
-  test('Render details element correctly', () => {
-    const text = 'details';
-    const { container } = render(
-      <DialTab
-        tab={baseTab}
-        active={false}
-        onClick={vi.fn()}
-        details={<p>{text}</p>}
-      />,
-    );
-
-    expect(container.querySelector('p')).toBeInTheDocument();
-    expect(screen.getByText(text)).toBeInTheDocument();
-  });
 });

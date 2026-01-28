@@ -1,5 +1,5 @@
 import { IconExclamationCircle } from '@tabler/icons-react';
-import type { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, FC } from 'react';
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { TabModel } from '@/models/tab';
@@ -17,7 +17,6 @@ export interface DialTabProps extends NativeButtonProps {
   invalid?: boolean;
   horizontal?: boolean;
   onClick: (id: string) => void;
-  details?: ReactNode;
 }
 /**
  * A single tab element used within the {@link DialTabs} component.
@@ -38,7 +37,6 @@ export interface DialTabProps extends NativeButtonProps {
  * @param active - Whether the tab is currently active.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
- * @param {details} - React element to render additional details of tab.
  */
 export const DialTab: FC<DialTabProps> = ({
   tab,
@@ -47,7 +45,6 @@ export const DialTab: FC<DialTabProps> = ({
   className,
   horizontal,
   onClick,
-  details,
 }) => {
   const baseClassName = mergeClasses(
     'rounded h-[38px] items-center flex flex-row border-transparent cursor-pointer dial-small leading-4 hover:text-accent-primary',
@@ -78,8 +75,6 @@ export const DialTab: FC<DialTabProps> = ({
         contentClassName="max-w-[200px]"
         className="max-w-[200px]"
       />
-
-      {details}
 
       {(invalid || tab.invalid) && (
         <div className="text-error pl-1">
