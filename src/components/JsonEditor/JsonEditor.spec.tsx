@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialJsonEditor, type DialJsonEditorProps } from './JsonEditor';
-import { EDITOR_THEMES } from '@/types/editor';
+import { EditorThemes } from '@/types/editor';
 import type { ReactElement } from 'react';
 import type { Monaco } from '@monaco-editor/react';
 
@@ -11,7 +11,7 @@ describe('Dial UI Kit :: DialJsonEditor', () => {
     render(
       <DialJsonEditor
         value=""
-        currentTheme={EDITOR_THEMES.dark}
+        currentTheme={EditorThemes.dark}
         onChange={mockOnChange}
       />,
     );
@@ -30,7 +30,7 @@ describe('Dial UI Kit :: DialJsonEditor', () => {
     render(
       <DialJsonEditor
         value={initialValue}
-        currentTheme={EDITOR_THEMES.dark}
+        currentTheme={EditorThemes.dark}
         onChange={mockOnChange}
       />,
     );
@@ -44,7 +44,7 @@ describe('Dial UI Kit :: DialJsonEditor', () => {
   });
 
   test('defines the theme and sets JSON diagnostics in beforeMount', () => {
-    const currentTheme = EDITOR_THEMES.dark;
+    const currentTheme = EditorThemes.dark;
 
     const onChange: NonNullable<DialJsonEditorProps['onChange']> = vi.fn();
     const onValidateJSON: NonNullable<DialJsonEditorProps['onValidateJSON']> =
@@ -78,7 +78,7 @@ describe('Dial UI Kit :: DialJsonEditor', () => {
 
     expect(defineTheme).toHaveBeenCalledWith(
       currentTheme,
-      (themesConfig as Record<EDITOR_THEMES, unknown>)[currentTheme],
+      (themesConfig as Record<EditorThemes, unknown>)[currentTheme],
     );
 
     expect(setDiagnosticsOptions).toHaveBeenCalledWith(
