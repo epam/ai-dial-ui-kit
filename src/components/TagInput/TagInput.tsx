@@ -16,6 +16,7 @@ export interface DialTagInputProps extends FieldControlProps {
   elementId: string;
   initialTags?: string[];
   placeholder?: string;
+  captionDescription?: string;
   errorText?: string;
   invalid?: boolean;
   disabled?: boolean;
@@ -43,6 +44,7 @@ export interface DialTagInputProps extends FieldControlProps {
  * @param [fieldTitle] - Optional label displayed above the input field.
  * @param [initialTags=[]] - Array of tags to be displayed initially.
  * @param [placeholder] - Placeholder text shown when the input is empty.
+ * @param [captionDescription] - Caption text shown under the input if there is no errors.
  * @param [errorText] - Error message displayed below the field when validation fails.
  * @param [optional=false] - Whether the field is optional (renders an “optional” indicator).
  * @param [invalid=false] - Whether the field should be styled as invalid.
@@ -55,6 +57,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   optional,
   elementId,
   placeholder,
+  captionDescription,
   errorText,
   invalid,
   disabled,
@@ -78,6 +81,13 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === ',' || e.key === 'Enter') {
       e.preventDefault();
+      addTag(inputValue);
+      setInputValue('');
+    }
+  };
+
+  const handleBlur = () => {
+    if (inputValue.trim()) {
       addTag(inputValue);
       setInputValue('');
     }
@@ -136,6 +146,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
+            onBlur={handleBlur}
             className={classNames(
               'dial-input-no-border outline-none border-none w-full min-w-[100px] flex-1 p-1',
             )}
@@ -144,7 +155,13 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           />
         </div>
       </div>
-      <DialErrorText errorText={errorText} />
+      {errorText ? (
+        <DialErrorText errorText={errorText} />
+      ) : captionDescription ? (
+        <div className={'dial-tiny text-secondary mt-1'}>
+          {captionDescription}
+        </div>
+      ) : null}
     </div>
   );
 };
