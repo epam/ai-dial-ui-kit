@@ -195,6 +195,7 @@ export interface GridOptions
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
   showFiles?: boolean;
+  showFolders?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
   actionLabels?: {
