@@ -9,7 +9,7 @@ import {
   type Ref,
   useImperativeHandle,
 } from 'react';
-import type { CellClickedEvent, ColDef } from 'ag-grid-community';
+import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import {
   containerBaseClassName,
   mainGridClassName,
@@ -106,6 +106,7 @@ import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 
 type GridRow = FileManagerGridRow;
 
@@ -194,6 +195,7 @@ export interface GridOptions
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
   visibleColumns?: FileManagerColumnKey[];
+  selectionMode?: GridSelectionMode;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -277,6 +279,7 @@ export interface DialFileManagerProps {
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
+  onGridApiChange?: (api: GridApi) => void;
 
   onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
   onMoveToFiles?: (
@@ -490,6 +493,7 @@ export const DialFileManagerView: FC = () => {
     handleSearchChange,
     handleTreeItemClick,
     handleTableRowClick,
+    onGridApiChange,
 
     handleOpenDestinationFolderPopup,
     handleCloseDestinationFolderPopup,
@@ -597,6 +601,7 @@ export const DialFileManagerView: FC = () => {
     filterable = true,
     dateLocale,
     dateOptions,
+    selectionMode,
     visibleColumns = [
       FileManagerColumnKey.Name,
       FileManagerColumnKey.UpdatedAt,
@@ -804,16 +809,11 @@ export const DialFileManagerView: FC = () => {
     ],
   );
 
-  const selectedGridRows = useMemo(() => {
-    const map = new Map<string, GridRow>();
-    selectedFiles.forEach((_file, id) => {
-      const gridRow = gridRows.find((row) => row.path === id);
-      if (gridRow) {
-        map.set(id, gridRow);
-      }
-    });
-    return map;
-  }, [selectedFiles, gridRows]);
+  const selectedGridRowsIds = useMemo(() => {
+    const data = new Set<string>();
+    selectedFiles.forEach((_file, id) => data.add(id));
+    return data;
+  }, [selectedFiles]);
 
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
@@ -826,10 +826,8 @@ export const DialFileManagerView: FC = () => {
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
-    (newSelectedGridRows: Map<string, GridRow>) => {
-      const newSelectedFiles = new Set<string>();
-      newSelectedGridRows.forEach((_gridRow, id) => newSelectedFiles.add(id));
-      selectedPathsChangeHandler(newSelectedFiles);
+    (selectedRowsIds: Set<string>) => {
+      selectedPathsChangeHandler(selectedRowsIds);
     },
     [selectedPathsChangeHandler],
   );
@@ -1135,6 +1133,7 @@ export const DialFileManagerView: FC = () => {
                 getContextMenuItems={getGridContextMenuItems}
                 withoutHeaderBorders={isCompactView}
                 selectionOnHover={!isCompactView}
+                onGridApiChange={onGridApiChange}
                 className={classNames(
                   isDragging
                     ? 'border border-dashed border-accent-primary'
@@ -1144,6 +1143,7 @@ export const DialFileManagerView: FC = () => {
                     : '',
                 )}
                 {...forwardedGridOptions}
+                selectionMode={selectionMode || GridSelectionMode.CHECKBOX}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,
@@ -1174,8 +1174,8 @@ export const DialFileManagerView: FC = () => {
                     selectedPaths,
                   } as FileManagerGridContext,
                 }}
-                selectedRows={selectedGridRows}
-                onSelectionChangeWithMap={handleSelectionChange}
+                selectedRowIds={selectedGridRowsIds}
+                onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
               />

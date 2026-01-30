@@ -27,6 +27,7 @@ import type {
   DialFileAcceptType,
   DialFileManagerActionsRef,
 } from '@/models/file-manager';
+import type { GridApi } from 'ag-grid-community';
 
 export interface FileManagerGridRow {
   id: string;
@@ -121,6 +122,7 @@ export interface FileManagerContextValue {
 
   onTableFileClick?: DialFileManagerProps['onTableFileClick'];
   handleDownloadFiles: (items: DialFile[]) => void;
+  onGridApiChange?: (api: GridApi) => void;
 
   isDragging: boolean;
   isDraggingOverWindow: boolean;

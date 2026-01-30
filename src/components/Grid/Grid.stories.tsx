@@ -227,11 +227,18 @@ export const WithRadioButtonSelection: Story = {
   },
 };
 
+export const WithCheckboxSelection: Story = {
+  args: {
+    selectionMode: GridSelectionMode.CHECKBOX,
+    disabledRowIds: new Set(['2']),
+    selectedRowIds: new Set(['1']),
+  },
+};
+
 export const NoFilters: Story = {
   args: {
     selectedRowIds: undefined,
     onSelectionChange: undefined,
-    withSelectionColumn: false,
     columnDefs: columns.map((c) => ({
       ...c,
       filter: false,

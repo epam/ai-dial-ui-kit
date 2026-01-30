@@ -152,3 +152,9 @@
     @apply min-h-0;
   }
 }
+
+.ag-grid-no-checkbox {
+  .ag-selection-checkbox {
+    @apply hidden;
+  }
+}
