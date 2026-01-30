@@ -77,7 +77,7 @@ export const NeutralOutlinedIconButton: Story = {
 
 export const IconButtonWithTooltip: Story = {
   args: {
-    tooltipText: 'Custom tooltip text',
+    tooltipProps: { tooltip: 'Custom tooltip text' },
     variant: ButtonVariant.Neutral,
     appearance: ButtonAppearance.Outlined,
   },
