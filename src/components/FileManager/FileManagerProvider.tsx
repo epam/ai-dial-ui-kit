@@ -74,7 +74,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
-  gridOptions: { showFiles = true, ...gridOptions } = {},
+  gridOptions: { showFiles = true, showFolders = true, ...gridOptions } = {},
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
@@ -357,6 +357,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         );
       }
 
+      if (!showFolders) {
+        source = source.filter(
+          (node) => node.nodeType !== DialFileNodeType.FOLDER,
+        );
+      }
+
       if (!areHiddenFilesVisible) {
         source = source.filter((node) => !isHiddenDotFile(node));
       }
@@ -386,6 +392,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     if (!showFiles) {
       source = source.filter((node) => node.nodeType !== DialFileNodeType.ITEM);
+    }
+
+    if (!showFolders) {
+      source = source.filter(
+        (node) => node.nodeType !== DialFileNodeType.FOLDER,
+      );
     }
 
     if (!areHiddenFilesVisible) {
@@ -447,6 +459,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     isCreatingFolder,
     newFolderTempId,
     showFiles,
+    showFolders,
   ]);
 
   const handleTreeItemClick = useCallback(
@@ -512,7 +525,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     },
     showNavigationPanel,
     navigationPanelOptions,
-    gridOptions: { showFiles, ...gridOptions },
+    gridOptions: { showFiles, showFolders, ...gridOptions },
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
