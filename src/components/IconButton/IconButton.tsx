@@ -20,7 +20,7 @@ export interface DialIconButtonProps
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   icon: ReactNode;
-  tooltipText?: string;
+  tooltip?: ReactNode;
 }
 
 /**
@@ -48,7 +48,7 @@ export interface DialIconButtonProps
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ButtonSize.Standard] - Defines the size of the button
- * @param [tooltipText] - The text of icon button tooltip
+ * @param [tooltip] - The content of the icon button tooltip
  * @param icon - Icon display
  */
 export const DialIconButton: FC<DialIconButtonProps> = ({
@@ -57,7 +57,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   size = ButtonSize.Standard,
   className,
   icon,
-  tooltipText,
+  tooltip,
   type = 'button',
   ...props
 }) => {
@@ -71,7 +71,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   );
 
   return (
-    <DialTooltip tooltip={tooltipText}>
+    <DialTooltip tooltip={tooltip}>
       <button
         {...props}
         type={type}
