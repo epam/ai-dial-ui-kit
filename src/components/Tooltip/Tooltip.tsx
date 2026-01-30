@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 export interface DialTooltipProps extends DialTooltipContainerOptions {
   hideTooltip?: boolean;
-  tooltip: ReactNode;
+  tooltip?: ReactNode;
   children: ReactNode;
   triggerClassName?: string;
   contentClassName?: string;

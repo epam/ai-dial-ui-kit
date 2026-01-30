@@ -9,7 +9,9 @@ import type {
 import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
-import { DialTooltip } from '../Tooltip/Tooltip';
+import { DialTooltip, type DialTooltipProps } from '../Tooltip/Tooltip';
+
+type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
 export interface DialIconButtonProps
   extends DetailedHTMLProps<
@@ -20,7 +22,7 @@ export interface DialIconButtonProps
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   icon: ReactNode;
-  tooltip?: ReactNode;
+  tooltipProps?: TooltipProps;
 }
 
 /**
@@ -57,7 +59,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   size = ButtonSize.Standard,
   className,
   icon,
-  tooltip,
+  tooltipProps,
   type = 'button',
   ...props
 }) => {
@@ -71,7 +73,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   );
 
   return (
-    <DialTooltip tooltip={tooltip}>
+    <DialTooltip {...tooltipProps}>
       <button
         {...props}
         type={type}
