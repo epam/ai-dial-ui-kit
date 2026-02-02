@@ -13,7 +13,7 @@ import {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
-import React, {
+import {
   type FC,
   type ReactNode,
   useCallback,
@@ -40,6 +40,11 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
+
+enum SelectionEventSourceType {
+  API = 'api',
+  ROW_DATA_CHANGED = 'rowDataChanged',
+}
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -243,7 +248,10 @@ export const DialGrid = <T extends object>({
       const selectedIds = new Set(selectedRows.map(getRowId));
       selectedNodesRef.current = selectedIds;
 
-      if (event.source !== 'api' && event.source !== 'rowDataChanged') {
+      if (
+        event.source !== SelectionEventSourceType.API &&
+        event.source !== SelectionEventSourceType.ROW_DATA_CHANGED
+      ) {
         onSelectionChange?.(selectedIds, selectedRows);
       }
     },
@@ -462,7 +470,7 @@ export const DialGrid = <T extends object>({
       selectedNodesRef.current.forEach((id) => {
         const node = gridApi.getRowNode(id);
         if (node && !node.isSelected()) {
-          node.setSelected(true, false, 'api');
+          node.setSelected(true, false, SelectionEventSourceType.API);
         }
       });
     }
@@ -470,11 +478,11 @@ export const DialGrid = <T extends object>({
 
   useEffect(() => {
     if (gridApi && selectedRowIds) {
-      gridApi.deselectAll('all', 'api');
+      gridApi.deselectAll('all', SelectionEventSourceType.API);
       selectedRowIds.forEach((id) => {
         const node = gridApi.getRowNode(id);
         if (node && !node.isSelected()) {
-          node.setSelected(true, false, 'api');
+          node.setSelected(true, false, SelectionEventSourceType.API);
         }
       });
     }
@@ -482,7 +490,9 @@ export const DialGrid = <T extends object>({
 
   const agGridGetRowId = useCallback(
     (params: { data?: T }) => {
-      if (!params.data) return '';
+      if (!params.data) {
+        return '';
+      }
       return getRowId(params.data);
     },
     [getRowId],
