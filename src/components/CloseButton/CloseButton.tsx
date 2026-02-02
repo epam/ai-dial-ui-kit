@@ -1,6 +1,7 @@
 import { IconX } from '@tabler/icons-react';
 import type { FC, MouseEvent } from 'react';
-import { DialButton } from '@/components/Button/Button';
+
+import { DialIconButton } from '@/components/IconButton/IconButton';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialCloseButtonProps {
@@ -39,11 +40,15 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
   const buttonClassName = 'text-secondary hover:enabled:text-accent-primary';
 
   return (
-    <DialButton
+    <DialIconButton
       aria-label={ariaLabel}
-      className={mergeClasses(buttonClassName, className)}
+      className={mergeClasses(
+        buttonClassName,
+        className,
+        '!w-auto !h-auto !p-0', // Exception: DialCloseButton does not require a static size
+      )}
       onClick={onClose}
-      iconBefore={<IconX size={size} />}
+      icon={<IconX size={size} />}
       {...props}
     />
   );
