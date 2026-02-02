@@ -1,14 +1,14 @@
 import type { FC } from 'react';
 
 import { EDITOR_THEMES_CONFIG } from '@/constants/editor';
-import { EDITOR_THEMES } from '@/types/editor';
+import { EditorThemes } from '@/types/editor';
 import { Editor, type Monaco, type OnValidate } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 
 export interface DialJsonEditorProps {
   value?: string | undefined;
   currentTheme: string;
-  themesConfig?: Record<EDITOR_THEMES, editor.IStandaloneThemeData>;
+  themesConfig?: Record<EditorThemes, editor.IStandaloneThemeData>;
   onChange: (value: string | undefined) => void;
   onValidateJSON?: OnValidate;
   options?: editor.IStandaloneEditorConstructionOptions;
@@ -36,7 +36,7 @@ export const DialJsonEditor: FC<DialJsonEditorProps> = ({
   function handleBeforeMount(monaco: Monaco) {
     monaco?.editor?.defineTheme(
       currentTheme,
-      themesConfig[currentTheme as EDITOR_THEMES],
+      themesConfig[currentTheme as EditorThemes],
     );
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,

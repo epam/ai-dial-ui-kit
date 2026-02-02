@@ -79,6 +79,17 @@ function App() {
 }
 ```
 
+### Optional: Markdown Components CSS
+
+If you're using markdown-related components (`DialMarkdownEditor` or `DialMarkdownEditorContainer`), you need to import the required CSS files globally in your application (e.g., in your root layout or main entry point):
+
+```tsx
+import '@uiw/react-markdown-preview/markdown.css';
+import '@uiw/react-md-editor/markdown-editor.css';
+```
+
+This ensures the CSS is loaded once per application rather than being bundled with each component instance, reducing bundle size.
+
 ## Development
 
 ### Prerequisites

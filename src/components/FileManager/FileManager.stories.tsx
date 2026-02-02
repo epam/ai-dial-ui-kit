@@ -1415,6 +1415,66 @@ export const WithInsertSiblingChildrenActions: Story = {
   ),
 };
 
+const WithoutFilesComponent = (args: DialFileManagerProps) => {
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          showFiles: false,
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>(['All files']),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithoutFiles: Story = {
+  render: WithoutFilesComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager configured to hide files in the grid, showing only folders in the tree view.',
+      },
+    },
+  },
+};
+
+const WithoutFoldersComponent = (args: DialFileManagerProps) => {
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          showFolders: false,
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>(['All files']),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithoutFolders: Story = {
+  render: WithoutFoldersComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager configured to hide folders in the grid, showing only files in the grid view.',
+      },
+    },
+  },
+};
+
 const WithCustomColumnsComponent = (args: DialFileManagerProps) => {
   const customColumns = useMemo<ColDef<FileManagerGridRow>[]>(() => {
     return [

@@ -106,7 +106,7 @@ import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
-import { GridSelectionMode } from '@/models/selection-mode.ts';
+import type { GridSelectionMode } from '@/models/selection-mode.ts';
 
 type GridRow = FileManagerGridRow;
 
@@ -194,6 +194,8 @@ export interface GridOptions
   filterable?: boolean;
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
+  showFiles?: boolean;
+  showFolders?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
   actionLabels?: {
@@ -850,6 +852,7 @@ export const DialFileManagerView: FC = () => {
     onUnshare: onUnshareFiles,
     getCurrentFolderPath: () => currentPath ?? '/',
     sharedWithMeIds,
+    onClearSelection: clearSelection,
   });
 
   const renderToolbar = useCallback(() => {

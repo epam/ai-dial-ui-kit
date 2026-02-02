@@ -74,13 +74,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
-  gridOptions,
+  gridOptions: { showFiles = true, showFolders = true, ...gridOptions } = {},
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
   conflictResolutionPopupOptions,
   onPathChange,
   onTableFileClick,
+  onGridApiChange,
   onCopyFiles,
   onMoveToFiles,
   onDeleteFiles,
@@ -348,24 +349,22 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
     if (isSearchMode) {
-      const source = searchResultsRows;
+      let source = searchResultsRows;
+
+      if (!showFiles) {
+        source = source.filter(
+          (node) => node.nodeType !== DialFileNodeType.ITEM,
+        );
+      }
+
+      if (!showFolders) {
+        source = source.filter(
+          (node) => node.nodeType !== DialFileNodeType.FOLDER,
+        );
+      }
 
       if (!areHiddenFilesVisible) {
-        const filtered = source.filter((node) => !isHiddenDotFile(node));
-        return filtered.map((node) => ({
-          ...node,
-          id: node.id ?? node.path,
-          name: node.name ?? node.path.split('/').pop() ?? '',
-          updatedAt: node.updatedAt,
-          size: node.contentLength,
-          contentLength: node.contentLength,
-          author: node.author,
-          path: node.path,
-          nodeType: node.nodeType,
-          extension: node.extension,
-          isTemporary: false,
-          owner: node.owner,
-        }));
+        source = source.filter((node) => !isHiddenDotFile(node));
       }
 
       return source.map((node) => ({
@@ -374,6 +373,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         name: node.name ?? node.path.split('/').pop() ?? '',
         updatedAt: node.updatedAt,
         size: node.contentLength,
+        contentLength: node.contentLength,
         author: node.author,
         path: node.path,
         nodeType: node.nodeType,
@@ -389,6 +389,16 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     let source: DialFile[] = query
       ? collectAllDescendants(currentFolder)
       : directChildren;
+
+    if (!showFiles) {
+      source = source.filter((node) => node.nodeType !== DialFileNodeType.ITEM);
+    }
+
+    if (!showFolders) {
+      source = source.filter(
+        (node) => node.nodeType !== DialFileNodeType.FOLDER,
+      );
+    }
 
     if (!areHiddenFilesVisible) {
       source = source.filter((node) => !isHiddenDotFile(node));
@@ -448,6 +458,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    showFiles,
+    showFolders,
   ]);
 
   const handleTreeItemClick = useCallback(
@@ -513,7 +525,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     },
     showNavigationPanel,
     navigationPanelOptions,
-    gridOptions,
+    gridOptions: { showFiles, showFolders, ...gridOptions },
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
@@ -584,6 +596,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSearchChange,
     handleTableRowClick,
     onTableFileClick,
+    onGridApiChange,
 
     isDragging,
     uploadError,
