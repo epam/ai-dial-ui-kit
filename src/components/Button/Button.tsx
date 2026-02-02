@@ -9,6 +9,7 @@ import type {
 import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from './utils';
+import { mergeClasses } from '../../utils/merge-classes';
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -76,7 +77,7 @@ export const DialButton: FC<DialButtonProps> = ({
     textClassName,
   );
 
-  const btnClassName = classNames(
+  const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
     size === ButtonSize.Small ? 'dial-tiny-text' : 'dial-small-text',
     appearance !== ButtonAppearance.Link &&
