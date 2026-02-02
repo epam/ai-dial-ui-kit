@@ -45,7 +45,7 @@ export const DialCloseButton: FC<DialCloseButtonProps> = ({
       className={mergeClasses(
         buttonClassName,
         className,
-        '!w-auto !h-auto !p-0', // Exception: DialCloseButton does not require a static size
+        'w-auto h-auto p-0', // Exception: DialCloseButton does not require a static size
       )}
       onClick={onClose}
       icon={<IconX size={size} />}
