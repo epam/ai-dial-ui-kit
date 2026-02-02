@@ -281,7 +281,7 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
             label="Clear selection"
           />
           <DialPrimaryButton
-            onClick={() => setSelectedIds(new Set(['1', '2', '3']))}
+            onClick={() => setSelectedIds(new Set(['1', '2', '3', '4']))}
             label="Select all"
           />
         </div>
@@ -291,6 +291,7 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
         <DialGrid<Row>
           {...(args as DialGridProps<Row>)}
           selectedRowIds={selectedIds}
+          selectionMode={GridSelectionMode.CHECKBOX}
           onSelectionChange={handleSelectionChange}
         />
       </div>

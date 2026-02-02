@@ -106,7 +106,7 @@ import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
-import type { GridSelectionMode } from '@/models/selection-mode.ts';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 
 type GridRow = FileManagerGridRow;
 
@@ -612,7 +612,7 @@ export const DialFileManagerView: FC = () => {
       FileManagerColumnKey.Actions,
     ],
     ...forwardedGridOptions
-  } = gridOptions ?? {};
+  } = useMemo(() => gridOptions ?? {}, [gridOptions]);
 
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
