@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import type {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
@@ -10,6 +9,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
 import { DialTooltip, type DialTooltipProps } from '../Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
@@ -63,7 +63,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   type = 'button',
   ...props
 }) => {
-  const btnClassName = classNames(
+  const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
     size === ButtonSize.Small
       ? 'h-[22px] p-1 w-[22px]'
