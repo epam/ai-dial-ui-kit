@@ -301,12 +301,12 @@ export const DialGrid = <T extends object>({
     [getRowId, disabledRowIds],
   );
 
-  const selectionColumnDef = useMemo<ColDef<T> | undefined>(() => {
+  const selectionColumnDef = useMemo(() => {
     if (selectionMode === GridSelectionMode.RADIO_BUTTON) {
       return {
         ...RADIO_BUTTON_COL_DEF,
         cellRenderer: selectionCellRenderer,
-      };
+      } as ColDef<T>;
     }
     if (selectionMode === GridSelectionMode.CHECKBOX) {
       return {
@@ -321,7 +321,7 @@ export const DialGrid = <T extends object>({
           }
           return styles;
         },
-      };
+      } as ColDef<T>;
     }
   }, [
     disabledRowIds,

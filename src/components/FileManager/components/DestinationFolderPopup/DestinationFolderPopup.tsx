@@ -192,10 +192,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
               header: restProps.treeOptions?.header,
             }}
-            gridOptions={{
-              withSelectionColumn: false,
-              ...restProps.gridOptions,
-            }}
+            gridOptions={restProps.gridOptions}
             navigationPanelOptions={{
               elementId: 'file-manager-destination-search',
               ...restProps.navigationPanelOptions,
