@@ -363,7 +363,6 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
                 columnDefs={columnDefs}
                 rowData={gridRows}
                 getRowId={(row) => row.id}
-                withSelectionColumn={false}
                 wrapCustomCellRenderers={false}
                 alternateOddRowColors={false}
                 additionalGridOptions={{
