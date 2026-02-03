@@ -316,6 +316,7 @@ export const DialGrid = <T extends object>({
           let styles = !selectionOnHover
             ? 'dial-row-select dial-row-select-visible'
             : 'dial-row-select';
+
           if (rowId && disabledRowIds?.has(rowId)) {
             styles += ' opacity-50 pointer-events-none';
           }
