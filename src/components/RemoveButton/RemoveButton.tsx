@@ -2,9 +2,9 @@ import { IconTrashX } from '@tabler/icons-react';
 import { type FC } from 'react';
 
 import { type DialButtonProps } from '@/components/Button/Button';
-import { DialErrorButton } from '@/components/Button/ButtonWrappers';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
+import { DialErrorIconButton } from '@/components/IconButton/IconButtonWrappers';
 
 export interface DialRemoveButtonProps
   extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
@@ -32,12 +32,10 @@ export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
   ...props
 }) => {
   return (
-    <DialErrorButton
+    <DialErrorIconButton
       {...props}
       appearance={ButtonAppearance.Ghost}
-      iconBefore={
-        <IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />
-      }
+      icon={<IconTrashX {...BASE_ICON_PROPS} className={iconClassName || ''} />}
     />
   );
 };

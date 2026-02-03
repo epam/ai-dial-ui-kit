@@ -28,7 +28,12 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DropdownTrigger } from '@/types/dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
-import { GRID_THEME_COLORS, gridBaseClassName, ROW_HEIGHT } from './constants';
+import {
+  GRID_THEME_COLORS,
+  gridBaseClassName,
+  ROW_HEIGHT,
+  SelectionEventSourceType,
+} from './constants';
 import { baseColumnComparator } from './comparators/base-column-comparator';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { IconZoomCancel } from '@tabler/icons-react';
@@ -40,12 +45,6 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
-
-enum SelectionEventSourceType {
-  API = 'api',
-  ROW_DATA_CHANGED = 'rowDataChanged',
-  CHECKBOX_SELECTED = 'checkboxSelected',
-}
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];

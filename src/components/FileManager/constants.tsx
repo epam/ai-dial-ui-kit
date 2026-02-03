@@ -42,10 +42,10 @@ export const COMPACT_VIEW_FILE_ROW_HEIGHT = 56;
 
 export const DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT = 800;
 
-export const defaultVisibleColumns = [
+export const DEFAULT_VISIBLE_COLUMN = [
   FileManagerColumnKey.Name,
   FileManagerColumnKey.UpdatedAt,
   FileManagerColumnKey.Size,
   FileManagerColumnKey.Author,
   FileManagerColumnKey.Actions,
-]
+];
