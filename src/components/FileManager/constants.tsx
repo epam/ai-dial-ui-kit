@@ -48,4 +48,4 @@ export const defaultVisibleColumns = [
   FileManagerColumnKey.Size,
   FileManagerColumnKey.Author,
   FileManagerColumnKey.Actions,
-]
+];
