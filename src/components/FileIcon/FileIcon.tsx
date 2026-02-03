@@ -7,7 +7,7 @@ import { fileIconFactories } from './constants';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileIconProps {
-  extension: string;
+  extension: string | null | undefined;
   size?: number;
   stroke?: number;
   className?: string;
@@ -46,6 +46,7 @@ export const DialFileIcon: FC<DialFileIconProps> = ({
   indicator,
 }) => {
   const normalized = (() => {
+    if (!extension) return '';
     const raw = extension.trim().toLowerCase();
     return raw.startsWith('.') ? raw : `.${raw}`;
   })();

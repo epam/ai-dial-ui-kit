@@ -15,11 +15,11 @@ describe('Dial UI Kit :: DialFileName', () => {
     ).toBeInTheDocument();
   });
 
-  test('does not render file icon when no extension', () => {
+  test('renders file icon when no extension', () => {
     render(<DialFileName name="README" />);
     expect(
       screen.queryByRole('img', { name: 'File type icon' }),
-    ).not.toBeInTheDocument();
+    ).toBeInTheDocument();
   });
 
   test('root container spans full width and keeps spacing', () => {
