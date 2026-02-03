@@ -160,7 +160,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [loading=false] - When true, shows AG-Grid's native loading overlay
  * @param [wrapperBorder=true] - Whether to apply a border around the grid container
  * @param [withoutHeaderBorders=false] - Whether to hide the header row borders
- * @param [selectionMode] - Could be GridSelectionMode.CHECKBOX or GridSelectionMode.RADIO_BUTTON to enable selection column
+ * @param [selectionMode] - Could be GridSelectionMode.MULTIPLE or GridSelectionMode.SINGLE to enable selection column
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -302,13 +302,13 @@ export const DialGrid = <T extends object>({
   );
 
   const selectionColumnDef = useMemo(() => {
-    if (selectionMode === GridSelectionMode.RADIO_BUTTON) {
+    if (selectionMode === GridSelectionMode.SINGLE) {
       return {
         ...RADIO_BUTTON_COL_DEF,
         cellRenderer: selectionCellRenderer,
       } as ColDef<T>;
     }
-    if (selectionMode === GridSelectionMode.CHECKBOX) {
+    if (selectionMode === GridSelectionMode.MULTIPLE) {
       return {
         ...CHECKBOX_COL_DEF,
         cellClass: (p) => {
@@ -316,6 +316,7 @@ export const DialGrid = <T extends object>({
           let styles = !selectionOnHover
             ? 'dial-row-select dial-row-select-visible'
             : 'dial-row-select';
+
           if (rowId && disabledRowIds?.has(rowId)) {
             styles += ' opacity-50 pointer-events-none';
           }
@@ -457,9 +458,7 @@ export const DialGrid = <T extends object>({
     if (selectionMode) {
       return {
         mode:
-          selectionMode === GridSelectionMode.RADIO_BUTTON
-            ? 'singleRow'
-            : 'multiRow',
+          selectionMode === GridSelectionMode.SINGLE ? 'singleRow' : 'multiRow',
         isRowSelectable: (node) => {
           const rowId = node.data ? getRowId(node.data as T) : null;
           return rowId ? !disabledRowIds?.has(rowId) : true;
