@@ -1141,7 +1141,7 @@ export const DialFileManagerView: FC = () => {
                     : '',
                 )}
                 {...forwardedGridOptions}
-                selectionMode={selectionMode || GridSelectionMode.CHECKBOX}
+                selectionMode={selectionMode}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,
