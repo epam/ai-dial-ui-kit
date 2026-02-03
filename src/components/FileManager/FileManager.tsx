@@ -25,6 +25,7 @@ import {
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
   actionsColumnButtonClassName,
+  DEFAULT_VISIBLE_COLUMN,
 } from './constants';
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -106,7 +107,7 @@ import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
-import type { GridSelectionMode } from '@/models/selection-mode.ts';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 
 type GridRow = FileManagerGridRow;
 
@@ -603,13 +604,8 @@ export const DialFileManagerView: FC = () => {
     filterable = true,
     dateLocale,
     dateOptions,
-    visibleColumns = [
-      FileManagerColumnKey.Name,
-      FileManagerColumnKey.UpdatedAt,
-      FileManagerColumnKey.Size,
-      FileManagerColumnKey.Author,
-      FileManagerColumnKey.Actions,
-    ],
+    selectionMode,
+    visibleColumns = DEFAULT_VISIBLE_COLUMN,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -810,16 +806,11 @@ export const DialFileManagerView: FC = () => {
     ],
   );
 
-  const selectedGridRows = useMemo(() => {
-    const map = new Map<string, GridRow>();
-    selectedFiles.forEach((_file, id) => {
-      const gridRow = gridRows.find((row) => row.path === id);
-      if (gridRow) {
-        map.set(id, gridRow);
-      }
-    });
-    return map;
-  }, [selectedFiles, gridRows]);
+  const selectedGridRowsIds = useMemo(() => {
+    const data = new Set<string>();
+    selectedFiles.forEach((_file, id) => data.add(id));
+    return data;
+  }, [selectedFiles]);
 
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
@@ -832,10 +823,8 @@ export const DialFileManagerView: FC = () => {
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
-    (newSelectedGridRows: Map<string, GridRow>) => {
-      const newSelectedFiles = new Set<string>();
-      newSelectedGridRows.forEach((_gridRow, id) => newSelectedFiles.add(id));
-      selectedPathsChangeHandler(newSelectedFiles);
+    (selectedRowsIds: Set<string>) => {
+      selectedPathsChangeHandler(selectedRowsIds);
     },
     [selectedPathsChangeHandler],
   );
@@ -1152,6 +1141,7 @@ export const DialFileManagerView: FC = () => {
                     : '',
                 )}
                 {...forwardedGridOptions}
+                selectionMode={selectionMode}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,
@@ -1182,8 +1172,8 @@ export const DialFileManagerView: FC = () => {
                     selectedPaths,
                   } as FileManagerGridContext,
                 }}
-                selectedRows={selectedGridRows}
-                onSelectionChangeWithMap={handleSelectionChange}
+                selectedRowIds={selectedGridRowsIds}
+                onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
               />

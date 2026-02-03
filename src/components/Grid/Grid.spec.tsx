@@ -37,23 +37,6 @@ describe('Dial UI Kit :: DialGrid', () => {
     expect(await screen.findByText('Age')).toBeInTheDocument();
   });
 
-  test('does not render selection column when withSelectionColumn=false', async () => {
-    render(
-      <DialGrid<TestRow>
-        columnDefs={testColumns}
-        rowData={testRows}
-        withSelectionColumn={false}
-      />,
-    );
-
-    // Wait for grid to render
-    await screen.findByText('Alice');
-
-    // Selection checkboxes shouldn't be present
-    expect(screen.queryByLabelText('Select all rows')).not.toBeInTheDocument();
-    expect(screen.queryAllByLabelText('Select row').length).toBe(0);
-  });
-
   test('calls onGridReady when grid is initialized', async () => {
     const onGridReady = vi.fn();
     render(

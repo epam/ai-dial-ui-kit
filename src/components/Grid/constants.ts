@@ -1,4 +1,4 @@
-export const gridBaseClassName = 'h-full';
+export const gridBaseClassName = 'h-full w-full';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--controls-bg-accent, #5C8DEA)',
@@ -24,3 +24,9 @@ export const GRID_THEME_COLORS = {
 };
 
 export const ROW_HEIGHT = 40;
+
+export enum SelectionEventSourceType {
+  API = 'api',
+  ROW_DATA_CHANGED = 'rowDataChanged',
+  CHECKBOX_SELECTED = 'checkboxSelected',
+}
