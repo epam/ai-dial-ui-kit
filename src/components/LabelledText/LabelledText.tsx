@@ -46,11 +46,13 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
         className,
       )}
     >
-      <label className="dial-tiny mb-2 text-secondary">{label}</label>
+      {label && (
+        <label className="dial-tiny mb-2 text-secondary">{label}</label>
+      )}
       {children ? (
         children
       ) : (
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center gap-x-3">
           <DialTooltip
             triggerClassName="text-primary"
             tooltip={tooltip || text}
