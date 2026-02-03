@@ -1,3 +1,5 @@
+import { FileManagerColumnKey } from '@/types/file-manager.ts';
+
 export const containerBaseClassName =
   'w-full h-full grid grid-rows-[auto_1fr] gap-5 p-6 overflow-hidden min-w-0 bg-layer-1';
 
@@ -39,3 +41,11 @@ export const COMPACT_VIEW_HEADER_HEIGHT = 44;
 export const COMPACT_VIEW_FILE_ROW_HEIGHT = 56;
 
 export const DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT = 800;
+
+export const defaultVisibleColumns = [
+  FileManagerColumnKey.Name,
+  FileManagerColumnKey.UpdatedAt,
+  FileManagerColumnKey.Size,
+  FileManagerColumnKey.Author,
+  FileManagerColumnKey.Actions,
+]

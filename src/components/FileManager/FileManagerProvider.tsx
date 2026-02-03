@@ -74,7 +74,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
-  gridOptions: { showFiles = true, showFolders = true, ...gridOptions } = {},
+  gridOptions: rawGridOptions,
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
@@ -146,6 +146,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onPathChange,
     onSelectionClear: clearSelection,
   });
+
+  const memoizedGridOptions = useMemo(() => {
+    const {
+      showFiles = true,
+      showFolders = true,
+      ...gridOptions
+    } = rawGridOptions || {};
+    return { showFiles, showFolders, ...gridOptions };
+  }, [rawGridOptions]);
+
+  const showFiles = memoizedGridOptions.showFiles;
+  const showFolders = memoizedGridOptions.showFolders;
 
   const [internalDestinationPath, setInternalDestinationPath] =
     useState<string>();
@@ -525,7 +537,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     },
     showNavigationPanel,
     navigationPanelOptions,
-    gridOptions: { showFiles, showFolders, ...gridOptions },
+    gridOptions: memoizedGridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,

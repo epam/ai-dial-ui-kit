@@ -25,6 +25,7 @@ import {
   COMPACT_VIEW_FILE_ROW_HEIGHT,
   DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
   actionsColumnButtonClassName,
+  defaultVisibleColumns,
 } from './constants';
 import { findNodeByPath, isFileAccepted } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
@@ -604,15 +605,9 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     selectionMode,
-    visibleColumns = [
-      FileManagerColumnKey.Name,
-      FileManagerColumnKey.UpdatedAt,
-      FileManagerColumnKey.Size,
-      FileManagerColumnKey.Author,
-      FileManagerColumnKey.Actions,
-    ],
+    visibleColumns = defaultVisibleColumns,
     ...forwardedGridOptions
-  } = useMemo(() => gridOptions ?? {}, [gridOptions]);
+  } = gridOptions ?? {};
 
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
