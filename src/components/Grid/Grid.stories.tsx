@@ -235,14 +235,6 @@ export const WithCheckboxSelection: Story = {
   },
 };
 
-export const WithCheckboxSelection: Story = {
-  args: {
-    selectionMode: GridSelectionMode.CHECKBOX,
-    disabledRowIds: new Set(['2']),
-    selectedRowIds: new Set(['1']),
-  },
-};
-
 export const NoFilters: Story = {
   args: {
     selectedRowIds: undefined,
