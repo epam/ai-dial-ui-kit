@@ -142,19 +142,32 @@ export const DialTabs: FC<DialTabsProps> = ({
     const scrollEl = scrollableRef.current;
     if (!activeEl || !scrollEl) return;
 
-    const offsetLeft = activeEl.offsetLeft;
-    const offsetRight = offsetLeft + activeEl.offsetWidth;
-    const visibleStart = scrollEl.scrollLeft;
-    const visibleEnd = visibleStart + scrollEl.clientWidth;
+    const activeRect = activeEl.getBoundingClientRect();
+    const scrollRect = scrollEl.getBoundingClientRect();
 
-    if (offsetLeft < visibleStart) {
+    // Skip if dimensions aren't ready yet
+    if (activeRect.width === 0 || scrollRect.width === 0) return;
+
+    const gap = DESKTOP_TABS_GAP_PX;
+    let nextScrollLeft = scrollEl.scrollLeft;
+
+    if (activeRect.left < scrollRect.left + gap) {
+      nextScrollLeft -= scrollRect.left + gap - activeRect.left;
+    } else if (activeRect.right > scrollRect.right - gap) {
+      nextScrollLeft += activeRect.right - (scrollRect.right - gap);
+    } else {
+      return;
+    }
+
+    const maxScrollLeft = Math.max(
+      0,
+      scrollEl.scrollWidth - scrollEl.clientWidth,
+    );
+    nextScrollLeft = Math.max(0, Math.min(nextScrollLeft, maxScrollLeft));
+
+    if (nextScrollLeft !== scrollEl.scrollLeft) {
       scrollEl.scrollTo({
-        left: offsetLeft - DESKTOP_TABS_GAP_PX,
-        behavior: 'smooth',
-      });
-    } else if (offsetRight > visibleEnd) {
-      scrollEl.scrollTo({
-        left: offsetRight - scrollEl.clientWidth + DESKTOP_TABS_GAP_PX,
+        left: nextScrollLeft,
         behavior: 'smooth',
       });
     }
