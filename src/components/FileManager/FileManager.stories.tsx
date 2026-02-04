@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useCallback, useMemo, useState } from 'react';
 import {
   DialFileManager,
-  DialFileManagerView,
   type DialFileManagerProps,
+  DialFileManagerView,
 } from './FileManager';
 import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
@@ -11,9 +11,9 @@ import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialPopup } from '@/components/Popup/Popup';
 import {
+  type DialFile,
   DialFileNodeType,
   DialFileResourceType,
-  type DialFile,
   type DialRootFolder,
 } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
@@ -21,9 +21,9 @@ import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
   DialFileManagerTabs,
+  FileManagerColumnKey,
 } from '@/types/file-manager';
 import { PopupSize } from '@/types/popup';
-import { FileManagerColumnKey } from '@/types/file-manager';
 import {
   IconBuildingCommunity,
   IconFileDescription,
@@ -32,6 +32,7 @@ import {
 import type { FileManagerGridRow } from './FileManagerContext';
 import type { ColDef } from 'ag-grid-community';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -1576,6 +1577,7 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
         gridOptions={{
           ...(args.gridOptions ?? {}),
           filterable: false,
+          selectionMode: GridSelectionMode.SINGLE,
         }}
         treeOptions={{
           ...(args.treeOptions ?? {}),
