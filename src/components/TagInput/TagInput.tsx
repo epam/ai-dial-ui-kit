@@ -124,7 +124,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     });
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [tags]);
+  }, []);
 
   useEffect(() => {
     setTags(initialTags);
