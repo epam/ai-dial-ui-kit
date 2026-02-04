@@ -126,6 +126,11 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     return () => observer.disconnect();
   }, [tags]);
 
+  useEffect(() => {
+    setTags(initialTags);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(initialTags)]);
+
   return (
     <div className={classNames('flex flex-col w-full')}>
       <DialFieldLabel
