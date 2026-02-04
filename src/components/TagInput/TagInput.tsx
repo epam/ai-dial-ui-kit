@@ -65,7 +65,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(initialTags);
   const [inputValue, setInputValue] = useState('');
   const [wraps, setWraps] = useState(false);
 
@@ -124,11 +124,12 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     });
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [tags]);
 
   useEffect(() => {
     setTags(initialTags);
-  }, [initialTags]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(initialTags)]);
 
   return (
     <div className={classNames('flex flex-col w-full')}>
