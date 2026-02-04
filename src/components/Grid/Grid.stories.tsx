@@ -223,13 +223,13 @@ export const WithoutContextMenu: Story = {
 
 export const WithRadioButtonSelection: Story = {
   args: {
-    selectionMode: GridSelectionMode.RADIO_BUTTON,
+    selectionMode: GridSelectionMode.SINGLE,
   },
 };
 
 export const WithCheckboxSelection: Story = {
   args: {
-    selectionMode: GridSelectionMode.CHECKBOX,
+    selectionMode: GridSelectionMode.MULTIPLE,
     disabledRowIds: new Set(['2']),
     selectedRowIds: new Set(['1']),
   },
@@ -291,7 +291,7 @@ const ControlledSelectionDemo: FC<DialGridProps<Row>> = (args) => {
         <DialGrid<Row>
           {...(args as DialGridProps<Row>)}
           selectedRowIds={selectedIds}
-          selectionMode={GridSelectionMode.CHECKBOX}
+          selectionMode={GridSelectionMode.MULTIPLE}
           onSelectionChange={handleSelectionChange}
         />
       </div>
