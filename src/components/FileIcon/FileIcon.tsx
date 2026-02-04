@@ -7,7 +7,7 @@ import { fileIconFactories } from './constants';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 
 export interface DialFileIconProps {
-  extension: string | null | undefined;
+  extension?: string;
   size?: number;
   stroke?: number;
   className?: string;

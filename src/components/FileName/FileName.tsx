@@ -49,7 +49,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
   details,
   sharedIndicatorClassName,
 }) => {
-  const extension = name.includes('.') ? name.split('.').pop() : null;
+  const extension = name.includes('.') ? name.split('.').pop() : undefined;
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
