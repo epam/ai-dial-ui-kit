@@ -95,14 +95,13 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     );
 
     const menuItems = result.current(testFile);
-    expect(menuItems).toHaveLength(8);
+    expect(menuItems).toHaveLength(7);
     expect(menuItems.map((item) => item.key)).toEqual([
       DialFileManagerActions.Duplicate,
       DialFileManagerActions.Copy,
       DialFileManagerActions.Move,
       DialFileManagerActions.Download,
       DialFileManagerActions.Delete,
-      DialFileManagerActions.Rename,
       DialFileManagerActions.Info,
       DialFileManagerActions.Unshare,
     ]);
@@ -160,11 +159,10 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     );
 
     const menuItems = result.current(testFile);
-    expect(menuItems).toHaveLength(3);
+    expect(menuItems).toHaveLength(2);
     expect(menuItems.map((item) => item.key)).toEqual([
       DialFileManagerActions.Copy,
       DialFileManagerActions.Delete,
-      DialFileManagerActions.Rename,
     ]);
   });
 
@@ -292,7 +290,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       }),
     );
 
-    const menuItems = result.current(testFile);
+    const menuItems = result.current(testFolder);
     const renameAction = menuItems[0];
     renameAction.onClick?.({
       key: renameAction.key,
@@ -300,7 +298,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     });
 
     expect(onRename).toHaveBeenCalledTimes(1);
-    expect(onRename).toHaveBeenCalledWith(testFile.path);
+    expect(onRename).toHaveBeenCalledWith(testFolder.path);
   });
 
   test('delete action calls onDelete with file and parent path', () => {
@@ -568,7 +566,7 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     const folderMenuItems = result.current(testFolder);
 
     // File should have Info action
-    expect(fileMenuItems).toHaveLength(8);
+    expect(fileMenuItems).toHaveLength(7);
     expect(
       fileMenuItems.find((i) => i.key === DialFileManagerActions.Info),
     ).toBeDefined();

@@ -58,6 +58,7 @@ export interface FileManagerProviderProps
  *
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
+  title,
   children,
   className,
   items = [],
@@ -116,6 +117,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   emptyStateDescription,
 
   sharedWithMeIds,
+  onFolderPopupPathChange,
+  onManagePermissions,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -523,6 +526,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
   const value: FileManagerContextValue = {
+    title,
     className,
     items,
     allowedFileTypes,
@@ -673,6 +677,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateDescription,
 
     sharedWithMeIds,
+
+    onFolderPopupPathChange,
+    onManagePermissions,
   };
 
   return (

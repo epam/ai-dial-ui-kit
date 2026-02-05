@@ -45,6 +45,7 @@ export interface FileManagerGridRow {
 }
 
 export interface FileManagerContextValue {
+  title?: string;
   className?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
@@ -191,6 +192,8 @@ export interface FileManagerContextValue {
   emptyStateDescription?: string;
 
   sharedWithMeIds?: string[];
+  onFolderPopupPathChange?: (newPath?: string) => void;
+  onManagePermissions?: (path?: string) => void;
 }
 
 export const FileManagerContext = createContext<

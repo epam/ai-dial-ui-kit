@@ -59,6 +59,7 @@ import {
 import {
   IconCopy,
   IconDownload,
+  IconExternalLink,
   IconFileDescription,
   IconPencilMinus,
   IconTrashX,
@@ -167,6 +168,7 @@ export interface FileTreeOptions
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Unshare]?: string;
+    [DialFileManagerActions.ManagePermissions]?: string;
   };
 }
 
@@ -210,6 +212,7 @@ export interface GridOptions
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
+    [DialFileManagerActions.ManagePermissions]?: string;
   };
 }
 
@@ -251,6 +254,7 @@ export interface DialFileManagerProps {
   path?: string;
   defaultPath?: string;
   className?: string;
+  title?: string;
 
   allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
@@ -343,6 +347,8 @@ export interface DialFileManagerProps {
   emptyStateDescription?: string;
 
   sharedWithMeIds?: string[];
+  onFolderPopupPathChange?: (newPath?: string) => void;
+  onManagePermissions?: (path?: string) => void;
 }
 
 /**
@@ -457,6 +463,7 @@ export const DialFileManager: FC<DialFileManagerProps> = (props) => {
  */
 export const DialFileManagerView: FC = () => {
   const {
+    title,
     className,
     items,
     rootItem,
@@ -574,6 +581,9 @@ export const DialFileManagerView: FC = () => {
     emptyStateDescription = 'Upload or drag and drop files',
 
     sharedWithMeIds,
+
+    onFolderPopupPathChange,
+    onManagePermissions,
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -647,10 +657,13 @@ export const DialFileManagerView: FC = () => {
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
+      const isRootNode = !file.parentPath;
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
-          typeof handleAddSibling === 'function'
+          typeof handleAddSibling === 'function' &&
+          file.nodeType === DialFileNodeType.FOLDER &&
+          !isRootNode
         ) {
           items.push({
             key: 'addSibling',
@@ -668,7 +681,8 @@ export const DialFileManagerView: FC = () => {
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddChild] &&
-          typeof handleAddChild === 'function'
+          typeof handleAddChild === 'function' &&
+          file.nodeType === DialFileNodeType.FOLDER
         ) {
           items.push(
             {
@@ -690,7 +704,10 @@ export const DialFileManagerView: FC = () => {
           );
         }
 
-        if (treeOptions.actionLabels[DialFileManagerActions.Duplicate]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Duplicate] &&
+          !isRootNode
+        ) {
           items.push({
             key: 'duplicate',
             label: treeOptions.actionLabels[DialFileManagerActions.Duplicate],
@@ -699,7 +716,10 @@ export const DialFileManagerView: FC = () => {
           });
         }
 
-        if (treeOptions.actionLabels[DialFileManagerActions.Copy]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Copy] &&
+          !isRootNode
+        ) {
           items.push({
             key: DestinationFolderMode.Copy,
             label: treeOptions.actionLabels[DialFileManagerActions.Copy],
@@ -716,7 +736,10 @@ export const DialFileManagerView: FC = () => {
             },
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Move]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Move] &&
+          !isRootNode
+        ) {
           items.push({
             key: DestinationFolderMode.Move,
             label: treeOptions.actionLabels[DialFileManagerActions.Move],
@@ -733,7 +756,10 @@ export const DialFileManagerView: FC = () => {
             },
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Download]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Download] &&
+          !isRootNode
+        ) {
           items.push({
             key: 'download',
             label: treeOptions.actionLabels[DialFileManagerActions.Download],
@@ -743,7 +769,10 @@ export const DialFileManagerView: FC = () => {
             onClick: () => handleDownloadFiles([file]),
           });
         }
-        if (treeOptions.actionLabels[DialFileManagerActions.Rename]) {
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Rename] &&
+          !isRootNode
+        ) {
           items.push({
             key: 'rename',
             label: treeOptions.actionLabels[DialFileManagerActions.Rename],
@@ -758,7 +787,8 @@ export const DialFileManagerView: FC = () => {
         }
         if (
           treeOptions.actionLabels[DialFileManagerActions.Unshare] &&
-          sharedWithMeIds?.includes(file.path)
+          sharedWithMeIds?.includes(file.path) &&
+          !isRootNode
         ) {
           items.push({
             key: 'unshare',
@@ -774,8 +804,29 @@ export const DialFileManagerView: FC = () => {
           });
         }
         if (
+          treeOptions.actionLabels[DialFileManagerActions.ManagePermissions] &&
+          typeof onManagePermissions === 'function' &&
+          file.nodeType === DialFileNodeType.FOLDER
+        ) {
+          items.push({
+            key: DialFileManagerActions.ManagePermissions,
+            label:
+              treeOptions.actionLabels[
+                DialFileManagerActions.ManagePermissions
+              ],
+            icon: (
+              <IconExternalLink
+                {...BASE_ICON_PROPS}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onManagePermissions?.(file.path),
+          });
+        }
+        if (
           treeOptions.actionLabels[DialFileManagerActions.Delete] &&
-          file.permissions?.includes(DialFilePermission.WRITE)
+          file.permissions?.includes(DialFilePermission.WRITE) &&
+          !isRootNode
         ) {
           items.push({
             key: 'delete',
@@ -803,6 +854,7 @@ export const DialFileManagerView: FC = () => {
       onUnshareFiles,
       sharedWithMeIds,
       openDeleteConfirmation,
+      onManagePermissions,
     ],
   );
 
@@ -858,6 +910,7 @@ export const DialFileManagerView: FC = () => {
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
+          {title && <h1 className="text-primary">{title}</h1>}
           <DialFileManagerToolbar
             {...toolbarOptions}
             areHiddenFilesVisible={areHiddenFilesVisible}
@@ -899,6 +952,7 @@ export const DialFileManagerView: FC = () => {
     isNewButtonVisible,
     isNewButtonDisabled,
     newActions,
+    title,
   ]);
 
   useImperativeHandle(
@@ -1002,6 +1056,7 @@ export const DialFileManagerView: FC = () => {
     sharedWithMeIds,
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
+    onManagePermissions: (path) => onManagePermissions?.(path),
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1227,6 +1282,7 @@ export const DialFileManagerView: FC = () => {
           destinationFolderPopupOptions?.sourceFolder ?? currentPath
         }
         treeOptions={{ header: treeOptions?.header }}
+        onFolderPopupPathChange={onFolderPopupPathChange}
       />
       <ConflictResolutionPopup
         {...conflictResolutionPopupOptions}

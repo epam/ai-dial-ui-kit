@@ -8,6 +8,7 @@ import {
   IconPencilMinus,
   IconTrashX,
   IconInfoCircle,
+  IconExternalLink,
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
@@ -27,6 +28,7 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Copy]?: string;
     [DialFileManagerActions.Rename]?: string;
     [DialFileManagerActions.Download]?: string;
+    [DialFileManagerActions.ManagePermissions]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
@@ -43,6 +45,7 @@ export interface UseGridContextMenuProps {
   sharedWithMeIds?: string[];
   onAddSibling?: (file: DialFile) => void;
   onAddChild?: (file: DialFile) => void;
+  onManagePermissions?: (path?: string) => void;
 }
 
 export const useGridContextMenu = ({
@@ -58,6 +61,7 @@ export const useGridContextMenu = ({
   sharedWithMeIds,
   onAddSibling,
   onAddChild,
+  onManagePermissions,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -69,7 +73,8 @@ export const useGridContextMenu = ({
 
       if (
         actionLabels[DialFileManagerActions.AddSibling] &&
-        typeof onAddSibling === 'function'
+        typeof onAddSibling === 'function' &&
+        file.nodeType === DialFileNodeType.FOLDER
       ) {
         items.push({
           key: 'addSibling',
@@ -87,7 +92,8 @@ export const useGridContextMenu = ({
 
       if (
         actionLabels[DialFileManagerActions.AddChild] &&
-        typeof onAddChild === 'function'
+        typeof onAddChild === 'function' &&
+        file.nodeType === DialFileNodeType.FOLDER
       ) {
         items.push(
           {
@@ -159,6 +165,21 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (
+        actionLabels[DialFileManagerActions.ManagePermissions] &&
+        typeof onManagePermissions === 'function' &&
+        file.nodeType === DialFileNodeType.FOLDER
+      ) {
+        items.push({
+          key: DialFileManagerActions.ManagePermissions,
+          label: actionLabels[DialFileManagerActions.ManagePermissions],
+          icon: (
+            <IconExternalLink {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onManagePermissions?.(file.path),
+        });
+      }
+
       const emptyOrWritePermissions =
         !file.permissions ||
         file.permissions.includes(DialFilePermission.WRITE);
@@ -175,7 +196,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Rename]) {
+      if (
+        actionLabels[DialFileManagerActions.Rename] &&
+        file.nodeType === DialFileNodeType.FOLDER
+      ) {
         items.push({
           key: DialFileManagerActions.Rename,
           label: actionLabels[DialFileManagerActions.Rename],
@@ -233,5 +257,6 @@ export const useGridContextMenu = ({
     onInfo,
     onUnshare,
     sharedWithMeIds,
+    onManagePermissions,
   ]);
 };
