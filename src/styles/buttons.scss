@@ -1,6 +1,6 @@
 .dial-base-button {
   @apply flex flex-row items-center gap-x-2 justify-center;
-  @apply rounded border border-solid border-transparent;
+  @apply rounded border border-solid border-transparent box-content;
 }
 
 .dial-button-disable {
