@@ -254,7 +254,7 @@ export interface DialFileManagerProps {
   path?: string;
   defaultPath?: string;
   className?: string;
-  title?: string;
+  managerLabel?: ReactNode;
 
   allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
@@ -349,6 +349,11 @@ export interface DialFileManagerProps {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  isRenameFileAvailable?: boolean;
+  customUploadFileAction?: (
+    currentPath?: string,
+    currentFolder?: DialFile,
+  ) => void;
 }
 
 /**
@@ -463,7 +468,7 @@ export const DialFileManager: FC<DialFileManagerProps> = (props) => {
  */
 export const DialFileManagerView: FC = () => {
   const {
-    title,
+    managerLabel,
     className,
     items,
     rootItem,
@@ -584,6 +589,7 @@ export const DialFileManagerView: FC = () => {
 
     onFolderPopupPathChange,
     onManagePermissions,
+    isRenameFileAvailable,
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -910,7 +916,7 @@ export const DialFileManagerView: FC = () => {
           role="toolbar"
           aria-label="File Manager Toolbar"
         >
-          {title && <h1 className="text-primary">{title}</h1>}
+          {managerLabel}
           <DialFileManagerToolbar
             {...toolbarOptions}
             areHiddenFilesVisible={areHiddenFilesVisible}
@@ -952,7 +958,7 @@ export const DialFileManagerView: FC = () => {
     isNewButtonVisible,
     isNewButtonDisabled,
     newActions,
-    title,
+    managerLabel,
   ]);
 
   useImperativeHandle(
@@ -1057,6 +1063,7 @@ export const DialFileManagerView: FC = () => {
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
+    isRenameFileAvailable,
   });
 
   const getGridContextMenuItems = useCallback(

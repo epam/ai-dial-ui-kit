@@ -46,6 +46,7 @@ export interface UseGridContextMenuProps {
   onAddSibling?: (file: DialFile) => void;
   onAddChild?: (file: DialFile) => void;
   onManagePermissions?: (path?: string) => void;
+  isRenameFileAvailable?: boolean;
 }
 
 export const useGridContextMenu = ({
@@ -62,6 +63,7 @@ export const useGridContextMenu = ({
   onAddSibling,
   onAddChild,
   onManagePermissions,
+  isRenameFileAvailable = true,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -196,10 +198,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (
-        actionLabels[DialFileManagerActions.Rename] &&
-        file.nodeType === DialFileNodeType.FOLDER
-      ) {
+      const isRenameAvailable =
+        file.nodeType === DialFileNodeType.FOLDER ||
+        (file.nodeType === DialFileNodeType.ITEM && isRenameFileAvailable);
+      if (actionLabels[DialFileManagerActions.Rename] && isRenameAvailable) {
         items.push({
           key: DialFileManagerActions.Rename,
           label: actionLabels[DialFileManagerActions.Rename],
@@ -258,5 +260,6 @@ export const useGridContextMenu = ({
     onUnshare,
     sharedWithMeIds,
     onManagePermissions,
+    isRenameFileAvailable,
   ]);
 };

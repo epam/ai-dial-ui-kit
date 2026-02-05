@@ -47,7 +47,7 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
-    title: 'Title',
+    managerLabel: <h1 className="text-primary">Title</h1>,
     defaultPath: 'All files',
     items: itemsMock,
     treeOptions: {
@@ -81,7 +81,7 @@ export const Basic: Story = {};
 
 export const PreselectedNode: Story = {
   args: {
-    title: 'Title',
+    managerLabel: <h1 className="text-primary">Title</h1>,
     path: 'All files/Design/Icons/SVG/24px/logo.svg',
     treeOptions: {
       expandedPaths: new Set<string>([
