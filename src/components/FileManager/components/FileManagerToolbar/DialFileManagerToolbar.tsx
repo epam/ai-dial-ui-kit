@@ -93,7 +93,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   onToggleHiddenFiles,
   isNewButtonVisible,
   isNewButtonDisabled,
-  newButtonVariant = ButtonVariant.Secondary,
+  newButtonVariant = ButtonVariant.Primary,
   newButtonDropdownItems = [],
   newButtonLabel = 'New',
   hiddenFilesSwitcherLabel = 'Hidden files',
