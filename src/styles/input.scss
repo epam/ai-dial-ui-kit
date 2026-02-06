@@ -1,23 +1,25 @@
 .dial-input {
-  @apply border border-solid border-primary rounded;
+  @apply border border-solid rounded-[3px];
+  border-color: #424952;
 
   &:hover {
-    @apply border-hover;
+    border-color: #5c8dea;
   }
 
   &:focus,
+  &:active,
   &:focus-within {
-    @apply border-accent-primary;
+    border-color: #5c8dea;
   }
 }
 
 .dial-input,
 .dial-input-no-border {
-  @apply bg-transparent dial-small truncate;
+  @apply bg-transparent truncate;
   @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
-    @apply text-primary;
+    color: #f3f4f6;
   }
 
   &:disabled {
@@ -26,25 +28,13 @@
 }
 
 .dial-input-disable,
-.dial-input-readonly {
-  @apply bg-layer-3;
-}
-
-.dial-input-disable,
 .dial-input-disable:not(:placeholder-shown) {
-  @apply text-secondary;
-}
-
-.dial-input-disable:hover {
-  @apply border-primary;
+  border-color: #424952;
+  color: #424952;
 }
 
 .dial-input-error {
-  @apply border-error;
-}
-
-.dial-input-field {
-  @apply h-[38px];
+  border-color: #f76464;
 }
 
 input {

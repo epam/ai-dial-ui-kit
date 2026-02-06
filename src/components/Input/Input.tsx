@@ -4,28 +4,27 @@ import {
   useRef,
   type ChangeEvent,
   type FC,
-  type FocusEvent,
   type KeyboardEvent,
   type Ref,
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import {
+  DialTooltip,
+  type DialTooltipProps,
+} from '@/components/Tooltip/Tooltip';
 import type { InputBaseProps } from '@/models/field-control-props';
-import { handleKeyDown } from './utils';
 import { useMergeRefs } from '@floating-ui/react';
+import { handleKeyDown } from './utils';
 
 export interface DialInputProps extends InputBaseProps {
-  type?: string;
   containerClassName?: string;
   className?: string;
-  hideBorder?: boolean;
-  tooltipText?: string;
-  tooltipTriggerClassName?: string;
+  hideBorder?: boolean; // TODO: really need?
+  tooltipProps?: DialTooltipProps;
   hideTooltip?: boolean;
   inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
-  onBlur?: (event: FocusEvent<HTMLInputElement, Element>) => void;
 }
 
 /**
@@ -43,17 +42,14 @@ export interface DialInputProps extends InputBaseProps {
  * ```
  *
  * @params Component properties extending:
- * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, readonly, invalid, icons, etc.)
+ * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, invalid, icons, etc.)
  *
- * @param type - The HTML input type (text, password, email, number, etc.)
  * @param containerClassName - Additional CSS classes to apply to the container div
  * @param className - Additional CSS classes to apply to the input element
  * @param hideBorder - Whether to hide the input border styling
- * @param tooltipText - The text to display inside the tooltip. If empty, the tooltip will display the value prop.
- * @param tooltipTriggerClassName - Additional CSS classes to apply to the tooltip
+ * @param tooltipProps - Props to pass to the internal tooltip component
  * @param hideTooltip - Whether to hide the tooltip
  * @param onChange - Callback function called when the input value changes
- * @param onBlur - Callback function called when the input blurs
  */
 export const DialInput: FC<DialInputProps> = ({
   iconBefore,
@@ -61,10 +57,8 @@ export const DialInput: FC<DialInputProps> = ({
   hideBorder,
   className = '',
   containerClassName,
-  tooltipTriggerClassName,
   type = 'text',
   value,
-  readOnly,
   invalid,
   onChange,
   min,
@@ -73,10 +67,9 @@ export const DialInput: FC<DialInputProps> = ({
   suffix,
   textBeforeInput,
   textAfterInput,
-  onBlur,
   defaultValue,
-  tooltipText,
   hideTooltip = false,
+  tooltipProps,
   inputRef,
   ...props
 }) => {
@@ -138,7 +131,6 @@ export const DialInput: FC<DialInputProps> = ({
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
         props.disabled && 'dial-input-disable',
-        readOnly && 'dial-input-readonly',
         !textBeforeInput && 'pl-3',
         !textAfterInput && 'pr-3',
         containerClassName,
@@ -148,24 +140,33 @@ export const DialInput: FC<DialInputProps> = ({
       {textBeforeInput && (
         <div className="mr-2">
           <DialInput
-            hideBorder={true}
+            hideBorder
             containerClassName="rounded-r-none border-r-0"
-            className="overflow-hidden overflow-ellipsis dial-small"
+            className="truncate"
             value={textBeforeInput}
-            disabled={true}
-            id={textBeforeInput + 'textBefore'}
+            disabled
+            id={`${textBeforeInput}_textBefore`}
           />
         </div>
       )}
+
       {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
+
       <DialIcon
         icon={iconBefore}
         className={classNames(!!iconBefore && 'mr-2')}
       />
 
       <DialTooltip
-        tooltip={hideTooltip ? undefined : tooltipText || value}
-        triggerClassName={classNames(tooltipTriggerClassName, 'flex-1')}
+        {...(hideTooltip
+          ? { tooltip: null }
+          : ({
+              ...tooltipProps,
+              triggerClassName: classNames(
+                tooltipProps?.triggerClassName,
+                'flex-1',
+              ),
+            } as DialTooltipProps))}
       >
         <input
           ref={ref}
@@ -176,9 +177,8 @@ export const DialInput: FC<DialInputProps> = ({
             'border-0 bg-transparent w-full truncate',
             className,
           )}
-          onChange={(event) => !readOnly && handleChange?.(event)}
+          onChange={handleChange}
           onKeyDown={onKeyDown}
-          onBlur={onBlur}
           min={min}
           max={max}
           {...props}
@@ -189,15 +189,17 @@ export const DialInput: FC<DialInputProps> = ({
         icon={iconAfter}
         className={classNames(!!iconAfter && 'ml-2')}
       />
+
       {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
+
       {textAfterInput && (
         <div className="ml-2">
           <DialInput
-            hideBorder={true}
+            hideBorder
             containerClassName="rounded-l-none border-l-0"
             value={textAfterInput}
-            disabled={true}
-            id={textAfterInput + 'textAfter'}
+            disabled
+            id={`${textAfterInput}_textAfter`}
           />
         </div>
       )}
