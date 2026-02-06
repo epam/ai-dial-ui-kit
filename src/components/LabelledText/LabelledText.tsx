@@ -52,9 +52,9 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
       {children ? (
         children
       ) : (
-        <div className="flex flex-row items-center gap-x-3">
+        <div className="flex flex-row items-center gap-x-2">
           <DialTooltip
-            triggerClassName="text-primary"
+            triggerClassName="text-primary flex-1 min-w-0"
             tooltip={tooltip || text}
           >
             {text}

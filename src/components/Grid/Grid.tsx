@@ -477,7 +477,7 @@ export const DialGrid = <T extends object>({
         }
       });
     }
-  }, [getRowId, gridApi, rowData]);
+  }, [gridApi, rowData]);
 
   useEffect(() => {
     if (gridApi && selectedRowIds) {

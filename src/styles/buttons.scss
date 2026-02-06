@@ -3,12 +3,12 @@
   @apply rounded border border-solid border-transparent;
 }
 
-.dial-base-button:focus {
-  @apply border-focus;
-}
-
 .dial-button-disable {
   @apply cursor-not-allowed;
+}
+
+.dial-base-button:focus-visible {
+  @apply border-focus;
 }
 
 .dial-button-solid-disable {
@@ -19,7 +19,7 @@
   @apply dial-base-button bg-controls-solid-primary text-controls-solid;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-controls-solid-primary-hover;
   }
 }
@@ -35,7 +35,7 @@
   }
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-accent-primary-alpha;
   }
 
@@ -48,7 +48,7 @@
   @apply dial-base-button bg-transparent text-accent-primary px-2;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply text-controls-link-primary-hover;
   }
 
@@ -62,7 +62,7 @@
   @apply border-primary;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-controls-outlined-neutral-hover;
   }
 
@@ -75,7 +75,7 @@
   @apply dial-base-button bg-controls-solid-error text-controls-solid;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-controls-solid-error-hover;
   }
 }
@@ -84,7 +84,7 @@
   @apply text-error;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-error;
   }
 
@@ -96,7 +96,7 @@
 .dial-success-ghost-button {
   @apply text-accent-secondary;
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-accent-secondary-alpha;
   }
 
@@ -108,7 +108,7 @@
 .dial-secondary-ghost-button {
   @apply text-secondary;
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-accent-secondary-alpha text-accent-secondary;
   }
 
@@ -121,7 +121,7 @@
   @apply text-secondary;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     @apply bg-accent-tertiary-alpha text-accent-tertiary;
   }
 
