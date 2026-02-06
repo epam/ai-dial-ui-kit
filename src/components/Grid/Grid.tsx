@@ -9,6 +9,7 @@ import {
   type ICellRendererParams,
   ModuleRegistry,
   type RowSelectionOptions,
+  setupAgTestIds,
   themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -45,6 +46,8 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
+
+setupAgTestIds({ testIdAttribute: 'dataQA' });
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
