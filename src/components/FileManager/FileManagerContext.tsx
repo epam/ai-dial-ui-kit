@@ -119,6 +119,7 @@ export interface FileManagerContextValue {
   handleBreadcrumbItemClick: (href?: string) => void;
   handleSearchChange: (value?: string) => void;
   handleTableRowClick: (row: FileManagerGridRow) => void;
+  handleSelectionClick?: (row: FileManagerGridRow[]) => void;
 
   onTableFileClick?: DialFileManagerProps['onTableFileClick'];
   handleDownloadFiles: (items: DialFile[]) => void;

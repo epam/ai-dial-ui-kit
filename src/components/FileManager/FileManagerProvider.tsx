@@ -81,6 +81,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   conflictResolutionPopupOptions,
   onPathChange,
   onTableFileClick,
+  handleSelectionClick,
   onGridApiChange,
   onCopyFiles,
   onMoveToFiles,
@@ -608,6 +609,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSearchChange,
     handleTableRowClick,
     onTableFileClick,
+    handleSelectionClick,
     onGridApiChange,
 
     isDragging,
