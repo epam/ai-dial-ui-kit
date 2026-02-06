@@ -109,14 +109,20 @@
 }
 
 .with-selection-column {
-  .ag-row .dial-row-select {
+  .ag-row .dial-row-select,
+  .ag-header-row .dial-row-select {
     opacity: 0;
     transition: opacity 0.12s ease;
   }
 
   .ag-row-hover .dial-row-select,
   .ag-row-selected .dial-row-select,
-  .ag-row .dial-row-select-visible {
+  .ag-row .dial-row-select-visible,
+  .ag-header-row .dial-row-select-visible,
+  .ag-header-active.dial-row-select,
+  .ag-header-row .dial-row-select:has(.ag-checkbox-input-wrapper.ag-checked),
+  .ag-header-row
+    .dial-row-select:has(.ag-checkbox-input-wrapper.ag-indeterminate) {
     opacity: 1;
   }
 

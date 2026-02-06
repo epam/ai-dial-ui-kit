@@ -301,6 +301,16 @@ export const DialGrid = <T extends object>({
     [getRowId, disabledRowIds],
   );
 
+  const getSelectionClasses = useCallback((selectionOnHover: boolean) => {
+    const baseClass = 'dial-row-select';
+    const visibleClass = 'dial-row-select-visible';
+
+    if (!selectionOnHover) {
+      return `${baseClass} ${visibleClass}`;
+    }
+    return baseClass;
+  }, []);
+
   const selectionColumnDef = useMemo(() => {
     if (selectionMode === GridSelectionMode.SINGLE) {
       return {
@@ -311,11 +321,10 @@ export const DialGrid = <T extends object>({
     if (selectionMode === GridSelectionMode.MULTIPLE) {
       return {
         ...CHECKBOX_COL_DEF,
+        headerClass: () => getSelectionClasses(selectionOnHover),
         cellClass: (p) => {
           const rowId = p.data ? getRowId(p.data) : null;
-          let styles = !selectionOnHover
-            ? 'dial-row-select dial-row-select-visible'
-            : 'dial-row-select';
+          let styles = getSelectionClasses(selectionOnHover);
 
           if (rowId && disabledRowIds?.has(rowId)) {
             styles += ' opacity-50 pointer-events-none';
@@ -330,6 +339,7 @@ export const DialGrid = <T extends object>({
     selectionCellRenderer,
     selectionMode,
     selectionOnHover,
+    getSelectionClasses,
   ]);
 
   const wrapRendererIfNeeded = useCallback(
