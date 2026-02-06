@@ -3,6 +3,12 @@ import '../src/index.css';
 
 const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ['DIAL'],
+      },
+    },
+
     backgrounds: {
       options: {
         dark: { name: 'Dark', value: 'var(--bg-layer-1, #090D13)' },
@@ -19,6 +25,7 @@ const preview: Preview = {
   initialGlobals: {
     backgrounds: { value: 'dark' },
   },
+
   tags: ['autodocs'],
 };
 
