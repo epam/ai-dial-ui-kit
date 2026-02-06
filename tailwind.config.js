@@ -60,6 +60,7 @@ const borderColors = {
   'accent-tertiary': 'var(--stroke-accent-tertiary, #A972FF)',
 
   // TODO: need review
+  'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
   'accent-primary-hover': 'var(--stroke-accent-primary-hover, #4878d2)',
   hover: 'var(--stroke-hover, #F3F4F6)',
   'red-900': 'var(--red-900, #402027)',

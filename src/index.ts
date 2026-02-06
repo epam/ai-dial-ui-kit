@@ -80,7 +80,6 @@ export { DialPasswordInputField } from './components/PasswordInput/PasswordInput
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 export { DialSearch } from './components/Search/Search';
 export { DialInputPopup } from './components/InputPopup/InputPopup';
-export { DialAutocompleteInput } from './components/AutocompleteInput/AutocompleteInput';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
 export { DialSelect } from './components/Select/Select';
