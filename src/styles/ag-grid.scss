@@ -109,14 +109,20 @@
 }
 
 .with-selection-column {
-  .ag-row .dial-row-select {
+  .ag-row .dial-row-select,
+  .ag-header-row .dial-row-select {
     opacity: 0;
     transition: opacity 0.12s ease;
   }
 
   .ag-row-hover .dial-row-select,
   .ag-row-selected .dial-row-select,
-  .ag-row .dial-row-select-visible {
+  .ag-row .dial-row-select-visible,
+  .ag-header-row .dial-row-select-visible,
+  .ag-header-active.dial-row-select,
+  .ag-header-row .dial-row-select:has(.ag-checkbox-input-wrapper.ag-checked),
+  .ag-header-row
+    .dial-row-select:has(.ag-checkbox-input-wrapper.ag-indeterminate) {
     opacity: 1;
   }
 
@@ -161,13 +167,15 @@
 
 :where(.ag-theme-checkboxStyle-5) {
   .ag-checkbox-input-wrapper {
-    @apply bg-transparent !rounded-[2px] w-[18px] h-[18px] !shadow-none;
+    @apply bg-transparent !rounded-[2px] w-[18px] h-[18px] !shadow-none border-controls-accent;
 
     &.ag-checked:after {
       mask: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2224%22%20height=%2224%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22currentColor%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20class=%22icon%20icon-tabler%20icons-tabler-outline%20icon-tabler-check%22%3E%3Cpath%20stroke=%22none%22%20d=%22M0%200h24v24H0z%22%20fill=%22none%22/%3E%3Cpath%20d=%22M5%2012l5%205l10%20-10%22%20/%3E%3C/svg%3E')
         center/contain no-repeat;
+      @apply bg-accent-primary;
     }
     &.ag-indeterminate:after {
+      @apply bg-accent-primary;
       mask: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2224%22%20height=%2224%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22currentColor%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20class=%22icon%20icon-tabler%20icons-tabler-outline%20icon-tabler-minus%22%3E%3Cpath%20stroke=%22none%22%20d=%22M0%200h24v24H0z%22%20fill=%22none%22/%3E%3Cpath%20d=%22M5%2012l14%200%22%20/%3E%3C/svg%3E')
         center/contain no-repeat;
     }

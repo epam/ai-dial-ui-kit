@@ -82,7 +82,11 @@ export const Basic: Story = {};
 export const PreselectedNode: Story = {
   args: {
     managerLabel: <h1 className="text-primary">Title</h1>,
-    path: 'All files/Design/Icons/SVG/24px/logo.svg',
+    defaultPath: 'All files/Design/Icons/SVG/24px',
+    gridOptions: {
+      selectionMode: GridSelectionMode.MULTIPLE,
+    },
+    defaultSelectedPaths: new Set(['All files/Design/Icons/SVG/24px/logo.svg']),
     treeOptions: {
       expandedPaths: new Set<string>([
         'All files',
@@ -1572,14 +1576,14 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
       </div>
       <DialFileManager
         {...args}
-        path="All files/Design/Icons/SVG/24px"
+        defaultPath="All files/Design/Icons/SVG/24px"
         items={itemsMock}
         selectedPaths={selectedPaths}
         onSelectedPathsChange={setSelectedPaths}
         gridOptions={{
           ...(args.gridOptions ?? {}),
           filterable: false,
-          selectionMode: GridSelectionMode.SINGLE,
+          selectionMode: GridSelectionMode.MULTIPLE,
         }}
         treeOptions={{
           ...(args.treeOptions ?? {}),

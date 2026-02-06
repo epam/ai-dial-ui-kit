@@ -286,6 +286,7 @@ export interface DialFileManagerProps {
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
+  handleSelectionClick?: (file: GridRow[]) => void;
   onGridApiChange?: (api: GridApi) => void;
 
   onCopyFiles?: (items: DialCopiedItem[], destinationFolder: string) => void;
@@ -508,6 +509,7 @@ export const DialFileManagerView: FC = () => {
     handleSearchChange,
     handleTreeItemClick,
     handleTableRowClick,
+    handleSelectionClick,
     onGridApiChange,
 
     handleOpenDestinationFolderPopup,
@@ -881,10 +883,11 @@ export const DialFileManagerView: FC = () => {
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
-    (selectedRowsIds: Set<string>) => {
+    (selectedRowsIds: Set<string>, selectedRows: GridRow[]) => {
       selectedPathsChangeHandler(selectedRowsIds);
+      handleSelectionClick?.(selectedRows);
     },
-    [selectedPathsChangeHandler],
+    [handleSelectionClick, selectedPathsChangeHandler],
   );
 
   const bulkActions = useBulkActions({
@@ -1098,7 +1101,7 @@ export const DialFileManagerView: FC = () => {
   const cellClickHandler = useCallback(
     (event: CellClickedEvent<FileManagerGridRow>) => {
       if (
-        event.colDef.colId === '__select' ||
+        event.colDef.colId === 'ag-Grid-SelectionColumn' ||
         event.colDef.colId === FileManagerColumnKey.Actions ||
         (renamedPath && event.data?.path === renamedPath) ||
         event.data?.isTemporary
