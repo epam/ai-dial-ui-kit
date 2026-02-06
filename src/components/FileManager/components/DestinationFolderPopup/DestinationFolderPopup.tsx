@@ -114,7 +114,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   }, []);
 
   const handleOnPathChange = useCallback(
-    (nextPath: string | undefined) => {
+    (nextPath?: string) => {
       if (nextPath) {
         onFolderPopupPathChange?.(nextPath);
         setDestinationFolderPath?.(nextPath);
