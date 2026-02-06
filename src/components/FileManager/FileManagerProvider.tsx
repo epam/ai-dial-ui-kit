@@ -58,6 +58,7 @@ export interface FileManagerProviderProps
  *
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
+  managerLabel,
   children,
   className,
   items = [],
@@ -117,6 +118,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   emptyStateDescription,
 
   sharedWithMeIds,
+  onFolderPopupPathChange,
+  onManagePermissions,
+  isRenameFileAvailable,
+  customUploadFileAction,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -335,6 +340,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
 
+  const customUploadFile = useCallback(() => {
+    customUploadFileAction?.(currentPath, currentFolder);
+  }, [customUploadFileAction, currentPath, currentFolder]);
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -353,7 +362,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     {
       newActions: toolbarOptions?.newActions,
       currentFolder,
-      onUploadFiles: openFileDialog,
+      onUploadFiles: customUploadFileAction ? customUploadFile : openFileDialog,
       onUploadArchive: openArchiveUpload,
       onCreateFolder: startFolderCreation,
       isNewButtonDisabled: toolbarOptions?.isNewButtonDisabled,
@@ -524,6 +533,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
   const value: FileManagerContextValue = {
+    managerLabel,
     className,
     items,
     allowedFileTypes,
@@ -675,6 +685,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateDescription,
 
     sharedWithMeIds,
+
+    onFolderPopupPathChange,
+    onManagePermissions,
+    isRenameFileAvailable,
+    customUploadFileAction,
   };
 
   return (

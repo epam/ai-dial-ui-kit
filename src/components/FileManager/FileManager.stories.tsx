@@ -47,6 +47,7 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
+    managerLabel: <h1 className="text-primary">Title</h1>,
     defaultPath: 'All files',
     items: itemsMock,
     treeOptions: {
@@ -80,6 +81,7 @@ export const Basic: Story = {};
 
 export const PreselectedNode: Story = {
   args: {
+    managerLabel: <h1 className="text-primary">Title</h1>,
     defaultPath: 'All files/Design/Icons/SVG/24px',
     gridOptions: {
       selectionMode: GridSelectionMode.MULTIPLE,

@@ -45,6 +45,7 @@ export interface FileManagerGridRow {
 }
 
 export interface FileManagerContextValue {
+  managerLabel?: ReactNode;
   className?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
@@ -192,6 +193,13 @@ export interface FileManagerContextValue {
   emptyStateDescription?: string;
 
   sharedWithMeIds?: string[];
+  onFolderPopupPathChange?: (newPath?: string) => void;
+  onManagePermissions?: (path?: string) => void;
+  isRenameFileAvailable?: boolean;
+  customUploadFileAction?: (
+    currentPath?: string,
+    currentFolder?: DialFile,
+  ) => void;
 }
 
 export const FileManagerContext = createContext<
