@@ -424,6 +424,11 @@ export const DialGrid = <T extends object>({
   );
 
   const onGridReady = (e: GridReadyEvent) => {
+    const headerCheckbox = document.querySelector('.ag-checkbox-input');
+
+    if (headerCheckbox) {
+      headerCheckbox.setAttribute('aria-description', 'checkbox-container');
+    }
     const colsNoSort = computedColumnDefs.map((column) => ({
       ...column,
       sort: undefined,
@@ -514,6 +519,11 @@ export const DialGrid = <T extends object>({
     [getRowId],
   );
 
+  function setAria() {
+    document.querySelectorAll('.ag-row .ag-checkbox-input').forEach((el) => {
+      el.setAttribute('aria-description', 'checkbox-container');
+    });
+  }
   return (
     <div
       className={classNames(
@@ -553,6 +563,9 @@ export const DialGrid = <T extends object>({
           rowSelection={rowSelection}
           onSelectionChanged={debouncedOnSelectionChange}
           getRowId={agGridGetRowId}
+          onRowDataUpdated={setAria}
+          onBodyScroll={setAria}
+          onFirstDataRendered={setAria}
           {...additionalGridOptions}
         />
       </div>
