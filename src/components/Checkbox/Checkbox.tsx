@@ -10,6 +10,7 @@ import {
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { ariaDescription } from './constants';
 
 export interface DialCheckboxProps
   extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
@@ -92,7 +93,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
       {...labelProps}
       className={checkboxClassName}
       htmlFor={id}
-      aria-description={labelProps['aria-description'] || 'checkbox-container'}
+      aria-description={labelProps['aria-description'] || ariaDescription}
     >
       {renderIcon()}
       {label &&
