@@ -30,6 +30,7 @@ import { DropdownTrigger } from '@/types/dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import {
+  checkboxClass,
   GRID_THEME_COLORS,
   gridBaseClassName,
   ROW_HEIGHT,
@@ -46,6 +47,7 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
+import { ariaDescription } from '../Checkbox/constants';
 
 setupAgTestIds({ testIdAttribute: 'dataQA' });
 
@@ -424,10 +426,10 @@ export const DialGrid = <T extends object>({
   );
 
   const onGridReady = (e: GridReadyEvent) => {
-    const headerCheckbox = document.querySelector('.ag-checkbox-input');
+    const headerCheckbox = document.querySelector(checkboxClass);
 
     if (headerCheckbox) {
-      headerCheckbox.setAttribute('aria-description', 'checkbox-container');
+      headerCheckbox.setAttribute('aria-description', ariaDescription);
     }
     const colsNoSort = computedColumnDefs.map((column) => ({
       ...column,
@@ -519,11 +521,12 @@ export const DialGrid = <T extends object>({
     [getRowId],
   );
 
-  function setAria() {
-    document.querySelectorAll('.ag-row .ag-checkbox-input').forEach((el) => {
-      el.setAttribute('aria-description', 'checkbox-container');
+  const setAria = useCallback(() => {
+    document.querySelectorAll(`.ag-row ${checkboxClass}`).forEach((el) => {
+      el.setAttribute('aria-description', ariaDescription);
     });
-  }
+  }, []);
+
   return (
     <div
       className={classNames(
