@@ -55,7 +55,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   containerClassName,
   selectClassName,
   error,
-  id: elementId,
+  id,
   description,
   readonly,
   value,
@@ -88,7 +88,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
 
   return (
     <DialFormItem
-      id={elementId}
+      id={id}
       label={fieldTitle}
       optional={optional}
       description={description}
@@ -102,7 +102,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       <DialSelect
         className={selectClassName}
         value={value}
-        elementId={elementId}
+        elementId={id}
         invalid={!!error}
         {...restSelectProps}
       />

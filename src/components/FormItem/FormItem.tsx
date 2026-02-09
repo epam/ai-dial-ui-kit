@@ -62,7 +62,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  * @params - Component properties extending:
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, orientation, etc.)
  *
- * @param elementId - Unique identifier for the form control element (used for accessibility)
+ * @param id - Unique identifier for the form control element (used for accessibility)
  * @param labelVisuallyHidden - Whether to visually hide the label (still accessible to screen readers, default: false)
  * @param className - Additional CSS classes to apply to the container div
  * @param childrenClassName - Additional CSS classes to apply to the children container div
@@ -73,7 +73,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
  */
 export const DialFormItem: FC<DialFormItemProps> = ({
-  id: elementId,
+  id,
   label,
   optional,
   optionalText,
@@ -91,10 +91,10 @@ export const DialFormItem: FC<DialFormItemProps> = ({
   defaultEmptyText,
   children,
 }) => {
-  const labelId = `${elementId}-label`;
-  const descriptionId = description ? `${elementId}-desc` : undefined;
-  const errorId = error ? `${elementId}-err` : undefined;
-  const captionDescriptionId = `${elementId}-caption-desc`;
+  const labelId = `${id}-label`;
+  const descriptionId = description ? `${id}-desc` : undefined;
+  const errorId = error ? `${id}-err` : undefined;
+  const captionDescriptionId = `${id}-caption-desc`;
 
   const describedBy =
     [descriptionId, errorId].filter(Boolean).join(' ') || undefined;
@@ -162,7 +162,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           className={mergeClasses(orientation === 'horizontal' && 'shrink-0')}
         >
           <DialFieldLabel
-            htmlFor={elementId}
+            htmlFor={id}
             fieldTitle={label}
             optional={optional}
             optionalText={optionalText}
