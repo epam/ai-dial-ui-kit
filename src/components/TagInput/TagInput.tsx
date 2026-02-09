@@ -16,6 +16,7 @@ export interface DialTagInputProps extends FieldControlProps {
   elementId: string;
   initialTags?: string[];
   placeholder?: string;
+  captionDescription?: string;
   errorText?: string;
   invalid?: boolean;
   disabled?: boolean;
@@ -43,6 +44,7 @@ export interface DialTagInputProps extends FieldControlProps {
  * @param [fieldTitle] - Optional label displayed above the input field.
  * @param [initialTags=[]] - Array of tags to be displayed initially.
  * @param [placeholder] - Placeholder text shown when the input is empty.
+ * @param [captionDescription] - Caption text shown under the input if there is no errors.
  * @param [errorText] - Error message displayed below the field when validation fails.
  * @param [optional=false] - Whether the field is optional (renders an “optional” indicator).
  * @param [invalid=false] - Whether the field should be styled as invalid.
@@ -55,6 +57,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   optional,
   elementId,
   placeholder,
+  captionDescription,
   errorText,
   invalid,
   disabled,
@@ -83,10 +86,31 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     }
   };
 
+  const handleBlur = () => {
+    if (inputValue.trim()) {
+      addTag(inputValue);
+      setInputValue('');
+    }
+  };
+
   const handleRemove = (index: number) => {
     const newTags = tags.filter((_, i) => i !== index);
     setTags(newTags);
     onChange?.(newTags);
+  };
+
+  const renderCaption = () => {
+    if (errorText) {
+      return <DialErrorText errorText={errorText} />;
+    }
+    if (captionDescription) {
+      return (
+        <div className="dial-tiny text-secondary mt-1">
+          {captionDescription}
+        </div>
+      );
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -101,6 +125,11 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, [tags]);
+
+  useEffect(() => {
+    setTags(initialTags);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(initialTags)]);
 
   return (
     <div className={classNames('flex flex-col w-full')}>
@@ -136,6 +165,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
+            onBlur={handleBlur}
             className={classNames(
               'dial-input-no-border outline-none border-none w-full min-w-[100px] flex-1 p-1',
             )}
@@ -144,7 +174,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           />
         </div>
       </div>
-      <DialErrorText errorText={errorText} />
+      {renderCaption()}
     </div>
   );
 };

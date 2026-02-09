@@ -14,8 +14,36 @@ vi.mock('monaco-editor', () => ({
 
 // Mock Monaco Editor React
 vi.mock('@monaco-editor/react', () => ({
-  Editor: vi.fn(({ value, onChange, theme }) =>
-    createElement(
+  Editor: vi.fn(({ value, onChange, theme, onValidate }) => {
+    // Simulate Monaco Editor validation behavior by calling onValidate after mount
+    if (onValidate) {
+      // Use queueMicrotask to ensure validation happens after render
+      queueMicrotask(() => {
+        // Call onValidate with empty markers array (valid JSON) or with errors if invalid
+        try {
+          if (value) {
+            JSON.parse(value);
+            onValidate([]); // Valid JSON - no markers
+          } else {
+            onValidate([]); // Empty value - no markers
+          }
+        } catch {
+          // Invalid JSON - return error markers
+          onValidate([
+            {
+              severity: 8, // Error severity
+              message: 'Invalid JSON',
+              startLineNumber: 1,
+              startColumn: 1,
+              endLineNumber: 1,
+              endColumn: 1,
+            },
+          ]);
+        }
+      });
+    }
+
+    return createElement(
       'div',
       { role: 'textbox', 'aria-label': 'JSON Editor' },
       createElement('textarea', {
@@ -25,8 +53,8 @@ vi.mock('@monaco-editor/react', () => ({
         'data-theme': theme,
         'aria-label': 'JSON content',
       }),
-    ),
-  ),
+    );
+  }),
 }));
 
 afterEach(() => {

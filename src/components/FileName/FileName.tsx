@@ -49,23 +49,22 @@ export const DialFileName: FC<DialFileNameProps> = ({
   details,
   sharedIndicatorClassName,
 }) => {
-  const extension = name.includes('.') ? name.split('.').pop() : null;
+  const extension = name.includes('.') ? name.split('.').pop() : undefined;
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
-      {extension && (
-        <DialFileIcon
-          extension={extension}
-          size={iconSize}
-          className="text-secondary"
-          indicator={
-            shared ? (
-              <DialSharedEntityIndicator className={sharedIndicatorClassName} />
-            ) : null
-          }
-          label="File type icon"
-        />
-      )}
+      <DialFileIcon
+        extension={extension}
+        size={iconSize}
+        className="text-secondary"
+        indicator={
+          shared ? (
+            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+          ) : null
+        }
+        label="File type icon"
+      />
+
       <div
         className={classNames([
           'w-full flex min-w-0',

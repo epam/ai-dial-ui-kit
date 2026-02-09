@@ -3,7 +3,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { IconDotsVertical } from '@tabler/icons-react';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import { useCallback, useMemo } from 'react';
+import { useRef, useEffect, useCallback, useMemo } from 'react';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import type { DropdownItem } from '@/models/dropdown';
 import type { DialFileAcceptType } from '@/models/file-manager';
@@ -28,6 +28,12 @@ export const useGridActionsColumn = ({
   maxSelectableFileSize,
   buttonClassName,
 }: UseGridActionsColumnProps) => {
+  const getContextMenuItemsRef = useRef(getContextMenuItems);
+
+  useEffect(() => {
+    getContextMenuItemsRef.current = getContextMenuItems;
+  }, [getContextMenuItems]);
+
   const renderActionsCell = useCallback(
     (p: ICellRendererParams<FileManagerGridRow, unknown>) => {
       if (!p.data) return null;
@@ -40,7 +46,9 @@ export const useGridActionsColumn = ({
 
       if (disabled) return null;
 
-      const items = p.data ? (getContextMenuItems?.(p.data) ?? []) : [];
+      const items = p.data
+        ? (getContextMenuItemsRef.current?.(p.data) ?? [])
+        : [];
 
       if (!items.length) return null;
 
@@ -58,13 +66,7 @@ export const useGridActionsColumn = ({
         </DialDropdown>
       );
     },
-    [
-      allowedFileTypes,
-      maxSelectableFileSize,
-      buttonClassName,
-      getContextMenuItems,
-      isRowDisabled,
-    ],
+    [allowedFileTypes, maxSelectableFileSize, buttonClassName, isRowDisabled],
   );
 
   const actionsColumnDef: ColDef<FileManagerGridRow> = useMemo(

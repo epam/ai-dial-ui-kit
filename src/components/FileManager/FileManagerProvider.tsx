@@ -58,6 +58,7 @@ export interface FileManagerProviderProps
  *
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
+  managerLabel,
   children,
   className,
   items = [],
@@ -74,13 +75,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showNavigationPanel = true,
   navigationPanelOptions,
   deleteConfirmationOptions,
-  gridOptions,
+  gridOptions: rawGridOptions,
   toolbarOptions,
   bulkActionsToolbarOptions,
   destinationFolderPopupOptions,
   conflictResolutionPopupOptions,
   onPathChange,
   onTableFileClick,
+  handleSelectionClick,
   onGridApiChange,
   onCopyFiles,
   onMoveToFiles,
@@ -116,6 +118,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   emptyStateDescription,
 
   sharedWithMeIds,
+  onFolderPopupPathChange,
+  onManagePermissions,
+  isRenameFileAvailable,
+  customUploadFileAction,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -146,6 +152,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onPathChange,
     onSelectionClear: clearSelection,
   });
+
+  const memoizedGridOptions = useMemo(() => {
+    const {
+      showFiles = true,
+      showFolders = true,
+      ...gridOptions
+    } = rawGridOptions || {};
+    return { showFiles, showFolders, ...gridOptions };
+  }, [rawGridOptions]);
+
+  const showFiles = memoizedGridOptions.showFiles;
+  const showFolders = memoizedGridOptions.showFolders;
 
   const [internalDestinationPath, setInternalDestinationPath] =
     useState<string>();
@@ -322,6 +340,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     openArchiveDialog(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openArchiveDialog]);
 
+  const customUploadFile = useCallback(() => {
+    customUploadFileAction?.(currentPath, currentFolder);
+  }, [customUploadFileAction, currentPath, currentFolder]);
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -340,7 +362,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     {
       newActions: toolbarOptions?.newActions,
       currentFolder,
-      onUploadFiles: openFileDialog,
+      onUploadFiles: customUploadFileAction ? customUploadFile : openFileDialog,
       onUploadArchive: openArchiveUpload,
       onCreateFolder: startFolderCreation,
       isNewButtonDisabled: toolbarOptions?.isNewButtonDisabled,
@@ -349,24 +371,22 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const gridRows: FileManagerGridRow[] = useMemo(() => {
     if (isSearchMode) {
-      const source = searchResultsRows;
+      let source = searchResultsRows;
+
+      if (!showFiles) {
+        source = source.filter(
+          (node) => node.nodeType !== DialFileNodeType.ITEM,
+        );
+      }
+
+      if (!showFolders) {
+        source = source.filter(
+          (node) => node.nodeType !== DialFileNodeType.FOLDER,
+        );
+      }
 
       if (!areHiddenFilesVisible) {
-        const filtered = source.filter((node) => !isHiddenDotFile(node));
-        return filtered.map((node) => ({
-          ...node,
-          id: node.id ?? node.path,
-          name: node.name ?? node.path.split('/').pop() ?? '',
-          updatedAt: node.updatedAt,
-          size: node.contentLength,
-          contentLength: node.contentLength,
-          author: node.author,
-          path: node.path,
-          nodeType: node.nodeType,
-          extension: node.extension,
-          isTemporary: false,
-          owner: node.owner,
-        }));
+        source = source.filter((node) => !isHiddenDotFile(node));
       }
 
       return source.map((node) => ({
@@ -375,6 +395,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         name: node.name ?? node.path.split('/').pop() ?? '',
         updatedAt: node.updatedAt,
         size: node.contentLength,
+        contentLength: node.contentLength,
         author: node.author,
         path: node.path,
         nodeType: node.nodeType,
@@ -390,6 +411,16 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     let source: DialFile[] = query
       ? collectAllDescendants(currentFolder)
       : directChildren;
+
+    if (!showFiles) {
+      source = source.filter((node) => node.nodeType !== DialFileNodeType.ITEM);
+    }
+
+    if (!showFolders) {
+      source = source.filter(
+        (node) => node.nodeType !== DialFileNodeType.FOLDER,
+      );
+    }
 
     if (!areHiddenFilesVisible) {
       source = source.filter((node) => !isHiddenDotFile(node));
@@ -449,6 +480,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    showFiles,
+    showFolders,
   ]);
 
   const handleTreeItemClick = useCallback(
@@ -500,6 +533,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
   const value: FileManagerContextValue = {
+    managerLabel,
     className,
     items,
     allowedFileTypes,
@@ -514,7 +548,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     },
     showNavigationPanel,
     navigationPanelOptions,
-    gridOptions,
+    gridOptions: memoizedGridOptions,
     toolbarOptions,
     bulkActionsToolbarOptions,
     deleteConfirmationOptions,
@@ -585,6 +619,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSearchChange,
     handleTableRowClick,
     onTableFileClick,
+    handleSelectionClick,
     onGridApiChange,
 
     isDragging,
@@ -650,6 +685,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateDescription,
 
     sharedWithMeIds,
+
+    onFolderPopupPathChange,
+    onManagePermissions,
+    isRenameFileAvailable,
+    customUploadFileAction,
   };
 
   return (

@@ -9,6 +9,7 @@ import type {
 import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from './utils';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -76,11 +77,11 @@ export const DialButton: FC<DialButtonProps> = ({
     textClassName,
   );
 
-  const btnClassName = classNames(
+  const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
-    size === ButtonSize.Small ? 'dial-tiny-text' : 'dial-small-text',
+    size === ButtonSize.Small ? 'dial-tiny-semi-text' : 'dial-small-semi-text',
     appearance !== ButtonAppearance.Link &&
-      (size === ButtonSize.Small ? 'h-[22px] px-2' : 'h-[38px] px-3'),
+      (size === ButtonSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3'),
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );

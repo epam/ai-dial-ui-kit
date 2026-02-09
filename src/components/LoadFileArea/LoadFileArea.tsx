@@ -84,7 +84,7 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
       <DialEmptyFileArea {...props} onChange={onChange} />
     </DndProvider>
   ) : (
-    <div className="flex-1 min-h-0 border border-solid border-primary rounded">
+    <div className="flex-1 min-h-0 border border-solid border-primary rounded py-2">
       {files && files.length > 0 && (
         <div className="max-h-full overflow-y-auto">
           {files.map((file, index) => (

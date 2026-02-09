@@ -7,7 +7,7 @@ export interface JSONEditorErrorNotification extends JSONEditorError {
   id: string;
 }
 
-export enum EDITOR_THEMES {
+export enum EditorThemes {
   dark = 'dark',
   light = 'light',
 }

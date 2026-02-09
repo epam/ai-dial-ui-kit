@@ -42,6 +42,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   disabledPathTooltip?: string;
   collapsedFileTree?: boolean;
   alertProps?: DialAlertProps;
+  onFolderPopupPathChange?: (newPath?: string) => void;
 }
 
 /**
@@ -86,6 +87,8 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
 export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
   onConfirm,
+  onFolderPopupPathChange,
+  setDestinationFolderPath,
   open,
   copyLabel = 'Copy',
   moveLabel = 'Move',
@@ -109,6 +112,16 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   const handleShowHiddenFilesChange = useCallback((value: boolean) => {
     setShowHiddenFiles(value);
   }, []);
+
+  const handleOnPathChange = useCallback(
+    (nextPath?: string) => {
+      if (nextPath) {
+        onFolderPopupPathChange?.(nextPath);
+        setDestinationFolderPath?.(nextPath);
+      }
+    },
+    [onFolderPopupPathChange, setDestinationFolderPath],
+  );
 
   const defaultTitle =
     mode === DestinationFolderMode.Copy ? 'Copy to' : 'Move to';
@@ -192,16 +205,14 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               expandedPaths: new Set<string>([restProps.rootItem?.path || '/']),
               header: restProps.treeOptions?.header,
             }}
-            gridOptions={{
-              withSelectionColumn: false,
-              ...restProps.gridOptions,
-            }}
+            gridOptions={{ ...restProps.gridOptions, selectionMode: undefined }}
             navigationPanelOptions={{
               elementId: 'file-manager-destination-search',
               ...restProps.navigationPanelOptions,
             }}
             onUploadFiles={onUploadFiles}
             onValidateUpload={onValidateUpload}
+            onPathChange={handleOnPathChange}
             maxFileSize={maxFileSize}
           />
         </div>

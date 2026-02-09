@@ -171,7 +171,7 @@ export const DialInput: FC<DialInputProps> = ({
         <input
           ref={ref}
           type={type}
-          autoComplete="off"
+          autoComplete={type === 'password' ? 'new-password' : 'off'}
           value={defaultValue ? undefined : (value ?? '')}
           className={classNames(
             'border-0 bg-transparent w-full truncate',

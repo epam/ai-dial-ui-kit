@@ -13,7 +13,7 @@ import {
 } from './IconButtonWrappers';
 
 const meta = {
-  title: 'Form/IconButton',
+  title: 'Dial/Form/IconButton',
   component: DialIconButton,
   parameters: {
     layout: 'centered',
@@ -77,7 +77,7 @@ export const NeutralOutlinedIconButton: Story = {
 
 export const IconButtonWithTooltip: Story = {
   args: {
-    tooltipText: 'Custom tooltip text',
+    tooltipProps: { tooltip: 'Custom tooltip text' },
     variant: ButtonVariant.Neutral,
     appearance: ButtonAppearance.Outlined,
   },

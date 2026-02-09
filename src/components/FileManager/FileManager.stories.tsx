@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useCallback, useMemo, useState } from 'react';
 import {
   DialFileManager,
-  DialFileManagerView,
   type DialFileManagerProps,
+  DialFileManagerView,
 } from './FileManager';
 import { FileManagerProvider } from './FileManagerProvider';
 import { itemsMock } from './__mocks__/files';
@@ -11,9 +11,9 @@ import { useDialFileManagerTabs } from './hooks/use-file-manager-tabs';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialPopup } from '@/components/Popup/Popup';
 import {
+  type DialFile,
   DialFileNodeType,
   DialFileResourceType,
-  type DialFile,
   type DialRootFolder,
 } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
@@ -21,9 +21,9 @@ import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
   DialFileManagerTabs,
+  FileManagerColumnKey,
 } from '@/types/file-manager';
 import { PopupSize } from '@/types/popup';
-import { FileManagerColumnKey } from '@/types/file-manager';
 import {
   IconBuildingCommunity,
   IconFileDescription,
@@ -32,6 +32,7 @@ import {
 import type { FileManagerGridRow } from './FileManagerContext';
 import type { ColDef } from 'ag-grid-community';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -46,6 +47,7 @@ const meta = {
     onPathChange: { action: 'onPathChange' },
   },
   args: {
+    managerLabel: <h1 className="text-primary">Title</h1>,
     defaultPath: 'All files',
     items: itemsMock,
     treeOptions: {
@@ -79,7 +81,12 @@ export const Basic: Story = {};
 
 export const PreselectedNode: Story = {
   args: {
-    path: 'All files/Design/Icons/SVG/24px/logo.svg',
+    managerLabel: <h1 className="text-primary">Title</h1>,
+    defaultPath: 'All files/Design/Icons/SVG/24px',
+    gridOptions: {
+      selectionMode: GridSelectionMode.MULTIPLE,
+    },
+    defaultSelectedPaths: new Set(['All files/Design/Icons/SVG/24px/logo.svg']),
     treeOptions: {
       expandedPaths: new Set<string>([
         'All files',
@@ -1415,6 +1422,66 @@ export const WithInsertSiblingChildrenActions: Story = {
   ),
 };
 
+const WithoutFilesComponent = (args: DialFileManagerProps) => {
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          showFiles: false,
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>(['All files']),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithoutFiles: Story = {
+  render: WithoutFilesComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager configured to hide files in the grid, showing only folders in the tree view.',
+      },
+    },
+  },
+};
+
+const WithoutFoldersComponent = (args: DialFileManagerProps) => {
+  return (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          showFolders: false,
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths: new Set<string>(['All files']),
+        }}
+      />
+    </div>
+  );
+};
+
+export const WithoutFolders: Story = {
+  render: WithoutFoldersComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager configured to hide folders in the grid, showing only files in the grid view.',
+      },
+    },
+  },
+};
+
 const WithCustomColumnsComponent = (args: DialFileManagerProps) => {
   const customColumns = useMemo<ColDef<FileManagerGridRow>[]>(() => {
     return [
@@ -1509,13 +1576,14 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
       </div>
       <DialFileManager
         {...args}
-        path="All files/Design/Icons/SVG/24px"
+        defaultPath="All files/Design/Icons/SVG/24px"
         items={itemsMock}
         selectedPaths={selectedPaths}
         onSelectedPathsChange={setSelectedPaths}
         gridOptions={{
           ...(args.gridOptions ?? {}),
           filterable: false,
+          selectionMode: GridSelectionMode.MULTIPLE,
         }}
         treeOptions={{
           ...(args.treeOptions ?? {}),

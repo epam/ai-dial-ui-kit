@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialJsonEditor } from './JsonEditor';
-import { EDITOR_THEMES } from '@/types/editor';
+import { EditorThemes } from '@/types/editor';
 
 const meta = {
   title: 'Data Display/JsonEditor',
@@ -21,7 +21,7 @@ const meta = {
     },
     currentTheme: {
       control: { type: 'select' },
-      options: Object.values(EDITOR_THEMES),
+      options: Object.values(EditorThemes),
       description: 'The theme to apply to the editor',
     },
     onChange: {
@@ -65,7 +65,7 @@ const sampleJsonValue = JSON.stringify(
 export const Default: Story = {
   args: {
     value: sampleJsonValue,
-    currentTheme: EDITOR_THEMES.dark,
+    currentTheme: EditorThemes.dark,
     onChange: () => void 0,
   },
   render: renderWithContainer,
@@ -74,7 +74,7 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     value: '',
-    currentTheme: EDITOR_THEMES.dark,
+    currentTheme: EditorThemes.dark,
     onChange: () => void 0,
   },
   render: renderWithContainer,
@@ -83,7 +83,7 @@ export const Empty: Story = {
 export const LightTheme: Story = {
   args: {
     value: sampleJsonValue,
-    currentTheme: EDITOR_THEMES.light,
+    currentTheme: EditorThemes.light,
     onChange: () => void 0,
   },
   render: renderWithContainer,
@@ -148,7 +148,7 @@ export const ComplexJson: Story = {
       null,
       2,
     ),
-    currentTheme: EDITOR_THEMES.dark,
+    currentTheme: EditorThemes.dark,
     onChange: () => void 0,
   },
   render: renderWithContainer,
@@ -157,7 +157,7 @@ export const ComplexJson: Story = {
 export const WithCustomOptions: Story = {
   args: {
     value: sampleJsonValue,
-    currentTheme: EDITOR_THEMES.dark,
+    currentTheme: EditorThemes.dark,
     onChange: () => void 0,
     options: {
       fontSize: 16,

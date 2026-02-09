@@ -2,8 +2,9 @@ import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { DialFieldLabel } from '@/components/Field/Field';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
-import { IconPlus, IconTrashX } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
+import { DialRemoveButton } from '../RemoveButton/RemoveButton';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
@@ -115,10 +116,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
         />
         {multiple && !!files?.length && (
           <div className="flex flex-row items-center gap-x-2">
-            <DialPrimaryButton
-              appearance={ButtonAppearance.Ghost}
-              className="!text-error"
-              iconBefore={<IconTrashX {...BASE_ICON_PROPS} />}
+            <DialRemoveButton
               label={deleteAllButtonLabel}
               onClick={onRemoveFiles}
             />
