@@ -814,7 +814,8 @@ export const DialFileManagerView: FC = () => {
         if (
           treeOptions.actionLabels[DialFileManagerActions.ManagePermissions] &&
           typeof onManagePermissions === 'function' &&
-          file.nodeType === DialFileNodeType.FOLDER
+          file.nodeType === DialFileNodeType.FOLDER &&
+          !isRootNode
         ) {
           items.push({
             key: DialFileManagerActions.ManagePermissions,
