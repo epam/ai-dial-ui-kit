@@ -1,5 +1,5 @@
 .dial-textarea {
-  @apply min-h-[72px] resize whitespace-normal overflow-auto;
+  @apply min-h-[120px] resize whitespace-normal overflow-auto;
 
   &:focus {
     @apply outline-none;

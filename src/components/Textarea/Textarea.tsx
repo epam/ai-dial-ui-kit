@@ -1,20 +1,23 @@
-import classNames from 'classnames';
-import type { FC } from 'react';
+import {
+  type DetailedHTMLProps,
+  type FC,
+  type TextareaHTMLAttributes,
+} from 'react';
 
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialErrorText } from '../ErrorText/ErrorText';
 
-export interface DialTextareaProps {
-  value?: string | number | null;
-  placeholder?: string;
-  textareaId?: string;
-  className?: string;
-  containerClassName?: string;
-  disabled?: boolean;
+// TODO: add tooltip for disable textarea
+export interface DialTextareaProps
+  extends DetailedHTMLProps<
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
+    HTMLTextAreaElement
+  > {
   invalid?: boolean;
-  readonly?: boolean;
-  disableTooltip?: boolean;
+  containerClassName?: string;
+  // disableTooltip?: boolean; // TODO: review after approve Design system
   onChange?: (value: string) => void;
+  errorText?: string;
 }
 
 /**
@@ -23,55 +26,47 @@ export interface DialTextareaProps {
  * @example
  * ```tsx
  * <DialTextarea
- *   textareaId="description"
+ *   id="description"
  *   placeholder="Enter description..."
  *   value={value}
  *   onChange={(value) => setValue(value)}
  * />
  * ```
+ * @params Component properties extending:
+ * - {@link TextareaHTMLAttributes<HTMLTextAreaElement>} - Standard textarea attributes (id, value, placeholder, disabled, etc.)
+ * - {@link HTMLTextAreaElement} - The underlying HTML textarea element type
  *
- * @param textareaId - Unique identifier for the textarea element
- * @param [value] - The current value of the textarea
  * @param [onChange] - Callback function called when the textarea value changes
- * @param [placeholder] - Placeholder text displayed when textarea is empty
  * @param [className=""] - Additional CSS classes to apply to the textarea element
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
- * @param [disabled=false] - Whether the textarea is disabled
- * @param [readonly=false] - Whether the textarea is read-only (no user input allowed)
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
  * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
+ * @param [errorText] - Error message to display below the textarea (also adds error styling)
  */
 export const DialTextarea: FC<DialTextareaProps> = ({
-  value,
-  textareaId,
-  placeholder,
   className = '',
-  containerClassName = '',
-  disabled,
-  invalid,
-  readonly,
-  disableTooltip,
+  value,
   onChange,
+  errorText,
+  containerClassName,
+  ...props
 }) => {
+  const textareaClassName = mergeClasses(
+    'dial-textarea dial-input px-3 py-2',
+    props.invalid && 'dial-input-error',
+    props.disabled && 'dial-input-disable',
+    className,
+  );
+
   return (
-    <DialTooltip
-      tooltip={disableTooltip ? null : value}
-      triggerClassName={mergeClasses('flex', containerClassName)}
-    >
+    <div className={mergeClasses('flex flex-col', containerClassName)}>
       <textarea
-        id={textareaId}
-        placeholder={placeholder}
         value={value || ''}
-        disabled={disabled}
-        className={classNames(
-          'dial-textarea dial-input px-3 py-2',
-          invalid && 'dial-input-error',
-          disabled && 'dial-input-disable',
-          readonly && 'dial-input-readonly',
-          className,
-        )}
-        onChange={(event) => !readonly && onChange?.(event.currentTarget.value)}
+        className={textareaClassName}
+        onChange={(event) => onChange?.(event.currentTarget.value)}
+        {...props}
       />
-    </DialTooltip>
+      <DialErrorText errorText={errorText} />
+    </div>
   );
 };

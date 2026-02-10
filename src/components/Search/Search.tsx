@@ -92,7 +92,6 @@ export const DialSearch: FC<DialSearchProps> = ({
         'dial-input flex flex-row items-center justify-between',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
-        readonly && 'dial-input-readonly',
         sizeConfig.containerClassName,
         containerClassName,
       )}
@@ -114,7 +113,6 @@ export const DialSearch: FC<DialSearchProps> = ({
         placeholder={placeholder}
         value={query ?? ''}
         disabled={disabled}
-        readOnly={readonly}
         className={classNames(
           'border-0 bg-transparent w-full',
           className,

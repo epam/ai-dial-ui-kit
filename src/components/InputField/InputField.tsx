@@ -176,7 +176,7 @@ export interface DialTextInputFieldProps extends DialInputFieldBaseProps {
  * @params - Component properties extending:
  * - {@link FieldControlProps} - Field control properties (fieldTitle, optional)
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, etc.)
- * - {@link InputBaseProps} - Base input properties (id, value, placeholder, disabled, readOnly, invalid, etc.)
+ * - {@link InputBaseProps} - Base input properties (id, value, placeholder, disabled, invalid, etc.)
  *
  * @param onChange - Callback function called when the input value changes, receives the new string value
  */

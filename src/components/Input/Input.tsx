@@ -9,17 +9,14 @@ import {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import {
-  DialTooltip,
-  type DialTooltipProps,
-} from '@/components/Tooltip/Tooltip';
 import type { InputBaseProps } from '@/models/field-control-props';
+import { mergeClasses } from '@/utils/merge-classes';
 import { useMergeRefs } from '@floating-ui/react';
-import { handleKeyDown } from './utils';
 import type { DialEllipsisTooltipProps } from '../EllipsisTooltip/EllipsisTooltip';
 import { DialErrorText } from '../ErrorText/ErrorText';
-import { mergeClasses } from '@/utils/merge-classes';
+import { handleKeyDown } from './utils';
 
+// TODO: add tooltip for disable input
 export interface DialInputProps extends InputBaseProps {
   containerClassName?: string;
   className?: string;
@@ -27,7 +24,7 @@ export interface DialInputProps extends InputBaseProps {
   tooltipProps?: DialEllipsisTooltipProps;
   hideTooltip?: boolean;
   inputRef?: Ref<HTMLInputElement>;
-  error?: string;
+  errorText?: string;
   onChange?: (value?: string) => void;
 }
 
@@ -70,7 +67,7 @@ export const DialInput: FC<DialInputProps> = ({
   min,
   max,
   prefix,
-  error,
+  errorText,
   suffix,
   textBeforeInput,
   textAfterInput,
@@ -200,7 +197,7 @@ export const DialInput: FC<DialInputProps> = ({
           </div>
         )}
       </div>
-      <DialErrorText errorText={error} />
+      <DialErrorText errorText={errorText} />
     </div>
   );
 };

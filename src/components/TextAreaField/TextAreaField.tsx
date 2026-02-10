@@ -8,7 +8,6 @@ import { DialTextarea } from '@/components/Textarea/Textarea';
 
 export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
   onChange?: (value: string) => void;
-  disableTooltip?: boolean; // TODO: need?
 }
 
 /**
@@ -27,7 +26,7 @@ export interface DialTextAreaFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  * @params - Component properties extending:
- * - {@link InputBaseProps} - Base input properties (id, value, placeholder, disabled, readOnly, invalid, etc.)
+ * - {@link InputBaseProps} - Base input properties (id, value, placeholder, disabled, invalid, etc.)
  *
  * @param [onChange] - Callback function called when the textarea value changes
  * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
@@ -49,13 +48,13 @@ export const DialTextAreaField: FC<DialTextAreaFieldProps> = ({
         optional={optional}
         htmlFor={id}
       />
-      <DialTextarea
-        textareaId={id}
+      {/* <DialTextarea
+        id={id}
         className={elementClassName}
-        containerClassName={elementContainerClassName}
+       
         {...props}
       />
-      <DialErrorText errorText={errorText} />
+      <DialErrorText errorText={errorText} /> */}
     </div>
   );
 };

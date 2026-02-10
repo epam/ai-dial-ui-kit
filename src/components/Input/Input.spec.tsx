@@ -90,21 +90,6 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(container).toHaveClass('dial-input-error');
   });
 
-  test('readonly prevents onChange from being called', () => {
-    const handleChange = vi.fn();
-    const { getByPlaceholderText } = render(
-      <DialInput
-        id="test-input"
-        placeholder="Readonly input"
-        readOnly
-        onChange={handleChange}
-      />,
-    );
-    const input = getByPlaceholderText('Readonly input');
-    fireEvent.change(input, { target: { value: 'should not call onChange' } });
-    expect(handleChange).not.toHaveBeenCalled();
-  });
-
   test('renders with min and max attributes for number input', () => {
     const { getByPlaceholderText } = render(
       <DialInput

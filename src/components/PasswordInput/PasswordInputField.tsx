@@ -23,7 +23,7 @@ export interface DialPasswordInputFieldProps extends DialInputFieldBaseProps {
  * />
  * ```
  * @params - Component properties extending:
- * - {@link DialInputFieldBaseProps} - Base input properties (id, value, placeholder, disabled, readOnly, invalid, etc.)
+ * - {@link DialInputFieldBaseProps} - Base input properties (id, value, placeholder, disabled, invalid, etc.)
  *
  * @param [onChange] - Callback function called when the input value changes
  */

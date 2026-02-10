@@ -10,7 +10,6 @@ import { DialInput, type DialInputProps } from './Input';
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');
 
-  console.log(args.error);
   return (
     <DialInput
       {...args}
@@ -265,7 +264,7 @@ export const AllVariants: Story = {
               placeholder="Placeholder"
               invalid={true}
               value="Text"
-              error="Error message"
+              errorText="Error message"
               iconBefore={<IconSearch size={16} />}
               iconAfter={<IconEye size={16} />}
             />
@@ -279,7 +278,7 @@ export const AllVariants: Story = {
               id="disable-input"
               placeholder="Placeholder"
               disabled={true}
-              value="Disabled input"
+              value="Text"
               iconBefore={<IconSearch size={16} />}
               iconAfter={<IconEye size={16} />}
             />
@@ -288,58 +287,6 @@ export const AllVariants: Story = {
       </div>
     );
   },
-  parameters: {
-    pseudo: {
-      hover: ['.dial-input-for-hover'],
-      focus: ['.dial-input-for-focus'],
-    },
-  },
-};
-
-export const AllVariantsWithIcons: Story = {
-  render: () => (
-    <div className="p-8 max-w-[1200px]">
-      <div className="grid grid-cols-4 gap-6">
-        {/* Field State (with value) */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field</div>
-          <InteractiveInput
-            id="field-input"
-            placeholder="Placeholder"
-            value="Input value"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Field Hover State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field hover</div>
-          <InteractiveInput
-            id="field-hover-input"
-            placeholder="Placeholder"
-            containerClassName="dial-input-for-hover"
-            value="Input value"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Error State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Error</div>
-          <InteractiveInput
-            id="error-input"
-            placeholder="Placeholder"
-            error="Error text"
-            invalid={true}
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-      </div>
-    </div>
-  ),
   parameters: {
     pseudo: {
       hover: ['.dial-input-for-hover'],

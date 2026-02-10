@@ -37,11 +37,6 @@ export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
     control: { type: 'boolean' as const },
     description: 'Whether the input is disabled and cannot be interacted with',
   },
-  readOnly: {
-    control: { type: 'boolean' as const },
-    description:
-      'Whether the input is read-only (displays value as text, no input element)',
-  },
   invalid: {
     control: { type: 'boolean' as const },
     description:
