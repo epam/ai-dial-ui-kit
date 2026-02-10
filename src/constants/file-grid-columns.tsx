@@ -12,6 +12,7 @@ import type { FileManagerGridRow } from '@/components/FileManager/FileManagerCon
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import type { FileManagerGridContext } from '@/components/FileManager/hooks/use-file-manager-columns';
 import { formatBytes } from '@/components/FileManager/utils';
+import type { ColDef } from 'ag-grid-community';
 
 type GridRow = FileManagerGridRow;
 
@@ -21,7 +22,7 @@ export const NAME_COLUMN =
     dateLocale: Intl.LocalesArgument,
     dateOptions: Intl.DateTimeFormatOptions | undefined,
     isCompactView: boolean,
-  ) => {
+  ): ColDef => {
     return {
       colId: FileManagerColumnKey.Name,
       field: 'name' as keyof FileManagerGridRow,
@@ -151,7 +152,7 @@ export const UPDATED_AT_COLUMN =
   (
     dateLocale: Intl.LocalesArgument,
     dateOptions: Intl.DateTimeFormatOptions | undefined,
-  ) => ({
+  ): ColDef => ({
     colId: FileManagerColumnKey.UpdatedAt,
     field: 'updatedAt' as keyof FileManagerGridRow,
     headerName: headerName,
@@ -164,13 +165,13 @@ export const UPDATED_AT_COLUMN =
     },
   });
 
-export const SIZE_COLUMN = (headerName: string) => ({
+export const SIZE_COLUMN = (headerName: string): ColDef => ({
   colId: FileManagerColumnKey.Size,
   field: 'size' as keyof FileManagerGridRow,
   headerName: headerName,
   width: 120,
   suppressSizeToFit: true,
-  cellRenderer: (params: { data: GridRow }) => {
+  cellRenderer: (params: { data: GridRow }): string => {
     return params.data.nodeType === DialFileNodeType.ITEM
       ? formatBytes(params.data.contentLength)
       : '';
