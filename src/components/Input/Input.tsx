@@ -17,6 +17,7 @@ import type {
 } from '@/models/field-control-props';
 import { handleKeyDown } from './utils';
 import { useMergeRefs } from '@floating-ui/react';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialInputProps
   extends InputBaseProps,
@@ -141,7 +142,7 @@ export const DialInput: FC<DialInputProps> = ({
 
   return (
     <div
-      className={classNames(
+      className={mergeClasses(
         'dial-input-field flex flex-row items-center justify-between py-2',
         hideBorder ? 'dial-input-no-border' : 'dial-input',
         invalid && 'dial-input-error',
