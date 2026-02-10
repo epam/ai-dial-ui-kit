@@ -1,4 +1,5 @@
 export const gridBaseClassName = 'h-full w-full';
+export const checkboxClass = '.ag-checkbox-input';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--controls-bg-accent, #5C8DEA)',

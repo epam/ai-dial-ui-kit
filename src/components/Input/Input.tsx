@@ -18,6 +18,7 @@ import { useMergeRefs } from '@floating-ui/react';
 import { handleKeyDown } from './utils';
 import type { DialEllipsisTooltipProps } from '../EllipsisTooltip/EllipsisTooltip';
 import { DialErrorText } from '../ErrorText/ErrorText';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialInputProps extends InputBaseProps {
   containerClassName?: string;
@@ -133,8 +134,8 @@ export const DialInput: FC<DialInputProps> = ({
   return (
     <div className="flex flex-col dial-input-field">
       <div
-        className={classNames(
-          'flex flex-row items-center justify-between py-2',
+        className={mergeClasses(
+          'dial-input-field flex flex-row items-center justify-between py-2',
           hideBorder ? 'dial-input-no-border' : 'dial-input',
           invalid && 'dial-input-error',
           props.disabled && 'dial-input-disable',
@@ -164,33 +165,21 @@ export const DialInput: FC<DialInputProps> = ({
           className={classNames(!!iconBefore && 'mr-2')}
         />
 
-        <DialTooltip
-          {...(hideTooltip
-            ? { tooltip: null }
-            : ({
-                ...tooltipProps,
-                triggerClassName: classNames(
-                  tooltipProps?.triggerClassName,
-                  'flex-1',
-                ),
-              } as DialTooltipProps))}
-        >
-          <input
-            ref={ref}
-            type={type}
-            autoComplete={type === 'password' ? 'new-password' : 'off'}
-            value={defaultValue ? undefined : (value ?? '')}
-            className={classNames(
-              'border-0 bg-transparent w-full truncate',
-              className,
-            )}
-            onChange={handleChange}
-            onKeyDown={onKeyDown}
-            min={min}
-            max={max}
-            {...props}
-          />
-        </DialTooltip>
+        <input
+          ref={ref}
+          type={type}
+          autoComplete={type === 'password' ? 'new-password' : 'off'}
+          value={defaultValue ? undefined : (value ?? '')}
+          className={classNames(
+            'border-0 bg-transparent w-full truncate',
+            className,
+          )}
+          onChange={handleChange}
+          onKeyDown={onKeyDown}
+          min={min}
+          max={max}
+          {...props}
+        />
 
         <DialIcon
           icon={iconAfter}

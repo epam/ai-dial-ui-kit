@@ -55,6 +55,7 @@ export const DialFilledInput: FC<DialFilledInputProps> = ({
       {...props}
       iconBefore={getIcon()}
       tooltipTriggerClassName="flex-1 min-w-0"
+      containerClassName="!h-[40px] !p-0"
       className={classNames(isInvalid ? 'text-error' : '', className)}
       tooltipText={isInvalid && errorText ? errorText : undefined}
       hideBorder
