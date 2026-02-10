@@ -1,7 +1,8 @@
-import { DialButton } from '@/components/Button/Button';
+import { DialIconButton } from '@/components/IconButton/IconButton';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconCopyMinus } from '@tabler/icons-react';
 import { useMemo, type ReactNode } from 'react';
+import { ButtonSize } from '@/types/button';
 
 interface useTreeAdditionalButtonsOptions {
   additionalButtons?: ReactNode;
@@ -30,7 +31,7 @@ export const useTreeAdditionalButtons = ({
 
   const buttons = useMemo(() => {
     const buttonClass = mergeClasses([
-      'hover:text-accent-primary p-1',
+      'hover:text-accent-primary p-0',
       isCollapseAllDisabled &&
         'text-controls-disable hover:text-controls-disable disabled:hover:cursor-default',
     ]);
@@ -38,11 +39,12 @@ export const useTreeAdditionalButtons = ({
     return (
       <>
         {additionalButtons}
-        <DialButton
+        <DialIconButton
           disabled={isCollapseAllDisabled}
           className={buttonClass}
+          size={ButtonSize.Small}
           onClick={collapseAll}
-          iconBefore={<IconCopyMinus size={24} stroke={1.5} />}
+          icon={<IconCopyMinus size={24} stroke={1.5} />}
           aria-label="collapse-all"
         />
       </>

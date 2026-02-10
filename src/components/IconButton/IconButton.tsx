@@ -5,7 +5,6 @@ import type {
   ReactNode,
 } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
 import { DialTooltip, type DialTooltipProps } from '../Tooltip/Tooltip';
@@ -80,7 +79,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
         className={btnClassName}
         aria-label={props['aria-label']}
       >
-        <DialIcon icon={icon} />
+        {icon}
       </button>
     </DialTooltip>
   );
