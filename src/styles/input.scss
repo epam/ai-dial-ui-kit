@@ -15,7 +15,7 @@
 
 .dial-input,
 .dial-input-no-border {
-  @apply bg-transparent truncate;
+  @apply bg-transparent truncate dial-small-text;
   @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
@@ -29,6 +29,7 @@
 
 .dial-input-disable,
 .dial-input-disable:not(:placeholder-shown) {
+  @apply cursor-not-allowed;
   border-color: #424952;
   color: #424952;
 }

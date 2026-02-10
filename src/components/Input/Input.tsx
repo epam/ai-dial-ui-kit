@@ -16,14 +16,17 @@ import {
 import type { InputBaseProps } from '@/models/field-control-props';
 import { useMergeRefs } from '@floating-ui/react';
 import { handleKeyDown } from './utils';
+import type { DialEllipsisTooltipProps } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialErrorText } from '../ErrorText/ErrorText';
 
 export interface DialInputProps extends InputBaseProps {
   containerClassName?: string;
   className?: string;
   hideBorder?: boolean; // TODO: really need?
-  tooltipProps?: DialTooltipProps;
+  tooltipProps?: DialEllipsisTooltipProps;
   hideTooltip?: boolean;
   inputRef?: Ref<HTMLInputElement>;
+  error?: string;
   onChange?: (value?: string) => void;
 }
 
@@ -49,6 +52,8 @@ export interface DialInputProps extends InputBaseProps {
  * @param hideBorder - Whether to hide the input border styling
  * @param tooltipProps - Props to pass to the internal tooltip component
  * @param hideTooltip - Whether to hide the tooltip
+ * @param inputRef - Ref to access the underlying input element
+ * @param error - Error message to display below the input (also adds error styling)
  * @param onChange - Callback function called when the input value changes
  */
 export const DialInput: FC<DialInputProps> = ({
@@ -64,6 +69,7 @@ export const DialInput: FC<DialInputProps> = ({
   min,
   max,
   prefix,
+  error,
   suffix,
   textBeforeInput,
   textAfterInput,
@@ -125,84 +131,87 @@ export const DialInput: FC<DialInputProps> = ({
   };
 
   return (
-    <div
-      className={classNames(
-        'dial-input-field flex flex-row items-center justify-between py-2',
-        hideBorder ? 'dial-input-no-border' : 'dial-input',
-        invalid && 'dial-input-error',
-        props.disabled && 'dial-input-disable',
-        !textBeforeInput && 'pl-3',
-        !textAfterInput && 'pr-3',
-        containerClassName,
-      )}
-      aria-label="input-container"
-    >
-      {textBeforeInput && (
-        <div className="mr-2">
-          <DialInput
-            hideBorder
-            containerClassName="rounded-r-none border-r-0"
-            className="truncate"
-            value={textBeforeInput}
-            disabled
-            id={`${textBeforeInput}_textBefore`}
-          />
-        </div>
-      )}
-
-      {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
-
-      <DialIcon
-        icon={iconBefore}
-        className={classNames(!!iconBefore && 'mr-2')}
-      />
-
-      <DialTooltip
-        {...(hideTooltip
-          ? { tooltip: null }
-          : ({
-              ...tooltipProps,
-              triggerClassName: classNames(
-                tooltipProps?.triggerClassName,
-                'flex-1',
-              ),
-            } as DialTooltipProps))}
+    <div className="flex flex-col dial-input-field">
+      <div
+        className={classNames(
+          'flex flex-row items-center justify-between py-2',
+          hideBorder ? 'dial-input-no-border' : 'dial-input',
+          invalid && 'dial-input-error',
+          props.disabled && 'dial-input-disable',
+          !textBeforeInput && 'pl-3',
+          !textAfterInput && 'pr-3',
+          containerClassName,
+        )}
+        aria-label="input-container"
       >
-        <input
-          ref={ref}
-          type={type}
-          autoComplete={type === 'password' ? 'new-password' : 'off'}
-          value={defaultValue ? undefined : (value ?? '')}
-          className={classNames(
-            'border-0 bg-transparent w-full truncate',
-            className,
-          )}
-          onChange={handleChange}
-          onKeyDown={onKeyDown}
-          min={min}
-          max={max}
-          {...props}
+        {textBeforeInput && (
+          <div className="mr-2">
+            <DialInput
+              hideBorder
+              containerClassName="rounded-r-none border-r-0"
+              className="truncate"
+              value={textBeforeInput}
+              disabled
+              id={`${textBeforeInput}_textBefore`}
+            />
+          </div>
+        )}
+
+        {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
+
+        <DialIcon
+          icon={iconBefore}
+          className={classNames(!!iconBefore && 'mr-2')}
         />
-      </DialTooltip>
 
-      <DialIcon
-        icon={iconAfter}
-        className={classNames(!!iconAfter && 'ml-2')}
-      />
-
-      {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
-
-      {textAfterInput && (
-        <div className="ml-2">
-          <DialInput
-            hideBorder
-            containerClassName="rounded-l-none border-l-0"
-            value={textAfterInput}
-            disabled
-            id={`${textAfterInput}_textAfter`}
+        <DialTooltip
+          {...(hideTooltip
+            ? { tooltip: null }
+            : ({
+                ...tooltipProps,
+                triggerClassName: classNames(
+                  tooltipProps?.triggerClassName,
+                  'flex-1',
+                ),
+              } as DialTooltipProps))}
+        >
+          <input
+            ref={ref}
+            type={type}
+            autoComplete={type === 'password' ? 'new-password' : 'off'}
+            value={defaultValue ? undefined : (value ?? '')}
+            className={classNames(
+              'border-0 bg-transparent w-full truncate',
+              className,
+            )}
+            onChange={handleChange}
+            onKeyDown={onKeyDown}
+            min={min}
+            max={max}
+            {...props}
           />
-        </div>
-      )}
+        </DialTooltip>
+
+        <DialIcon
+          icon={iconAfter}
+          className={classNames(!!iconAfter && 'ml-2')}
+        />
+
+        {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
+
+        {textAfterInput && (
+          <div className="ml-2">
+            <DialInput
+              hideBorder
+              containerClassName="rounded-l-none border-l-0"
+              value={textAfterInput}
+              disabled
+              id={`${textAfterInput}_textAfter`}
+            />
+          </div>
+        )}
+      </div>
+      <DialErrorText errorText={error} />
     </div>
   );
 };
