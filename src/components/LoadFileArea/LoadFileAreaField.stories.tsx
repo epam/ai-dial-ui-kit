@@ -34,6 +34,10 @@ const meta: Meta<typeof DialLoadFileAreaField> = {
       control: 'number',
       description: 'Maximum allowed file count',
     },
+    maxFileSize: {
+      control: 'number',
+      description: 'Maximum allowed file size',
+    },
     acceptTypes: {
       control: 'text',
       description: 'Accepted MIME types (e.g. image/*, .pdf)',
@@ -54,6 +58,10 @@ const meta: Meta<typeof DialLoadFileAreaField> = {
     fileCountError: {
       control: 'text',
       description: 'Displayed when max file count exceeded',
+    },
+    fileSizeError: {
+      control: 'text',
+      description: 'Displayed when max file size exceeded',
     },
   },
 };
@@ -93,10 +101,12 @@ export const Empty: Story = {
     acceptTypes: 'application/pdf, application/txt, image/svg+xml',
     multiple: true,
     maxFilesCount: 5,
+    maxFileSize: 4,
     deleteAllButtonLabel: 'Delete all',
     addButtonLabel: 'Add files',
     fileFormatError: 'Invalid file format',
     fileCountError: 'Too many files selected',
+    fileSizeError: 'File exceed max file size limit',
     emptyTextFirstLine: 'Drop file here',
     emptyTextSecondLine: 'or',
     emptyButtonLabel: 'Browse',
