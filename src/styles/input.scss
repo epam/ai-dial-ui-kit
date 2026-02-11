@@ -1,5 +1,5 @@
 .dial-input {
-  @apply border border-solid border-primary rounded;
+  @apply border border-solid rounded border-primary;
 
   &:hover {
     @apply border-hover;
@@ -9,6 +9,10 @@
   &:focus-within {
     @apply border-accent-primary;
   }
+}
+
+.dial-input-border-transparent {
+  @apply border-transparent;
 }
 
 .dial-input,

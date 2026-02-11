@@ -18,7 +18,7 @@ interface CacheEntry {
 const DEFAULT_TTL_MS = 20 * 60 * 1000; // TTL (Time To Live) 20 minutes
 const DEFAULT_MAX_ENTRIES = 20; // LRU (Least Recently Used) cap
 
-interface DocumentPreviewCacheContextValue {
+export interface DocumentPreviewCacheContextValue {
   getFile: (url: string, loader: () => Promise<Blob>) => Promise<Blob>;
   clearCache: () => void;
 }
@@ -26,14 +26,29 @@ interface DocumentPreviewCacheContextValue {
 const DocumentPreviewCacheContext =
   createContext<DocumentPreviewCacheContextValue | null>(null);
 
-interface DocumentPreviewCacheProviderProps extends PropsWithChildren {
+export interface DocumentPreviewCacheProviderProps extends PropsWithChildren {
   ttlMs?: number;
   maxEntries?: number;
 }
 
 /**
- * This context provider caches document files for previewing, with a TTL and LRU eviction policy.
- * It helps optimize performance by avoiding redundant network requests for duplicate documents between different fields
+ * DocumentPreviewCacheProvider caches document files for previewing with TTL and LRU eviction policy.
+ *
+ * This provider optimizes performance by:
+ * - Avoiding redundant network requests for duplicate documents
+ * - Managing memory with configurable TTL (Time To Live)
+ * - Implementing LRU (Least Recently Used) eviction when cache limit is reached
+ *
+ * @param children - Child components that will have access to the cache context
+ * @param [ttlMs=1200000] - Time-to-live in milliseconds for cached entries (default: 20 minutes)
+ * @param [maxEntries=20] - Maximum number of cached entries before LRU eviction
+ *
+ * @example
+ * ```tsx
+ * <DocumentPreviewCacheProvider ttlMs={30 * 60 * 1000} maxEntries={50}>
+ *   <DialDocumentPreview {...props} />
+ * </DocumentPreviewCacheProvider>
+ * ```
  */
 export const DocumentPreviewCacheProvider: FC<
   DocumentPreviewCacheProviderProps
@@ -118,6 +133,19 @@ export const DocumentPreviewCacheProvider: FC<
   );
 };
 
+/**
+ * Hook to access document preview cache functionality.
+ * Must be used within a DocumentPreviewCacheProvider.
+ *
+ * @returns Cache context value with getFile and clearCache methods
+ * @throws Error if used outside of DocumentPreviewCacheProvider
+ *
+ * @example
+ * ```tsx
+ * const { getFile, clearCache } = useDocumentPreviewCache();
+ * const file = await getFile(url, () => fetch(url).then(r => r.blob()));
+ * ```
+ */
 export const useDocumentPreviewCache = () => {
   const ctx = useContext(DocumentPreviewCacheContext);
   if (!ctx) {

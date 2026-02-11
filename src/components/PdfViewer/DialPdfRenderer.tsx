@@ -6,16 +6,37 @@ import {
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
 import { AUTO_ZOOM_ID, AUTO_ZOOM_VALUE } from './pdf-viewer.contants';
 
-interface Props {
+export interface DialPdfRendererProps {
   pdf: string | Blob;
   highlights: InputHighlightData[];
-  // should be 'auto' or a string representing a number
   zoom?: string;
   selectedHighlightId?: string;
   containerClassName?: string;
 }
 
-export const PDFViewer: FC<Props> = ({
+/**
+ * DialPdfRenderer component displays PDF documents with highlighting capabilities.
+ * Uses pdf-highlighter-kit to render PDFs with text selection and highlighting support.
+ *
+ * @param pdf - PDF document to display, can be a URL string or Blob object
+ * @param highlights - Array of highlights to display in the PDF
+ * @param [zoom] - Zoom level - should be 'auto' or a string representing a number
+ * @param [selectedHighlightId] - ID of the currently selected highlight to scroll to
+ * @param [containerClassName] - Additional CSS classes for the container
+ *
+ * @example
+ * ```tsx
+ * <DialPdfRenderer
+ *   pdf={pdfBlob}
+ *   highlights={[
+ *     { id: '1', bboxes: [...] }
+ *   ]}
+ *   zoom="1.5"
+ *   selectedHighlightId="1"
+ * />
+ * ```
+ */
+export const DialPdfRenderer: FC<DialPdfRendererProps> = ({
   pdf,
   highlights,
   selectedHighlightId,

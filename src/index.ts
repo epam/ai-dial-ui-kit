@@ -95,6 +95,14 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 export { DialFileManager } from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
 
+// PDF Viewer
+export { DialPdfRenderer } from './components/PdfViewer/DialPdfRenderer';
+export { DialPdfViewer } from './components/PdfViewer/DialPdfViewer';
+export {
+  DocumentPreviewCacheProvider,
+  useDocumentPreviewCache,
+} from './components/PdfViewer/DocumentPreviewCacheContext';
+
 // Types
 export { AlertVariant } from './types/alert';
 export { ButtonVariant, ButtonAppearance, ButtonSize } from './types/button';

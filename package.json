@@ -58,7 +58,6 @@
     "esbuild": "0.25.9"
   },
   "dependencies": {
-    "@epam/pdf-highlighter-kit": "^0.0.5",
     "ag-grid-community": "^34.3.0",
     "ag-grid-react": "^34.3.0",
     "re-resizable": "^6.11.2",
@@ -75,7 +74,9 @@
     "classnames": "^2.5.1",
     "monaco-editor": "^0.52.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "@epam/pdf-highlighter-kit": "^0.0.5",
+    "pdfjs-dist": "5.4.149"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
