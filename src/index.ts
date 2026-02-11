@@ -8,6 +8,7 @@ export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
+export type { DialNoDataContentProps } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
