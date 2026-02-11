@@ -665,6 +665,7 @@ export const DialFileManagerView: FC = () => {
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
+      const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
       if (treeOptions?.actionLabels) {
         if (
@@ -692,31 +693,25 @@ export const DialFileManagerView: FC = () => {
           typeof handleAddChild === 'function' &&
           file.nodeType === DialFileNodeType.FOLDER
         ) {
-          items.push(
-            {
-              key: 'addChild',
-              label: treeOptions.actionLabels[DialFileManagerActions.AddChild],
-              icon: (
-                <AddChild
-                  width={BASE_ICON_PROPS.size}
-                  height={BASE_ICON_PROPS.size}
-                  className="text-secondary"
-                />
-              ),
-              onClick: () => handleAddChild([file]),
-            },
-            {
-              key: 'divider',
-              type: DropdownItemType.Divider,
-            },
-          );
+          items.push({
+            key: 'addChild',
+            label: treeOptions.actionLabels[DialFileManagerActions.AddChild],
+            icon: (
+              <AddChild
+                width={BASE_ICON_PROPS.size}
+                height={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => handleAddChild([file]),
+          });
         }
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Duplicate] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'duplicate',
             label: treeOptions.actionLabels[DialFileManagerActions.Duplicate],
             icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
@@ -728,7 +723,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Copy] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DestinationFolderMode.Copy,
             label: treeOptions.actionLabels[DialFileManagerActions.Copy],
             icon: (
@@ -748,7 +743,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Move] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DestinationFolderMode.Move,
             label: treeOptions.actionLabels[DialFileManagerActions.Move],
             icon: (
@@ -768,7 +763,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Download] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'download',
             label: treeOptions.actionLabels[DialFileManagerActions.Download],
             icon: (
@@ -781,7 +776,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Rename] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'rename',
             label: treeOptions.actionLabels[DialFileManagerActions.Rename],
             icon: (
@@ -798,7 +793,7 @@ export const DialFileManagerView: FC = () => {
           sharedWithMeIds?.includes(file.path) &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'unshare',
             label: treeOptions.actionLabels[DialFileManagerActions.Unshare],
             icon: (
@@ -817,7 +812,7 @@ export const DialFileManagerView: FC = () => {
           file.nodeType === DialFileNodeType.FOLDER &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DialFileManagerActions.ManagePermissions,
             label:
               treeOptions.actionLabels[
@@ -837,7 +832,7 @@ export const DialFileManagerView: FC = () => {
           file.permissions?.includes(DialFilePermission.WRITE) &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'delete',
             label: treeOptions.actionLabels[DialFileManagerActions.Delete],
             icon: (
@@ -847,6 +842,17 @@ export const DialFileManagerView: FC = () => {
               openDeleteConfirmation([file], file.parentPath ?? ''),
           });
         }
+      }
+
+      if (elements.length > 0) {
+        return [
+          ...items,
+          {
+            key: 'divider',
+            type: DropdownItemType.Divider,
+          },
+          ...elements,
+        ];
       }
       return items;
     },
