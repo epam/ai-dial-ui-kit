@@ -23,10 +23,13 @@ export interface DialEmptyFileAreaProps {
   emptyButtonLabel?: string;
   acceptTypes: string;
   maxFilesCount?: number;
+  maxFileSize?: number;
   multiple?: boolean;
   fileFormatError?: string;
   fileCountError?: string;
+  fileSizeError?: string;
   getIsFileFormatError?: (fileItems: File[] | DataTransferItem[]) => boolean;
+  getIsFileSizeError?: (fileItems: File[] | DataTransferItem[]) => boolean;
   onChange: (files: File[]) => void;
 }
 
@@ -61,10 +64,13 @@ export interface DialEmptyFileAreaProps {
  * @param {string} [props.emptyButtonLabel] - Label for the upload button shown below the text.
  * @param {string} [props.acceptTypes] - Comma-separated list of accepted file MIME types (e.g., "application/pdf").
  * @param {number} [props.maxFilesCount] - Maximum allowed number of files that can be uploaded at once.
+ * @param {number} [props.maxFileSize] - Maximum allowed size of file that can be uploaded in MB.
  * @param {boolean} [props.multiple=false] - Whether multiple file uploads are allowed.
  * @param {string} [props.fileFormatError] - Error message shown when an invalid file format is detected.
  * @param {string} [props.fileCountError] - Error message shown when the selected files exceed the limit.
+ * @param {string} [props.fileSizeError] - Error message shown when the some of files exceed the size limit.
  * @param {(files: File[] | DataTransferItem[]) => boolean} [props.getIsFileFormatError] - Optional validation function that returns `true` if selected files have invalid formats.
+ * @param {(files: File[] | DataTransferItem[]) => boolean} [props.getIsFileSizeError] - Optional validation function that returns `true` if selected files have invalid size.
  *
  * @returns {JSX.Element} The rendered drag-and-drop upload area with file validation feedback.
  */
@@ -78,12 +84,15 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   multiple,
   fileFormatError,
   fileCountError,
+  fileSizeError,
   getIsFileFormatError,
+  getIsFileSizeError,
 }) => {
   const dropRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[] | DataTransferItem[]>([]);
   const [isErrorFileFormat, setIsErrorFileFormat] = useState<boolean>(false);
+  const [isErrorFileSize, setIsErrorFileSize] = useState<boolean>(false);
 
   const onFileChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,15 +100,18 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
       if (filesList && filesList.length > 0) {
         const selectedFiles = Array.from(filesList);
         const isFormatError = getIsFileFormatError?.(selectedFiles);
+        const isSizeError = getIsFileSizeError?.(selectedFiles);
 
-        if (!isFormatError) {
-          onChange(selectedFiles);
-        } else {
+        if (isFormatError) {
           setIsErrorFileFormat(true);
+        } else if (isSizeError) {
+          setIsErrorFileSize(true);
+        } else {
+          onChange(selectedFiles);
         }
       }
     },
-    [getIsFileFormatError, onChange],
+    [getIsFileFormatError, getIsFileSizeError, onChange],
   );
 
   const getIsFileCountError = useCallback(
@@ -110,13 +122,33 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   );
 
   const isFileValidationError = useMemo(() => {
-    return isErrorFileFormat || getIsFileCountError(files);
-  }, [isErrorFileFormat, files, getIsFileCountError]);
+    return isErrorFileFormat || isErrorFileSize || getIsFileCountError(files);
+  }, [isErrorFileFormat, isErrorFileSize, getIsFileCountError, files]);
 
   const clearErrorState = () => {
     setFiles([]);
     setIsErrorFileFormat(false);
+    setIsErrorFileSize(false);
   };
+
+  const errorText = useMemo(() => {
+    if (isErrorFileFormat) {
+      return <DialErrorText errorText={fileFormatError} />;
+    } else if (isErrorFileSize) {
+      return <DialErrorText errorText={fileSizeError} />;
+    } else if (getIsFileCountError(files)) {
+      return <DialErrorText errorText={fileCountError} />;
+    }
+    return null;
+  }, [
+    fileCountError,
+    fileFormatError,
+    fileSizeError,
+    files,
+    getIsFileCountError,
+    isErrorFileFormat,
+    isErrorFileSize,
+  ]);
 
   useEffect(() => {
     clearErrorState();
@@ -127,7 +159,11 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
       accept: [NativeTypes.FILE],
       drop(selectedFiles: { files: File[] }) {
         const files = selectedFiles.files;
-        if (!getIsFileFormatError?.(files) && !getIsFileCountError(files)) {
+        if (
+          !getIsFileFormatError?.(files) &&
+          !getIsFileSizeError?.(files) &&
+          !getIsFileCountError(files)
+        ) {
           onChange(files);
         }
         clearErrorState();
@@ -155,6 +191,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
     const fileItems = Array.from(event.dataTransfer?.items ?? []);
 
     setIsErrorFileFormat(!!getIsFileFormatError?.(fileItems));
+    setIsErrorFileSize(!!getIsFileSizeError?.(fileItems));
     setFiles(fileItems);
   };
 
@@ -211,15 +248,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           onChange={onFileChange}
         />
       </div>
-      <>
-        {isErrorFileFormat ? (
-          <DialErrorText errorText={fileFormatError} />
-        ) : (
-          getIsFileCountError(files) && (
-            <DialErrorText errorText={fileCountError} />
-          )
-        )}
-      </>
+      <>{errorText}</>
     </>
   );
 };
