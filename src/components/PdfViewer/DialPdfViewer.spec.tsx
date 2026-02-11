@@ -1,8 +1,8 @@
 import type { InputHighlightData } from '@epam/pdf-highlighter-kit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { DocumentPreviewCacheProvider } from './DocumentPreviewCacheContext';
 import { DialPdfViewer } from './DialPdfViewer';
+import { DocumentPreviewCacheProvider } from './DocumentPreviewCacheProvider';
 
 // Mock the PDFHighlightViewer
 vi.mock('@epam/pdf-highlighter-kit', () => ({

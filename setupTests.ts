@@ -3,6 +3,37 @@ import { cleanup } from '@testing-library/react';
 import { ChangeEvent, createElement } from 'react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 
+const originalDOMMatrix = globalThis.DOMMatrix;
+
+if (!globalThis.DOMMatrix) {
+  class DOMMatrixMock {
+    a = 1;
+    b = 0;
+    c = 0;
+    d = 1;
+    e = 0;
+    f = 0;
+
+    multiplySelf() {
+      return this;
+    }
+
+    translateSelf() {
+      return this;
+    }
+
+    scaleSelf() {
+      return this;
+    }
+
+    rotateSelf() {
+      return this;
+    }
+  }
+
+  globalThis.DOMMatrix = DOMMatrixMock as unknown as typeof DOMMatrix;
+}
+
 // Mock Monaco Editor
 vi.mock('monaco-editor', () => ({
   editor: {
@@ -108,4 +139,5 @@ afterAll(() => {
   vi.restoreAllMocks();
   globalThis.IntersectionObserver = originalIntersectionObserver;
   globalThis.ResizeObserver = originalResizeObserver;
+  globalThis.DOMMatrix = originalDOMMatrix as typeof DOMMatrix;
 });

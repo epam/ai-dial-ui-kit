@@ -1,3 +1,7 @@
+// Cache configuration defaults
+export const DEFAULT_TTL_MS = 20 * 60 * 1000; // TTL (Time To Live) 20 minutes
+export const DEFAULT_MAX_ENTRIES = 20; // LRU (Least Recently Used) cap
+
 export const AUTO_ZOOM_ID = 'auto';
 export const AUTO_ZOOM_VALUE = '1.25';
 

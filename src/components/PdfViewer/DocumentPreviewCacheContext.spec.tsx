@@ -1,10 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import {
-  DocumentPreviewCacheProvider,
-  useDocumentPreviewCache,
-} from './DocumentPreviewCacheContext';
+import { useDocumentPreviewCache } from './DocumentPreviewCacheContext';
+import { DocumentPreviewCacheProvider } from './DocumentPreviewCacheProvider';
 
 describe('Dial UI Kit :: DocumentPreviewCacheContext', () => {
   beforeEach(() => {

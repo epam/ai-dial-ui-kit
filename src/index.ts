@@ -98,10 +98,8 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 // PDF Viewer
 export { DialPdfRenderer } from './components/PdfViewer/DialPdfRenderer';
 export { DialPdfViewer } from './components/PdfViewer/DialPdfViewer';
-export {
-  DocumentPreviewCacheProvider,
-  useDocumentPreviewCache,
-} from './components/PdfViewer/DocumentPreviewCacheContext';
+export { useDocumentPreviewCache } from './components/PdfViewer/DocumentPreviewCacheContext';
+export { DocumentPreviewCacheProvider } from './components/PdfViewer/DocumentPreviewCacheProvider';
 
 // Types
 export { AlertVariant } from './types/alert';
