@@ -120,6 +120,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   sharedWithMeIds,
   onFolderPopupPathChange,
   onManagePermissions,
+  onPreview,
   isRenameFileAvailable,
   customUploadFileAction,
 }) => {
@@ -688,6 +689,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     onFolderPopupPathChange,
     onManagePermissions,
+    onPreview,
     isRenameFileAvailable,
     customUploadFileAction,
   };
