@@ -403,11 +403,21 @@ export const DialGrid = <T extends object>({
     ],
   );
 
-  const computedColumnDefs = useMemo<ColDef<T>[]>(() => {
-    return wrapCustomCellRenderers
-      ? (columnDefs ?? []).map(wrapRendererIfNeeded)
-      : (columnDefs ?? []);
-  }, [columnDefs, wrapCustomCellRenderers, wrapRendererIfNeeded]);
+  // TODO: temporary fix, until wrapRendererIfNeeded exists
+  const computedColumnDefs = useMemo<ColDef<T>[]>(
+    () => {
+      return wrapCustomCellRenderers
+        ? (columnDefs ?? []).map(wrapRendererIfNeeded)
+        : (columnDefs ?? []);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      columnDefs,
+      wrapCustomCellRenderers,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      wrapCustomCellRenderers ? wrapRendererIfNeeded : null,
+    ],
+  );
 
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
