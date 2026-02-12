@@ -213,6 +213,7 @@ export interface GridOptions
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
+    [DialFileManagerActions.Preview]?: string;
   };
 }
 
@@ -350,6 +351,8 @@ export interface DialFileManagerProps {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
@@ -591,6 +594,8 @@ export const DialFileManagerView: FC = () => {
 
     onFolderPopupPathChange,
     onManagePermissions,
+    onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   } = useFileManagerContext();
   const {
@@ -1073,6 +1078,8 @@ export const DialFileManagerView: FC = () => {
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
+    onPreview: (path) => onPreview?.(path),
+    previewExtensions,
     isRenameFileAvailable,
   });
 

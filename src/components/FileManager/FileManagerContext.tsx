@@ -195,6 +195,8 @@ export interface FileManagerContextValue {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
