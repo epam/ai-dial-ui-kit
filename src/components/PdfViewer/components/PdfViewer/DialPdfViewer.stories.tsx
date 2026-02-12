@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialPdfViewer, type DialPdfViewerProps } from './DialPdfViewer';
-import { DocumentPreviewCacheProvider } from './DocumentPreviewCacheContext';
+import { DocumentPreviewCacheProvider } from '../../context/DocumentPreviewCacheContext';
 import type { InputHighlightData } from '@epam/pdf-highlighter-kit';
 import samplePdf from '@/assets/files/pdf_sample.pdf';
 

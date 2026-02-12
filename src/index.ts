@@ -96,10 +96,10 @@ export { DialFileManager } from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
 
 // PDF Viewer
-export { DialPdfRenderer } from './components/PdfViewer/DialPdfRenderer';
-export { DialPdfViewer } from './components/PdfViewer/DialPdfViewer';
-export { useDocumentPreviewCache } from './components/PdfViewer/DocumentPreviewCacheContext';
-export { DocumentPreviewCacheProvider } from './components/PdfViewer/DocumentPreviewCacheProvider';
+export { DialPdfRenderer } from './components/PdfViewer/components/PdfRenderer/DialPdfRenderer.tsx';
+export { DialPdfViewer } from './components/PdfViewer/components/PdfViewer/DialPdfViewer.tsx';
+export { useDocumentPreviewCache } from './components/PdfViewer/context/DocumentPreviewCacheContext.tsx';
+export { DocumentPreviewCacheProvider } from './components/PdfViewer/context/DocumentPreviewCacheProvider.tsx';
 
 // Types
 export { AlertVariant } from './types/alert';

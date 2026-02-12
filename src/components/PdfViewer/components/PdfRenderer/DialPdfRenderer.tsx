@@ -4,7 +4,7 @@ import {
   PDFHighlightViewer,
 } from '@epam/pdf-highlighter-kit';
 import { type FC, useCallback, useEffect, useRef, useState } from 'react';
-import { AUTO_ZOOM_ID, AUTO_ZOOM_VALUE } from './pdf-viewer.contants';
+import { AUTO_ZOOM_ID, AUTO_ZOOM_VALUE } from '../../constants';
 
 export interface DialPdfRendererProps {
   pdf: string | Blob;

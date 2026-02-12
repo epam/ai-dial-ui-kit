@@ -3,7 +3,7 @@ import {
   DocumentPreviewCacheContext,
   type DocumentPreviewCacheProviderProps,
 } from './DocumentPreviewCacheContext';
-import { DEFAULT_MAX_ENTRIES, DEFAULT_TTL_MS } from './pdf-viewer.contants';
+import { DEFAULT_MAX_ENTRIES, DEFAULT_TTL_MS } from '../constants';
 
 interface CacheEntry {
   promise?: Promise<Blob>;

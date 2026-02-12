@@ -20,14 +20,10 @@ import { DialLoader } from '@/components/Loader/Loader';
 import { DialSelect } from '@/components/Select/Select';
 import { ButtonSize } from '@/types/button';
 import { SelectSize, SelectVariant } from '@/types/select';
-import { DialPdfRenderer } from './DialPdfRenderer';
-import { useDocumentPreviewCache } from './DocumentPreviewCacheContext';
-import {
-  AUTO_ZOOM_ID,
-  AUTO_ZOOM_VALUE,
-  ZOOM_OPTIONS,
-} from './pdf-viewer.contants';
-import { DialEllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DialPdfRenderer } from '../PdfRenderer/DialPdfRenderer';
+import { useDocumentPreviewCache } from '../../context/DocumentPreviewCacheContext';
+import { AUTO_ZOOM_ID, AUTO_ZOOM_VALUE, ZOOM_OPTIONS } from '../../constants';
+import { DialEllipsisTooltip } from '../../../EllipsisTooltip/EllipsisTooltip';
 
 export interface DialPdfViewerProps {
   fileUrl: string;
