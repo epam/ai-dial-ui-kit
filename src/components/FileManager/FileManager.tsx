@@ -352,6 +352,7 @@ export interface DialFileManagerProps {
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
@@ -594,6 +595,7 @@ export const DialFileManagerView: FC = () => {
     onFolderPopupPathChange,
     onManagePermissions,
     onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   } = useFileManagerContext();
   const {
@@ -1077,6 +1079,7 @@ export const DialFileManagerView: FC = () => {
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
     onPreview: (path) => onPreview?.(path),
+    previewExtensions,
     isRenameFileAvailable,
   });
 
