@@ -49,6 +49,7 @@ export interface UseGridContextMenuProps {
   onAddChild?: (file: DialFile) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
 }
 
@@ -67,6 +68,7 @@ export const useGridContextMenu = ({
   onAddChild,
   onManagePermissions,
   onPreview,
+  previewExtensions,
   isRenameFileAvailable = true,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
@@ -186,10 +188,16 @@ export const useGridContextMenu = ({
         });
       }
 
+      const parts = file.name.split('.');
+      const extension = parts.length > 1 ? parts[parts.length - 1] : '';
+      const isPreviewAvailable =
+        extension && previewExtensions?.includes(`.${extension}`);
+
       if (
         actionLabels[DialFileManagerActions.Preview] &&
         typeof onPreview === 'function' &&
-        file.nodeType === DialFileNodeType.ITEM
+        file.nodeType === DialFileNodeType.ITEM &&
+        isPreviewAvailable
       ) {
         items.push({
           key: DialFileManagerActions.Preview,
@@ -278,6 +286,7 @@ export const useGridContextMenu = ({
     sharedWithMeIds,
     onManagePermissions,
     onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   ]);
 };
