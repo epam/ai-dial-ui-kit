@@ -201,6 +201,7 @@ export interface GridOptions
   showFolders?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
+  wrapCustomCellRenderers?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -628,6 +629,7 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     selectionMode,
+    wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
     ...forwardedGridOptions
   } = gridOptions ?? {};
@@ -1221,6 +1223,7 @@ export const DialFileManagerView: FC = () => {
                 )}
                 {...forwardedGridOptions}
                 selectionMode={selectionMode}
+                wrapCustomCellRenderers={wrapCustomCellRenderers}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,
