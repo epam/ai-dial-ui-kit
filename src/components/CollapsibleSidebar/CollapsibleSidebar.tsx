@@ -129,7 +129,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
       >
         {opened && additionalButtons}
         <DialIconButton
-          className="hover:text-accent-primary p-0"
+          className="hover:text-accent-primary"
           onClick={changeVisibility}
           aria-label="sidebar-state"
           size={ButtonSize.Small}
