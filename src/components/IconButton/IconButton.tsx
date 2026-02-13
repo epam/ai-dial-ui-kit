@@ -71,16 +71,19 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
     className,
   );
 
-  return (
-    <DialTooltip {...tooltipProps}>
-      <button
-        {...props}
-        type={type}
-        className={btnClassName}
-        aria-label={props['aria-label']}
-      >
-        {icon}
-      </button>
-    </DialTooltip>
+  const button = (
+    <button
+      {...props}
+      type={type}
+      className={btnClassName}
+      aria-label={props['aria-label']}
+    >
+      {icon}
+    </button>
+  );
+  return tooltipProps ? (
+    <DialTooltip {...tooltipProps}>{button}</DialTooltip>
+  ) : (
+    button
   );
 };
