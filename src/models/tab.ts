@@ -4,5 +4,6 @@ export interface TabModel {
   id: string;
   label: ReactNode;
   invalid?: boolean;
+  warning?: boolean;
   disabled?: boolean;
 }
