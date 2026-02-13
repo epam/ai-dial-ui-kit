@@ -60,6 +60,7 @@ export const DialTag: FC<DialTagProps> = ({
       <DialEllipsisTooltip text={tag} />
       {remove && (
         <DialButton
+          className="p-0"
           iconAfter={<IconX size={16} />}
           onClick={(e) => remove(e)}
         />
