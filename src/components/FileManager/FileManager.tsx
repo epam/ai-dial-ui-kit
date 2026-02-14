@@ -8,6 +8,7 @@ import {
   useRef,
   type Ref,
   useImperativeHandle,
+  type RefObject,
 } from 'react';
 import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import {
@@ -285,6 +286,7 @@ export interface DialFileManagerProps {
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
   compactViewWidthBreakpoint?: number;
+  customBreakpointRef?: RefObject<HTMLElement | null>;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -490,6 +492,7 @@ export const DialFileManagerView: FC = () => {
     destinationFolderPopupOptions,
     conflictResolutionPopupOptions,
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+    customBreakpointRef,
     sharedByMePaths,
     allowedFileTypes,
     maxSelectableFileSize,
@@ -636,6 +639,7 @@ export const DialFileManagerView: FC = () => {
 
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
+    customBreakpointRef,
   );
 
   const effectiveVisibleColumns = useMemo(() => {

@@ -124,6 +124,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   previewExtensions,
   isRenameFileAvailable,
   customUploadFileAction,
+  customBreakpointRef,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -694,6 +695,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     previewExtensions,
     isRenameFileAvailable,
     customUploadFileAction,
+    customBreakpointRef,
   };
 
   return (

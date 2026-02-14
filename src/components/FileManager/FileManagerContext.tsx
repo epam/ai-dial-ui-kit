@@ -66,6 +66,7 @@ export interface FileManagerContextValue {
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
 
   compactViewWidthBreakpoint?: number;
+  customBreakpointRef?: RefObject<HTMLElement | null>;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
