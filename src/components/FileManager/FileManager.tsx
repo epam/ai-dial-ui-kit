@@ -202,6 +202,7 @@ export interface GridOptions
   showFolders?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
+  wrapCustomCellRenderers?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -214,6 +215,7 @@ export interface GridOptions
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
+    [DialFileManagerActions.Preview]?: string;
   };
 }
 
@@ -352,6 +354,8 @@ export interface DialFileManagerProps {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
@@ -594,6 +598,8 @@ export const DialFileManagerView: FC = () => {
 
     onFolderPopupPathChange,
     onManagePermissions,
+    onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   } = useFileManagerContext();
   const {
@@ -626,6 +632,7 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     selectionMode,
+    wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
     ...forwardedGridOptions
   } = gridOptions ?? {};
@@ -1077,6 +1084,8 @@ export const DialFileManagerView: FC = () => {
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
+    onPreview: (path) => onPreview?.(path),
+    previewExtensions,
     isRenameFileAvailable,
   });
 
@@ -1218,6 +1227,7 @@ export const DialFileManagerView: FC = () => {
                 )}
                 {...forwardedGridOptions}
                 selectionMode={selectionMode}
+                wrapCustomCellRenderers={wrapCustomCellRenderers}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,

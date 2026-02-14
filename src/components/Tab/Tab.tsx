@@ -1,4 +1,4 @@
-import { IconExclamationCircle } from '@tabler/icons-react';
+import { IconAlertTriangle, IconExclamationCircle } from '@tabler/icons-react';
 import type { ButtonHTMLAttributes, FC } from 'react';
 
 import { BASE_ICON_PROPS } from '@/constants/icon';
@@ -33,7 +33,7 @@ export interface DialTabProps extends NativeButtonProps {
  * />
  * ```
  *
- * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`].
+ * @param tab - The tab model containing its `id`, `name`, [`disabled`], [`invalid`], [`warning`].
  * @param active - Whether the tab is currently active.
  * @param [horizontal=false] - Whether the tab is displayed in horizontal orientation.
  * @param onClick - Callback fired when the tab is clicked. Receives the tab’s `id`.
@@ -79,6 +79,11 @@ export const DialTab: FC<DialTabProps> = ({
       {(invalid || tab.invalid) && (
         <div className="text-error pl-1">
           <IconExclamationCircle {...BASE_ICON_PROPS} />
+        </div>
+      )}
+      {tab.warning && (
+        <div className="text-warning pl-1">
+          <IconAlertTriangle {...BASE_ICON_PROPS} />
         </div>
       )}
     </button>

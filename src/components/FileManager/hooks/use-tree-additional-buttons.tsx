@@ -31,7 +31,7 @@ export const useTreeAdditionalButtons = ({
 
   const buttons = useMemo(() => {
     const buttonClass = mergeClasses([
-      'hover:text-accent-primary p-0',
+      'hover:text-accent-primary',
       isCollapseAllDisabled &&
         'text-controls-disable hover:text-controls-disable disabled:hover:cursor-default',
     ]);

@@ -120,6 +120,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   sharedWithMeIds,
   onFolderPopupPathChange,
   onManagePermissions,
+  onPreview,
+  previewExtensions,
   isRenameFileAvailable,
   customUploadFileAction,
   customBreakpointRef,
@@ -689,6 +691,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     onFolderPopupPathChange,
     onManagePermissions,
+    onPreview,
+    previewExtensions,
     isRenameFileAvailable,
     customUploadFileAction,
     customBreakpointRef,
