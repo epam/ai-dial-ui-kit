@@ -66,6 +66,7 @@ export interface FileManagerContextValue {
   fileMetadataPopupOptions?: FileMetadataPopupOptions;
 
   compactViewWidthBreakpoint?: number;
+  customBreakpointRef?: RefObject<HTMLElement | null>;
 
   currentPath?: string;
   setCurrentPath: (p?: string) => void;
@@ -195,6 +196,8 @@ export interface FileManagerContextValue {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,

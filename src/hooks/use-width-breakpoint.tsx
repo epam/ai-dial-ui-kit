@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type RefObject } from 'react';
 
 /**
  * A React hook that tracks the width of a DOM element and determines if it is smaller than a specified breakpoint.
@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
  * The value updates automatically when the element is resized.
  *
  * @param {number} breakpoint - The width in pixels used as the threshold. `isBelowBreakpoint` is true when the element's width is less than this value.
+ * @param customBreakpointRef - Custom ref to an element to observe instead of the one returned by this hook. If not provided, the hook will observe the element attached to `containerRef`.
  * @returns {{ containerRef: RefObject<HTMLElement>, isBelowBreakpoint: boolean }} An object containing the ref to attach to your element and the boolean indicating if it is smaller than the breakpoint.
  *
  * @example
@@ -19,7 +20,10 @@ import { useState, useEffect, useRef } from 'react';
  *   </div>
  * );
  */
-export function useWidthBreakpoint(breakpoint: number) {
+export function useWidthBreakpoint(
+  breakpoint: number,
+  customBreakpointRef?: RefObject<HTMLElement | null>,
+) {
   const containerRef = useRef<HTMLElement | null>(null);
   const [isBelowBreakpoint, setIsBelowBreakpoint] = useState(false);
 
@@ -31,9 +35,9 @@ export function useWidthBreakpoint(breakpoint: number) {
       setIsBelowBreakpoint(width < breakpoint);
     });
 
-    observer.observe(containerRef.current);
+    observer.observe(customBreakpointRef?.current || containerRef?.current);
     return () => observer.disconnect();
-  }, [breakpoint]);
+  }, [breakpoint, customBreakpointRef]);
 
   return { containerRef, isBelowBreakpoint };
 }

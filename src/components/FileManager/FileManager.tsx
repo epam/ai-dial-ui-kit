@@ -8,6 +8,7 @@ import {
   useRef,
   type Ref,
   useImperativeHandle,
+  type RefObject,
 } from 'react';
 import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import {
@@ -201,6 +202,7 @@ export interface GridOptions
   showFolders?: boolean;
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
+  wrapCustomCellRenderers?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -213,6 +215,7 @@ export interface GridOptions
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
+    [DialFileManagerActions.Preview]?: string;
   };
 }
 
@@ -283,6 +286,7 @@ export interface DialFileManagerProps {
   conflictResolutionPopupOptions?: DialFileManagerConflictResolutionPopupOptions;
 
   compactViewWidthBreakpoint?: number;
+  customBreakpointRef?: RefObject<HTMLElement | null>;
 
   onPathChange?: (nextPath?: string) => void;
   onTableFileClick?: (file: GridRow) => void;
@@ -350,6 +354,8 @@ export interface DialFileManagerProps {
   sharedWithMeIds?: string[];
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
@@ -486,6 +492,7 @@ export const DialFileManagerView: FC = () => {
     destinationFolderPopupOptions,
     conflictResolutionPopupOptions,
     compactViewWidthBreakpoint = DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+    customBreakpointRef,
     sharedByMePaths,
     allowedFileTypes,
     maxSelectableFileSize,
@@ -591,6 +598,8 @@ export const DialFileManagerView: FC = () => {
 
     onFolderPopupPathChange,
     onManagePermissions,
+    onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   } = useFileManagerContext();
   const {
@@ -623,12 +632,14 @@ export const DialFileManagerView: FC = () => {
     dateLocale,
     dateOptions,
     selectionMode,
+    wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
   const { containerRef, isBelowBreakpoint: isCompactView } = useWidthBreakpoint(
     compactViewWidthBreakpoint,
+    customBreakpointRef,
   );
 
   const effectiveVisibleColumns = useMemo(() => {
@@ -665,6 +676,7 @@ export const DialFileManagerView: FC = () => {
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
+      const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
       if (treeOptions?.actionLabels) {
         if (
@@ -692,31 +704,25 @@ export const DialFileManagerView: FC = () => {
           typeof handleAddChild === 'function' &&
           file.nodeType === DialFileNodeType.FOLDER
         ) {
-          items.push(
-            {
-              key: 'addChild',
-              label: treeOptions.actionLabels[DialFileManagerActions.AddChild],
-              icon: (
-                <AddChild
-                  width={BASE_ICON_PROPS.size}
-                  height={BASE_ICON_PROPS.size}
-                  className="text-secondary"
-                />
-              ),
-              onClick: () => handleAddChild([file]),
-            },
-            {
-              key: 'divider',
-              type: DropdownItemType.Divider,
-            },
-          );
+          items.push({
+            key: 'addChild',
+            label: treeOptions.actionLabels[DialFileManagerActions.AddChild],
+            icon: (
+              <AddChild
+                width={BASE_ICON_PROPS.size}
+                height={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => handleAddChild([file]),
+          });
         }
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Duplicate] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'duplicate',
             label: treeOptions.actionLabels[DialFileManagerActions.Duplicate],
             icon: <IconCopy {...BASE_ICON_PROPS} className="text-secondary" />,
@@ -728,7 +734,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Copy] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DestinationFolderMode.Copy,
             label: treeOptions.actionLabels[DialFileManagerActions.Copy],
             icon: (
@@ -748,7 +754,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Move] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DestinationFolderMode.Move,
             label: treeOptions.actionLabels[DialFileManagerActions.Move],
             icon: (
@@ -768,7 +774,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Download] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'download',
             label: treeOptions.actionLabels[DialFileManagerActions.Download],
             icon: (
@@ -781,7 +787,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions.actionLabels[DialFileManagerActions.Rename] &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'rename',
             label: treeOptions.actionLabels[DialFileManagerActions.Rename],
             icon: (
@@ -798,7 +804,7 @@ export const DialFileManagerView: FC = () => {
           sharedWithMeIds?.includes(file.path) &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'unshare',
             label: treeOptions.actionLabels[DialFileManagerActions.Unshare],
             icon: (
@@ -817,7 +823,7 @@ export const DialFileManagerView: FC = () => {
           file.nodeType === DialFileNodeType.FOLDER &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: DialFileManagerActions.ManagePermissions,
             label:
               treeOptions.actionLabels[
@@ -837,7 +843,7 @@ export const DialFileManagerView: FC = () => {
           file.permissions?.includes(DialFilePermission.WRITE) &&
           !isRootNode
         ) {
-          items.push({
+          elements.push({
             key: 'delete',
             label: treeOptions.actionLabels[DialFileManagerActions.Delete],
             icon: (
@@ -847,6 +853,17 @@ export const DialFileManagerView: FC = () => {
               openDeleteConfirmation([file], file.parentPath ?? ''),
           });
         }
+      }
+
+      if (elements.length > 0) {
+        return [
+          ...items,
+          {
+            key: 'divider',
+            type: DropdownItemType.Divider,
+          },
+          ...elements,
+        ];
       }
       return items;
     },
@@ -1067,6 +1084,8 @@ export const DialFileManagerView: FC = () => {
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
+    onPreview: (path) => onPreview?.(path),
+    previewExtensions,
     isRenameFileAvailable,
   });
 
@@ -1208,6 +1227,7 @@ export const DialFileManagerView: FC = () => {
                 )}
                 {...forwardedGridOptions}
                 selectionMode={selectionMode}
+                wrapCustomCellRenderers={wrapCustomCellRenderers}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
                   onCellClicked: cellClickHandler,

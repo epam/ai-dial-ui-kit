@@ -46,8 +46,10 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
  * @param {string} props.elementId - The unique `id` used for accessibility and input association.
  * @param {File[]} [props.files] - The list of currently selected or uploaded files.
  * @param {number} [props.maxFilesCount] - The maximum number of files allowed.
+ * @param {number} [props.maxFileSize] - The maximum size of file allowed in MB.
  * @param {string} [props.fileFormatError] - Error message shown for invalid file formats.
  * @param {string} [props.fileCountError] - Error message shown when exceeding the file count limit.
+ * @param {string} [props.fileSizeError] - Error message shown when exceeding the file size limit.
  * @param {boolean} [props.multiple=true] - Whether multiple file uploads are allowed.
  * @param {string} [props.acceptTypes] - Comma-separated list of allowed MIME types or file extensions.
  * @param {string} [props.deleteAllButtonLabel] - Label for the "Delete All" button shown when files exist.
@@ -62,8 +64,10 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
   elementId,
   files,
   maxFilesCount,
+  maxFileSize,
   fileFormatError,
   fileCountError,
+  fileSizeError,
   multiple = true,
   acceptTypes,
   deleteAllButtonLabel,
@@ -82,7 +86,6 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
     (fileItems: File[] | DataTransferItem[]) => {
       return fileItems?.some(
         (fileItem) =>
-          fileItem.type === '' ||
           !(
             acceptTypes === '/' ||
             acceptTypes?.toLowerCase()?.includes(fileItem?.type?.toLowerCase())
@@ -92,19 +95,34 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
     [acceptTypes],
   );
 
+  const getIsFileSizeError = useCallback(
+    (fileItems: File[] | DataTransferItem[]) => {
+      if (!maxFileSize) {
+        return false;
+      }
+      const maxSize = maxFileSize * (1024 * 1024);
+      return fileItems?.some((fileItem) => {
+        const size = (fileItem as File).size;
+        return !!size && size > maxSize;
+      });
+    },
+    [maxFileSize],
+  );
+
   const onFileChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const filesList = e.target.files;
       if (filesList && filesList.length > 0) {
         const selectedFiles = Array.from(filesList);
         const isFileFormatError = getIsFileFormatError(selectedFiles);
+        const isFileSizeError = getIsFileSizeError(selectedFiles);
 
-        if (!isFileFormatError) {
+        if (!isFileFormatError && !isFileSizeError) {
           onChange([...(files || []), ...selectedFiles]);
         }
       }
     },
-    [onChange, files, getIsFileFormatError],
+    [getIsFileFormatError, getIsFileSizeError, onChange, files],
   );
 
   return (
@@ -151,7 +169,9 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
         multiple={multiple}
         fileFormatError={fileFormatError}
         fileCountError={fileCountError}
+        fileSizeError={fileSizeError}
         getIsFileFormatError={getIsFileFormatError}
+        getIsFileSizeError={getIsFileSizeError}
         {...props}
       />
     </div>

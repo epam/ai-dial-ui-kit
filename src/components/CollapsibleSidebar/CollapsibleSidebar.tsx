@@ -1,16 +1,16 @@
 import {
   useEffect,
+  useMemo,
   useState,
   type FC,
-  type ReactNode,
   type MouseEvent,
-  useMemo,
+  type ReactNode,
 } from 'react';
 
-import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
-import classNames from 'classnames';
-import { DialButton } from '@/components/Button/Button';
 import { mergeClasses } from '@/utils/merge-classes';
+import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
+import { DialIconButton } from '@/components/IconButton/IconButton';
+import { ButtonSize } from '@/types/button';
 
 export interface DialCollapsibleSidebarProps {
   children: ReactNode;
@@ -82,15 +82,15 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
     }
   }, [controlled, isOpened, width]);
 
-  const titleClass = classNames([
+  const titleClass = mergeClasses([
     `transform rotate-180 [writing-mode:tb-rl] py-4 px-3`,
     opened && 'hidden',
     titleClassName,
   ]);
 
-  const buttonClass = classNames([
-    'flex flex-row gap-2 cursor-pointer text-secondary p-2 px-4',
-    opened ? 'justify-end' : 'justify-center',
+  const buttonClass = mergeClasses([
+    'flex flex-row gap-2 cursor-pointer text-secondary py-2 items-center',
+    opened ? 'justify-end px-4' : 'justify-center',
   ]);
 
   const changeVisibility = (e: MouseEvent<HTMLButtonElement>) => {
@@ -108,15 +108,15 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
 
   return (
     <div
-      className={classNames([
-        'rounded flex flex-col justify-between overflow-y-auto flex-shrink-0',
+      className={mergeClasses([
+        'rounded flex flex-col justify-between',
         containerClassName,
       ])}
       style={{ width: `${containerWidth}px` }}
       aria-label="collapsible-sidebar"
     >
       <div
-        className={classNames([
+        className={mergeClasses([
           'flex-1 p-4 min-h-0 overflow-auto',
           !opened && 'hidden',
         ])}
@@ -128,11 +128,12 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
         className={mergeClasses('border-t border-tertiary h-12', buttonClass)}
       >
         {opened && additionalButtons}
-        <DialButton
-          className="hover:text-accent-primary p-1"
+        <DialIconButton
+          className="hover:text-accent-primary"
           onClick={changeVisibility}
           aria-label="sidebar-state"
-          iconBefore={
+          size={ButtonSize.Small}
+          icon={
             opened ? (
               <IconChevronsLeft size={iconSize} stroke={iconStroke} />
             ) : (

@@ -77,6 +77,15 @@ export const Invalid: Story = {
   },
 };
 
+export const Warning: Story = {
+  args: {
+    tab: { id: 'analytics', label: 'Analytics', warning: true },
+    active: false,
+    horizontal: true,
+    onClick: () => null,
+  },
+};
+
 export const TooLongText: Story = {
   args: {
     tab: {
