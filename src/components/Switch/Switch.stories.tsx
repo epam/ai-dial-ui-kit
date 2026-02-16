@@ -157,9 +157,7 @@ export const AllVariants: Story = {
 
       {/* With caption */}
       <div>
-        <div className="text-primary font-semibold mb-2">
-          With caption
-        </div>
+        <div className="text-primary font-semibold mb-2">With caption</div>
         <InteractiveSwitch
           switchId="disabled-switch"
           label="Disabled Switch"

@@ -88,7 +88,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
         ></span>
       </label>
       {(label || caption) && (
-        <div className="flex flex-col gap-1 ml-2 items-center">
+        <div className="flex flex-col gap-1 ml-2">
           {label && (
             <span
               className={classNames(
