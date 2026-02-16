@@ -44,7 +44,7 @@ const controlsBgColors = {
 
   'controls-error': 'var(--controls-bg-error, #CC4545)',
   'controls-error-hover': 'var(--controls-bg-error-hover, #BF3939)',
-  'controls-error-active': 'var(--controls-bg-error-hover, #AE2F2F)',
+  'controls-error-active': 'var(--controls-bg-error-active, #AE2F2F)',
   'controls-error-alpha-hover': 'var(--controls-bg-alpha-hover, #F7646426)',
   'controls-error-alpha-active':
     'var(--controls-bg-error-alpha-active, #F764644D)',
