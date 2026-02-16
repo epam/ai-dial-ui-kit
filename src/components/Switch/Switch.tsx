@@ -7,6 +7,7 @@ export interface DialSwitchProps {
   isOn?: boolean;
   disabled?: boolean;
   onChange?: (value: boolean) => void;
+  caption?: string;
 }
 
 /**
@@ -20,6 +21,7 @@ export interface DialSwitchProps {
  *   isOn={true}
  *   disabled={false}
  *   onChange={(value) => console.log(value)}
+ *   caption="Caption"
  * />
  * ```
  *
@@ -28,6 +30,7 @@ export interface DialSwitchProps {
  * @param [isOn=false] - The current value of the switch
  * @param [disabled=false] - Whether the switch is disabled
  * @param [onChange] - Callback function called when the switch value changes
+ * @param [caption] - Caption text
  */
 export const DialSwitch: FC<DialSwitchProps> = ({
   label,
@@ -35,6 +38,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   isOn = false,
   disabled,
   onChange,
+  caption,
 }) => {
   const switchClassName = classNames(
     'flex w-[36px] h-[18px] cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
@@ -58,7 +62,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   );
 
   return (
-    <div className="flex flex-row items-center" role="switch">
+    <div className="flex flex-row items-start" role="switch">
       <input
         type="checkbox"
         onChange={onClick}
@@ -67,7 +71,11 @@ export const DialSwitch: FC<DialSwitchProps> = ({
         className="invisible w-0 h-0"
         checked={isOn}
       />
-      <label htmlFor={switchId} className={switchClassName}>
+      <label
+        htmlFor={switchId}
+        className={switchClassName}
+        aria-describedby={caption && 'caption'}
+      >
         <span
           className={classNames(
             'size-3 rounded-full',
@@ -79,16 +87,25 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           )}
         ></span>
       </label>
-      {label && (
-        <span
-          className={classNames(
-            'pl-2 dial-small',
-            disabled ? 'text-secondary' : 'text-primary',
+      {(label || caption) && (
+        <div className="flex flex-col gap-1 ml-2 items-center">
+          {label && (
+            <span
+              className={classNames(
+                'dial-small py-[1px]',
+                disabled ? 'text-secondary' : 'text-primary',
+              )}
+              aria-label="switch-title"
+            >
+              {label}
+            </span>
           )}
-          aria-label="switch-title"
-        >
-          {label}
-        </span>
+          {caption && (
+            <span id="caption" className="dial-tiny text-secondary">
+              {caption}
+            </span>
+          )}
+        </div>
       )}
     </div>
   );
