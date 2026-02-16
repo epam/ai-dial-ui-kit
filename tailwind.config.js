@@ -28,14 +28,13 @@ const backgroundsColors = {
 };
 
 const buttonsBgColors = {
-  'controls-solid-primary': 'var(--controls-bg-solid-primary, #3970DA)',
-  'controls-solid-primary-hover':
-    'var(--controls-bg-solid-primary-hover, #215DD0)',
-  'controls-solid-error': 'var(--controls-bg-solid-error, #CC4545)',
-  'controls-solid-error-hover': 'var(--controls-bg-solid-error-hover, #AE2F2F)',
-  'controls-solid-disable': 'var(--controls-bg-solid-disable, #69727C)',
-  'controls-outlined-neutral-hover':
-    'var(--controls-bg-outlined-neutral-hover, #333942)',
+  'controls-accent-primary': 'var(--controls-bg-accent-primary, #3970DA)',
+  'controls-accent-primary-hover':
+    'var(--controls-bg-accent-primary-hover, #215DD0)',
+  'controls-error': 'var(--controls-bg-error, #CC4545)',
+  'controls-error-hover': 'var(--controls-bg-error-hover, #BF3939)',
+  'controls-disable-accent': 'var(--controls-bg-disable-accent, #69727C)',
+  'controls-neutral-hover': 'var(--controls-bg-neutral-hover, #333942)',
 
   // TODO: old names, need to remove
   'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
@@ -48,7 +47,7 @@ const buttonsBgColors = {
 const borderColors = {
   transparent: 'transparent',
   primary: 'var(--stroke-primary, #69727C)',
-  secondary: 'var(--stroke-secondary, #222932)',
+  secondary: 'var(--stroke-secondary, #333942)',
   tertiary: 'var(--stroke-tertiary, #090D13)',
   focus: 'var(--stroke-focus, #F3F4F6)',
   error: 'var(--stroke-error, #F76464)',
@@ -88,15 +87,16 @@ const placeholderColor = {
 };
 
 const buttonsTextColors = {
-  'controls-solid': 'var(--controls-text-solid, #FCFCFC)',
-  'controls-solid-disable': 'var(--controls-text-solid-disable, #333942)',
-  'controls-outlined': 'var(--controls-text-outlined, #FCFCFC)',
-  'controls-link-primary-hover':
-    'var(--controls-text-link-primary-hover, #3970DA)',
-  'controls-disable': 'var(--controls-disable, #5B6570)',
+  'controls-permanent': 'var(--controls-text-permanent, #FCFCFC)',
+  'controls-accent-disable': 'var(--controls-text-accent-disable, #333942)',
+  'controls-neutral': 'var(--controls-text-neutral, #FCFCFC)',
+  'controls-accent-primary-hover':
+    'var(--controls-text-accent-primary-hover, #3970DA)',
+  'controls-secondary-disable': 'var(--controls-secondary-disable, #5B6570)',
 
   // TODO: old names, need to remove
   'controls-primary': 'var(--controls-primary, #FCFCFC)',
+  'controls-disable': 'var(--controls-disable, #5B6570)',
 };
 
 /** @type {import('tailwindcss').Config} */
