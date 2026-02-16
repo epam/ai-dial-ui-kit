@@ -92,11 +92,12 @@ const buttonsTextColors = {
   'controls-neutral': 'var(--controls-text-neutral, #FCFCFC)',
   'controls-accent-primary-hover':
     'var(--controls-text-accent-primary-hover, #3970DA)',
-  'controls-secondary-disable': 'var(--controls-secondary-disable, #5B6570)',
+  'controls-secondary-disable':
+    'var(--controls-secondary-text-disable, #5B6570)',
 
   // TODO: old names, need to remove
   'controls-primary': 'var(--controls-primary, #FCFCFC)',
-  'controls-disable': 'var(--controls-disable, #5B6570)',
+  'controls-disable': 'var(--controls-text-disable, #5B6570)',
 };
 
 /** @type {import('tailwindcss').Config} */
