@@ -48,6 +48,10 @@ const meta = {
       control: false,
       description: 'Callback function called when the switch value changes',
     },
+    caption: {
+      control: 'text',
+      description: 'Caption text',
+    },
   },
 } satisfies Meta<typeof DialSwitch>;
 
@@ -88,6 +92,16 @@ export const DisabledWithActiveValue: Story = {
     label: 'Enable feature',
     isOn: true,
     disabled: true,
+  },
+};
+
+export const WithCaption: Story = {
+  render: InteractiveSwitch,
+  args: {
+    switchId: 'default-switch',
+    label: 'Enable feature',
+    isOn: true,
+    caption: 'Some caption text',
   },
 };
 
@@ -137,6 +151,17 @@ export const AllVariants: Story = {
           switchId="disabled-switch"
           label="Disabled Switch"
           disabled={true}
+          isOn={false}
+        />
+      </div>
+
+      {/* With caption */}
+      <div>
+        <div className="text-primary font-semibold mb-2">With caption</div>
+        <InteractiveSwitch
+          switchId="disabled-switch"
+          label="Disabled Switch"
+          caption="Some caption text"
           isOn={false}
         />
       </div>
