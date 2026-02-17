@@ -12,15 +12,18 @@
 }
 
 .dial-button-solid-disable {
-  @apply dial-button-disable text-controls-solid-disable bg-controls-solid-disable;
+  @apply dial-button-disable text-controls-accent-disable bg-controls-disable-accent;
 }
 
 .dial-primary-solid-button {
-  @apply dial-base-button bg-controls-solid-primary text-controls-solid;
+  @apply dial-base-button bg-controls-accent-primary text-controls-permanent;
 
-  &:hover,
-  &:focus-visible {
-    @apply bg-controls-solid-primary-hover;
+  &:hover {
+    @apply bg-controls-accent-primary-hover;
+  }
+
+  &:active {
+    @apply bg-controls-accent-primary-active;
   }
 }
 
@@ -34,99 +37,99 @@
     }
   }
 
-  &:hover,
-  &:focus-visible {
+  &:hover {
     @apply bg-accent-primary-alpha;
   }
 
   &:active {
-    @apply border-accent-primary;
+    @apply bg-controls-accent-primary-alpha-active;
   }
 }
 
 .dial-primary-link-button {
   @apply dial-base-button bg-transparent text-accent-primary px-2;
 
-  &:hover,
-  &:focus-visible {
-    @apply text-controls-link-primary-hover;
+  &:hover {
+    @apply text-controls-accent-primary-hover;
+  }
+
+  &:active {
+    @apply text-controls-accent-primary-active;
   }
 
   &:disabled {
-    @apply dial-button-disable text-controls-disable;
+    @apply dial-button-disable text-controls-secondary-disable;
   }
 }
 
 .dial-neutral-outlined-button {
-  @apply dial-base-button bg-transparent text-controls-outlined;
+  @apply dial-base-button bg-transparent text-controls-neutral;
   @apply border-primary;
 
-  &:hover,
-  &:focus-visible {
-    @apply bg-controls-outlined-neutral-hover;
+  &:hover {
+    @apply bg-controls-neutral-hover;
+  }
+
+  &:active {
+    @apply border-transparent bg-controls-neutral-active;
   }
 
   &:disabled {
-    @apply dial-button-disable text-controls-disable bg-transparent;
+    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
   }
 }
 
 .dial-error-solid-button {
-  @apply dial-base-button bg-controls-solid-error text-controls-solid;
+  @apply dial-base-button bg-controls-error text-controls-permanent;
 
-  &:hover,
-  &:focus-visible {
-    @apply bg-controls-solid-error-hover;
+  &:hover {
+    @apply bg-controls-error-hover;
+  }
+  &:active {
+    @apply bg-controls-error-active;
   }
 }
 
 .dial-error-ghost-button {
   @apply text-error;
 
-  &:hover,
-  &:focus-visible {
+  &:hover {
     @apply bg-error;
-  }
-
-  &:active {
-    @apply border-error;
   }
 }
 
 .dial-success-ghost-button {
   @apply text-accent-secondary;
-  &:hover,
-  &:focus-visible {
-    @apply bg-accent-secondary-alpha;
+
+  &:hover {
+    @apply bg-controls-accent-success-alpha-hover;
   }
 
   &:active {
-    @apply border-accent-secondary;
+    @apply bg-controls-accent-success-alpha-active;
   }
 }
 
 .dial-secondary-ghost-button {
   @apply text-secondary;
-  &:hover,
-  &:focus-visible {
+  &:hover {
     @apply bg-accent-secondary-alpha text-accent-secondary;
   }
 
   &:active {
-    @apply border-accent-secondary text-accent-secondary;
+    @apply text-accent-secondary bg-controls-accent-secondary-alpha-active;
   }
 }
 
 .dial-tertiary-ghost-button {
   @apply text-secondary;
 
-  &:hover,
-  &:focus-visible {
+  &:hover {
     @apply bg-accent-tertiary-alpha text-accent-tertiary;
   }
 
   &:active {
-    @apply border-accent-tertiary text-accent-tertiary;
+    @apply text-accent-tertiary bg-controls-accent-tertiary-alpha-active;
   }
 }
 
@@ -143,7 +146,7 @@
 .dial-secondary-ghost-button:disabled,
 .dial-tertiary-ghost-button:disabled,
 .dial-error-ghost-button:disabled {
-  @apply dial-button-disable text-controls-disable bg-transparent;
+  @apply dial-button-disable text-controls-secondary-disable bg-transparent;
 }
 
 .dial-primary-solid-button:disabled,

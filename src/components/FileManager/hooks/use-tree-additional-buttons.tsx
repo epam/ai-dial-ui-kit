@@ -33,7 +33,7 @@ export const useTreeAdditionalButtons = ({
     const buttonClass = mergeClasses([
       'hover:text-accent-primary',
       isCollapseAllDisabled &&
-        'text-controls-disable hover:text-controls-disable disabled:hover:cursor-default',
+        'controls-secondary-disable hover:controls-secondary-disable disabled:hover:cursor-default',
     ]);
 
     return (
