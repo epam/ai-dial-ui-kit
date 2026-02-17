@@ -216,6 +216,20 @@ export const AllVariants: Story = {
               iconAfter={<IconEye size={16} />}
             />
           </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Filled
+            </div>
+            <InteractiveInput
+              id="field-input"
+              placeholder="Placeholder"
+              value="Text"
+              iconBefore={<IconSearch size={16} />}
+              iconAfter={<IconEye size={16} />}
+            />
+          </div>
+
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
               Hover
@@ -244,19 +258,6 @@ export const AllVariants: Story = {
 
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
-              Filled
-            </div>
-            <InteractiveInput
-              id="field-input"
-              placeholder="Placeholder"
-              value="Text"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
               Error
             </div>
             <InteractiveInput
@@ -272,13 +273,26 @@ export const AllVariants: Story = {
 
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
-              Disabled
+              Disabled filled
             </div>
             <InteractiveInput
               id="disable-input"
               placeholder="Placeholder"
               disabled={true}
               value="Text"
+              iconBefore={<IconSearch size={16} />}
+              iconAfter={<IconEye size={16} />}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled empty
+            </div>
+            <InteractiveInput
+              id="disable-input"
+              placeholder="Placeholder"
+              disabled={true}
               iconBefore={<IconSearch size={16} />}
               iconAfter={<IconEye size={16} />}
             />

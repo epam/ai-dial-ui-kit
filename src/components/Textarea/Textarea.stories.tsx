@@ -119,6 +119,18 @@ export const AllVariants: Story = {
               placeholder="Placeholder"
             />
           </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Filled
+            </div>
+            <InteractiveTextarea
+              id="field-textarea"
+              placeholder="Placeholder"
+              value="Text"
+            />
+          </div>
+
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
               Hover
@@ -136,19 +148,8 @@ export const AllVariants: Story = {
             </div>
             <InteractiveTextarea
               id="focus-textarea"
-              containerClassName="dial-input-for-focus"
+              className="dial-input-for-focus"
               placeholder="Placeholder"
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Filled
-            </div>
-            <InteractiveTextarea
-              id="field-textarea"
-              placeholder="Placeholder"
-              value="Text"
             />
           </div>
 
@@ -167,13 +168,24 @@ export const AllVariants: Story = {
 
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
-              Disabled
+              Disabled filled
             </div>
             <InteractiveTextarea
               id="disabled-textarea"
               placeholder="Placeholder"
               disabled={true}
               value="Text"
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled empty
+            </div>
+            <InteractiveTextarea
+              id="disabled-textarea"
+              placeholder="Placeholder"
+              disabled={true}
             />
           </div>
         </div>

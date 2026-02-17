@@ -1,15 +1,14 @@
 .dial-input {
-  @apply border border-solid rounded-[3px];
-  border-color: #424952;
+  @apply border border-solid border-primary rounded h-[40px];
 
   &:hover {
-    border-color: #5c8dea;
+    @apply border-accent-primary;
   }
 
   &:focus,
   &:active,
   &:focus-within {
-    border-color: #5c8dea;
+    @apply border-focus;
   }
 }
 
@@ -19,7 +18,7 @@
   @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
-    color: #f3f4f6;
+    @apply text-primary;
   }
 
   &:disabled {
@@ -29,13 +28,11 @@
 
 .dial-input-disable,
 .dial-input-disable:not(:placeholder-shown) {
-  @apply cursor-not-allowed;
-  border-color: #424952;
-  color: #424952;
+  @apply cursor-not-allowed bg-controls-disable border-transparent text-controls-primary-disable;
 }
 
 .dial-input-error {
-  border-color: #f76464;
+  @apply border-error;
 }
 
 input {

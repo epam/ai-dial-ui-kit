@@ -10,10 +10,10 @@ type NativeLabelProps = Omit<
 >;
 
 export interface DialFieldLabelProps extends NativeLabelProps {
-  fieldTitle?: ReactNode;
-  optional?: boolean;
-  optionalText?: string;
-  description?: string;
+  fieldTitle?: ReactNode; // fieldLabel
+  optional?: boolean; // requared
+  optionalText?: string; // remove
+  description?: string; // caption
 }
 
 /**

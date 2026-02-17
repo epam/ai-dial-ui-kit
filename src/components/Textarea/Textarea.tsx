@@ -15,7 +15,7 @@ export interface DialTextareaProps
   > {
   invalid?: boolean;
   containerClassName?: string;
-  // disableTooltip?: boolean; // TODO: review after approve Design system
+  resize?: boolean;
   onChange?: (value: string) => void;
   errorText?: string;
 }
@@ -40,7 +40,7 @@ export interface DialTextareaProps
  * @param [className=""] - Additional CSS classes to apply to the textarea element
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
- * @param [disableTooltip] - Whether to disable the tooltip that shows the full value on hover
+ * @param [resize=false] - Whether the textarea has possibility to resize
  * @param [errorText] - Error message to display below the textarea (also adds error styling)
  */
 export const DialTextarea: FC<DialTextareaProps> = ({
@@ -49,12 +49,14 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   onChange,
   errorText,
   containerClassName,
+  resize = false,
   ...props
 }) => {
   const textareaClassName = mergeClasses(
     'dial-textarea dial-input px-3 py-2',
     props.invalid && 'dial-input-error',
     props.disabled && 'dial-input-disable',
+    resize ? 'resize' : 'resize-none',
     className,
   );
 
