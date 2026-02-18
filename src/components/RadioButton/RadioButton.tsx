@@ -5,7 +5,7 @@ export interface DialRadioButtonProps {
   name: string;
   value: string;
   label?: ReactNode;
-  caption?: string;
+  caption?: ReactNode;
   description?: ReactNode;
   checked?: boolean;
   inputId: string;
@@ -111,7 +111,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
               <label
                 className={allLabelClassName}
                 htmlFor={inputId}
-                aria-describedby={caption && 'caption'}
+                aria-describedby={caption ? 'caption' : ''}
               >
                 {label}
               </label>
