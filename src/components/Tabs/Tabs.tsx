@@ -129,15 +129,7 @@ export const DialTabs: FC<DialTabsProps> = ({
     setShowDropdown(el.scrollWidth > el.clientWidth);
   }, []);
 
-  useEffect(() => {
-    checkOverflow();
-    const observer = new ResizeObserver(() => checkOverflow());
-    const scrollableEl = scrollableRef.current;
-    if (scrollableEl) observer.observe(scrollableEl);
-    return () => observer.disconnect();
-  }, [tabs, checkOverflow]);
-
-  useEffect(() => {
+  const scrollToActiveTab = useCallback(() => {
     const activeEl = activeTabRef.current;
     const scrollEl = scrollableRef.current;
     if (!activeEl || !scrollEl) return;
@@ -171,7 +163,29 @@ export const DialTabs: FC<DialTabsProps> = ({
         behavior: 'smooth',
       });
     }
-  }, [activeTab]);
+  }, []);
+
+  const handleClick = useCallback(
+    (id: string) => {
+      onClick(id);
+      if (id === activeTab) {
+        scrollToActiveTab();
+      }
+    },
+    [onClick, activeTab, scrollToActiveTab],
+  );
+
+  useEffect(() => {
+    checkOverflow();
+    const observer = new ResizeObserver(() => checkOverflow());
+    const scrollableEl = scrollableRef.current;
+    if (scrollableEl) observer.observe(scrollableEl);
+    return () => observer.disconnect();
+  }, [tabs, checkOverflow]);
+
+  useEffect(() => {
+    scrollToActiveTab();
+  }, [activeTab, scrollToActiveTab]);
 
   return isSmallScreen ? (
     <div
@@ -194,7 +208,7 @@ export const DialTabs: FC<DialTabsProps> = ({
               tab={tab}
               active={tab.id === activeTab}
               onClick={(id) => {
-                onClick(id);
+                handleClick(id);
                 setIsMobileDropdownOpen(false);
               }}
               className={mergeClasses(
@@ -210,7 +224,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             key={activeTab}
             tab={activeTabModel}
             active
-            onClick={onClick}
+            onClick={handleClick}
             className="rounded-none bg-transparent border-l-0 border-b-0 h-full items-center px-0"
           />
           <DialIcon
@@ -236,7 +250,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             <DialTab
               tab={tab}
               active={activeTab === tab.id}
-              onClick={onClick}
+              onClick={handleClick}
               horizontal={isHorizontal}
               className={mergeClasses('w-full', desktopTabClassName)}
             />
@@ -258,7 +272,7 @@ export const DialTabs: FC<DialTabsProps> = ({
                   tab={tab}
                   active={tab.id === activeTab}
                   onClick={(id) => {
-                    onClick(id);
+                    handleClick(id);
                     setIsDropdownOpen(false);
                   }}
                   className="w-full rounded-none h-8 items-center px-3 py-2"
