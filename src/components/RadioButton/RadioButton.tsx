@@ -5,6 +5,7 @@ export interface DialRadioButtonProps {
   name: string;
   value: string;
   label?: ReactNode;
+  caption?: string;
   description?: ReactNode;
   checked?: boolean;
   inputId: string;
@@ -37,6 +38,7 @@ export interface DialRadioButtonProps {
  * @param name - Radio group name
  * @param value - Radio value emitted on change
  * @param [label] - Visible label text
+ * @param [caption] - Caption text describing label
  * @param [description] - Supporting text shown when checked
  * @param [checked=false] - Controlled checked state
  * @param inputId - ID associated with the label
@@ -58,11 +60,12 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   disabled,
   onChange,
   descriptionClassName,
+  caption,
 }) => {
   const descId = `${inputId}-desc`;
 
   const allLabelClassName = classNames(
-    'dial-small cursor-pointer',
+    'dial-small cursor-pointer py-[1px]',
     disabled ? 'text-secondary' : 'text-primary',
     labelClassName,
   );
@@ -90,7 +93,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 
   return (
     <div className={containerClassName}>
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row">
         <input
           type="radio"
           id={inputId}
@@ -102,11 +105,24 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           className={inputClassName}
           onChange={handleChange}
         />
-        {label ? (
-          <label className={allLabelClassName} htmlFor={inputId}>
-            {label}
-          </label>
-        ) : null}
+        {(label || caption) && (
+          <div className="flex flex-col gap-1 ml-2">
+            {label && (
+              <label
+                className={allLabelClassName}
+                htmlFor={inputId}
+                aria-describedby={caption && 'caption'}
+              >
+                {label}
+              </label>
+            )}
+            {caption && (
+              <span id="caption" className="dial-tiny text-secondary">
+                {caption}
+              </span>
+            )}
+          </div>
+        )}
       </div>
       {checked && description && (
         <div id={descId} className={allDescriptionClassName}>

@@ -4,4 +4,5 @@ export interface RadioButtonWithContent {
   id: string;
   name: string;
   content?: ReactNode;
+  caption?: string;
 }
