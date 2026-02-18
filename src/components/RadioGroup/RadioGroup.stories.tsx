@@ -229,6 +229,47 @@ export const Column: Story = {
     onChange: () => null,
   },
 };
+const CaptionExample = (
+  args: JSX.IntrinsicAttributes & DialRadioGroupProps,
+) => {
+  const [active, setActive] = useState('pickup');
+  return (
+    <DialRadioGroup
+      {...args}
+      radioButtons={[
+        {
+          id: 'pickup',
+          name: 'Pickup',
+          caption: 'Free, ready today',
+        },
+        {
+          id: 'courier',
+          name: 'Courier',
+          caption: 'Arrives tomorrow',
+        },
+      ]}
+      activeRadioButton={active}
+      onChange={(id) => {
+        setActive(id);
+        args.onChange?.(id);
+      }}
+    />
+  );
+};
+export const Caption: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Vertical layout with radio buttons stacked in a column.',
+      },
+    },
+  },
+  render: CaptionExample,
+  args: {
+    orientation: RadioGroupOrientation.Column,
+    onChange: () => null,
+  },
+};
 
 export const DisabledGroup: Story = {
   parameters: {
