@@ -68,7 +68,7 @@ const meta = {
     ),
   ],
   argTypes: {
-    fieldTitle: { control: { type: 'text' } },
+    fieldLabel: { control: { type: 'text' } },
     htmlFor: { control: { type: 'text' } },
     disabled: { control: { type: 'boolean' } },
     selectedValue: { control: { type: 'text' } },
@@ -96,7 +96,7 @@ const meta = {
     },
   },
   args: {
-    fieldTitle: 'Status',
+    fieldLabel: 'Status',
     htmlFor: 'status',
     header: 'Select status',
     emptyValueText: 'None',

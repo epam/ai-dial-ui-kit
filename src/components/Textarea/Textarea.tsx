@@ -6,18 +6,19 @@ import {
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialErrorText } from '../ErrorText/ErrorText';
+import { DialLabel, type DialLabelProps } from '../Label/Label';
 
-// TODO: add tooltip for disable textarea
 export interface DialTextareaProps
   extends DetailedHTMLProps<
     Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
     HTMLTextAreaElement
   > {
+  labelProps?: DialLabelProps;
   invalid?: boolean;
   containerClassName?: string;
   resize?: boolean;
-  onChange?: (value: string) => void;
   errorText?: string;
+  onChange?: (value: string) => void;
 }
 
 /**
@@ -37,6 +38,7 @@ export interface DialTextareaProps
  * - {@link HTMLTextAreaElement} - The underlying HTML textarea element type
  *
  * @param [onChange] - Callback function called when the textarea value changes
+ * @param [labelProps] - Props for the field label, including `fieldLabel` (label text) and `required` (whether to show required indicator)
  * @param [className=""] - Additional CSS classes to apply to the textarea element
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
@@ -50,6 +52,8 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   errorText,
   containerClassName,
   resize = false,
+  labelProps,
+  id,
   ...props
 }) => {
   const textareaClassName = mergeClasses(
@@ -61,8 +65,10 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   );
 
   return (
-    <div className={mergeClasses('flex flex-col', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
+      {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
       <textarea
+        id={id}
         value={value || ''}
         className={textareaClassName}
         onChange={(event) => onChange?.(event.currentTarget.value)}

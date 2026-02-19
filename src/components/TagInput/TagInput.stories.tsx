@@ -34,7 +34,7 @@ const meta: Meta<typeof DialTagInput> = {
       control: { type: 'text' },
       description: 'Unique ID for the input element',
     },
-    fieldTitle: {
+    fieldLabel: {
       control: { type: 'text' },
       description: 'Label displayed above the input field',
     },
@@ -46,7 +46,7 @@ const meta: Meta<typeof DialTagInput> = {
       control: { type: 'object' },
       description: 'Initial array of tags displayed when component loads',
     },
-    optional: {
+    required: {
       control: 'boolean',
       description: 'Displays an “Optional” indicator next to the field label',
     },
@@ -77,7 +77,7 @@ export const Default: Story = {
   render: InteractiveTagInput,
   args: {
     elementId: 'tag-input-default',
-    fieldTitle: 'Tags',
+    fieldLabel: 'Tags',
     placeholder: 'Enter values, separated by commas',
     initialTags: [],
   },
@@ -87,7 +87,7 @@ export const WithInitialTags: Story = {
   render: InteractiveTagInput,
   args: {
     elementId: 'tag-input-initial',
-    fieldTitle: 'Technologies',
+    fieldLabel: 'Technologies',
     placeholder: 'Add a tag...',
     initialTags: ['React', 'TypeScript', 'Storybook'],
   },
@@ -97,9 +97,9 @@ export const OptionalField: Story = {
   render: InteractiveTagInput,
   args: {
     elementId: 'tag-input-optional',
-    fieldTitle: 'Skills',
+    fieldLabel: 'Skills',
     placeholder: 'Add a skill...',
-    optional: true,
+    required: true,
     initialTags: ['UI Design'],
   },
 };
@@ -108,7 +108,7 @@ export const WithError: Story = {
   render: InteractiveTagInput,
   args: {
     elementId: 'tag-input-error',
-    fieldTitle: 'Required Tags',
+    fieldLabel: 'Required Tags',
     placeholder: 'Add tags...',
     invalid: true,
     errorText: 'At least one tag is required',
@@ -120,7 +120,7 @@ export const Disabled: Story = {
   render: InteractiveTagInput,
   args: {
     elementId: 'tag-input-disabled',
-    fieldTitle: 'Tags (Disabled)',
+    fieldLabel: 'Tags (Disabled)',
     placeholder: 'Cannot add tags',
     disabled: true,
     initialTags: ['React', 'Next.js'],
@@ -134,7 +134,7 @@ export const AllVariants: Story = {
         <h4 className="text-lg font-semibold mb-2">Default</h4>
         <InteractiveTagInput
           elementId="tag-input-default"
-          fieldTitle="Tags"
+          fieldLabel="Tags"
           placeholder="Add tags..."
         />
       </div>
@@ -142,7 +142,7 @@ export const AllVariants: Story = {
         <h4 className="text-lg font-semibold mb-2">With Initial Tags</h4>
         <InteractiveTagInput
           elementId="tag-input-initial"
-          fieldTitle="Technologies"
+          fieldLabel="Technologies"
           initialTags={['React', 'TypeScript']}
         />
       </div>
@@ -150,8 +150,8 @@ export const AllVariants: Story = {
         <h4 className="text-lg font-semibold mb-2">Optional Field</h4>
         <InteractiveTagInput
           elementId="tag-input-optional"
-          fieldTitle="Skills"
-          optional
+          fieldLabel="Skills"
+          required
           initialTags={['Design']}
         />
       </div>
@@ -159,7 +159,7 @@ export const AllVariants: Story = {
         <h4 className="text-lg font-semibold mb-2">With Error</h4>
         <InteractiveTagInput
           elementId="tag-input-error"
-          fieldTitle="Tags"
+          fieldLabel="Tags"
           invalid
           errorText="You must add at least one tag"
         />
@@ -168,7 +168,7 @@ export const AllVariants: Story = {
         <h4 className="text-lg font-semibold mb-2">Disabled</h4>
         <InteractiveTagInput
           elementId="tag-input-disabled"
-          fieldTitle="Tags"
+          fieldLabel="Tags"
           disabled
           initialTags={['React']}
         />

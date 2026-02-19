@@ -103,90 +103,99 @@ export const Invalid: Story = {
   },
 };
 
+export const Resize: Story = {
+  render: InteractiveTextarea,
+  args: {
+    id: 'resize-textarea',
+    placeholder: 'Enter text...',
+    value: 'This textarea can be resized',
+    resize: true,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => {
+    const props = {
+      labelProps: { fieldLabel: 'Label', required: true },
+      id: 'interactive-textarea',
+      placeholder: 'Enter your text here...',
+    };
     return (
       <div className="flex flex-col h-full w-full items-center">
-        <h2 className="text-primary font-semibold mb-8">Inputs</h2>
+        <h2 className="text-primary font-semibold mb-8">Textarea</h2>
 
         <div className="flex-1 min-h-0 flex flex-col gap-y-6">
           <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Default
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Default
+              </div>
+              <InteractiveTextarea {...props} />
             </div>
-            <InteractiveTextarea
-              id="default-textarea"
-              placeholder="Placeholder"
-            />
+
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Filled
+              </div>
+              <InteractiveTextarea {...props} value="Text" />
+            </div>
+          </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Hover
+              </div>
+              <InteractiveTextarea
+                {...props}
+                className="dial-input-for-hover"
+              />
+            </div>
+
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Focus/Active
+              </div>
+              <InteractiveTextarea
+                {...props}
+                className="dial-input-for-focus"
+              />
+            </div>
           </div>
 
           <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Filled
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Disabled filled
+              </div>
+              <InteractiveTextarea {...props} disabled={true} value="Text" />
             </div>
-            <InteractiveTextarea
-              id="field-textarea"
-              placeholder="Placeholder"
-              value="Text"
-            />
-          </div>
 
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Hover
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Disabled empty
+              </div>
+              <InteractiveTextarea {...props} disabled={true} />
             </div>
-            <InteractiveTextarea
-              id="hover-textarea"
-              containerClassName="dial-input-for-hover"
-              placeholder="Placeholder"
-            />
           </div>
-
           <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Focus/Active
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Error
+              </div>
+              <InteractiveTextarea
+                {...props}
+                invalid={true}
+                value="Text"
+                errorText="Error message"
+              />
             </div>
-            <InteractiveTextarea
-              id="focus-textarea"
-              className="dial-input-for-focus"
-              placeholder="Placeholder"
-            />
-          </div>
 
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Error
+            <div className="flex flex-row items-center gap-x-6">
+              <div className="text-primary font-semibold mb-2 w-[150px]">
+                Error without message
+              </div>
+              <InteractiveTextarea {...props} invalid={true} value="Text" />
             </div>
-            <InteractiveTextarea
-              id="error-textarea"
-              placeholder="Placeholder"
-              invalid={true}
-              value="Text"
-              errorText="Error message"
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Disabled filled
-            </div>
-            <InteractiveTextarea
-              id="disabled-textarea"
-              placeholder="Placeholder"
-              disabled={true}
-              value="Text"
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Disabled empty
-            </div>
-            <InteractiveTextarea
-              id="disabled-textarea"
-              placeholder="Placeholder"
-              disabled={true}
-            />
           </div>
         </div>
       </div>

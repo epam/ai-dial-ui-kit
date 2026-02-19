@@ -5,10 +5,7 @@ import {
   DialPrimaryButton,
   DialNeutralButton,
 } from '@/components/Button/ButtonWrappers';
-import {
-  DialFieldLabel,
-  type DialFieldLabelProps,
-} from '@/components/Field/Field';
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import {
   DialInputPopup,
   type DialInputPopupProps,
@@ -22,7 +19,7 @@ import { PopupSize } from '@/types/popup';
 import { RadioGroupOrientation } from '@/types/radio-group';
 
 export interface RadioGroupPopupFieldProps
-  extends Pick<DialFieldLabelProps, 'fieldTitle' | 'htmlFor'>,
+  extends Pick<DialLabelProps, 'fieldLabel' | 'htmlFor'>,
     Omit<DialInputPopupProps, 'onOpen' | 'children'>,
     Pick<DialRadioGroupProps, 'radioButtons'>,
     Pick<DialPopupProps, 'onClose' | 'portalId' | 'size'> {
@@ -90,7 +87,7 @@ export interface RadioGroupPopupFieldProps
  * @param [size=PopupSize.Md] - Size of the popup
  */
 export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
-  fieldTitle,
+  fieldLabel,
   htmlFor,
   disabled,
   selectedValue,
@@ -130,7 +127,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
 
   return (
     <div className="flex flex-col">
-      <DialFieldLabel fieldTitle={fieldTitle} htmlFor={htmlFor} />
+      <DialLabel fieldLabel={fieldLabel} htmlFor={htmlFor} />
       <DialInputPopup
         disabled={disabled}
         open={isOpen}

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFieldLabel, type DialFieldLabelProps } from './Field';
+import { DialLabel, type DialLabelProps } from './Label';
 
 const meta = {
   title: 'Form/FieldLabel',
-  component: DialFieldLabel,
+  component: DialLabel,
   parameters: {
     layout: 'centered',
     docs: {
@@ -14,7 +14,7 @@ const meta = {
     },
   },
   argTypes: {
-    fieldTitle: {
+    fieldLabel: {
       control: { type: 'text' },
       description: 'The title/label text to display for the field',
     },
@@ -22,64 +22,48 @@ const meta = {
       control: { type: 'text' },
       description: 'The ID of the form element this label is associated with',
     },
-    optional: {
+    required: {
       control: { type: 'boolean' },
       description: 'Whether the field is optional (displays "(Optional)" text)',
     },
-    optionalText: {
-      control: { type: 'text' },
-      description: 'Custom text for optional indicator',
-    },
   },
   args: {
-    fieldTitle: 'Field Label',
+    fieldLabel: 'Field Label',
     htmlFor: 'field-input',
-    optional: false,
-    optionalText: undefined,
+    required: false,
   },
-  render: (args: DialFieldLabelProps) => {
-    const { optionalText, ...fieldLabelProps } = args;
-
+  render: (args: DialLabelProps) => {
     return (
       <div className="w-80">
-        <DialFieldLabel {...fieldLabelProps} optionalText={optionalText} />
+        <DialLabel {...args} />
       </div>
     );
   },
-} satisfies Meta<DialFieldLabelProps>;
+} satisfies Meta<DialLabelProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BasicLabel: Story = {
   args: {
-    fieldTitle: 'Email Address',
+    fieldLabel: 'Email Address',
     htmlFor: 'email-input',
   },
 };
 
 export const OptionalField: Story = {
   args: {
-    fieldTitle: 'Phone Number',
+    fieldLabel: 'Phone Number',
     htmlFor: 'phone-input',
-    optional: true,
+    required: true,
   },
 };
 
-export const WithCustomOptionalText: Story = {
+export const LongLabel: Story = {
   args: {
-    fieldTitle: 'Priority Level',
-    htmlFor: 'priority-input',
-    optional: true,
-    optionalText: '(Not Required)',
-  },
-};
-
-export const LongFieldTitle: Story = {
-  args: {
-    fieldTitle:
-      'This is a very long field title that might wrap to multiple lines',
-    htmlFor: 'long-title-input',
-    optional: true,
+    fieldLabel:
+      'This is a very long field label that might wrap to multiple lines',
+    htmlFor: 'long-label-input',
+    required: true,
   },
 };

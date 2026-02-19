@@ -1,34 +1,30 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { DialPasswordInputField } from './PasswordInputField';
+import { DialPasswordInput } from './PasswordInput';
 
-describe('Dial UI Kit :: DialPasswordInputField', () => {
+describe('Dial UI Kit :: DialPasswordInput', () => {
   it('renders the field title', () => {
-    render(<DialPasswordInputField fieldTitle="Password" id="pw" />);
+    render(<DialPasswordInput fieldLabel="Password" id="pw" />);
     expect(screen.getByText('Password')).toBeInTheDocument();
   });
 
   it('renders error text', () => {
     render(
-      <DialPasswordInputField
-        fieldTitle="Password"
-        id="pw"
-        errorText="Error!"
-      />,
+      <DialPasswordInput fieldLabel="Password" id="pw" errorText="Error!" />,
     );
     expect(screen.getByText('Error!')).toBeInTheDocument();
   });
 
-  it('renders optional label', () => {
-    render(<DialPasswordInputField fieldTitle="Password" id="pw" optional />);
-    expect(screen.getByText(/optional/i)).toBeInTheDocument();
+  it('renders required label', () => {
+    render(<DialPasswordInput fieldLabel="Password" id="pw" required />);
+    expect(screen.getByText(/\*/i)).toBeInTheDocument();
   });
 
   it('toggles back to password when clicking the hide control', () => {
     render(
-      <DialPasswordInputField
+      <DialPasswordInput
         id="pw"
-        fieldTitle="Password"
+        fieldLabel="Password"
         value=""
         onChange={() => null}
       />,
