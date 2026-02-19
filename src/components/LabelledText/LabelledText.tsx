@@ -1,8 +1,7 @@
-import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
 
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import { mergeClasses } from '../../utils/merge-classes';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialLabelledTextProps {
   label: ReactNode;

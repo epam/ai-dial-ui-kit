@@ -141,6 +141,12 @@ export const DisabledChecked: Story = {
     description: 'This option is locked by policy.',
   },
 };
+export const Caption: Story = {
+  args: {
+    label: 'Disabled & checked',
+    caption: 'This option is locked by policy.',
+  },
+};
 
 export const GroupControlled: Story = {
   render: () => <ControlledGroup />,

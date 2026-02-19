@@ -154,4 +154,17 @@ describe('Dial UI Kit :: DialRadioButton', () => {
     // no description relationship when there's no description/checked
     expect(radio).not.toHaveAttribute('aria-describedby');
   });
+
+  test('caption is rendered when provided', () => {
+    render(
+      <DialRadioButton
+        name="group1"
+        value="opt-n"
+        inputId="radio-n"
+        caption="caption"
+      />,
+    );
+    const caption = screen.getByText('caption');
+    expect(caption).toBeInTheDocument();
+  });
 });

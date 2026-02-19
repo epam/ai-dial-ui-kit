@@ -140,4 +140,29 @@ describe('Dial UI Kit :: DialRadioGroup', () => {
       screen.getByRole('radio', { name: 'All attachments' }),
     ).toBeDisabled();
   });
+
+  test('caption is rendered when provided', () => {
+    const radiosWithCaption = [
+      { id: 'none', name: '— None —', caption: 'caption 1' },
+      {
+        id: 'all',
+        name: 'All attachments',
+        caption: 'caption',
+      },
+    ];
+    render(
+      <DialRadioGroup
+        elementId="attachments"
+        radioButtons={radiosWithCaption}
+        activeRadioButton="none"
+        orientation={RadioGroupOrientation.Row}
+        disabled
+        onChange={() => null}
+      />,
+    );
+    const caption = screen.getByText('caption');
+    const caption1 = screen.getByText('caption 1');
+    expect(caption).toBeInTheDocument();
+    expect(caption1).toBeInTheDocument();
+  });
 });
