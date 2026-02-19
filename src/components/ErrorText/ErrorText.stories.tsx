@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialErrorText } from './ErrorText';
 
 const meta = {
-  title: 'Feedback/ErrorText',
+  title: 'DIAL/Elements/ErrorText',
   component: DialErrorText,
   parameters: {
     layout: 'centered',

@@ -1,11 +1,8 @@
-import {
-  inputBaseArgTypes,
-  numberInputBaseArgTypes,
-} from '@/constants/storybook/input';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconEye, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialInput, type DialInputProps } from './Input';
+import { inputBaseArgTypes } from '../../constants/storybook/input';
 
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -22,7 +19,7 @@ const InteractiveInput = (args: DialInputProps) => {
 };
 
 const meta = {
-  title: 'DIAL/Elements/Input',
+  title: 'DIAL/Elements/Elements/Input',
   component: DialInput,
   tags: ['input'],
   parameters: {
@@ -35,40 +32,6 @@ const meta = {
   },
   argTypes: {
     ...inputBaseArgTypes,
-    ...numberInputBaseArgTypes,
-    type: {
-      control: { type: 'select' },
-      options: ['text', 'password', 'email', 'number', 'search'],
-      description: 'Input type',
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text',
-    },
-    containerClassName: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes for the container',
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes for the input element',
-    },
-    hideBorder: {
-      control: { type: 'boolean' },
-      description: 'Whether to hide the input border',
-    },
-    onChange: {
-      control: false,
-      description: 'Callback function called when the input value changes',
-    },
-    onBlur: {
-      control: false,
-      description: 'Callback function called when the input blurs',
-    },
-    hideTooltip: {
-      control: { type: 'boolean' },
-      description: 'Whether to hide the tooltip',
-    },
   },
   args: {
     id: 'story-input',
@@ -76,7 +39,6 @@ const meta = {
     placeholder: 'Placeholder',
     disabled: false,
     invalid: false,
-    hideBorder: false,
   },
   render: InteractiveInput,
 } satisfies Meta<DialInputProps>;
@@ -90,21 +52,21 @@ export const Default: Story = {
   },
 };
 
-export const WithValue: Story = {
+export const Filled: Story = {
   args: {
     placeholder: 'Enter text...',
     value: 'Sample text',
   },
 };
 
-export const WithIconBefore: Story = {
+export const IconBefore: Story = {
   args: {
     placeholder: 'Search...',
     iconBefore: <IconSearch size={16} />,
   },
 };
 
-export const WithIconAfter: Story = {
+export const IconAfter: Story = {
   args: {
     placeholder: 'Password',
     type: 'password',
@@ -112,7 +74,7 @@ export const WithIconAfter: Story = {
   },
 };
 
-export const WithBothIcons: Story = {
+export const BothIcons: Story = {
   args: {
     placeholder: 'Search...',
     iconBefore: <IconSearch size={16} />,
@@ -120,14 +82,14 @@ export const WithBothIcons: Story = {
   },
 };
 
-export const Disable: Story = {
+export const Disabled: Story = {
   args: {
     placeholder: 'Disable input',
     disabled: true,
   },
 };
 
-export const Error: Story = {
+export const Invalid: Story = {
   args: {
     placeholder: 'Invalid input',
     value: 'Invalid value',
@@ -135,25 +97,7 @@ export const Error: Story = {
   },
 };
 
-export const NumberInput: Story = {
-  args: {
-    type: 'number',
-    placeholder: '0',
-    value: 42,
-  },
-};
-
-export const NumberInputWithMinMax: Story = {
-  args: {
-    type: 'number',
-    placeholder: 'Enter age (18-120)',
-    min: 18,
-    max: 120,
-    value: 25,
-  },
-};
-
-export const WithPrefixAndSuffix: Story = {
+export const PrefixAndSuffix: Story = {
   args: {
     placeholder: 'Enter amount',
     value: '100',
@@ -162,7 +106,7 @@ export const WithPrefixAndSuffix: Story = {
   },
 };
 
-export const WithTextBeforeAndAfter: Story = {
+export const TextBeforeAndAfter: Story = {
   args: {
     placeholder: 'Enter domain',
     value: 'example',
@@ -171,7 +115,7 @@ export const WithTextBeforeAndAfter: Story = {
   },
 };
 
-export const WithAllExtraParts: Story = {
+export const AllExtraParts: Story = {
   args: {
     placeholder: 'Enter value',
     value: 'test',
@@ -181,20 +125,6 @@ export const WithAllExtraParts: Story = {
     textAfterInput: 'after',
     iconBefore: <IconSearch size={16} />,
     iconAfter: <IconEye size={16} />,
-  },
-};
-
-export const WithTooltipText: Story = {
-  args: {
-    value: 'example value',
-    tooltipProps: { text: 'This is a tooltip' },
-  },
-};
-
-export const HiddenTooltip: Story = {
-  args: {
-    value: 'example value',
-    hideTooltip: true,
   },
 };
 

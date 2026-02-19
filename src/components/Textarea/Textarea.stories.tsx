@@ -73,7 +73,7 @@ export const Default: Story = {
   },
 };
 
-export const WithValue: Story = {
+export const Filled: Story = {
   render: InteractiveTextarea,
   args: {
     id: 'textarea-with-value',

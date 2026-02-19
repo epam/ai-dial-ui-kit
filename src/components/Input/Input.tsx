@@ -4,28 +4,42 @@ import {
   useRef,
   type ChangeEvent,
   type FC,
+  type InputHTMLAttributes,
   type KeyboardEvent,
+  type ReactNode,
   type Ref,
 } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
-import type { InputBaseProps } from '@/models/field-control-props';
-import { mergeClasses } from '@/utils/merge-classes';
 import { useMergeRefs } from '@floating-ui/react';
-import type { DialEllipsisTooltipProps } from '../EllipsisTooltip/EllipsisTooltip';
-import { DialErrorText } from '../ErrorText/ErrorText';
+
+import { DialIcon } from '@/components/Icon/Icon';
+import { mergeClasses } from '@/utils/merge-classes';
+import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { handleKeyDown } from './utils';
 
-// TODO: add tooltip for disable input
-export interface DialInputProps extends InputBaseProps {
+export interface DialInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'onChange'> {
+  labelProps?: DialLabelProps;
+
+  invalid?: boolean;
+  errorText?: string;
+
+  iconBefore?: ReactNode;
+  iconAfter?: ReactNode;
+
+  textBeforeInput?: string;
+  textAfterInput?: string;
+
+  prefix?: string;
+  suffix?: string;
+
+  inputRef?: Ref<HTMLInputElement>;
+
+  onChange?: (value?: string) => void;
+
   containerClassName?: string;
   className?: string;
-  hideBorder?: boolean; // TODO: really need?
-  tooltipProps?: DialEllipsisTooltipProps;
-  hideTooltip?: boolean;
-  inputRef?: Ref<HTMLInputElement>;
-  errorText?: string;
-  onChange?: (value?: string) => void;
 }
 
 /**
@@ -34,7 +48,7 @@ export interface DialInputProps extends InputBaseProps {
  * @example
  * ```tsx
  * <DialInput
- *   elementId="search"
+ *   id="search"
  *   placeholder="Search..."
  *   iconBefore={<SearchIcon />}
  *   iconAfter={<ClearIcon />}
@@ -42,39 +56,62 @@ export interface DialInputProps extends InputBaseProps {
  * />
  * ```
  *
- * @params Component properties extending:
- * - {@link InputBaseProps} - Base input properties (elementId, value, placeholder, disabled, invalid, icons, etc.)
- *
- * @param containerClassName - Additional CSS classes to apply to the container div
- * @param className - Additional CSS classes to apply to the input element
- * @param hideBorder - Whether to hide the input border styling
- * @param tooltipProps - Props to pass to the internal tooltip component
- * @param hideTooltip - Whether to hide the tooltip
- * @param inputRef - Ref to access the underlying input element
- * @param error - Error message to display below the input (also adds error styling)
- * @param onChange - Callback function called when the input value changes
+ * @param [invalid] - Whether the input has validation errors (applies error styling)
+ * @param [iconAfter] - Icon or element to display after the input
+ * @param [iconBefore] - Icon or element to display before the input
+ * @param [textBeforeInput] - Text to display before the input
+ * @param [textAfterInput] - Text to display after the input
+ * @param [prefix] - Text to display inside the input on the left
+ * @param [suffix] - Text to display inside the input on the right
+ * @param [containerClassName] - Additional CSS classes to apply to the container div
+ * @param [className] - Additional CSS classes to apply to the input element
+ * @param [inputRef] - Ref to access the underlying input element
+ * @param [errorText] - Error message to display below the input (also adds error styling)
+ * @param [onChange] - Callback function called when the input value changes
  */
 export const DialInput: FC<DialInputProps> = ({
+  labelProps,
+  errorText,
+  id,
+  containerClassName,
+  ...props
+}) => {
+  return (
+    <div className={mergeClasses('flex flex-col', containerClassName)}>
+      {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
+
+      <InputWrapper id={id} {...props} />
+      <DialErrorText errorText={errorText} />
+    </div>
+  );
+};
+
+interface InputWrapperProps
+  extends Omit<
+    DialInputProps,
+    'labelProps' | 'containerClassName' | 'errorText'
+  > {
+  wrapperClassName?: string;
+  hideBorder?: boolean; // TODO: !!!
+}
+
+const InputWrapper: FC<InputWrapperProps> = ({
+  invalid,
+  disabled,
+  textBeforeInput,
+  className,
+  textAfterInput,
+  prefix,
+  suffix,
   iconBefore,
   iconAfter,
-  hideBorder,
-  className = '',
-  containerClassName,
-  type = 'text',
-  value,
-  invalid,
-  onChange,
-  min,
-  max,
-  prefix,
-  errorText,
-  suffix,
-  textBeforeInput,
-  textAfterInput,
-  defaultValue,
-  hideTooltip = false,
-  tooltipProps,
+  wrapperClassName,
+  type,
   inputRef,
+  value,
+  min,
+  onChange,
+  max,
   ...props
 }) => {
   const innerRef = useRef<HTMLInputElement | null>(null);
@@ -129,75 +166,72 @@ export const DialInput: FC<DialInputProps> = ({
   };
 
   return (
-    <div className="flex flex-col dial-input-field">
-      <div
-        className={mergeClasses(
-          'dial-input-field flex flex-row items-center justify-between py-2',
-          hideBorder ? 'dial-input-no-border' : 'dial-input',
-          invalid && 'dial-input-error',
-          props.disabled && 'dial-input-disable',
-          !textBeforeInput && 'pl-3',
-          !textAfterInput && 'pr-3',
-          containerClassName,
+    <div
+      className={mergeClasses(
+        'flex flex-row items-center justify-between py-2',
+        // hideBorder ? 'dial-input-no-border' : 'dial-input',
+        invalid && 'dial-input-error',
+        disabled && 'dial-input-disable',
+        !textBeforeInput && 'pl-3',
+        !textAfterInput && 'pr-3',
+        wrapperClassName,
+      )}
+      aria-label="input-container"
+    >
+      {textBeforeInput && (
+        <div className="mr-2">
+          <InputWrapper
+            hideBorder
+            wrapperClassName="rounded-r-none border-r-0"
+            className="truncate"
+            value={textBeforeInput}
+            disabled
+            id={`${textBeforeInput}_textBefore`}
+          />
+        </div>
+      )}
+
+      {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
+
+      <DialIcon
+        icon={iconBefore}
+        className={classNames(!!iconBefore && 'mr-2')}
+      />
+
+      <input
+        ref={ref}
+        type={type}
+        autoComplete={type === 'password' ? 'new-password' : 'off'}
+        value={value ?? ''}
+        className={classNames(
+          'border-0 bg-transparent w-full truncate',
+          className,
         )}
-        aria-label="input-container"
-      >
-        {textBeforeInput && (
-          <div className="mr-2">
-            <DialInput
-              hideBorder
-              containerClassName="rounded-r-none border-r-0"
-              className="truncate"
-              value={textBeforeInput}
-              disabled
-              id={`${textBeforeInput}_textBefore`}
-            />
-          </div>
-        )}
+        onChange={handleChange}
+        onKeyDown={onKeyDown}
+        min={min}
+        max={max}
+        {...props}
+      />
 
-        {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
+      <DialIcon
+        icon={iconAfter}
+        className={classNames(!!iconAfter && 'ml-2')}
+      />
 
-        <DialIcon
-          icon={iconBefore}
-          className={classNames(!!iconBefore && 'mr-2')}
-        />
+      {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
 
-        <input
-          ref={ref}
-          type={type}
-          autoComplete={type === 'password' ? 'new-password' : 'off'}
-          value={defaultValue ? undefined : (value ?? '')}
-          className={classNames(
-            'border-0 bg-transparent w-full truncate',
-            className,
-          )}
-          onChange={handleChange}
-          onKeyDown={onKeyDown}
-          min={min}
-          max={max}
-          {...props}
-        />
-
-        <DialIcon
-          icon={iconAfter}
-          className={classNames(!!iconAfter && 'ml-2')}
-        />
-
-        {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
-
-        {textAfterInput && (
-          <div className="ml-2">
-            <DialInput
-              hideBorder
-              containerClassName="rounded-l-none border-l-0"
-              value={textAfterInput}
-              disabled
-              id={`${textAfterInput}_textAfter`}
-            />
-          </div>
-        )}
-      </div>
-      <DialErrorText errorText={errorText} />
+      {textAfterInput && (
+        <div className="ml-2">
+          <InputWrapper
+            hideBorder
+            wrapperClassName="rounded-l-none border-l-0"
+            value={textAfterInput}
+            disabled
+            id={`${textAfterInput}_textAfter`}
+          />
+        </div>
+      )}
     </div>
   );
 };

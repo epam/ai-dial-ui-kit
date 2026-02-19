@@ -14,7 +14,7 @@ import { DialInput, type DialInputProps } from '@/components/Input/Input';
  *   label="Password"
  *   value={password}
  *   onChange={e => setPassword(e.target.value)}
- *   disabled={false}
+ *   disabled={false}sss
  * />
  * ```
  *
@@ -36,7 +36,6 @@ export const DialPasswordInput: FC<DialInputProps> = ({ ...props }) => {
     <DialInput
       type={showValue ? 'text' : 'password'}
       {...props}
-      hideTooltip={!showValue}
       iconAfter={
         showValue ? (
           <DialHideIcon onClick={() => onChangeShowValue(false)} />

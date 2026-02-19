@@ -1,5 +1,5 @@
 export { DialErrorText } from './components/ErrorText/ErrorText';
-export { DialFieldLabel } from './components/Field/Field';
+export { DialLabel } from './components/Label/Label.tsx';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
@@ -55,7 +55,6 @@ export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
-export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
 
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
@@ -75,10 +74,10 @@ export { DialFormPopup } from './components/FormPopup/FormPopup';
 // Inputs
 export { DialInput } from './components/Input/Input';
 export type { DialInputProps } from './components/Input/Input';
-export { DialNumberInputField } from './components/InputField/InputField';
-export { DialTextInputField } from './components/InputField/InputField';
-export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
+export { DialNumberInput } from './components/NumberInput/NumberInput';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
+
+// Selects and related components
 export { DialSearch } from './components/Search/Search';
 export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';

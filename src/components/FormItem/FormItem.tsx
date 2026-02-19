@@ -2,7 +2,7 @@ import { useCallback, type FC, type ReactNode } from 'react';
 
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 
-import { DialFieldLabel } from '@/components/Field/Field';
+import { DialLabel } from '@/components/Label/Label';
 import {
   FormItemOrientation,
   type DialFormItemBaseProps,
@@ -161,16 +161,16 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           id={labelId}
           className={mergeClasses(orientation === 'horizontal' && 'shrink-0')}
         >
-          <DialFieldLabel
+          <DialLabel
             htmlFor={id}
-            fieldTitle={label}
-            optional={optional}
+            fieldLabel={label}
+            required={optional}
             optionalText={optionalText}
             className={mergeClasses(
               labelVisuallyHidden && 'sr-only',
               labelClassName,
             )}
-            description={description}
+            caption={description}
           />
         </div>
       )}

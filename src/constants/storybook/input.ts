@@ -1,46 +1,39 @@
-import type {
-  FieldControlProps,
-  InputBaseProps,
-} from '@/models/field-control-props';
 import type { ArgTypes } from '@storybook/react';
+import type { DialInputProps } from '../../components/Input/Input';
 
-export const fieldControlArgTypes: Partial<ArgTypes<FieldControlProps>> = {
-  fieldTitle: {
-    control: { type: 'text' as const },
-    description: 'The label text to display above the input field',
-  },
-  optional: {
-    control: { type: 'boolean' as const },
-    description:
-      'Whether the field is optional (displays "(Optional)" indicator when true)',
-  },
-};
-
-export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
-  id: {
-    control: { type: 'text' as const },
-    description: 'Unique identifier for the input element',
-  },
-  value: {
-    control: { type: 'text' as const },
-    description: 'The current value of the input (string, number, or null)',
-  },
-  defaultValue: {
-    control: { type: 'text' as const },
-    description: 'The default value for the input',
+export const inputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
+  type: {
+    control: { type: 'select' },
+    options: ['text', 'password', 'email', 'number', 'search'],
+    description: 'Input type',
   },
   placeholder: {
-    control: { type: 'text' as const },
-    description: 'Placeholder text shown when input is empty',
+    control: { type: 'text' },
+    description: 'Placeholder text',
+  },
+  containerClassName: {
+    control: { type: 'text' },
+    description: 'Additional CSS classes for the container',
+  },
+  className: {
+    control: { type: 'text' },
+    description: 'Additional CSS classes for the input element',
   },
   disabled: {
-    control: { type: 'boolean' as const },
-    description: 'Whether the input is disabled and cannot be interacted with',
+    control: { type: 'boolean' },
+    description: 'Whether the input is disabled',
   },
   invalid: {
-    control: { type: 'boolean' as const },
-    description:
-      'Whether the input has validation errors (applies error styling)',
+    control: { type: 'boolean' },
+    description: 'Whether the input has an error state',
+  },
+  onChange: {
+    control: false,
+    description: 'Callback function called when the input value changes',
+  },
+  onBlur: {
+    control: false,
+    description: 'Callback function called when the input blurs',
   },
   iconAfter: {
     control: false,
@@ -68,7 +61,7 @@ export const inputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
   },
 };
 
-export const numberInputBaseArgTypes: Partial<ArgTypes<InputBaseProps>> = {
+export const numberInputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
   min: {
     control: { type: 'number' as const },
     description: 'Minimum allowed value for the number input',

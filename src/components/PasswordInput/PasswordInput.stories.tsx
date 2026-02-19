@@ -16,7 +16,7 @@ const InteractiveInput = (args: DialInputProps) => {
 };
 
 const meta: Meta<typeof DialPasswordInput> = {
-  title: 'Form/PasswordInput',
+  title: 'Dial/Elements/Inputs/PasswordInput',
   component: DialPasswordInput,
   tags: ['input'],
   parameters: {
@@ -72,15 +72,15 @@ type Story = StoryObj<typeof DialPasswordInput>;
 export const Default: Story = {
   args: {
     id: 'password',
-    fieldLabel: 'Password',
+    labelProps: { fieldLabel: 'Password' },
     value: '',
   },
 };
 
-export const WithError: Story = {
+export const Invalid: Story = {
   args: {
     id: 'password-error',
-    fieldLabel: 'Password',
+    labelProps: { fieldLabel: 'Password' },
     required: true,
     errorText: 'Password is required',
     invalid: true,
@@ -90,7 +90,7 @@ export const WithError: Story = {
 export const Required: Story = {
   args: {
     id: 'password-required',
-    fieldLabel: 'Password',
+    labelProps: { fieldLabel: 'Password' },
     value: '',
     errorText: '',
     required: true,
@@ -106,17 +106,17 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveInput
             id="password"
-            fieldLabel="Password"
+            labelProps={{ fieldLabel: 'Password' }}
             placeholder="Placeholder"
           />
         </div>
 
-        {/* With Error */}
+        {/* Invalid State */}
         <div>
-          <div className="text-primary font-semibold mb-2">With Error</div>
+          <div className="text-primary font-semibold mb-2">Invalid</div>
           <InteractiveInput
-            id="password"
-            fieldLabel="Password"
+            id="password-error"
+            labelProps={{ fieldLabel: 'Password' }}
             placeholder="Placeholder"
             invalid={true}
             errorText="Password is required"
@@ -127,8 +127,8 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Required</div>
           <InteractiveInput
-            id="password"
-            fieldLabel="Password"
+            id="password-required"
+            labelProps={{ fieldLabel: 'Password' }}
             placeholder="Placeholder"
             required={true}
           />
