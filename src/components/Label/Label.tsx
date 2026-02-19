@@ -1,8 +1,7 @@
-import { DialIcon } from '@/components/Icon/Icon';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import { IconInfoCircle } from '@tabler/icons-react';
 import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
+
+import { DialInfoButton } from '@/components/InfoButton/InfoButton';
 
 type NativeLabelProps = Omit<
   LabelHTMLAttributes<HTMLLabelElement>,
@@ -40,21 +39,19 @@ export const DialLabel: FC<DialLabelProps> = ({
   return (
     <label
       {...props}
-      className={mergeClasses('dial-tiny text-secondary flex gap-1', className)}
+      className={mergeClasses(
+        'dial-tiny-text text-secondary flex items-center gap-1',
+        className,
+      )}
     >
       {typeof fieldLabel === 'string' ? (
         <span className="min-h-4">{fieldLabel}</span>
       ) : (
         fieldLabel
       )}
-      {required && <span>*</span>}
-      {caption && (
-        <DialTooltip tooltip={caption}>
-          <DialIcon
-            icon={<IconInfoCircle size={14} className="text-secondary" />}
-          />
-        </DialTooltip>
-      )}
+      {required && <span className="text-accent-primary">*</span>}
+
+      <DialInfoButton caption={caption} />
     </label>
   );
 };

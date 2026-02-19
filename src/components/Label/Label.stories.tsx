@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialLabel, type DialLabelProps } from './Label';
 
 const meta = {
-  title: 'Form/FieldLabel',
+  title: 'DIAL/Elements/Label',
   component: DialLabel,
   parameters: {
     layout: 'centered',
@@ -44,18 +44,27 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const BasicLabel: Story = {
+export const Basic: Story = {
   args: {
     fieldLabel: 'Email Address',
     htmlFor: 'email-input',
   },
 };
 
-export const OptionalField: Story = {
+export const Required: Story = {
   args: {
     fieldLabel: 'Phone Number',
     htmlFor: 'phone-input',
     required: true,
+  },
+};
+
+export const Caption: Story = {
+  args: {
+    fieldLabel: 'Phone Number',
+    htmlFor: 'phone-input',
+    required: true,
+    caption: 'This is a caption for the phone number field',
   },
 };
 
