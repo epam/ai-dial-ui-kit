@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialRemoveButton, type DialRemoveButtonProps } from './RemoveButton';
 
 const meta: Meta<typeof DialRemoveButton> = {
-  title: 'Utility/RemoveButton',
+  title: 'DIAL/Elements/Buttons/RemoveButton',
   component: DialRemoveButton,
   parameters: {
     layout: 'padded',
