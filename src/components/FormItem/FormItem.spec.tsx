@@ -117,17 +117,12 @@ describe('Dial UI Kit :: DialFormItem', () => {
     expect(screen.getByText('Hidden label')).toBeInTheDocument();
   });
 
-  test('renders optional indicator text when provided', () => {
+  test('renders required indicator text when provided', () => {
     render(
-      <DialFormItem
-        id="opt"
-        label="With optional"
-        optional
-        optionalText="(optional)"
-      >
+      <DialFormItem id="opt" label="With required" required>
         <input id="opt" />
       </DialFormItem>,
     );
-    expect(screen.getByText('(optional)')).toBeInTheDocument();
+    expect(screen.getByText('*')).toBeInTheDocument();
   });
 });

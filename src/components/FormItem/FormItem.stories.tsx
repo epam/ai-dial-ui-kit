@@ -89,7 +89,7 @@ const BasicFormExample = (args: DialFormItemProps) => {
         captionDescription="This is additional caption text."
       >
         <DialInput
-          elementId="name"
+          id="name"
           placeholder="John Doe"
           value={name}
           onChange={(name) => setName(name ?? '')}
@@ -99,8 +99,7 @@ const BasicFormExample = (args: DialFormItemProps) => {
       <DialFormItem
         id="agree"
         label="Terms"
-        optional
-        optionalText="(optional)"
+        required
         description="You must accept the terms to proceed."
       >
         <DialCheckbox
@@ -140,7 +139,7 @@ const WithValidationExample = (args: DialFormItemProps) => {
         error={!isValid && email ? 'Enter a valid email' : undefined}
       >
         <DialInput
-          elementId="email"
+          id="email"
           type="email"
           placeholder="name@company.com"
           value={email}
@@ -249,7 +248,7 @@ const SelectWithValidationExample = (args: DialFormItemProps) => {
     >
       <DialFormItem id="name" label="Name">
         <DialInput
-          elementId="name"
+          id="name"
           placeholder="Entity name"
           value={name}
           onChange={(name) => setName(name ?? '')}

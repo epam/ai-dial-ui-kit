@@ -90,7 +90,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
     <DialFormItem
       id={id}
       label={fieldLabel}
-      optional={required}
+      required={required}
       description={caption}
       error={error}
       captionDescription={captionDescription}

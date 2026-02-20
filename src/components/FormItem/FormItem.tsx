@@ -75,8 +75,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
 export const DialFormItem: FC<DialFormItemProps> = ({
   id,
   label,
-  optional,
-  optionalText,
+  required,
   description,
   error,
   orientation = FormItemOrientation.Vertical,
@@ -164,8 +163,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           <DialLabel
             htmlFor={id}
             fieldLabel={label}
-            required={optional}
-            optionalText={optionalText}
+            required={required}
             className={mergeClasses(
               labelVisuallyHidden && 'sr-only',
               labelClassName,
