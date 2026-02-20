@@ -14,7 +14,7 @@ import { DialInput, type DialInputProps } from '@/components/Input/Input';
  *   label="Password"
  *   value={password}
  *   onChange={e => setPassword(e.target.value)}
- *   disabled={false}sss
+ *   disabled={false}
  * />
  * ```
  *
