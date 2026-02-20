@@ -41,8 +41,8 @@ export const DialAutocompleteInputValue: FC<
         listClassName,
       )}
     >
-      {selectedItems?.map((selectedItem) => (
-        <li key={selectedItem}>
+      {selectedItems?.map((selectedItem, index) => (
+        <li key={`${selectedItem}_${index}`}>
           <DialTooltip tooltip={selectedItem}>
             <DialTag
               tag={selectedItem}
