@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialNumberInput, type DialNumberInputProps } from './NumberInput';
-import { dialFormItemBaseArgTypes } from '@/constants/storybook/form-item';
 
 const InteractiveNumberInputField = (args: DialNumberInputProps) => {
   const [value, setValue] = useState(args.value);
@@ -35,26 +33,7 @@ const meta = {
     },
   },
   argTypes: {
-    value: {
-      control: { type: 'number' },
-      description: 'The current value of the input',
-    },
-    errorText: {
-      control: { type: 'text' },
-      description: 'Error message text to display below the input',
-    },
-    defaultEmptyText: {
-      control: { type: 'text' },
-      description: 'Text to display when readonly and value is empty',
-    },
-    min: {
-      control: { type: 'number' },
-      description: 'Minimum allowed value for the number input',
-    },
-    max: {
-      control: { type: 'number' },
-      description: 'Maximum allowed value for the number input',
-    },
+    ...inputBaseArgTypes,
   },
   args: {
     fieldLabel: 'Number Field',
