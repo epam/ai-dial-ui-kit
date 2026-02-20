@@ -13,7 +13,7 @@ import {
 } from './IconButtonWrappers';
 
 const meta = {
-  title: 'Dial/Elements/IconButton',
+  title: 'Dial/Elements/Buttons/IconButton',
   component: DialIconButton,
   parameters: {
     layout: 'centered',
