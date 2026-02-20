@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconEye, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialInput, type DialInputProps } from './Input';
-import { inputBaseArgTypes } from '../../constants/storybook/input';
+import { inputBaseArgTypes } from '@/constants/storybook/input';
 
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');

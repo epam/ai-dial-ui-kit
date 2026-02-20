@@ -4,7 +4,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
 import { IconPlus } from '@tabler/icons-react';
 import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
-import { DialRemoveButton } from '../RemoveButton/RemoveButton';
+import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {

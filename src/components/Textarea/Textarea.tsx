@@ -5,8 +5,8 @@ import {
 } from 'react';
 
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialErrorText } from '../ErrorText/ErrorText';
-import { DialLabel, type DialLabelProps } from '../Label/Label';
+import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 
 export interface DialTextareaProps
   extends DetailedHTMLProps<

@@ -1,5 +1,5 @@
 import type { ArgTypes } from '@storybook/react';
-import type { DialInputProps } from '../../components/Input/Input';
+import type { DialInputProps } from '@/components/Input/Input';
 
 export const inputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
   type: {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialPasswordInput } from './PasswordInput';
-import type { DialInputProps } from '../Input/Input';
+import type { DialInputProps } from '@/components/Input/Input';
 
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');

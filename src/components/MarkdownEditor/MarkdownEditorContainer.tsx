@@ -13,7 +13,7 @@ import { type DialJsonEditorProps } from '@/components/JsonEditor/JsonEditor';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { EditorThemes } from '@/types/editor';
 import { DialMarkdownEditor } from './MarkdownEditor';
-import { DialLabel } from '../Label/Label';
+import { DialLabel } from '@/components/Label/Label';
 
 export interface DialMarkdownEditorContainerProps {
   value?: string;

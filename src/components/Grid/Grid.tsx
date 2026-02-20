@@ -47,7 +47,7 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
-import { ariaDescription } from '../Checkbox/constants';
+import { ariaDescription } from '@/components/Checkbox/constants';
 
 setupAgTestIds({ testIdAttribute: 'dataQA' });
 
