@@ -43,19 +43,11 @@ export const inputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
     control: false,
     description: 'Icon or element to display before the input',
   },
-  textBeforeInput: {
+  prefix: {
     control: { type: 'text' as const },
     description: 'Text to display before the input',
   },
-  textAfterInput: {
-    control: { type: 'text' as const },
-    description: 'Text to display after the input',
-  },
-  prefix: {
-    control: { type: 'text' as const },
-    description: 'Text to display inside the input on the left',
-  },
-  suffix: {
+  postfix: {
     control: { type: 'text' as const },
     description: 'Text to display inside the input on the right',
   },

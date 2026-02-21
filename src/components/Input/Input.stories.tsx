@@ -19,7 +19,7 @@ const InteractiveInput = (args: DialInputProps) => {
 };
 
 const meta = {
-  title: 'DIAL/Elements/Elements/Input',
+  title: 'DIAL/Elements/Inputs/Input',
   component: DialInput,
   tags: ['input'],
   parameters: {
@@ -97,34 +97,97 @@ export const Invalid: Story = {
   },
 };
 
-export const PrefixAndSuffix: Story = {
-  args: {
-    placeholder: 'Enter amount',
-    value: '100',
-    prefix: '$',
-    suffix: 'USD',
-  },
-};
+export const MaxView: Story = {
+  render: () => {
+    const props: DialInputProps = {
+      placeholder: 'Placeholder',
+      iconBefore: <IconSearch size={16} />,
+      postfix: 'suf',
+      prefix: 'before',
+      iconAfter: <IconEye size={16} />,
+    };
 
-export const TextBeforeAndAfter: Story = {
-  args: {
-    placeholder: 'Enter domain',
-    value: 'example',
-    textBeforeInput: 'https://',
-    textAfterInput: '.com',
-  },
-};
+    return (
+      <div className="flex flex-col h-full w-full items-center">
+        <h2 className="text-primary font-semibold mb-8">Inputs</h2>
 
-export const AllExtraParts: Story = {
-  args: {
-    placeholder: 'Enter value',
-    value: 'test',
-    prefix: 'pre',
-    suffix: 'suf',
-    textBeforeInput: 'before',
-    textAfterInput: 'after',
-    iconBefore: <IconSearch size={16} />,
-    iconAfter: <IconEye size={16} />,
+        <div className="flex-1 min-h-0 flex flex-col gap-y-6">
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Default
+            </div>
+            <InteractiveInput id="default-input" {...props} />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Filled
+            </div>
+            <InteractiveInput id="field-input" value="Text" {...props} />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Hover
+            </div>
+            <InteractiveInput
+              id="hover-input"
+              containerClassName="dial-input-for-hover"
+              {...props}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Focus/Active
+            </div>
+            <InteractiveInput
+              id="focus-input"
+              containerClassName="dial-input-for-focus"
+              {...props}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Error
+            </div>
+            <InteractiveInput
+              id="error-input"
+              invalid={true}
+              value="Text"
+              errorText="Error message"
+              {...props}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled filled
+            </div>
+            <InteractiveInput
+              id="disable-input"
+              disabled={true}
+              value="Text"
+              {...props}
+            />
+          </div>
+
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled empty
+            </div>
+            <InteractiveInput id="disable-input" disabled={true} {...props} />
+          </div>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    pseudo: {
+      hover: ['.dial-input-for-hover'],
+      focus: ['.dial-input-for-focus'],
+    },
   },
 };
 

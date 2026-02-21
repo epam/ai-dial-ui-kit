@@ -71,15 +71,6 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(handleChange).toHaveBeenCalledWith('test');
   });
 
-  test('applies hideBorder class correctly', () => {
-    const { container } = render(
-      <DialInput id="test-input" placeholder="Test" hideBorder />,
-    );
-    const inputContainer = container.querySelector('.dial-input-field');
-    expect(inputContainer).toHaveClass('dial-input-no-border');
-    expect(inputContainer).not.toHaveClass('dial-input');
-  });
-
   test('applies invalid class when invalid prop is true', () => {
     const { getByPlaceholderText } = render(
       <DialInput id="test-input" placeholder="Invalid input" invalid />,
@@ -111,21 +102,20 @@ describe('Dial UI Kit :: DialInput', () => {
         id="test-input"
         placeholder="Amount"
         prefix="$"
-        suffix="USD"
+        postfix="USD"
       />,
     );
     expect(container.textContent).toContain('$');
     expect(container.textContent).toContain('USD');
   });
 
-  test('renders text before and after input', () => {
+  test('renders prefix input', () => {
     render(
       <DialInput
         id="test-input"
         placeholder="domain"
-        textBeforeInput="https://"
+        prefix="https://"
         value="123"
-        textAfterInput=".com"
       />,
     );
     expect(screen.getByDisplayValue('123')).toBeInTheDocument();

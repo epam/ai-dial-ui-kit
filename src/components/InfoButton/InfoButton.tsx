@@ -22,11 +22,13 @@ export interface DialInfoButtonProps {
 export const DialInfoButton: FC<DialInfoButtonProps> = ({ caption }) => {
   if (!caption) return null;
 
+  const className =
+    'w-auto h-auto border border-solid rounded-[6px] border-transparent p-1 text-secondary hover:text-controls-accent-primary-hover active:text-controls-accent-primary-active focus-within:border-focus';
   return (
     <DialTooltip tooltip={caption} triggerClassName="flex">
       <DialIconButton
         aria-label={caption}
-        className="w-auto h-auto text-secondary hover:text-controls-accent-primary-hover active:text-controls-accent-primary-active focus-within:border-focus"
+        className={className}
         icon={<IconInfoCircle size={16} />}
       />
     </DialTooltip>

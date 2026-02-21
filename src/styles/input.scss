@@ -1,5 +1,7 @@
 .dial-input {
   @apply border border-solid border-primary rounded h-[40px];
+  @apply bg-transparent truncate dial-small-text;
+  @apply w-full outline-0;
 
   &:hover {
     @apply border-accent-primary;
@@ -10,12 +12,6 @@
   &:focus-within {
     @apply border-focus;
   }
-}
-
-.dial-input,
-.dial-input-no-border {
-  @apply bg-transparent truncate dial-small-text;
-  @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
     @apply text-primary;

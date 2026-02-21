@@ -165,7 +165,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            className="dial-input-no-border outline-none border-none w-full min-w-[100px] flex-1 p-1"
+            className="outline-none border-none w-full min-w-[100px] flex-1 p-1"
             placeholder={placeholder}
             disabled={disabled}
           />

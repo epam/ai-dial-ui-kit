@@ -19,7 +19,7 @@ import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { handleKeyDown } from './utils';
 
 export interface DialInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'onChange'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   labelProps?: DialLabelProps;
 
   invalid?: boolean;
@@ -27,12 +27,10 @@ export interface DialInputProps
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-
-  textBeforeInput?: string;
-  textAfterInput?: string;
+  inputButtonIcon?: ReactNode;
 
   prefix?: string;
-  suffix?: string;
+  postfix?: string;
 
   inputRef?: Ref<HTMLInputElement>;
 
@@ -60,8 +58,6 @@ export interface DialInputProps
  * @param [iconAfter] - Icon or element to display after the input
  * @param [iconBefore] - Icon or element to display before the input
  * @param [textBeforeInput] - Text to display before the input
- * @param [textAfterInput] - Text to display after the input
- * @param [prefix] - Text to display inside the input on the left
  * @param [suffix] - Text to display inside the input on the right
  * @param [containerClassName] - Additional CSS classes to apply to the container div
  * @param [className] - Additional CSS classes to apply to the input element
@@ -77,7 +73,7 @@ export const DialInput: FC<DialInputProps> = ({
   ...props
 }) => {
   return (
-    <div className={mergeClasses('flex flex-col', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
@@ -92,20 +88,18 @@ interface InputWrapperProps
     'labelProps' | 'containerClassName' | 'errorText'
   > {
   wrapperClassName?: string;
-  hideBorder?: boolean; // TODO: !!!
 }
 
 const InputWrapper: FC<InputWrapperProps> = ({
   invalid,
   disabled,
-  textBeforeInput,
-  className,
-  textAfterInput,
   prefix,
-  suffix,
+  className,
+  postfix,
   iconBefore,
   iconAfter,
   wrapperClassName,
+  inputButtonIcon,
   type,
   inputRef,
   value,
@@ -168,35 +162,27 @@ const InputWrapper: FC<InputWrapperProps> = ({
   return (
     <div
       className={mergeClasses(
-        'flex flex-row items-center justify-between py-2',
-        // hideBorder ? 'dial-input-no-border' : 'dial-input',
+        'dial-input flex flex-row items-center gap-x-2 justify-between py-2 pr-2',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
-        !textBeforeInput && 'pl-3',
-        !textAfterInput && 'pr-3',
+        !prefix && 'pl-3',
         wrapperClassName,
       )}
       aria-label="input-container"
     >
-      {textBeforeInput && (
-        <div className="mr-2">
+      {prefix && (
+        <div className="border-r border-tertiary">
           <InputWrapper
-            hideBorder
-            wrapperClassName="rounded-r-none border-r-0"
+            wrapperClassName="!rounded-r-none"
             className="truncate"
-            value={textBeforeInput}
+            value={prefix}
             disabled
-            id={`${textBeforeInput}_textBefore`}
+            id={`${prefix}_textBefore`}
           />
         </div>
       )}
 
-      {prefix && <p className="text-secondary dial-small mr-2"> {prefix}</p>}
-
-      <DialIcon
-        icon={iconBefore}
-        className={classNames(!!iconBefore && 'mr-2')}
-      />
+      <DialIcon icon={iconBefore} />
 
       <input
         ref={ref}
@@ -214,24 +200,11 @@ const InputWrapper: FC<InputWrapperProps> = ({
         {...props}
       />
 
-      <DialIcon
-        icon={iconAfter}
-        className={classNames(!!iconAfter && 'ml-2')}
-      />
+      {postfix && <p className="text-secondary dial-small-text"> {postfix}</p>}
 
-      {suffix && <p className="text-secondary dial-small ml-2"> {suffix}</p>}
+      <DialIcon icon={iconAfter} />
 
-      {textAfterInput && (
-        <div className="ml-2">
-          <InputWrapper
-            hideBorder
-            wrapperClassName="rounded-l-none border-l-0"
-            value={textAfterInput}
-            disabled
-            id={`${textAfterInput}_textAfter`}
-          />
-        </div>
-      )}
+      {inputButtonIcon && <div className="">{inputButtonIcon}</div>}
     </div>
   );
 };
