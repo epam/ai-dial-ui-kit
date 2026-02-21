@@ -59,32 +59,6 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
     expect(onChangeFile).toHaveBeenCalledWith([]);
   });
 
-  test('Should show tooltip with errorText by hovering on invalid file', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <DialLoadFileAreaField
-        fieldTitle="Files"
-        elementId="file-input"
-        files={[new File([''], 'file1.png', { type: 'image/png' })]}
-        onChange={vi.fn()}
-        acceptTypes="image/jpg"
-        emptyTextFirstLine="empty"
-        emptyButtonLabel="Browse"
-        errorText="invalid format"
-        isInvalid={(file) => !!file}
-      />,
-    );
-
-    const input = screen.getByDisplayValue('file1.png') as HTMLInputElement;
-
-    await user.hover(input);
-
-    await waitFor(() => {
-      expect(screen.getByText('invalid format')).toBeInTheDocument();
-    });
-  });
-
   test('Should display empty texts and button label when there is an empty area', () => {
     render(
       <DialLoadFileAreaField

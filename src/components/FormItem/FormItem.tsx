@@ -105,12 +105,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
 
     if (typeof error === 'string' || typeof error === 'undefined') {
       return error ? (
-        <div
-          id={errorId}
-          role="alert"
-          aria-live="polite"
-          className={errorClassName}
-        >
+        <div id={errorId} aria-live="polite" className={errorClassName}>
           <DialErrorText errorText={error} />
         </div>
       ) : null;

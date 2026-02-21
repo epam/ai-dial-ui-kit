@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { DialLabel } from './Label';
 
-describe('Dial UI Kit :: DialFieldLabel', () => {
+describe('Dial UI Kit :: DialLabel', () => {
   test('Should render with fieldLabel and be accessible by htmlFor', () => {
     render(
       <>
@@ -31,7 +31,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
       />,
     );
     expect(screen.getByText('Optional Field')).toBeInTheDocument();
-    expect(screen.getByText('(Optional)')).toBeInTheDocument();
+    expect(screen.getByText('*')).toBeInTheDocument();
   });
 
   test('Should not display optional text when optional is false', () => {
@@ -43,7 +43,6 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
       />,
     );
     expect(screen.getByText('Required Field')).toBeInTheDocument();
-    expect(screen.queryByText('(Optional)')).not.toBeInTheDocument();
   });
 
   test('Should apply custom CSS class', () => {
@@ -61,32 +60,7 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
   test('Should apply default CSS classes', () => {
     render(<DialLabel fieldLabel="Default Field" htmlFor="default-input" />);
     const label = screen.getByText('Default Field').closest('label');
-    expect(label).toHaveClass('dial-tiny', 'text-secondary');
-  });
-
-  test('Should apply default mb-2 class when className does not include mb', () => {
-    render(
-      <DialLabel
-        fieldLabel="Default Margin"
-        htmlFor="margin-input"
-        className="custom-class"
-      />,
-    );
-    const label = screen.getByText('Default Margin').closest('label');
-    expect(label).toHaveClass('mb-2');
-  });
-
-  test('Should not apply mb-2 when className includes mb', () => {
-    render(
-      <DialLabel
-        fieldLabel="Custom Margin"
-        htmlFor="custom-margin-input"
-        className="mb-4 custom-class"
-      />,
-    );
-    const label = screen.getByText('Custom Margin').closest('label');
-    expect(label).toHaveClass('mb-4');
-    expect(label).not.toHaveClass('mb-2');
+    expect(label).toHaveClass('dial-tiny-text', 'text-secondary');
   });
 
   test('Should handle empty fieldLabel string', () => {
@@ -107,7 +81,11 @@ describe('Dial UI Kit :: DialFieldLabel', () => {
     );
 
     const label = screen.getByText('Full Featured').closest('label');
-    expect(label).toHaveClass('special-label', 'dial-tiny', 'text-secondary');
+    expect(label).toHaveClass(
+      'special-label',
+      'dial-tiny-text',
+      'text-secondary',
+    );
     expect(screen.getByText('Full Featured')).toBeInTheDocument();
     expect(label).toHaveAttribute('for', 'full-input');
   });

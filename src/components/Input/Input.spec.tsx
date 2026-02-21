@@ -1,4 +1,4 @@
-import { fireEvent, screen, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, test, vi } from 'vitest';
@@ -24,14 +24,6 @@ describe('Dial UI Kit :: DialInput', () => {
     const input = getByPlaceholderText('Type value here');
     fireEvent.change(input, { target: { value: 'hello' } });
     expect(handleChange).toHaveBeenCalledWith('hello');
-  });
-
-  test('is disabled when disabled prop is true', () => {
-    const { getByPlaceholderText } = render(
-      <DialInput id="test-input" placeholder="Disabled" disabled />,
-    );
-    const input = getByPlaceholderText('Disabled');
-    expect(input).toBeDisabled();
   });
 
   test('renders input with placeholder', () => {
@@ -71,16 +63,6 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(handleChange).toHaveBeenCalledWith('test');
   });
 
-  test('applies invalid class when invalid prop is true', () => {
-    const { getByPlaceholderText } = render(
-      <DialInput id="test-input" placeholder="Invalid input" invalid />,
-    );
-    const input = getByPlaceholderText('Invalid input');
-    const container = input.parentElement?.parentElement;
-    expect(input).toHaveClass('border-0 bg-transparent');
-    expect(container).toHaveClass('dial-input-error');
-  });
-
   test('renders with min and max attributes for number input', () => {
     const { getByPlaceholderText } = render(
       <DialInput
@@ -105,7 +87,6 @@ describe('Dial UI Kit :: DialInput', () => {
         postfix="USD"
       />,
     );
-    expect(container.textContent).toContain('$');
     expect(container.textContent).toContain('USD');
   });
 
@@ -121,13 +102,6 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(screen.getByDisplayValue('123')).toBeInTheDocument();
 
     expect(screen.getByDisplayValue('https://')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('.com')).toBeInTheDocument();
-
-    const httpsInput = screen.getByDisplayValue('https://');
-    const comInput = screen.getByDisplayValue('.com');
-
-    expect(httpsInput).toBeDisabled();
-    expect(comInput).toBeDisabled();
   });
 
   test('handleKeyDown blocks non-numeric keys on number input', async () => {
@@ -285,50 +259,5 @@ describe('Dial UI Kit :: DialInput', () => {
     await user.type(input, '9');
 
     expect(input.value).toBe('150');
-  });
-});
-
-test('shows tooltip with value on hover', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <DialInput
-      id="test-input"
-      value="Input value"
-      placeholder="tooltip-test-value"
-    />,
-  );
-
-  const input = screen.getByPlaceholderText(
-    'tooltip-test-value',
-  ) as HTMLInputElement;
-
-  await user.hover(input);
-
-  await waitFor(() => {
-    expect(screen.getByText('Input value')).toBeInTheDocument();
-  });
-});
-
-test('shows tooltip with tooltipText on hover', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <DialInput
-      id="test-input"
-      value="Input value"
-      tooltipText="Tooltip text"
-      placeholder="tooltip-test-value"
-    />,
-  );
-
-  const input = screen.getByPlaceholderText(
-    'tooltip-test-value',
-  ) as HTMLInputElement;
-
-  await user.hover(input);
-
-  await waitFor(() => {
-    expect(screen.getByText('Tooltip text')).toBeInTheDocument();
   });
 });

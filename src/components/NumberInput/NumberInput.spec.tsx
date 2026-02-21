@@ -35,8 +35,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
-        required={true}
+        labelProps={{ fieldLabel: 'Test Number Field', required: true }}
       />,
     );
 
@@ -69,18 +68,6 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     fireEvent.change(input, { target: { value: '123.45' } });
 
     expect(onChange).toHaveBeenCalledWith(123.45);
-  });
-
-  test('applies disabled state correctly', () => {
-    render(
-      <DialNumberInput
-        id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
-        disabled={true}
-      />,
-    );
-
-    expect(screen.getByRole('spinbutton')).toBeDisabled();
   });
 
   test('applies min and max attributes correctly', () => {

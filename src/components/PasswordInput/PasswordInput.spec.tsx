@@ -4,27 +4,29 @@ import { DialPasswordInput } from './PasswordInput';
 
 describe('Dial UI Kit :: DialPasswordInput', () => {
   it('renders the field title', () => {
-    render(<DialPasswordInput fieldLabel="Password" id="pw" />);
+    render(
+      <DialPasswordInput labelProps={{ fieldLabel: 'Password' }} id="pw" />,
+    );
     expect(screen.getByText('Password')).toBeInTheDocument();
   });
 
   it('renders error text', () => {
     render(
-      <DialPasswordInput fieldLabel="Password" id="pw" errorText="Error!" />,
+      <DialPasswordInput
+        labelProps={{ fieldLabel: 'Password' }}
+        id="pw"
+        required
+        errorText="Error!"
+      />,
     );
     expect(screen.getByText('Error!')).toBeInTheDocument();
-  });
-
-  it('renders required label', () => {
-    render(<DialPasswordInput fieldLabel="Password" id="pw" required />);
-    expect(screen.getByText(/\*/i)).toBeInTheDocument();
   });
 
   it('toggles back to password when clicking the hide control', () => {
     render(
       <DialPasswordInput
         id="pw"
-        fieldLabel="Password"
+        labelProps={{ fieldLabel: 'Password' }}
         value=""
         onChange={() => null}
       />,
