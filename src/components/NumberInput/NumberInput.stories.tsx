@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialNumberInput, type DialNumberInputProps } from './NumberInput';
+import { inputBaseArgTypes } from '@/constants/storybook/input';
 
 const InteractiveNumberInputField = (args: DialNumberInputProps) => {
   const [value, setValue] = useState(args.value);
@@ -36,16 +37,14 @@ const meta = {
     ...inputBaseArgTypes,
   },
   args: {
-    fieldLabel: 'Number Field',
-    elementId: 'number-input',
+    labelProps: { fieldLabel: 'Number Input' },
+    id: 'number-input',
     required: false,
     placeholder: 'Enter a number',
     value: undefined,
     disabled: false,
-    readonly: false,
     invalid: false,
     errorText: undefined,
-    defaultEmptyText: undefined,
     min: undefined,
     max: undefined,
   },
