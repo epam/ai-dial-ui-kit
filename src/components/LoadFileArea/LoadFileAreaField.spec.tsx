@@ -1,7 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialLoadFileAreaField } from './LoadFileAreaField';
-import userEvent from '@testing-library/user-event';
 
 describe('Dial UI Kit :: DialLoadFileAreaField', () => {
   test('Should render label and LoadFileArea', () => {

@@ -107,6 +107,7 @@ const textColors = {
 
 const placeholderColor = {
   primary: 'var(--text-primary, #F3F4F6)',
+  secondary: 'var(--controls-text-secondary-disable, #5B6570)',
 };
 
 const controlsTextColors = {

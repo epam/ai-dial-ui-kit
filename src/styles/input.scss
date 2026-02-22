@@ -19,6 +19,9 @@
 
   &:disabled {
     @apply dial-input-disable;
+    &:not(:placeholder-shown) {
+      @apply placeholder-secondary;
+    }
   }
 }
 

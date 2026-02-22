@@ -128,28 +128,6 @@ export const MaxView: Story = {
 
           <div className="flex flex-row items-center gap-x-6">
             <div className="text-primary font-semibold mb-2 w-[150px]">
-              Hover
-            </div>
-            <InteractiveInput
-              id="hover-input"
-              containerClassName="dial-input-for-hover"
-              {...props}
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
-              Focus/Active
-            </div>
-            <InteractiveInput
-              id="focus-input"
-              containerClassName="dial-input-for-focus"
-              {...props}
-            />
-          </div>
-
-          <div className="flex flex-row items-center gap-x-6">
-            <div className="text-primary font-semibold mb-2 w-[150px]">
               Error
             </div>
             <InteractiveInput
