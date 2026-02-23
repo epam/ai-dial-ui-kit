@@ -12,7 +12,7 @@ import {
 } from './ButtonWrappers';
 
 const meta = {
-  title: 'DIAL/Elements/Button',
+  title: 'DIAL/Elements/Buttons/Button',
   component: DialButton,
   parameters: {
     layout: 'centered',
