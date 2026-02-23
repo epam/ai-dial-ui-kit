@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import {
   useEffect,
   useRef,
@@ -188,7 +187,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         type={type}
         autoComplete={type === 'password' ? 'new-password' : 'off'}
         value={value ?? ''}
-        className={classNames(
+        className={mergeClasses(
           'border-0 bg-transparent w-full truncate',
           className,
         )}
