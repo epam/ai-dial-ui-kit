@@ -33,7 +33,7 @@
   &.dial-icon-button {
     @apply text-secondary;
     &:hover {
-      @apply text-accent-primary;
+      @apply enabled:text-accent-primary;
     }
   }
 
