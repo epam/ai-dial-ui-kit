@@ -3,9 +3,11 @@ import type { FC } from 'react';
 
 import { DialIconButton } from '@/components/IconButton/IconButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { infoButtonClassName } from './constants';
 
 export interface DialInfoButtonProps {
   caption?: string;
+  onClick?: () => void;
 }
 /**
  * An Info button component with a customizable icon and accessible label.
@@ -18,19 +20,27 @@ export interface DialInfoButtonProps {
  * ```
  *
  * @param [caption] - Text to display inside the info button
+ * @param [onClick] - Click handler for the info button
  */
-export const DialInfoButton: FC<DialInfoButtonProps> = ({ caption }) => {
+export const DialInfoButton: FC<DialInfoButtonProps> = ({
+  caption,
+  onClick,
+}) => {
   if (!caption) return null;
 
-  const className =
-    'w-auto h-auto border border-solid rounded-[6px] border-transparent p-1 text-secondary hover:text-controls-accent-primary-hover active:text-controls-accent-primary-active focus-within:border-focus';
-  return (
+  const button = (
+    <DialIconButton
+      aria-label={caption}
+      className={infoButtonClassName}
+      icon={<IconInfoCircle size={16} />}
+      onClick={onClick}
+    />
+  );
+  return caption ? (
     <DialTooltip tooltip={caption} triggerClassName="flex">
-      <DialIconButton
-        aria-label={caption}
-        className={className}
-        icon={<IconInfoCircle size={16} />}
-      />
+      {button}
     </DialTooltip>
+  ) : (
+    button
   );
 };
