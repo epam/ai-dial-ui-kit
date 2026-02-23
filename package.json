@@ -55,7 +55,8 @@
     ]
   },
   "overrides": {
-    "esbuild": "0.25.9"
+    "esbuild": "0.25.9",
+    "minimatch": "10.2.2"
   },
   "dependencies": {
     "ag-grid-community": "^34.3.0",
