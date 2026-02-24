@@ -7,7 +7,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         placeholder="Enter number"
         value={42.5}
       />,
@@ -22,7 +22,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         value={42.5}
       />,
     );
@@ -35,7 +35,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field', required: true }}
+        labelProps={{ label: 'Test Number Field', required: true }}
       />,
     );
 
@@ -46,7 +46,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         errorText="This field is required"
       />,
     );
@@ -59,7 +59,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         onChange={onChange}
       />,
     );
@@ -74,7 +74,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         min={0}
         max={100}
       />,
@@ -89,7 +89,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         min={10}
       />,
     );
@@ -103,7 +103,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
       />,
     );
 
@@ -117,7 +117,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         min={0.1}
         max={99.9}
         onChange={onChange}
@@ -137,7 +137,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     render(
       <DialNumberInput
         id="test-number"
-        labelProps={{ fieldLabel: 'Test Number Field' }}
+        labelProps={{ label: 'Test Number Field' }}
         min={0}
         max={1}
         onChange={onChange}

@@ -4,16 +4,14 @@ import { DialPasswordInput } from './PasswordInput';
 
 describe('Dial UI Kit :: DialPasswordInput', () => {
   it('renders the field title', () => {
-    render(
-      <DialPasswordInput labelProps={{ fieldLabel: 'Password' }} id="pw" />,
-    );
+    render(<DialPasswordInput labelProps={{ label: 'Password' }} id="pw" />);
     expect(screen.getByText('Password')).toBeInTheDocument();
   });
 
   it('renders error text', () => {
     render(
       <DialPasswordInput
-        labelProps={{ fieldLabel: 'Password' }}
+        labelProps={{ label: 'Password' }}
         id="pw"
         required
         errorText="Error!"
@@ -26,7 +24,7 @@ describe('Dial UI Kit :: DialPasswordInput', () => {
     render(
       <DialPasswordInput
         id="pw"
-        labelProps={{ fieldLabel: 'Password' }}
+        labelProps={{ label: 'Password' }}
         value=""
         onChange={() => null}
       />,

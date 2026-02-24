@@ -129,7 +129,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
     <div className="h-full flex flex-col">
       <div className="flex justify-between items-center pb-1 min-h-[42px]">
         <DialLabel
-          fieldLabel={`${fieldTitle}: ${multiple ? files?.length || 0 : ''}`}
+          label={`${fieldTitle}: ${multiple ? files?.length || 0 : ''}`}
           htmlFor={elementId}
         />
         {multiple && !!files?.length && (

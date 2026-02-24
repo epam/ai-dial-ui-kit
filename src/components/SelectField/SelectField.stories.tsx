@@ -7,7 +7,7 @@ const meta = {
   component: DialSelectField,
   parameters: { layout: 'centered' },
   argTypes: {
-    fieldLabel: { control: 'text' },
+    label: { control: 'text' },
     required: { control: 'boolean' },
     caption: { control: 'text' },
     captionDescription: { control: 'text' },
@@ -26,7 +26,7 @@ const meta = {
   },
   args: {
     id: 'transport',
-    fieldLabel: 'Transport',
+    label: 'Transport',
     placeholder: 'Pick transport',
     options: [
       { value: 'SSE', label: 'Server-Sent Events (SSE)' },

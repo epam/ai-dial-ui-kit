@@ -116,7 +116,7 @@ export const Resize: Story = {
 export const AllVariants: Story = {
   render: () => {
     const props = {
-      labelProps: { fieldLabel: 'Label', required: true },
+      labelProps: { label: 'Label', required: true },
       id: 'interactive-textarea',
       placeholder: 'Enter your text here...',
     };

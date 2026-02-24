@@ -7,7 +7,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
     render(
       <DialSelectField
         id="transport"
-        fieldLabel="Transport"
+        label="Transport"
         options={[
           { value: 'SSE', label: 'Server-Sent Events (SSE)' },
           { value: 'WS', label: 'WebSocket' },
@@ -24,7 +24,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
     render(
       <DialSelectField
         id="styled"
-        fieldLabel="Styled"
+        label="Styled"
         containerClassName="ring-1"
         options={[{ value: 'x', label: 'X' }]}
       />,
@@ -36,7 +36,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
     render(
       <DialSelectField
         id="err"
-        fieldLabel="With error"
+        label="With error"
         error="Selection required"
         options={[{ value: 'x', label: 'X' }]}
       />,
@@ -49,7 +49,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
     render(
       <DialSelectField
         id="cap"
-        fieldLabel="With caption"
+        label="With caption"
         captionDescription="Helper caption"
         options={[{ value: 'x', label: 'X' }]}
       />,
@@ -61,7 +61,7 @@ describe('Dial UI Kit :: DialSelectField', () => {
     render(
       <DialSelectField
         id="ro"
-        fieldLabel="Readonly"
+        label="Readonly"
         readonly
         value="WS"
         options={[

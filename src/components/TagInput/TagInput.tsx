@@ -52,7 +52,7 @@ export interface DialTagInputProps extends DialLabelProps {
  */
 export const DialTagInput: FC<DialTagInputProps> = ({
   initialTags = [],
-  fieldLabel,
+  label,
   required,
   elementId,
   placeholder,
@@ -132,11 +132,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
 
   return (
     <div className="flex flex-col w-full">
-      <DialLabel
-        fieldLabel={fieldLabel}
-        required={required}
-        htmlFor={elementId}
-      />
+      <DialLabel label={label} required={required} htmlFor={elementId} />
       <div
         className={classNames(
           'dial-input min-h-[38px] p-[6px]',

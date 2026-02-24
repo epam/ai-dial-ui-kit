@@ -16,7 +16,7 @@ export interface DialLabelledTextProps {
  *
  * @example
  * ```tsx
- * <FieldLabel
+ * <DialLabelledText
  *   label="Username"
  *   text="Enter your username"
  *   postfix={<span>*</span>}

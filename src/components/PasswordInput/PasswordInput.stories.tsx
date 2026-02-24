@@ -72,7 +72,7 @@ type Story = StoryObj<typeof DialPasswordInput>;
 export const Default: Story = {
   args: {
     id: 'password',
-    labelProps: { fieldLabel: 'Password' },
+    labelProps: { label: 'Password' },
     value: '',
   },
 };
@@ -80,7 +80,7 @@ export const Default: Story = {
 export const Invalid: Story = {
   args: {
     id: 'password-error',
-    labelProps: { fieldLabel: 'Password' },
+    labelProps: { label: 'Password' },
     required: true,
     errorText: 'Password is required',
     invalid: true,
@@ -90,7 +90,7 @@ export const Invalid: Story = {
 export const Required: Story = {
   args: {
     id: 'password-required',
-    labelProps: { fieldLabel: 'Password' },
+    labelProps: { label: 'Password' },
     value: '',
     errorText: '',
     required: true,
@@ -106,7 +106,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveInput
             id="password"
-            labelProps={{ fieldLabel: 'Password' }}
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
           />
         </div>
@@ -116,7 +116,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Invalid</div>
           <InteractiveInput
             id="password-error"
-            labelProps={{ fieldLabel: 'Password' }}
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
             invalid={true}
             errorText="Password is required"
@@ -128,7 +128,7 @@ export const AllVariants: Story = {
           <div className="text-primary font-semibold mb-2">Required</div>
           <InteractiveInput
             id="password-required"
-            labelProps={{ fieldLabel: 'Password' }}
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
             required={true}
           />

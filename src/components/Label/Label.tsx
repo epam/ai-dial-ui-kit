@@ -9,7 +9,7 @@ type NativeLabelProps = Omit<
 >;
 
 export interface DialLabelProps extends NativeLabelProps {
-  fieldLabel?: ReactNode;
+  label?: ReactNode;
   required?: boolean;
   caption?: string;
 }
@@ -20,21 +20,21 @@ export interface DialLabelProps extends NativeLabelProps {
  * @example
  * ```tsx
  * // Basic  label
- * <DialLabel htmlFor="email-input" fieldLabel="Email Address" />
+ * <DialLabel htmlFor="email-input" label="Email Address" />
  * ```
  *
- * @param [fieldLabel] - The label text to display for the label
+ * @param [label] - The label text to display for the label
  * @param [required=false] - Whether the field is required
  * @param [caption] - Additional caption text, displayed below the label.
  */
 export const DialLabel: FC<DialLabelProps> = ({
-  fieldLabel,
+  label,
   required,
   className,
   caption,
   ...props
 }) => {
-  if (!fieldLabel) return null;
+  if (!label) return null;
 
   return (
     <label
@@ -44,10 +44,10 @@ export const DialLabel: FC<DialLabelProps> = ({
         className,
       )}
     >
-      {typeof fieldLabel === 'string' ? (
-        <span className="min-h-4">{fieldLabel}</span>
+      {typeof label === 'string' ? (
+        <span className="min-h-4">{label}</span>
       ) : (
-        fieldLabel
+        label
       )}
       {required && <span className="text-accent-primary">*</span>}
 

@@ -25,7 +25,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
 /**
  * A layout wrapper for form controls with label, helper text and error message.
  *
- * Uses `DialFieldLabel` for the label and `DialErrorText` for consistent error styling.
+ * Uses `DialLabel` for the label and `DialErrorText` for consistent error styling.
  * Wires accessibility with:
  * - `role="group"`
  * - `aria-labelledby` (when label is present)
@@ -157,7 +157,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
         >
           <DialLabel
             htmlFor={id}
-            fieldLabel={label}
+            label={label}
             required={required}
             className={mergeClasses(
               labelVisuallyHidden && 'sr-only',

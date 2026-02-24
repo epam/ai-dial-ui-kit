@@ -49,7 +49,7 @@ export interface DialSelectFieldProps
  * ```
  */
 export const DialSelectField: FC<DialSelectFieldProps> = ({
-  fieldLabel,
+  label,
   required,
   captionDescription,
   containerClassName,
@@ -89,7 +89,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
   return (
     <DialFormItem
       id={id}
-      label={fieldLabel}
+      label={label}
       required={required}
       description={caption}
       error={error}

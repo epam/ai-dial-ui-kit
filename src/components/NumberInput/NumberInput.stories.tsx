@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { DialNumberInput, type DialNumberInputProps } from './NumberInput';
 import { inputBaseArgTypes } from '@/constants/storybook/input';
 
-const InteractiveNumberInputField = (args: DialNumberInputProps) => {
+const InteractiveNumberInput = (args: DialNumberInputProps) => {
   const [value, setValue] = useState(args.value);
 
   return (
@@ -37,7 +37,7 @@ const meta = {
     ...inputBaseArgTypes,
   },
   args: {
-    labelProps: { fieldLabel: 'Number Input' },
+    labelProps: { label: 'Number Input' },
     id: 'number-input',
     required: false,
     placeholder: 'Enter a number',
@@ -48,7 +48,7 @@ const meta = {
     min: undefined,
     max: undefined,
   },
-  render: InteractiveNumberInputField,
+  render: InteractiveNumberInput,
 } satisfies Meta<DialNumberInputProps>;
 
 export default meta;
@@ -56,7 +56,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    labelProps: { fieldLabel: 'Age' },
+    labelProps: { label: 'Age' },
     id: 'age-input',
     placeholder: 'Enter your age',
   },
@@ -64,7 +64,7 @@ export const Default: Story = {
 
 export const Filled: Story = {
   args: {
-    labelProps: { fieldLabel: 'Price' },
+    labelProps: { label: 'Price' },
     id: 'price-input',
     placeholder: 'Enter your price',
     value: 29.99,
@@ -73,7 +73,7 @@ export const Filled: Story = {
 
 export const Invalid: Story = {
   args: {
-    labelProps: { fieldLabel: 'Budget' },
+    labelProps: { label: 'Budget' },
     id: 'budget-input',
     placeholder: 'Enter budget amount',
     value: -100,
@@ -84,7 +84,7 @@ export const Invalid: Story = {
 
 export const Disabled: Story = {
   args: {
-    labelProps: { fieldLabel: 'System Generated ID' },
+    labelProps: { label: 'System Generated ID' },
     id: 'id-input',
     value: 12345,
     disabled: true,
@@ -93,7 +93,7 @@ export const Disabled: Story = {
 
 export const DecimalHandling: Story = {
   args: {
-    labelProps: { fieldLabel: 'Precision Value' },
+    labelProps: { label: 'Precision Value' },
     id: 'precision-input',
     placeholder: 'Enter decimal value',
     value: 0.005,
@@ -110,7 +110,7 @@ export const DecimalHandling: Story = {
 
 export const MinAndMaxValues: Story = {
   args: {
-    labelProps: { fieldLabel: 'Age' },
+    labelProps: { label: 'Age' },
     id: 'age-input',
     placeholder: 'Enter your age (18-120)',
     min: 18,
@@ -129,7 +129,7 @@ export const MinAndMaxValues: Story = {
 
 export const MinValue: Story = {
   args: {
-    labelProps: { fieldLabel: 'Temperature' },
+    labelProps: { label: 'Temperature' },
     id: 'temp-input',
     placeholder: 'Enter temperature (min: -273.15°C)',
     min: -273.15,
@@ -146,7 +146,7 @@ export const MinValue: Story = {
 
 export const MaxValue: Story = {
   args: {
-    labelProps: { fieldLabel: 'Percentage' },
+    labelProps: { label: 'Percentage' },
     id: 'percentage-input',
     placeholder: 'Enter percentage (max: 100%)',
     max: 100,

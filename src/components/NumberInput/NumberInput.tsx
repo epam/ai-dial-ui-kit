@@ -14,9 +14,8 @@ export interface DialNumberInputProps extends Omit<DialInputProps, 'onChange'> {
  *
  * @example
  * ```tsx
- * <DialNumberInputField
+ * <DialNumberInput
  *   id="age"
- *   fieldLabel="Age"
  *   placeholder="Enter your age"
  *   value={25}
  *   onChange={(value) => setAge(value)}
