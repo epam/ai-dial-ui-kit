@@ -1,14 +1,14 @@
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
-import { DialFieldLabel } from '@/components/Field/Field';
+import { DialLabel } from '@/components/Label/Label';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
 import { IconPlus } from '@tabler/icons-react';
 import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
-import { DialRemoveButton } from '../RemoveButton/RemoveButton';
+import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
-  fieldTitle: string;
+  fieldTitle: string; // TODO: rename to label and use DialLabel component
   elementId: string;
   deleteAllButtonLabel?: string;
   addButtonLabel?: string;
@@ -128,8 +128,8 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
   return (
     <div className="h-full flex flex-col">
       <div className="flex justify-between items-center pb-1 min-h-[42px]">
-        <DialFieldLabel
-          fieldTitle={`${fieldTitle}: ${multiple ? files?.length || 0 : ''}`}
+        <DialLabel
+          label={`${fieldTitle}: ${multiple ? files?.length || 0 : ''}`}
           htmlFor={elementId}
         />
         {multiple && !!files?.length && (

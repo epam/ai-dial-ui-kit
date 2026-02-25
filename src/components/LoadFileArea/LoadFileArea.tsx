@@ -90,7 +90,7 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
           {files.map((file, index) => (
             <DialFilledInput
               key={file.name + index}
-              elementId={file.name}
+              id={file.name}
               value={file.name}
               iconAfter={removeFile(file.name)}
               iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}

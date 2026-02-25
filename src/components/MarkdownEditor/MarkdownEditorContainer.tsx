@@ -13,7 +13,7 @@ import { type DialJsonEditorProps } from '@/components/JsonEditor/JsonEditor';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { EditorThemes } from '@/types/editor';
 import { DialMarkdownEditor } from './MarkdownEditor';
-import { DialFieldLabel } from '../Field/Field';
+import { DialLabel } from '@/components/Label/Label';
 
 export interface DialMarkdownEditorContainerProps {
   value?: string;
@@ -113,7 +113,7 @@ export const DialMarkdownEditorContainer: FC<
         <div>
           {(label || headerContent || showSwitcher) && (
             <div className="flex justify-between items-center mb-2">
-              {label && <DialFieldLabel fieldTitle={label} />}
+              {label && <DialLabel label={label} />}
               <div className="flex items-center gap-2 flex-1 justify-end">
                 {headerContent}
                 {showSwitcher && (

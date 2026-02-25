@@ -7,7 +7,10 @@ import type {
 
 import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
-import { DialTooltip, type DialTooltipProps } from '../Tooltip/Tooltip';
+import {
+  DialTooltip,
+  type DialTooltipProps,
+} from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;

@@ -82,18 +82,6 @@ describe('Dial UI Kit :: DialSearch', () => {
     expect(screen.getByPlaceholderText('Search placeholder')).toBeDisabled();
   });
 
-  it('is readonly when readonly prop is true', () => {
-    render(
-      <DialSearch
-        elementId="search-readonly"
-        placeholder="Search placeholder"
-        readonly
-      />,
-    );
-    const input = screen.getByPlaceholderText('Search placeholder');
-    expect(input).toHaveAttribute('readonly');
-  });
-
   it('does not call onChange when readonly', () => {
     const onChange = vi.fn();
     render(

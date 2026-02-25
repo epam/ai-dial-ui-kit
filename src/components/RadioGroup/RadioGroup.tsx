@@ -12,7 +12,7 @@ import {
 } from './constants';
 
 export interface DialRadioGroupProps {
-  fieldTitle?: string;
+  fieldTitle?: string; // TODO: rename to label and use DialLabel component
   elementId: string;
   disabled?: boolean;
   radioButtons: RadioButtonWithContent[];
@@ -92,7 +92,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
 }) => {
   return (
     <DialFormItem
-      elementId={elementId}
+      id={elementId}
       label={fieldTitle}
       labelClassName={
         groupLabelClassName ? groupLabelClassName : labelClassName

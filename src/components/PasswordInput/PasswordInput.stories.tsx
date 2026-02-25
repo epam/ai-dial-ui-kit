@@ -1,25 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import {
-  DialPasswordInputField,
-  type DialPasswordInputFieldProps,
-} from './PasswordInputField';
+import { DialPasswordInput } from './PasswordInput';
+import type { DialInputProps } from '@/components/Input/Input';
 
-const InteractiveInput = (args: DialPasswordInputFieldProps) => {
+const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');
 
   return (
-    <DialPasswordInputField
+    <DialPasswordInput
       {...args}
       value={value}
-      onChange={(newValue) => setValue(newValue)}
+      onChange={(newValue) => setValue(newValue as string)}
     />
   );
 };
 
-const meta: Meta<typeof DialPasswordInputField> = {
-  title: 'Form/PasswordInput',
-  component: DialPasswordInputField,
+const meta: Meta<typeof DialPasswordInput> = {
+  title: 'Dial/Elements/Inputs/PasswordInput',
+  component: DialPasswordInput,
   tags: ['input'],
   parameters: {
     layout: 'centered',
@@ -30,7 +28,7 @@ const meta: Meta<typeof DialPasswordInputField> = {
     },
   },
   argTypes: {
-    elementId: {
+    id: {
       control: { type: 'text' },
       description: 'Unique identifier for the input element',
     },
@@ -50,10 +48,6 @@ const meta: Meta<typeof DialPasswordInputField> = {
       control: { type: 'boolean' },
       description: 'Whether the input is disabled',
     },
-    readonly: {
-      control: { type: 'boolean' },
-      description: 'Whether the input is read-only',
-    },
     invalid: {
       control: { type: 'boolean' },
       description: 'Whether the input has an error state',
@@ -64,7 +58,7 @@ const meta: Meta<typeof DialPasswordInputField> = {
     },
   },
   args: {
-    elementId: 'story-input',
+    id: 'story-input',
     placeholder: 'Placeholder',
     disabled: false,
     invalid: false,
@@ -73,32 +67,33 @@ const meta: Meta<typeof DialPasswordInputField> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof DialPasswordInputField>;
+type Story = StoryObj<typeof DialPasswordInput>;
 
 export const Default: Story = {
   args: {
-    elementId: 'password',
-    fieldTitle: 'Password',
+    id: 'password',
+    labelProps: { label: 'Password' },
     value: '',
   },
 };
 
-export const WithError: Story = {
+export const Invalid: Story = {
   args: {
-    elementId: 'password-error',
-    fieldTitle: 'Password',
+    id: 'password-error',
+    labelProps: { label: 'Password' },
+    required: true,
     errorText: 'Password is required',
     invalid: true,
   },
 };
 
-export const Optional: Story = {
+export const Required: Story = {
   args: {
-    elementId: 'password-optional',
-    fieldTitle: 'Password',
+    id: 'password-required',
+    labelProps: { label: 'Password' },
     value: '',
     errorText: '',
-    optional: true,
+    required: true,
   },
 };
 
@@ -110,32 +105,32 @@ export const AllVariants: Story = {
         <div>
           <div className="text-primary font-semibold mb-2">Default</div>
           <InteractiveInput
-            elementId="password"
-            fieldTitle="Password"
+            id="password"
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
           />
         </div>
 
-        {/* With Error */}
+        {/* Invalid State */}
         <div>
-          <div className="text-primary font-semibold mb-2">With Error</div>
+          <div className="text-primary font-semibold mb-2">Invalid</div>
           <InteractiveInput
-            elementId="password"
-            fieldTitle="Password"
+            id="password-error"
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
             invalid={true}
             errorText="Password is required"
           />
         </div>
 
-        {/* Optional */}
+        {/* Required */}
         <div>
-          <div className="text-primary font-semibold mb-2">Optional</div>
+          <div className="text-primary font-semibold mb-2">Required</div>
           <InteractiveInput
-            elementId="password"
-            fieldTitle="Password"
+            id="password-required"
+            labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
-            optional={true}
+            required={true}
           />
         </div>
       </div>

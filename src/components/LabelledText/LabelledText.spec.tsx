@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { DialLabelledText } from './LabelledText';
 
-describe('Dial UI Kit :: FieldLabel', () => {
+describe('Dial UI Kit :: DialLabelledText', () => {
   it('renders label and text', () => {
     render(<DialLabelledText label="Test Label" text="Test Text" />);
     expect(screen.getByText('Test Label')).toBeInTheDocument();

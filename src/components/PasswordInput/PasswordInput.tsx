@@ -36,7 +36,6 @@ export const DialPasswordInput: FC<DialInputProps> = ({ ...props }) => {
     <DialInput
       type={showValue ? 'text' : 'password'}
       {...props}
-      hideTooltip={!showValue}
       iconAfter={
         showValue ? (
           <DialHideIcon onClick={() => onChangeShowValue(false)} />

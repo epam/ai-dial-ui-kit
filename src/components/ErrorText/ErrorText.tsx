@@ -25,6 +25,7 @@ export const DialErrorText: FC<Props> = ({
   return (
     <span
       {...props}
+      role="alert"
       className={mergeClasses('text-error dial-tiny mt-1', className)}
     >
       {errorText}

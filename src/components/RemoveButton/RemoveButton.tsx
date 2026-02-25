@@ -5,7 +5,7 @@ import { type DialButtonProps } from '@/components/Button/Button';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
 import { DialErrorIconButton } from '@/components/IconButton/IconButtonWrappers';
-import { DialErrorButton } from '../Button/ButtonWrappers';
+import { DialErrorButton } from '@/components/Button/ButtonWrappers';
 
 export interface DialRemoveButtonProps
   extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
@@ -23,10 +23,9 @@ export interface DialRemoveButtonProps
  *   onClick={handleDelete}
  *   iconClassName="text-error"
  * />
- * @component
- * @param {DialRemoveButtonProps} props - The properties for the remove button component.
- * @param {string} [props.iconClassName] - Optional CSS class applied to the trash icon for styling or sizing.
- * @returns {JSX.Element} The rendered remove button component.
+ * @params Component properties extending:
+ * - {@link DialButtonProps} - Standard button properties (onClick, disabled, etc.) excluding `iconBefore` and `iconAfter` *
+ * @param [iconClassName] - Optional CSS class applied to the trash icon for additional styling
  */
 export const DialRemoveButton: FC<DialRemoveButtonProps> = ({
   iconClassName,
