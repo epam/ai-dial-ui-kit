@@ -593,7 +593,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             ? 'min-h-[25px] px-1.5 py-1'
             : 'min-h-[38px] px-3 py-2',
           invalid && 'dial-input-error',
-          variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
+          variant === SelectVariant.Secondary ? '!bg-layer-4 !h-auto' : '',
           className,
         )}
         onMouseDown={(e) => {

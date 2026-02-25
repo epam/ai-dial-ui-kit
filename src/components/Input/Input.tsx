@@ -11,7 +11,6 @@ import {
 
 import { useMergeRefs } from '@floating-ui/react';
 
-import { DialIcon } from '@/components/Icon/Icon';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
@@ -71,7 +70,7 @@ export const DialInput: FC<DialInputProps> = ({
   ...props
 }) => {
   return (
-    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-2', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
@@ -180,7 +179,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         </div>
       )}
 
-      <DialIcon icon={iconBefore} />
+      {iconBefore}
 
       <input
         ref={ref}
@@ -200,7 +199,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
 
       {postfix && <p className="text-secondary dial-small-text"> {postfix}</p>}
 
-      <DialIcon icon={iconAfter} />
+      {iconAfter}
 
       {inputButtonIcon && <div className="">{inputButtonIcon}</div>}
     </div>

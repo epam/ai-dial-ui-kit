@@ -18,6 +18,8 @@ export interface DialIconProps {
  * @param [icon] - The icon element to render
  * @param [className] - Additional CSS classes to apply to the icon wrapper
  */
+
+// TODO: really need?
 export const DialIcon: FC<DialIconProps> = ({ icon, className }) => {
   if (!icon) {
     return null;
