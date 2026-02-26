@@ -208,6 +208,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         min={min}
         disabled={disabled}
         max={max}
+        disabled={disabled}
         {...props}
       />
 
