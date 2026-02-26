@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { CaptionType } from '@/types/caption';
 import { DialCaptionText } from './CaptionText';
-import { Caption } from '../Label/Label.stories';
-import { CaptionType } from '../../types/caption';
 
 const meta = {
   title: 'DIAL/Elements/CaptionText',

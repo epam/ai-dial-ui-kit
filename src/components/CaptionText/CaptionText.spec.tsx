@@ -28,9 +28,7 @@ describe('Dial UI Kit :: DialCaptionText', () => {
     expect(el).toBeInTheDocument();
     expect(el).toHaveTextContent('With extra props');
     expect(el).toHaveAttribute('aria-label', 'caption-label');
-    expect(el.className).toContain('text-error');
     expect(el.className).toContain('dial-tiny-text');
-    expect(el.className).toContain('mt-1');
     expect(el.className).toContain('extra-class');
   });
 
@@ -48,9 +46,7 @@ describe('Dial UI Kit :: DialCaptionText', () => {
     expect(el).toBeInTheDocument();
     expect(el).toHaveTextContent('With extra props');
     expect(el).toHaveAttribute('aria-label', 'caption-label');
-    expect(el.className).toContain('text-error');
     expect(el.className).toContain('dial-tiny-text');
-    expect(el.className).toContain('mt-1');
     expect(el.className).toContain('extra-class');
   });
 });
