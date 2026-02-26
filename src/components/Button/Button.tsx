@@ -7,9 +7,10 @@ import type {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from './utils';
 import { mergeClasses } from '@/utils/merge-classes';
+import { ElementSize } from '@/types/size';
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -17,7 +18,7 @@ export interface DialButtonProps
     HTMLButtonElement
   > {
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: ElementSize;
   appearance?: ButtonAppearance;
   textClassName?: string;
   label?: ReactNode;
@@ -53,7 +54,7 @@ export interface DialButtonProps
  * @param [label] - The content of the button. Can be any React node.
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
- * @param [size=ButtonSize.Standard] - Defines the size of the button
+ * @param [size=ElementSize.Standard] - Defines the size of the button
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
@@ -63,7 +64,7 @@ export const DialButton: FC<DialButtonProps> = ({
   label,
   variant,
   appearance = ButtonAppearance.Solid,
-  size = ButtonSize.Standard,
+  size = ElementSize.Standard,
   className,
   textClassName,
   iconAfter,
@@ -79,9 +80,9 @@ export const DialButton: FC<DialButtonProps> = ({
 
   const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
-    size === ButtonSize.Small ? 'dial-tiny-semi-text' : 'dial-small-semi-text',
+    size === ElementSize.Small ? 'dial-tiny-semi-text' : 'dial-small-semi-text',
     appearance !== ButtonAppearance.Link &&
-      (size === ButtonSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3'),
+      (size === ElementSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3'),
     'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );

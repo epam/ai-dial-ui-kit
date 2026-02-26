@@ -101,7 +101,7 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 
 // Types
 export { AlertVariant } from './types/alert';
-export { ButtonVariant, ButtonAppearance, ButtonSize } from './types/button';
+export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';

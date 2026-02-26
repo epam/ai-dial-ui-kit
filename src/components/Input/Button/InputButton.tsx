@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { DialIconButton } from '@/components/IconButton/IconButton';
 import { ElementSize } from '@/types/size';
 import { inputButtonClassName } from './constants';
-import { ButtonSize } from '@/types/button';
 
 export interface DialInputButtonProps {
   icon: ReactNode;
@@ -50,9 +49,7 @@ export const DialInputButton: FC<DialInputButtonProps> = ({
         icon={icon}
         onClick={onClick}
         disabled={disabled}
-        size={
-          size === ElementSize.Standard ? ButtonSize.Standard : ButtonSize.Small
-        }
+        size={size}
       />
     </div>
   );
