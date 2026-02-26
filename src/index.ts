@@ -110,7 +110,7 @@ export {
   DropdownTrigger,
   DropdownItemType,
 } from './types/dropdown';
-export { SearchSize } from './types/search';
+export { ElementSize } from './types/size';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
