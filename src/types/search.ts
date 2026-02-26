@@ -1,4 +1,4 @@
 export enum SearchSize {
-  Small = 'small',
-  Base = 'base',
+  Small = 'Small',
+  Standard = 'Standard',
 }

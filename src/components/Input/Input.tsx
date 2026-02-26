@@ -35,7 +35,6 @@ export interface DialInputProps
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-  inputButtonIcon?: ReactNode;
 
   prefix?: string;
   postfix?: string;
@@ -109,7 +108,6 @@ const InputWrapper: FC<InputWrapperProps> = ({
   iconBefore,
   iconAfter,
   wrapperClassName,
-  inputButtonIcon,
   type,
   inputRef,
   value,
@@ -216,8 +214,6 @@ const InputWrapper: FC<InputWrapperProps> = ({
       {postfix && <p className="text-secondary dial-small-text"> {postfix}</p>}
 
       <DialIcon icon={iconAfter} />
-
-      {inputButtonIcon && <div className="">{inputButtonIcon}</div>}
 
       {inputButtonProps && (
         <DialInputButton {...inputButtonProps} disabled={disabled} />

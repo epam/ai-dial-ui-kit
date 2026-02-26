@@ -1,7 +1,7 @@
+import { SearchSize } from '@/types/search';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type FC } from 'react';
 import { DialSearch, type DialSearchProps } from './Search';
-import { SearchSize } from '@/types/search';
 
 const InteractiveSearch = (args: DialSearchProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -9,13 +9,13 @@ const InteractiveSearch = (args: DialSearchProps) => {
     <DialSearch
       {...args}
       value={value}
-      onChange={(newValue) => setValue(newValue)}
+      onChange={(newValue) => setValue(newValue || '')}
     />
   );
 };
 
 const meta: Meta<typeof DialSearch> = {
-  title: 'Components/Search',
+  title: 'DIAL/Elements/Search',
   component: DialSearch,
   tags: ['search'],
   parameters: {
@@ -28,7 +28,7 @@ const meta: Meta<typeof DialSearch> = {
     },
   },
   argTypes: {
-    elementId: {
+    id: {
       control: { type: 'text' },
       description: 'Unique identifier for the input element',
     },
@@ -52,26 +52,15 @@ const meta: Meta<typeof DialSearch> = {
       control: 'boolean',
       description: 'Whether the search is disabled',
     },
-    readonly: {
-      control: 'boolean',
-      description: 'Whether the search is read-only',
-    },
     invalid: {
       control: 'boolean',
       description: 'Whether the search should be styled as invalid',
     },
-    allowClear: {
-      control: 'boolean',
-      description: 'Whether to show a clear button when there is a value',
-      table: {
-        defaultValue: { summary: 'true' },
-      },
-    },
-    onChange: {
-      action: 'changed',
-      control: false,
-      description: 'Callback called when the input value changes',
-    },
+    // onChange: {
+    //   action: 'changed',
+    //   control: false,
+    //   description: 'Callback called when the input value changes',
+    // },
     onBlur: {
       action: 'blurred',
       control: false,
@@ -86,17 +75,17 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: InteractiveSearch,
   args: {
-    elementId: 'search',
+    id: 'search',
     placeholder: 'Search',
     value: '',
-    size: SearchSize.Base,
+    size: SearchSize.Standard,
   },
 };
 
 export const Small: Story = {
   render: InteractiveSearch,
   args: {
-    elementId: 'search-small',
+    id: 'search-small',
     placeholder: 'Search small',
     value: '',
     size: SearchSize.Small,
@@ -106,70 +95,48 @@ export const Small: Story = {
 export const Filled: Story = {
   render: InteractiveSearch,
   args: {
-    elementId: 'search-filled',
+    id: 'search-filled',
     placeholder: 'Search',
     value: 'What is it?',
-    size: SearchSize.Base,
+    size: SearchSize.Standard,
   },
 };
 
 export const Disabled: Story = {
   render: InteractiveSearch,
   args: {
-    elementId: 'search-disabled',
+    id: 'search-disabled',
     placeholder: 'Search',
     value: '',
-    size: SearchSize.Base,
+    size: SearchSize.Standard,
     disabled: true,
-  },
-};
-
-export const ReadOnly: Story = {
-  render: InteractiveSearch,
-  args: {
-    elementId: 'search-readonly',
-    placeholder: 'Search',
-    value: 'Read-only value',
-    size: SearchSize.Base,
-    readonly: true,
   },
 };
 
 export const Invalid: Story = {
   render: InteractiveSearch,
   args: {
-    elementId: 'search-invalid',
+    id: 'search-invalid',
     placeholder: 'Search',
     value: 'Invalid input',
-    size: SearchSize.Base,
+    size: SearchSize.Standard,
     invalid: true,
   },
 };
 
-export const WithoutClearButton: Story = {
-  render: InteractiveSearch,
-  args: {
-    elementId: 'search-no-clear',
-    placeholder: 'Search',
-    value: 'Cannot clear me',
-    size: SearchSize.Base,
-    allowClear: false,
-  },
-};
-
-const WithBlurHandlerComponent: FC = () => {
+const BlurHandlerComponent: FC = () => {
   const [value, setValue] = useState('');
   const [blurCount, setBlurCount] = useState(0);
 
   return (
     <div className="flex flex-col gap-4 min-w-[400px]">
       <DialSearch
-        elementId="search-with-blur"
+        id="search-with-blur"
         placeholder="Type and click outside"
         value={value}
-        onChange={setValue}
+        onChange={(newValue) => setValue(newValue || '')}
         onBlur={() => setBlurCount((prev) => prev + 1)}
-        size={SearchSize.Base}
+        size={SearchSize.Standard}
       />
       <div className="dial-small text-secondary">
         Blur event triggered: <strong>{blurCount} times</strong>
@@ -179,21 +146,23 @@ const WithBlurHandlerComponent: FC = () => {
 };
 
 export const WithBlurHandler: Story = {
-  render: () => <WithBlurHandlerComponent />,
+  render: () => <BlurHandlerComponent />,
 };
 
 const AllVariantsComponent: FC = () => {
-  const sizes = [SearchSize.Small, SearchSize.Base] as const;
+  const sizes = [SearchSize.Standard, SearchSize.Small] as const;
   const states = [
     { label: 'Default', props: {} },
     { label: 'Filled', props: { value: 'Hello world' } },
     { label: 'Disabled', props: { disabled: true } },
-    { label: 'Read-only', props: { readonly: true, value: 'Read-only' } },
-    { label: 'Invalid', props: { invalid: true, value: 'Invalid' } },
+    {
+      label: 'Disabled Filled',
+      props: { disabled: true, value: 'Hello world' },
+    },
   ];
 
   return (
-    <div className="min-w-[600px] flex flex-col gap-8">
+    <div className="min-w-[600px] flex flex-row gap-8">
       {sizes.map((size) => (
         <div key={size}>
           <div className="text-primary font-semibold mb-4 capitalize">
@@ -204,7 +173,7 @@ const AllVariantsComponent: FC = () => {
               <div key={label}>
                 <div className="dial-small text-secondary mb-1">{label}</div>
                 <InteractiveSearch
-                  elementId={`search-${size}-${label.toLowerCase()}`}
+                  id={`search-${size}-${label.toLowerCase()}`}
                   placeholder={`Search ${label.toLowerCase()}`}
                   size={size}
                   {...props}
