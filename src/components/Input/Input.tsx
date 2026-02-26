@@ -24,7 +24,7 @@ export interface DialInputProps
   labelProps?: DialLabelProps;
 
   invalid?: boolean;
-  errorText?: string;
+  error?: string;
   caption?: string;
 
   iconBefore?: ReactNode;
@@ -63,13 +63,13 @@ export interface DialInputProps
  * @param [containerClassName] - Additional CSS classes to apply to the container div
  * @param [className] - Additional CSS classes to apply to the input element
  * @param [inputRef] - Ref to access the underlying input element
- * @param [errorText] - Error message to display below the input (also adds error styling)
+ * @param [error] - Error message to display below the input (also adds error styling)
  * @param [caption] - Helper text to display below the input
  * @param [onChange] - Callback function called when the input value changes
  */
 export const DialInput: FC<DialInputProps> = ({
   labelProps,
-  errorText,
+  error,
   caption,
   id,
   containerClassName,
@@ -80,8 +80,8 @@ export const DialInput: FC<DialInputProps> = ({
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
-      <DialErrorText text={errorText} />
-      <DialCaptionText text={caption} />
+      <DialErrorText text={error} />
+      {!error && <DialCaptionText text={caption} />}
     </div>
   );
 };

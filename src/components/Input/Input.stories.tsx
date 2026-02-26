@@ -134,7 +134,7 @@ export const MaxView: Story = {
               id="error-input"
               invalid={true}
               value="Text"
-              errorText="Error message"
+              error="Error message"
               {...props}
             />
           </div>
@@ -236,7 +236,7 @@ export const AllVariants: Story = {
               placeholder="Placeholder"
               invalid={true}
               value="Text"
-              errorText="Error message"
+              error="Error message"
               iconBefore={<IconSearch size={16} />}
               iconAfter={<IconEye size={16} />}
             />

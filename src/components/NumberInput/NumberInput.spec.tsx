@@ -47,7 +47,7 @@ describe('Dial UI Kit :: DialNumberInput', () => {
       <DialNumberInput
         id="test-number"
         labelProps={{ label: 'Test Number Field' }}
-        errorText="This field is required"
+        error="This field is required"
       />,
     );
 

@@ -1,4 +1,7 @@
-export { DialErrorText } from './components/ErrorText/ErrorText';
+export {
+  DialCaptionText,
+  DialErrorText,
+} from './components/CaptionText/CaptionText.tsx';
 export { DialLabel } from './components/Label/Label.tsx';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';

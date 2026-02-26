@@ -99,7 +99,7 @@ export const Invalid: Story = {
     placeholder: 'Enter valid text...',
     value: 'This text has validation errors',
     invalid: true,
-    errorText: 'This field is required and must be valid.',
+    error: 'This field is required and must be valid.',
   },
 };
 
@@ -188,7 +188,7 @@ export const AllVariants: Story = {
                 {...props}
                 invalid={true}
                 value="Text"
-                errorText="Error message"
+                error="Error message"
               />
             </div>
 

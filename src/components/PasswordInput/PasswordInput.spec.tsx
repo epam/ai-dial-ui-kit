@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialPasswordInput', () => {
         labelProps={{ label: 'Password' }}
         id="pw"
         required
-        errorText="Error!"
+        error="Error!"
       />,
     );
     expect(screen.getByText('Error!')).toBeInTheDocument();
