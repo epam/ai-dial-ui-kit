@@ -1,9 +1,10 @@
 import type { FC, ReactNode } from 'react';
+import classNames from 'classnames';
 
 import { DialIconButton } from '@/components/IconButton/IconButton';
 import { ElementSize } from '@/types/size';
-import classNames from 'classnames';
 import { inputButtonClassName } from './constants';
+import { ButtonSize } from '@/types/button';
 
 export interface DialInputButtonProps {
   icon: ReactNode;
@@ -38,14 +39,20 @@ export const DialInputButton: FC<DialInputButtonProps> = ({
         'border-l border-tertiary',
         size === ElementSize.Standard
           ? 'h-[40px] w-[44px]'
-          : 'h-[22px] w-[32px]',
+          : 'h-[24px] w-[32px]',
       )}
     >
       <DialIconButton
-        className={inputButtonClassName}
+        className={classNames(
+          inputButtonClassName,
+          size === ElementSize.Small && 'p-1',
+        )}
         icon={icon}
         onClick={onClick}
         disabled={disabled}
+        size={
+          size === ElementSize.Standard ? ButtonSize.Standard : ButtonSize.Small
+        }
       />
     </div>
   );
