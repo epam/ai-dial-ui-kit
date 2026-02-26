@@ -201,6 +201,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         onKeyDown={onKeyDown}
         min={min}
         max={max}
+        disabled={disabled}
         {...props}
       />
 
