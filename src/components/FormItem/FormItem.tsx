@@ -1,6 +1,6 @@
 import { useCallback, type FC, type ReactNode } from 'react';
 
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 
 import { DialLabel } from '@/components/Label/Label';
 import {
@@ -106,7 +106,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
     if (typeof error === 'string' || typeof error === 'undefined') {
       return error ? (
         <div id={errorId} aria-live="polite" className={errorClassName}>
-          <DialErrorText errorText={error} />
+          <DialErrorText text={error} />
         </div>
       ) : null;
     }

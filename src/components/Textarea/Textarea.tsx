@@ -5,7 +5,10 @@ import {
 } from 'react';
 
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import {
+  DialCaptionText,
+  DialErrorText,
+} from '@/components/CaptionText/CaptionText';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 
 export interface DialTextareaProps
@@ -17,7 +20,8 @@ export interface DialTextareaProps
   invalid?: boolean;
   containerClassName?: string;
   resize?: boolean;
-  errorText?: string;
+  error?: string;
+  caption?: string;
   onChange?: (value: string) => void;
 }
 
@@ -43,16 +47,18 @@ export interface DialTextareaProps
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
  * @param [resize=false] - Whether the textarea has possibility to resize
- * @param [errorText] - Error message to display below the textarea (also adds error styling)
+ * @param [error] - Error message to display below the textarea (also adds error styling)
+ * @param [caption] - Optional caption text to display below the textarea
  */
 export const DialTextarea: FC<DialTextareaProps> = ({
   className = '',
   value,
   onChange,
-  errorText,
+  error,
   containerClassName,
   resize = false,
   labelProps,
+  caption,
   id,
   ...props
 }) => {
@@ -74,7 +80,8 @@ export const DialTextarea: FC<DialTextareaProps> = ({
         onChange={(event) => onChange?.(event.currentTarget.value)}
         {...props}
       />
-      <DialErrorText errorText={errorText} />
+      <DialErrorText text={error} />
+      {!error && <DialCaptionText text={caption} />}
     </div>
   );
 };

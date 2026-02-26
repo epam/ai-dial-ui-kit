@@ -9,7 +9,10 @@ import {
 import classNames from 'classnames';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { DialTag } from '@/components/Tag/Tag';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import {
+  DialCaptionText,
+  DialErrorText,
+} from '@/components/CaptionText/CaptionText';
 
 export interface DialTagInputProps extends DialLabelProps {
   elementId: string;
@@ -100,14 +103,11 @@ export const DialTagInput: FC<DialTagInputProps> = ({
 
   const renderCaption = () => {
     if (errorText) {
-      return <DialErrorText errorText={errorText} />;
+      return <DialErrorText text={errorText} />;
     }
+
     if (captionDescription) {
-      return (
-        <div className="dial-tiny text-secondary mt-1">
-          {captionDescription}
-        </div>
-      );
+      return <DialCaptionText text={captionDescription} />;
     }
     return null;
   };

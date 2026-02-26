@@ -82,7 +82,7 @@ export const Invalid: Story = {
     id: 'password-error',
     labelProps: { label: 'Password' },
     required: true,
-    errorText: 'Password is required',
+    error: 'Password is required',
     invalid: true,
   },
 };
@@ -92,7 +92,7 @@ export const Required: Story = {
     id: 'password-required',
     labelProps: { label: 'Password' },
     value: '',
-    errorText: '',
+    error: '',
     required: true,
   },
 };
@@ -119,7 +119,7 @@ export const AllVariants: Story = {
             labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
             invalid={true}
-            errorText="Password is required"
+            error="Password is required"
           />
         </div>
 

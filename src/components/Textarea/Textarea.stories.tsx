@@ -99,7 +99,7 @@ export const Invalid: Story = {
     placeholder: 'Enter valid text...',
     value: 'This text has validation errors',
     invalid: true,
-    errorText: 'This field is required and must be valid.',
+    error: 'This field is required and must be valid.',
   },
 };
 
@@ -119,6 +119,8 @@ export const AllVariants: Story = {
       labelProps: { label: 'Label', required: true },
       id: 'interactive-textarea',
       placeholder: 'Enter your text here...',
+      caption:
+        'This is a caption text providing additional information about the textarea.',
     };
     return (
       <div className="flex flex-col h-full w-full items-center">
@@ -186,7 +188,7 @@ export const AllVariants: Story = {
                 {...props}
                 invalid={true}
                 value="Text"
-                errorText="Error message"
+                error="Error message"
               />
             </div>
 

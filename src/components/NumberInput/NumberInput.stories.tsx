@@ -44,7 +44,7 @@ const meta = {
     value: undefined,
     disabled: false,
     invalid: false,
-    errorText: undefined,
+    error: undefined,
     min: undefined,
     max: undefined,
   },
@@ -78,7 +78,7 @@ export const Invalid: Story = {
     placeholder: 'Enter budget amount',
     value: -100,
     invalid: true,
-    errorText: 'Budget must be a positive number',
+    error: 'Budget must be a positive number',
   },
 };
 

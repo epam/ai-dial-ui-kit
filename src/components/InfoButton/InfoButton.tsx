@@ -37,7 +37,10 @@ export const DialInfoButton: FC<DialInfoButtonProps> = ({
     />
   );
   return caption ? (
-    <DialTooltip tooltip={caption} triggerClassName="flex">
+    <DialTooltip
+      tooltip={caption}
+      triggerClassName="flex justify-center items-center"
+    >
       {button}
     </DialTooltip>
   ) : (
