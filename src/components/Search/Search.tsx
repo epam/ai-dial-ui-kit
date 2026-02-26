@@ -1,7 +1,7 @@
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
 
-import { SearchSize } from '@/types/search';
+import { ElementSize } from '@/types/size';
 import { DialInput, type DialInputProps } from '../Input/Input';
 import { SIZE_CONFIG } from './constants';
 
@@ -16,8 +16,10 @@ export interface DialSearchProps
     | 'iconAfter'
     | 'prefix'
     | 'postfix'
+    | 'onChange'
   > {
-  size?: SearchSize;
+  size?: ElementSize;
+  onChange?: (value: string) => void;
 }
 
 /**
@@ -27,10 +29,10 @@ export interface DialSearchProps
  * @example
  * ```tsx
  * <DialSearch
- *   elementId="search"
+ *   id="search"
  *   value={query}
  *   placeholder="Search"
- *   size={SearchSize.Small}
+ *   size={ElementSize.Small}
  *   onChange={(value) => setQuery(value)}
  *   onBlur={() => handleBlur()}
  *   disabled={false}
@@ -40,10 +42,10 @@ export interface DialSearchProps
  * Extends the `DialInput` component, inheriting all of its props except for those that are overridden
  * (like `iconBefore`, `iconAfter`, and `inputButtonProps` which are managed internally). The `size`
  * prop allows you to choose between predefined size configurations that adjust the input's appearance
- * @param [size=SearchSize.Base] - The size of the search input. Uses the {@link SearchSize} enum.
+ * @param [size=ElementSize.Standard] - The size of the search input. Uses the {@link ElementSize} enum.
  */
 export const DialSearch: FC<DialSearchProps> = ({
-  size = SearchSize.Standard,
+  size = ElementSize.Standard,
   placeholder = 'Search...',
   value,
   onChange,
@@ -58,7 +60,7 @@ export const DialSearch: FC<DialSearchProps> = ({
   const onQueryChange = useCallback(
     (newValue?: string) => {
       setQuery(newValue || '');
-      onChange?.(newValue);
+      onChange?.(newValue || '');
     },
     [onChange],
   );
@@ -81,8 +83,9 @@ export const DialSearch: FC<DialSearchProps> = ({
         />
       ),
       onClick: onClickClear,
+      size,
     };
-  }, [onClickClear, query, sizeConfig.iconSize]);
+  }, [onClickClear, query, size, sizeConfig.iconSize]);
 
   return (
     <DialInput
@@ -95,6 +98,7 @@ export const DialSearch: FC<DialSearchProps> = ({
       inputButtonProps={inputButtonProps}
       containerClassName={sizeConfig.containerClassName}
       className={sizeConfig.className}
+      wrapperClassName={sizeConfig.wrapperClassName}
       {...props}
     />
   );

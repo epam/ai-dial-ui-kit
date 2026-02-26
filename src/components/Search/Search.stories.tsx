@@ -1,4 +1,4 @@
-import { SearchSize } from '@/types/search';
+import { ElementSize } from '@/types/size';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type FC } from 'react';
 import { DialSearch, type DialSearchProps } from './Search';
@@ -78,7 +78,7 @@ export const Default: Story = {
     id: 'search',
     placeholder: 'Search',
     value: '',
-    size: SearchSize.Standard,
+    size: ElementSize.Standard,
   },
 };
 
@@ -88,7 +88,7 @@ export const Small: Story = {
     id: 'search-small',
     placeholder: 'Search small',
     value: '',
-    size: SearchSize.Small,
+    size: ElementSize.Small,
   },
 };
 
@@ -98,7 +98,7 @@ export const Filled: Story = {
     id: 'search-filled',
     placeholder: 'Search',
     value: 'What is it?',
-    size: SearchSize.Standard,
+    size: ElementSize.Standard,
   },
 };
 
@@ -108,7 +108,7 @@ export const Disabled: Story = {
     id: 'search-disabled',
     placeholder: 'Search',
     value: '',
-    size: SearchSize.Standard,
+    size: ElementSize.Standard,
     disabled: true,
   },
 };
@@ -119,7 +119,7 @@ export const Invalid: Story = {
     id: 'search-invalid',
     placeholder: 'Search',
     value: 'Invalid input',
-    size: SearchSize.Standard,
+    size: ElementSize.Standard,
     invalid: true,
   },
 };
@@ -136,7 +136,7 @@ const BlurHandlerComponent: FC = () => {
         value={value}
         onChange={(newValue) => setValue(newValue || '')}
         onBlur={() => setBlurCount((prev) => prev + 1)}
-        size={SearchSize.Standard}
+        size={ElementSize.Standard}
       />
       <div className="dial-small text-secondary">
         Blur event triggered: <strong>{blurCount} times</strong>
@@ -150,7 +150,7 @@ export const WithBlurHandler: Story = {
 };
 
 const AllVariantsComponent: FC = () => {
-  const sizes = [SearchSize.Standard, SearchSize.Small] as const;
+  const sizes = [ElementSize.Standard, ElementSize.Small] as const;
   const states = [
     { label: 'Default', props: {} },
     { label: 'Filled', props: { value: 'Hello world' } },

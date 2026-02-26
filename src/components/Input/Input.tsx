@@ -44,6 +44,7 @@ export interface DialInputProps
   onChange?: (value?: string) => void;
 
   containerClassName?: string;
+  wrapperClassName?: string;
 }
 
 /**
@@ -66,6 +67,7 @@ export interface DialInputProps
  * @param [textBeforeInput] - Text to display before the input
  * @param [suffix] - Text to display inside the input on the right
  * @param [containerClassName] - Additional CSS classes to apply to the container div
+ * @param [wrapperClassName] - Additional CSS classes to apply to the input wrapper div
  * @param [className] - Additional CSS classes to apply to the input element
  * @param [inputRef] - Ref to access the underlying input element
  * @param [error] - Error message to display below the input (also adds error styling)
@@ -91,13 +93,10 @@ export const DialInput: FC<DialInputProps> = ({
   );
 };
 
-interface InputWrapperProps
-  extends Omit<
-    DialInputProps,
-    'labelProps' | 'containerClassName' | 'errorText'
-  > {
-  wrapperClassName?: string;
-}
+type InputWrapperProps = Omit<
+  DialInputProps,
+  'labelProps' | 'containerClassName' | 'errorText'
+>;
 
 const InputWrapper: FC<InputWrapperProps> = ({
   invalid,
@@ -208,7 +207,6 @@ const InputWrapper: FC<InputWrapperProps> = ({
         min={min}
         disabled={disabled}
         max={max}
-        disabled={disabled}
         {...props}
       />
 
