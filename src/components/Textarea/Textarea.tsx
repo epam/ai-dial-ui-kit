@@ -38,7 +38,7 @@ export interface DialTextareaProps
  * - {@link HTMLTextAreaElement} - The underlying HTML textarea element type
  *
  * @param [onChange] - Callback function called when the textarea value changes
- * @param [labelProps] - Props for the field label, including `fieldLabel` (label text) and `required` (whether to show required indicator)
+ * @param [labelProps] - Props for the field label, including `label` (label text) and `required` (whether to show required indicator)
  * @param [className=""] - Additional CSS classes to apply to the textarea element
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
@@ -65,7 +65,7 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   );
 
   return (
-    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-2', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
       <textarea
         id={id}

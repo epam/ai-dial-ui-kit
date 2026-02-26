@@ -126,7 +126,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   }, [onApply, onClosePopup]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-2">
       <DialLabel label={label} htmlFor={htmlFor} />
       <DialInputPopup
         disabled={disabled}
