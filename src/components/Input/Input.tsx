@@ -12,7 +12,10 @@ import {
 import { useMergeRefs } from '@floating-ui/react';
 
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import {
+  DialCaptionText,
+  DialErrorText,
+} from '@/components/CaptionText/CaptionText';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { handleKeyDown } from './utils';
 
@@ -22,6 +25,7 @@ export interface DialInputProps
 
   invalid?: boolean;
   errorText?: string;
+  caption?: string;
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
@@ -60,11 +64,13 @@ export interface DialInputProps
  * @param [className] - Additional CSS classes to apply to the input element
  * @param [inputRef] - Ref to access the underlying input element
  * @param [errorText] - Error message to display below the input (also adds error styling)
+ * @param [caption] - Helper text to display below the input
  * @param [onChange] - Callback function called when the input value changes
  */
 export const DialInput: FC<DialInputProps> = ({
   labelProps,
   errorText,
+  caption,
   id,
   containerClassName,
   ...props
@@ -74,7 +80,8 @@ export const DialInput: FC<DialInputProps> = ({
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
-      <DialErrorText errorText={errorText} />
+      <DialErrorText text={errorText} />
+      <DialCaptionText text={caption} />
     </div>
   );
 };

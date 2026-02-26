@@ -119,6 +119,8 @@ export const AllVariants: Story = {
       labelProps: { label: 'Label', required: true },
       id: 'interactive-textarea',
       placeholder: 'Enter your text here...',
+      caption:
+        'This is a caption text providing additional information about the textarea.',
     };
     return (
       <div className="flex flex-col h-full w-full items-center">

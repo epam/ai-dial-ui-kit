@@ -1,4 +1,4 @@
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { ButtonAppearance } from '@/types/button';
 import classNames from 'classnames';
 import {
@@ -133,11 +133,13 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
 
   const errorText = useMemo(() => {
     if (isErrorFileFormat) {
-      return <DialErrorText errorText={fileFormatError} />;
-    } else if (isErrorFileSize) {
-      return <DialErrorText errorText={fileSizeError} />;
-    } else if (getIsFileCountError(files)) {
-      return <DialErrorText errorText={fileCountError} />;
+      return <DialErrorText text={fileFormatError} />;
+    }
+    if (isErrorFileSize) {
+      return <DialErrorText text={fileSizeError} />;
+    }
+    if (getIsFileCountError(files)) {
+      return <DialErrorText text={fileCountError} />;
     }
     return null;
   }, [
