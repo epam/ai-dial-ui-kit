@@ -10,7 +10,7 @@ import {
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
 import { DialIconButton } from '@/components/IconButton/IconButton';
-import { ButtonSize } from '@/types/button';
+import { ElementSize } from '@/types/size';
 
 export interface DialCollapsibleSidebarProps {
   children: ReactNode;
@@ -132,7 +132,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
           className="hover:text-accent-primary"
           onClick={changeVisibility}
           aria-label="sidebar-state"
-          size={ButtonSize.Small}
+          size={ElementSize.Small}
           icon={
             opened ? (
               <IconChevronsLeft size={iconSize} stroke={iconStroke} />

@@ -16,8 +16,3 @@ export enum ButtonAppearance {
   Ghost = 'ghost',
   Link = 'link', // button specific
 }
-
-export enum ButtonSize {
-  Standard = 'standard',
-  Small = 'small',
-}

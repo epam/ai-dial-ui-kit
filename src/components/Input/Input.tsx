@@ -18,10 +18,16 @@ import {
 } from '@/components/CaptionText/CaptionText';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { handleKeyDown } from './utils';
+import { DialIcon } from '@/components/Icon/Icon';
+import {
+  DialInputButton,
+  type DialInputButtonProps,
+} from './Button/InputButton';
 
 export interface DialInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   labelProps?: DialLabelProps;
+  inputButtonProps?: DialInputButtonProps;
 
   invalid?: boolean;
   error?: string;
@@ -29,7 +35,6 @@ export interface DialInputProps
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
-  inputButtonIcon?: ReactNode;
 
   prefix?: string;
   postfix?: string;
@@ -39,6 +44,7 @@ export interface DialInputProps
   onChange?: (value?: string) => void;
 
   containerClassName?: string;
+  wrapperClassName?: string;
 }
 
 /**
@@ -61,6 +67,7 @@ export interface DialInputProps
  * @param [textBeforeInput] - Text to display before the input
  * @param [suffix] - Text to display inside the input on the right
  * @param [containerClassName] - Additional CSS classes to apply to the container div
+ * @param [wrapperClassName] - Additional CSS classes to apply to the input wrapper div
  * @param [className] - Additional CSS classes to apply to the input element
  * @param [inputRef] - Ref to access the underlying input element
  * @param [error] - Error message to display below the input (also adds error styling)
@@ -86,13 +93,10 @@ export const DialInput: FC<DialInputProps> = ({
   );
 };
 
-interface InputWrapperProps
-  extends Omit<
-    DialInputProps,
-    'labelProps' | 'containerClassName' | 'errorText'
-  > {
-  wrapperClassName?: string;
-}
+type InputWrapperProps = Omit<
+  DialInputProps,
+  'labelProps' | 'containerClassName' | 'errorText'
+>;
 
 const InputWrapper: FC<InputWrapperProps> = ({
   invalid,
@@ -103,13 +107,13 @@ const InputWrapper: FC<InputWrapperProps> = ({
   iconBefore,
   iconAfter,
   wrapperClassName,
-  inputButtonIcon,
   type,
   inputRef,
   value,
   min,
   onChange,
   max,
+  inputButtonProps,
   ...props
 }) => {
   const innerRef = useRef<HTMLInputElement | null>(null);
@@ -166,10 +170,11 @@ const InputWrapper: FC<InputWrapperProps> = ({
   return (
     <div
       className={mergeClasses(
-        'dial-input flex flex-row items-center gap-x-2 justify-between py-2 pr-2',
+        'dial-input flex flex-row items-center gap-x-2 justify-between py-2',
         invalid && 'dial-input-error',
         disabled && 'dial-input-disable',
         !prefix && 'pl-3',
+        !inputButtonProps && 'pr-3',
         wrapperClassName,
       )}
       aria-label="input-container"
@@ -186,7 +191,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         </div>
       )}
 
-      {iconBefore}
+      <DialIcon icon={iconBefore} />
 
       <input
         ref={ref}
@@ -200,16 +205,18 @@ const InputWrapper: FC<InputWrapperProps> = ({
         onChange={handleChange}
         onKeyDown={onKeyDown}
         min={min}
-        max={max}
         disabled={disabled}
+        max={max}
         {...props}
       />
 
       {postfix && <p className="text-secondary dial-small-text"> {postfix}</p>}
 
-      {iconAfter}
+      <DialIcon icon={iconAfter} />
 
-      {inputButtonIcon && <div className="">{inputButtonIcon}</div>}
+      {inputButtonProps && (
+        <DialInputButton {...inputButtonProps} disabled={disabled} />
+      )}
     </div>
   );
 };
