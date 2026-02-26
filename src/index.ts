@@ -1,8 +1,8 @@
 export {
   DialCaptionText,
   DialErrorText,
-} from './components/CaptionText/CaptionText.tsx';
-export { DialLabel } from './components/Label/Label.tsx';
+} from './components/CaptionText/CaptionText';
+export { DialLabel } from './components/Label/Label';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
@@ -76,6 +76,7 @@ export { DialFormPopup } from './components/FormPopup/FormPopup';
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
 // Inputs
 export { DialInput } from './components/Input/Input';
+export type { DialInputButtonProps } from './components/Input/Button/InputButton';
 export type { DialInputProps } from './components/Input/Input';
 export { DialNumberInput } from './components/NumberInput/NumberInput';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';

@@ -62,7 +62,7 @@ export const Filled: Story = {
 export const IconBefore: Story = {
   args: {
     placeholder: 'Search...',
-    iconBefore: <IconSearch size={16} />,
+    iconBefore: <IconSearch size={20} />,
   },
 };
 
@@ -70,15 +70,15 @@ export const IconAfter: Story = {
   args: {
     placeholder: 'Password',
     type: 'password',
-    iconAfter: <IconEye size={16} />,
+    iconAfter: <IconEye size={20} />,
   },
 };
 
 export const BothIcons: Story = {
   args: {
     placeholder: 'Search...',
-    iconBefore: <IconSearch size={16} />,
-    iconAfter: <IconEye size={16} />,
+    iconBefore: <IconSearch size={20} />,
+    iconAfter: <IconEye size={20} />,
   },
 };
 
@@ -101,10 +101,15 @@ export const MaxView: Story = {
   render: () => {
     const props: DialInputProps = {
       placeholder: 'Placeholder',
-      iconBefore: <IconSearch size={16} />,
-      postfix: 'suf',
-      prefix: 'before',
-      iconAfter: <IconEye size={16} />,
+      iconBefore: <IconSearch size={20} />,
+      postfix: 'postfix',
+      prefix: 'prefix',
+      caption: 'Caption text',
+      iconAfter: <IconEye size={20} />,
+      inputButtonProps: {
+        icon: <IconSearch size={20} />,
+        onClick: () => alert('Input button clicked'),
+      },
     };
 
     return (
@@ -183,8 +188,8 @@ export const AllVariants: Story = {
             <InteractiveInput
               id="default-input"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -196,8 +201,8 @@ export const AllVariants: Story = {
               id="field-input"
               placeholder="Placeholder"
               value="Text"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -209,8 +214,8 @@ export const AllVariants: Story = {
               id="hover-input"
               containerClassName="dial-input-for-hover"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -222,8 +227,8 @@ export const AllVariants: Story = {
               id="focus-input"
               containerClassName="dial-input-for-focus"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -237,8 +242,8 @@ export const AllVariants: Story = {
               invalid={true}
               value="Text"
               error="Error message"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -251,8 +256,8 @@ export const AllVariants: Story = {
               placeholder="Placeholder"
               disabled={true}
               value="Text"
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
 
@@ -264,8 +269,8 @@ export const AllVariants: Story = {
               id="disable-input"
               placeholder="Placeholder"
               disabled={true}
-              iconBefore={<IconSearch size={16} />}
-              iconAfter={<IconEye size={16} />}
+              iconBefore={<IconSearch size={20} />}
+              iconAfter={<IconEye size={20} />}
             />
           </div>
         </div>

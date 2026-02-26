@@ -68,7 +68,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
   const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
     size === ButtonSize.Small ? 'h-[24px] w-[24px]' : 'h-[40px] w-[40px]',
-    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
+    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0 disabled:text-controls-secondary-disable',
     className,
   );
 
