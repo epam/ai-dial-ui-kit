@@ -63,7 +63,6 @@ export default defineConfig([
       ],
 
       '@typescript-eslint/no-explicit-any': 'warn',
-      'react-refresh/only-export-components': 'error',
       'prettier/prettier': 'error',
       'no-empty': 'error',
       'no-console': [
