@@ -1,10 +1,12 @@
-import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
+import {
+  DialNeutralButton,
+  DialPrimaryButton,
+} from '@/components/Button/ButtonWrappers';
 import { DialLabel } from '@/components/Label/Label';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconTrashX } from '@tabler/icons-react';
 import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
-import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
@@ -134,8 +136,9 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
         />
         {multiple && !!files?.length && (
           <div className="flex flex-row items-center gap-x-2">
-            <DialRemoveButton
+            <DialNeutralButton
               label={deleteAllButtonLabel}
+              iconBefore={<IconTrashX {...BASE_ICON_PROPS} />}
               onClick={onRemoveFiles}
             />
 
