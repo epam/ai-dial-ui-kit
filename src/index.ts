@@ -37,6 +37,7 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 // Buttons
 export { DialButton } from './components/Button/Button';
 export { DialIconButton } from './components/IconButton/IconButton';
+export type { DialIconButtonProps } from './components/IconButton/IconButton';
 export {
   DialErrorButton,
   DialNeutralButton,
