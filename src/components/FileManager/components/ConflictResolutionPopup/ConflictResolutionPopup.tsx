@@ -1,10 +1,10 @@
 import { DialPopup } from '@/components/Popup/Popup';
 import { PopupSize } from '@/types/popup';
 import {
-  DialPrimaryButton,
   DialNeutralButton,
+  DialPrimaryButton,
 } from '@/components/Button/ButtonWrappers';
-import { type FC, useState, useMemo, useCallback } from 'react';
+import { type FC, useCallback, useMemo, useState } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import { DialRadioGroup } from '@/components/RadioGroup/RadioGroup';
@@ -210,8 +210,12 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
         id: DialFileManagerConflictActions.Duplicate,
         name: duplicateLabel,
       },
+      {
+        id: DialFileManagerConflictActions.Cancel,
+        name: cancelActionLabel,
+      },
     ],
-    [replaceLabel, duplicateLabel],
+    [replaceLabel, duplicateLabel, cancelActionLabel],
   );
 
   const gridRows = useMemo<ConflictGridRow[]>(() => {
@@ -387,8 +391,18 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
     if (isSingleFile) {
       if (singleFileMode === DialFileManagerConflictActions.Replace) {
         onReplace();
-      } else {
+      } else if (singleFileMode === DialFileManagerConflictActions.Duplicate) {
         onDuplicate();
+      } else if (
+        singleFileMode === DialFileManagerConflictActions.Cancel &&
+        onDecideForEach
+      ) {
+        onDecideForEach([
+          {
+            file: conflictingFiles[0],
+            action: DialFileManagerConflictActions.Cancel,
+          },
+        ]);
       }
     } else {
       if (strategy === DialFileManagerConflictStrategies.ReplaceAll) {
