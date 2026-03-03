@@ -1,4 +1,4 @@
-import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconRefresh } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
@@ -11,6 +11,7 @@ import {
   DialSuccessIconButton,
   DialTertiaryIconButton,
 } from './IconButtonWrappers';
+import { ElementSize } from '../../types/size';
 
 const meta = {
   title: 'Dial/Elements/Buttons/IconButton',
@@ -42,7 +43,7 @@ const meta = {
     },
     size: {
       control: { type: 'select' },
-      options: [ButtonSize.Standard, ButtonSize.Small],
+      options: [ElementSize.Standard, ElementSize.Small],
       description: 'Button size',
     },
     icon: {
@@ -53,7 +54,7 @@ const meta = {
   args: {
     variant: ButtonVariant.Primary,
     appearance: ButtonAppearance.Solid,
-    size: ButtonSize.Standard,
+    size: ElementSize.Standard,
     disabled: false,
     icon: <IconRefresh size={24} stroke={1.5} />,
   },
@@ -131,7 +132,7 @@ export const AllVariants: Story = {
 
     const smallProps: DialIconButtonProps = {
       icon: <IconRefresh size={16} stroke={1.5} />,
-      size: ButtonSize.Small,
+      size: ElementSize.Small,
     };
 
     const blocks: {
@@ -155,7 +156,7 @@ export const AllVariants: Story = {
       },
 
       {
-        title: 'Primary · Ghost', // TODO: AAAA
+        title: 'Primary · Ghost',
         render: (p) => (
           <DialPrimaryIconButton {...p} appearance={ButtonAppearance.Ghost} />
         ),

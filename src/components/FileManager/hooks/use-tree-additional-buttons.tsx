@@ -2,7 +2,7 @@ import { DialIconButton } from '@/components/IconButton/IconButton';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconCopyMinus } from '@tabler/icons-react';
 import { useMemo, type ReactNode } from 'react';
-import { ButtonSize } from '@/types/button';
+import { ElementSize } from '@/types/size';
 
 interface useTreeAdditionalButtonsOptions {
   additionalButtons?: ReactNode;
@@ -42,7 +42,7 @@ export const useTreeAdditionalButtons = ({
         <DialIconButton
           disabled={isCollapseAllDisabled}
           className={buttonClass}
-          size={ButtonSize.Small}
+          size={ElementSize.Small}
           onClick={collapseAll}
           icon={<IconCopyMinus size={24} stroke={1.5} />}
           aria-label="collapse-all"

@@ -5,13 +5,14 @@ import type {
   ReactNode,
 } from 'react';
 
-import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from '@/components/Button/utils';
 import {
   DialTooltip,
   type DialTooltipProps,
 } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { ElementSize } from '@/types/size';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
@@ -21,7 +22,7 @@ export interface DialIconButtonProps
     HTMLButtonElement
   > {
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: ElementSize;
   appearance?: ButtonAppearance;
   icon: ReactNode;
   tooltipProps?: TooltipProps;
@@ -51,14 +52,14 @@ export interface DialIconButtonProps
  *
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
- * @param [size=ButtonSize.Standard] - Defines the size of the button
+ * @param [size=ElementSize.Standard] - Defines the size of the button
  * @param [tooltip] - The content of the icon button tooltip
  * @param icon - Icon display
  */
 export const DialIconButton: FC<DialIconButtonProps> = ({
   variant,
   appearance = ButtonAppearance.Solid,
-  size = ButtonSize.Standard,
+  size = ElementSize.Standard,
   className,
   icon,
   tooltipProps,
@@ -67,8 +68,8 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
 }) => {
   const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
-    size === ButtonSize.Small ? 'h-[24px] w-[24px]' : 'h-[40px] w-[40px]',
-    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
+    size === ElementSize.Small ? 'h-[24px] w-[24px]' : 'h-[40px] w-[40px]',
+    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0 disabled:text-controls-secondary-disable',
     className,
   );
 

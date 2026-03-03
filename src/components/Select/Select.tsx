@@ -181,10 +181,10 @@ export const DialSelect: FC<DialSelectProps> = ({
   );
   const inlineSearchInputRef = useRef<HTMLInputElement>(null);
   const setQuery = useCallback(
-    (next: string) => {
+    (next?: string) => {
       if (next !== query) {
-        setInternalQuery(next);
-        onInlineQueryChange?.(next);
+        setInternalQuery(next || '');
+        onInlineQueryChange?.(next || '');
       }
     },
     [onInlineQueryChange, query],
@@ -443,7 +443,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                   placeholder={searchPlaceholder}
                   onChange={setQuery}
                   value={query}
-                  elementId={`search-${elementId || listId}`}
+                  id={`search-${elementId || listId}`}
                 />
               )}
               {closable && (

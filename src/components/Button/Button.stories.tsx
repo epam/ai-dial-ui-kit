@@ -1,4 +1,4 @@
-import { ButtonAppearance, ButtonSize, ButtonVariant } from '@/types/button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
@@ -10,6 +10,7 @@ import {
   DialNeutralButton,
   DialPrimaryButton,
 } from './ButtonWrappers';
+import { ElementSize } from '@/types/size';
 
 const meta = {
   title: 'DIAL/Elements/Buttons/Button',
@@ -45,7 +46,7 @@ const meta = {
     },
     size: {
       control: { type: 'select' },
-      options: [ButtonSize.Standard, ButtonSize.Small],
+      options: [ElementSize.Standard, ElementSize.Small],
       description: 'Button size',
     },
     textClassName: {
@@ -70,7 +71,7 @@ const meta = {
     label: 'Button',
     variant: ButtonVariant.Primary,
     appearance: ButtonAppearance.Solid,
-    size: ButtonSize.Standard,
+    size: ElementSize.Standard,
     disabled: false,
     hideTitleOnMobile: false,
   },
@@ -207,7 +208,7 @@ export const AllVariants: Story = {
       label: 'Small',
       iconAfter: <IconArrowRight size={16} />,
       iconBefore: <IconArrowLeft size={16} />,
-      size: ButtonSize.Small,
+      size: ElementSize.Small,
     };
 
     const blocks: {
@@ -290,7 +291,7 @@ export const SmallPrimaryButton: Story = {
   args: {
     label: 'Small Primary',
     variant: ButtonVariant.Primary,
-    size: ButtonSize.Small,
+    size: ElementSize.Small,
   },
 };
 
