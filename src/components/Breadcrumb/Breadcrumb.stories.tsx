@@ -4,6 +4,7 @@ import { DialBreadcrumb } from './Breadcrumb';
 import { DialBreadcrumbItem } from './BreadcrumbItem';
 import { IconFolder } from '@tabler/icons-react';
 import { useState } from 'react';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const meta = {
   title: 'Navigation/Breadcrumb',
@@ -183,7 +184,9 @@ export const WithFolderIcons: Story = {
       <DialBreadcrumbItem
         label="Projects"
         href="#"
-        iconBefore={<IconFolder size={16} aria-label="folder" />}
+        iconBefore={
+          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
+        }
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked Projects folder');
@@ -192,7 +195,9 @@ export const WithFolderIcons: Story = {
       <DialBreadcrumbItem
         label="2025"
         href="#"
-        iconBefore={<IconFolder size={16} aria-label="folder" />}
+        iconBefore={
+          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
+        }
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked 2025 folder');
@@ -200,7 +205,9 @@ export const WithFolderIcons: Story = {
       />
       <DialBreadcrumbItem
         label="Design System"
-        iconBefore={<IconFolder size={16} aria-label="folder" />}
+        iconBefore={
+          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
+        }
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked Design System folder');

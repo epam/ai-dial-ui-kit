@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export const breadcrumbBaseClassName = 'w-full overflow-hidden';
 export const breadcrumbListClassName =
@@ -27,5 +28,5 @@ export const breadcrumbEllipsisButtonClassName =
   'items-center gap-1 min-w-0 transition-colors text-secondary hover:text-accent-primary';
 
 export const defaultSeparator: ReactNode = (
-  <IconChevronRight size={16} aria-hidden="true" />
+  <IconChevronRight size={DIAL_ICON_SIZE.SMALL} aria-hidden="true" />
 );

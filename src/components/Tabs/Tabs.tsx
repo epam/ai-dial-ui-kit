@@ -20,6 +20,7 @@ import { DESKTOP_TABS_GAP_PX } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 import { ScreenType } from '@/types/screen';
 import { useScreenType } from '@/hooks/use-screen-type';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialTabsProps {
   tabs: TabModel[];
@@ -228,7 +229,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             className="rounded-none bg-transparent border-l-0 border-b-0 h-full items-center px-0"
           />
           <DialIcon
-            icon={<IconChevronDown size={16} />}
+            icon={<IconChevronDown size={DIAL_ICON_SIZE.SMALL} />}
             className={classNames(
               'text-primary transition-transform',
               isMobileDropdownOpen && 'rotate-180',
@@ -281,7 +282,7 @@ export const DialTabs: FC<DialTabsProps> = ({
             }
           >
             <DialButton
-              iconBefore={<IconDotsVertical size={18} />}
+              iconBefore={<IconDotsVertical size={DIAL_ICON_SIZE.BASE} />}
               className={mergeClasses(
                 'w-8 h-8 flex items-center justify-center rounded border',
                 isDropdownOpen

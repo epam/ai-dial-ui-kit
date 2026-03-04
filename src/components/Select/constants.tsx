@@ -1,3 +1,4 @@
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { IconChevronDown } from '@tabler/icons-react';
 
 export const selectTriggerBaseClassName =
@@ -15,4 +16,6 @@ export const selectOptionSingleSelectedClassName =
 
 export const selectOptionDisabledClassName = 'opacity-75';
 export const dropdownMenuMaxHeight = 352;
-export const selectChevronIcon = <IconChevronDown size={16} />;
+export const selectChevronIcon = (
+  <IconChevronDown size={DIAL_ICON_SIZE.SMALL} />
+);

@@ -16,6 +16,7 @@ import {
   alertVariantClassNameMap,
   variantIcons,
 } from './constants';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
@@ -100,7 +101,7 @@ export const DialAlert: FC<DialAlertProps> = ({
         <DialButton
           className="ml-2 text-secondary hover:text-primary"
           aria-label="Close alert"
-          iconBefore={<IconX size={16} />}
+          iconBefore={<IconX size={DIAL_ICON_SIZE.SMALL} />}
           onClick={onClose}
         />
       )}

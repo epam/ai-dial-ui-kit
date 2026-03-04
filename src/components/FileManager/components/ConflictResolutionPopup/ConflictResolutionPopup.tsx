@@ -24,6 +24,7 @@ import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface FileConflictDecision {
   file: DialFile;
@@ -321,7 +322,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
                     {activeItem?.label ?? replaceLabel}
                   </span>
                   <IconChevronDown
-                    size={16}
+                    size={DIAL_ICON_SIZE.SMALL}
                     className={classNames(
                       'text-secondary transition-transform',
                       isOpen && 'rotate-180',

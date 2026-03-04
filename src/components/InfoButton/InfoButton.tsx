@@ -4,6 +4,7 @@ import type { FC } from 'react';
 import { DialIconButton } from '@/components/IconButton/IconButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { infoButtonClassName } from './constants';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialInfoButtonProps {
   caption?: string;
@@ -32,7 +33,7 @@ export const DialInfoButton: FC<DialInfoButtonProps> = ({
     <DialIconButton
       aria-label={caption}
       className={infoButtonClassName}
-      icon={<IconInfoCircle size={16} />}
+      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SMALL} />}
       onClick={onClick}
     />
   );

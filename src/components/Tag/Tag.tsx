@@ -6,6 +6,7 @@ import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialTagProps {
   tag: string;
@@ -61,7 +62,7 @@ export const DialTag: FC<DialTagProps> = ({
       {remove && (
         <DialButton
           className="p-0"
-          iconAfter={<IconX size={16} />}
+          iconAfter={<IconX size={DIAL_ICON_SIZE.SMALL} />}
           onClick={(e) => remove(e)}
         />
       )}

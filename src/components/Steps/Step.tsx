@@ -4,6 +4,7 @@ import type { FC } from 'react';
 import { type Step, StepStatus } from '@/models/step';
 import classNames from 'classnames';
 import { getCircleClass, getStepClass } from './utils';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialStepProps {
   step: Step;
@@ -25,10 +26,10 @@ export const DialStep: FC<DialStepProps> = ({
 
   const getContent = () => {
     if (currentStep === step.id && step.status === StepStatus.ERROR) {
-      return <IconExclamationCircle stroke={2} size={16} />;
+      return <IconExclamationCircle stroke={2} size={DIAL_ICON_SIZE.SMALL} />;
     }
     if (currentStep !== step.id && step.status === StepStatus.VALID) {
-      return <IconCheck stroke={2} size={16} />;
+      return <IconCheck stroke={2} size={DIAL_ICON_SIZE.SMALL} />;
     }
 
     return index + 1;

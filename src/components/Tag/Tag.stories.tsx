@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagVariant } from '@/types/tag';
 import { DialTag } from '@/components/Tag/Tag';
 import { IconEye } from '@tabler/icons-react';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const meta: Meta<typeof DialTag> = {
   title: 'Data Display/Tag',
@@ -69,7 +70,9 @@ export const WithIconBefore: Story = {
       tag="Review required"
       remove={args.remove}
       className="border-[#F4CE46] bg-warning"
-      iconBefore={<IconEye size={16} className="text-warning" />}
+      iconBefore={
+        <IconEye size={DIAL_ICON_SIZE.SMALL} className="text-warning" />
+      }
     />
   ),
 };
