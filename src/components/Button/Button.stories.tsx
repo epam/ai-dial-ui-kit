@@ -11,6 +11,7 @@ import {
   DialPrimaryButton,
 } from './ButtonWrappers';
 import { ElementSize } from '@/types/size';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const meta = {
   title: 'DIAL/Elements/Buttons/Button',
@@ -200,14 +201,14 @@ export const AllVariants: Story = {
   render: () => {
     const baseProps: DialButtonProps = {
       label: 'Standard',
-      iconAfter: <IconArrowRight size={20} />,
-      iconBefore: <IconArrowLeft size={20} />,
+      iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
+      iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
     };
 
     const smallProps: DialButtonProps = {
       label: 'Small',
-      iconAfter: <IconArrowRight size={16} />,
-      iconBefore: <IconArrowLeft size={16} />,
+      iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.SM} />,
+      iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.SM} />,
       size: ElementSize.Small,
     };
 
@@ -299,15 +300,15 @@ export const WithIconsBeforeAfter: Story = {
   args: {
     label: 'With Icons',
     variant: ButtonVariant.Primary,
-    iconBefore: <IconArrowLeft size={20} />,
-    iconAfter: <IconArrowRight size={20} />,
+    iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
+    iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
   },
 };
 
 export const IconOnlyButton: Story = {
   args: {
     variant: ButtonVariant.Primary,
-    iconBefore: <IconArrowRight size={20} />,
+    iconBefore: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
     'aria-label': 'Next',
   },
   parameters: {
@@ -325,8 +326,8 @@ export const HideTitleOnMobile: Story = {
     label: 'Hidden on mobile',
     variant: ButtonVariant.Primary,
     hideTitleOnMobile: true,
-    iconBefore: <IconArrowLeft size={20} />,
-    iconAfter: <IconArrowRight size={20} />,
+    iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
+    iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
   },
   parameters: {
     docs: {
@@ -366,7 +367,7 @@ export const LinkWrapperButton: Story = {
   render: (args) => <DialLinkButton {...args} />,
   args: {
     label: 'Link Button',
-    iconAfter: <IconArrowRight size={20} />,
+    iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
   },
   parameters: {
     docs: {
@@ -382,7 +383,7 @@ export const GhostWrapperButton: Story = {
   render: (args) => <DialGhostButton {...args} />,
   args: {
     label: 'Ghost Button',
-    iconBefore: <IconArrowLeft size={20} />,
+    iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
   },
   parameters: {
     docs: {

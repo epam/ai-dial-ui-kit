@@ -22,27 +22,36 @@ import {
   DialPrimaryButton,
 } from '@/components/Button/ButtonWrappers';
 import { type DropdownItem } from '@/models/dropdown';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const items: DropdownItem[] = [
-  { key: 'profile', label: 'Profile', icon: <IconUser size={16} /> },
-  { key: 'settings', label: 'Settings', icon: <IconSettings size={16} /> },
+  {
+    key: 'profile',
+    label: 'Profile',
+    icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+  },
+  {
+    key: 'settings',
+    label: 'Settings',
+    icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+  },
   {
     key: 'disabled',
     label: 'Disabled',
-    icon: <IconStack size={16} />,
+    icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
     disabled: true,
   },
   {
     key: 'danger',
     label: 'Danger',
-    icon: <IconRowRemove size={16} />,
+    icon: <IconRowRemove size={DIAL_ICON_SIZE.SM} />,
     danger: true,
   },
   { key: 'd1', type: DropdownItemType.Divider },
   {
     key: 'logout',
     label: 'Logout',
-    icon: <IconLogout size={16} />,
+    icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
   },
 ];
 
@@ -50,19 +59,27 @@ const specItems: DropdownItem[] = [
   {
     key: 'open',
     label: 'Open in a new tab',
-    icon: <IconExternalLink size={16} />,
+    icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
   },
   {
     key: 'dup',
     label: 'Duplicate as a new version',
-    icon: <IconCopy size={16} />,
+    icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
   },
   { key: 'd2', type: DropdownItemType.Divider },
-  { key: 'del', label: 'Delete', icon: <IconTrash size={16} />, danger: true },
+  {
+    key: 'del',
+    label: 'Delete',
+    icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
+    danger: true,
+  },
 ];
 
 const TriggerBtn = ({ label = 'Open' }: { label?: ReactNode }) => (
-  <DialPrimaryButton iconAfter={<IconChevronDown size={16} />} label={label} />
+  <DialPrimaryButton
+    iconAfter={<IconChevronDown size={DIAL_ICON_SIZE.SM} />}
+    label={label}
+  />
 );
 
 const PLACEMENTS: Placement[] = [
@@ -193,7 +210,7 @@ export const SecondaryEllipsisTrigger: Story = {
     children: (
       <DialNeutralButton
         aria-label="More actions"
-        iconBefore={<IconDots size={16} />}
+        iconBefore={<IconDots size={DIAL_ICON_SIZE.SM} />}
       />
     ),
     menu: { items: specItems },
