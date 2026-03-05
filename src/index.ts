@@ -172,3 +172,5 @@ export {
   SIZE_COLUMN,
   UPDATED_AT_COLUMN,
 } from './constants/file-grid-columns';
+
+export type { DIAL_ICON_SIZE } from './constants/icon.ts';

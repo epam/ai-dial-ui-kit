@@ -3,6 +3,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { IconCopyMinus } from '@tabler/icons-react';
 import { useMemo, type ReactNode } from 'react';
 import { ElementSize } from '@/types/size';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 interface useTreeAdditionalButtonsOptions {
   additionalButtons?: ReactNode;
@@ -44,7 +45,7 @@ export const useTreeAdditionalButtons = ({
           className={buttonClass}
           size={ElementSize.Small}
           onClick={collapseAll}
-          icon={<IconCopyMinus size={24} stroke={1.5} />}
+          icon={<IconCopyMinus size={DIAL_ICON_SIZE.LG} stroke={1.5} />}
           aria-label="collapse-all"
         />
       </>
