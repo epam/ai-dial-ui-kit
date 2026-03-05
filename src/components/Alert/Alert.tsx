@@ -101,7 +101,7 @@ export const DialAlert: FC<DialAlertProps> = ({
         <DialButton
           className="ml-2 text-secondary hover:text-primary"
           aria-label="Close alert"
-          iconBefore={<IconX size={DIAL_ICON_SIZE.SMALL} />}
+          iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
           onClick={onClose}
         />
       )}

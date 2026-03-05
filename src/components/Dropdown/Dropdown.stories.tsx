@@ -28,30 +28,30 @@ const items: DropdownItem[] = [
   {
     key: 'profile',
     label: 'Profile',
-    icon: <IconUser size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
   },
   {
     key: 'settings',
     label: 'Settings',
-    icon: <IconSettings size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
   },
   {
     key: 'disabled',
     label: 'Disabled',
-    icon: <IconStack size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
     disabled: true,
   },
   {
     key: 'danger',
     label: 'Danger',
-    icon: <IconRowRemove size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconRowRemove size={DIAL_ICON_SIZE.SM} />,
     danger: true,
   },
   { key: 'd1', type: DropdownItemType.Divider },
   {
     key: 'logout',
     label: 'Logout',
-    icon: <IconLogout size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
   },
 ];
 
@@ -59,25 +59,25 @@ const specItems: DropdownItem[] = [
   {
     key: 'open',
     label: 'Open in a new tab',
-    icon: <IconExternalLink size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
   },
   {
     key: 'dup',
     label: 'Duplicate as a new version',
-    icon: <IconCopy size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
   },
   { key: 'd2', type: DropdownItemType.Divider },
   {
     key: 'del',
     label: 'Delete',
-    icon: <IconTrash size={DIAL_ICON_SIZE.SMALL} />,
+    icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
     danger: true,
   },
 ];
 
 const TriggerBtn = ({ label = 'Open' }: { label?: ReactNode }) => (
   <DialPrimaryButton
-    iconAfter={<IconChevronDown size={DIAL_ICON_SIZE.SMALL} />}
+    iconAfter={<IconChevronDown size={DIAL_ICON_SIZE.SM} />}
     label={label}
   />
 );
@@ -210,7 +210,7 @@ export const SecondaryEllipsisTrigger: Story = {
     children: (
       <DialNeutralButton
         aria-label="More actions"
-        iconBefore={<IconDots size={DIAL_ICON_SIZE.SMALL} />}
+        iconBefore={<IconDots size={DIAL_ICON_SIZE.SM} />}
       />
     ),
     menu: { items: specItems },

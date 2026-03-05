@@ -16,6 +16,4 @@ export const selectOptionSingleSelectedClassName =
 
 export const selectOptionDisabledClassName = 'opacity-75';
 export const dropdownMenuMaxHeight = 352;
-export const selectChevronIcon = (
-  <IconChevronDown size={DIAL_ICON_SIZE.SMALL} />
-);
+export const selectChevronIcon = <IconChevronDown size={DIAL_ICON_SIZE.SM} />;

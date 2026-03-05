@@ -45,7 +45,7 @@ export const DifferentSizes: Story = {
   render: () => (
     <div className="flex gap-4 items-center text-accent-primary">
       <DialIcon icon={<IconSnowflake size={12} />} />
-      <DialIcon icon={<IconSnowflake size={DIAL_ICON_SIZE.SMALL} />} />
+      <DialIcon icon={<IconSnowflake size={DIAL_ICON_SIZE.SM} />} />
       <DialIcon icon={<IconSnowflake size={22} />} />
       <DialIcon icon={<IconSnowflake size={48} />} />
       <DialIcon icon={<IconSnowflake size={64} />} />

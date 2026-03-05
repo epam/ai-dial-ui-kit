@@ -26,10 +26,10 @@ export const DialStep: FC<DialStepProps> = ({
 
   const getContent = () => {
     if (currentStep === step.id && step.status === StepStatus.ERROR) {
-      return <IconExclamationCircle stroke={2} size={DIAL_ICON_SIZE.SMALL} />;
+      return <IconExclamationCircle stroke={2} size={DIAL_ICON_SIZE.SM} />;
     }
     if (currentStep !== step.id && step.status === StepStatus.VALID) {
-      return <IconCheck stroke={2} size={DIAL_ICON_SIZE.SMALL} />;
+      return <IconCheck stroke={2} size={DIAL_ICON_SIZE.SM} />;
     }
 
     return index + 1;

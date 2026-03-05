@@ -62,7 +62,7 @@ export const DialTag: FC<DialTagProps> = ({
       {remove && (
         <DialButton
           className="p-0"
-          iconAfter={<IconX size={DIAL_ICON_SIZE.SMALL} />}
+          iconAfter={<IconX size={DIAL_ICON_SIZE.SM} />}
           onClick={(e) => remove(e)}
         />
       )}

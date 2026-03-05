@@ -184,9 +184,7 @@ export const WithFolderIcons: Story = {
       <DialBreadcrumbItem
         label="Projects"
         href="#"
-        iconBefore={
-          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
-        }
+        iconBefore={<IconFolder size={DIAL_ICON_SIZE.SM} aria-label="folder" />}
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked Projects folder');
@@ -195,9 +193,7 @@ export const WithFolderIcons: Story = {
       <DialBreadcrumbItem
         label="2025"
         href="#"
-        iconBefore={
-          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
-        }
+        iconBefore={<IconFolder size={DIAL_ICON_SIZE.SM} aria-label="folder" />}
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked 2025 folder');
@@ -205,9 +201,7 @@ export const WithFolderIcons: Story = {
       />
       <DialBreadcrumbItem
         label="Design System"
-        iconBefore={
-          <IconFolder size={DIAL_ICON_SIZE.SMALL} aria-label="folder" />
-        }
+        iconBefore={<IconFolder size={DIAL_ICON_SIZE.SM} aria-label="folder" />}
         onClick={(e) => {
           e.preventDefault();
           alert('Clicked Design System folder');

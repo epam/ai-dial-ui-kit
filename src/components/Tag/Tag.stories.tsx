@@ -70,9 +70,7 @@ export const WithIconBefore: Story = {
       tag="Review required"
       remove={args.remove}
       className="border-[#F4CE46] bg-warning"
-      iconBefore={
-        <IconEye size={DIAL_ICON_SIZE.SMALL} className="text-warning" />
-      }
+      iconBefore={<IconEye size={DIAL_ICON_SIZE.SM} className="text-warning" />}
     />
   ),
 };

@@ -451,7 +451,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                 <DialButton
                   aria-label="Close select"
                   className="shrink-0"
-                  iconBefore={<IconX size={DIAL_ICON_SIZE.SMALL} />}
+                  iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
                   onClick={(e) => {
                     onClose?.(e);
                     setOpen(false);
@@ -487,7 +487,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                       icon={
                         emptyStateIcon ?? (
                           <IconClipboardX
-                            size={DIAL_ICON_SIZE.LARGE}
+                            size={DIAL_ICON_SIZE.LG}
                             stroke={0.5}
                           />
                         )

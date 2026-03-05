@@ -322,7 +322,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
                     {activeItem?.label ?? replaceLabel}
                   </span>
                   <IconChevronDown
-                    size={DIAL_ICON_SIZE.SMALL}
+                    size={DIAL_ICON_SIZE.SM}
                     className={classNames(
                       'text-secondary transition-transform',
                       isOpen && 'rotate-180',

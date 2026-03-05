@@ -33,7 +33,7 @@ export const DialInfoButton: FC<DialInfoButtonProps> = ({
     <DialIconButton
       aria-label={caption}
       className={infoButtonClassName}
-      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SMALL} />}
+      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SM} />}
       onClick={onClick}
     />
   );

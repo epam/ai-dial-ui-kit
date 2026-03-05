@@ -28,5 +28,5 @@ export const breadcrumbEllipsisButtonClassName =
   'items-center gap-1 min-w-0 transition-colors text-secondary hover:text-accent-primary';
 
 export const defaultSeparator: ReactNode = (
-  <IconChevronRight size={DIAL_ICON_SIZE.SMALL} aria-hidden="true" />
+  <IconChevronRight size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
 );

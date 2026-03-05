@@ -57,7 +57,7 @@ const meta = {
     appearance: ButtonAppearance.Solid,
     size: ElementSize.Standard,
     disabled: false,
-    icon: <IconRefresh size={DIAL_ICON_SIZE.LARGE} stroke={1.5} />,
+    icon: <IconRefresh size={DIAL_ICON_SIZE.LG} stroke={1.5} />,
   },
 } satisfies Meta<DialIconButtonProps>;
 
@@ -128,11 +128,11 @@ export const Active: Story = {
 export const AllVariants: Story = {
   render: () => {
     const baseProps: DialIconButtonProps = {
-      icon: <IconRefresh size={DIAL_ICON_SIZE.LARGE} stroke={1.5} />,
+      icon: <IconRefresh size={DIAL_ICON_SIZE.LG} stroke={1.5} />,
     };
 
     const smallProps: DialIconButtonProps = {
-      icon: <IconRefresh size={DIAL_ICON_SIZE.SMALL} stroke={1.5} />,
+      icon: <IconRefresh size={DIAL_ICON_SIZE.SM} stroke={1.5} />,
       size: ElementSize.Small,
     };
 

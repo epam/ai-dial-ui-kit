@@ -177,7 +177,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
               aria-label="More breadcrumbs"
               className={breadcrumbEllipsisButtonClassName}
             >
-              <IconDots size={DIAL_ICON_SIZE.SMALL} />
+              <IconDots size={DIAL_ICON_SIZE.SM} />
             </button>
           </DialDropdown>
           <span className={breadcrumbSeparatorClassName}>{separator}</span>

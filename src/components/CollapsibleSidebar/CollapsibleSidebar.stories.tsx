@@ -7,7 +7,7 @@ import {
   type DialCollapsibleSidebarProps,
 } from './CollapsibleSidebar';
 import { DialButton } from '@/components/Button/Button';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { BASE_ICON_SIZE } from '@/constants/icon';
 
 const BarContent = (
   <div className="flex flex-col gap-4">
@@ -95,7 +95,7 @@ export const WithAdditionalButtons: Story = {
     children: BarContent,
     additionalButtons: (
       <DialButton
-        iconBefore={<IconSettings size={DIAL_ICON_SIZE.BASE} />}
+        iconBefore={<IconSettings size={BASE_ICON_SIZE} />}
         onClick={() => alert('Settings clicked!')}
         className="hover:text-accent-primary"
       />
@@ -127,7 +127,7 @@ export const AllVariants: Story = {
           children: BarContent,
           additionalButtons: (
             <DialButton
-              iconBefore={<IconSettings size={DIAL_ICON_SIZE.BASE} />}
+              iconBefore={<IconSettings size={BASE_ICON_SIZE} />}
               onClick={() => alert('Settings clicked!')}
             />
           ),
