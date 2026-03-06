@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
@@ -228,6 +228,32 @@ export const useConflictResolution = ({
     closeConflictResolution,
   ]);
 
+  const handleCancelAll = useCallback(() => {
+    if (!pendingOperation) return;
+    const { files, destinationFolder, metadata } = pendingOperation;
+
+    const resolvedItems = resolveConflictsWithDecisions(
+      destinationFolder,
+      files,
+      new Map(
+        conflictingFiles.map((file) => [
+          file.path,
+          DialFileManagerConflictActions.Cancel,
+        ]),
+      ),
+      metadata,
+    );
+
+    onResolve?.(resolvedItems, destinationFolder);
+    closeConflictResolution();
+  }, [
+    closeConflictResolution,
+    conflictingFiles,
+    onResolve,
+    pendingOperation,
+    resolveConflictsWithDecisions,
+  ]);
+
   const handleDecideForEach = useCallback(
     (decisions: FileConflictDecision[]) => {
       if (!pendingOperation) return;
@@ -269,6 +295,7 @@ export const useConflictResolution = ({
 
     handleReplaceAll,
     handleDuplicateAll,
+    handleCancelAll,
     handleDecideForEach,
   };
 };

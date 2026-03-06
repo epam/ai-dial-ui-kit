@@ -159,6 +159,7 @@ export interface FileManagerContextValue {
   conflictResolutionOpen: boolean;
   closeConflictResolution: () => void;
   handleConflictReplace: () => void;
+  handleConflictCancel: () => void;
   handleConflictDuplicate: () => void;
   handleConflictDecideForEach: (decisions: FileConflictDecision[]) => void;
 
@@ -166,6 +167,7 @@ export interface FileManagerContextValue {
   uploadConflictResolutionOpen: boolean;
   closeUploadConflictResolution: () => void;
   handleUploadConflictReplace: () => void;
+  handleUploadConflictCancel: () => void;
   handleUploadConflictDuplicate: () => void;
   handleUploadConflictDecideForEach: (
     decisions: FileConflictDecision[],

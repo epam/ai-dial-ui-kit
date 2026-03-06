@@ -253,6 +253,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeConflictResolution,
     handleConflictReplace,
     handleConflictDuplicate,
+    handleConflictCancel,
     handleConflictDecideForEach,
     sourceFolder,
   } = useFileClipboard({
@@ -310,6 +311,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeUploadConflictResolution,
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
+    handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
   } = useFileUpload({
     onUploadFiles,
@@ -656,6 +658,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeConflictResolution,
     handleConflictReplace,
     handleConflictDuplicate,
+    handleConflictCancel,
     handleConflictDecideForEach,
 
     uploadConflictingFiles,
@@ -663,6 +666,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeUploadConflictResolution,
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
+    handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
 
     fileMetadataPopupOptions,
