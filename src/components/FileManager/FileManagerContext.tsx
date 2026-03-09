@@ -180,6 +180,7 @@ export interface FileManagerContextValue {
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
   onUnshareFiles?: (file: DialFile[]) => void;
+  onRemoveFilesAccess?: (file: DialFile[]) => void;
 
   actionsRef?: Ref<DialFileManagerActionsRef>;
 

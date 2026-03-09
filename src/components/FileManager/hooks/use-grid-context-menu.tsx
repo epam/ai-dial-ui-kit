@@ -10,6 +10,7 @@ import {
   IconInfoCircle,
   IconExternalLink,
   IconEye,
+  IconUserX,
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
@@ -35,6 +36,7 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
   onDuplicate: (file: DialFile) => void;
   onCopy: (file: DialFile) => void;
@@ -44,7 +46,9 @@ export interface UseGridContextMenuProps {
   onDelete: (file: DialFile, parentFolderPath: string) => void;
   onInfo: (file: DialFile) => void;
   onUnshare: (file: DialFile) => void;
+  onRemoveAccess?: (file: DialFile) => void;
   sharedWithMeIds?: string[];
+  sharedByMePaths?: Set<string>;
   onAddSibling?: (file: DialFile) => void;
   onAddChild?: (file: DialFile) => void;
   onManagePermissions?: (path?: string) => void;
@@ -63,7 +67,9 @@ export const useGridContextMenu = ({
   onDelete,
   onInfo,
   onUnshare,
+  onRemoveAccess,
   sharedWithMeIds,
+  sharedByMePaths,
   onAddSibling,
   onAddChild,
   onManagePermissions,
@@ -269,6 +275,21 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (
+        actionLabels[DialFileManagerActions.RemoveAccess] &&
+        sharedByMePaths?.has(file.path) &&
+        onRemoveAccess
+      ) {
+        items.push({
+          key: DialFileManagerActions.RemoveAccess,
+          label: actionLabels[DialFileManagerActions.RemoveAccess],
+          icon: (
+            <IconUserX size={BASE_ICON_PROPS.size} className="text-secondary" />
+          ),
+          onClick: () => onRemoveAccess(file),
+        });
+      }
+
       return items;
     };
   }, [
@@ -283,7 +304,9 @@ export const useGridContextMenu = ({
     onRename,
     onInfo,
     onUnshare,
+    onRemoveAccess,
     sharedWithMeIds,
+    sharedByMePaths,
     onManagePermissions,
     onPreview,
     previewExtensions,

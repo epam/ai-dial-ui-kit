@@ -1193,6 +1193,58 @@ export const WithUnshareAction: Story = {
   ),
 };
 
+export const WithRemoveAccessAction: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+            info: 'Info',
+            removeAccess: 'Remove access',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            rename: 'Rename',
+            download: 'Download',
+            delete: 'Delete',
+            removeAccess: 'Remove access',
+          },
+        }}
+        bulkActionsToolbarOptions={{
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
+          actionLabels: {
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            unshare: 'Unshare',
+            removeAccess: 'Remove access',
+          },
+        }}
+        onRemoveFilesAccess={(files) => {
+          alert(`Removing access file: ${files.map((f) => f.name).join(',')}`);
+        }}
+        sharedByMePaths={new Set(['All files/Design'])}
+      />
+    </div>
+  ),
+};
+
 export const WithOwnerColumn: Story = {
   args: {
     gridOptions: {

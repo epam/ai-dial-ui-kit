@@ -64,6 +64,7 @@ import {
   IconFileDescription,
   IconPencilMinus,
   IconTrashX,
+  IconUserX,
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
@@ -170,6 +171,7 @@ export interface FileTreeOptions
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
 }
 
@@ -216,6 +218,7 @@ export interface GridOptions
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
     [DialFileManagerActions.Preview]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
 }
 
@@ -244,6 +247,7 @@ export type BulkActionsToolbarOptions = Omit<
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Unshare]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
 };
 
@@ -340,6 +344,7 @@ export interface DialFileManagerProps {
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
   onUnshareFiles?: (files: DialFile[]) => void | Promise<void>;
+  onRemoveFilesAccess?: (files: DialFile[]) => void | Promise<void>;
   actionsRef?: Ref<DialFileManagerActionsRef>;
 
   onSearchFiles?: (folder: string, query: string) => void;
@@ -585,6 +590,7 @@ export const DialFileManagerView: FC = () => {
     closeMetadataPopup,
 
     onUnshareFiles,
+    onRemoveFilesAccess,
 
     actionsRef,
     searchInProgress,
@@ -818,6 +824,24 @@ export const DialFileManagerView: FC = () => {
           });
         }
         if (
+          treeOptions.actionLabels[DialFileManagerActions.RemoveAccess] &&
+          sharedByMePaths?.has(file.path) &&
+          !isRootNode
+        ) {
+          elements.push({
+            key: DialFileManagerActions.RemoveAccess,
+            label:
+              treeOptions.actionLabels[DialFileManagerActions.RemoveAccess],
+            icon: (
+              <IconUserX
+                size={BASE_ICON_PROPS.size}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onRemoveFilesAccess?.([file]),
+          });
+        }
+        if (
           treeOptions.actionLabels[DialFileManagerActions.ManagePermissions] &&
           typeof onManagePermissions === 'function' &&
           file.nodeType === DialFileNodeType.FOLDER &&
@@ -878,7 +902,9 @@ export const DialFileManagerView: FC = () => {
       handleDownloadFiles,
       onTreeRename,
       onUnshareFiles,
+      onRemoveFilesAccess,
       sharedWithMeIds,
+      sharedByMePaths,
       openDeleteConfirmation,
       onManagePermissions,
     ],
@@ -924,8 +950,10 @@ export const DialFileManagerView: FC = () => {
     onRename: onGridRename,
     onDelete: openDeleteConfirmation,
     onUnshare: onUnshareFiles,
+    onRemoveAccess: onRemoveFilesAccess,
     getCurrentFolderPath: () => currentPath ?? '/',
     sharedWithMeIds,
+    sharedByMePaths,
     onClearSelection: clearSelection,
   });
 
@@ -1080,7 +1108,9 @@ export const DialFileManagerView: FC = () => {
       openDeleteConfirmation([file], parentFolderPath),
     onInfo: (file) => openMetadataPopup(file),
     onUnshare: (file) => onUnshareFiles?.([file]),
+    onRemoveAccess: (file) => onRemoveFilesAccess?.([file]),
     sharedWithMeIds,
+    sharedByMePaths,
     onAddChild: (file) => handleAddChild?.([file]),
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),

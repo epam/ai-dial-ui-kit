@@ -104,6 +104,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   fileMetadataPopupOptions,
   onGetInfo,
   onUnshareFiles,
+  onRemoveFilesAccess,
   actionsRef,
   sharedByMePaths,
   onSearchFiles,
@@ -677,6 +678,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onGetInfo,
 
     onUnshareFiles,
+    onRemoveFilesAccess,
 
     actionsRef,
     sharedByMePaths,
