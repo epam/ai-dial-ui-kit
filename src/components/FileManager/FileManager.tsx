@@ -878,18 +878,22 @@ export const DialFileManagerView: FC = () => {
           });
         }
       }
-
-      if (elements.length > 0) {
-        return [
-          ...items,
-          {
-            key: 'divider',
-            type: DropdownItemType.Divider,
-          },
-          ...elements,
-        ];
+      if (!items.length) {
+        return elements;
       }
-      return items;
+
+      if (!elements.length) {
+        return items;
+      }
+
+      return [
+        ...items,
+        {
+          key: 'divider',
+          type: DropdownItemType.Divider,
+        },
+        ...elements,
+      ];
     },
     [
       treeOptions?.actionLabels,
