@@ -466,6 +466,68 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(onUnshare).toHaveBeenCalledWith(testFolder);
   });
 
+  test('remove access action calls onRemoveAccess with file', () => {
+    const onRemoveAccess = vi.fn();
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: {
+          [DialFileManagerActions.RemoveAccess]: 'Remove access',
+        },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+        onRemoveAccess,
+        sharedByMePaths: new Set([testFile.path]),
+      }),
+    );
+
+    const menuItems = result.current(testFile);
+    const removeAccessAction = menuItems[0];
+    removeAccessAction.onClick?.({
+      key: removeAccessAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onRemoveAccess).toHaveBeenCalledTimes(1);
+    expect(onRemoveAccess).toHaveBeenCalledWith(testFile);
+  });
+
+  test('remove access action works with folders', () => {
+    const onRemoveAccess = vi.fn();
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: {
+          [DialFileManagerActions.RemoveAccess]: 'Remove access',
+        },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+        onRemoveAccess,
+        sharedByMePaths: new Set([testFolder.path]),
+      }),
+    );
+
+    const menuItems = result.current(testFolder);
+    const removeAccessAction = menuItems[0];
+    removeAccessAction.onClick?.({
+      key: removeAccessAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onRemoveAccess).toHaveBeenCalledTimes(1);
+    expect(onRemoveAccess).toHaveBeenCalledWith(testFolder);
+  });
+
   test('menu items have correct properties', () => {
     const { result } = renderHook(() =>
       useGridContextMenu({
