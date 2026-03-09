@@ -25,6 +25,7 @@ export interface DialFileManagerItemNameInputProps {
   inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
   sharedIndicatorClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
 }
 
 /**
@@ -94,6 +95,7 @@ export const DialFileManagerItemNameInput: FC<
   inputRef,
   onChange,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
 }) => {
   const getInputIconAfter = () => {
     if (!inputInvalid) return null;
@@ -124,6 +126,7 @@ export const DialFileManagerItemNameInput: FC<
         loading={loading}
         shared={shared}
         sharedIndicatorClassName={sharedIndicatorClassName}
+        sharedIndicatorTooltip={sharedIndicatorTooltip}
       />
       <DialInput
         containerClassName={mergeClasses(

@@ -13,6 +13,7 @@ export interface DialFileNameProps {
   iconSize?: number;
   details?: ReactNode;
   sharedIndicatorClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
 }
 
 /**
@@ -40,6 +41,7 @@ export interface DialFileNameProps {
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  * @param details - Optional metadata block displayed under the file name (e.g., size, modified date).
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator.
+ * @param sharedIndicatorTooltip - Custom tooltip content for the shared indicator; defaults to "Shared"
  */
 export const DialFileName: FC<DialFileNameProps> = ({
   name,
@@ -48,6 +50,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
   iconSize = BASE_ICON_SIZE,
   details,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
 }) => {
   const extension = name.includes('.') ? name.split('.').pop() : undefined;
 
@@ -59,7 +62,10 @@ export const DialFileName: FC<DialFileNameProps> = ({
         className="text-secondary"
         indicator={
           shared ? (
-            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+            <DialSharedEntityIndicator
+              className={sharedIndicatorClassName}
+              sharedIndicatorTooltip={sharedIndicatorTooltip}
+            />
           ) : null
         }
         label="File type icon"
