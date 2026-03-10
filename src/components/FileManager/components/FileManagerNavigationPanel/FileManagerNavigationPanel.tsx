@@ -281,7 +281,7 @@ export const DialFileManagerNavigationPanel: FC<
       {searchable && (
         <div
           className={mergeClasses(searchContainerWrapperClassName, {
-            'w-[38px]': isCompactView && !isSearchExpanded,
+            'w-[40px]': isCompactView && !isSearchExpanded,
             'w-full': isCompactView && isSearchExpanded,
           })}
           role="search"
@@ -296,9 +296,10 @@ export const DialFileManagerNavigationPanel: FC<
             onBlur={handleSearchBlur}
             invalid={invalid}
             className={searchClassName}
-            containerClassName={mergeClasses(searchContainerClassName, {
-              'p-[10px]': isCompactView,
-            })}
+            wrapperClassName={
+              isCompactView && !isSearchExpanded ? 'pl-2.5' : ''
+            }
+            containerClassName={searchContainerClassName}
           />
         </div>
       )}

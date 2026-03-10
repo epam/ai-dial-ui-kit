@@ -9,8 +9,7 @@ export const breadcrumbListClassName =
 export const breadcrumbItemBaseClassName =
   'flex items-center gap-2 min-w-0 shrink-0 dial-small';
 
-export const breadcrumbItemVisibleClassName =
-  'max-w-[20%] basis-[20%] flex-none';
+export const breadcrumbItemVisibleClassName = 'basis-[20%] flex-none';
 export const breadcrumbItemLastClassName = 'flex-1 min-w-0';
 
 export const breadcrumbLinkBaseClassName =
