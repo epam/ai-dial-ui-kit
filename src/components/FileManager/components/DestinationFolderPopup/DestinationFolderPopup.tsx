@@ -173,6 +173,8 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
+      dividerFooter
+      dividers={false}
       className="md:!h-[800px] !bg-layer-2"
       footer={
         <div className="flex justify-between items-center gap-2 py-4 px-4 md:px-6">
@@ -247,7 +249,11 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         <div className="flex-1 min-h-0">
           <DialFileManager
             {...restProps}
-            className={mergeClasses(restProps.className, 'bg-layer-2 h-full')}
+            gridClassName="size-full"
+            className={mergeClasses(
+              restProps.className,
+              'bg-layer-2 h-full flex pt-0',
+            )}
             actionsRef={fileManagerActionRef}
             path={path}
             showHiddenFiles={showHiddenFiles}

@@ -262,6 +262,7 @@ export interface DialFileManagerProps {
   defaultPath?: string;
   className?: string;
   managerLabel?: ReactNode;
+  gridClassName?: string;
 
   allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
@@ -416,6 +417,7 @@ export interface DialFileManagerProps {
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
  * @param [defaultPath] - Initial path used in uncontrolled mode (applied only on first render)
  * @param [className] - Additional classes for the root container
+ * @param [gridClassName] - Additional classes for the grid container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
@@ -607,6 +609,7 @@ export const DialFileManagerView: FC = () => {
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    gridClassName,
   } = useFileManagerContext();
   const {
     width = sidebarWidth,
@@ -998,8 +1001,8 @@ export const DialFileManagerView: FC = () => {
         </div>
       );
     }
-    // If no toolbar options are provided, render empty div to maintain layout consistency
-    return <div></div>;
+
+    return null;
   }, [
     bulkActionsToolbarOptions,
     selectedPaths,
@@ -1208,7 +1211,7 @@ export const DialFileManagerView: FC = () => {
       )}
     >
       {renderToolbar()}
-      <div className={mainGridClassName}>
+      <div className={mergeClasses(mainGridClassName, gridClassName)}>
         {renderFoldersTree()}
         <div
           className={mergeClasses(contentGridClassName, {

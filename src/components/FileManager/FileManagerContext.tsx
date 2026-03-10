@@ -47,6 +47,7 @@ export interface FileManagerGridRow {
 export interface FileManagerContextValue {
   managerLabel?: ReactNode;
   className?: string;
+  gridClassName?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
   allowedFileTypes?: DialFileAcceptType[];
