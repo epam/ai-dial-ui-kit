@@ -29,7 +29,9 @@ export interface DialPopupProps {
   overlayClassName?: string;
   titleClassName?: string;
   headerClassName?: string;
+  // TODO: review after implementing common design system
   dividers?: boolean;
+  dividerFooter?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
@@ -70,6 +72,7 @@ export interface DialPopupProps {
  * @param [titleClassName] - Additional CSS classes applied to the title element
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [dividers=true] - Whether to render separators between sections
+ * @param [dividerFooter=true] - Whether to render a divider above the footer when `dividers` is true
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
@@ -86,6 +89,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   titleClassName,
   headerClassName,
   dividers = true,
+  dividerFooter = true,
   children,
   footer,
   onClose,
@@ -164,7 +168,7 @@ export const DialPopup: FC<DialPopupProps> = ({
               {/* Body area */}
               {children}
             </div>
-            {footer}
+            {dividerFooter && <div className={popupDividerClassName} />}
           </div>
         </FloatingFocusManager>
       </FloatingOverlay>
