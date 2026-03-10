@@ -38,7 +38,6 @@ export interface DialPopupProps {
   size?: PopupSize;
   hideClose?: boolean;
   closeOnOutsideClick?: boolean;
-  /** When true, focus is set to a non-input guard so the virtual keyboard does not open on mobile */
   preventKeyboardOnOpen?: boolean;
 }
 
