@@ -430,6 +430,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       className={classNames([!isSingleFile && 'w-[600px]'])}
       header={title}
       dividers={false}
+      preventKeyboardOnOpen
       footer={
         <div className="flex justify-end gap-3 py-4 px-6 border-t border-tertiary">
           <DialNeutralButton onClick={onClose} label={cancelLabel} />

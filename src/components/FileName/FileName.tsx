@@ -8,6 +8,7 @@ import classNames from 'classnames';
 
 export interface DialFileNameProps {
   name: string;
+  fileExtension?: string;
   className?: string;
   shared?: boolean;
   iconSize?: number;
@@ -51,8 +52,11 @@ export const DialFileName: FC<DialFileNameProps> = ({
   details,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
+  fileExtension,
 }) => {
-  const extension = name.includes('.') ? name.split('.').pop() : undefined;
+  const extension = name.includes('.')
+    ? name.split('.').pop()
+    : fileExtension || void 0;
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>

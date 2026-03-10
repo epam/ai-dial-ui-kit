@@ -18,6 +18,7 @@ export interface DialFileManagerItemIconProps
   loading?: boolean;
   sharedIndicatorClassName?: string;
   sharedIndicatorTooltip?: ReactNode;
+  fileExtension?: string;
 }
 
 /**
@@ -65,6 +66,7 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   loading = false,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
+  fileExtension,
   ...restProps
 }) => {
   const wrapIcon = (icon: ReactNode) => (
@@ -86,7 +88,9 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   }
 
   if (type === DialItemType.File) {
-    const extension = name.includes('.') ? name.split('.').pop() : undefined;
+    const extension = name.includes('.')
+      ? name.split('.').pop()
+      : fileExtension || void 0;
 
     return (
       <DialFileIcon
