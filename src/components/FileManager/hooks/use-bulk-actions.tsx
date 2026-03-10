@@ -113,6 +113,9 @@ export const useBulkActions = ({
         title: actionLabels[DialFileManagerActions.Delete],
         icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
         disabled: isDisabled,
+        tooltip: isDisabled
+          ? 'Selected items contain item which can not be deleted'
+          : undefined,
         onClick: () => {
           const currentFolderPath = getCurrentFolderPath();
           onDelete(selectedFilesArray, currentFolderPath);

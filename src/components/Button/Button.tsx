@@ -11,6 +11,12 @@ import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { getButtonClassNames } from './utils';
 import { mergeClasses } from '@/utils/merge-classes';
 import { ElementSize } from '@/types/size';
+import {
+  DialTooltip,
+  type DialTooltipProps,
+} from '@/components/Tooltip/Tooltip';
+
+type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
 export interface DialButtonProps
   extends DetailedHTMLProps<
@@ -25,6 +31,7 @@ export interface DialButtonProps
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
   hideTitleOnMobile?: boolean;
+  tooltipProps?: TooltipProps;
 }
 
 /**
@@ -71,6 +78,7 @@ export const DialButton: FC<DialButtonProps> = ({
   iconBefore,
   hideTitleOnMobile,
   type = 'button',
+  tooltipProps,
   ...props
 }) => {
   const btnTextClassName = classNames(
@@ -87,7 +95,7 @@ export const DialButton: FC<DialButtonProps> = ({
     className,
   );
 
-  return (
+  const button = (
     <button
       {...props}
       type={type}
@@ -98,5 +106,11 @@ export const DialButton: FC<DialButtonProps> = ({
       {label && <span className={btnTextClassName}>{label}</span>}
       <DialIcon icon={iconAfter} />
     </button>
+  );
+
+  return tooltipProps ? (
+    <DialTooltip {...tooltipProps}>{button}</DialTooltip>
+  ) : (
+    button
   );
 };
