@@ -6,7 +6,7 @@ import { FormItemOrientation } from '@/types/form-item';
 describe('Dial UI Kit :: DialFormItem', () => {
   test('no label -> no aria-labelledby', () => {
     render(
-      <DialFormItem elementId="nolabel">
+      <DialFormItem id="nolabel">
         <input id="nolabel" />
       </DialFormItem>,
     );
@@ -16,11 +16,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
 
   test('applies custom className to container', () => {
     render(
-      <DialFormItem
-        elementId="with-class"
-        label="With class"
-        className="ring-1"
-      >
+      <DialFormItem id="with-class" label="With class" className="ring-1">
         <input id="with-class" />
       </DialFormItem>,
     );
@@ -30,7 +26,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
   test('horizontal orientation applies layout classes', () => {
     render(
       <DialFormItem
-        elementId="agree"
+        id="agree"
         label="Agree"
         orientation={FormItemOrientation.Horizontal}
       >
@@ -45,7 +41,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
   test('shows captionDescription below control', () => {
     render(
       <DialFormItem
-        elementId="caption"
+        id="caption"
         label="Label"
         captionDescription="Helper caption"
       >
@@ -58,7 +54,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
   test('captionDescription gets error color when error present', () => {
     render(
       <DialFormItem
-        elementId="caption-error"
+        id="caption-error"
         label="Label"
         captionDescription="Caption text"
         error="Oops"
@@ -72,7 +68,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
 
   test('string error renders alert via DialErrorText and updates aria-describedby', () => {
     render(
-      <DialFormItem elementId="age" label="Age" error="Required">
+      <DialFormItem id="age" label="Age" error="Required">
         <input id="age" />
       </DialFormItem>,
     );
@@ -86,7 +82,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
   test('ReactNode error renders inside alert container', () => {
     render(
       <DialFormItem
-        elementId="custom-error"
+        id="custom-error"
         label="Label"
         error={
           <span role="contentinfo" aria-label="Custom error">
@@ -105,7 +101,7 @@ describe('Dial UI Kit :: DialFormItem', () => {
 
   test('boolean error does not render alert (used only to style caption/field)', () => {
     render(
-      <DialFormItem elementId="bool-error" label="Label" error={true}>
+      <DialFormItem id="bool-error" label="Label" error={true}>
         <input id="bool-error" />
       </DialFormItem>,
     );
@@ -114,24 +110,19 @@ describe('Dial UI Kit :: DialFormItem', () => {
 
   test('supports visually hidden label (sr-only on label)', () => {
     render(
-      <DialFormItem elementId="hidden" label="Hidden label" labelVisuallyHidden>
+      <DialFormItem id="hidden" label="Hidden label" labelVisuallyHidden>
         <input id="hidden" />
       </DialFormItem>,
     );
     expect(screen.getByText('Hidden label')).toBeInTheDocument();
   });
 
-  test('renders optional indicator text when provided', () => {
+  test('renders required indicator text when provided', () => {
     render(
-      <DialFormItem
-        elementId="opt"
-        label="With optional"
-        optional
-        optionalText="(optional)"
-      >
+      <DialFormItem id="opt" label="With required" required>
         <input id="opt" />
       </DialFormItem>,
     );
-    expect(screen.getByText('(optional)')).toBeInTheDocument();
+    expect(screen.getByText('*')).toBeInTheDocument();
   });
 });

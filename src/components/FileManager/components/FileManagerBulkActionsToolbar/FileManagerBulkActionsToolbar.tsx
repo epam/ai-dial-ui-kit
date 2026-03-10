@@ -16,6 +16,7 @@ import { FlexibleActionsDirection } from '@/types/flexible-actions';
 
 export interface DialActionDropdownItem extends DropdownItem {
   title: string;
+  tooltip?: string;
 }
 
 export interface DialFileManagerBulkActionsToolbarProps {
@@ -139,17 +140,20 @@ export const DialFileManagerBulkActionsToolbar: FC<
             </DialDropdown>
           )}
 
-          {visibleActions.map(({ key, icon, title, onClick, disabled }) => (
-            <DialNeutralButton
-              className="!p-[9px]"
-              key={key}
-              iconBefore={icon}
-              label={title}
-              hideTitleOnMobile
-              disabled={disabled}
-              onClick={(domEvent) => onClick?.({ key, domEvent })}
-            />
-          ))}
+          {visibleActions.map(
+            ({ key, icon, tooltip, title, onClick, disabled }) => (
+              <DialNeutralButton
+                className="!p-[9px]"
+                key={key}
+                iconBefore={icon}
+                label={title}
+                hideTitleOnMobile
+                disabled={disabled}
+                tooltipProps={{ tooltip }}
+                onClick={(domEvent) => onClick?.({ key, domEvent })}
+              />
+            ),
+          )}
         </div>
       </div>
     </>

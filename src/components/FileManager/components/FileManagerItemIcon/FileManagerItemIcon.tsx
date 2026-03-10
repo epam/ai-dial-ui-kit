@@ -17,6 +17,8 @@ export interface DialFileManagerItemIconProps
   shared?: boolean;
   loading?: boolean;
   sharedIndicatorClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
+  fileExtension?: string;
 }
 
 /**
@@ -55,6 +57,7 @@ export interface DialFileManagerItemIconProps
  * @param {string} [props.label] - Accessible label for screen readers.
  * @param {ReactNode} [props.indicator] - Optional indicator to display over the icon.
  * @param {string} [props.sharedIndicatorClassName] - Optional CSS class for the shared indicator.
+ * @param  [sharedIndicatorTooltip] - Custom tooltip content for the shared indicator; defaults to "Shared"
  */
 export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   name,
@@ -62,6 +65,8 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   shared = false,
   loading = false,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
+  fileExtension,
   ...restProps
 }) => {
   const wrapIcon = (icon: ReactNode) => (
@@ -69,7 +74,10 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
       {icon}
       {shared && (
         <span className="absolute -bottom-0.5 -left-0.5">
-          <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+          <DialSharedEntityIndicator
+            className={sharedIndicatorClassName}
+            sharedIndicatorTooltip={sharedIndicatorTooltip}
+          />
         </span>
       )}
     </span>
@@ -80,7 +88,9 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   }
 
   if (type === DialItemType.File) {
-    const extension = name.includes('.') ? name.split('.').pop() : undefined;
+    const extension = name.includes('.')
+      ? name.split('.').pop()
+      : fileExtension || void 0;
 
     return (
       <DialFileIcon
@@ -89,7 +99,10 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
         className="text-secondary"
         indicator={
           shared ? (
-            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+            <DialSharedEntityIndicator
+              className={sharedIndicatorClassName}
+              sharedIndicatorTooltip={sharedIndicatorTooltip}
+            />
           ) : null
         }
         label="File type icon"

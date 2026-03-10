@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
 import OpenPopupIcon from '@/assets/icons/open-popup.svg?react';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -125,7 +125,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           )}
         </div>
       </button>
-      {errorText && <DialErrorText errorText={errorText} />}
+      <DialErrorText text={errorText} />
     </>
   );
 

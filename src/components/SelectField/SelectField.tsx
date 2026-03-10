@@ -6,12 +6,12 @@ import {
 } from '@/components/FormItem/FormItem';
 import { DialSelect, type DialSelectProps } from '@/components/Select/Select';
 
-import type { DialFieldLabelProps } from '@/components/Field/Field';
+import type { DialLabelProps } from '@/components/Label/Label';
 import { DialMultiSelectTags } from '@/components/Select/MultiSelectTags';
 
 export interface DialSelectFieldProps
   extends Omit<DialSelectProps, 'className' | 'elementId'>,
-    Omit<DialFieldLabelProps, 'htmlFor'>,
+    Omit<DialLabelProps, 'htmlFor'>,
     Omit<DialFormItemProps, 'label' | 'children' | 'value'> {
   selectClassName?: string;
   containerClassName?: string;
@@ -39,7 +39,7 @@ export interface DialSelectFieldProps
  * @params - Component properties extending:
  * - {@link DialSelectProps} for select options and props, except for className
  * - {@link DialFormItemProps} for form item props, except for htmlFor
- * - {@link DialFieldLabelProps} for label props, except for label, children, value
+ * - {@link DialLabelProps} for label props, except for label, children, value
  *
  * @param selectClassName CSS class for the select element
  * @param containerClassName CSS class for the form item container
@@ -49,14 +49,14 @@ export interface DialSelectFieldProps
  * ```
  */
 export const DialSelectField: FC<DialSelectFieldProps> = ({
-  fieldTitle,
-  optional,
+  label,
+  required,
   captionDescription,
   containerClassName,
   selectClassName,
   error,
-  elementId,
-  description,
+  id,
+  caption,
   readonly,
   value,
   defaultEmptyText,
@@ -88,10 +88,10 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
 
   return (
     <DialFormItem
-      elementId={elementId}
-      label={fieldTitle}
-      optional={optional}
-      description={description}
+      id={id}
+      label={label}
+      required={required}
+      description={caption}
       error={error}
       captionDescription={captionDescription}
       className={containerClassName}
@@ -102,7 +102,7 @@ export const DialSelectField: FC<DialSelectFieldProps> = ({
       <DialSelect
         className={selectClassName}
         value={value}
-        elementId={elementId}
+        elementId={id}
         invalid={!!error}
         {...restSelectProps}
       />

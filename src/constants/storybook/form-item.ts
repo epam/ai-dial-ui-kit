@@ -11,14 +11,9 @@ export const dialFormItemBaseArgTypes: Partial<
     control: { type: 'text' as const },
     description: 'The label text or element to display for the form item',
   },
-  optional: {
+  required: {
     control: { type: 'boolean' as const },
-    description: 'Whether the field is optional (displays optional indicator)',
-  },
-  optionalText: {
-    control: { type: 'text' as const },
-    description:
-      'Custom text to display for optional fields (default: "(Optional)")',
+    description: 'Whether the field is required (displays required indicator)',
   },
   description: {
     control: { type: 'text' as const },

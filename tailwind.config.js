@@ -27,28 +27,50 @@ const backgroundsColors = {
   'orange-800': 'var(--bg-orange-800, #B25500)',
 };
 
-const buttonsBgColors = {
-  'controls-solid-primary': 'var(--controls-bg-solid-primary, #3970DA)',
-  'controls-solid-primary-hover':
-    'var(--controls-bg-solid-primary-hover, #215DD0)',
-  'controls-solid-error': 'var(--controls-bg-solid-error, #CC4545)',
-  'controls-solid-error-hover': 'var(--controls-bg-solid-error-hover, #AE2F2F)',
-  'controls-solid-disable': 'var(--controls-bg-solid-disable, #69727C)',
-  'controls-outlined-neutral-hover':
-    'var(--controls-bg-outlined-neutral-hover, #333942)',
+const controlsBgColors = {
+  'controls-accent-primary': 'var(--controls-bg-accent-primary, #3970DA)',
+  'controls-accent-primary-hover':
+    'var(--controls-bg-accent-primary-hover, #215DD0)',
+  'controls-accent-primary-active':
+    'var(--controls-bg-accent-primary-active, #1252CE)',
+  'controls-accent-primary-alpha-active':
+    'var(--controls-bg-accent-primary-alpha-active, #74A4FF4D)',
+
+  'controls-accent-secondary-alpha-active':
+    'var(--controls-bg-accent-secondary-alpha-active, #37BABC4D)',
+
+  'controls-accent-tertiary-alpha-active':
+    'var(--controls-bg-accent-tertiary-alpha-active, #A972FF4D)',
+
+  'controls-error': 'var(--controls-bg-error, #CC4545)',
+  'controls-error-hover': 'var(--controls-bg-error-hover, #BF3939)',
+  'controls-error-active': 'var(--controls-bg-error-active, #AE2F2F)',
+  'controls-error-alpha-hover': 'var(--controls-bg-alpha-hover, #F7646426)',
+  'controls-error-alpha-active':
+    'var(--controls-bg-error-alpha-active, #F764644D)',
+
+  'controls-disable-accent': 'var(--controls-bg-disable-accent, #69727C)',
+  'controls-disable': 'var(--controls-bg-disable, #333942)',
+
+  'controls-neutral-hover': 'var(--controls-bg-neutral-hover, #333942)',
+  'controls-neutral-active': 'var(--controls-bg-neutral-active, #5B6570)',
+
+  'controls-accent-success-alpha-hover':
+    'var(--controls-bg-accent-success-alpha-hover, #37BABC26)',
+  'controls-accent-success-alpha-active':
+    'var(--controls-bg-accent-success-alpha-active, #37BABC4D)',
 
   // TODO: old names, need to remove
   'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
   'controls-accent-hover': 'var(--controls-bg-accent-hover, #4878D2)',
   'controls-accent-alpha': 'var(--controls-bg-accent-alpha, #5C8DEA2B)',
-  'controls-disable': 'var(--controls-bg-disable, #7F8792)',
   'controls-enable-primary': 'var(--controls-enable-primary, #FCFCFC)',
 };
 
 const borderColors = {
   transparent: 'transparent',
   primary: 'var(--stroke-primary, #69727C)',
-  secondary: 'var(--stroke-secondary, #222932)',
+  secondary: 'var(--stroke-secondary, #333942)',
   tertiary: 'var(--stroke-tertiary, #090D13)',
   focus: 'var(--stroke-focus, #F3F4F6)',
   error: 'var(--stroke-error, #F76464)',
@@ -85,30 +107,39 @@ const textColors = {
 
 const placeholderColor = {
   primary: 'var(--text-primary, #F3F4F6)',
+  secondary: 'var(--controls-text-secondary-disable, #5B6570)',
 };
 
-const buttonsTextColors = {
-  'controls-solid': 'var(--controls-text-solid, #FCFCFC)',
-  'controls-solid-disable': 'var(--controls-text-solid-disable, #333942)',
-  'controls-outlined': 'var(--controls-text-outlined, #FCFCFC)',
-  'controls-link-primary-hover':
-    'var(--controls-text-link-primary-hover, #3970DA)',
-  'controls-disable': 'var(--controls-disable, #5B6570)',
+const controlsTextColors = {
+  'controls-permanent': 'var(--controls-text-permanent, #FCFCFC)',
+
+  'controls-accent-disable': 'var(--controls-text-accent-disable, #333942)',
+  'controls-primary-disable': 'var(--controls-text-primary-disable, #808997)',
+  'controls-secondary-disable':
+    'var(--controls-text-secondary-disable, #5B6570)',
+
+  'controls-neutral': 'var(--controls-text-neutral, #FCFCFC)',
+
+  'controls-accent-primary-hover':
+    'var(--controls-text-accent-primary-hover, #3970DA)',
+  'controls-accent-primary-active':
+    'var(--controls-text-accent-primary-active, #1252CE)',
 
   // TODO: old names, need to remove
   'controls-primary': 'var(--controls-primary, #FCFCFC)',
+  'controls-disable': 'var(--controls-text-disable, #5B6570)',
 };
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
   theme: {
-    backgroundColor: { ...backgroundsColors, ...buttonsBgColors },
+    backgroundColor: { ...backgroundsColors, ...controlsBgColors },
     borderColor: borderColors,
     stroke: borderColors,
     divideColor: borderColors,
     placeholderColor: placeholderColor,
-    textColor: { ...textColors, ...buttonsTextColors },
+    textColor: { ...textColors, ...controlsTextColors },
     gradientColorStops: backgroundsColors,
 
     extend: {

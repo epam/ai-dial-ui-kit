@@ -12,7 +12,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
   test('renders label and empty value text', () => {
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Group"
+        label="Group"
         htmlFor="group"
         header="Choose an option"
         emptyValueText="None"
@@ -32,7 +32,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
   test('shows custom input value when provided', () => {
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Custom"
+        label="Custom"
         htmlFor="custom"
         header="Choose"
         emptyValueText="None"
@@ -52,7 +52,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
   test('opens popup on trigger click (not readonly) and renders title', () => {
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Group"
+        label="Group"
         htmlFor="group"
         header="Select one"
         emptyValueText="None"
@@ -76,7 +76,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
   test('does not open when disabled is true', () => {
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Disabled"
+        label="Disabled"
         htmlFor="disabled"
         header="Hidden dialog"
         emptyValueText="None"
@@ -101,7 +101,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
 
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Group"
+        label="Group"
         htmlFor="group"
         header="Select"
         emptyValueText="None"
@@ -127,7 +127,7 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
 
     render(
       <DialRadioGroupPopupField
-        fieldTitle="Group"
+        label="Group"
         htmlFor="group"
         header="Select"
         emptyValueText="None"

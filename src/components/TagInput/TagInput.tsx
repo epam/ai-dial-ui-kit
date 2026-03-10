@@ -7,12 +7,14 @@ import {
 } from 'react';
 
 import classNames from 'classnames';
-import { DialFieldLabel } from '@/components/Field/Field';
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { DialTag } from '@/components/Tag/Tag';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
-import type { FieldControlProps } from '@/models/field-control-props';
+import {
+  DialCaptionText,
+  DialErrorText,
+} from '@/components/CaptionText/CaptionText';
 
-export interface DialTagInputProps extends FieldControlProps {
+export interface DialTagInputProps extends DialLabelProps {
   elementId: string;
   initialTags?: string[];
   placeholder?: string;
@@ -53,8 +55,8 @@ export interface DialTagInputProps extends FieldControlProps {
  */
 export const DialTagInput: FC<DialTagInputProps> = ({
   initialTags = [],
-  fieldTitle,
-  optional,
+  label,
+  required,
   elementId,
   placeholder,
   captionDescription,
@@ -101,14 +103,11 @@ export const DialTagInput: FC<DialTagInputProps> = ({
 
   const renderCaption = () => {
     if (errorText) {
-      return <DialErrorText errorText={errorText} />;
+      return <DialErrorText text={errorText} />;
     }
+
     if (captionDescription) {
-      return (
-        <div className="dial-tiny text-secondary mt-1">
-          {captionDescription}
-        </div>
-      );
+      return <DialCaptionText text={captionDescription} />;
     }
     return null;
   };
@@ -132,12 +131,8 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   }, [JSON.stringify(initialTags)]);
 
   return (
-    <div className={classNames('flex flex-col w-full')}>
-      <DialFieldLabel
-        fieldTitle={fieldTitle}
-        optional={optional}
-        htmlFor={elementId}
-      />
+    <div className="flex flex-col w-full">
+      <DialLabel label={label} required={required} htmlFor={elementId} />
       <div
         className={classNames(
           'dial-input min-h-[38px] p-[6px]',
@@ -166,9 +161,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            className={classNames(
-              'dial-input-no-border outline-none border-none w-full min-w-[100px] flex-1 p-1',
-            )}
+            className="dial-input outline-none !border-none w-full min-w-[100px] flex-1 !p-1 !h-auto"
             placeholder={placeholder}
             disabled={disabled}
           />

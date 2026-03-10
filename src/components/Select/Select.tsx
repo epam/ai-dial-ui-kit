@@ -37,6 +37,7 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialMultiSelectTags } from './MultiSelectTags';
 import { SelectSize, SelectVariant } from '@/types/select';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -181,10 +182,10 @@ export const DialSelect: FC<DialSelectProps> = ({
   );
   const inlineSearchInputRef = useRef<HTMLInputElement>(null);
   const setQuery = useCallback(
-    (next: string) => {
+    (next?: string) => {
       if (next !== query) {
-        setInternalQuery(next);
-        onInlineQueryChange?.(next);
+        setInternalQuery(next || '');
+        onInlineQueryChange?.(next || '');
       }
     },
     [onInlineQueryChange, query],
@@ -443,14 +444,14 @@ export const DialSelect: FC<DialSelectProps> = ({
                   placeholder={searchPlaceholder}
                   onChange={setQuery}
                   value={query}
-                  elementId={`search-${elementId || listId}`}
+                  id={`search-${elementId || listId}`}
                 />
               )}
               {closable && (
                 <DialButton
                   aria-label="Close select"
                   className="shrink-0"
-                  iconBefore={<IconX size={16} />}
+                  iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
                   onClick={(e) => {
                     onClose?.(e);
                     setOpen(false);
@@ -485,7 +486,10 @@ export const DialSelect: FC<DialSelectProps> = ({
                     <DialNoDataContent
                       icon={
                         emptyStateIcon ?? (
-                          <IconClipboardX size={24} stroke={0.5} />
+                          <IconClipboardX
+                            size={DIAL_ICON_SIZE.LG}
+                            stroke={0.5}
+                          />
                         )
                       }
                       title={emptyStateTitle}
@@ -593,7 +597,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             ? 'min-h-[25px] px-1.5 py-1'
             : 'min-h-[38px] px-3 py-2',
           invalid && 'dial-input-error',
-          variant === SelectVariant.Secondary ? '!bg-layer-4' : '',
+          variant === SelectVariant.Secondary ? '!bg-layer-4 !h-auto' : '',
           className,
         )}
         onMouseDown={(e) => {

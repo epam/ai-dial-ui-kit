@@ -200,7 +200,7 @@ const InteractiveInputModalWithFormItem = (args: DialInputPopupProps) => {
   return (
     <div className="rounded-md w-[320px]">
       <DialFormItem
-        elementId="selection-field"
+        id="selection-field"
         label="Selection Field"
         description="Please make a selection from the available options"
         error={errorText}

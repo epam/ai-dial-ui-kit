@@ -46,7 +46,7 @@ export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
           context={context.context}
           fill="currentColor"
           strokeWidth={1}
-          className="border-primary w-2 text-[var(--bg-layer-0,_#000000)]"
+          className="stroke-primary text-[var(--bg-layer-0,_#000000)]"
         />
       </div>
     </FloatingPortal>

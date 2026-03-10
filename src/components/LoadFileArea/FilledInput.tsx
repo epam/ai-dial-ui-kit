@@ -6,7 +6,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialInput, type DialInputProps } from '@/components/Input/Input';
 
 interface DialFilledInputProps extends DialInputProps {
-  errorText?: string;
+  error?: string;
   onClick?: () => void;
 }
 
@@ -35,7 +35,7 @@ interface DialFilledInputProps extends DialInputProps {
 export const DialFilledInput: FC<DialFilledInputProps> = ({
   iconBefore,
   className,
-  errorText,
+  error: errorText,
   ...props
 }) => {
   const isInvalid = props.invalid;
@@ -54,11 +54,12 @@ export const DialFilledInput: FC<DialFilledInputProps> = ({
     <DialInput
       {...props}
       iconBefore={getIcon()}
-      tooltipTriggerClassName="flex-1 min-w-0"
-      containerClassName="!h-[40px] !p-0"
-      className={classNames(isInvalid ? 'text-error' : '', className)}
-      tooltipText={isInvalid && errorText ? errorText : undefined}
-      hideBorder
+      containerClassName="h-[40px] p-0"
+      className={classNames(
+        'rounded-r-none border-r-0',
+        isInvalid && 'text-error',
+        className,
+      )}
     />
   );
 };

@@ -47,7 +47,7 @@ import {
 } from '@/components/Grid/renderers/constants.ts';
 import type { SelectionChangedEvent } from 'ag-grid-community';
 import { debounceFn } from '@/utils/debounce.ts';
-import { ariaDescription } from '../Checkbox/constants';
+import { ariaDescription } from '@/components/Checkbox/constants';
 
 setupAgTestIds({ testIdAttribute: 'dataQA' });
 
@@ -196,6 +196,9 @@ export const DialGrid = <T extends object>({
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
   const a11yId = useId();
   const selectedNodesRef = useRef<Set<string>>(new Set());
+  const lastSelectionSourceRef = useRef<SelectionEventSourceType | undefined>(
+    undefined,
+  );
 
   const themeParams = useMemo(
     () => ({
@@ -243,6 +246,16 @@ export const DialGrid = <T extends object>({
     [getContextMenuItems, disabledRowIds, getRowId],
   );
 
+  const isUserSelectionEvent = useCallback(
+    (source?: SelectionEventSourceType) => {
+      return (
+        source === SelectionEventSourceType.API ||
+        source === SelectionEventSourceType.ROW_DATA_CHANGED
+      );
+    },
+    [],
+  );
+
   const onSelectionChanged = useCallback(
     (event: SelectionChangedEvent) => {
       if (!gridApi) {
@@ -252,15 +265,13 @@ export const DialGrid = <T extends object>({
       const selectedRows = selectedNodes.map((node) => node.data as T);
       const selectedIds = new Set(selectedRows.map(getRowId));
       selectedNodesRef.current = selectedIds;
+      lastSelectionSourceRef.current = event.source as SelectionEventSourceType;
 
-      if (
-        event.source !== SelectionEventSourceType.API &&
-        event.source !== SelectionEventSourceType.ROW_DATA_CHANGED
-      ) {
+      if (!isUserSelectionEvent(event.source as SelectionEventSourceType)) {
         onSelectionChange?.(selectedIds, selectedRows);
       }
     },
-    [gridApi, getRowId, onSelectionChange],
+    [gridApi, getRowId, isUserSelectionEvent, onSelectionChange],
   );
 
   const debouncedOnSelectionChange = useMemo(() => {
@@ -403,11 +414,21 @@ export const DialGrid = <T extends object>({
     ],
   );
 
-  const computedColumnDefs = useMemo<ColDef<T>[]>(() => {
-    return wrapCustomCellRenderers
-      ? (columnDefs ?? []).map(wrapRendererIfNeeded)
-      : (columnDefs ?? []);
-  }, [columnDefs, wrapCustomCellRenderers, wrapRendererIfNeeded]);
+  // TODO: temporary fix, until wrapRendererIfNeeded exists
+  const computedColumnDefs = useMemo<ColDef<T>[]>(
+    () => {
+      return wrapCustomCellRenderers
+        ? (columnDefs ?? []).map(wrapRendererIfNeeded)
+        : (columnDefs ?? []);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      columnDefs,
+      wrapCustomCellRenderers,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      wrapCustomCellRenderers ? wrapRendererIfNeeded : null,
+    ],
+  );
 
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
@@ -526,6 +547,22 @@ export const DialGrid = <T extends object>({
       el.setAttribute('aria-description', ariaDescription);
     });
   }, []);
+
+  useEffect(() => {
+    const isCustomSelection = isUserSelectionEvent(
+      lastSelectionSourceRef.current,
+    );
+
+    if (gridApi && selectedRowIds?.size && isCustomSelection) {
+      const firstSelectedId = Array.from(selectedRowIds)[0];
+      if (firstSelectedId) {
+        const node = gridApi.getRowNode(firstSelectedId);
+        if (node) {
+          gridApi.ensureNodeVisible(node);
+        }
+      }
+    }
+  }, [gridApi, isUserSelectionEvent, selectedRowIds]);
 
   return (
     <div

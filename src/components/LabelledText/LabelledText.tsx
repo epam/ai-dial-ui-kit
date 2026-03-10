@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
 
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialLabelledTextProps {
   label: ReactNode;
@@ -16,7 +16,7 @@ export interface DialLabelledTextProps {
  *
  * @example
  * ```tsx
- * <FieldLabel
+ * <DialLabelledText
  *   label="Username"
  *   text="Enter your username"
  *   postfix={<span>*</span>}
@@ -40,7 +40,7 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
 }) => {
   return (
     <div
-      className={classNames(
+      className={mergeClasses(
         'flex flex-col',
         children ? '' : 'max-w-[200px]',
         className,

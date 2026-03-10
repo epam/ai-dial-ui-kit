@@ -20,6 +20,7 @@ import type {
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { IconDots } from '@tabler/icons-react';
 import type { DropdownItem } from '@/models/dropdown';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialBreadcrumbProps {
   pathItems?: DialBreadcrumbPathItem[];
@@ -176,7 +177,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
               aria-label="More breadcrumbs"
               className={breadcrumbEllipsisButtonClassName}
             >
-              <IconDots size={16} />
+              <IconDots size={DIAL_ICON_SIZE.SM} />
             </button>
           </DialDropdown>
           <span className={breadcrumbSeparatorClassName}>{separator}</span>

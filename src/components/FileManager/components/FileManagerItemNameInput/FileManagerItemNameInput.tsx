@@ -25,6 +25,8 @@ export interface DialFileManagerItemNameInputProps {
   inputRef?: Ref<HTMLInputElement>;
   onChange?: (value?: string) => void;
   sharedIndicatorClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
+  fileExtension?: string;
 }
 
 /**
@@ -94,6 +96,8 @@ export const DialFileManagerItemNameInput: FC<
   inputRef,
   onChange,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
+  fileExtension,
 }) => {
   const getInputIconAfter = () => {
     if (!inputInvalid) return null;
@@ -123,18 +127,19 @@ export const DialFileManagerItemNameInput: FC<
         stroke={iconStroke}
         loading={loading}
         shared={shared}
+        fileExtension={fileExtension}
         sharedIndicatorClassName={sharedIndicatorClassName}
+        sharedIndicatorTooltip={sharedIndicatorTooltip}
       />
       <DialInput
         containerClassName={mergeClasses(
           '!h-6 py-[1px] pl-[7px] pr-[7px]',
           inputContainerClassName,
         )}
-        elementId={elementId}
+        id={elementId}
         value={name}
         onChange={onChange}
         invalid={inputInvalid}
-        hideTooltip
         iconAfter={getInputIconAfter()}
         inputRef={inputRef}
       />

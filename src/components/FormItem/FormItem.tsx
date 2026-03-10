@@ -1,8 +1,8 @@
 import { useCallback, type FC, type ReactNode } from 'react';
 
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 
-import { DialFieldLabel } from '@/components/Field/Field';
+import { DialLabel } from '@/components/Label/Label';
 import {
   FormItemOrientation,
   type DialFormItemBaseProps,
@@ -11,7 +11,7 @@ import { containerBaseClassName, orientationClassMap } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialFormItemProps extends DialFormItemBaseProps {
-  elementId: string;
+  id?: string;
   labelVisuallyHidden?: boolean;
   className?: string;
   childrenClassName?: string;
@@ -25,7 +25,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
 /**
  * A layout wrapper for form controls with label, helper text and error message.
  *
- * Uses `DialFieldLabel` for the label and `DialErrorText` for consistent error styling.
+ * Uses `DialLabel` for the label and `DialErrorText` for consistent error styling.
  * Wires accessibility with:
  * - `role="group"`
  * - `aria-labelledby` (when label is present)
@@ -62,7 +62,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  * @params - Component properties extending:
  * - {@link DialFormItemBaseProps} - Form item properties (label, error, description, orientation, etc.)
  *
- * @param elementId - Unique identifier for the form control element (used for accessibility)
+ * @param id - Unique identifier for the form control element (used for accessibility)
  * @param labelVisuallyHidden - Whether to visually hide the label (still accessible to screen readers, default: false)
  * @param className - Additional CSS classes to apply to the container div
  * @param childrenClassName - Additional CSS classes to apply to the children container div
@@ -73,10 +73,9 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
  * @param defaultEmptyText - Text to display when readonly and value is empty (default: "None")
  */
 export const DialFormItem: FC<DialFormItemProps> = ({
-  elementId,
+  id,
   label,
-  optional,
-  optionalText,
+  required,
   description,
   error,
   orientation = FormItemOrientation.Vertical,
@@ -91,10 +90,10 @@ export const DialFormItem: FC<DialFormItemProps> = ({
   defaultEmptyText,
   children,
 }) => {
-  const labelId = `${elementId}-label`;
-  const descriptionId = description ? `${elementId}-desc` : undefined;
-  const errorId = error ? `${elementId}-err` : undefined;
-  const captionDescriptionId = `${elementId}-caption-desc`;
+  const labelId = `${id}-label`;
+  const descriptionId = description ? `${id}-desc` : undefined;
+  const errorId = error ? `${id}-err` : undefined;
+  const captionDescriptionId = `${id}-caption-desc`;
 
   const describedBy =
     [descriptionId, errorId].filter(Boolean).join(' ') || undefined;
@@ -106,13 +105,8 @@ export const DialFormItem: FC<DialFormItemProps> = ({
 
     if (typeof error === 'string' || typeof error === 'undefined') {
       return error ? (
-        <div
-          id={errorId}
-          role="alert"
-          aria-live="polite"
-          className={errorClassName}
-        >
-          <DialErrorText errorText={error} />
+        <div id={errorId} aria-live="polite" className={errorClassName}>
+          <DialErrorText text={error} />
         </div>
       ) : null;
     }
@@ -161,16 +155,15 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           id={labelId}
           className={mergeClasses(orientation === 'horizontal' && 'shrink-0')}
         >
-          <DialFieldLabel
-            htmlFor={elementId}
-            fieldTitle={label}
-            optional={optional}
-            optionalText={optionalText}
+          <DialLabel
+            htmlFor={id}
+            label={label}
+            required={required}
             className={mergeClasses(
               labelVisuallyHidden && 'sr-only',
               labelClassName,
             )}
-            description={description}
+            caption={description}
           />
         </div>
       )}

@@ -94,7 +94,7 @@ export interface DialFileManagerNavigationPanelProps
  * @param [searchable=true] - Whether to render the search control
  * @param [value] - Controlled value for the search input (parent-managed)
  * @param [elementId="file-manager-search"] - DOM id for the internal DialSearch input
- * @param [size=SearchSize.Base] - Size of the search input (from DialSearchProps)
+ * @param [size=ElementSize.Standard] - Size of the search input (from DialSearchProps)
  * @param [onSearchChange] - Callback fired when the search value changes
  * @param [searchClassName] - Extra classes for the search input element
  * @param [searchContainerClassName] - Extra classes for the search container
@@ -120,7 +120,6 @@ export const DialFileManagerNavigationPanel: FC<
   value,
   elementId = 'file-manager-search',
   disabled,
-  readonly,
   invalid,
   onSearchChange,
   searchClassName,
@@ -282,7 +281,7 @@ export const DialFileManagerNavigationPanel: FC<
       {searchable && (
         <div
           className={mergeClasses(searchContainerWrapperClassName, {
-            'w-[38px]': isCompactView && !isSearchExpanded,
+            'w-[40px]': isCompactView && !isSearchExpanded,
             'w-full': isCompactView && isSearchExpanded,
           })}
           role="search"
@@ -290,17 +289,17 @@ export const DialFileManagerNavigationPanel: FC<
           onClick={expandSearch}
         >
           <DialSearch
-            elementId={elementId}
+            id={elementId}
             value={value ?? ''}
             onChange={onSearchChange}
             disabled={disabled}
-            readonly={readonly}
             onBlur={handleSearchBlur}
             invalid={invalid}
             className={searchClassName}
-            containerClassName={mergeClasses(searchContainerClassName, {
-              'p-[10px]': isCompactView,
-            })}
+            wrapperClassName={
+              isCompactView && !isSearchExpanded ? 'pl-2.5' : ''
+            }
+            containerClassName={searchContainerClassName}
           />
         </div>
       )}

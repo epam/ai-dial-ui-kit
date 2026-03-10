@@ -544,4 +544,41 @@ describe('Dial UI Kit :: useBulkActions', () => {
     expect(onUnshare).toHaveBeenCalledWith([testFiles[0]]);
     expect(onClearSelection).toHaveBeenCalledTimes(1);
   });
+
+  test('remove access action calls onRemoveAccess and onClearSelection with selected files', () => {
+    const onRemoveAccess = vi.fn();
+    const onClearSelection = vi.fn();
+    const selectedFiles = new Map<string, DialFile>([
+      [testFiles[0].path, testFiles[0]],
+    ]);
+
+    const { result } = renderHook(() =>
+      useBulkActions({
+        selectedFiles,
+        actionLabels: {
+          [DialFileManagerActions.RemoveAccess]: 'Remove access',
+        },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onUnshare: vi.fn(),
+        getCurrentFolderPath: () => '/test',
+        onRemoveAccess,
+        onClearSelection,
+      }),
+    );
+
+    const removeAccessAction = result.current[0];
+    removeAccessAction.onClick?.({
+      key: removeAccessAction.key,
+      domEvent: mockMouseEvent,
+    });
+
+    expect(onRemoveAccess).toHaveBeenCalledTimes(1);
+    expect(onRemoveAccess).toHaveBeenCalledWith([testFiles[0]]);
+    expect(onClearSelection).toHaveBeenCalledTimes(1);
+  });
 });

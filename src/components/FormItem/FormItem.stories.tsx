@@ -27,7 +27,7 @@ const meta = {
     },
   },
   argTypes: {
-    elementId: {
+    id: {
       control: { type: 'text' as const },
       description: 'The unique identifier for the form element',
     },
@@ -54,7 +54,7 @@ const meta = {
     ...dialFormItemBaseArgTypes,
   },
   args: {
-    elementId: 'field',
+    id: 'field',
     label: 'Field label',
     orientation: FormItemOrientation.Vertical,
   },
@@ -83,13 +83,13 @@ const BasicFormExample = (args: DialFormItemProps) => {
     >
       <DialFormItem
         {...args}
-        elementId="name"
+        id="name"
         label="Name"
         description="Type your full name."
         captionDescription="This is additional caption text."
       >
         <DialInput
-          elementId="name"
+          id="name"
           placeholder="John Doe"
           value={name}
           onChange={(name) => setName(name ?? '')}
@@ -97,10 +97,9 @@ const BasicFormExample = (args: DialFormItemProps) => {
       </DialFormItem>
 
       <DialFormItem
-        elementId="agree"
+        id="agree"
         label="Terms"
-        optional
-        optionalText="(optional)"
+        required
         description="You must accept the terms to proceed."
       >
         <DialCheckbox
@@ -133,14 +132,14 @@ const WithValidationExample = (args: DialFormItemProps) => {
     >
       <DialFormItem
         {...args}
-        elementId="email"
+        id="email"
         label="Email"
         description="We will send an invitation link."
         captionDescription="Make sure to enter a valid email address."
         error={!isValid && email ? 'Enter a valid email' : undefined}
       >
         <DialInput
-          elementId="email"
+          id="email"
           type="email"
           placeholder="name@company.com"
           value={email}
@@ -175,7 +174,7 @@ const SelectBasicExample = (args: DialFormItemProps) => {
     >
       <DialFormItem
         {...args}
-        elementId="transport"
+        id="transport"
         label="Transport"
         description="Select your preferred transport type."
         className="w-[160px]"
@@ -210,7 +209,7 @@ const SelectHorizontalExample = (args: DialFormItemProps) => {
     >
       <DialFormItem
         {...args}
-        elementId="transport-h"
+        id="transport-h"
         label="Transport"
         orientation={FormItemOrientation.Horizontal}
         labelClassName="w-32 mt-1"
@@ -247,9 +246,9 @@ const SelectWithValidationExample = (args: DialFormItemProps) => {
         alert(`Create with: ${JSON.stringify({ name, transport })}`);
       }}
     >
-      <DialFormItem elementId="name" label="Name">
+      <DialFormItem id="name" label="Name">
         <DialInput
-          elementId="name"
+          id="name"
           placeholder="Entity name"
           value={name}
           onChange={(name) => setName(name ?? '')}
@@ -258,7 +257,7 @@ const SelectWithValidationExample = (args: DialFormItemProps) => {
 
       <DialFormItem
         {...args}
-        elementId="transport-v"
+        id="transport-v"
         label="Transport"
         description="Required field."
         error={!transport ? 'Please choose a transport' : undefined}

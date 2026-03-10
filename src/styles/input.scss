@@ -1,20 +1,17 @@
 .dial-input {
-  @apply border border-solid border-primary rounded;
+  @apply border border-solid border-primary rounded h-[40px];
+  @apply bg-transparent truncate dial-small-text;
+  @apply w-full outline-0;
 
   &:hover {
-    @apply border-hover;
+    @apply border-accent-primary;
   }
 
   &:focus,
+  &:active,
   &:focus-within {
-    @apply border-accent-primary;
+    @apply border-focus;
   }
-}
-
-.dial-input,
-.dial-input-no-border {
-  @apply bg-transparent dial-small truncate;
-  @apply w-full outline-0;
 
   &:not(:placeholder-shown) {
     @apply text-primary;
@@ -22,29 +19,19 @@
 
   &:disabled {
     @apply dial-input-disable;
+    &:not(:placeholder-shown) {
+      @apply placeholder-secondary;
+    }
   }
 }
 
 .dial-input-disable,
-.dial-input-readonly {
-  @apply bg-layer-3;
-}
-
-.dial-input-disable,
 .dial-input-disable:not(:placeholder-shown) {
-  @apply text-secondary;
-}
-
-.dial-input-disable:hover {
-  @apply border-primary;
+  @apply cursor-not-allowed bg-controls-disable border-transparent text-controls-primary-disable;
 }
 
 .dial-input-error {
   @apply border-error;
-}
-
-.dial-input-field {
-  @apply h-[38px];
 }
 
 input {

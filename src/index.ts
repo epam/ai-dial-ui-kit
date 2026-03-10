@@ -1,5 +1,8 @@
-export { DialErrorText } from './components/ErrorText/ErrorText';
-export { DialFieldLabel } from './components/Field/Field';
+export {
+  DialCaptionText,
+  DialErrorText,
+} from './components/CaptionText/CaptionText';
+export { DialLabel } from './components/Label/Label';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
@@ -8,6 +11,7 @@ export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
 export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
+export type { DialNoDataContentProps } from './components/NoDataContent/NoDataContent';
 export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
@@ -33,6 +37,7 @@ export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 // Buttons
 export { DialButton } from './components/Button/Button';
 export { DialIconButton } from './components/IconButton/IconButton';
+export type { DialIconButtonProps } from './components/IconButton/IconButton';
 export {
   DialErrorButton,
   DialNeutralButton,
@@ -54,7 +59,6 @@ export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
-export { DialTextAreaField } from './components/TextAreaField/TextAreaField';
 
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
@@ -73,11 +77,12 @@ export { DialFormPopup } from './components/FormPopup/FormPopup';
 // export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
 // Inputs
 export { DialInput } from './components/Input/Input';
+export type { DialInputButtonProps } from './components/Input/Button/InputButton';
 export type { DialInputProps } from './components/Input/Input';
-export { DialNumberInputField } from './components/InputField/InputField';
-export { DialTextInputField } from './components/InputField/InputField';
-export { DialPasswordInputField } from './components/PasswordInput/PasswordInputField';
+export { DialNumberInput } from './components/NumberInput/NumberInput';
 export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
+
+// Selects and related components
 export { DialSearch } from './components/Search/Search';
 export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
@@ -97,7 +102,7 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 
 // Types
 export { AlertVariant } from './types/alert';
-export { ButtonVariant, ButtonAppearance, ButtonSize } from './types/button';
+export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
@@ -106,7 +111,7 @@ export {
   DropdownTrigger,
   DropdownItemType,
 } from './types/dropdown';
-export { SearchSize } from './types/search';
+export { ElementSize } from './types/size';
 export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
@@ -167,3 +172,5 @@ export {
   SIZE_COLUMN,
   UPDATED_AT_COLUMN,
 } from './constants/file-grid-columns';
+
+export type { DIAL_ICON_SIZE } from './constants/icon.ts';

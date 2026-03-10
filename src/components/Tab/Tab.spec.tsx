@@ -46,6 +46,19 @@ describe('Dial UI Kit :: DialTab', () => {
     ).toBeInTheDocument();
   });
 
+  test('shows alert icon if warning', () => {
+    const { container } = render(
+      <DialTab
+        tab={{ ...baseTab, warning: true }}
+        active={false}
+        onClick={vi.fn()}
+      />,
+    );
+    expect(
+      container.querySelector('.tabler-icon-alert-triangle'),
+    ).toBeInTheDocument();
+  });
+
   test('applies active styles for horizontal', () => {
     render(<DialTab tab={baseTab} active horizontal onClick={vi.fn()} />);
     const btn = screen.getByRole('tab');

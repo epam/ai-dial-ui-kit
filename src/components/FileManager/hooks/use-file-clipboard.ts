@@ -54,6 +54,7 @@ export const useFileClipboard = ({
     openConflictResolution,
     handleReplaceAll: baseHandleReplaceAll,
     handleDuplicateAll: baseHandleDuplicateAll,
+    handleCancelAll: baseHandleCancelAll,
     handleDecideForEach: baseHandleDecideForEach,
   } = useConflictResolution({
     getDestinationFiles,
@@ -153,6 +154,11 @@ export const useFileClipboard = ({
     clearState();
   }, [baseHandleDuplicateAll, clearState]);
 
+  const handleConflictCancel = useCallback(() => {
+    baseHandleCancelAll();
+    clearState();
+  }, [baseHandleCancelAll, clearState]);
+
   const handleConflictDecideForEach = useCallback(
     (decisions: FileConflictDecision[]) => {
       baseHandleDecideForEach(decisions);
@@ -245,6 +251,7 @@ export const useFileClipboard = ({
     openConflictResolution,
     closeConflictResolution,
     handleConflictReplace,
+    handleConflictCancel,
     handleConflictDuplicate,
     handleConflictDecideForEach,
     sourceFolder,

@@ -525,6 +525,64 @@ export const TreeCollapsedControlled: Story = {
   render: TreeCollapsedControlledComponent,
 };
 
+const TreeExpandedControlledComponent = (args: DialFileManagerProps) => {
+  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
+    new Set(['All files', 'All files/Design']),
+  );
+
+  const expandDesign = () =>
+    setExpandedPaths(new Set(['All files', 'All files/Design']));
+
+  const expandIcons = () =>
+    setExpandedPaths(
+      new Set(['All files', 'All files/Design', 'All files/Design/Icons']),
+    );
+
+  const expandDeep = () =>
+    setExpandedPaths(
+      new Set([
+        'All files',
+        'All files/Design',
+        'All files/Design/Icons',
+        'All files/Design/Icons/SVG',
+        'All files/Design/Icons/SVG/24px',
+      ]),
+    );
+
+  const collapseAll = () => setExpandedPaths(new Set());
+
+  return (
+    <div className="h-[640px] flex flex-col gap-3">
+      <div className="flex gap-2 px-2">
+        <DialPrimaryButton label="Expand Design" onClick={expandDesign} />
+        <DialPrimaryButton label="Expand Icons" onClick={expandIcons} />
+        <DialPrimaryButton label="Expand Deep" onClick={expandDeep} />
+        <DialPrimaryButton label="Collapse All" onClick={collapseAll} />
+      </div>
+      <DialFileManager
+        {...args}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          expandedPaths,
+          onExpandedPathsChange: setExpandedPaths,
+        }}
+      />
+    </div>
+  );
+};
+
+export const TreeExpandedControlled: Story = {
+  render: TreeExpandedControlledComponent,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Tree expandedPaths is fully controlled by the parent. Use buttons to change expanded state; the tree reflects the controlled expandedPaths.',
+      },
+    },
+  },
+};
+
 const rootItem: DialRootFolder = {
   id: 'root',
   folderId: 'root',
@@ -1130,6 +1188,58 @@ export const WithUnshareAction: Story = {
           alert(`Unsharing file: ${files.map((f) => f.name).join(',')}`);
         }}
         sharedWithMeIds={['All files/Design']}
+      />
+    </div>
+  ),
+};
+
+export const WithRemoveAccessAction: Story = {
+  render: (args) => (
+    <div className="h-[640px]">
+      <DialFileManager
+        {...args}
+        gridOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+            info: 'Info',
+            removeAccess: 'Remove access',
+          },
+        }}
+        treeOptions={{
+          actionLabels: {
+            unshare: 'Unshare',
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            rename: 'Rename',
+            download: 'Download',
+            delete: 'Delete',
+            removeAccess: 'Remove access',
+          },
+        }}
+        bulkActionsToolbarOptions={{
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
+          actionLabels: {
+            duplicate: 'Duplicate',
+            copy: 'Copy to',
+            move: 'Move to',
+            download: 'Download',
+            delete: 'Delete',
+            unshare: 'Unshare',
+            removeAccess: 'Remove access',
+          },
+        }}
+        onRemoveFilesAccess={(files) => {
+          alert(`Removing access file: ${files.map((f) => f.name).join(',')}`);
+        }}
+        sharedByMePaths={new Set(['All files/Design'])}
       />
     </div>
   ),

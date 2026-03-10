@@ -9,6 +9,8 @@ import {
   IconTrashX,
   IconInfoCircle,
   IconExternalLink,
+  IconEye,
+  IconUserX,
 } from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
@@ -29,10 +31,12 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Rename]?: string;
     [DialFileManagerActions.Download]?: string;
     [DialFileManagerActions.ManagePermissions]?: string;
+    [DialFileManagerActions.Preview]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
   onDuplicate: (file: DialFile) => void;
   onCopy: (file: DialFile) => void;
@@ -42,10 +46,14 @@ export interface UseGridContextMenuProps {
   onDelete: (file: DialFile, parentFolderPath: string) => void;
   onInfo: (file: DialFile) => void;
   onUnshare: (file: DialFile) => void;
+  onRemoveAccess?: (file: DialFile) => void;
   sharedWithMeIds?: string[];
+  sharedByMePaths?: Set<string>;
   onAddSibling?: (file: DialFile) => void;
   onAddChild?: (file: DialFile) => void;
   onManagePermissions?: (path?: string) => void;
+  onPreview?: (path?: string) => void;
+  previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
 }
 
@@ -59,10 +67,14 @@ export const useGridContextMenu = ({
   onDelete,
   onInfo,
   onUnshare,
+  onRemoveAccess,
   sharedWithMeIds,
+  sharedByMePaths,
   onAddSibling,
   onAddChild,
   onManagePermissions,
+  onPreview,
+  previewExtensions,
   isRenameFileAvailable = true,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
@@ -182,6 +194,25 @@ export const useGridContextMenu = ({
         });
       }
 
+      const parts = file.name.split('.');
+      const extension = parts.length > 1 ? parts[parts.length - 1] : '';
+      const isPreviewAvailable =
+        extension && previewExtensions?.includes(`.${extension}`);
+
+      if (
+        actionLabels[DialFileManagerActions.Preview] &&
+        typeof onPreview === 'function' &&
+        file.nodeType === DialFileNodeType.ITEM &&
+        isPreviewAvailable
+      ) {
+        items.push({
+          key: DialFileManagerActions.Preview,
+          label: actionLabels[DialFileManagerActions.Preview],
+          icon: <IconEye {...BASE_ICON_PROPS} className="text-secondary" />,
+          onClick: () => onPreview?.(file.path),
+        });
+      }
+
       const emptyOrWritePermissions =
         !file.permissions ||
         file.permissions.includes(DialFilePermission.WRITE);
@@ -244,6 +275,21 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (
+        actionLabels[DialFileManagerActions.RemoveAccess] &&
+        sharedByMePaths?.has(file.path) &&
+        onRemoveAccess
+      ) {
+        items.push({
+          key: DialFileManagerActions.RemoveAccess,
+          label: actionLabels[DialFileManagerActions.RemoveAccess],
+          icon: (
+            <IconUserX size={BASE_ICON_PROPS.size} className="text-secondary" />
+          ),
+          onClick: () => onRemoveAccess(file),
+        });
+      }
+
       return items;
     };
   }, [
@@ -258,8 +304,12 @@ export const useGridContextMenu = ({
     onRename,
     onInfo,
     onUnshare,
+    onRemoveAccess,
     sharedWithMeIds,
+    sharedByMePaths,
     onManagePermissions,
+    onPreview,
+    previewExtensions,
     isRenameFileAvailable,
   ]);
 };

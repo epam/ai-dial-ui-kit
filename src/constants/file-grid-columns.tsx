@@ -13,6 +13,11 @@ import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants'
 import type { FileManagerGridContext } from '@/components/FileManager/hooks/use-file-manager-columns';
 import { formatBytes } from '@/components/FileManager/utils';
 import type { ColDef } from 'ag-grid-community';
+import { convertToDate } from '@/components/Grid/renderers/utils';
+import {
+  DEFAULT_DATE_FORMAT_OPTIONS,
+  DEFAULT_LOCALE,
+} from '@/components/Grid/renderers/constants';
 
 type GridRow = FileManagerGridRow;
 
@@ -96,6 +101,7 @@ export const NAME_COLUMN =
                   ? DialItemType.Folder
                   : DialItemType.File
               }
+              fileExtension={renamedItem.name.split('.').pop()}
               elementId={`rename-${params.data.id}`}
               editing={true}
               shared={isSharedByMe}
@@ -163,6 +169,18 @@ export const UPDATED_AT_COLUMN =
       locale: dateLocale,
       options: dateOptions,
     },
+    filterValueGetter: (params) => {
+      const value = params.data[params.colDef.field || ''];
+      const date = convertToDate(value);
+      if (!date) return '';
+
+      const formatted = new Intl.DateTimeFormat(
+        dateLocale || DEFAULT_LOCALE,
+        dateOptions || DEFAULT_DATE_FORMAT_OPTIONS,
+      );
+
+      return formatted.format(date);
+    },
   });
 
 export const SIZE_COLUMN = (headerName: string): ColDef => ({
@@ -172,6 +190,11 @@ export const SIZE_COLUMN = (headerName: string): ColDef => ({
   width: 120,
   suppressSizeToFit: true,
   cellRenderer: (params: { data: GridRow }): string => {
+    return params.data.nodeType === DialFileNodeType.ITEM
+      ? formatBytes(params.data.contentLength)
+      : '';
+  },
+  filterValueGetter: (params) => {
     return params.data.nodeType === DialFileNodeType.ITEM
       ? formatBytes(params.data.contentLength)
       : '';

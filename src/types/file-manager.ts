@@ -15,7 +15,9 @@ export enum DialFileManagerActions {
   Rename = 'rename',
   Info = 'info',
   Unshare = 'unshare',
+  RemoveAccess = 'removeAccess',
   ManagePermissions = 'managePermissions',
+  Preview = 'preview',
 }
 
 export enum DialFileManagerConflictActions {

@@ -23,7 +23,7 @@
 }
 
 .dial-body-semi-text {
-  @apply dial-body font-semibold;
+  @apply dial-body-text font-semibold;
 }
 
 .dial-small-text {
@@ -31,7 +31,7 @@
 }
 
 .dial-small-semi-text {
-  @apply dial-small font-semibold;
+  @apply dial-small-text font-semibold;
 }
 
 .dial-tiny-text {
@@ -39,7 +39,7 @@
 }
 
 .dial-tiny-semi-text {
-  @apply dial-tiny font-semibold;
+  @apply dial-tiny-text font-semibold;
 }
 
 .dial-caption-text {

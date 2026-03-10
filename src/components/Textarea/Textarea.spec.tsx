@@ -4,12 +4,12 @@ import { DialTextarea } from './Textarea';
 
 describe('Dial UI Kit :: DialTextarea', () => {
   test('Should render successfully', () => {
-    const { baseElement } = render(<DialTextarea textareaId="testArea" />);
+    const { baseElement } = render(<DialTextarea id="testArea" />);
     expect(baseElement).toBeTruthy();
   });
 
   test('Should set string value', () => {
-    const res = render(<DialTextarea textareaId="testArea" value="str" />);
+    const res = render(<DialTextarea id="testArea" value="str" />);
     const input = res.getByDisplayValue('str');
     expect(input).toBeTruthy();
     expect(input.id).toBe('testArea');
@@ -17,7 +17,7 @@ describe('Dial UI Kit :: DialTextarea', () => {
 
   test('Should check invalid true', () => {
     const res = render(
-      <DialTextarea textareaId="testArea" value="str" invalid={true} />,
+      <DialTextarea id="testArea" value="str" invalid={true} />,
     );
     const input = res.getByDisplayValue('str');
     expect(input).toBeTruthy();
@@ -33,7 +33,7 @@ describe('Dial UI Kit :: DialTextarea', () => {
     };
 
     const { baseElement } = render(
-      <DialTextarea textareaId="testArea" value={value} onChange={onChange} />,
+      <DialTextarea id="testArea" value={value} onChange={onChange} />,
     );
     const input = baseElement.getElementsByTagName('textarea')[0];
 

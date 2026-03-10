@@ -1,11 +1,9 @@
-import {
-  inputBaseArgTypes,
-  numberInputBaseArgTypes,
-} from '@/constants/storybook/input';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconEye, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { DialInput, type DialInputProps } from './Input';
+import { inputBaseArgTypes } from '@/constants/storybook/input';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const InteractiveInput = (args: DialInputProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -22,7 +20,7 @@ const InteractiveInput = (args: DialInputProps) => {
 };
 
 const meta = {
-  title: 'Form/Input',
+  title: 'DIAL/Elements/Inputs/Input',
   component: DialInput,
   tags: ['input'],
   parameters: {
@@ -35,56 +33,13 @@ const meta = {
   },
   argTypes: {
     ...inputBaseArgTypes,
-    ...numberInputBaseArgTypes,
-    type: {
-      control: { type: 'select' },
-      options: ['text', 'password', 'email', 'number', 'search'],
-      description: 'Input type',
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text',
-    },
-    containerClassName: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes for the container',
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes for the input element',
-    },
-    hideBorder: {
-      control: { type: 'boolean' },
-      description: 'Whether to hide the input border',
-    },
-    onChange: {
-      control: false,
-      description: 'Callback function called when the input value changes',
-    },
-    onBlur: {
-      control: false,
-      description: 'Callback function called when the input blurs',
-    },
-    tooltipText: {
-      control: { type: 'text' },
-      description: 'The text to display inside the tooltip',
-    },
-    tooltipTriggerClassName: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply to the tooltip trigger',
-    },
-    hideTooltip: {
-      control: { type: 'boolean' },
-      description: 'Whether to hide the tooltip',
-    },
   },
   args: {
-    elementId: 'story-input',
+    id: 'story-input',
     type: 'text',
     placeholder: 'Placeholder',
     disabled: false,
     invalid: false,
-    hideBorder: false,
   },
   render: InteractiveInput,
 } satisfies Meta<DialInputProps>;
@@ -98,57 +53,43 @@ export const Default: Story = {
   },
 };
 
-export const WithValue: Story = {
+export const Filled: Story = {
   args: {
     placeholder: 'Enter text...',
     value: 'Sample text',
   },
 };
 
-export const WithDefaultValue: Story = {
-  args: {
-    placeholder: 'Enter text...',
-    defaultValue: 'Sample text',
-  },
-};
-
-export const WithIconBefore: Story = {
+export const IconBefore: Story = {
   args: {
     placeholder: 'Search...',
-    iconBefore: <IconSearch size={16} />,
+    iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
   },
 };
 
-export const WithIconAfter: Story = {
+export const IconAfter: Story = {
   args: {
     placeholder: 'Password',
     type: 'password',
-    iconAfter: <IconEye size={16} />,
+    iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
   },
 };
 
-export const WithBothIcons: Story = {
+export const BothIcons: Story = {
   args: {
     placeholder: 'Search...',
-    iconBefore: <IconSearch size={16} />,
-    iconAfter: <IconEye size={16} />,
+    iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
+    iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
   },
 };
 
 export const Disabled: Story = {
   args: {
-    placeholder: 'Disabled input',
+    placeholder: 'Disable input',
     disabled: true,
   },
 };
 
-export const Readonly: Story = {
-  args: {
-    placeholder: 'Readonly input',
-    readonly: true,
-    value: "Value can't be changed",
-  },
-};
 export const Invalid: Story = {
   args: {
     placeholder: 'Invalid input',
@@ -157,180 +98,75 @@ export const Invalid: Story = {
   },
 };
 
-export const WithoutBorder: Story = {
-  args: {
-    placeholder: 'Borderless input',
-    hideBorder: true,
-  },
-};
+export const MaxView: Story = {
+  render: () => {
+    const props: DialInputProps = {
+      placeholder: 'Placeholder',
+      iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
+      postfix: 'postfix',
+      prefix: 'prefix',
+      caption: 'Caption text',
+      iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
+      inputButtonProps: {
+        icon: <IconSearch size={DIAL_ICON_SIZE.MD} />,
+        onClick: () => alert('Input button clicked'),
+      },
+    };
 
-export const NumberInput: Story = {
-  args: {
-    type: 'number',
-    placeholder: '0',
-    value: 42,
-  },
-};
+    return (
+      <div className="flex flex-col h-full w-full items-center">
+        <h2 className="text-primary font-semibold mb-8">Inputs</h2>
 
-export const NumberInputWithMinMax: Story = {
-  args: {
-    type: 'number',
-    placeholder: 'Enter age (18-120)',
-    min: 18,
-    max: 120,
-    value: 25,
-  },
-};
+        <div className="flex-1 min-h-0 flex flex-col gap-y-6">
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Default
+            </div>
+            <InteractiveInput id="default-input" {...props} />
+          </div>
 
-export const WithPrefixAndSuffix: Story = {
-  args: {
-    placeholder: 'Enter amount',
-    value: '100',
-    prefix: '$',
-    suffix: 'USD',
-  },
-};
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Filled
+            </div>
+            <InteractiveInput id="field-input" value="Text" {...props} />
+          </div>
 
-export const WithTextBeforeAndAfter: Story = {
-  args: {
-    placeholder: 'Enter domain',
-    value: 'example',
-    textBeforeInput: 'https://',
-    textAfterInput: '.com',
-  },
-};
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Error
+            </div>
+            <InteractiveInput
+              id="error-input"
+              invalid={true}
+              value="Text"
+              error="Error message"
+              {...props}
+            />
+          </div>
 
-export const WithAllExtraParts: Story = {
-  args: {
-    placeholder: 'Enter value',
-    value: 'test',
-    prefix: 'pre',
-    suffix: 'suf',
-    textBeforeInput: 'before',
-    textAfterInput: 'after',
-    iconBefore: <IconSearch size={16} />,
-    iconAfter: <IconEye size={16} />,
-  },
-};
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled filled
+            </div>
+            <InteractiveInput
+              id="disable-input"
+              disabled={true}
+              value="Text"
+              {...props}
+            />
+          </div>
 
-export const WithTooltipText: Story = {
-  args: {
-    value: 'example value',
-    tooltipText: 'Tooltip text',
-  },
-};
-
-export const HiddenTooltip: Story = {
-  args: {
-    value: 'example value',
-    hideTooltip: true,
-  },
-};
-
-export const AllVariantsWithIcons: Story = {
-  render: () => (
-    <div className="p-8 max-w-[1200px]">
-      <div className="grid grid-cols-4 gap-6">
-        {/* Default State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Default</div>
-          <InteractiveInput
-            elementId="default-input"
-            placeholder="Placeholder"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Hover State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Hover</div>
-          <InteractiveInput
-            elementId="hover-input"
-            containerClassName="dial-input-for-hover"
-            placeholder="Placeholder"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Field State (with value) */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field</div>
-          <InteractiveInput
-            elementId="field-input"
-            placeholder="Placeholder"
-            value="Input value"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Field Hover State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field hover</div>
-          <InteractiveInput
-            elementId="field-hover-input"
-            placeholder="Placeholder"
-            containerClassName="dial-input-for-hover"
-            value="Input value"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Focus State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Focus</div>
-          <InteractiveInput
-            elementId="focus-input"
-            containerClassName="dial-input-for-focus"
-            placeholder="Placeholder"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Error State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Error</div>
-          <InteractiveInput
-            elementId="error-input"
-            placeholder="Placeholder"
-            invalid={true}
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Disable State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Disable</div>
-          <InteractiveInput
-            elementId="disable-input"
-            placeholder="Placeholder"
-            disabled={true}
-            value="Disabled input"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
-        </div>
-
-        {/* Read-only State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Read-only</div>
-          <InteractiveInput
-            elementId="readonly-input"
-            placeholder="Placeholder"
-            readonly={true}
-            value="Read-only value"
-            iconBefore={<IconSearch size={16} />}
-            iconAfter={<IconEye size={16} />}
-          />
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled empty
+            </div>
+            <InteractiveInput id="disable-input" disabled={true} {...props} />
+          </div>
         </div>
       </div>
-    </div>
-  ),
+    );
+  },
   parameters: {
     pseudo: {
       hover: ['.dial-input-for-hover'],
@@ -339,238 +175,113 @@ export const AllVariantsWithIcons: Story = {
   },
 };
 
-export const AllVariantsWithoutIcon: Story = {
-  render: () => (
-    <div className="p-8 max-w-[1200px]">
-      <div className="grid grid-cols-4 gap-6">
-        {/* Default State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Default</div>
-          <InteractiveInput
-            elementId="default-no-icon-input"
-            placeholder="Placeholder"
-          />
-        </div>
+export const AllVariants: Story = {
+  render: () => {
+    return (
+      <div className="flex flex-col h-full w-full items-center">
+        <h2 className="text-primary font-semibold mb-8">Inputs</h2>
 
-        {/* Hover State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Hover</div>
-          <InteractiveInput
-            elementId="hover-no-icon-input"
-            containerClassName="dial-input-for-hover-no-icon"
-            placeholder="Placeholder"
-          />
-        </div>
+        <div className="flex-1 min-h-0 flex flex-col gap-y-6">
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Default
+            </div>
+            <InteractiveInput
+              id="default-input"
+              placeholder="Placeholder"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Field State (with value) */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field</div>
-          <InteractiveInput
-            elementId="field-no-icon-input"
-            placeholder="Placeholder"
-            value="Input value"
-          />
-        </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Filled
+            </div>
+            <InteractiveInput
+              id="field-input"
+              placeholder="Placeholder"
+              value="Text"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Field Hover State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Field hover</div>
-          <InteractiveInput
-            elementId="field-hover-no-icon-input"
-            containerClassName="dial-input-for-hover-no-icon"
-            placeholder="Placeholder"
-            value="Input value"
-          />
-        </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Hover
+            </div>
+            <InteractiveInput
+              id="hover-input"
+              containerClassName="dial-input-for-hover"
+              placeholder="Placeholder"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Focus State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Focus</div>
-          <InteractiveInput
-            elementId="focus-no-icon-input"
-            containerClassName="dial-input-for-focus-no-icon"
-            placeholder="Placeholder"
-          />
-        </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Focus/Active
+            </div>
+            <InteractiveInput
+              id="focus-input"
+              containerClassName="dial-input-for-focus"
+              placeholder="Placeholder"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Error State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Error</div>
-          <InteractiveInput
-            elementId="error-no-icon-input"
-            placeholder="Placeholder"
-            invalid={true}
-          />
-        </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Error
+            </div>
+            <InteractiveInput
+              id="error-input"
+              placeholder="Placeholder"
+              invalid={true}
+              value="Text"
+              error="Error message"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Disable State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Disable</div>
-          <InteractiveInput
-            elementId="disable-no-icon-input"
-            placeholder="Placeholder"
-            disabled={true}
-            value="Disabled input"
-          />
-        </div>
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled filled
+            </div>
+            <InteractiveInput
+              id="disable-input"
+              placeholder="Placeholder"
+              disabled={true}
+              value="Text"
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
 
-        {/* Read-only State */}
-        <div>
-          <div className="text-primary font-semibold mb-2">Read-only</div>
-          <InteractiveInput
-            elementId="readonly-no-icon-input"
-            placeholder="Placeholder"
-            readonly={true}
-            value="Read-only value"
-          />
+          <div className="flex flex-row items-center gap-x-6">
+            <div className="text-primary font-semibold mb-2 w-[150px]">
+              Disabled empty
+            </div>
+            <InteractiveInput
+              id="disable-input"
+              placeholder="Placeholder"
+              disabled={true}
+              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
+              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  ),
+    );
+  },
   parameters: {
     pseudo: {
-      hover: ['.dial-input-for-hover-no-icon'],
-      focus: ['.dial-input-for-focus-no-icon'],
+      hover: ['.dial-input-for-hover'],
+      focus: ['.dial-input-for-focus'],
     },
-  },
-};
-
-export const AllVariantsWithoutBorder: Story = {
-  render: () => (
-    <div className="p-8">
-      <h3 className=" mb-4 font-semibold text-primary">
-        Input States Without Border
-      </h3>
-      <table className="w-full border-collapse text-primary border border-white">
-        <thead>
-          <tr>
-            <th className="text-left p-1 border border-white font-semibold">
-              State
-            </th>
-            <th className="text-left p-1 border border-white font-semibold">
-              Text Input
-            </th>
-            <th className="text-left p-1 border border-white font-semibold">
-              Password Input
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="p-1 border border-white font-medium">Default</td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-default-text"
-                placeholder="Enter text"
-                hideBorder={true}
-              />
-            </td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-default-password"
-                type="password"
-                placeholder="Enter password"
-                hideBorder={true}
-                iconAfter={<IconEye size={16} />}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="p-1 border border-white font-medium">With Value</td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-value-text"
-                placeholder="Enter text"
-                value="Sample text"
-                hideBorder={true}
-              />
-            </td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-value-password"
-                type="password"
-                placeholder="Enter password"
-                value="password123"
-                hideBorder={true}
-                iconAfter={<IconEye size={16} />}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="p-1 border border-white font-medium">Disabled</td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-disabled-text"
-                placeholder="Disabled text"
-                value="Disabled value"
-                disabled={true}
-                hideBorder={true}
-              />
-            </td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-disabled-password"
-                type="password"
-                placeholder="Disabled password"
-                value="disabled123"
-                disabled={true}
-                hideBorder={true}
-                iconAfter={<IconEye size={16} />}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="p-1 border border-white font-medium">Read-only</td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-readonly-text"
-                placeholder="Read-only text"
-                value="Read-only value"
-                readonly={true}
-                hideBorder={true}
-              />
-            </td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-readonly-password"
-                type="password"
-                placeholder="Read-only password"
-                value="readonly123"
-                readonly={true}
-                hideBorder={true}
-                iconAfter={<IconEye size={16} />}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className="p-1 border border-white font-medium">Error</td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-error-text"
-                placeholder="Invalid text"
-                value="Invalid value"
-                invalid={true}
-                hideBorder={true}
-              />
-            </td>
-            <td className="p-1 border border-white">
-              <InteractiveInput
-                elementId="table-error-password"
-                type="password"
-                placeholder="Invalid password"
-                value="invalid123"
-                invalid={true}
-                hideBorder={true}
-                iconAfter={<IconEye size={16} />}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  ),
-  parameters: {
-    controls: { disable: true },
-    layout: 'fullscreen',
   },
 };

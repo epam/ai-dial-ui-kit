@@ -24,6 +24,7 @@ import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface FileConflictDecision {
   file: DialFile;
@@ -321,7 +322,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
                     {activeItem?.label ?? replaceLabel}
                   </span>
                   <IconChevronDown
-                    size={16}
+                    size={DIAL_ICON_SIZE.SM}
                     className={classNames(
                       'text-secondary transition-transform',
                       isOpen && 'rotate-180',
@@ -429,6 +430,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       className={classNames([!isSingleFile && 'w-[600px]'])}
       header={title}
       dividers={false}
+      preventKeyboardOnOpen
       footer={
         <div className="flex justify-end gap-3 py-4 px-6 border-t border-tertiary">
           <DialNeutralButton onClick={onClose} label={cancelLabel} />

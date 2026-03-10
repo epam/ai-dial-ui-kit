@@ -18,6 +18,8 @@ export interface DialFileManagerItemNameProps
   loading?: boolean;
   shared?: boolean;
   details?: ReactNode;
+  sharedIndicatorTooltip?: ReactNode;
+  fileExtension?: string;
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
@@ -66,9 +68,11 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   iconSize = BASE_ICON_SIZE,
   validate,
   onSave,
+  fileExtension,
   onCancel,
   inputContainerClassName,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -115,7 +119,9 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
       inputRef={inputRef}
       onChange={onChange}
       iconSize={iconSize}
+      fileExtension={fileExtension}
       inputContainerClassName={inputContainerClassName}
+      sharedIndicatorTooltip={sharedIndicatorTooltip}
       sharedIndicatorClassName={sharedIndicatorClassName}
     />
   );
