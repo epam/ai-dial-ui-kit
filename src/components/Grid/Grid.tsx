@@ -74,6 +74,7 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   wrapperBorder?: boolean;
   withoutHeaderBorders?: boolean;
   selectionMode?: GridSelectionMode;
+  allowDisabledContextMenu?: boolean;
 }
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -166,6 +167,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [wrapperBorder=true] - Whether to apply a border around the grid container
  * @param [withoutHeaderBorders=false] - Whether to hide the header row borders
  * @param [selectionMode] - Could be GridSelectionMode.MULTIPLE or GridSelectionMode.SINGLE to enable selection column
+ * @param [allowDisabledContextMenu] - Enables context menu actions even if row itself is disabled for selection
  */
 export const DialGrid = <T extends object>({
   columnDefs,
@@ -190,6 +192,7 @@ export const DialGrid = <T extends object>({
   loading = false,
   wrapperBorder = true,
   withoutHeaderBorders = false,
+  allowDisabledContextMenu = false,
   selectionMode,
 }: DialGridProps<T>) => {
   const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
@@ -220,7 +223,8 @@ export const DialGrid = <T extends object>({
     (p: ICellRendererParams<T, unknown>) => {
       if (p.data) {
         const rowId = getRowId(p.data);
-        const disabled = disabledRowIds?.has(rowId);
+        const disabled =
+          !allowDisabledContextMenu && disabledRowIds?.has(rowId);
         const valueText = p.value == null ? '' : String(p.value);
         const items = getContextMenuItems?.(p.data) ?? [];
 
@@ -244,7 +248,7 @@ export const DialGrid = <T extends object>({
         );
       }
     },
-    [getContextMenuItems, disabledRowIds, getRowId],
+    [getContextMenuItems, disabledRowIds, getRowId, allowDisabledContextMenu],
   );
 
   const isUserSelectionEvent = useCallback(
@@ -396,8 +400,11 @@ export const DialGrid = <T extends object>({
             menu={{ items }}
             anchorToMouse
             matchReferenceWidth
-            className="w-full h-full"
-            disabled={disabled}
+            className={classNames(
+              'w-full h-full',
+              disabled && '!cursor-not-allowed opacity-75',
+            )}
+            disabled={disabled && !allowDisabledContextMenu}
           >
             <span className="block min-w-0 max-w-full flex-1">{content}</span>
           </DialDropdown>
@@ -412,6 +419,7 @@ export const DialGrid = <T extends object>({
       getRowId,
       renderDataCell,
       wrapCustomCellRenderers,
+      allowDisabledContextMenu,
     ],
   );
 

@@ -208,6 +208,7 @@ export interface GridOptions
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
   wrapCustomCellRenderers?: boolean;
+  allowDisabledContextMenu?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -265,6 +266,7 @@ export interface DialFileManagerProps {
   defaultPath?: string;
   className?: string;
   managerLabel?: ReactNode;
+  gridClassName?: string;
 
   allowedFileTypes?: DialFileAcceptType[];
   items?: DialFile[];
@@ -422,6 +424,7 @@ export interface DialFileManagerProps {
  * @param [path] - Absolute path of the current location (e.g. "/All files/Design/Icons")
  * @param [defaultPath] - Initial path used in uncontrolled mode (applied only on first render)
  * @param [className] - Additional classes for the root container
+ * @param [gridClassName] - Additional classes for the grid container
  * @param [items] - Full hierarchical list of files and folders used by both tree and grid
  * @param [rootItem] - Optional root folder item to represent the top-level container in the tree
  * @param [filesLoading=false] - When true, shows skeleton loading state in the grid
@@ -618,6 +621,7 @@ export const DialFileManagerView: FC = () => {
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
+    gridClassName,
   } = useFileManagerContext();
 
   const {
@@ -652,6 +656,7 @@ export const DialFileManagerView: FC = () => {
     selectionMode,
     wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
+    allowDisabledContextMenu = false,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -1102,8 +1107,8 @@ export const DialFileManagerView: FC = () => {
         </div>
       );
     }
-    // If no toolbar options are provided, render empty div to maintain layout consistency
-    return <div></div>;
+
+    return null;
   }, [
     bulkActionsToolbarOptions,
     selectedPaths,
@@ -1236,9 +1241,22 @@ export const DialFileManagerView: FC = () => {
     [items, gridContextMenu],
   );
 
+  const isRowContextMenuDisabled = useCallback(
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      return allowDisabledContextMenu
+        ? false
+        : isRowDisabled(row, allowedFileTypes, maxSelectableFileSize);
+    },
+    [allowDisabledContextMenu, isRowDisabled],
+  );
+
   const { actionsColumnDef } = useGridActionsColumn({
     getContextMenuItems: getGridContextMenuItems,
-    isRowDisabled,
+    isRowDisabled: isRowContextMenuDisabled,
     allowedFileTypes: allowedFileTypes,
     buttonClassName: isCompactView ? '' : actionsColumnButtonClassName,
   });
@@ -1312,7 +1330,7 @@ export const DialFileManagerView: FC = () => {
       )}
     >
       {renderToolbar()}
-      <div className={mainGridClassName}>
+      <div className={mergeClasses(mainGridClassName, gridClassName)}>
         {renderFoldersTree()}
         <div
           className={mergeClasses(contentGridClassName, {
@@ -1407,6 +1425,7 @@ export const DialFileManagerView: FC = () => {
                 onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
+                allowDisabledContextMenu={allowDisabledContextMenu}
               />
             )}
             {hoveredRowTooltipContent && hoveredRowRect && (
