@@ -16,7 +16,10 @@ import {
   DialFileResourceType,
   type DialRootFolder,
 } from '@/models/file';
-import type { DialUploadFileItem } from '@/models/file-manager';
+import type {
+  DialFileAcceptType,
+  DialUploadFileItem,
+} from '@/models/file-manager';
 import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
@@ -33,6 +36,8 @@ import type { FileManagerGridRow } from './FileManagerContext';
 import type { ColDef } from 'ag-grid-community';
 import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
 import { GridSelectionMode } from '@/models/selection-mode.ts';
+import { DialCheckbox } from '@/components/Checkbox/Checkbox.tsx';
+import { DialSwitch } from '@/components/Switch/Switch.tsx';
 
 const meta = {
   title: 'FileManager/FileManager',
@@ -1720,4 +1725,100 @@ export const ControlledSelection: Story = {
       },
     },
   },
+};
+
+const WithAllowedFileTypesComponent = (args: DialFileManagerProps) => {
+  const FILE_TYPES: Record<string, DialFileAcceptType> = {
+    SVG: '.svg',
+    PNG: '.png',
+    TXT: '.txt',
+  };
+
+  const [allowedFileTypes, setAllowedFileTypes] = useState<
+    DialFileAcceptType[]
+  >([FILE_TYPES.SVG]);
+  const [allowDisabledContextMenu, setAllowDisabledContextMenu] =
+    useState(false);
+
+  const handleCheck = (value?: boolean, id?: string) => {
+    const type = id as DialFileAcceptType;
+    const excludeType = (t: DialFileAcceptType) => t !== type;
+
+    setAllowedFileTypes((prev) =>
+      value ? [...prev, type] : prev.filter(excludeType),
+    );
+  };
+
+  return (
+    <div className="h-[640px] flex flex-col gap-4">
+      <div className="flex gap-2 pl-6 mt-6">
+        <DialCheckbox
+          id={FILE_TYPES.SVG}
+          checked={allowedFileTypes.includes(FILE_TYPES.SVG)}
+          label={FILE_TYPES.SVG}
+          onChange={handleCheck}
+        />
+        <DialCheckbox
+          id={FILE_TYPES.PNG}
+          checked={allowedFileTypes.includes(FILE_TYPES.PNG)}
+          label={FILE_TYPES.PNG}
+          onChange={handleCheck}
+        />
+        <DialCheckbox
+          id={FILE_TYPES.TXT}
+          checked={allowedFileTypes.includes(FILE_TYPES.TXT)}
+          label={FILE_TYPES.TXT}
+          onChange={handleCheck}
+        />
+      </div>
+
+      <div className="pl-6">
+        <DialSwitch
+          switchId="allow-context-menu"
+          label="Context menu always enabled"
+          isOn={allowDisabledContextMenu}
+          onChange={(v: boolean) => setAllowDisabledContextMenu(v)}
+        />
+      </div>
+
+      <DialFileManager
+        {...args}
+        allowedFileTypes={allowedFileTypes}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          filterable: false,
+          selectionMode: GridSelectionMode.MULTIPLE,
+          actionLabels: {
+            duplicate: 'Duplicate',
+            download: 'Download',
+            delete: 'Delete',
+            rename: 'Rename',
+          },
+          allowDisabledContextMenu,
+        }}
+        bulkActionsToolbarOptions={{
+          getSelectionLabel: (selectedCount: number) =>
+            `${selectedCount} item(s) selected`,
+          actionLabels: {
+            duplicate: 'Duplicate',
+            download: 'Download',
+            delete: 'Delete',
+          },
+        }}
+        defaultPath="All files/Design/Icons/SVG/24px"
+      />
+    </div>
+  );
+};
+
+export const WithAllowedFileTypes: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only restricted file types are allowed for selection. Use checkboxes above to control allowed types. Use switch to enable context menu on not allowed file types.',
+      },
+    },
+  },
+  render: WithAllowedFileTypesComponent,
 };

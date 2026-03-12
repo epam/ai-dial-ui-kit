@@ -205,6 +205,7 @@ export interface GridOptions
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
   wrapCustomCellRenderers?: boolean;
+  allowDisabledContextMenu?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -643,6 +644,7 @@ export const DialFileManagerView: FC = () => {
     selectionMode,
     wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
+    allowDisabledContextMenu = false,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -1135,9 +1137,22 @@ export const DialFileManagerView: FC = () => {
     [items, gridContextMenu],
   );
 
+  const isRowContextMenuDisabled = useCallback(
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      return allowDisabledContextMenu
+        ? false
+        : isRowDisabled(row, allowedFileTypes, maxSelectableFileSize);
+    },
+    [allowDisabledContextMenu, isRowDisabled],
+  );
+
   const { actionsColumnDef } = useGridActionsColumn({
     getContextMenuItems: getGridContextMenuItems,
-    isRowDisabled,
+    isRowDisabled: isRowContextMenuDisabled,
     allowedFileTypes: allowedFileTypes,
     buttonClassName: isCompactView ? '' : actionsColumnButtonClassName,
   });
@@ -1299,6 +1314,7 @@ export const DialFileManagerView: FC = () => {
                 onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
+                allowDisabledContextMenu={allowDisabledContextMenu}
               />
             )}
           </section>
