@@ -1314,6 +1314,7 @@ export const DialFileManagerView: FC = () => {
                 onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
+                allowDisabledContextMenu={allowDisabledContextMenu}
               />
             )}
           </section>
