@@ -1785,6 +1785,9 @@ const WithAllowedFileTypesComponent = (args: DialFileManagerProps) => {
         {...args}
         allowedFileTypes={allowedFileTypes}
         gridOptions={{
+          ...(args.gridOptions ?? {}),
+          filterable: false,
+          selectionMode: GridSelectionMode.MULTIPLE,
           actionLabels: {
             duplicate: 'Duplicate',
             download: 'Download',
