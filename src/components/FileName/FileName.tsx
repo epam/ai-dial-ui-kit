@@ -15,6 +15,7 @@ export interface DialFileNameProps {
   details?: ReactNode;
   sharedIndicatorClassName?: string;
   sharedIndicatorTooltip?: ReactNode;
+  hideTooltip?: boolean;
 }
 
 /**
@@ -53,6 +54,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
   fileExtension,
+  hideTooltip = false,
 }) => {
   const extension = name.includes('.')
     ? name.split('.').pop()
@@ -85,6 +87,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
           className="text-primary dial-small flex-1 min-w-0"
           text={name}
           id="name"
+          hideTooltip={hideTooltip}
         />
         {details}
       </div>

@@ -237,6 +237,7 @@ export const DialGrid = <T extends object>({
               <DialEllipsisTooltip
                 text={valueText}
                 className="max-w-full h-full"
+                hideTooltip={disabled}
               />
             </span>
           </DialDropdown>

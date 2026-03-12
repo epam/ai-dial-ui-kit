@@ -77,7 +77,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basic: Story = {};
+export const Basic: Story = {
+  args: {},
+};
 
 export const PreselectedNode: Story = {
   args: {
@@ -139,6 +141,46 @@ export const WithFilesInTree: Story = {
   args: {
     treeOptions: {
       showFiles: true,
+    },
+  },
+};
+
+type WithDisabledTooltipArgs = DialFileManagerProps;
+
+const WithDisabledTooltipComponent = (args: WithDisabledTooltipArgs) => (
+  <DialFileManager {...args} />
+);
+
+export const WithDisabledTooltip: StoryObj<WithDisabledTooltipArgs> = {
+  render: WithDisabledTooltipComponent,
+  args: {
+    allowedFileTypes: ['.pdf'],
+    maxSelectableFileSize: 1024 * 1024, // 1MB
+  },
+  argTypes: {
+    unsupportedFileTypeTooltip: {
+      control: { type: 'text' },
+      description: 'Tooltip text shown for unsupported file types',
+    },
+    fileTooLargeTooltip: {
+      control: { type: 'text' },
+      description: 'Tooltip text shown for files exceeding size limit',
+    },
+    allowedFileTypes: {
+      control: 'object',
+      description: 'Allowed file extensions (e.g. [".svg", ".png"])',
+    },
+    maxSelectableFileSize: {
+      control: { type: 'number' },
+      description: 'Maximum selectable file size in bytes',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Adjust constraints and tooltip texts in the Controls panel. Hover over any greyed-out file to see the row-level tooltip centered at the bottom.',
+      },
     },
   },
 };

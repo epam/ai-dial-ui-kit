@@ -23,6 +23,7 @@ export interface DialFileManagerItemNameProps
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
+  hideTooltip?: boolean;
 }
 
 /**
@@ -73,6 +74,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   inputContainerClassName,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
+  hideTooltip = false,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -94,6 +96,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           iconSize={iconSize}
           className="max-w-[428px] truncate"
           sharedIndicatorClassName={sharedIndicatorClassName}
+          hideTooltip={hideTooltip}
         />
       );
     }
@@ -105,6 +108,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         shared={shared}
         iconSize={iconSize}
         sharedIndicatorClassName={sharedIndicatorClassName}
+        hideTooltip={hideTooltip}
       />
     );
   }
