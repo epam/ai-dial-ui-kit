@@ -391,10 +391,7 @@ export const DialGrid = <T extends object>({
         }
 
         const rowId = p.data ? getRowId(p.data) : null;
-        const disabled =
-          rowId && !allowDisabledContextMenu
-            ? disabledRowIds?.has(rowId)
-            : false;
+        const disabled = rowId ? disabledRowIds?.has(rowId) : false;
 
         return (
           <DialDropdown
@@ -402,8 +399,11 @@ export const DialGrid = <T extends object>({
             menu={{ items }}
             anchorToMouse
             matchReferenceWidth
-            className="w-full h-full"
-            disabled={disabled}
+            className={classNames(
+              'w-full h-full',
+              disabled && '!cursor-not-allowed opacity-75',
+            )}
+            disabled={disabled && !allowDisabledContextMenu}
           >
             <span className="block min-w-0 max-w-full flex-1">{content}</span>
           </DialDropdown>
