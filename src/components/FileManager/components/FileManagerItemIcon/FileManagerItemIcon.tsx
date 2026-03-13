@@ -88,7 +88,8 @@ export const DialFileManagerItemIcon: FC<DialFileManagerItemIconProps> = ({
   }
 
   if (type === DialItemType.File) {
-    const extension = fileExtension || (name.includes('.') ? name.split('.').pop() : void 0);
+    const extension =
+      fileExtension || (name.includes('.') ? name.split('.').pop() : void 0);
 
     return (
       <DialFileIcon
