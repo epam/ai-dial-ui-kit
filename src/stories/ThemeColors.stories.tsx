@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useMemo, useState } from 'react';
-import { DialErrorText } from '@/components/ErrorText/ErrorText';
 import { DialLabelledText } from '@/components/LabelledText/LabelledText';
 import { DialLoader } from '@/components/Loader/Loader';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DialTag } from '@/components/Tag/Tag';
+import { DialErrorText } from '../components/CaptionText/CaptionText';
 
 interface ThemeVariables {
   id?: string;
@@ -205,7 +205,7 @@ const ThemeColorsTable = () => {
     return (
       <div className="p-4">
         <DialErrorText
-          errorText={`Failed to load theme colors from API: ${error}`}
+          text={`Failed to load theme colors from API: ${error}`}
         />
       </div>
     );
