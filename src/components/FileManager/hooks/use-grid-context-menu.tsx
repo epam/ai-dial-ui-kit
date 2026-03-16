@@ -51,6 +51,7 @@ export interface UseGridContextMenuProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  nameValidationRegExp?: RegExp;
 }
 
 export const useGridContextMenu = ({
@@ -70,6 +71,7 @@ export const useGridContextMenu = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable = true,
+  nameValidationRegExp,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -78,6 +80,8 @@ export const useGridContextMenu = ({
       if (!actionLabels) {
         return items;
       }
+
+      const hasRestrictedSymbolsInName = nameValidationRegExp?.test(file.name);
 
       if (
         actionLabels[DialFileManagerActions.AddSibling] &&
@@ -101,7 +105,8 @@ export const useGridContextMenu = ({
       if (
         actionLabels[DialFileManagerActions.AddChild] &&
         typeof onAddChild === 'function' &&
-        file.nodeType === DialFileNodeType.FOLDER
+        file.nodeType === DialFileNodeType.FOLDER &&
+        !hasRestrictedSymbolsInName
       ) {
         items.push(
           {
@@ -123,7 +128,10 @@ export const useGridContextMenu = ({
         );
       }
 
-      if (actionLabels[DialFileManagerActions.Duplicate]) {
+      if (
+        actionLabels[DialFileManagerActions.Duplicate] &&
+        !hasRestrictedSymbolsInName
+      ) {
         items.push({
           key: DialFileManagerActions.Duplicate,
           label: actionLabels[DialFileManagerActions.Duplicate],
@@ -132,7 +140,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Copy]) {
+      if (
+        actionLabels[DialFileManagerActions.Copy] &&
+        !hasRestrictedSymbolsInName
+      ) {
         items.push({
           key: DialFileManagerActions.Copy,
           label: actionLabels[DialFileManagerActions.Copy],
@@ -147,7 +158,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Move]) {
+      if (
+        actionLabels[DialFileManagerActions.Move] &&
+        !hasRestrictedSymbolsInName
+      ) {
         items.push({
           key: DialFileManagerActions.Move,
           label: actionLabels[DialFileManagerActions.Move],
@@ -162,7 +176,10 @@ export const useGridContextMenu = ({
         });
       }
 
-      if (actionLabels[DialFileManagerActions.Download]) {
+      if (
+        actionLabels[DialFileManagerActions.Download] &&
+        !hasRestrictedSymbolsInName
+      ) {
         items.push({
           key: DialFileManagerActions.Download,
           label: actionLabels[DialFileManagerActions.Download],
@@ -176,7 +193,8 @@ export const useGridContextMenu = ({
       if (
         actionLabels[DialFileManagerActions.ManagePermissions] &&
         typeof onManagePermissions === 'function' &&
-        file.nodeType === DialFileNodeType.FOLDER
+        file.nodeType === DialFileNodeType.FOLDER &&
+        !hasRestrictedSymbolsInName
       ) {
         items.push({
           key: DialFileManagerActions.ManagePermissions,
@@ -197,7 +215,8 @@ export const useGridContextMenu = ({
         actionLabels[DialFileManagerActions.Preview] &&
         typeof onPreview === 'function' &&
         file.nodeType === DialFileNodeType.ITEM &&
-        isPreviewAvailable
+        isPreviewAvailable &&
+        !hasRestrictedSymbolsInName
       ) {
         items.push({
           key: DialFileManagerActions.Preview,
@@ -239,7 +258,8 @@ export const useGridContextMenu = ({
 
       if (
         actionLabels[DialFileManagerActions.Info] &&
-        file.nodeType === DialFileNodeType.ITEM
+        file.nodeType === DialFileNodeType.ITEM &&
+        !hasRestrictedSymbolsInName
       ) {
         items.push({
           key: DialFileManagerActions.Info,
@@ -288,5 +308,6 @@ export const useGridContextMenu = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    nameValidationRegExp,
   ]);
 };

@@ -113,6 +113,7 @@ export const NAME_COLUMN =
                 '!h-9',
                 isCompactView && type === DialFileNodeType.ITEM && '!h-10',
               ])}
+              nameValidationRegExp={params.context.nameValidationRegExp}
             />
           );
         }
@@ -139,6 +140,9 @@ export const NAME_COLUMN =
             shared={isSharedByMe}
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+            isInvalidName={params.context.nameValidationRegExp?.test(
+              params.data.name,
+            )}
           />
         ) : (
           <DialFileName
@@ -146,6 +150,9 @@ export const NAME_COLUMN =
             shared={isSharedByMe}
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+            isInvalidName={params.context.nameValidationRegExp?.test(
+              params.data.name,
+            )}
           />
         );
       },

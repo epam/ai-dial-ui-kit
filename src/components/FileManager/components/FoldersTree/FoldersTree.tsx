@@ -37,6 +37,7 @@ export interface DialFoldersTreeProps {
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
+  nameValidationRegExp?: RegExp;
 }
 
 /**
@@ -154,6 +155,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onRenameCancel,
   onRenameValidate,
   onExpandedPathsChange,
+  nameValidationRegExp,
 }) => {
   const { expandedPaths, togglePath } = useExpandedPaths({
     expandedPaths: externalExpandedPaths ?? new Set(),
@@ -247,6 +249,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                         isSelected && 'bg-accent-primary-alpha',
                       )}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+                      nameValidationRegExp={nameValidationRegExp}
                       {...(!isRootFolder && {
                         editing: isRenaming,
                         onSave: onRenameSave,

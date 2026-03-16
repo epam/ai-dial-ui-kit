@@ -13,6 +13,7 @@ export interface DialFileNameProps {
   iconSize?: number;
   details?: ReactNode;
   sharedIndicatorClassName?: string;
+  isInvalidName?: boolean;
 }
 
 /**
@@ -40,6 +41,8 @@ export interface DialFileNameProps {
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  * @param details - Optional metadata block displayed under the file name (e.g., size, modified date).
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator.
+ * @param isInvalidName - If true, applies disabled styling to indicate the file name has invalid characters.
+
  */
 export const DialFileName: FC<DialFileNameProps> = ({
   name,
@@ -48,6 +51,7 @@ export const DialFileName: FC<DialFileNameProps> = ({
   iconSize = BASE_ICON_SIZE,
   details,
   sharedIndicatorClassName,
+  isInvalidName = false,
 }) => {
   const extension = name.includes('.') ? name.split('.').pop() : undefined;
 
@@ -72,7 +76,10 @@ export const DialFileName: FC<DialFileNameProps> = ({
         ])}
       >
         <DialEllipsisTooltip
-          className="text-primary dial-small flex-1 min-w-0"
+          className={classNames([
+            'dial-small flex-1 min-w-0',
+            isInvalidName ? 'text-secondary' : 'text-primary',
+          ])}
           text={name}
           id="name"
         />

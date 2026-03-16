@@ -109,6 +109,7 @@ export interface FileManagerContextValue {
   onRenameCancel: () => void;
   onRenameValidate: (value: string, item: DialFile) => string | null;
   getDisplayName: (item: DialFile) => string;
+  nameValidationRegExp?: RegExp;
 
   openDeleteConfirmation: (items: DialFile[], parentFolderPath: string) => void;
   closeDeleteConfirmation: () => void;

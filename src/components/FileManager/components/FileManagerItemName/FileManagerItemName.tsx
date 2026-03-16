@@ -21,6 +21,7 @@ export interface DialFileManagerItemNameProps
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
+  nameValidationRegExp?: RegExp;
 }
 
 /**
@@ -69,6 +70,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   onCancel,
   inputContainerClassName,
   sharedIndicatorClassName,
+  nameValidationRegExp,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -81,6 +83,8 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     });
 
   if (!editing) {
+    const hasRestrictedSymbolsInName = nameValidationRegExp?.test(name);
+
     if (type === DialItemType.Folder) {
       return (
         <DialFolderName
@@ -90,9 +94,11 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           iconSize={iconSize}
           className="max-w-[428px] truncate"
           sharedIndicatorClassName={sharedIndicatorClassName}
+          isInvalidName={hasRestrictedSymbolsInName}
         />
       );
     }
+
     return (
       <DialFileName
         className="max-w-[428px]"
@@ -101,6 +107,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         shared={shared}
         iconSize={iconSize}
         sharedIndicatorClassName={sharedIndicatorClassName}
+        isInvalidName={hasRestrictedSymbolsInName}
       />
     );
   }

@@ -20,6 +20,7 @@ export interface FileManagerGridContext {
   renameTriggerView: FileManagerRenameTriggerView;
   sharedByMePaths?: Set<string>;
   selectedPaths?: Set<string>;
+  nameValidationRegExp?: RegExp;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;

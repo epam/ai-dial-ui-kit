@@ -306,6 +306,7 @@ export interface DialFileManagerProps {
 
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   renameValidationMessages?: RenameValidationMessages;
+  nameValidationRegExp?: RegExp;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
@@ -437,6 +438,8 @@ export interface DialFileManagerProps {
  * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
  * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
+ * @param [nameValidationRegExp] - Optional RegExp will be used in the validation for the files and folders names
+ *
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
@@ -544,6 +547,7 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    nameValidationRegExp,
     getDisplayName,
     isDragging,
     isDraggingOverWindow,
@@ -678,6 +682,7 @@ export const DialFileManagerView: FC = () => {
       const items: DropdownItem[] = [];
       const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
+      const hasRestrictedSymbolsInName = nameValidationRegExp?.test(file.name);
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
@@ -702,7 +707,8 @@ export const DialFileManagerView: FC = () => {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddChild] &&
           typeof handleAddChild === 'function' &&
-          file.nodeType === DialFileNodeType.FOLDER
+          file.nodeType === DialFileNodeType.FOLDER &&
+          !hasRestrictedSymbolsInName
         ) {
           items.push({
             key: 'addChild',
@@ -720,7 +726,8 @@ export const DialFileManagerView: FC = () => {
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Duplicate] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: 'duplicate',
@@ -732,7 +739,8 @@ export const DialFileManagerView: FC = () => {
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Copy] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: DestinationFolderMode.Copy,
@@ -752,7 +760,8 @@ export const DialFileManagerView: FC = () => {
         }
         if (
           treeOptions.actionLabels[DialFileManagerActions.Move] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: DestinationFolderMode.Move,
@@ -772,7 +781,8 @@ export const DialFileManagerView: FC = () => {
         }
         if (
           treeOptions.actionLabels[DialFileManagerActions.Download] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: 'download',
@@ -855,22 +865,22 @@ export const DialFileManagerView: FC = () => {
         }
       }
 
-      if (elements.length > 0) {
-        return [
-          ...items,
-          {
-            key: 'divider',
-            type: DropdownItemType.Divider,
-          },
-          ...elements,
-        ];
-      }
-      return items;
+      if (elements.length === 0) return items;
+      if (items.length === 0) return elements;
+
+      return [
+        ...items,
+        { key: 'divider', type: DropdownItemType.Divider },
+        ...elements,
+      ];
     },
     [
       treeOptions?.actionLabels,
       handleAddSibling,
+      nameValidationRegExp,
       handleAddChild,
+      sharedWithMeIds,
+      onManagePermissions,
       handleDuplicate,
       handleSetCopiedFiles,
       handleOpenDestinationFolderPopup,
@@ -878,9 +888,7 @@ export const DialFileManagerView: FC = () => {
       handleDownloadFiles,
       onTreeRename,
       onUnshareFiles,
-      sharedWithMeIds,
       openDeleteConfirmation,
-      onManagePermissions,
     ],
   );
 
@@ -1024,6 +1032,7 @@ export const DialFileManagerView: FC = () => {
               rootItemLabel={rootItem?.label}
               selectedPath={currentPath}
               sharedByMePaths={sharedByMePaths}
+              nameValidationRegExp={nameValidationRegExp}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
@@ -1061,6 +1070,7 @@ export const DialFileManagerView: FC = () => {
     header,
     sharedByMePaths,
     toggleTreeCollapse,
+    nameValidationRegExp,
   ]);
 
   const gridContextMenu = useGridContextMenu({
@@ -1087,6 +1097,7 @@ export const DialFileManagerView: FC = () => {
     onPreview: (path) => onPreview?.(path),
     previewExtensions,
     isRenameFileAvailable,
+    nameValidationRegExp,
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1256,6 +1267,7 @@ export const DialFileManagerView: FC = () => {
                     newFolderTempId,
                     sharedByMePaths,
                     selectedPaths,
+                    nameValidationRegExp,
                   } as FileManagerGridContext,
                 }}
                 selectedRowIds={selectedGridRowsIds}
