@@ -1,29 +1,30 @@
-import { DialPopup } from '@/components/Popup/Popup';
-import { PopupSize } from '@/types/popup';
 import {
-  DialPrimaryButton,
   DialNeutralButton,
+  DialPrimaryButton,
 } from '@/components/Button/ButtonWrappers';
-import { type FC, useState, useMemo, useCallback } from 'react';
-import type { DialFile } from '@/models/file';
-import { DialFileNodeType } from '@/models/file';
-import { DialRadioGroup } from '@/components/RadioGroup/RadioGroup';
-import { RadioGroupOrientation } from '@/types/radio-group';
-import type { RadioButtonWithContent } from '@/models/radio';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
-import type { DropdownItem } from '@/models/dropdown';
-import { DialGrid } from '@/components/Grid/Grid';
-import type { ColDef } from 'ag-grid-community';
+import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
-import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
+import { DialGrid } from '@/components/Grid/Grid';
+import { DialPopup } from '@/components/Popup/Popup';
+import { DialRadioGroup } from '@/components/RadioGroup/RadioGroup';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
+import type { DropdownItem } from '@/models/dropdown';
+import type { DialFile } from '@/models/file';
+import { DialFileNodeType } from '@/models/file';
+import type { RadioButtonWithContent } from '@/models/radio';
 import { DropdownTrigger } from '@/types/dropdown';
-import { IconChevronDown, IconCircleFilled } from '@tabler/icons-react';
-import classNames from 'classnames';
 import {
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
 } from '@/types/file-manager';
+import { PopupSize } from '@/types/popup';
+import { RadioGroupOrientation } from '@/types/radio-group';
+import { IconChevronDown, IconCircleFilled } from '@tabler/icons-react';
+import type { ColDef } from 'ag-grid-community';
+import classNames from 'classnames';
+import { type FC, useCallback, useMemo, useState } from 'react';
 
 export interface FileConflictDecision {
   file: DialFile;
@@ -321,7 +322,7 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
                     {activeItem?.label ?? replaceLabel}
                   </span>
                   <IconChevronDown
-                    size={16}
+                    size={DIAL_ICON_SIZE.SM}
                     className={classNames(
                       'text-secondary transition-transform',
                       isOpen && 'rotate-180',
@@ -383,7 +384,24 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
     ],
   );
 
+  const resetState = useCallback(() => {
+    setFileDecisions(
+      new Map(
+        conflictingFiles.map((file) => [
+          file.path,
+          DialFileManagerConflictActions.Replace,
+        ]),
+      ),
+    );
+  }, [conflictingFiles]);
+
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [resetState, onClose]);
+
   const handleConfirm = useCallback(() => {
+    resetState();
     if (isSingleFile) {
       if (singleFileMode === DialFileManagerConflictActions.Replace) {
         onReplace();
@@ -411,24 +429,26 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
       }
     }
   }, [
+    resetState,
     isSingleFile,
     singleFileMode,
-    strategy,
-    fileDecisions,
-    conflictingFiles,
     onReplace,
     onDuplicate,
+    strategy,
     onDecideForEach,
+    conflictingFiles,
+    fileDecisions,
   ]);
 
   return (
     <DialPopup
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       size={isSingleFile ? PopupSize.Sm : PopupSize.Md}
       className={classNames([!isSingleFile && 'w-[600px]'])}
       header={title}
       dividers={false}
+      preventKeyboardOnOpen
       footer={
         <div className="flex justify-end gap-3 py-4 px-6 border-t border-tertiary">
           <DialNeutralButton onClick={onClose} label={cancelLabel} />

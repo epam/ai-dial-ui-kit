@@ -47,6 +47,7 @@ export interface FileManagerGridRow {
 export interface FileManagerContextValue {
   managerLabel?: ReactNode;
   className?: string;
+  gridClassName?: string;
   items: DialFile[];
   rootItem?: DialRootFolder;
   allowedFileTypes?: DialFileAcceptType[];
@@ -160,6 +161,7 @@ export interface FileManagerContextValue {
   conflictResolutionOpen: boolean;
   closeConflictResolution: () => void;
   handleConflictReplace: () => void;
+  handleConflictCancel: () => void;
   handleConflictDuplicate: () => void;
   handleConflictDecideForEach: (decisions: FileConflictDecision[]) => void;
 
@@ -167,6 +169,7 @@ export interface FileManagerContextValue {
   uploadConflictResolutionOpen: boolean;
   closeUploadConflictResolution: () => void;
   handleUploadConflictReplace: () => void;
+  handleUploadConflictCancel: () => void;
   handleUploadConflictDuplicate: () => void;
   handleUploadConflictDecideForEach: (
     decisions: FileConflictDecision[],
@@ -179,6 +182,7 @@ export interface FileManagerContextValue {
   onGetInfo?: (file: DialFile) => void | Promise<void>;
 
   onUnshareFiles?: (file: DialFile[]) => void;
+  onRemoveFilesAccess?: (file: DialFile[]) => void;
 
   actionsRef?: Ref<DialFileManagerActionsRef>;
 

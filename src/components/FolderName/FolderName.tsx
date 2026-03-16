@@ -1,5 +1,5 @@
 import { mergeClasses } from '@/utils/merge-classes';
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/SharedEntityIndicator';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -15,6 +15,7 @@ export interface DialFolderNameProps {
   iconSize?: number;
   className?: string;
   sharedIndicatorClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
   isInvalidName?: boolean;
 }
 
@@ -33,6 +34,7 @@ export interface DialFolderNameProps {
  * @param loading - If true, shows loading state. Default: false.
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator
+ * @param sharedIndicatorTooltip - Custom tooltip content for the shared indicator; defaults to "Shared"
  * @param isInvalidName - If true, applies disabled styling to indicate the file name has invalid characters.
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
@@ -42,6 +44,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   loading = false,
   iconSize = BASE_ICON_SIZE,
   sharedIndicatorClassName,
+  sharedIndicatorTooltip,
   isInvalidName = false,
 }) => {
   const getIcon = () => {
@@ -62,7 +65,10 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         {getIcon()}
         {shared && (
           <span className="absolute z-50 -bottom-0.5 -left-0.5">
-            <DialSharedEntityIndicator className={sharedIndicatorClassName} />
+            <DialSharedEntityIndicator
+              className={sharedIndicatorClassName}
+              sharedIndicatorTooltip={sharedIndicatorTooltip}
+            />
           </span>
         )}
       </span>

@@ -114,6 +114,7 @@ export const useFileUpload = ({
     openConflictResolution,
     handleReplaceAll: baseHandleReplaceAll,
     handleDuplicateAll: baseHandleDuplicateAll,
+    handleCancelAll: baseHandleCancelAll,
     handleDecideForEach: baseHandleDecideForEach,
   } = useConflictResolution({
     getDestinationFiles: () => existingFilesRef.current,
@@ -320,6 +321,11 @@ export const useFileUpload = ({
     baseHandleDuplicateAll();
     clearUploadState();
   }, [baseHandleDuplicateAll, clearUploadState]);
+
+  const handleConflictCancel = useCallback(() => {
+    baseHandleCancelAll();
+    clearUploadState();
+  }, [baseHandleCancelAll, clearUploadState]);
 
   const handleConflictDecideForEach = useCallback(
     (decisions: FileConflictDecision[]) => {
@@ -595,6 +601,7 @@ export const useFileUpload = ({
     closeUploadConflictResolution: handleCloseConflictResolution,
     handleUploadConflictReplace: handleConflictReplace,
     handleUploadConflictDuplicate: handleConflictDuplicate,
+    handleUploadConflictCancel: handleConflictCancel,
     handleUploadConflictDecideForEach: handleConflictDecideForEach,
   };
 };

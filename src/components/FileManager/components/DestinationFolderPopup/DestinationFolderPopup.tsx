@@ -8,8 +8,9 @@ import {
   DialPrimaryButton,
   DialNeutralButton,
 } from '@/components/Button/ButtonWrappers';
+import { DialButton } from '@/components/Button/Button';
 import { ButtonAppearance } from '@/types/button';
-import { IconFolderPlus } from '@tabler/icons-react';
+import { IconFolderPlus, IconDotsVertical, IconEye } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialSwitch } from '@/components/Switch/Switch';
 import {
@@ -25,6 +26,9 @@ import type { DialFileManagerActionsRef } from '@/models/file-manager';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialAlert, type DialAlertProps } from '@/components/Alert/Alert';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import type { DropdownItem } from '@/models/dropdown';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -107,11 +111,39 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const fileManagerActionRef = useRef<DialFileManagerActionsRef>(null);
+  const isMobile = useIsMobileScreen();
 
   const handleShowHiddenFilesChange = useCallback((value: boolean) => {
     setShowHiddenFiles(value);
   }, []);
+
+  const mobileFooterDropdownItems = useMemo<DropdownItem[]>(
+    () => [
+      {
+        key: 'add-folder',
+        label: addFolderLabel,
+        icon: (
+          <IconFolderPlus {...BASE_ICON_PROPS} className="text-secondary" />
+        ),
+        onClick: () => {
+          fileManagerActionRef.current?.createFolder();
+          setMobileMenuOpen(false);
+        },
+      },
+      {
+        key: 'show-hidden-files',
+        label: hiddenFilesSwitcherLabel,
+        icon: <IconEye {...BASE_ICON_PROPS} className="text-secondary" />,
+        onClick: () => {
+          setShowHiddenFiles((prev) => !prev);
+          setMobileMenuOpen(false);
+        },
+      },
+    ],
+    [addFolderLabel, hiddenFilesSwitcherLabel],
+  );
 
   const handleOnPathChange = useCallback(
     (nextPath?: string) => {
@@ -141,29 +173,52 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         onClose();
       }}
       size={PopupSize.Lg}
+      dividerFooter
+      dividers={false}
       className="md:!h-[800px] !bg-layer-2"
       footer={
-        <div className="flex justify-between space-x-2 py-4 px-6">
-          <div className="flex space-x-4">
-            <DialPrimaryButton
-              label={addFolderLabel}
-              appearance={ButtonAppearance.Ghost}
-              iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
-              onClick={() => {
-                fileManagerActionRef.current?.createFolder();
-              }}
-            />
-            <div className="border border-l border-primary my-2" />
-            <div className="inline-flex items-center cursor-pointer">
-              <DialSwitch
-                label={hiddenFilesSwitcherLabel}
-                isOn={showHiddenFiles}
-                onChange={handleShowHiddenFilesChange}
-                switchId="hidden-files-switch"
-              />
-            </div>
+        <div className="flex justify-between items-center gap-2 py-4 px-4 md:px-6">
+          <div className="flex items-center gap-4 min-w-0">
+            {isMobile ? (
+              <DialDropdown
+                menu={{ items: mobileFooterDropdownItems }}
+                open={mobileMenuOpen}
+                onOpenChange={setMobileMenuOpen}
+              >
+                <DialButton
+                  className="h-9 w-9 shrink-0"
+                  aria-label="More options"
+                  iconBefore={
+                    <IconDotsVertical
+                      {...BASE_ICON_PROPS}
+                      className="text-secondary"
+                    />
+                  }
+                />
+              </DialDropdown>
+            ) : (
+              <>
+                <DialPrimaryButton
+                  label={addFolderLabel}
+                  appearance={ButtonAppearance.Ghost}
+                  iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
+                  onClick={() => {
+                    fileManagerActionRef.current?.createFolder();
+                  }}
+                />
+                <div className="w-px h-[26px] bg-controls-disable-accent my-2" />
+                <div className="inline-flex items-center cursor-pointer">
+                  <DialSwitch
+                    label={hiddenFilesSwitcherLabel}
+                    isOn={showHiddenFiles}
+                    onChange={handleShowHiddenFilesChange}
+                    switchId="hidden-files-switch"
+                  />
+                </div>
+              </>
+            )}
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 items-center">
             <DialNeutralButton onClick={onClose} label="Cancel" />
             {isDestinationDisabled ? (
               <DialTooltip tooltip={disabledPathTooltip}>
@@ -194,7 +249,11 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         <div className="flex-1 min-h-0">
           <DialFileManager
             {...restProps}
-            className={mergeClasses(restProps.className, 'bg-layer-2 h-full')}
+            gridClassName="size-full"
+            className={mergeClasses(
+              restProps.className,
+              'bg-layer-2 h-full flex pt-0',
+            )}
             actionsRef={fileManagerActionRef}
             path={path}
             showHiddenFiles={showHiddenFiles}

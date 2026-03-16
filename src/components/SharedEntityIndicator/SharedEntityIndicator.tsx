@@ -4,6 +4,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconArrowUpRight } from '@tabler/icons-react';
+import { DialTooltip } from '../Tooltip/Tooltip';
 
 export interface DialSharedEntityIndicatorProps {
   label?: ReactNode;
@@ -11,6 +12,7 @@ export interface DialSharedEntityIndicatorProps {
   stroke?: number;
   className?: string;
   containerClassName?: string;
+  sharedIndicatorTooltip?: ReactNode;
 }
 
 /**
@@ -29,6 +31,7 @@ export interface DialSharedEntityIndicatorProps {
  * @param [className] - Additional Tailwind classes applied to the icon
  * @param [containerClassName] - Additional Tailwind classes appended to the container
  * @param [stroke=1.5] - Stroke width for the icon
+ * @param [sharedIndicatorTooltip] - Custom tooltip content, defaults to "Shared"
  *
  */
 export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
@@ -37,22 +40,25 @@ export const DialSharedEntityIndicator: FC<DialSharedEntityIndicatorProps> = ({
   className,
   containerClassName,
   stroke = 1.5,
+  sharedIndicatorTooltip,
 }) => {
   return (
-    <DialIcon
-      className={mergeClasses(
-        'text-accent-primary flex bg-layer-3',
-        containerClassName,
-      )}
-      icon={
-        <IconArrowUpRight
-          size={size}
-          stroke={stroke}
-          aria-label={typeof label === 'string' ? label : undefined}
-          className={className}
-          role="img"
-        />
-      }
-    />
+    <DialTooltip tooltip={sharedIndicatorTooltip || 'Shared'}>
+      <DialIcon
+        className={mergeClasses(
+          'text-accent-primary flex bg-layer-3',
+          containerClassName,
+        )}
+        icon={
+          <IconArrowUpRight
+            size={size}
+            stroke={stroke}
+            aria-label={typeof label === 'string' ? label : undefined}
+            className={className}
+            role="img"
+          />
+        }
+      />
+    </DialTooltip>
   );
 };

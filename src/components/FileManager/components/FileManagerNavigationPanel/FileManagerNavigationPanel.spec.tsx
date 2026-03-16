@@ -114,7 +114,7 @@ describe('Dial UI Kit :: DialFileManagerNavigationPanel', () => {
       <DialFileManagerNavigationPanel path="Root" isCompactView searchable />,
     );
     const searchContainer = screen.getByRole('search');
-    expect(searchContainer).toHaveClass('w-[38px]');
+    expect(searchContainer).toHaveClass('w-[40px]');
   });
 
   test('search container expands to full width when clicked in compact view', () => {

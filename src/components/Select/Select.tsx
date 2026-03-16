@@ -37,6 +37,7 @@ import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisToolti
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialMultiSelectTags } from './MultiSelectTags';
 import { SelectSize, SelectVariant } from '@/types/select';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -444,13 +445,14 @@ export const DialSelect: FC<DialSelectProps> = ({
                   onChange={setQuery}
                   value={query}
                   id={`search-${elementId || listId}`}
+                  containerClassName="w-full"
                 />
               )}
               {closable && (
                 <DialButton
                   aria-label="Close select"
                   className="shrink-0"
-                  iconBefore={<IconX size={16} />}
+                  iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
                   onClick={(e) => {
                     onClose?.(e);
                     setOpen(false);
@@ -485,7 +487,10 @@ export const DialSelect: FC<DialSelectProps> = ({
                     <DialNoDataContent
                       icon={
                         emptyStateIcon ?? (
-                          <IconClipboardX size={24} stroke={0.5} />
+                          <IconClipboardX
+                            size={DIAL_ICON_SIZE.LG}
+                            stroke={0.5}
+                          />
                         )
                       }
                       title={emptyStateTitle}

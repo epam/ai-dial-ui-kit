@@ -106,6 +106,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   fileMetadataPopupOptions,
   onGetInfo,
   onUnshareFiles,
+  onRemoveFilesAccess,
   actionsRef,
   sharedByMePaths,
   onSearchFiles,
@@ -127,6 +128,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   isRenameFileAvailable,
   customUploadFileAction,
   customBreakpointRef,
+  gridClassName,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -255,6 +257,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeConflictResolution,
     handleConflictReplace,
     handleConflictDuplicate,
+    handleConflictCancel,
     handleConflictDecideForEach,
     sourceFolder,
   } = useFileClipboard({
@@ -312,6 +315,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeUploadConflictResolution,
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
+    handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
   } = useFileUpload({
     onUploadFiles,
@@ -659,6 +663,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeConflictResolution,
     handleConflictReplace,
     handleConflictDuplicate,
+    handleConflictCancel,
     handleConflictDecideForEach,
 
     uploadConflictingFiles,
@@ -666,6 +671,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     closeUploadConflictResolution,
     handleUploadConflictReplace,
     handleUploadConflictDuplicate,
+    handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
 
     fileMetadataPopupOptions,
@@ -676,6 +682,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onGetInfo,
 
     onUnshareFiles,
+    onRemoveFilesAccess,
 
     actionsRef,
     sharedByMePaths,
@@ -689,6 +696,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     emptyStateIcon,
     emptyStateTitle,
     emptyStateDescription,
+    gridClassName,
 
     sharedWithMeIds,
 

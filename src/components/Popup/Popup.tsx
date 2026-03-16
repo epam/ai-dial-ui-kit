@@ -8,7 +8,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import type { FC, MouseEvent, ReactNode } from 'react';
+import { type FC, type MouseEvent, type ReactNode, useRef } from 'react';
 
 import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
@@ -29,13 +29,16 @@ export interface DialPopupProps {
   overlayClassName?: string;
   titleClassName?: string;
   headerClassName?: string;
+  // TODO: review after implementing common design system
   dividers?: boolean;
+  dividerFooter?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
   size?: PopupSize;
   hideClose?: boolean;
   closeOnOutsideClick?: boolean;
+  preventKeyboardOnOpen?: boolean;
 }
 
 /**
@@ -70,12 +73,14 @@ export interface DialPopupProps {
  * @param [titleClassName] - Additional CSS classes applied to the title element
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [dividers=true] - Whether to render separators between sections
+ * @param [dividerFooter=true] - Whether to render a divider above the footer when `dividers` is true
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
  * @param [hideClose=false] Whether the close button is hidden in the header (default: false)
  * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside (default: true)
+ * @param [preventKeyboardOnOpen=false] - When true, initial focus goes to a non-input guard to avoid opening the virtual keyboard on mobile
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -86,13 +91,16 @@ export const DialPopup: FC<DialPopupProps> = ({
   titleClassName,
   headerClassName,
   dividers = true,
+  dividerFooter = true,
   children,
   footer,
   onClose,
   size = PopupSize.Md,
   hideClose = false,
   closeOnOutsideClick = true,
+  preventKeyboardOnOpen = false,
 }) => {
+  const focusGuardRef = useRef<HTMLDivElement>(null);
   const { refs, context } = useFloating({
     open,
     onOpenChange: (next) => {
@@ -132,7 +140,10 @@ export const DialPopup: FC<DialPopupProps> = ({
       <FloatingOverlay
         className={classNames(overlayBaseClassName, overlayClassName)}
       >
-        <FloatingFocusManager context={context}>
+        <FloatingFocusManager
+          context={context}
+          initialFocus={preventKeyboardOnOpen ? focusGuardRef : undefined}
+        >
           <div
             ref={refs.setFloating}
             {...getFloatingProps()}
@@ -146,6 +157,14 @@ export const DialPopup: FC<DialPopupProps> = ({
               className,
             )}
           >
+            {preventKeyboardOnOpen && (
+              <div
+                ref={focusGuardRef}
+                tabIndex={-1}
+                aria-hidden
+                className="absolute size-px -m-px overflow-hidden opacity-0 pointer-events-none"
+              />
+            )}
             <div
               className={mergeClasses(popupHeaderClassName, headerClassName)}
             >
@@ -164,6 +183,7 @@ export const DialPopup: FC<DialPopupProps> = ({
               {/* Body area */}
               {children}
             </div>
+            {dividerFooter && <div className={popupDividerClassName} />}
             {footer}
           </div>
         </FloatingFocusManager>

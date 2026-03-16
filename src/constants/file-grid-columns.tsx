@@ -101,6 +101,7 @@ export const NAME_COLUMN =
                   ? DialItemType.Folder
                   : DialItemType.File
               }
+              fileExtension={renamedItem.name.split('.').pop()}
               elementId={`rename-${params.data.id}`}
               editing={true}
               shared={isSharedByMe}

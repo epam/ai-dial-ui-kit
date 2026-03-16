@@ -7,6 +7,7 @@ import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
+import { IconUserX } from '@tabler/icons-react';
 
 export interface UseBulkActionsProps {
   selectedFiles: Map<string, DialFile>;
@@ -18,16 +19,19 @@ export interface UseBulkActionsProps {
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.Delete]?: string;
     [DialFileManagerActions.Move]?: string;
+    [DialFileManagerActions.RemoveAccess]?: string;
   };
   onDuplicate: (files: DialFile[]) => void;
   onCopy: (files: DialFile[]) => void;
   onMove: (files: DialFile[]) => void;
   onDownload: (files: DialFile[]) => void;
   onUnshare?: (files: DialFile[]) => void;
+  onRemoveAccess?: (files: DialFile[]) => void;
   onRename: (filePath: string) => void;
   onDelete: (files: DialFile[], parentFolderPath: string) => void;
   getCurrentFolderPath: () => string;
   sharedWithMeIds?: string[];
+  sharedByMePaths?: Set<string>;
   onClearSelection: () => void;
 }
 
@@ -39,9 +43,11 @@ export const useBulkActions = ({
   onMove,
   onDownload,
   onUnshare,
+  onRemoveAccess,
   onDelete,
   getCurrentFolderPath,
   sharedWithMeIds,
+  sharedByMePaths,
   onClearSelection,
 }: UseBulkActionsProps): DialActionDropdownItem[] => {
   return useMemo(() => {
@@ -107,6 +113,9 @@ export const useBulkActions = ({
         title: actionLabels[DialFileManagerActions.Delete],
         icon: <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />,
         disabled: isDisabled,
+        tooltip: isDisabled
+          ? 'Selected items contain item which can not be deleted'
+          : undefined,
         onClick: () => {
           const currentFolderPath = getCurrentFolderPath();
           onDelete(selectedFilesArray, currentFolderPath);
@@ -148,18 +157,40 @@ export const useBulkActions = ({
       });
     }
 
+    if (actionLabels[DialFileManagerActions.RemoveAccess] && onRemoveAccess) {
+      const disabled = selectedFilesArray.some(
+        (file) => !sharedByMePaths?.has(file.path),
+      );
+
+      actions.push({
+        key: DialFileManagerActions.RemoveAccess,
+        label: actionLabels[DialFileManagerActions.RemoveAccess],
+        title: actionLabels[DialFileManagerActions.RemoveAccess],
+        disabled,
+        icon: (
+          <IconUserX size={BASE_ICON_PROPS.size} className="text-secondary" />
+        ),
+        onClick: () => {
+          onRemoveAccess(selectedFilesArray);
+          onClearSelection();
+        },
+      });
+    }
+
     return actions;
   }, [
     selectedFiles,
     actionLabels,
+    onUnshare,
+    onRemoveAccess,
     onMove,
     onCopy,
     onDuplicate,
     getCurrentFolderPath,
     onDelete,
     onDownload,
-    onUnshare,
     sharedWithMeIds,
     onClearSelection,
+    sharedByMePaths,
   ]);
 };
