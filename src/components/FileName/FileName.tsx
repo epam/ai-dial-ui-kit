@@ -56,9 +56,8 @@ export const DialFileName: FC<DialFileNameProps> = ({
   fileExtension,
   hideTooltip = false,
 }) => {
-  const extension = name.includes('.')
-    ? name.split('.').pop()
-    : fileExtension || void 0;
+  const extension =
+    fileExtension || (name.includes('.') ? name.split('.').pop() : void 0);
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
