@@ -135,6 +135,7 @@ export const NAME_COLUMN =
               updatedAt={params.data.updatedAt}
               dateLocale={dateLocale}
               dateOptions={dateOptions}
+              hideTooltip={isDisabled}
             />
           );
         }

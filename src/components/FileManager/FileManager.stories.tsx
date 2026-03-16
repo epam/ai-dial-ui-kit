@@ -184,7 +184,7 @@ export const WithDisabledTooltip: StoryObj<WithDisabledTooltipArgs> = {
     docs: {
       description: {
         story:
-          'Adjust constraints and tooltip texts in the Controls panel. Hover over any greyed-out file to see the row-level tooltip centered at the bottom.',
+          'Adjust constraints and tooltip texts in the Controls panel. Hover over any greyed-out file to see the row-level tooltip displayed above the row.',
       },
     },
   },

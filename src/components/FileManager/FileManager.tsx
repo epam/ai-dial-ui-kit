@@ -692,10 +692,12 @@ export const DialFileManagerView: FC = () => {
         isFileAccepted(allowedFileTypes, row.contentType, row.name);
 
       if (!isFileTypeAccepted) {
-        return (
-          unsupportedFileTypeTooltip ??
-          `Unsupported file type. Supported types: ${allowedFileTypes?.join(', ')}.`
-        );
+        const hasAllowedTypes =
+          Array.isArray(allowedFileTypes) && allowedFileTypes.length > 0;
+        const defaultUnsupportedMessage = hasAllowedTypes
+          ? `Unsupported file type. Supported types: ${allowedFileTypes.join(', ')}.`
+          : 'Unsupported file type.';
+        return unsupportedFileTypeTooltip ?? defaultUnsupportedMessage;
       }
       if (!isFileSizeAccepted) {
         return (
@@ -709,40 +711,37 @@ export const DialFileManagerView: FC = () => {
   );
 
   const isRowDisabled = useCallback(
-    (row: FileManagerGridRow) => {
-      if (getDisabledTooltip && getDisabledTooltip(row as DialFile)) {
-        return true;
-      }
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
       return !!getRowDisabledTooltip(
         row,
         allowedFileTypes,
         maxSelectableFileSize,
       );
     },
-    [
-      getDisabledTooltip,
-      getRowDisabledTooltip,
-      allowedFileTypes,
-      maxSelectableFileSize,
-    ],
+    [getRowDisabledTooltip],
   );
 
   const disabledGridRowIds = useMemo(() => {
     const ids = new Set<string>();
     for (const row of gridRows) {
-      if (isRowDisabled(row)) {
+      if (isRowDisabled(row, allowedFileTypes, maxSelectableFileSize)) {
         ids.add(row.path);
       }
     }
     return ids;
-  }, [gridRows, isRowDisabled]);
+  }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
   const [hoveredRowRect, setHoveredRowRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setHoveredRowId((prev) => (prev ? null : prev));
+      setHoveredRowId(null);
+      setHoveredRowRect(null);
     };
     window.addEventListener('scroll', handleScroll, true);
     return () => window.removeEventListener('scroll', handleScroll, true);
@@ -772,6 +771,7 @@ export const DialFileManagerView: FC = () => {
 
   const handleGridViewportMouseLeave = useCallback(() => {
     setHoveredRowId(null);
+    setHoveredRowRect(null);
   }, []);
 
   const hoveredRowFile = useMemo(() => {
