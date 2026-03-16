@@ -76,6 +76,7 @@ export const DialAlert: FC<DialAlertProps> = ({
   iconStroke = 2,
   closable = false,
   onClose,
+  children,
   ...props
 }) => {
   const icon = useMemo(() => {
@@ -97,6 +98,7 @@ export const DialAlert: FC<DialAlertProps> = ({
         <div className="text-primary">{message}</div>
       </div>
 
+      {children}
       {closable && (
         <DialButton
           className="ml-2 text-secondary hover:text-primary"
