@@ -129,7 +129,10 @@ export const useGridContextMenu = ({
         );
       }
 
-      if (actionLabels[DialFileManagerActions.Duplicate]) {
+      if (
+        actionLabels[DialFileManagerActions.Duplicate] &&
+        file.nodeType === DialFileNodeType.ITEM
+      ) {
         items.push({
           key: DialFileManagerActions.Duplicate,
           label: actionLabels[DialFileManagerActions.Duplicate],
