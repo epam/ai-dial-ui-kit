@@ -2,7 +2,10 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { DialFileNodeType } from '@/models/file';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
-import { DialDateCellRenderer } from '@/components/Grid/renderers/DateCellRenderer';
+import {
+  DialDateCellRenderer,
+  type DialDateCellRendererProps,
+} from '@/components/Grid/renderers/DateCellRenderer';
 import { FileManagerRenameTriggerView } from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
@@ -46,10 +49,12 @@ export const NAME_COLUMN =
           newFolderTempId,
           sharedByMePaths,
           selectedPaths,
+          disabledRowIds,
         } = params.context;
 
         const isSharedByMe = sharedByMePaths?.has(params.data.path);
         const isSelected = selectedPaths?.has(params.data.path);
+        const isDisabled = disabledRowIds?.has(params.data.path) ?? false;
 
         const sharedIndicatorClassName = mergeClasses([
           'group-hover/grid-row:bg-accent-primary-alpha',
@@ -131,6 +136,7 @@ export const NAME_COLUMN =
               updatedAt={params.data.updatedAt}
               dateLocale={dateLocale}
               dateOptions={dateOptions}
+              hideTooltip={isDisabled}
             />
           );
         }
@@ -141,6 +147,7 @@ export const NAME_COLUMN =
             shared={isSharedByMe}
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+            hideTooltip={isDisabled}
             isInvalidName={params.context.nameValidationRegExp?.test(
               params.data.name,
             )}
@@ -151,6 +158,7 @@ export const NAME_COLUMN =
             shared={isSharedByMe}
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
+            hideTooltip={isDisabled}
             isInvalidName={params.context.nameValidationRegExp?.test(
               params.data.name,
             )}
@@ -171,7 +179,11 @@ export const UPDATED_AT_COLUMN =
     headerName: headerName,
     width: 168,
     suppressSizeToFit: true,
-    cellRenderer: DialDateCellRenderer,
+    cellRenderer: (params: DialDateCellRendererProps) => {
+      const isDisabled =
+        params.context?.disabledRowIds?.has(params.data?.path) ?? false;
+      return <DialDateCellRenderer {...params} hideTooltip={isDisabled} />;
+    },
     cellRendererParams: {
       locale: dateLocale,
       options: dateOptions,

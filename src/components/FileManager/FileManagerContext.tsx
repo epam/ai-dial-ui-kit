@@ -42,6 +42,7 @@ export interface FileManagerGridRow {
   owner?: string;
   contentType?: string;
   contentLength?: number;
+  folderId?: string;
 }
 
 export interface FileManagerContextValue {
@@ -208,6 +209,9 @@ export interface FileManagerContextValue {
     currentPath?: string,
     currentFolder?: DialFile,
   ) => void;
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
+  fileTooLargeTooltip?: string;
+  unsupportedFileTypeTooltip?: string;
 }
 
 export const FileManagerContext = createContext<

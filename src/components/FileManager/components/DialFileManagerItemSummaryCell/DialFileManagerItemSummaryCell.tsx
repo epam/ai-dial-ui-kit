@@ -17,6 +17,7 @@ interface DialFileManagerItemSummaryCellProps {
   dateLocale?: Intl.LocalesArgument;
   dateOptions?: Intl.DateTimeFormatOptions;
   sharedIndicatorClassName?: string;
+  hideTooltip?: boolean;
 }
 
 /**
@@ -74,6 +75,7 @@ export const DialFileManagerItemSummaryCell: FC<
   dateOptions,
   shared,
   sharedIndicatorClassName,
+  hideTooltip = false,
 }) => {
   return (
     <div className="flex">
@@ -89,6 +91,7 @@ export const DialFileManagerItemSummaryCell: FC<
           shared={shared}
           iconSize={BASE_FILE_MANAGER_ICON_SIZE}
           sharedIndicatorClassName={sharedIndicatorClassName}
+          hideTooltip={hideTooltip}
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">
               <span>
@@ -104,6 +107,7 @@ export const DialFileManagerItemSummaryCell: FC<
                     locale={dateLocale?.toString()}
                     options={dateOptions}
                     className="dial-tiny text-secondary"
+                    hideTooltip={hideTooltip}
                   />
                 </span>
               ) : null}

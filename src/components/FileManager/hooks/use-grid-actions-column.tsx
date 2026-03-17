@@ -75,6 +75,7 @@ export const useGridActionsColumn = ({
       headerName: '',
       width: 44,
       minWidth: 44,
+      maxWidth: 44,
       suppressSizeToFit: true,
       sortable: false,
       resizable: false,
