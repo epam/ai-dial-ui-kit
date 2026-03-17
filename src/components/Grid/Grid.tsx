@@ -223,8 +223,9 @@ export const DialGrid = <T extends object>({
     (p: ICellRendererParams<T, unknown>) => {
       if (p.data) {
         const rowId = getRowId(p.data);
-        const disabled =
-          !allowDisabledContextMenu && disabledRowIds?.has(rowId);
+        const isRowDisabled = disabledRowIds?.has(rowId) ?? false;
+        const isContextMenuDisabled =
+          isRowDisabled && !allowDisabledContextMenu;
         const valueText = p.value == null ? '' : String(p.value);
         const items = getContextMenuItems?.(p.data) ?? [];
 
@@ -235,12 +236,13 @@ export const DialGrid = <T extends object>({
             anchorToMouse
             matchReferenceWidth
             className="w-full"
-            disabled={disabled}
+            disabled={isContextMenuDisabled}
           >
             <span className="block min-w-0 h-full max-w-full">
               <DialEllipsisTooltip
                 text={valueText}
                 className="max-w-full h-full"
+                hideTooltip={isRowDisabled}
               />
             </span>
           </DialDropdown>

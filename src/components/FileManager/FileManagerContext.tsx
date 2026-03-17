@@ -45,6 +45,7 @@ export interface FileManagerGridRow {
   owner?: string;
   contentType?: string;
   contentLength?: number;
+  folderId?: string;
 }
 
 export interface FileManagerContextValue {
@@ -216,6 +217,9 @@ export interface FileManagerContextValue {
   ) => void;
   customDuplicateAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
+  fileTooLargeTooltip?: string;
+  unsupportedFileTypeTooltip?: string;
 }
 
 export const FileManagerContext = createContext<
