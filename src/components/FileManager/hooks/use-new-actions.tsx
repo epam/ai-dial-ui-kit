@@ -65,6 +65,24 @@ export const useNewActions = ({
       });
     }
 
+    if (newActions.newItem) {
+      actions.push({
+        key: 'new-item',
+        label: newActions.newItem.label,
+        icon:
+          newActions?.newItem?.icon !== undefined ? (
+            newActions?.newItem?.icon
+          ) : (
+            <IconPlus {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+        onClick: () => {
+          if (onCreateNewItem) {
+            onCreateNewItem();
+          }
+        },
+      });
+    }
+
     if (newActions.uploadFiles) {
       actions.push({
         key: 'upload-file',
@@ -96,21 +114,6 @@ export const useNewActions = ({
         onClick: () => {
           if (onUploadArchive) {
             onUploadArchive();
-          }
-        },
-      });
-    }
-
-    if (newActions.newItem) {
-      actions.push({
-        key: 'new-item',
-        label: newActions.newItem.label,
-        icon: newActions?.newItem?.icon || (
-          <IconPlus {...BASE_ICON_PROPS} className="text-secondary" />
-        ),
-        onClick: () => {
-          if (onCreateNewItem) {
-            onCreateNewItem();
           }
         },
       });
