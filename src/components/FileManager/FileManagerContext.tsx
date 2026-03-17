@@ -208,7 +208,7 @@ export interface FileManagerContextValue {
     currentPath?: string,
     currentFolder?: DialFile,
   ) => void;
-  getDisabledTooltip?: (row: DialFile) => string | undefined;
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   fileTooLargeTooltip?: string;
   unsupportedFileTypeTooltip?: string;
 }

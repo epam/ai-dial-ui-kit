@@ -326,7 +326,7 @@ export interface DialFileManagerProps {
     parentFolder: DialFile,
   ) => string | null;
   folderCreationValidationMessages?: CreateFolderValidationMessages;
-  getDisabledTooltip?: (row: DialFile) => string | undefined;
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   fileTooLargeTooltip?: string;
   unsupportedFileTypeTooltip?: string;
 
@@ -677,27 +677,28 @@ export const DialFileManagerView: FC = () => {
 
   const getRowDisabledTooltip = useCallback(
     (
-      row: FileManagerGridRow,
+      file: FileManagerGridRow,
       allowedFileTypes?: DialFileAcceptType[],
       maxSelectableFileSize?: number,
     ) => {
-      if (row.nodeType === DialFileNodeType.FOLDER) return undefined;
+      if (file.nodeType === DialFileNodeType.FOLDER) return undefined;
 
       const isFileSizeAccepted =
-        !row.contentLength ||
+        !file.contentLength ||
         maxSelectableFileSize == null ||
-        row.contentLength <= maxSelectableFileSize;
+        file.contentLength <= maxSelectableFileSize;
+
       const isFileTypeAccepted =
-        !row.contentType ||
-        isFileAccepted(allowedFileTypes, row.contentType, row.name);
+        !file.contentType ||
+        isFileAccepted(allowedFileTypes, file.contentType, file.name);
 
       if (!isFileTypeAccepted) {
-        const hasAllowedTypes =
-          Array.isArray(allowedFileTypes) && allowedFileTypes.length > 0;
-        const defaultUnsupportedMessage = hasAllowedTypes
-          ? `Unsupported file type. Supported types: ${allowedFileTypes.join(', ')}.`
-          : 'Unsupported file type.';
-        return unsupportedFileTypeTooltip ?? defaultUnsupportedMessage;
+        return (
+          unsupportedFileTypeTooltip ??
+          (allowedFileTypes?.length
+            ? `Unsupported file type. Supported types: ${allowedFileTypes.join(', ')}.`
+            : 'Unsupported file type.')
+        );
       }
       if (!isFileSizeAccepted) {
         return (
@@ -776,17 +777,18 @@ export const DialFileManagerView: FC = () => {
 
   const hoveredRowFile = useMemo(() => {
     if (!hoveredRowId) return undefined;
-    const file = gridRows.find((r) => r.path === hoveredRowId);
-    return file ? (file as unknown as DialFile) : undefined;
+    return gridRows.find((r) => r.path === hoveredRowId);
   }, [hoveredRowId, gridRows]);
 
   const hoveredRowTooltipContent = useMemo(() => {
     if (!hoveredRowFile) return undefined;
-    if (getDisabledTooltip) {
+
+    if (getDisabledTooltip && hoveredRowFile.folderId) {
       return getDisabledTooltip(hoveredRowFile);
     }
+
     return getRowDisabledTooltip(
-      hoveredRowFile as unknown as FileManagerGridRow,
+      hoveredRowFile,
       allowedFileTypes,
       maxSelectableFileSize,
     );
