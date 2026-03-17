@@ -105,12 +105,9 @@ export const useNewActions = ({
       actions.push({
         key: 'new-item',
         label: newActions.newItem.label,
-        icon:
-          newActions?.newItem?.icon !== undefined ? (
-            newActions?.newItem?.icon
-          ) : (
-            <IconPlus {...BASE_ICON_PROPS} className="text-secondary" />
-          ),
+        icon: newActions?.newItem?.icon || (
+          <IconPlus {...BASE_ICON_PROPS} className="text-secondary" />
+        ),
         onClick: () => {
           if (onCreateNewItem) {
             onCreateNewItem();
