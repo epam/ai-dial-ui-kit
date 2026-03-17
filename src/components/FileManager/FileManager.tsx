@@ -371,6 +371,7 @@ export interface DialFileManagerProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
     currentFolder?: DialFile,
@@ -625,6 +626,7 @@ export const DialFileManagerView: FC = () => {
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
@@ -1240,6 +1242,7 @@ export const DialFileManagerView: FC = () => {
     onPreview: (path) => onPreview?.(path),
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
   });
 
   const getGridContextMenuItems = useCallback(

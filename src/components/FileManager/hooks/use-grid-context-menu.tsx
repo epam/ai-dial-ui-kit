@@ -55,6 +55,7 @@ export interface UseGridContextMenuProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
 }
 
 export const useGridContextMenu = ({
@@ -76,6 +77,7 @@ export const useGridContextMenu = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable = true,
+  isDuplicateFolderAvailable = true,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -129,9 +131,14 @@ export const useGridContextMenu = ({
         );
       }
 
+      const isDuplicateAvailable =
+        file.nodeType === DialFileNodeType.ITEM ||
+        (file.nodeType === DialFileNodeType.FOLDER &&
+          isDuplicateFolderAvailable);
+
       if (
         actionLabels[DialFileManagerActions.Duplicate] &&
-        file.nodeType === DialFileNodeType.ITEM
+        isDuplicateAvailable
       ) {
         items.push({
           key: DialFileManagerActions.Duplicate,
@@ -314,5 +321,6 @@ export const useGridContextMenu = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
   ]);
 };
