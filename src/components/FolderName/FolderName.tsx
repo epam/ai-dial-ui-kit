@@ -15,6 +15,7 @@ export interface DialFolderNameProps {
   className?: string;
   sharedIndicatorClassName?: string;
   sharedIndicatorTooltip?: ReactNode;
+  hideTooltip?: boolean;
 }
 
 /**
@@ -42,6 +43,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   iconSize = BASE_ICON_SIZE,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
+  hideTooltip = false,
 }) => {
   const getIcon = () => {
     if (loading) {
@@ -72,6 +74,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         className="text-primary dial-small flex-1 min-w-0"
         text={name}
         id="name"
+        hideTooltip={hideTooltip}
       />
     </div>
   );

@@ -113,6 +113,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   clearSearchResults,
   allowedFileTypes,
   maxSelectableFileSize,
+  getDisabledTooltip,
+  fileTooLargeTooltip,
+  unsupportedFileTypeTooltip,
 
   emptyStateIcon,
   emptyStateTitle,
@@ -142,14 +145,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const map = new Map<string, DialFile>();
 
     effectiveSelectedPaths.forEach((path) => {
-      const file = findNodeByPath(items, path);
-      if (file) {
-        map.set(path, file);
+      const node = findNodeByPath(items, path);
+      if (node && node.nodeType === DialFileNodeType.ITEM) {
+        map.set(path, node);
       }
     });
 
     return map;
-  }, [effectiveSelectedPaths, items]);
+  }, [items, effectiveSelectedPaths]);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
@@ -409,6 +412,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         extension: node.extension,
         isTemporary: false,
         owner: node.owner,
+        folderId: node.folderId,
       }));
     }
 
@@ -447,6 +451,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       owner: node.owner,
       contentType: node.contentType,
       contentLength: node.contentLength,
+      folderId: node.folderId,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -704,6 +709,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     isRenameFileAvailable,
     customUploadFileAction,
     customBreakpointRef,
+    getDisabledTooltip,
+    fileTooLargeTooltip,
+    unsupportedFileTypeTooltip,
   };
 
   return (
