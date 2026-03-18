@@ -10,7 +10,10 @@ import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
 import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { isHiddenDotFile } from '@/components/FileManager/utils';
+import {
+  getForbiddenSymbolsTooltip,
+  isHiddenDotFile,
+} from '@/components/FileManager/utils';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
@@ -37,7 +40,8 @@ export interface DialFoldersTreeProps {
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
-  nameValidationRegExp?: RegExp;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 }
 
 /**
@@ -127,6 +131,8 @@ export interface DialFoldersTreeProps {
  * @param [areHiddenFilesVisible=false] - Whether hidden files (dotfiles) should be visible in the tree.
  * @param [rootItemPath] - Path of the folder to treat as the custom root node (no context menu, special label).
  * @param [rootItemLabel] - Label to display for the root node instead of its actual name.
+ * @param [forbiddenSymbolsRegExp] - Optional RegExp used to validate folder and file names for forbidden characters.
+ * @param [forbiddenSymbolsTooltip] - Optional tooltip content displayed when a name contains forbidden characters.
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
  * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
@@ -155,7 +161,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onRenameCancel,
   onRenameValidate,
   onExpandedPathsChange,
-  nameValidationRegExp,
+  forbiddenSymbolsRegExp,
+  forbiddenSymbolsTooltip,
 }) => {
   const { expandedPaths, togglePath } = useExpandedPaths({
     expandedPaths: externalExpandedPaths ?? new Set(),
@@ -199,6 +206,13 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
         : 'border-l-2 border-l-transparent';
 
       const menuItems = isRootFolder ? [] : (getContextMenuItems?.(node) ?? []);
+      const tooltipContent = forbiddenSymbolsRegExp
+        ? getForbiddenSymbolsTooltip(
+            node,
+            forbiddenSymbolsRegExp,
+            forbiddenSymbolsTooltip,
+          )
+        : undefined;
 
       return (
         <div key={`${path}-children`} className="cursor-pointer text-secondary">
@@ -249,7 +263,8 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                         isSelected && 'bg-accent-primary-alpha',
                       )}
                       iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-                      nameValidationRegExp={nameValidationRegExp}
+                      forbiddenSymbolsRegExp={forbiddenSymbolsRegExp}
+                      forbiddenSymbolsTooltip={tooltipContent}
                       {...(!isRootFolder && {
                         editing: isRenaming,
                         onSave: onRenameSave,

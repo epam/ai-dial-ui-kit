@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import type { ColDef, SuppressKeyboardEventParams } from 'ag-grid-community';
 import { type DialFile } from '@/models/file';
 import { FileManagerRenameTriggerView } from '@/types/file-manager';
@@ -21,7 +21,8 @@ export interface FileManagerGridContext {
   sharedByMePaths?: Set<string>;
   selectedPaths?: Set<string>;
   disabledRowIds?: Set<string>;
-  nameValidationRegExp?: RegExp;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;

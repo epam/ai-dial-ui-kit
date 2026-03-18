@@ -18,6 +18,7 @@ export interface DialFolderNameProps {
   sharedIndicatorTooltip?: ReactNode;
   hideTooltip?: boolean;
   isInvalidName?: boolean;
+  tooltipContent?: ReactNode;
 }
 
 /**
@@ -37,6 +38,8 @@ export interface DialFolderNameProps {
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator
  * @param sharedIndicatorTooltip - Custom tooltip content for the shared indicator; defaults to "Shared"
  * @param isInvalidName - If true, applies disabled styling to indicate the file name has invalid characters.
+ * @param hideTooltip - If true, disables the tooltip even if the name is truncated.
+ * @param tooltipContent - Custom tooltip content to show when the name is truncated; defaults to showing the full name.
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
@@ -48,6 +51,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   sharedIndicatorTooltip,
   hideTooltip = false,
   isInvalidName = false,
+  tooltipContent,
 }) => {
   const getIcon = () => {
     if (loading) {
@@ -82,6 +86,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         text={name}
         id="name"
         hideTooltip={hideTooltip}
+        customTooltipContent={tooltipContent}
       />
     </div>
   );

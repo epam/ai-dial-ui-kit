@@ -29,7 +29,12 @@ import {
   actionsColumnButtonClassName,
   DEFAULT_VISIBLE_COLUMN,
 } from './constants';
-import { findNodeByPath, isFileAccepted, formatBytes } from './utils';
+import {
+  findNodeByPath,
+  isFileAccepted,
+  formatBytes,
+  getForbiddenSymbolsTooltip,
+} from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType, DialFilePermission } from '@/models/file';
@@ -315,7 +320,8 @@ export interface DialFileManagerProps {
 
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   renameValidationMessages?: RenameValidationMessages;
-  nameValidationRegExp?: RegExp;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
@@ -452,7 +458,8 @@ export interface DialFileManagerProps {
  * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
  * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
- * @param [nameValidationRegExp] - Optional RegExp will be used in the validation for the files and folders names
+ * @param [forbiddenSymbolsRegExp] - Optional RegExp will be used in the validation for the files and folders names
+ * @param [forbiddenSymbolsTooltip] - Optional tooltip displayed when a file or folder name contains forbidden characters
  *
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
@@ -563,7 +570,8 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
-    nameValidationRegExp,
+    forbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
     getDisplayName,
     isDragging,
     isDraggingOverWindow,
@@ -740,6 +748,16 @@ export const DialFileManagerView: FC = () => {
     return ids;
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
+  const restrictedGridRowIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const row of gridRows) {
+      if (forbiddenSymbolsRegExp && forbiddenSymbolsRegExp.test(row.name)) {
+        ids.add(row.path);
+      }
+    }
+    return ids;
+  }, [forbiddenSymbolsRegExp, gridRows]);
+
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
   const [hoveredRowRect, setHoveredRowRect] = useState<DOMRect | null>(null);
 
@@ -762,7 +780,10 @@ export const DialFileManagerView: FC = () => {
         return;
       }
       const rowId = rowTarget.getAttribute('row-id');
-      if (rowId && disabledGridRowIds.has(rowId)) {
+      if (
+        rowId &&
+        (disabledGridRowIds.has(rowId) || restrictedGridRowIds.has(rowId))
+      ) {
         if (hoveredRowId !== rowId) {
           setHoveredRowId(rowId);
           setHoveredRowRect(rowTarget.getBoundingClientRect());
@@ -771,7 +792,7 @@ export const DialFileManagerView: FC = () => {
         if (hoveredRowId) setHoveredRowId(null);
       }
     },
-    [hoveredRowId, disabledGridRowIds],
+    [disabledGridRowIds, restrictedGridRowIds, hoveredRowId],
   );
 
   const handleGridViewportMouseLeave = useCallback(() => {
@@ -804,12 +825,24 @@ export const DialFileManagerView: FC = () => {
     maxSelectableFileSize,
   ]);
 
+  const forbiddenSymbolsTooltipContent = useMemo(() => {
+    if (!hoveredRowFile) return undefined;
+
+    return getForbiddenSymbolsTooltip(
+      hoveredRowFile,
+      forbiddenSymbolsRegExp,
+      forbiddenSymbolsTooltip,
+    );
+  }, [hoveredRowFile, forbiddenSymbolsRegExp, forbiddenSymbolsTooltip]);
+
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
       const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
-      const hasRestrictedSymbolsInName = nameValidationRegExp?.test(file.name);
+      const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(
+        file.name,
+      );
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
@@ -1025,7 +1058,7 @@ export const DialFileManagerView: FC = () => {
     [
       treeOptions?.actionLabels,
       handleAddSibling,
-      nameValidationRegExp,
+      forbiddenSymbolsRegExp,
       handleAddChild,
       onManagePermissions,
       handleDuplicate,
@@ -1174,7 +1207,8 @@ export const DialFileManagerView: FC = () => {
               rootItemLabel={rootItem?.label}
               selectedPath={currentPath}
               sharedByMePaths={sharedByMePaths}
-              nameValidationRegExp={nameValidationRegExp}
+              forbiddenSymbolsRegExp={forbiddenSymbolsRegExp}
+              forbiddenSymbolsTooltip={forbiddenSymbolsTooltip}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
@@ -1192,27 +1226,29 @@ export const DialFileManagerView: FC = () => {
       </aside>
     );
   }, [
-    additionalButtons,
-    areHiddenFilesVisible,
-    containerClassName,
-    currentPath,
-    forwardedTreeProps,
-    getTreeContextMenuItems,
-    handleTreeItemClick,
     isCompactView,
+    sidebarCurrentWidth,
     isTreeCollapsed,
+    header,
+    containerClassName,
+    additionalButtons,
+    toggleTreeCollapse,
+    forwardedTreeProps,
     items,
-    rootItem,
-    onRenameCancel,
-    onRenameSave,
-    onRenameValidate,
+    rootItem?.path,
+    rootItem?.label,
+    currentPath,
+    sharedByMePaths,
+    forbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
+    handleTreeItemClick,
+    areHiddenFilesVisible,
+    getTreeContextMenuItems,
     renameTriggerView,
     renamedPath,
-    sidebarCurrentWidth,
-    header,
-    sharedByMePaths,
-    toggleTreeCollapse,
-    nameValidationRegExp,
+    onRenameSave,
+    onRenameCancel,
+    onRenameValidate,
   ]);
 
   const gridContextMenu = useGridContextMenu({
@@ -1241,7 +1277,7 @@ export const DialFileManagerView: FC = () => {
     onPreview: (path) => onPreview?.(path),
     previewExtensions,
     isRenameFileAvailable,
-    nameValidationRegExp,
+    forbiddenSymbolsRegExp,
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1431,7 +1467,8 @@ export const DialFileManagerView: FC = () => {
                     sharedByMePaths,
                     selectedPaths,
                     disabledRowIds: disabledGridRowIds,
-                    nameValidationRegExp,
+                    forbiddenSymbolsRegExp,
+                    forbiddenSymbolsTooltip,
                   } as FileManagerGridContext,
                 }}
                 selectedRowIds={selectedGridRowsIds}
@@ -1441,24 +1478,28 @@ export const DialFileManagerView: FC = () => {
                 allowDisabledContextMenu={allowDisabledContextMenu}
               />
             )}
-            {hoveredRowTooltipContent && hoveredRowRect && (
-              <DialTooltipContainer open={true} placement="top">
-                <DialTooltipTrigger asChild>
-                  <div
-                    className="fixed pointer-events-none z-[-1]"
-                    style={{
-                      top: hoveredRowRect.top,
-                      left: hoveredRowRect.left,
-                      width: hoveredRowRect.width,
-                      height: hoveredRowRect.height,
-                    }}
-                  />
-                </DialTooltipTrigger>
-                <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
-                  {hoveredRowTooltipContent}
-                </DialTooltipContent>
-              </DialTooltipContainer>
-            )}
+            {(hoveredRowTooltipContent || forbiddenSymbolsTooltipContent) &&
+              hoveredRowRect && (
+                <DialTooltipContainer open={true} placement="top">
+                  <DialTooltipTrigger asChild>
+                    <div
+                      className={classNames(
+                        'fixed z-[-1]',
+                        hoveredRowTooltipContent && 'pointer-events-none',
+                      )}
+                      style={{
+                        top: hoveredRowRect.top,
+                        left: hoveredRowRect.left,
+                        width: hoveredRowRect.width,
+                        height: hoveredRowRect.height,
+                      }}
+                    />
+                  </DialTooltipTrigger>
+                  <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
+                    {hoveredRowTooltipContent ?? forbiddenSymbolsTooltipContent}
+                  </DialTooltipContent>
+                </DialTooltipContainer>
+              )}
           </section>
         </div>
       </div>

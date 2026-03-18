@@ -119,7 +119,7 @@ export const NAME_COLUMN =
                 '!h-9',
                 isCompactView && type === DialFileNodeType.ITEM && '!h-10',
               ])}
-              nameValidationRegExp={params.context.nameValidationRegExp}
+              forbiddenSymbolsRegExp={params.context.forbiddenSymbolsRegExp}
             />
           );
         }
@@ -137,6 +137,8 @@ export const NAME_COLUMN =
               dateLocale={dateLocale}
               dateOptions={dateOptions}
               hideTooltip={isDisabled}
+              forbiddenSymbolsRegExp={params.context.forbiddenSymbolsRegExp}
+              forbiddenSymbolsTooltip={params.context.forbiddenSymbolsTooltip}
             />
           );
         }
@@ -148,7 +150,7 @@ export const NAME_COLUMN =
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             hideTooltip={isDisabled}
-            isInvalidName={params.context.nameValidationRegExp?.test(
+            isInvalidName={params.context.forbiddenSymbolsRegExp?.test(
               params.data.name,
             )}
           />
@@ -159,7 +161,7 @@ export const NAME_COLUMN =
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             hideTooltip={isDisabled}
-            isInvalidName={params.context.nameValidationRegExp?.test(
+            isInvalidName={params.context.forbiddenSymbolsRegExp?.test(
               params.data.name,
             )}
           />

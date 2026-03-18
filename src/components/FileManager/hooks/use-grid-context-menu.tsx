@@ -55,7 +55,7 @@ export interface UseGridContextMenuProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
-  nameValidationRegExp?: RegExp;
+  forbiddenSymbolsRegExp?: RegExp;
 }
 
 export const useGridContextMenu = ({
@@ -77,7 +77,7 @@ export const useGridContextMenu = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable = true,
-  nameValidationRegExp,
+  forbiddenSymbolsRegExp,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
     return (file: DialFile): DropdownItem[] => {
@@ -87,7 +87,9 @@ export const useGridContextMenu = ({
         return items;
       }
 
-      const hasRestrictedSymbolsInName = nameValidationRegExp?.test(file.name);
+      const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(
+        file.name,
+      );
 
       if (
         actionLabels[DialFileManagerActions.AddSibling] &&
@@ -331,6 +333,6 @@ export const useGridContextMenu = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
-    nameValidationRegExp,
+    forbiddenSymbolsRegExp,
   ]);
 };

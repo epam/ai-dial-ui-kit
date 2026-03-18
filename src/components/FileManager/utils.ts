@@ -1,5 +1,7 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
+import type { ReactNode } from 'react';
+import { NOT_ALLOWED_SYMBOLS } from './constants';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,
@@ -143,3 +145,19 @@ export function isFileAccepted(
     return normalizedType === normalizedRule;
   });
 }
+
+export const getForbiddenSymbolsTooltip = (
+  item: { name: string; nodeType: DialFileNodeType },
+  forbiddenSymbolsRegExp?: RegExp,
+  forbiddenSymbolsTooltip?: ReactNode,
+) => {
+  if (!forbiddenSymbolsRegExp) return undefined;
+
+  if (forbiddenSymbolsRegExp.test(item.name)) {
+    return (
+      forbiddenSymbolsTooltip ??
+      `This ${item.nodeType === DialFileNodeType.FOLDER ? 'folder' : 'file'} contains forbidden ${NOT_ALLOWED_SYMBOLS} characters in its name.`
+    );
+  }
+  return undefined;
+};

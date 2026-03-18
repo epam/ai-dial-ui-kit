@@ -24,7 +24,8 @@ export interface DialFileManagerItemNameProps
   onSave?: (value: string) => void;
   onCancel?: () => void;
   hideTooltip?: boolean;
-  nameValidationRegExp?: RegExp;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 }
 
 /**
@@ -76,7 +77,8 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
   hideTooltip = false,
-  nameValidationRegExp,
+  forbiddenSymbolsRegExp,
+  forbiddenSymbolsTooltip,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -89,7 +91,10 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     });
 
   if (!editing) {
-    const hasRestrictedSymbolsInName = nameValidationRegExp?.test(name);
+    const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(name);
+    const tooltipContent = hasRestrictedSymbolsInName
+      ? forbiddenSymbolsTooltip
+      : undefined;
 
     if (type === DialItemType.Folder) {
       return (
@@ -102,6 +107,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           sharedIndicatorClassName={sharedIndicatorClassName}
           hideTooltip={hideTooltip}
           isInvalidName={hasRestrictedSymbolsInName}
+          tooltipContent={tooltipContent}
         />
       );
     }
@@ -116,6 +122,7 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         sharedIndicatorClassName={sharedIndicatorClassName}
         hideTooltip={hideTooltip}
         isInvalidName={hasRestrictedSymbolsInName}
+        tooltipContent={tooltipContent}
       />
     );
   }
