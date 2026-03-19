@@ -162,12 +162,11 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
     strategyLabels?.[DialFileManagerConflictStrategies.DecideForEach] ??
     'Decide for each';
 
-  const [singleFileMode, setSingleFileMode] =
-    useState<DialFileManagerConflictActions>(
-      DialFileManagerConflictActions.Replace,
-    );
+  const [singleFileMode, setSingleFileMode] = useState(
+    DialFileManagerConflictActions.Replace,
+  );
 
-  const [strategy, setStrategy] = useState<DialFileManagerConflictStrategies>(
+  const [strategy, setStrategy] = useState(
     DialFileManagerConflictStrategies.ReplaceAll,
   );
   const [fileDecisions, setFileDecisions] = useState<
@@ -385,6 +384,8 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
   );
 
   const resetState = useCallback(() => {
+    setSingleFileMode(DialFileManagerConflictActions.Replace);
+    setStrategy(DialFileManagerConflictStrategies.ReplaceAll);
     setFileDecisions(
       new Map(
         conflictingFiles.map((file) => [
