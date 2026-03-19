@@ -7,11 +7,14 @@ import { DialFileNodeType } from '@/models/file';
 export interface RenameValidationMessages {
   emptyName?: string;
   duplicateName?: string;
+  hiddenItemWarning?: string;
 }
 
 const DEFAULT_VALIDATION_MESSAGES: Required<RenameValidationMessages> = {
   emptyName: 'Name cannot be empty',
   duplicateName: 'An item with this name already exists',
+  hiddenItemWarning:
+    'warning__A dot at the start of the name will make the item hidden',
 };
 
 function trimTrailingSlashes(path: string): string {
@@ -140,6 +143,10 @@ export const useItemRenaming = ({
 
       if (!trimmedName) {
         return messages.emptyName;
+      }
+
+      if (trimmedName.startsWith('.')) {
+        return messages.hiddenItemWarning;
       }
 
       const isFile = item.nodeType === DialFileNodeType.ITEM;

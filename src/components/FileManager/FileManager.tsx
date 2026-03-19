@@ -458,6 +458,8 @@ export interface DialFileManagerProps {
  * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
  * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
+ * @param [onRenameValidate] - Optional callback to validate a file or folder name during renaming. Should return an error message string if the name is invalid, or null if it's valid.
+ * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `warning__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
  * @param [forbiddenSymbolsRegExp] - Optional RegExp will be used in the validation for the files and folders names
  * @param [forbiddenSymbolsTooltip] - Optional tooltip displayed when a file or folder name contains forbidden characters
  *
