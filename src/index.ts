@@ -98,6 +98,11 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 //File Manager
 export { DialFileManager } from './components/FileManager/FileManager';
+export type {
+  GridOptions,
+  ToolbarOptions,
+  BulkActionsToolbarOptions,
+} from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
 
 // Types
