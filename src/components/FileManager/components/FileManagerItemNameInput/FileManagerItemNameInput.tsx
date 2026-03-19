@@ -104,10 +104,11 @@ export const DialFileManagerItemNameInput: FC<
   fileExtension,
 }) => {
   const getInputIconAfter = () => {
-    if (!inputInvalid) return null;
     const isWarning = inputInvalidMessage?.startsWith(
       `${AlertVariant.Warning}__`,
     );
+
+    if (!inputInvalid && !isWarning) return null;
 
     const cleanedMessage = inputInvalidMessage?.replace(
       `${AlertVariant.Warning}__`,
