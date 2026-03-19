@@ -82,7 +82,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
     ) : (
       <span
         className={mergeClasses(
-          'flex-1 min-w-0 max-w-full truncate cursor-pointer',
+          'flex-1 min-w-0 max-w-full truncate cursor-pointer max-w-[300px]',
           labelClassName,
         )}
         aria-label="breadcrumb-item-content"

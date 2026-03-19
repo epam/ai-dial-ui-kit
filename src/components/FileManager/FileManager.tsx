@@ -241,6 +241,7 @@ export type ToolbarOptions = Omit<
     uploadFiles?: NewAction;
     newFolder?: NewAction;
     uploadArchive?: NewAction;
+    newItem?: NewAction;
   };
   showHiddenFilesToggle?: boolean;
 };
@@ -377,10 +378,17 @@ export interface DialFileManagerProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
     currentFolder?: DialFile,
   ) => void;
+  customCreateNewItemAction?: (
+    currentPath?: string,
+    currentFolder?: DialFile,
+  ) => void;
+  customDuplicateAction?: (items?: DialFile[]) => void;
+  nonClickableTableColumns?: FileManagerColumnKey[];
 }
 
 /**
@@ -632,10 +640,12 @@ export const DialFileManagerView: FC = () => {
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
     gridClassName,
+    nonClickableTableColumns,
   } = useFileManagerContext();
 
   const {
@@ -1279,6 +1289,7 @@ export const DialFileManagerView: FC = () => {
     onPreview: (path) => onPreview?.(path),
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     forbiddenSymbolsRegExp,
   });
 
@@ -1330,7 +1341,11 @@ export const DialFileManagerView: FC = () => {
         event.colDef.colId === 'ag-Grid-SelectionColumn' ||
         event.colDef.colId === FileManagerColumnKey.Actions ||
         (renamedPath && event.data?.path === renamedPath) ||
-        event.data?.isTemporary
+        event.data?.isTemporary ||
+        (nonClickableTableColumns &&
+          nonClickableTableColumns.includes(
+            event.colDef.colId as FileManagerColumnKey,
+          ))
       ) {
         return;
       }
@@ -1338,7 +1353,7 @@ export const DialFileManagerView: FC = () => {
         handleTableRowClick(event.data);
       }
     },
-    [renamedPath, handleTableRowClick],
+    [renamedPath, handleTableRowClick, nonClickableTableColumns],
   );
 
   const emptyStateRenderer = useCallback(

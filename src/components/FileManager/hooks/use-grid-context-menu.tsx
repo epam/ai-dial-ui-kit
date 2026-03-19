@@ -55,6 +55,7 @@ export interface UseGridContextMenuProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
   forbiddenSymbolsRegExp?: RegExp;
 }
 
@@ -77,6 +78,7 @@ export const useGridContextMenu = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable = true,
+  isDuplicateFolderAvailable = true,
   forbiddenSymbolsRegExp,
 }: UseGridContextMenuProps) => {
   return useMemo(() => {
@@ -136,8 +138,14 @@ export const useGridContextMenu = ({
         );
       }
 
+      const isDuplicateAvailable =
+        file.nodeType === DialFileNodeType.ITEM ||
+        (file.nodeType === DialFileNodeType.FOLDER &&
+          isDuplicateFolderAvailable);
+
       if (
         actionLabels[DialFileManagerActions.Duplicate] &&
+        isDuplicateAvailable &&
         !hasRestrictedSymbolsInName
       ) {
         items.push({
@@ -333,6 +341,7 @@ export const useGridContextMenu = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     forbiddenSymbolsRegExp,
   ]);
 };

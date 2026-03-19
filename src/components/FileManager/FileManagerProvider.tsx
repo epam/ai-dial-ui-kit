@@ -130,9 +130,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable,
+  isDuplicateFolderAvailable,
   customUploadFileAction,
+  customCreateNewItemAction,
+  customDuplicateAction,
   customBreakpointRef,
   gridClassName,
+  nonClickableTableColumns,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -148,14 +152,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const map = new Map<string, DialFile>();
 
     effectiveSelectedPaths.forEach((path) => {
-      const node = findNodeByPath(items, path);
-      if (node && node.nodeType === DialFileNodeType.ITEM) {
-        map.set(path, node);
+      const file = findNodeByPath(items, path);
+      if (file) {
+        map.set(path, file);
       }
     });
 
     return map;
-  }, [items, effectiveSelectedPaths]);
+  }, [effectiveSelectedPaths, items]);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
@@ -357,6 +361,17 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     customUploadFileAction?.(currentPath, currentFolder);
   }, [customUploadFileAction, currentPath, currentFolder]);
 
+  const customCreateNewItem = useCallback(() => {
+    customCreateNewItemAction?.(currentPath, currentFolder);
+  }, [customCreateNewItemAction, currentPath, currentFolder]);
+
+  const customDuplicateHandle = useCallback(
+    (items: DialFile[]) => {
+      customDuplicateAction?.(items);
+    },
+    [customDuplicateAction],
+  );
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -378,6 +393,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onUploadFiles: customUploadFileAction ? customUploadFile : openFileDialog,
       onUploadArchive: openArchiveUpload,
       onCreateFolder: startFolderCreation,
+      onCreateNewItem: customCreateNewItem,
       isNewButtonDisabled: toolbarOptions?.isNewButtonDisabled,
     },
   );
@@ -602,7 +618,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     handleCopyTo,
     handleMoveTo,
-    handleDuplicate,
+    handleDuplicate: customDuplicateAction
+      ? customDuplicateHandle
+      : handleDuplicate,
     handleSetCopiedFiles,
     handleSetMovedFiles,
     openDestinationFolderPopup,
@@ -712,8 +730,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     customUploadFileAction,
     customBreakpointRef,
+    nonClickableTableColumns,
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
