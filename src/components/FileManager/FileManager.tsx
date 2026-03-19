@@ -1413,6 +1413,14 @@ export const DialFileManagerView: FC = () => {
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowClass: 'group/grid-row',
+                  defaultColDef: {
+                    ...forwardedGridOptions.additionalGridOptions
+                      ?.defaultColDef,
+                    floatingFilter: navigationPanelOptions?.searchable
+                      ? false
+                      : forwardedGridOptions.additionalGridOptions
+                          ?.defaultColDef?.floatingFilter,
+                  },
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>
