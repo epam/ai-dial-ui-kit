@@ -156,7 +156,7 @@ export const getForbiddenSymbolsTooltip = (
   if (forbiddenSymbolsRegExp.test(item.name)) {
     return (
       forbiddenSymbolsTooltip ??
-      `This ${item.nodeType === DialFileNodeType.FOLDER ? 'folder' : 'file'} contains forbidden ${NOT_ALLOWED_SYMBOLS} characters in its name.`
+      `This ${item.nodeType === DialFileNodeType.FOLDER ? 'folder' : 'file'} contains forbidden characters in its name.`
     );
   }
   return undefined;
