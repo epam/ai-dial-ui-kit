@@ -1,7 +1,7 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import type { ReactNode } from 'react';
-import { NOT_ALLOWED_SYMBOLS } from './constants';
+import { NOT_ALLOWED_SYMBOLS } from '@/constants/validation';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,

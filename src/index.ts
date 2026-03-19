@@ -174,3 +174,10 @@ export {
 } from './constants/file-grid-columns';
 
 export type { DIAL_ICON_SIZE } from './constants/icon.ts';
+
+export {
+  NOT_ALLOWED_SYMBOLS,
+  NOT_ALLOWED_SPACES,
+  NOT_ALLOWED_SYMBOLS_REGEXP,
+  NOT_ALLOWED_SPACES_REGEXP,
+} from './constants/validation.ts';

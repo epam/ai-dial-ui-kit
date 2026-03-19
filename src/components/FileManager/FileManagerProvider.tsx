@@ -38,7 +38,7 @@ import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tre
 import { useFileMetadata } from './hooks/use-file-metadata';
 import { useFileSearch } from './hooks/use-file-search';
 import { usePathsSelection } from './hooks/use-paths-selection';
-import { NOT_ALLOWED_SYMBOLS_REGEXP } from './constants';
+import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
