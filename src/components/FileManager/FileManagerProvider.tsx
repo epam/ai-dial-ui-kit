@@ -149,14 +149,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     const map = new Map<string, DialFile>();
 
     effectiveSelectedPaths.forEach((path) => {
-      const node = findNodeByPath(items, path);
-      if (node && node.nodeType === DialFileNodeType.ITEM) {
-        map.set(path, node);
+      const file = findNodeByPath(items, path);
+      if (file) {
+        map.set(path, file);
       }
     });
 
     return map;
-  }, [items, effectiveSelectedPaths]);
+  }, [effectiveSelectedPaths, items]);
 
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
