@@ -1453,14 +1453,18 @@ export const DialFileManagerView: FC = () => {
                 wrapCustomCellRenderers={wrapCustomCellRenderers}
                 additionalGridOptions={{
                   ...forwardedGridOptions.additionalGridOptions,
-                  defaultColDef: {
-                    ...forwardedGridOptions.additionalGridOptions
-                      ?.defaultColDef,
-                  },
                   onCellClicked: cellClickHandler,
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowClass: 'group/grid-row',
+                  defaultColDef: {
+                    ...forwardedGridOptions.additionalGridOptions
+                      ?.defaultColDef,
+                    floatingFilter: navigationPanelOptions?.searchable
+                      ? false
+                      : forwardedGridOptions.additionalGridOptions
+                          ?.defaultColDef?.floatingFilter,
+                  },
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>
