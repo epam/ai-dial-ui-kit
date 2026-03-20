@@ -20,6 +20,7 @@ import AddSibling from '@/assets/icons/add-sibling.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileNodeType } from '@/models/file';
 import { DropdownItemType } from '@/types/dropdown';
+import { cleanForbiddenSymbolsRegExp } from '../utils';
 
 export interface UseGridContextMenuProps {
   actionLabels?: {
@@ -89,9 +90,9 @@ export const useGridContextMenu = ({
         return items;
       }
 
-      const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(
-        file.name,
-      );
+      const hasRestrictedSymbolsInName = cleanForbiddenSymbolsRegExp(
+        forbiddenSymbolsRegExp,
+      )?.test(file.name);
 
       if (
         actionLabels[DialFileManagerActions.AddSibling] &&

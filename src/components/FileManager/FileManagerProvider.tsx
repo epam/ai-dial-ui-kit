@@ -10,6 +10,7 @@ import {
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import {
+  cleanForbiddenSymbolsRegExp,
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
@@ -563,6 +564,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileMetadataPopupOptions?.clearMetadata?.();
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
+  const cleanedForbiddenSymbolsRegExp = useMemo(() => {
+    if (!forbiddenSymbolsRegExp) return undefined;
+
+    return cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp);
+  }, [forbiddenSymbolsRegExp]);
+
   const value: FileManagerContextValue = {
     managerLabel,
     className,
@@ -634,7 +641,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     renamedPath,
     renamedItem,
-    forbiddenSymbolsRegExp,
+    forbiddenSymbolsRegExp: cleanedForbiddenSymbolsRegExp,
     forbiddenSymbolsTooltip,
     onRename: renameHandler,
     onRenameSave: renameSaveHandler,

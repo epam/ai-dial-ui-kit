@@ -145,6 +145,15 @@ export function isFileAccepted(
   });
 }
 
+export const cleanForbiddenSymbolsRegExp = (
+  forbiddenSymbolsRegExp?: RegExp,
+) => {
+  if (!forbiddenSymbolsRegExp) return undefined;
+
+  const flags = forbiddenSymbolsRegExp.flags.replace(/[gy]/g, '');
+  return new RegExp(forbiddenSymbolsRegExp.source, flags);
+};
+
 export const getForbiddenSymbolsTooltip = (
   item: { name: string; nodeType: DialFileNodeType },
   forbiddenSymbolsRegExp?: RegExp,
@@ -152,7 +161,7 @@ export const getForbiddenSymbolsTooltip = (
 ) => {
   if (!forbiddenSymbolsRegExp) return undefined;
 
-  if (forbiddenSymbolsRegExp.test(item.name)) {
+  if (cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp)?.test(item.name)) {
     return (
       forbiddenSymbolsTooltip ??
       `This ${item.nodeType === DialFileNodeType.FOLDER ? 'folder' : 'file'} contains forbidden characters in its name. Please rename it.`
