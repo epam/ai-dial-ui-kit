@@ -10,6 +10,7 @@ import {
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import {
+  cleanForbiddenSymbolsRegExp,
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
@@ -38,6 +39,7 @@ import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tre
 import { useFileMetadata } from './hooks/use-file-metadata';
 import { useFileSearch } from './hooks/use-file-search';
 import { usePathsSelection } from './hooks/use-paths-selection';
+import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -92,6 +94,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onAddSibling,
   onAddChild,
   renameValidationMessages,
+  forbiddenSymbolsRegExp = NOT_ALLOWED_SYMBOLS_REGEXP,
+  forbiddenSymbolsTooltip,
   onUploadFiles,
   onValidateUpload,
   uploadEnabled,
@@ -560,6 +564,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileMetadataPopupOptions?.clearMetadata?.();
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
+  const cleanedForbiddenSymbolsRegExp = useMemo(() => {
+    if (!forbiddenSymbolsRegExp) return undefined;
+
+    return cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp);
+  }, [forbiddenSymbolsRegExp]);
+
   const value: FileManagerContextValue = {
     managerLabel,
     className,
@@ -631,6 +641,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     renamedPath,
     renamedItem,
+    forbiddenSymbolsRegExp: cleanedForbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
     onRename: renameHandler,
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,

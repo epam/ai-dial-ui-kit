@@ -524,6 +524,16 @@ describe('useItemRenaming hook', () => {
       expect(error).toBe('An item with this name already exists');
     });
 
+    it('returns warning for hidden items', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0]; // /root/A
+      const error = result.current.renameValidateHandler('.hidden', folderA);
+      expect(error).toBe(
+        'warning__A dot at the start of the name will make the item hidden',
+      );
+    });
+
     it('returns null for valid unique name', () => {
       const { result } = renderHook(() => useItemRenaming({ items }));
 
@@ -566,6 +576,7 @@ describe('useItemRenaming hook', () => {
           validationMessages: {
             emptyName: 'Custom empty error',
             duplicateName: 'Custom duplicate error',
+            hiddenItemWarning: 'Custom hidden item warning',
           },
         }),
       );
@@ -579,6 +590,12 @@ describe('useItemRenaming hook', () => {
       const folderA = items[0].items![0];
       const duplicateError = result.current.renameValidateHandler('B', folderA);
       expect(duplicateError).toBe('Custom duplicate error');
+
+      const hiddenError = result.current.renameValidateHandler(
+        '.hidden',
+        items[0].items![0],
+      );
+      expect(hiddenError).toBe('Custom hidden item warning');
     });
 
     it('delegates to onRenameValidate and returns its result', () => {

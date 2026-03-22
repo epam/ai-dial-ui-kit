@@ -8,6 +8,7 @@ import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 import { BASE_ICON_SIZE } from '@/constants/icon';
+import { cleanForbiddenSymbolsRegExp } from '../../utils';
 
 export interface DialFileManagerItemNameProps
   extends DialFileManagerItemNameInputProps {
@@ -24,6 +25,8 @@ export interface DialFileManagerItemNameProps
   onSave?: (value: string) => void;
   onCancel?: () => void;
   hideTooltip?: boolean;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 }
 
 /**
@@ -75,6 +78,8 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
   hideTooltip = false,
+  forbiddenSymbolsRegExp,
+  forbiddenSymbolsTooltip,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -87,6 +92,13 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     });
 
   if (!editing) {
+    const hasRestrictedSymbolsInName = cleanForbiddenSymbolsRegExp(
+      forbiddenSymbolsRegExp,
+    )?.test(name);
+    const tooltipContent = hasRestrictedSymbolsInName
+      ? forbiddenSymbolsTooltip
+      : undefined;
+
     if (type === DialItemType.Folder) {
       return (
         <DialFolderName
@@ -97,9 +109,12 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           className="max-w-[428px] truncate"
           sharedIndicatorClassName={sharedIndicatorClassName}
           hideTooltip={hideTooltip}
+          isInvalidName={hasRestrictedSymbolsInName}
+          tooltipContent={tooltipContent}
         />
       );
     }
+
     return (
       <DialFileName
         className="max-w-[428px]"
@@ -109,6 +124,8 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         iconSize={iconSize}
         sharedIndicatorClassName={sharedIndicatorClassName}
         hideTooltip={hideTooltip}
+        isInvalidName={hasRestrictedSymbolsInName}
+        tooltipContent={tooltipContent}
       />
     );
   }

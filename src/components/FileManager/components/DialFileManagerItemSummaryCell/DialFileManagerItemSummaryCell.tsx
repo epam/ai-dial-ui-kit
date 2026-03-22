@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import { DialFileNodeType } from '@/models/file';
@@ -18,6 +18,8 @@ interface DialFileManagerItemSummaryCellProps {
   dateOptions?: Intl.DateTimeFormatOptions;
   sharedIndicatorClassName?: string;
   hideTooltip?: boolean;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 }
 
 /**
@@ -62,6 +64,9 @@ interface DialFileManagerItemSummaryCellProps {
  * @param dateLocale - Optional locale override for date formatting (e.g., `"fr-FR"`).
  * @param dateOptions - Optional `Intl.DateTimeFormat` configuration (e.g., `{ timeZone: 'UTC' }`).
  * @params sharedIndicatorClassName - Optional CSS classes for the shared indicator.
+ * @param hideTooltip - If `true`, disables tooltips on the name and date, even if truncated.
+ * @param forbiddenSymbolsRegExp - Optional RegExp to validate the name for forbidden symbols.
+ * @param forbiddenSymbolsTooltip - Custom tooltip content when the name contains forbidden symbols; defaults to a standard message.
  */
 export const DialFileManagerItemSummaryCell: FC<
   DialFileManagerItemSummaryCellProps
@@ -76,6 +81,8 @@ export const DialFileManagerItemSummaryCell: FC<
   shared,
   sharedIndicatorClassName,
   hideTooltip = false,
+  forbiddenSymbolsRegExp,
+  forbiddenSymbolsTooltip,
 }) => {
   return (
     <div className="flex">
@@ -92,6 +99,8 @@ export const DialFileManagerItemSummaryCell: FC<
           iconSize={BASE_FILE_MANAGER_ICON_SIZE}
           sharedIndicatorClassName={sharedIndicatorClassName}
           hideTooltip={hideTooltip}
+          forbiddenSymbolsRegExp={forbiddenSymbolsRegExp}
+          forbiddenSymbolsTooltip={forbiddenSymbolsTooltip}
           details={
             <div className="flex items-center gap-1 dial-tiny text-secondary">
               <span>

@@ -29,6 +29,28 @@ const testFolder: DialFile = {
   updatedAt: '2024-01-01T00:00:00Z',
 };
 
+const testFolderWithForbiddenSymbols: DialFile = {
+  id: '3',
+  folderId: 'folder3',
+  path: '/test/folde),.?r',
+  name: 'folde),.?r',
+  parentPath: '/test',
+  nodeType: DialFileNodeType.FOLDER,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
+};
+
+const testFileWithForbiddenSymbols: DialFile = {
+  id: '4',
+  folderId: 'folder4',
+  path: '/test/file$%<1.txt',
+  name: 'file$%<1.txt',
+  parentPath: '/test',
+  nodeType: DialFileNodeType.ITEM,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
+};
+
 const fileWithWritePermission: DialFile = {
   ...testFile,
   permissions: [DialFilePermission.WRITE],
@@ -837,5 +859,38 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
 
     expect(menuItems).toHaveLength(1);
     expect(menuItems[0].key).toBe(DialFileManagerActions.Delete);
+  });
+
+  test('delete action is shown when file has no permissions defined', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: defaultActionLabels,
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+        forbiddenSymbolsRegExp: /[!@#%^&*(),.?":{}|<>]/gy,
+      }),
+    );
+
+    const fileMenuItems = result.current(testFileWithForbiddenSymbols);
+
+    expect(fileMenuItems).toHaveLength(2);
+    expect(fileMenuItems.map((item) => item.key)).toEqual([
+      DialFileManagerActions.Delete,
+      DialFileManagerActions.Rename,
+    ]);
+    expect(fileMenuItems[0].key).toBe(DialFileManagerActions.Delete);
+    expect(fileMenuItems[1].key).toBe(DialFileManagerActions.Rename);
+
+    const folderMenuItems = result.current(testFolderWithForbiddenSymbols);
+
+    expect(folderMenuItems).toHaveLength(2);
+    expect(folderMenuItems[0].key).toBe(DialFileManagerActions.Delete);
+    expect(folderMenuItems[1].key).toBe(DialFileManagerActions.Rename);
   });
 });
