@@ -224,7 +224,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
       </div>
     );
   };
-  return disabled ? (
+  return disabled && type !== 'password' ? (
     <DialTooltip tooltip={value}>{input()}</DialTooltip>
   ) : (
     input()

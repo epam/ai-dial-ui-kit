@@ -82,7 +82,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
             disabled
               ? isOn
                 ? 'bg-layer-4'
-                : 'bg-controls-disable'
+                : 'bg-controls-disable-accent'
               : 'bg-controls-enable-primary',
           )}
         ></span>
