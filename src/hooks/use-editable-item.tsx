@@ -1,3 +1,4 @@
+import { AlertVariant } from '@/types/alert';
 import {
   useCallback,
   useEffect,
@@ -97,6 +98,10 @@ export function useEditableItem({
 
       const error = onValidate(val);
       if (error) {
+        if (error.startsWith(`${AlertVariant.Warning}__`)) {
+          resetValidationState(false, error);
+          return true;
+        }
         resetValidationState(true, error);
         return false;
       }

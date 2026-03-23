@@ -6,6 +6,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { BASE_ICON_PROPS, BASE_ICON_SIZE } from '@/constants/icon';
 import { IconFolder } from '@tabler/icons-react';
 import { DialLoader } from '@/components/Loader/Loader';
+import classNames from 'classnames';
 
 export interface DialFolderNameProps {
   name: string;
@@ -16,6 +17,8 @@ export interface DialFolderNameProps {
   sharedIndicatorClassName?: string;
   sharedIndicatorTooltip?: ReactNode;
   hideTooltip?: boolean;
+  isInvalidName?: boolean;
+  tooltipContent?: ReactNode;
 }
 
 /**
@@ -34,6 +37,9 @@ export interface DialFolderNameProps {
  * @param iconSize - Icon size in px. Default: BASE_ICON_SIZE.
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator
  * @param sharedIndicatorTooltip - Custom tooltip content for the shared indicator; defaults to "Shared"
+ * @param isInvalidName - If true, applies disabled styling to indicate the file name has invalid characters.
+ * @param hideTooltip - If true, disables the tooltip even if the name is truncated.
+ * @param tooltipContent - Custom tooltip content to show when the name is truncated; defaults to showing the full name.
  */
 export const DialFolderName: FC<DialFolderNameProps> = ({
   name,
@@ -44,6 +50,8 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
   hideTooltip = false,
+  isInvalidName = false,
+  tooltipContent,
 }) => {
   const getIcon = () => {
     if (loading) {
@@ -71,10 +79,14 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
         )}
       </span>
       <DialEllipsisTooltip
-        className="text-primary dial-small flex-1 min-w-0"
+        className={classNames(
+          'dial-small flex-1 min-w-0',
+          isInvalidName ? 'text-secondary' : 'text-primary',
+        )}
         text={name}
         id="name"
         hideTooltip={hideTooltip}
+        customTooltipContent={tooltipContent}
       />
     </div>
   );
