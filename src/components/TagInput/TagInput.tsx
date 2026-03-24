@@ -209,7 +209,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   }, [JSON.stringify(initialTags)]);
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col gap-2 w-full">
       <DialLabel label={label} required={required} htmlFor={elementId} />
       <div
         className={classNames(
