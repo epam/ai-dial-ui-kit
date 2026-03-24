@@ -113,4 +113,47 @@ describe('Dial UI Kit :: DialTagInput', () => {
     expect(screen.getByText('second')).toBeInTheDocument();
     expect(onChange).toHaveBeenCalledWith(['second']);
   });
+
+  test('uses single-line flex row classes', () => {
+    const { container } = render(
+      <DialTagInput elementId="collapse-layout" collapseTagOverflow />,
+    );
+
+    const row = container.querySelector('.flex-nowrap.overflow-hidden');
+    expect(row).toBeTruthy();
+  });
+
+  test('hides placeholder until the input is focused', () => {
+    render(
+      <DialTagInput
+        elementId="collapse-ph"
+        collapseTagOverflow
+        placeholder="Add tags"
+      />,
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    expect(input.placeholder).toBe('');
+
+    fireEvent.focus(input);
+    expect(input.placeholder).toBe('Add tags');
+
+    fireEvent.blur(input);
+    expect(input.placeholder).toBe('');
+  });
+
+  test('shows placeholder while disabled without focus', () => {
+    render(
+      <DialTagInput
+        elementId="collapse-dis"
+        collapseTagOverflow
+        disabled
+        placeholder="Hint"
+      />,
+    );
+
+    expect((screen.getByRole('textbox') as HTMLInputElement).placeholder).toBe(
+      'Hint',
+    );
+  });
 });
