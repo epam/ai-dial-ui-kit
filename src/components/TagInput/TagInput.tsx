@@ -79,7 +79,6 @@ export const DialTagInput: FC<DialTagInputProps> = ({
 
   const [tags, setTags] = useState<string[]>(initialTags);
   const [inputValue, setInputValue] = useState('');
-  const [inputFocused, setInputFocused] = useState(false);
   const [wraps, setWraps] = useState(false);
   const [visibleTagCount, setVisibleTagCount] = useState(initialTags.length);
 
@@ -144,7 +143,6 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   };
 
   const handleBlur = () => {
-    setInputFocused(false);
     if (inputValue.trim()) {
       addTag(inputValue);
       setInputValue('');
@@ -243,7 +241,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           {collapseTagOverflow && visibleTagCount < tags.length && (
             <DialTooltip
               tooltip={tags.slice(visibleTagCount).join(', ')}
-              triggerClassName="inline-flex shrink-0"
+              triggerClassName="inline-flex shrink-0 cursor-pointer"
             >
               <DialTag tag={`+${tags.length - visibleTagCount}`} />
             </DialTooltip>
@@ -254,17 +252,12 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            onFocus={() => setInputFocused(true)}
             onBlur={handleBlur}
             className={classNames(
               'dial-input outline-none !border-none w-full flex-1 !p-1 !h-auto',
               collapseTagOverflow ? 'min-w-0' : 'min-w-[100px]',
             )}
-            placeholder={
-              collapseTagOverflow && !inputFocused && !disabled
-                ? ''
-                : (placeholder ?? '')
-            }
+            placeholder={placeholder ?? ''}
             disabled={disabled}
           />
 
