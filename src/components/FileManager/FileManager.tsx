@@ -388,6 +388,10 @@ export interface DialFileManagerProps {
     currentFolder?: DialFile,
   ) => void;
   customDuplicateAction?: (items?: DialFile[]) => void;
+  customDeleteItemsAction?: (
+    items: DialFile[],
+    parentFolderPath: string,
+  ) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
 }
 

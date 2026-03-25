@@ -135,6 +135,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   customUploadFileAction,
   customCreateNewItemAction,
   customDuplicateAction,
+  customDeleteItemsAction,
   customBreakpointRef,
   gridClassName,
   nonClickableTableColumns,
@@ -649,7 +650,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onRenameValidate: renameValidateHandler,
     getDisplayName,
 
-    openDeleteConfirmation,
+    openDeleteConfirmation: customDeleteItemsAction || openDeleteConfirmation,
     closeDeleteConfirmation,
     confirmDelete,
     deleteConfirmationOpen,
