@@ -14,7 +14,10 @@ import { FileManagerColumnKey } from '@/types/file-manager';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import type { FileManagerGridContext } from '@/components/FileManager/hooks/use-file-manager-columns';
-import { formatBytes } from '@/components/FileManager/utils';
+import {
+  formatBytes,
+  getForbiddenSymbolsTooltip,
+} from '@/components/FileManager/utils';
 import type { ColDef } from 'ag-grid-community';
 import { convertToDate } from '@/components/Grid/renderers/utils';
 import {
@@ -143,6 +146,15 @@ export const NAME_COLUMN =
           );
         }
 
+        const tooltipContent = getForbiddenSymbolsTooltip(
+          {
+            name: params.data.name,
+            isFolder: type === DialFileNodeType.FOLDER,
+          },
+          params.context.forbiddenSymbolsRegExp,
+          params.context.forbiddenSymbolsTooltip,
+        );
+
         return type === DialFileNodeType.FOLDER ? (
           <DialFolderName
             name={params.data.name}
@@ -150,9 +162,8 @@ export const NAME_COLUMN =
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             hideTooltip={isDisabled}
-            isInvalidName={params.context.forbiddenSymbolsRegExp?.test(
-              params.data.name,
-            )}
+            isInvalidName={!!tooltipContent}
+            tooltipContent={tooltipContent}
           />
         ) : (
           <DialFileName
@@ -161,9 +172,8 @@ export const NAME_COLUMN =
             sharedIndicatorClassName={sharedIndicatorClassName}
             iconSize={BASE_FILE_MANAGER_ICON_SIZE}
             hideTooltip={isDisabled}
-            isInvalidName={params.context.forbiddenSymbolsRegExp?.test(
-              params.data.name,
-            )}
+            isInvalidName={!!tooltipContent}
+            tooltipContent={tooltipContent}
           />
         );
       },

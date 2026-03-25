@@ -208,7 +208,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const menuItems = isRootFolder ? [] : (getContextMenuItems?.(node) ?? []);
       const tooltipContent = forbiddenSymbolsRegExp
         ? getForbiddenSymbolsTooltip(
-            node,
+            { name: node.name, isFolder },
             forbiddenSymbolsRegExp,
             forbiddenSymbolsTooltip,
           )

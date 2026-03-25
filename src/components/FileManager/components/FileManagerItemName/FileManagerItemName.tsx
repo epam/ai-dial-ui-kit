@@ -8,7 +8,7 @@ import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 import { BASE_ICON_SIZE } from '@/constants/icon';
-import { cleanForbiddenSymbolsRegExp } from '../../utils';
+import { getForbiddenSymbolsTooltip } from '../../utils';
 
 export interface DialFileManagerItemNameProps
   extends DialFileManagerItemNameInputProps {
@@ -92,12 +92,15 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     });
 
   if (!editing) {
-    const hasRestrictedSymbolsInName = cleanForbiddenSymbolsRegExp(
+    const tooltipContent = getForbiddenSymbolsTooltip(
+      {
+        name,
+        isFolder: type === DialItemType.Folder,
+      },
       forbiddenSymbolsRegExp,
-    )?.test(name);
-    const tooltipContent = hasRestrictedSymbolsInName
-      ? forbiddenSymbolsTooltip
-      : undefined;
+      forbiddenSymbolsTooltip,
+    );
+    const hasRestrictedSymbolsInName = !!tooltipContent;
 
     if (type === DialItemType.Folder) {
       return (
