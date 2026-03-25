@@ -67,6 +67,11 @@ const meta: Meta<typeof DialTagInput> = {
       control: false,
       description: 'Callback fired when the tag list changes',
     },
+    collapseTagOverflow: {
+      control: 'boolean',
+      description:
+        'Single-line tags with a +N chip when they do not fit the field width',
+    },
   },
 };
 export default meta;
@@ -124,6 +129,24 @@ export const Disabled: Story = {
     placeholder: 'Cannot add tags',
     disabled: true,
     initialTags: ['React', 'Next.js'],
+  },
+};
+
+export const CollapsedOverflow: Story = {
+  render: InteractiveTagInput,
+  args: {
+    elementId: 'tag-input-collapsed',
+    label: 'Tags (single line)',
+    placeholder: 'Add more…',
+    collapseTagOverflow: true,
+    initialTags: [
+      'React',
+      'TypeScript',
+      'Storybook',
+      'Tailwind',
+      'Vite',
+      'Vitest',
+    ],
   },
 };
 
