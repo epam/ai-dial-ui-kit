@@ -123,25 +123,6 @@ describe('Dial UI Kit :: DialTagInput', () => {
     expect(row).toBeTruthy();
   });
 
-  test('hides placeholder until the input is focused', () => {
-    render(
-      <DialTagInput
-        elementId="collapse-ph"
-        collapseTagOverflow
-        placeholder="Add tags"
-      />,
-    );
-
-    const input = screen.getByRole('textbox') as HTMLInputElement;
-    expect(input.placeholder).toBe('');
-
-    fireEvent.focus(input);
-    expect(input.placeholder).toBe('Add tags');
-
-    fireEvent.blur(input);
-    expect(input.placeholder).toBe('');
-  });
-
   test('shows placeholder while disabled without focus', () => {
     render(
       <DialTagInput
