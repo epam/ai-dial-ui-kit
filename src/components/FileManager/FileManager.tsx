@@ -29,12 +29,7 @@ import {
   actionsColumnButtonClassName,
   DEFAULT_VISIBLE_COLUMN,
 } from './constants';
-import {
-  findNodeByPath,
-  isFileAccepted,
-  formatBytes,
-  getForbiddenSymbolsTooltip,
-} from './utils';
+import { findNodeByPath, isFileAccepted, formatBytes } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType, DialFilePermission } from '@/models/file';
@@ -764,16 +759,6 @@ export const DialFileManagerView: FC = () => {
     return ids;
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
-  const restrictedGridRowIds = useMemo(() => {
-    const ids = new Set<string>();
-    for (const row of gridRows) {
-      if (forbiddenSymbolsRegExp && forbiddenSymbolsRegExp.test(row.name)) {
-        ids.add(row.path);
-      }
-    }
-    return ids;
-  }, [forbiddenSymbolsRegExp, gridRows]);
-
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
   const [hoveredRowRect, setHoveredRowRect] = useState<DOMRect | null>(null);
 
@@ -796,10 +781,7 @@ export const DialFileManagerView: FC = () => {
         return;
       }
       const rowId = rowTarget.getAttribute('row-id');
-      if (
-        rowId &&
-        (disabledGridRowIds.has(rowId) || restrictedGridRowIds.has(rowId))
-      ) {
+      if (rowId && disabledGridRowIds.has(rowId)) {
         if (hoveredRowId !== rowId) {
           setHoveredRowId(rowId);
           setHoveredRowRect(rowTarget.getBoundingClientRect());
@@ -808,7 +790,7 @@ export const DialFileManagerView: FC = () => {
         if (hoveredRowId) setHoveredRowId(null);
       }
     },
-    [disabledGridRowIds, restrictedGridRowIds, hoveredRowId],
+    [disabledGridRowIds, hoveredRowId],
   );
 
   const handleGridViewportMouseLeave = useCallback(() => {
@@ -840,16 +822,6 @@ export const DialFileManagerView: FC = () => {
     allowedFileTypes,
     maxSelectableFileSize,
   ]);
-
-  const forbiddenSymbolsTooltipContent = useMemo(() => {
-    if (!hoveredRowFile) return undefined;
-
-    return getForbiddenSymbolsTooltip(
-      hoveredRowFile,
-      forbiddenSymbolsRegExp,
-      forbiddenSymbolsTooltip,
-    );
-  }, [hoveredRowFile, forbiddenSymbolsRegExp, forbiddenSymbolsTooltip]);
 
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
@@ -1503,28 +1475,27 @@ export const DialFileManagerView: FC = () => {
                 allowDisabledContextMenu={allowDisabledContextMenu}
               />
             )}
-            {(hoveredRowTooltipContent || forbiddenSymbolsTooltipContent) &&
-              hoveredRowRect && (
-                <DialTooltipContainer open={true} placement="top">
-                  <DialTooltipTrigger asChild>
-                    <div
-                      className={classNames(
-                        'fixed z-[-1]',
-                        hoveredRowTooltipContent && 'pointer-events-none',
-                      )}
-                      style={{
-                        top: hoveredRowRect.top,
-                        left: hoveredRowRect.left,
-                        width: hoveredRowRect.width,
-                        height: hoveredRowRect.height,
-                      }}
-                    />
-                  </DialTooltipTrigger>
-                  <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
-                    {hoveredRowTooltipContent ?? forbiddenSymbolsTooltipContent}
-                  </DialTooltipContent>
-                </DialTooltipContainer>
-              )}
+            {hoveredRowTooltipContent && hoveredRowRect && (
+              <DialTooltipContainer open={true} placement="top">
+                <DialTooltipTrigger asChild>
+                  <div
+                    className={classNames(
+                      'fixed z-[-1]',
+                      hoveredRowTooltipContent && 'pointer-events-none',
+                    )}
+                    style={{
+                      top: hoveredRowRect.top,
+                      left: hoveredRowRect.left,
+                      width: hoveredRowRect.width,
+                      height: hoveredRowRect.height,
+                    }}
+                  />
+                </DialTooltipTrigger>
+                <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
+                  {hoveredRowTooltipContent}
+                </DialTooltipContent>
+              </DialTooltipContainer>
+            )}
           </section>
         </div>
       </div>

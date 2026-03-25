@@ -154,18 +154,18 @@ export const cleanForbiddenSymbolsRegExp = (
   return new RegExp(forbiddenSymbolsRegExp.source, flags);
 };
 
-export const getForbiddenSymbolsTooltip = (
-  item: { name: string; nodeType: DialFileNodeType },
+export function getForbiddenSymbolsTooltip(
+  item: { name: string; isFolder: boolean },
   forbiddenSymbolsRegExp?: RegExp,
   forbiddenSymbolsTooltip?: ReactNode,
-) => {
+): ReactNode | undefined {
   if (!forbiddenSymbolsRegExp) return undefined;
 
   if (cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp)?.test(item.name)) {
     return (
       forbiddenSymbolsTooltip ??
-      `This ${item.nodeType === DialFileNodeType.FOLDER ? 'folder' : 'file'} contains forbidden characters in its name. Please rename it.`
+      `This ${item.isFolder ? 'folder' : 'file'} contains forbidden characters in its name. Please rename it.`
     );
   }
   return undefined;
-};
+}
