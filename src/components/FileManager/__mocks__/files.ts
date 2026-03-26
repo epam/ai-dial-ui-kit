@@ -806,8 +806,8 @@ export const itemsMock: DialFile[] = [
           },
           {
             id: 'test-forbidden-symbols-hidden',
-            name: '.no"tes%s_test',
-            path: 'All files/Folder%%End/.no"tes%s_test',
+            name: '.notes\\s_test',
+            path: 'All files/Folder%%End/.notes\\s_test',
             parentPath: 'All files/Folder%%End',
             nodeType: DialFileNodeType.ITEM,
             resourceType: DialFileResourceType.FILE,
