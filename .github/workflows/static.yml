@@ -30,6 +30,8 @@ jobs:
         run: npm ci
 
       - name: Build Storybook
+        env:
+          VITE_THEME_COLORS_API_URL: ${{ vars.VITE_THEME_COLORS_API_URL }}
         run: npm run build-storybook
 
       - name: Upload Storybook artifact
