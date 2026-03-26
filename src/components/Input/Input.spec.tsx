@@ -117,8 +117,9 @@ describe('Dial UI Kit :: DialInput', () => {
           type="number"
           value={val}
           onChange={(v) => {
-            setVal(v);
-            onChange(v);
+            const next = v ?? '';
+            setVal(next);
+            onChange(next);
           }}
         />
       );
@@ -146,7 +147,7 @@ describe('Dial UI Kit :: DialInput', () => {
           placeholder="plain"
           type="text"
           value={val}
-          onChange={setVal}
+          onChange={(v) => setVal(v ?? '')}
         />
       );
     };
@@ -168,7 +169,7 @@ describe('Dial UI Kit :: DialInput', () => {
           placeholder="num-allowed"
           type="number"
           value={val}
-          onChange={setVal}
+          onChange={(v) => setVal(v ?? '')}
         />
       );
     };
@@ -197,7 +198,7 @@ describe('Dial UI Kit :: DialInput', () => {
           type="number"
           min={10}
           value={val}
-          onChange={setVal}
+          onChange={(v) => setVal(v ?? '')}
         />
       );
     };
@@ -221,7 +222,7 @@ describe('Dial UI Kit :: DialInput', () => {
           type="number"
           max={100}
           value={val}
-          onChange={setVal}
+          onChange={(v) => setVal(v ?? '')}
         />
       );
     };
@@ -244,7 +245,7 @@ describe('Dial UI Kit :: DialInput', () => {
           placeholder="cursor-range"
           max={180}
           value={val}
-          onChange={setVal}
+          onChange={(v) => setVal(v ?? '')}
         />
       );
     };

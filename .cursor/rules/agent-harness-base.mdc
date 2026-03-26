@@ -1,0 +1,13 @@
+---
+description: Base agent behavior, safety, and verification for this repo
+alwaysApply: true
+---
+
+# Agent harness — base
+
+- Read neighboring files before editing; match existing naming, imports (`@/`), and patterns.
+- Keep changes scoped to the request; do not remove unrelated comments or refactor untouched modules.
+- Do not expose or request secrets; never suggest committing `.env` or keys.
+- After non-trivial edits, run **`npm run typecheck`** (TypeScript), then **`npm run lint`** and **`npm run test`** when possible. ESLint does not catch all TS errors; do not skip `typecheck` after changing `.ts`/`.tsx` types, props, or exports.
+- For new or changed public components: update `src/index.ts`, add or adjust Storybook stories and Vitest specs.
+- Prefer delegating large work into clear steps (plan → code → stories → tests) and confirm ambiguous product decisions with the user.

@@ -40,8 +40,8 @@ interface DialFileManagerItemSummaryCellProps {
  * <DialFileManagerItemSummaryCell
  *   id="42"
  *   name="Report.pdf"
- *   nodeType={DialFileNodeType.FILE}
- *   size="220 KB"
+ *   nodeType={DialFileNodeType.ITEM}
+ *   size={225280}
  *   updatedAt="2025-07-20T00:00:00Z"
  *   dateLocale="en-US"
  *   dateOptions={{ timeZone: 'UTC' }}
@@ -51,7 +51,6 @@ interface DialFileManagerItemSummaryCellProps {
  *   id="folder-1"
  *   name="Projects"
  *   nodeType={DialFileNodeType.FOLDER}
- *   size="—"
  *   updatedAt={undefined}
  * />
  * ```
@@ -59,7 +58,7 @@ interface DialFileManagerItemSummaryCellProps {
  * @param id - Unique identifier passed to `DialFileManagerItemName` as `elementId`.
  * @param name - File or folder display name.
  * @param nodeType - Determines whether the item renders as a **File** or **Folder**.
- * @param size - Human-readable file size (e.g., `"15 KB"`). May be `"—"` or omitted.
+ * @param size - File size in bytes; formatted with {@link formatBytes}. Omit for folders.
  * @param updatedAt - Date or timestamp passed to `DialDateCellRenderer`. If invalid or missing, renders `"—"`.
  * @param dateLocale - Optional locale override for date formatting (e.g., `"fr-FR"`).
  * @param dateOptions - Optional `Intl.DateTimeFormat` configuration (e.g., `{ timeZone: 'UTC' }`).

@@ -81,7 +81,7 @@ export const SimpleForm: Story = {
                 Name
               </label>
               <DialInput
-                elementId="name"
+                id="name"
                 placeholder="Type a name…"
                 value={name}
                 onChange={(value) => setName(value ?? '')}
@@ -129,7 +129,7 @@ export const WithValidationAndDividers: Story = {
                 Email
               </label>
               <DialInput
-                elementId="email"
+                id="email"
                 type="email"
                 placeholder="name@company.com"
                 value={email}

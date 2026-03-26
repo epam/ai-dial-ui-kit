@@ -13,7 +13,7 @@ const meta: Meta<typeof DialFileManagerItemSummaryCell> = {
       control: 'select',
       options: [DialFileNodeType.ITEM, DialFileNodeType.FOLDER],
     },
-    size: { control: 'text' },
+    size: { control: { type: 'number' } },
     updatedAt: { control: 'text' },
     dateLocale: { control: 'text' },
     dateOptions: { control: 'object' },
@@ -22,7 +22,7 @@ const meta: Meta<typeof DialFileManagerItemSummaryCell> = {
     id: '1',
     name: 'Example File.txt',
     nodeType: DialFileNodeType.ITEM,
-    size: '15 KB',
+    size: 15 * 1024,
     updatedAt: '2025-07-20T00:00:00Z',
     dateLocale: 'en-US',
     dateOptions: {
@@ -45,7 +45,6 @@ export const FolderItem: Story = {
     id: '2',
     name: 'Projects',
     nodeType: DialFileNodeType.FOLDER,
-    size: '—',
   },
 };
 
