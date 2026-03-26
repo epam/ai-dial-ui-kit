@@ -417,7 +417,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       }
 
       if (!areHiddenFilesVisible) {
-        source = source.filter((node) => !isHiddenDotFile(node));
+        source = source.filter((node) => {
+          const segments = node.path.split('/').filter(Boolean);
+          return !segments.some((segment) => segment.startsWith('.'));
+        });
       }
 
       return source.map((node) => ({
@@ -455,7 +458,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     }
 
     if (!areHiddenFilesVisible) {
-      source = source.filter((node) => !isHiddenDotFile(node));
+      source = source.filter((node) => {
+        if (query) {
+          const segments = node.path.split('/').filter(Boolean);
+          return !segments.some((segment) => segment.startsWith('.'));
+        }
+        return !isHiddenDotFile(node);
+      });
     }
 
     const mapped: FileManagerGridRow[] = source.map((node) => ({
