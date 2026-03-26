@@ -177,6 +177,7 @@ export const DialCollapsibleSidebar: FC<DialCollapsibleSidebarProps> = ({
 
   const resizeHandle = resizable && opened && (
     <div
+      role="separator"
       onMouseDown={handleMouseDown}
       className={mergeClasses([
         'absolute top-0 bottom-0 right-0 w-1 cursor-col-resize transition-colors hover:bg-accent-primary z-10',
