@@ -104,7 +104,6 @@ export const ControlledSearchState: Story = {
 export const DisabledReadonlyInvalid: Story = {
   args: {
     disabled: false,
-    readOnly: false,
     invalid: true,
   },
 };
