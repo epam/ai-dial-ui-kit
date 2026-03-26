@@ -666,4 +666,58 @@ describe('Dial UI Kit :: FileManager', () => {
       });
     });
   });
+
+  test('search does NOT show files from hidden folders when hidden files toggle is off', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        defaultPath="All files"
+        showHiddenFiles={false}
+        treeOptions={{
+          expandedPaths: new Set([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
+          ]),
+        }}
+        navigationPanelOptions={{ searchable: true }}
+      />,
+    );
+
+    const searchRegion = screen.getByRole('search', { name: 'Search' });
+    const searchInput = within(searchRegion).getByRole('textbox');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'inside-hidden');
+
+    expect((await queryAllInGridByRowText('inside-hidden')).length).toBe(0);
+  });
+
+  test('search DOES show files from hidden folders when hidden files toggle is on', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        defaultPath="All files"
+        showHiddenFiles={true}
+        treeOptions={{
+          expandedPaths: new Set([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+            'All files/Design/Icons/SVG/24px',
+          ]),
+        }}
+        navigationPanelOptions={{ searchable: true }}
+      />,
+    );
+
+    const searchRegion = screen.getByRole('search', { name: 'Search' });
+    const searchInput = within(searchRegion).getByRole('textbox');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'inside-hidden');
+
+    expect(await findInGridByRowText('inside-hidden')).toBeInTheDocument();
+  });
 });
