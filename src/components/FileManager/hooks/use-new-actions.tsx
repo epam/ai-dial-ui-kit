@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
-import { IconFile, IconFileZip, IconFolder } from '@tabler/icons-react';
+import {
+  IconFile,
+  IconFileZip,
+  IconFolder,
+  IconPlus,
+} from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import type { DropdownItem } from '@/models/dropdown';
 import type { NewAction } from '../FileManager';
@@ -10,11 +15,13 @@ export interface UseNewActionsProps {
     uploadFiles?: NewAction;
     newFolder?: NewAction;
     uploadArchive?: NewAction;
+    newItem?: NewAction;
   };
   currentFolder?: DialFile;
   onUploadFiles?: () => void;
   onCreateFolder?: () => void;
   onUploadArchive?: () => void;
+  onCreateNewItem: () => void;
   isNewButtonDisabled?: boolean;
 }
 
@@ -30,6 +37,7 @@ export const useNewActions = ({
   onUploadFiles,
   onCreateFolder,
   onUploadArchive,
+  onCreateNewItem,
   isNewButtonDisabled: isNewButtonDisabledExternal,
 }: UseNewActionsProps): UseNewActionsResult => {
   const newActionItems = useMemo(() => {
@@ -52,6 +60,24 @@ export const useNewActions = ({
         onClick: () => {
           if (onCreateFolder) {
             onCreateFolder();
+          }
+        },
+      });
+    }
+
+    if (newActions.newItem) {
+      actions.push({
+        key: 'new-item',
+        label: newActions.newItem.label,
+        icon:
+          newActions?.newItem?.icon !== undefined ? (
+            newActions?.newItem?.icon
+          ) : (
+            <IconPlus {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+        onClick: () => {
+          if (onCreateNewItem) {
+            onCreateNewItem();
           }
         },
       });
@@ -94,7 +120,13 @@ export const useNewActions = ({
     }
 
     return actions;
-  }, [newActions, onCreateFolder, onUploadFiles, onUploadArchive]);
+  }, [
+    newActions,
+    onCreateFolder,
+    onUploadFiles,
+    onUploadArchive,
+    onCreateNewItem,
+  ]);
 
   const isNewButtonVisible = useMemo(
     () => newActionItems?.length > 0,

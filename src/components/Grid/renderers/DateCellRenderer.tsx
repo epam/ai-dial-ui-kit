@@ -19,6 +19,7 @@ export interface DialDateCellRendererProps
   options?: Intl.DateTimeFormatOptions;
   emptyPlaceholder?: string;
   className?: string;
+  hideTooltip?: boolean;
 }
 
 /**
@@ -48,6 +49,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
   options = DEFAULT_DATE_FORMAT_OPTIONS,
   emptyPlaceholder,
   className,
+  hideTooltip = false,
 }) => {
   const date = convertToDate(value);
 
@@ -67,7 +69,7 @@ export const DialDateCellRenderer: FC<DialDateCellRendererProps> = ({
         iso ? <time dateTime={iso}>{content}</time> : <span>{content}</span>
       }
       className={classNames(dateCellBaseClassName, className)}
-      hideTooltip={false}
+      hideTooltip={hideTooltip}
     />
   );
 };

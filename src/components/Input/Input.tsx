@@ -23,6 +23,7 @@ import {
   DialInputButton,
   type DialInputButtonProps,
 } from './Button/InputButton';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
 export interface DialInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -167,56 +168,65 @@ const InputWrapper: FC<InputWrapperProps> = ({
     onChange?.(!newValue ? void 0 : newValue);
   };
 
-  return (
-    <div
-      className={mergeClasses(
-        'dial-input flex flex-row items-center gap-x-2 justify-between py-2',
-        invalid && 'dial-input-error',
-        disabled && 'dial-input-disable',
-        !prefix && 'pl-3',
-        !inputButtonProps && 'pr-3',
-        wrapperClassName,
-      )}
-      aria-label="input-container"
-    >
-      {prefix && (
-        <div className="border-r border-tertiary">
-          <InputWrapper
-            wrapperClassName="!rounded-r-none"
-            className="truncate"
-            value={prefix}
-            disabled
-            id={`${prefix}_textBefore`}
-          />
-        </div>
-      )}
-
-      <DialIcon icon={iconBefore} />
-
-      <input
-        ref={ref}
-        type={type}
-        autoComplete={type === 'password' ? 'new-password' : 'off'}
-        value={value ?? ''}
+  const input = () => {
+    return (
+      <div
         className={mergeClasses(
-          'border-0 bg-transparent w-full truncate',
-          className,
+          'dial-input flex flex-row items-center gap-x-2 justify-between py-2',
+          invalid && 'dial-input-error',
+          disabled && 'dial-input-disable',
+          !prefix && 'pl-3',
+          !inputButtonProps && 'pr-3',
+          wrapperClassName,
         )}
-        onChange={handleChange}
-        onKeyDown={onKeyDown}
-        min={min}
-        disabled={disabled}
-        max={max}
-        {...props}
-      />
+        aria-label="input-container"
+      >
+        {prefix && (
+          <div className="border-r border-tertiary">
+            <InputWrapper
+              wrapperClassName="!rounded-r-none"
+              className="truncate"
+              value={prefix}
+              disabled
+              id={`${prefix}_textBefore`}
+            />
+          </div>
+        )}
 
-      {postfix && <p className="text-secondary dial-small-text"> {postfix}</p>}
+        <DialIcon icon={iconBefore} />
 
-      <DialIcon icon={iconAfter} />
+        <input
+          ref={ref}
+          type={type}
+          autoComplete={type === 'password' ? 'new-password' : 'off'}
+          value={value ?? ''}
+          className={mergeClasses(
+            'border-0 bg-transparent w-full truncate',
+            className,
+          )}
+          onChange={handleChange}
+          onKeyDown={onKeyDown}
+          min={min}
+          disabled={disabled}
+          max={max}
+          {...props}
+        />
 
-      {inputButtonProps && (
-        <DialInputButton {...inputButtonProps} disabled={disabled} />
-      )}
-    </div>
+        {postfix && (
+          <p className="text-secondary dial-small-text"> {postfix}</p>
+        )}
+
+        <DialIcon icon={iconAfter} />
+
+        {inputButtonProps && (
+          <DialInputButton {...inputButtonProps} disabled={disabled} />
+        )}
+      </div>
+    );
+  };
+  return disabled && type !== 'password' ? (
+    <DialTooltip tooltip={value}>{input()}</DialTooltip>
+  ) : (
+    input()
   );
 };

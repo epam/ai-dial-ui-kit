@@ -14,6 +14,7 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
   contentClassName?: string;
   hideTooltip?: boolean;
   id?: string;
+  customTooltipContent?: ReactNode;
 }
 
 /**
@@ -37,6 +38,7 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
  * @param contentClassName Optional additional CSS classes for the tooltip content.
  * @param hideTooltip If true, disables the tooltip even if text is truncated.
  * @param id Optional attribute for unique identification
+ * @param customTooltipContent If provided, this content will be shown in the tooltip instead of the full text when truncated.
  * @param tooltipProps Additional props to pass to the underlying DialTooltipContainer.
  */
 export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
@@ -45,6 +47,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
   contentClassName,
   hideTooltip,
   id,
+  customTooltipContent,
   ...tooltipProps
 }) => {
   const ref = useRef<HTMLElement | null>(null);
@@ -94,8 +97,9 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
 
   const tooltipContent = useMemo(() => {
     if (hideTooltip) return '';
+    if (customTooltipContent) return customTooltipContent;
     return isTruncated ? fullText : '';
-  }, [fullText, hideTooltip, isTruncated]);
+  }, [customTooltipContent, fullText, hideTooltip, isTruncated]);
 
   return (
     <DialTooltipContainer {...tooltipProps}>

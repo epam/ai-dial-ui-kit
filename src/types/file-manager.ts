@@ -51,4 +51,5 @@ export enum FileManagerColumnKey {
   Owner = 'owner',
   Path = 'path',
   Actions = '__actions',
+  Version = 'version',
 }

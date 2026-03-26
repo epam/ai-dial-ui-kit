@@ -10,6 +10,7 @@ import {
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import {
+  cleanForbiddenSymbolsRegExp,
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
@@ -38,6 +39,7 @@ import { useTreeAdditionalButtons } from '@/components/FileManager/hooks/use-tre
 import { useFileMetadata } from './hooks/use-file-metadata';
 import { useFileSearch } from './hooks/use-file-search';
 import { usePathsSelection } from './hooks/use-paths-selection';
+import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
@@ -92,6 +94,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onAddSibling,
   onAddChild,
   renameValidationMessages,
+  forbiddenSymbolsRegExp = NOT_ALLOWED_SYMBOLS_REGEXP,
+  forbiddenSymbolsTooltip,
   onUploadFiles,
   onValidateUpload,
   uploadEnabled,
@@ -113,6 +117,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   clearSearchResults,
   allowedFileTypes,
   maxSelectableFileSize,
+  getDisabledTooltip,
+  fileTooLargeTooltip,
+  unsupportedFileTypeTooltip,
 
   emptyStateIcon,
   emptyStateTitle,
@@ -124,9 +131,14 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onPreview,
   previewExtensions,
   isRenameFileAvailable,
+  isDuplicateFolderAvailable,
   customUploadFileAction,
+  customCreateNewItemAction,
+  customDuplicateAction,
+  customDeleteItemsAction,
   customBreakpointRef,
   gridClassName,
+  nonClickableTableColumns,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -351,6 +363,17 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     customUploadFileAction?.(currentPath, currentFolder);
   }, [customUploadFileAction, currentPath, currentFolder]);
 
+  const customCreateNewItem = useCallback(() => {
+    customCreateNewItemAction?.(currentPath, currentFolder);
+  }, [customCreateNewItemAction, currentPath, currentFolder]);
+
+  const customDuplicateHandle = useCallback(
+    (items: DialFile[]) => {
+      customDuplicateAction?.(items);
+    },
+    [customDuplicateAction],
+  );
+
   const {
     isCreatingFolder,
     newFolderTempId,
@@ -372,6 +395,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       onUploadFiles: customUploadFileAction ? customUploadFile : openFileDialog,
       onUploadArchive: openArchiveUpload,
       onCreateFolder: startFolderCreation,
+      onCreateNewItem: customCreateNewItem,
       isNewButtonDisabled: toolbarOptions?.isNewButtonDisabled,
     },
   );
@@ -393,7 +417,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       }
 
       if (!areHiddenFilesVisible) {
-        source = source.filter((node) => !isHiddenDotFile(node));
+        source = source.filter((node) => {
+          const segments = node.path.split('/').filter(Boolean);
+          return !segments.some((segment) => segment.startsWith('.'));
+        });
       }
 
       return source.map((node) => ({
@@ -409,6 +436,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         extension: node.extension,
         isTemporary: false,
         owner: node.owner,
+        folderId: node.folderId,
       }));
     }
 
@@ -430,7 +458,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     }
 
     if (!areHiddenFilesVisible) {
-      source = source.filter((node) => !isHiddenDotFile(node));
+      source = source.filter((node) => {
+        if (query) {
+          const segments = node.path.split('/').filter(Boolean);
+          return !segments.some((segment) => segment.startsWith('.'));
+        }
+        return !isHiddenDotFile(node);
+      });
     }
 
     const mapped: FileManagerGridRow[] = source.map((node) => ({
@@ -447,6 +481,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       owner: node.owner,
       contentType: node.contentType,
       contentLength: node.contentLength,
+      folderId: node.folderId,
     }));
 
     if (isCreatingFolder && newFolderTempId && !query) {
@@ -539,6 +574,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileMetadataPopupOptions?.clearMetadata?.();
   }, [closeMetadataPopup, fileMetadataPopupOptions]);
 
+  const cleanedForbiddenSymbolsRegExp = useMemo(() => {
+    if (!forbiddenSymbolsRegExp) return undefined;
+
+    return cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp);
+  }, [forbiddenSymbolsRegExp]);
+
   const value: FileManagerContextValue = {
     managerLabel,
     className,
@@ -594,7 +635,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     handleCopyTo,
     handleMoveTo,
-    handleDuplicate,
+    handleDuplicate: customDuplicateAction
+      ? customDuplicateHandle
+      : handleDuplicate,
     handleSetCopiedFiles,
     handleSetMovedFiles,
     openDestinationFolderPopup,
@@ -608,13 +651,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     renamedPath,
     renamedItem,
+    forbiddenSymbolsRegExp: cleanedForbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
     onRename: renameHandler,
     onRenameSave: renameSaveHandler,
     onRenameCancel: renameCancelHandler,
     onRenameValidate: renameValidateHandler,
     getDisplayName,
 
-    openDeleteConfirmation,
+    openDeleteConfirmation: customDeleteItemsAction || openDeleteConfirmation,
     closeDeleteConfirmation,
     confirmDelete,
     deleteConfirmationOpen,
@@ -702,8 +747,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
     customUploadFileAction,
     customBreakpointRef,
+    nonClickableTableColumns,
+    getDisabledTooltip,
+    fileTooLargeTooltip,
+    unsupportedFileTypeTooltip,
   };
 
   return (

@@ -9,6 +9,7 @@ import {
   type Ref,
   useImperativeHandle,
   type RefObject,
+  useEffect,
 } from 'react';
 import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
 import {
@@ -28,7 +29,7 @@ import {
   actionsColumnButtonClassName,
   DEFAULT_VISIBLE_COLUMN,
 } from './constants';
-import { findNodeByPath, isFileAccepted } from './utils';
+import { findNodeByPath, isFileAccepted, formatBytes } from './utils';
 import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import type { DialFile, DialRootFolder } from '@/models/file';
 import { DialFileNodeType, DialFilePermission } from '@/models/file';
@@ -91,7 +92,6 @@ import {
   DialFileManagerActions,
   FileManagerRenameTriggerView,
 } from '@/types/file-manager';
-import type { FolderCreationValidationMessages } from '@/components/FileManager/hooks/use-folder-creation';
 import {
   ConflictResolutionPopup,
   type ConflictResolutionPopupProps,
@@ -111,6 +111,9 @@ import {
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
 import { GridSelectionMode } from '@/models/selection-mode.ts';
+import { DialTooltipContainer } from '@/components/Tooltip/TooltipContainer';
+import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
+import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
 
 type GridRow = FileManagerGridRow;
 
@@ -205,6 +208,7 @@ export interface GridOptions
   visibleColumns?: FileManagerColumnKey[];
   selectionMode?: GridSelectionMode;
   wrapCustomCellRenderers?: boolean;
+  allowDisabledContextMenu?: boolean;
   actionLabels?: {
     [DialFileManagerActions.AddSibling]?: string;
     [DialFileManagerActions.AddChild]?: string;
@@ -232,6 +236,7 @@ export type ToolbarOptions = Omit<
     uploadFiles?: NewAction;
     newFolder?: NewAction;
     uploadArchive?: NewAction;
+    newItem?: NewAction;
   };
   showHiddenFilesToggle?: boolean;
 };
@@ -311,6 +316,8 @@ export interface DialFileManagerProps {
 
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   renameValidationMessages?: RenameValidationMessages;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
@@ -321,7 +328,10 @@ export interface DialFileManagerProps {
     name: string,
     parentFolder: DialFile,
   ) => string | null;
-  folderCreationValidationMessages?: FolderCreationValidationMessages;
+  folderCreationValidationMessages?: CreateFolderValidationMessages;
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
+  fileTooLargeTooltip?: string;
+  unsupportedFileTypeTooltip?: string;
 
   onUploadFiles?: (
     files: DialUploadFileItem[],
@@ -363,10 +373,21 @@ export interface DialFileManagerProps {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
     currentFolder?: DialFile,
   ) => void;
+  customCreateNewItemAction?: (
+    currentPath?: string,
+    currentFolder?: DialFile,
+  ) => void;
+  customDuplicateAction?: (items?: DialFile[]) => void;
+  customDeleteItemsAction?: (
+    items: DialFile[],
+    parentFolderPath: string,
+  ) => void;
+  nonClickableTableColumns?: FileManagerColumnKey[];
 }
 
 /**
@@ -444,6 +465,11 @@ export interface DialFileManagerProps {
  * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
  * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
+ * @param [onRenameValidate] - Optional callback to validate a file or folder name during renaming. Should return an error message string if the name is invalid, or null if it's valid.
+ * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `warning__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
+ * @param [forbiddenSymbolsRegExp] - Optional RegExp will be used in the validation for the files and folders names. The "g" and "y" flags are not allowed in this RegExp and will be ignored.
+ * @param [forbiddenSymbolsTooltip] - Optional tooltip displayed when a file or folder name contains forbidden characters
+ *
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
@@ -466,6 +492,8 @@ export interface DialFileManagerProps {
  * @param [emptyStateDescription] - Optional description text displayed below the empty state title.
  *
  * @param [sharedWithMeIds] - Optional list of file IDs that are shared with the current user.
+ * @param [unsupportedFileTypeTooltip] - Optional tooltip text displayed when an unsupported file type is selected.
+ * @param [fileTooLargeTooltip] - Optional tooltip text displayed when a file is too large.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -551,6 +579,8 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    forbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
     getDisplayName,
     isDragging,
     isDraggingOverWindow,
@@ -609,8 +639,14 @@ export const DialFileManagerView: FC = () => {
     onPreview,
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
+    getDisabledTooltip,
+    fileTooLargeTooltip,
+    unsupportedFileTypeTooltip,
     gridClassName,
+    nonClickableTableColumns,
   } = useFileManagerContext();
+
   const {
     width = sidebarWidth,
     header = sidebarTitleDefault,
@@ -643,6 +679,7 @@ export const DialFileManagerView: FC = () => {
     selectionMode,
     wrapCustomCellRenderers,
     visibleColumns = DEFAULT_VISIBLE_COLUMN,
+    allowDisabledContextMenu = false,
     ...forwardedGridOptions
   } = gridOptions ?? {};
 
@@ -661,32 +698,139 @@ export const DialFileManagerView: FC = () => {
       : visibleColumns;
   }, [isSearchMode, visibleColumns]);
 
+  const getRowDisabledTooltip = useCallback(
+    (
+      file: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      if (file.nodeType === DialFileNodeType.FOLDER) return undefined;
+
+      const isFileSizeAccepted =
+        !file.contentLength ||
+        maxSelectableFileSize == null ||
+        file.contentLength <= maxSelectableFileSize;
+
+      const isFileTypeAccepted =
+        !file.contentType ||
+        isFileAccepted(allowedFileTypes, file.contentType, file.name);
+
+      if (!isFileTypeAccepted) {
+        return (
+          unsupportedFileTypeTooltip ??
+          (allowedFileTypes?.length
+            ? `Unsupported file type. Supported types: ${allowedFileTypes.join(', ')}.`
+            : 'Unsupported file type.')
+        );
+      }
+      if (!isFileSizeAccepted) {
+        return (
+          fileTooLargeTooltip ??
+          `File is too large. Maximum size: ${formatBytes(maxSelectableFileSize!)}.`
+        );
+      }
+      return undefined;
+    },
+    [fileTooLargeTooltip, unsupportedFileTypeTooltip],
+  );
+
   const isRowDisabled = useCallback(
     (
       row: FileManagerGridRow,
       allowedFileTypes?: DialFileAcceptType[],
       maxSelectableFileSize?: number,
     ) => {
-      const isFileSizeAccepted =
-        row.nodeType === DialFileNodeType.FOLDER ||
-        !row.contentLength ||
-        typeof maxSelectableFileSize !== 'number' ||
-        row.contentLength <= maxSelectableFileSize;
-      const isFileTypeAccepted =
-        row.nodeType === DialFileNodeType.FOLDER ||
-        !row.contentType ||
-        isFileAccepted(allowedFileTypes, row.contentType, row.name);
-
-      return !isFileTypeAccepted || !isFileSizeAccepted;
+      return !!getRowDisabledTooltip(
+        row,
+        allowedFileTypes,
+        maxSelectableFileSize,
+      );
     },
-    [],
+    [getRowDisabledTooltip],
   );
+
+  const disabledGridRowIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const row of gridRows) {
+      if (isRowDisabled(row, allowedFileTypes, maxSelectableFileSize)) {
+        ids.add(row.path);
+      }
+    }
+    return ids;
+  }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
+
+  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
+  const [hoveredRowRect, setHoveredRowRect] = useState<DOMRect | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHoveredRowId(null);
+      setHoveredRowRect(null);
+    };
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll, true);
+  }, []);
+
+  const handleGridViewportMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const rowTarget = (e.target as HTMLElement).closest(
+        '.ag-row',
+      ) as HTMLElement | null;
+      if (!rowTarget) {
+        if (hoveredRowId) setHoveredRowId(null);
+        return;
+      }
+      const rowId = rowTarget.getAttribute('row-id');
+      if (rowId && disabledGridRowIds.has(rowId)) {
+        if (hoveredRowId !== rowId) {
+          setHoveredRowId(rowId);
+          setHoveredRowRect(rowTarget.getBoundingClientRect());
+        }
+      } else {
+        if (hoveredRowId) setHoveredRowId(null);
+      }
+    },
+    [disabledGridRowIds, hoveredRowId],
+  );
+
+  const handleGridViewportMouseLeave = useCallback(() => {
+    setHoveredRowId(null);
+    setHoveredRowRect(null);
+  }, []);
+
+  const hoveredRowFile = useMemo(() => {
+    if (!hoveredRowId) return undefined;
+    return gridRows.find((r) => r.path === hoveredRowId);
+  }, [hoveredRowId, gridRows]);
+
+  const hoveredRowTooltipContent = useMemo(() => {
+    if (!hoveredRowFile) return undefined;
+
+    if (getDisabledTooltip && hoveredRowFile.folderId) {
+      return getDisabledTooltip(hoveredRowFile);
+    }
+
+    return getRowDisabledTooltip(
+      hoveredRowFile,
+      allowedFileTypes,
+      maxSelectableFileSize,
+    );
+  }, [
+    hoveredRowFile,
+    getDisabledTooltip,
+    getRowDisabledTooltip,
+    allowedFileTypes,
+    maxSelectableFileSize,
+  ]);
 
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
       const items: DropdownItem[] = [];
       const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
+      const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(
+        file.name,
+      );
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
@@ -711,7 +855,8 @@ export const DialFileManagerView: FC = () => {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddChild] &&
           typeof handleAddChild === 'function' &&
-          file.nodeType === DialFileNodeType.FOLDER
+          file.nodeType === DialFileNodeType.FOLDER &&
+          !hasRestrictedSymbolsInName
         ) {
           items.push({
             key: 'addChild',
@@ -729,7 +874,8 @@ export const DialFileManagerView: FC = () => {
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Duplicate] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: 'duplicate',
@@ -741,7 +887,8 @@ export const DialFileManagerView: FC = () => {
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.Copy] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: DestinationFolderMode.Copy,
@@ -761,7 +908,8 @@ export const DialFileManagerView: FC = () => {
         }
         if (
           treeOptions.actionLabels[DialFileManagerActions.Move] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: DestinationFolderMode.Move,
@@ -781,7 +929,8 @@ export const DialFileManagerView: FC = () => {
         }
         if (
           treeOptions.actionLabels[DialFileManagerActions.Download] &&
-          !isRootNode
+          !isRootNode &&
+          !hasRestrictedSymbolsInName
         ) {
           elements.push({
             key: 'download',
@@ -885,23 +1034,21 @@ export const DialFileManagerView: FC = () => {
         return elements;
       }
 
-      if (!elements.length) {
-        return items;
-      }
+      if (elements.length === 0) return items;
+      if (items.length === 0) return elements;
 
       return [
         ...items,
-        {
-          key: 'divider',
-          type: DropdownItemType.Divider,
-        },
+        { key: 'divider', type: DropdownItemType.Divider },
         ...elements,
       ];
     },
     [
       treeOptions?.actionLabels,
       handleAddSibling,
+      forbiddenSymbolsRegExp,
       handleAddChild,
+      onManagePermissions,
       handleDuplicate,
       handleSetCopiedFiles,
       handleOpenDestinationFolderPopup,
@@ -913,7 +1060,6 @@ export const DialFileManagerView: FC = () => {
       sharedWithMeIds,
       sharedByMePaths,
       openDeleteConfirmation,
-      onManagePermissions,
     ],
   );
 
@@ -922,16 +1068,6 @@ export const DialFileManagerView: FC = () => {
     selectedFiles.forEach((_file, id) => data.add(id));
     return data;
   }, [selectedFiles]);
-
-  const disabledGridRowIds = useMemo(() => {
-    const ids = new Set<string>();
-    gridRows
-      .filter((row) =>
-        isRowDisabled(row, allowedFileTypes, maxSelectableFileSize),
-      )
-      .forEach((row) => ids.add(row.path));
-    return ids;
-  }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
 
   const handleSelectionChange = useCallback(
     (selectedRowsIds: Set<string>, selectedRows: GridRow[]) => {
@@ -1059,6 +1195,8 @@ export const DialFileManagerView: FC = () => {
               rootItemLabel={rootItem?.label}
               selectedPath={currentPath}
               sharedByMePaths={sharedByMePaths}
+              forbiddenSymbolsRegExp={forbiddenSymbolsRegExp}
+              forbiddenSymbolsTooltip={forbiddenSymbolsTooltip}
               onItemClick={handleTreeItemClick}
               areHiddenFilesVisible={areHiddenFilesVisible}
               getContextMenuItems={getTreeContextMenuItems}
@@ -1076,26 +1214,29 @@ export const DialFileManagerView: FC = () => {
       </aside>
     );
   }, [
-    additionalButtons,
-    areHiddenFilesVisible,
-    containerClassName,
-    currentPath,
-    forwardedTreeProps,
-    getTreeContextMenuItems,
-    handleTreeItemClick,
     isCompactView,
+    sidebarCurrentWidth,
     isTreeCollapsed,
+    header,
+    containerClassName,
+    additionalButtons,
+    toggleTreeCollapse,
+    forwardedTreeProps,
     items,
-    rootItem,
-    onRenameCancel,
-    onRenameSave,
-    onRenameValidate,
+    rootItem?.path,
+    rootItem?.label,
+    currentPath,
+    sharedByMePaths,
+    forbiddenSymbolsRegExp,
+    forbiddenSymbolsTooltip,
+    handleTreeItemClick,
+    areHiddenFilesVisible,
+    getTreeContextMenuItems,
     renameTriggerView,
     renamedPath,
-    sidebarCurrentWidth,
-    header,
-    sharedByMePaths,
-    toggleTreeCollapse,
+    onRenameSave,
+    onRenameCancel,
+    onRenameValidate,
   ]);
 
   const gridContextMenu = useGridContextMenu({
@@ -1124,6 +1265,8 @@ export const DialFileManagerView: FC = () => {
     onPreview: (path) => onPreview?.(path),
     previewExtensions,
     isRenameFileAvailable,
+    isDuplicateFolderAvailable,
+    forbiddenSymbolsRegExp,
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1135,9 +1278,22 @@ export const DialFileManagerView: FC = () => {
     [items, gridContextMenu],
   );
 
+  const isRowContextMenuDisabled = useCallback(
+    (
+      row: FileManagerGridRow,
+      allowedFileTypes?: DialFileAcceptType[],
+      maxSelectableFileSize?: number,
+    ) => {
+      return allowDisabledContextMenu
+        ? false
+        : isRowDisabled(row, allowedFileTypes, maxSelectableFileSize);
+    },
+    [allowDisabledContextMenu, isRowDisabled],
+  );
+
   const { actionsColumnDef } = useGridActionsColumn({
     getContextMenuItems: getGridContextMenuItems,
-    isRowDisabled,
+    isRowDisabled: isRowContextMenuDisabled,
     allowedFileTypes: allowedFileTypes,
     buttonClassName: isCompactView ? '' : actionsColumnButtonClassName,
   });
@@ -1161,7 +1317,11 @@ export const DialFileManagerView: FC = () => {
         event.colDef.colId === 'ag-Grid-SelectionColumn' ||
         event.colDef.colId === FileManagerColumnKey.Actions ||
         (renamedPath && event.data?.path === renamedPath) ||
-        event.data?.isTemporary
+        event.data?.isTemporary ||
+        (nonClickableTableColumns &&
+          nonClickableTableColumns.includes(
+            event.colDef.colId as FileManagerColumnKey,
+          ))
       ) {
         return;
       }
@@ -1169,7 +1329,7 @@ export const DialFileManagerView: FC = () => {
         handleTableRowClick(event.data);
       }
     },
-    [renamedPath, handleTableRowClick],
+    [renamedPath, handleTableRowClick, nonClickableTableColumns],
   );
 
   const emptyStateRenderer = useCallback(
@@ -1237,6 +1397,8 @@ export const DialFileManagerView: FC = () => {
             role="region"
             aria-label="File Manager Grid View"
             className={mergeClasses(gridBaseClassName)}
+            onMouseMove={handleGridViewportMouseMove}
+            onMouseLeave={handleGridViewportMouseLeave}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
@@ -1271,6 +1433,14 @@ export const DialFileManagerView: FC = () => {
                   headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
                   rowClass: 'group/grid-row',
+                  defaultColDef: {
+                    ...forwardedGridOptions.additionalGridOptions
+                      ?.defaultColDef,
+                    floatingFilter: navigationPanelOptions?.searchable
+                      ? false
+                      : forwardedGridOptions.additionalGridOptions
+                          ?.defaultColDef?.floatingFilter,
+                  },
                   ...(isCompactView
                     ? {
                         getRowHeight: (params) =>
@@ -1293,13 +1463,38 @@ export const DialFileManagerView: FC = () => {
                     newFolderTempId,
                     sharedByMePaths,
                     selectedPaths,
+                    disabledRowIds: disabledGridRowIds,
+                    forbiddenSymbolsRegExp,
+                    forbiddenSymbolsTooltip,
                   } as FileManagerGridContext,
                 }}
                 selectedRowIds={selectedGridRowsIds}
                 onSelectionChange={handleSelectionChange}
                 wrapperBorder={!isDragging && !isDraggingOverWindow}
                 disabledRowIds={disabledGridRowIds}
+                allowDisabledContextMenu={allowDisabledContextMenu}
               />
+            )}
+            {hoveredRowTooltipContent && hoveredRowRect && (
+              <DialTooltipContainer open={true} placement="top">
+                <DialTooltipTrigger asChild>
+                  <div
+                    className={classNames(
+                      'fixed z-[-1]',
+                      hoveredRowTooltipContent && 'pointer-events-none',
+                    )}
+                    style={{
+                      top: hoveredRowRect.top,
+                      left: hoveredRowRect.left,
+                      width: hoveredRowRect.width,
+                      height: hoveredRowRect.height,
+                    }}
+                  />
+                </DialTooltipTrigger>
+                <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
+                  {hoveredRowTooltipContent}
+                </DialTooltipContent>
+              </DialTooltipContainer>
             )}
           </section>
         </div>

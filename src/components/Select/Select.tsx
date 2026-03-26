@@ -445,6 +445,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                   onChange={setQuery}
                   value={query}
                   id={`search-${elementId || listId}`}
+                  containerClassName="w-full"
                 />
               )}
               {closable && (

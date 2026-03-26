@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import type { ColDef, SuppressKeyboardEventParams } from 'ag-grid-community';
 import { type DialFile } from '@/models/file';
 import { FileManagerRenameTriggerView } from '@/types/file-manager';
@@ -20,6 +20,9 @@ export interface FileManagerGridContext {
   renameTriggerView: FileManagerRenameTriggerView;
   sharedByMePaths?: Set<string>;
   selectedPaths?: Set<string>;
+  disabledRowIds?: Set<string>;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -102,12 +105,22 @@ export function useFileManagerColumns({
         headerName: 'Path',
         flex: 1,
         minWidth: 200,
-        cellRenderer: (params: { data: GridRow }) => {
+        cellRenderer: (params: {
+          data: GridRow;
+          context: FileManagerGridContext;
+        }) => {
+          const isDisabled =
+            params.context?.disabledRowIds?.has(params.data.path) ?? false;
           if (!rootItemPath || !rootItemLabel) {
-            return <DialEllipsisTooltip text={params.data.path} />;
+            return (
+              <DialEllipsisTooltip
+                text={params.data.path}
+                hideTooltip={isDisabled}
+              />
+            );
           }
           const path = params.data.path.replace(rootItemPath, rootItemLabel);
-          return <DialEllipsisTooltip text={path} />;
+          return <DialEllipsisTooltip text={path} hideTooltip={isDisabled} />;
         },
       },
       UPDATED_AT_COLUMN('Modified Date')(dateLocale, dateOptions),

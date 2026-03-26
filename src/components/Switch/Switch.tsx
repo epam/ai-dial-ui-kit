@@ -80,9 +80,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
           className={classNames(
             'size-3 rounded-full',
             disabled
-              ? isOn
-                ? 'bg-layer-4'
-                : 'bg-controls-disable'
+              ? 'bg-controls-disable-accent'
               : 'bg-controls-enable-primary',
           )}
         ></span>

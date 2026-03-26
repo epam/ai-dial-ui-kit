@@ -22,7 +22,10 @@ import type {
 import type { FileUploadValidationMessages } from './hooks/use-file-upload';
 import type { DropdownItem } from '@/models/dropdown';
 import type { FileConflictDecision } from './components/ConflictResolutionPopup/ConflictResolutionPopup';
-import type { DestinationFolderMode } from '@/types/file-manager';
+import type {
+  DestinationFolderMode,
+  FileManagerColumnKey,
+} from '@/types/file-manager';
 import type {
   DialFileAcceptType,
   DialFileManagerActionsRef,
@@ -42,6 +45,7 @@ export interface FileManagerGridRow {
   owner?: string;
   contentType?: string;
   contentLength?: number;
+  folderId?: string;
 }
 
 export interface FileManagerContextValue {
@@ -110,6 +114,8 @@ export interface FileManagerContextValue {
   onRenameCancel: () => void;
   onRenameValidate: (value: string, item: DialFile) => string | null;
   getDisplayName: (item: DialFile) => string;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 
   openDeleteConfirmation: (items: DialFile[], parentFolderPath: string) => void;
   closeDeleteConfirmation: () => void;
@@ -203,10 +209,24 @@ export interface FileManagerContextValue {
   onPreview?: (path?: string) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
+  isDuplicateFolderAvailable?: boolean;
   customUploadFileAction?: (
     currentPath?: string,
     currentFolder?: DialFile,
   ) => void;
+  customCreateNewItemAction?: (
+    currentPath?: string,
+    currentFolder?: DialFile,
+  ) => void;
+  customDuplicateAction?: (items?: DialFile[]) => void;
+  customDeleteItemsAction?: (
+    items: DialFile[],
+    parentFolderPath: string,
+  ) => void;
+  nonClickableTableColumns?: FileManagerColumnKey[];
+  getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
+  fileTooLargeTooltip?: string;
+  unsupportedFileTypeTooltip?: string;
 }
 
 export const FileManagerContext = createContext<

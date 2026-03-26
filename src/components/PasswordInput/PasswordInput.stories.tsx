@@ -118,7 +118,7 @@ export const AllVariants: Story = {
             id="password-error"
             labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
-            invalid={true}
+            invalid
             error="Password is required"
           />
         </div>
@@ -130,7 +130,18 @@ export const AllVariants: Story = {
             id="password-required"
             labelProps={{ label: 'Password' }}
             placeholder="Placeholder"
-            required={true}
+            required
+          />
+        </div>
+        {/* Disabled */}
+        <div>
+          <div className="text-primary font-semibold mb-2">Disabled</div>
+          <InteractiveInput
+            id="password-disabled"
+            labelProps={{ label: 'Password' }}
+            placeholder="Placeholder"
+            value="Password text"
+            disabled
           />
         </div>
       </div>

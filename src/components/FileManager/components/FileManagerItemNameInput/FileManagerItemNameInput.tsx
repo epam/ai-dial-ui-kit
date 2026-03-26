@@ -2,10 +2,14 @@ import type { FC, ReactNode, Ref } from 'react';
 import { DialFileManagerItemIcon } from '@/components/FileManager/components/FileManagerItemIcon/FileManagerItemIcon';
 import type { DialItemType } from '@/types/item';
 import { DialInput } from '@/components/Input/Input';
-import { IconAlertCircleFilled } from '@tabler/icons-react';
+import {
+  IconAlertCircleFilled,
+  IconAlertTriangleFilled,
+} from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { AlertVariant } from '@/types/alert';
 
 export interface DialFileManagerItemNameInputProps {
   type: DialItemType;
@@ -100,17 +104,32 @@ export const DialFileManagerItemNameInput: FC<
   fileExtension,
 }) => {
   const getInputIconAfter = () => {
-    if (!inputInvalid) return null;
+    const isWarning = inputInvalidMessage?.startsWith(
+      `${AlertVariant.Warning}__`,
+    );
 
+    if (!inputInvalid && !isWarning) return null;
+
+    const cleanedMessage = inputInvalidMessage?.replace(
+      `${AlertVariant.Warning}__`,
+      '',
+    );
     return (
-      <DialTooltip tooltip={inputInvalidMessage}>
-        {inputIconAfter || (
-          <IconAlertCircleFilled
-            {...BASE_ICON_PROPS}
-            className="text-error"
-            aria-label="alert"
-          />
-        )}
+      <DialTooltip tooltip={cleanedMessage}>
+        {inputIconAfter ||
+          (!isWarning ? (
+            <IconAlertCircleFilled
+              {...BASE_ICON_PROPS}
+              className="text-error"
+              aria-label="alert"
+            />
+          ) : (
+            <IconAlertTriangleFilled
+              {...BASE_ICON_PROPS}
+              className="text-warning"
+              aria-label="warning"
+            />
+          ))}
       </DialTooltip>
     );
   };

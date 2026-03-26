@@ -98,6 +98,11 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 //File Manager
 export { DialFileManager } from './components/FileManager/FileManager';
+export type {
+  GridOptions,
+  ToolbarOptions,
+  BulkActionsToolbarOptions,
+} from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
 
 // Types
@@ -174,3 +179,10 @@ export {
 } from './constants/file-grid-columns';
 
 export type { DIAL_ICON_SIZE } from './constants/icon.ts';
+
+export {
+  NOT_ALLOWED_SYMBOLS,
+  NOT_ALLOWED_SPACES,
+  NOT_ALLOWED_SYMBOLS_REGEXP,
+  NOT_ALLOWED_SPACES_REGEXP,
+} from './constants/validation.ts';

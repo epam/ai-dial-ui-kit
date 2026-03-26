@@ -15,6 +15,9 @@ export interface DialFileNameProps {
   details?: ReactNode;
   sharedIndicatorClassName?: string;
   sharedIndicatorTooltip?: ReactNode;
+  hideTooltip?: boolean;
+  isInvalidName?: boolean;
+  tooltipContent?: ReactNode;
 }
 
 /**
@@ -43,6 +46,10 @@ export interface DialFileNameProps {
  * @param details - Optional metadata block displayed under the file name (e.g., size, modified date).
  * @param sharedIndicatorClassName - Additional CSS classes for the shared indicator.
  * @param sharedIndicatorTooltip - Custom tooltip content for the shared indicator; defaults to "Shared"
+ * @param isInvalidName - If true, applies disabled styling to indicate the file name has invalid characters.
+ * @param tooltipContent - Custom tooltip content to show when the name is truncated; defaults to showing the full name.
+
+
  */
 export const DialFileName: FC<DialFileNameProps> = ({
   name,
@@ -53,10 +60,12 @@ export const DialFileName: FC<DialFileNameProps> = ({
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
   fileExtension,
+  hideTooltip = false,
+  isInvalidName = false,
+  tooltipContent,
 }) => {
-  const extension = name.includes('.')
-    ? name.split('.').pop()
-    : fileExtension || void 0;
+  const extension =
+    fileExtension || (name.includes('.') ? name.split('.').pop() : void 0);
 
   return (
     <div className={mergeClasses('flex items-center gap-2 w-full', className)}>
@@ -82,9 +91,14 @@ export const DialFileName: FC<DialFileNameProps> = ({
         ])}
       >
         <DialEllipsisTooltip
-          className="text-primary dial-small flex-1 min-w-0"
+          className={classNames([
+            'dial-small flex-1 min-w-0',
+            isInvalidName ? 'text-secondary' : 'text-primary',
+          ])}
           text={name}
           id="name"
+          hideTooltip={hideTooltip}
+          customTooltipContent={tooltipContent}
         />
         {details}
       </div>

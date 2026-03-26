@@ -8,6 +8,7 @@ import { DialItemType } from '@/types/item';
 import { DialFileName } from '@/components/FileName/FileName';
 import { DialFolderName } from '@/components/FolderName/FolderName';
 import { BASE_ICON_SIZE } from '@/constants/icon';
+import { getForbiddenSymbolsTooltip } from '../../utils';
 
 export interface DialFileManagerItemNameProps
   extends DialFileManagerItemNameInputProps {
@@ -23,6 +24,9 @@ export interface DialFileManagerItemNameProps
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
+  hideTooltip?: boolean;
+  forbiddenSymbolsRegExp?: RegExp;
+  forbiddenSymbolsTooltip?: ReactNode;
 }
 
 /**
@@ -73,6 +77,9 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   inputContainerClassName,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
+  hideTooltip = false,
+  forbiddenSymbolsRegExp,
+  forbiddenSymbolsTooltip,
   ...restProps
 }) => {
   const { value, invalid, invalidMessage, onChange, inputRef } =
@@ -85,6 +92,16 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     });
 
   if (!editing) {
+    const tooltipContent = getForbiddenSymbolsTooltip(
+      {
+        name,
+        isFolder: type === DialItemType.Folder,
+      },
+      forbiddenSymbolsRegExp,
+      forbiddenSymbolsTooltip,
+    );
+    const hasRestrictedSymbolsInName = !!tooltipContent;
+
     if (type === DialItemType.Folder) {
       return (
         <DialFolderName
@@ -94,9 +111,13 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
           iconSize={iconSize}
           className="max-w-[428px] truncate"
           sharedIndicatorClassName={sharedIndicatorClassName}
+          hideTooltip={hideTooltip}
+          isInvalidName={hasRestrictedSymbolsInName}
+          tooltipContent={tooltipContent}
         />
       );
     }
+
     return (
       <DialFileName
         className="max-w-[428px]"
@@ -105,6 +126,9 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
         shared={shared}
         iconSize={iconSize}
         sharedIndicatorClassName={sharedIndicatorClassName}
+        hideTooltip={hideTooltip}
+        isInvalidName={hasRestrictedSymbolsInName}
+        tooltipContent={tooltipContent}
       />
     );
   }

@@ -60,7 +60,7 @@ export const useGridActionsColumn = ({
           className={mergeClasses('sticky right-0', buttonClassName)}
         >
           <DialIcon
-            className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary"
+            className="text-secondary mx-2 flex flex-row gap-2 hover:text-accent-primary cursor-default"
             icon={<IconDotsVertical {...BASE_ICON_PROPS} />}
           />
         </DialDropdown>
@@ -75,6 +75,7 @@ export const useGridActionsColumn = ({
       headerName: '',
       width: 44,
       minWidth: 44,
+      maxWidth: 44,
       suppressSizeToFit: true,
       sortable: false,
       resizable: false,
