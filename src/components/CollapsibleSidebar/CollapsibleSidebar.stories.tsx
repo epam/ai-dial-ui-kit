@@ -72,6 +72,18 @@ const meta: Meta<typeof DialCollapsibleSidebar> = {
       control: { type: 'number' },
       description: 'Icon size for the toggle button',
     },
+    resizable: {
+      control: { type: 'boolean' },
+      description: 'Enable mouse drag resizing of the sidebar width',
+    },
+    minWidth: {
+      control: { type: 'number' },
+      description: 'Minimum width when resizing (in px)',
+    },
+    maxWidth: {
+      control: { type: 'number' },
+      description: 'Maximum width when resizing (in px)',
+    },
   },
 };
 export default meta;
@@ -183,5 +195,17 @@ export const ControlledExternal: Story = {
   args: {
     width: 320,
     title: 'Filters',
+  },
+};
+
+export const Resizable: Story = {
+  render: InteractiveCollapseBar,
+  args: {
+    width: 300,
+    title: 'Resizable Panel',
+    children: BarContent,
+    resizable: true,
+    minWidth: 150,
+    maxWidth: 600,
   },
 };
