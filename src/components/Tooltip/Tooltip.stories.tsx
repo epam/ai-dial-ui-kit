@@ -149,7 +149,7 @@ export const OnlyMouse: Story = {
         placement="top"
         contentClassName="dial-small"
       >
-        <DialInput elementId="clickable-input" value="Hover only" />
+        <DialInput id="clickable-input" value="Hover only" />
       </DialTooltip>
       <DialTooltip
         tooltip="Tooltip on focus and hover"
@@ -157,7 +157,7 @@ export const OnlyMouse: Story = {
         isTriggerClickable={false}
         contentClassName="dial-small"
       >
-        <DialInput elementId="focusable-input" value="Hover and focus" />
+        <DialInput id="focusable-input" value="Hover and focus" />
       </DialTooltip>
     </div>
   ),

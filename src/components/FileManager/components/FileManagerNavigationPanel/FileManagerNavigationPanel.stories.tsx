@@ -22,7 +22,7 @@ const meta = {
     elementId: { control: { type: 'text' } },
     value: { control: { type: 'text' } },
     disabled: { control: { type: 'boolean' } },
-    readonly: { control: { type: 'boolean' } },
+    readOnly: { control: { type: 'boolean' } },
     invalid: { control: { type: 'boolean' } },
     searchClassName: { control: { type: 'text' } },
     searchContainerClassName: { control: { type: 'text' } },
@@ -104,7 +104,7 @@ export const ControlledSearchState: Story = {
 export const DisabledReadonlyInvalid: Story = {
   args: {
     disabled: false,
-    readonly: false,
+    readOnly: false,
     invalid: true,
   },
 };
