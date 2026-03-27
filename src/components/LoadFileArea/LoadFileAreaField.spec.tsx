@@ -39,6 +39,35 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
     expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
   });
 
+  test('Should render additional buttons near default actions', () => {
+    render(
+      <DialLoadFileAreaField
+        fieldTitle="Files"
+        elementId="file-input"
+        emptyTextFirstLine="empty"
+        emptyButtonLabel="Browse"
+        files={[new File([''], 'file1.png', { type: 'image/png' })]}
+        onChange={vi.fn()}
+        acceptTypes="image/png"
+        deleteAllButtonLabel="Delete All"
+        addButtonLabel="Add"
+        additionalActionButtons={
+          <button type="button" aria-label="extra-action">
+            Extra Action
+          </button>
+        }
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Delete All' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'extra-action' }),
+    ).toBeInTheDocument();
+  });
+
   test('Should call onChangeFile([]) when delete-all button is clicked', () => {
     const onChangeFile = vi.fn();
     render(
