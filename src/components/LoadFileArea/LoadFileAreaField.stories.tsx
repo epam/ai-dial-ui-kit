@@ -9,8 +9,10 @@ import {
   IconFileTypePdf,
   IconFileText,
   IconFileTypeSvg,
+  IconUpload,
 } from '@tabler/icons-react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
+import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 
 const meta: Meta<typeof DialLoadFileAreaField> = {
   title: 'Form/LoadFileAreaField',
@@ -51,6 +53,11 @@ const meta: Meta<typeof DialLoadFileAreaField> = {
       description: 'Label for delete-all button',
     },
     addButtonLabel: { control: 'text', description: 'Label for add button' },
+    additionalActionButtons: {
+      control: false,
+      description:
+        'Optional custom buttons or content rendered near the default action buttons',
+    },
     fileFormatError: {
       control: 'text',
       description: 'Displayed when an unsupported file is uploaded',
@@ -168,6 +175,31 @@ export const WithDynamicIcons: Story = {
     ];
 
     return <InteractiveLoadFileAreaField {...args} files={mockFiles} />;
+  },
+  args: {
+    ...Empty.args,
+  },
+};
+
+export const WithAdditionalButtons: Story = {
+  render: (args) => {
+    const mockFiles = [
+      new File(['text'], 'report.pdf', { type: 'application/pdf' }),
+      new File(['data'], 'notes.txt', { type: 'text/plain' }),
+    ];
+
+    return (
+      <InteractiveLoadFileAreaField
+        {...args}
+        files={mockFiles}
+        additionalActionButtons={
+          <DialPrimaryButton
+            label="Upload selected"
+            iconBefore={<IconUpload {...BASE_ICON_PROPS} />}
+          />
+        }
+      />
+    );
   },
   args: {
     ...Empty.args,

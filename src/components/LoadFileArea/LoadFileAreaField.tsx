@@ -6,7 +6,13 @@ import { DialLabel } from '@/components/Label/Label';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { ButtonAppearance } from '@/types/button';
 import { IconPlus, IconTrashX } from '@tabler/icons-react';
-import { type ChangeEvent, type FC, useCallback, useRef } from 'react';
+import {
+  type ChangeEvent,
+  type FC,
+  type ReactNode,
+  useCallback,
+  useRef,
+} from 'react';
 import { DialLoadFileArea, type DialLoadFileAreaProps } from './LoadFileArea';
 
 export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
@@ -14,6 +20,7 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
   elementId: string;
   deleteAllButtonLabel?: string;
   addButtonLabel?: string;
+  additionalActionButtons?: ReactNode;
 }
 
 /**
@@ -56,6 +63,7 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
  * @param {string} [props.acceptTypes] - Comma-separated list of allowed MIME types or file extensions.
  * @param {string} [props.deleteAllButtonLabel] - Label for the "Delete All" button shown when files exist.
  * @param {string} [props.addButtonLabel] - Label for the "Add" button used to select additional files.
+ * @param {ReactNode} [props.additionalActionButtons] - Optional custom buttons/content rendered next to default action buttons.
  * @param {object} [props.props] - Additional props passed to the underlying `DialLoadFileArea`.
  *
  * @returns {JSX.Element} A file upload field with label, action buttons, and a drag-and-drop area.
@@ -74,6 +82,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
   acceptTypes,
   deleteAllButtonLabel,
   addButtonLabel,
+  additionalActionButtons,
   ...props
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -150,6 +159,7 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
                 onClick={onAddFiles}
               />
             )}
+            {additionalActionButtons}
           </div>
         )}
       </div>
