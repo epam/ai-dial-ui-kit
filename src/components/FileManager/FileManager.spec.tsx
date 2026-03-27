@@ -824,5 +824,22 @@ describe('Dial UI Kit :: FileManager', () => {
       });
       expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
     });
+
+    test('drag and drop clears the search text and results', async () => {
+      renderWithNewActions();
+      const searchInput = await typeSearchAndVerify();
+
+      fireEvent.drop(getGridRegion(), {
+        dataTransfer: {
+          files: [new File([''], 'test.txt', { type: 'text/plain' })],
+          types: ['Files'],
+        },
+      });
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('');
+      });
+      expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
+    });
   });
 });

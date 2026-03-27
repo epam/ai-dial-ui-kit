@@ -341,11 +341,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const handleDrop = useCallback(
     (e: DragEvent) => {
+      handleSearchClear();
       const destinationFolder = currentPath ?? '';
       const existingFiles = currentFolder?.items ?? [];
       handleFileDropBase(e, destinationFolder, existingFiles);
     },
-    [currentPath, currentFolder, handleFileDropBase],
+    [currentPath, currentFolder, handleFileDropBase, handleSearchClear],
   );
 
   const openFileDialog = useCallback(() => {
