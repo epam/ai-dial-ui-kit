@@ -17,6 +17,7 @@ import {
   DialFilePermission,
   type DialFile,
 } from '@/models/file';
+import type { DropdownItem } from '@/models/dropdown';
 
 interface GridRowLike {
   name?: string;
@@ -152,6 +153,36 @@ vi.mock('@/components/Tooltip/TooltipContent', () => ({
       className={className}
     >
       {children}
+    </div>
+  ),
+}));
+
+vi.mock('@/components/ButtonDropdown/ButtonDropdown', () => ({
+  DialButtonDropdown: ({
+    label,
+    items,
+    disabled,
+  }: {
+    label?: string;
+    items: DropdownItem[];
+    disabled?: boolean;
+  }) => (
+    <div data-testid="mock-button-dropdown">
+      <button disabled={disabled}>{label}</button>
+      {items.map((item) => (
+        <button
+          key={item.key}
+          data-testid={`action-${item.key}`}
+          onClick={() =>
+            item.onClick?.({
+              key: item.key,
+              domEvent: {} as React.MouseEvent,
+            })
+          }
+        >
+          {item.label}
+        </button>
+      ))}
     </div>
   ),
 }));
@@ -721,48 +752,77 @@ describe('Dial UI Kit :: FileManager', () => {
     expect(await findInGridByRowText('inside-hidden')).toBeInTheDocument();
   });
 
-  test('New actions (New Folder) clear the search text and results', async () => {
-    renderWithinSizedShell(
-      <DialFileManager
-        items={itemsMock}
-        defaultPath="All files"
-        navigationPanelOptions={{ searchable: true }}
-        toolbarOptions={{
-          newActions: {
-            newFolder: { label: 'New Folder' },
-            uploadFiles: { label: 'Upload Files' },
-            uploadArchive: { label: 'Upload Archive' },
-          },
-        }}
-        treeOptions={{
-          expandedPaths: new Set([
-            'All files',
-            'All files/Design',
-            'All files/Design/Icons',
-            'All files/Design/Icons/SVG',
-          ]),
-        }}
-      />,
-    );
+  describe('New actions clear search', () => {
+    const renderWithNewActions = () =>
+      renderWithinSizedShell(
+        <DialFileManager
+          items={itemsMock}
+          defaultPath="All files"
+          navigationPanelOptions={{ searchable: true }}
+          toolbarOptions={{
+            newActions: {
+              newFolder: { label: 'New Folder' },
+              uploadFiles: { label: 'Upload Files' },
+              uploadArchive: { label: 'Upload Archive' },
+            },
+          }}
+          treeOptions={{
+            expandedPaths: new Set([
+              'All files',
+              'All files/Design',
+              'All files/Design/Icons',
+              'All files/Design/Icons/SVG',
+            ]),
+            showFiles: true,
+          }}
+        />,
+      );
 
-    const searchRegion = screen.getByRole('search', { name: 'Search' });
-    const searchInput = within(searchRegion).getByRole('textbox');
-    await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'svg');
+    const typeSearchAndVerify = async () => {
+      const searchRegion = screen.getByRole('search', { name: 'Search' });
+      const searchInput = within(searchRegion).getByRole('textbox');
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'svg');
 
-    expect(await findInGridByRowText('SVG')).toBeInTheDocument();
-    expect(searchInput).toHaveValue('svg');
+      expect(await findInGridByRowText('SVG')).toBeInTheDocument();
+      expect(searchInput).toHaveValue('svg');
+      return searchInput;
+    };
 
-    const newButton = screen.getByRole('button', { name: 'New' });
-    await userEvent.click(newButton);
+    test('New Folder clears the search text and results', async () => {
+      renderWithNewActions();
+      const searchInput = await typeSearchAndVerify();
 
-    const newFolderMenuAction = await screen.findByRole('menuitem', {
-      name: 'New Folder',
+      await userEvent.click(screen.getByTestId('action-new-folder'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('');
+      });
+      expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
     });
-    await userEvent.click(newFolderMenuAction);
 
-    await waitFor(() => {
-      expect(searchInput).toHaveValue('');
+    test('Upload Files clears the search text and results', async () => {
+      renderWithNewActions();
+      const searchInput = await typeSearchAndVerify();
+
+      await userEvent.click(screen.getByTestId('action-upload-file'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('');
+      });
+      expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
+    });
+
+    test('Upload Archive clears the search text and results', async () => {
+      renderWithNewActions();
+      const searchInput = await typeSearchAndVerify();
+
+      await userEvent.click(screen.getByTestId('action-upload-archive'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('');
+      });
+      expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
     });
   });
 });
