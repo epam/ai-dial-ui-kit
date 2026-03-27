@@ -720,4 +720,49 @@ describe('Dial UI Kit :: FileManager', () => {
 
     expect(await findInGridByRowText('inside-hidden')).toBeInTheDocument();
   });
+
+  test('New actions (New Folder) clear the search text and results', async () => {
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        defaultPath="All files"
+        navigationPanelOptions={{ searchable: true }}
+        toolbarOptions={{
+          newActions: {
+            newFolder: { label: 'New Folder' },
+            uploadFiles: { label: 'Upload Files' },
+            uploadArchive: { label: 'Upload Archive' },
+          },
+        }}
+        treeOptions={{
+          expandedPaths: new Set([
+            'All files',
+            'All files/Design',
+            'All files/Design/Icons',
+            'All files/Design/Icons/SVG',
+          ]),
+        }}
+      />,
+    );
+
+    const searchRegion = screen.getByRole('search', { name: 'Search' });
+    const searchInput = within(searchRegion).getByRole('textbox');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'svg');
+
+    expect(await findInGridByRowText('SVG')).toBeInTheDocument();
+    expect(searchInput).toHaveValue('svg');
+
+    const newButton = screen.getByRole('button', { name: 'New' });
+    await userEvent.click(newButton);
+
+    const newFolderMenuAction = await screen.findByRole('menuitem', {
+      name: 'New Folder',
+    });
+    await userEvent.click(newFolderMenuAction);
+
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('');
+    });
+  });
 });
