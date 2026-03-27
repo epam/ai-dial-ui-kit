@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "command": "npx tsx .cursor/hooks/post-write-verify.ts",
+        "matcher": "Write",
+        "timeout": 180
+      }
+    ]
+  }
+}

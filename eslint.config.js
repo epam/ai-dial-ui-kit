@@ -74,4 +74,17 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ['.cursor/hooks/**/*.ts'],
+    plugins: {
+      'react-refresh': reactRefresh,
+    },
+    languageOptions: {
+      globals: globals.node,
+    },
+    rules: {
+      'no-console': 'off',
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ]);
