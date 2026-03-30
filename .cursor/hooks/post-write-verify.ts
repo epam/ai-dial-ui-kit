@@ -1,5 +1,5 @@
 /**
- * postToolUse (Write): run repo checks; print JSON on stdout for Cursor hooks.
+ * postToolUse: run repo checks after .ts/.tsx Write/Edit; print JSON on stdout for Cursor hooks.
  * @see https://cursor.com/docs/agent/hooks
  */
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
@@ -36,7 +36,7 @@ function resolveProjectRoot(stdinText: string): string {
 
 function formatFailure(log: string): string {
   const body = log.length > 14000 ? `…\n${log.slice(-14000)}` : log;
-  const msg = `**Verify failed after Write** (\`npm run verify:agent-hook\`: typecheck → lint:check → test:run).
+  const msg = `**Verify failed after .ts/.tsx change** (\`npm run verify:agent-hook\`: typecheck → lint:check → test:run).
 
 \`\`\`
 ${body}
@@ -47,7 +47,7 @@ ${body}
 
 function main(): void {
   if (process.env.CURSOR_SKIP_AGENT_VERIFY === '1') {
-    console.log(JSON.stringify({}));
+    console.log('{}');
     return;
   }
 
@@ -77,7 +77,7 @@ function main(): void {
   }
 
   if (result.status === 0) {
-    console.log(JSON.stringify({}));
+    console.log('{}');
     return;
   }
 

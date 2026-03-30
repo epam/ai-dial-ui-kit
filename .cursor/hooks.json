@@ -4,7 +4,7 @@
     "postToolUse": [
       {
         "command": "npx tsx .cursor/hooks/post-write-verify.ts",
-        "matcher": "Write",
+        "matcher": "Edit:*.ts|Edit:*.tsx|Write:*.ts|Write:*.tsx",
         "timeout": 180
       }
     ]
