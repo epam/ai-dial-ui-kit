@@ -4,6 +4,7 @@ import { useItemRenaming } from '@/components/FileManager/hooks/use-item-renamin
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
+import { AlertVariant } from '@/types/alert';
 
 function buildTree(): DialFile[] {
   return [
@@ -530,7 +531,7 @@ describe('useItemRenaming hook', () => {
       const folderA = items[0].items![0]; // /root/A
       const error = result.current.renameValidateHandler('.hidden', folderA);
       expect(error).toBe(
-        'warning__A dot at the start of the name will make the item hidden',
+        `${AlertVariant.Warning}__A dot at the start of the name will make the item hidden`,
       );
     });
 
