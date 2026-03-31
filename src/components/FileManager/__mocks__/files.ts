@@ -774,7 +774,11 @@ export const itemsMock: DialFile[] = [
         updatedAt: '2026-03-13',
         author: 'Stanislaw Lem',
         owner: owners[10],
-        permissions: [DialFilePermission.READ],
+        permissions: [
+          DialFilePermission.READ,
+          DialFilePermission.WRITE,
+          DialFilePermission.SHARE,
+        ],
         items: [
           {
             id: 'no-forbidden',

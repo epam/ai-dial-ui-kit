@@ -8,6 +8,7 @@ import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
 import { IconUserX } from '@tabler/icons-react';
+import { cleanForbiddenSymbolsRegExp } from '@/components/FileManager/utils';
 
 export interface UseBulkActionsProps {
   selectedFiles: Map<string, DialFile>;
@@ -33,6 +34,7 @@ export interface UseBulkActionsProps {
   sharedWithMeIds?: string[];
   sharedByMePaths?: Set<string>;
   onClearSelection: () => void;
+  forbiddenSymbolsRegExp?: RegExp;
 }
 
 export const useBulkActions = ({
@@ -49,6 +51,7 @@ export const useBulkActions = ({
   sharedWithMeIds,
   sharedByMePaths,
   onClearSelection,
+  forbiddenSymbolsRegExp,
 }: UseBulkActionsProps): DialActionDropdownItem[] => {
   return useMemo(() => {
     const actions: DialActionDropdownItem[] = [];
@@ -58,7 +61,12 @@ export const useBulkActions = ({
       return actions;
     }
 
-    if (actionLabels[DialFileManagerActions.Move]) {
+    const regexp = cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp);
+    const hasAnyRestrictedSymbols = regexp
+      ? selectedFilesArray.some((file) => regexp.test(file.name))
+      : false;
+
+    if (actionLabels[DialFileManagerActions.Move] && !hasAnyRestrictedSymbols) {
       actions.push({
         key: DialFileManagerActions.Move,
         label: actionLabels[DialFileManagerActions.Move],
@@ -74,7 +82,7 @@ export const useBulkActions = ({
       });
     }
 
-    if (actionLabels[DialFileManagerActions.Copy]) {
+    if (actionLabels[DialFileManagerActions.Copy] && !hasAnyRestrictedSymbols) {
       actions.push({
         key: DialFileManagerActions.Copy,
         label: actionLabels[DialFileManagerActions.Copy],
@@ -90,7 +98,10 @@ export const useBulkActions = ({
       });
     }
 
-    if (actionLabels[DialFileManagerActions.Duplicate]) {
+    if (
+      actionLabels[DialFileManagerActions.Duplicate] &&
+      !hasAnyRestrictedSymbols
+    ) {
       actions.push({
         key: DialFileManagerActions.Duplicate,
         label: actionLabels[DialFileManagerActions.Duplicate],
@@ -123,7 +134,10 @@ export const useBulkActions = ({
       });
     }
 
-    if (actionLabels[DialFileManagerActions.Download]) {
+    if (
+      actionLabels[DialFileManagerActions.Download] &&
+      !hasAnyRestrictedSymbols
+    ) {
       actions.push({
         key: DialFileManagerActions.Download,
         label: actionLabels[DialFileManagerActions.Download],
@@ -192,5 +206,6 @@ export const useBulkActions = ({
     sharedWithMeIds,
     onClearSelection,
     sharedByMePaths,
+    forbiddenSymbolsRegExp,
   ]);
 };
