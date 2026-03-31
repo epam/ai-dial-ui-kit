@@ -1098,6 +1098,7 @@ export const DialFileManagerView: FC = () => {
     sharedWithMeIds,
     sharedByMePaths,
     onClearSelection: clearSelection,
+    forbiddenSymbolsRegExp,
   });
 
   const renderToolbar = useCallback(() => {
