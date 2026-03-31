@@ -126,7 +126,7 @@ export const DialFileManagerItemNameInput: FC<
           ) : (
             <IconAlertTriangleFilled
               {...BASE_ICON_PROPS}
-              className="text-warning"
+              className="text-warning-icon"
               aria-label="warning"
             />
           ))}
