@@ -233,6 +233,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     effectiveSearchValue,
     setSearchValue,
     handleSearchChange,
+    handleSearchClear,
     searchResultsRows,
   } = useFileSearch({
     onSearchFiles,
@@ -340,32 +341,42 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const handleDrop = useCallback(
     (e: DragEvent) => {
+      handleSearchClear();
       const destinationFolder = currentPath ?? '';
       const existingFiles = currentFolder?.items ?? [];
       handleFileDropBase(e, destinationFolder, existingFiles);
     },
-    [currentPath, currentFolder, handleFileDropBase],
+    [currentPath, currentFolder, handleFileDropBase, handleSearchClear],
   );
 
   const openFileDialog = useCallback(() => {
+    handleSearchClear();
     const destinationFolder = currentPath ?? '';
     const existingFiles = currentFolder?.items ?? [];
     openFileDialogBase(destinationFolder, existingFiles);
-  }, [currentPath, currentFolder, openFileDialogBase]);
+  }, [currentPath, currentFolder, openFileDialogBase, handleSearchClear]);
 
   const openArchiveUpload = useCallback(() => {
+    handleSearchClear();
     const destinationFolder = currentPath ?? '';
     const existingFiles = currentFolder?.items ?? [];
     openArchiveDialog(destinationFolder, existingFiles);
-  }, [currentPath, currentFolder, openArchiveDialog]);
+  }, [currentPath, currentFolder, openArchiveDialog, handleSearchClear]);
 
   const customUploadFile = useCallback(() => {
+    handleSearchClear();
     customUploadFileAction?.(currentPath, currentFolder);
-  }, [customUploadFileAction, currentPath, currentFolder]);
+  }, [customUploadFileAction, currentPath, currentFolder, handleSearchClear]);
 
   const customCreateNewItem = useCallback(() => {
+    handleSearchClear();
     customCreateNewItemAction?.(currentPath, currentFolder);
-  }, [customCreateNewItemAction, currentPath, currentFolder]);
+  }, [
+    customCreateNewItemAction,
+    currentPath,
+    currentFolder,
+    handleSearchClear,
+  ]);
 
   const customDuplicateHandle = useCallback(
     (items: DialFile[]) => {
@@ -377,7 +388,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const {
     isCreatingFolder,
     newFolderTempId,
-    startFolderCreation,
+    startFolderCreation: startFolderCreationBase,
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
@@ -387,6 +398,11 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onValidateFolderName: onCreateFolderValidate,
     validationMessages: folderCreationValidationMessages,
   });
+
+  const startFolderCreation = useCallback(() => {
+    handleSearchClear();
+    startFolderCreationBase();
+  }, [handleSearchClear, startFolderCreationBase]);
 
   const { newActions, isNewButtonVisible, isNewButtonDisabled } = useNewActions(
     {
