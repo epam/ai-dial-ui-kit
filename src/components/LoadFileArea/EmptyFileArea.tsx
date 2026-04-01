@@ -24,12 +24,17 @@ export interface DialEmptyFileAreaProps {
   acceptTypes: string;
   maxFilesCount?: number;
   maxFileSize?: number;
+  maxMultiFilesSize?: number;
   multiple?: boolean;
   fileFormatError?: string;
   fileCountError?: string;
   fileSizeError?: string;
+  multiFilesSizeError?: string;
   getIsFileFormatError?: (fileItems: File[] | DataTransferItem[]) => boolean;
   getIsFileSizeError?: (fileItems: File[] | DataTransferItem[]) => boolean;
+  getIsMultiFilesSizeError?: (
+    fileItems: File[] | DataTransferItem[],
+  ) => boolean;
   onChange: (files: File[]) => void;
 }
 
