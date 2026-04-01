@@ -193,4 +193,31 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
 
     expect(clickSpy).toHaveBeenCalled();
   });
+
+  test('Should display multiFilesSizeError when the total file size exceeds the maximum', () => {
+    const mockOnChange = vi.fn();
+    const mockMultiFilesSizeError = 'multiFilesSizeError';
+
+    const fileSize = 1 * 1024 * 1024;
+    const mockFileList = ['file1.txt', 'file2.txt'].map((fileName) => {
+      const content = new Array(fileSize).fill('a').join('');
+      const blob = new Blob([content], { type: 'text/plain' });
+
+      return new File([blob], fileName, { type: 'text/plain' });
+    });
+
+    render(
+      <DialLoadFileAreaField
+        fieldTitle="Files"
+        elementId="file-input"
+        files={mockFileList}
+        maxMultiFilesSize={1}
+        multiFilesSizeError={mockMultiFilesSizeError}
+        onChange={mockOnChange}
+        acceptTypes="image/jpg"
+      />,
+    );
+
+    expect(screen.getByText(mockMultiFilesSizeError)).toBeInTheDocument();
+  });
 });

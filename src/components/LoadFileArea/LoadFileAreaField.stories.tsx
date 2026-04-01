@@ -205,3 +205,21 @@ export const WithAdditionalButtons: Story = {
     ...Empty.args,
   },
 };
+
+export const InvalidTotalFileSize: Story = {
+  render: (args) => {
+    const fileSize = 1 * 1024 * 1024;
+    const mockFiles = ['file1.txt', 'file2.txt'].map((fileName) => {
+      const content = new Array(fileSize).fill('a').join('');
+      const blob = new Blob([content], { type: 'text/plain' });
+
+      return new File([blob], fileName, { type: 'text/plain' });
+    });
+    return <InteractiveLoadFileAreaField {...args} files={mockFiles} />;
+  },
+  args: {
+    ...Empty.args,
+    maxMultiFilesSize: 1,
+    multiFilesSizeError: 'Total files size is more than 1 MB',
+  },
+};
