@@ -1,4 +1,4 @@
-import type { FC, MouseEvent, ReactNode } from 'react';
+import { type FC, type MouseEvent, type ReactNode } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {
@@ -7,6 +7,7 @@ import {
 } from './EmptyFileArea';
 import { DialFilledInput } from './FilledInput';
 import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 
 export interface DialLoadFileAreaProps extends DialEmptyFileAreaProps {
   files?: File[];
@@ -61,6 +62,8 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
     isInvalid,
     errorText,
     removeButtonAriaLabel,
+    getIsMultiFilesSizeError,
+    multiFilesSizeError,
   } = props;
 
   const removeClick = (e: MouseEvent, fileUrl: string) => {
@@ -84,22 +87,27 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
       <DialEmptyFileArea {...props} onChange={onChange} />
     </DndProvider>
   ) : (
-    <div className="flex-1 min-h-0 border border-solid border-primary rounded p-2 overflow-y-auto">
-      {files && files.length > 0 && (
-        <div className="flex flex-col gap-y-1">
-          {files.map((file, index) => (
-            <DialFilledInput
-              key={file.name + index}
-              id={file.name}
-              value={file.name}
-              iconAfter={removeFile(file.name)}
-              iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}
-              invalid={isInvalid?.(file)}
-              error={errorText}
-            />
-          ))}
-        </div>
+    <>
+      <div className="flex-1 min-h-0 border border-solid border-primary rounded p-2 overflow-y-auto">
+        {files && files.length > 0 && (
+          <div className="flex flex-col gap-y-1">
+            {files.map((file, index) => (
+              <DialFilledInput
+                key={file.name + index}
+                id={file.name}
+                value={file.name}
+                iconAfter={removeFile(file.name)}
+                iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}
+                invalid={isInvalid?.(file)}
+                error={errorText}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      {getIsMultiFilesSizeError?.(files) && (
+        <DialErrorText text={multiFilesSizeError} />
       )}
-    </div>
+    </>
   );
 };
