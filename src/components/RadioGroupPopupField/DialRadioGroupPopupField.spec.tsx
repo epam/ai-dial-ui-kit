@@ -121,6 +121,34 @@ describe('Dial UI Kit :: DialRadioGroupPopupField', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  test('clicking Cancel calls onCancel and onClose', () => {
+    const onCancel = vi.fn();
+    const onClose = vi.fn();
+
+    render(
+      <DialRadioGroupPopupField
+        label="Group"
+        htmlFor="group"
+        header="Select"
+        emptyValueText="None"
+        radioButtons={radioButtons}
+        selectedRadioValue="opt-1"
+        onChangeRadioField={() => null}
+        id="group-id"
+        isValid={true}
+        onApply={() => null}
+        onCancel={onCancel}
+        onClose={onClose}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'open-popup' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
   test('clicking Apply calls onApply and then onClose', () => {
     const onApply = vi.fn();
     const onClose = vi.fn();

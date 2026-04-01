@@ -29,6 +29,7 @@ export interface RadioGroupPopupFieldProps
   applyButtonTitle?: string;
   isValid: boolean;
   onApply: () => void;
+  onCancel?: () => void;
   selectedRadioValue: string;
   onChangeRadioField: (id: string) => void;
   id: string;
@@ -78,6 +79,7 @@ export interface RadioGroupPopupFieldProps
  * @param header - Title text shown in the popup header
  * @param [portalId] - Target portal id for rendering the popup
  * @param onApply - Callback fired when the Apply button is clicked
+ * @param [onCancel] - Callback fired when the Cancel button is clicked
  * @param [cancelButtonTitle="Cancel"] - Text for the Cancel button
  * @param [applyButtonTitle="Apply"] - Text for the Apply button
  * @param isValid - Determines whether the Apply action is enabled
@@ -100,6 +102,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   header,
   portalId,
   onApply,
+  onCancel,
   cancelButtonTitle = 'Cancel',
   applyButtonTitle = 'Apply',
   isValid,
@@ -119,6 +122,11 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
     setIsOpen(false);
     onClose?.();
   }, [onClose]);
+
+  const onCancelValue = useCallback(() => {
+    onCancel?.();
+    onClosePopup();
+  }, [onCancel, onClosePopup]);
 
   const onApplyValue = useCallback(() => {
     onApply();
@@ -142,7 +150,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
       >
         <DialPopup
           open={isOpen}
-          onClose={onClosePopup}
+          onClose={onCancelValue}
           header={header}
           portalId={portalId}
           size={size}
@@ -150,7 +158,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
             <div className="flex flex-row items-center justify-end gap-2 px-6 py-4">
               <DialNeutralButton
                 label={cancelButtonTitle}
-                onClick={onClosePopup}
+                onClick={onCancelValue}
               />
               <DialPrimaryButton
                 label={applyButtonTitle}
