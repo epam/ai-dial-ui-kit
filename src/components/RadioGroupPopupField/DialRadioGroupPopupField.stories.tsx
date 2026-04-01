@@ -88,6 +88,7 @@ const meta = {
     },
     onChangeRadioField: { control: false },
     onApply: { control: false },
+    onCancel: { control: false },
     onClose: { control: false },
     id: { control: { type: 'text' } },
     size: {
