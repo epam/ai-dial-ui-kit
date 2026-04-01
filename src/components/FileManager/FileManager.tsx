@@ -135,6 +135,8 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'onCreateFolderValidate'
   | 'folderCreationValidationMessages'
   | 'disabledPathTooltip'
+  | 'emptyStateTitle'
+  | 'emptyStateDescription'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
