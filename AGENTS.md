@@ -8,7 +8,7 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 - **Build**: Vite library mode, Tailwind + SCSS, public API via `src/index.ts`.
 - **Docs & dev**: Storybook (`npm run storybook`), tests with Vitest + Testing Library (`npm run test`).
 
-## Agent principles (harness-style)
+## Agent principles
 
 1. **Read before edit** — Open related files (component, stories, spec, types, `src/index.ts`) before changing behavior or API.
 2. **Minimal diffs** — Solve the task only; no unrelated refactors or reformatting of untouched code.
@@ -44,7 +44,14 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 
 ## Cursor-specific assets
 
-- **`.cursor/rules/`** — Always-on and file-scoped rules (see `docs/AI-AGENTS-GUIDE.md`).
-- **`.cursor/commands/`** — Reusable prompts for plan / review / story+test workflows.
+- **`.cursor/rules/`** — Always-on and file-scoped rules (this file + `.cursor/rules/*.mdc`).
+- **`.cursor/commands/`** — Slash-style prompts, including a **plan → implement → review → fix** pipeline:
 
-This layout is inspired by community “agent harness” patterns (e.g. [everything-claude-code](https://github.com/affaan-m/everything-claude-code)): universal `AGENTS.md` + IDE rules + slash-style commands, adapted to this UI kit only.
+| Command               | Role                                             |
+| --------------------- | ------------------------------------------------ |
+| `plan-component`      | Plan only; no code until approved                |
+| `implement-from-plan` | Code only; follow the agreed plan                |
+| `review-changes`      | Review only; no edits                            |
+| `apply-review`        | Fixes only; address listed feedback              |
+| `feature-pipeline`    | Run all four phases in order in one thread       |
+| `story-and-test`      | Align Storybook + Vitest for components in scope |

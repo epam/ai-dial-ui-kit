@@ -117,9 +117,8 @@ describe('Dial UI Kit :: DialInput', () => {
           type="number"
           value={val}
           onChange={(v) => {
-            const next = v ?? '';
-            setVal(next);
-            onChange(next);
+            setVal(v ?? '');
+            onChange(v);
           }}
         />
       );

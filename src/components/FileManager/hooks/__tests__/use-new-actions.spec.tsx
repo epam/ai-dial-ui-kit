@@ -6,9 +6,14 @@ import { DialFilePermission, type DialFile } from '@/models/file';
 
 describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   const mockMouseEvent = {} as MouseEvent<Element, globalThis.MouseEvent>;
+  const requiredCreate = { onCreateNewItem: vi.fn() };
 
   it('returns empty actions when no labels provided', () => {
-    const { result } = renderHook(() => useNewActions({}));
+    const { result } = renderHook(() =>
+      useNewActions({
+        ...requiredCreate,
+      }),
+    );
 
     expect(result.current.newActions).toEqual([]);
     expect(result.current.isNewButtonVisible).toBe(false);
@@ -16,7 +21,10 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
   it('returns empty actions when labels object is undefined', () => {
     const { result } = renderHook(() =>
-      useNewActions({ newActions: undefined }),
+      useNewActions({
+        ...requiredCreate,
+        newActions: undefined,
+      }),
     );
 
     expect(result.current.newActions).toEqual([]);
@@ -47,6 +55,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     ({ actionKey, actionConfig, label }) => {
       const { result } = renderHook(() =>
         useNewActions({
+          ...requiredCreate,
           newActions: { [label]: actionConfig },
         }),
       );
@@ -85,6 +94,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
       const callback = vi.fn();
       const { result } = renderHook(() =>
         useNewActions({
+          ...requiredCreate,
           newActions: { [label]: actionConfig },
           [callbackName]: callback,
         }),
@@ -120,6 +130,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     ({ label, actionKey, actionConfig }) => {
       const { result } = renderHook(() =>
         useNewActions({
+          ...requiredCreate,
           newActions: { [label]: actionConfig },
         }),
       );
@@ -136,6 +147,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('creates all actions when all labels are provided', () => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: {
           newFolder: { label: 'New Folder' },
           uploadFiles: { label: 'Upload Files' },
@@ -151,6 +163,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('maintains correct order: newFolder, uploadFiles, uploadArchive', () => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: {
           uploadArchive: { label: 'Upload Archive' },
           newFolder: { label: 'New Folder' },
@@ -171,6 +184,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: {
           newFolder: { label: 'New Folder' },
           uploadFiles: { label: 'Upload Files' },
@@ -225,6 +239,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   ])('creates only $description actions', ({ actions, expectedKeys }) => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: actions,
       }),
     );
@@ -243,6 +258,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   ])('includes icon for $label action', ({ label, action }) => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { [label]: action },
       }),
     );
@@ -253,6 +269,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('returns new reference when labels change', () => {
     const { result, rerender } = renderHook((props) => useNewActions(props), {
       initialProps: {
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
       },
     });
@@ -260,6 +277,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
     const firstResult = result.current;
 
     rerender({
+      ...requiredCreate,
       newActions: { newFolder: { label: 'New Folder' } },
     });
 
@@ -268,7 +286,11 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   });
 
   it('isNewButtonVisible is false when no actions', () => {
-    const { result } = renderHook(() => useNewActions({}));
+    const { result } = renderHook(() =>
+      useNewActions({
+        ...requiredCreate,
+      }),
+    );
 
     expect(result.current.isNewButtonVisible).toBe(false);
   });
@@ -276,6 +298,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('isNewButtonVisible is true when at least one action exists', () => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
       }),
     );
@@ -286,6 +309,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
   it('isNewButtonDisabled is true when currentFolder is undefined', () => {
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: undefined,
       }),
@@ -299,6 +323,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: folder,
       }),
@@ -315,6 +340,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: folder,
       }),
@@ -331,6 +357,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: folder,
       }),
@@ -347,6 +374,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: folder,
         isNewButtonDisabled: true,
@@ -364,6 +392,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: { newFolder: { label: 'New Folder' } },
         currentFolder: folder,
         isNewButtonDisabled: false,
@@ -381,6 +410,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: {
           newFolder: { label: 'New Folder' },
           uploadFiles: { label: 'Upload Files' },
@@ -402,6 +432,7 @@ describe('Dial UI Kit :: FileManager :: useNewActions', () => {
 
     const { result } = renderHook(() =>
       useNewActions({
+        ...requiredCreate,
         newActions: undefined,
         currentFolder: folder,
       }),
