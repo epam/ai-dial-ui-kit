@@ -1,0 +1,9 @@
+# node:24-alpine vulnerabilities in https://hub.docker.com/layers/library/node/24-alpine
+
+# stdlib
+CVE-2025-68121 exp:2026-05-20
+CVE-2025-58183 exp:2026-05-20
+CVE-2025-61726 exp:2026-05-20
+CVE-2025-61728 exp:2026-05-20
+CVE-2025-61729 exp:2026-05-20
+CVE-2026-25679 exp:2026-05-20
