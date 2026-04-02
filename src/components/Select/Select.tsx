@@ -76,6 +76,7 @@ export interface DialSelectProps {
 
 /**
  * A versatile select supporting single and multiple selections.
+ * aliases: OptionPicker|ChoiceSelector
  *
  * Single mode mirrors the legacy visual:
  * - Trigger shows the selected option's leading icon + label.

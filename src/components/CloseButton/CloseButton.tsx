@@ -13,6 +13,7 @@ export interface DialCloseButtonProps {
 }
 /**
  * A Close button component with a customizable icon and accessible label.
+ * aliases: DismissButton|ExitButton
  *
  * @example
  * ```tsx

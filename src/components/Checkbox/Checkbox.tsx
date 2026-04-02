@@ -25,6 +25,7 @@ export interface DialCheckboxProps
 
 /**
  * A Checkbox component with styling options
+ * aliases: ToggleCheckbox|MultiSelectOption
  *
  * @example
  * ```tsx

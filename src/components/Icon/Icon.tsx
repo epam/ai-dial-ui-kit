@@ -8,6 +8,7 @@ export interface DialIconProps {
 
 /**
  * A wrapper component for rendering icons with consistent styling
+ * aliases: IconRenderer|SVGWrapper
  *
  * @example
  * ```tsx

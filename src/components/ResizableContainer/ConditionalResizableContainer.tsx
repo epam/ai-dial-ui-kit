@@ -11,6 +11,7 @@ export interface DialConditionalResizableContainerProps
 
 /**
  * DialConditionalResizableContainer — A conditional wrapper around `DialResizableContainer`.
+ * aliases: OptionalResize|ConditionalPanel
  *
  * This component renders its children inside a resizable container only when `enabled` is true.
  * When `enabled` is false, children are rendered directly without any resizable behavior.

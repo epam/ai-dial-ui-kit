@@ -13,6 +13,7 @@ export interface DialButtonDropdownProps
 
 /**
  * A Button dropdown component based on DialDropdown component
+ * aliases: SplitButton|MenuButton
  *
  * @example
  * ```tsx

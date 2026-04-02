@@ -29,6 +29,7 @@ export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * A contextual feedback component for displaying important messages.
+ * aliases: Notification|StatusBanner
  *
  * Renders a colored container with an icon, message text, and an optional
  * close button.

@@ -31,6 +31,7 @@ export interface DialConfirmationPopupProps extends DialPopupProps {
 
 /**
  * A confirmation dialog built with DialPopup and DialButton.
+ * aliases: ConfirmDialog|WarningDialog
  *
  * Provides an accessible modal with a title, optional description or custom content,
  * and a footer with Cancel / Confirm actions.

@@ -51,6 +51,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
 
 /**
  * DestinationFolderPopup
+ * aliases: FolderSelector|PathChooser
  *
  * A popup dialog for selecting a destination folder when copying or moving files.
  * Displays a File Manager interface with a footer containing action buttons and

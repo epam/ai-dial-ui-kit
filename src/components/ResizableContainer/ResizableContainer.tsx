@@ -25,6 +25,8 @@ export interface DialResizableContainerProps {
 
 /**
  * DialResizableContainer — A reusable resizable container
+ * aliases: ResizePanel|SizableContainer
+ *
  * supporting both **controlled** and **uncontrolled** width modes.
  *
  * Controlled Mode

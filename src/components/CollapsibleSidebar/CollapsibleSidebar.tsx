@@ -30,6 +30,8 @@ const CLOSED_WIDTH = 48;
 
 /**
  * A collapsible horizontal bar component that allows toggling between an expanded and collapsed state.
+ * aliases: ToggleSidebar|CollapsiblePanel
+ *
  * It supports customizable width, title, icons, additional buttons, and flexible styling options.
  *
  * @example

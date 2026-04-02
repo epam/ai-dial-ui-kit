@@ -398,6 +398,7 @@ export interface DialFileManagerProps {
 
 /**
  * File Manager layout with a collapsible folders tree, breadcrumb/search header, and a data grid.
+ * aliases: FileExplorer|FileBrowser
  *
  * Features:
  * - Global `path` drives both the breadcrumb trail and the visible folder in the grid.
