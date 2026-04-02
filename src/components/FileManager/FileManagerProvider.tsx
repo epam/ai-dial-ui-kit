@@ -129,6 +129,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onFolderPopupPathChange,
   onManagePermissions,
   onPreview,
+  onOpenInNewTab,
   previewExtensions,
   isRenameFileAvailable,
   isDuplicateFolderAvailable,
@@ -136,6 +137,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   customCreateNewItemAction,
   customDuplicateAction,
   customDeleteItemsAction,
+  customDownloadItemsAction,
   customBreakpointRef,
   gridClassName,
   nonClickableTableColumns,
@@ -304,6 +306,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   const { handleDownloadFiles } = useFileDownload({
     onDownloadFiles,
+    customDownloadItemsAction,
     onDownloadSuccess: clearSelection,
   });
 
@@ -745,6 +748,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onFolderPopupPathChange,
     onManagePermissions,
     onPreview,
+    onOpenInNewTab,
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
