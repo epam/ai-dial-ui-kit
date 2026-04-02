@@ -752,7 +752,7 @@ describe('Dial UI Kit :: FileManager', () => {
     expect(await findInGridByRowText('inside-hidden')).toBeInTheDocument();
   });
 
-  test('actionsRef.createFolder adds a new row even while in search mode', async () => {
+  test('actionsRef.createFolder clears search and adds a new row', async () => {
     const actionsRef = createRef<DialFileManagerActionsRef>();
 
     renderWithinSizedShell(
@@ -772,6 +772,8 @@ describe('Dial UI Kit :: FileManager', () => {
       />,
     );
 
+    const baselineRowCount = screen.getAllByRole('row').length;
+
     const searchRegion = screen.getByRole('search', { name: 'Search' });
     const searchInput = within(searchRegion).getByRole('textbox');
     await userEvent.clear(searchInput);
@@ -779,13 +781,12 @@ describe('Dial UI Kit :: FileManager', () => {
 
     expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
 
-    const rowsBefore = screen.getAllByRole('row').length;
-
     actionsRef.current?.createFolder();
 
     await waitFor(() => {
+      expect(searchInput).toHaveValue('');
       const rowsAfter = screen.getAllByRole('row').length;
-      expect(rowsAfter).toBe(rowsBefore + 1);
+      expect(rowsAfter).toBe(baselineRowCount + 1);
     });
   });
 
