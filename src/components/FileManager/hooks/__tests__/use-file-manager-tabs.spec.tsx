@@ -33,15 +33,17 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
       [DialFileManagerTabs.MyFiles]: 'My Files',
       [DialFileManagerTabs.Shared]: 'Shared With Me',
       [DialFileManagerTabs.Organization]: 'Public Files',
+      [DialFileManagerTabs.Review]: 'Review files',
     };
 
     const { result } = renderHook(() => useDialFileManagerTabs(tabLabels));
 
-    expect(result.current.tabs).toHaveLength(3);
+    expect(result.current.tabs).toHaveLength(4);
     expect(result.current.tabs).toEqual([
       { id: DialFileManagerTabs.MyFiles, label: 'My Files' },
       { id: DialFileManagerTabs.Shared, label: 'Shared With Me' },
       { id: DialFileManagerTabs.Organization, label: 'Public Files' },
+      { id: DialFileManagerTabs.Review, label: 'Review files' },
     ]);
   });
 
@@ -50,6 +52,7 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
       [DialFileManagerTabs.MyFiles]: '',
       [DialFileManagerTabs.Shared]: '',
       [DialFileManagerTabs.Organization]: '',
+      [DialFileManagerTabs.Review]: '',
     };
 
     const { result } = renderHook(() => useDialFileManagerTabs(tabLabels));
@@ -58,6 +61,7 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
       { id: DialFileManagerTabs.MyFiles, label: 'my files' },
       { id: DialFileManagerTabs.Shared, label: 'shared' },
       { id: DialFileManagerTabs.Organization, label: 'organization' },
+      { id: DialFileManagerTabs.Review, label: 'review' },
     ]);
   });
 
@@ -82,6 +86,7 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
       [DialFileManagerTabs.MyFiles]: 'My Files',
       [DialFileManagerTabs.Shared]: 'Shared With Me',
       [DialFileManagerTabs.Organization]: 'Public Files',
+      [DialFileManagerTabs.Review]: 'Review files',
     };
 
     const { result, rerender } = renderHook(() =>
@@ -107,6 +112,7 @@ describe('Dial UI Kit :: FileManager :: useDialFileManagerTabs', () => {
       [DialFileManagerTabs.MyFiles]: 'My Files',
       [DialFileManagerTabs.Shared]: 'Shared With Me',
       [DialFileManagerTabs.Organization]: 'Public Files',
+      [DialFileManagerTabs.Review]: 'Review files',
     };
 
     const { result } = renderHook(() =>
