@@ -423,7 +423,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         });
       }
 
-      return source.map((node) => ({
+      const searchMapped: FileManagerGridRow[] = source.map((node) => ({
         ...node,
         id: node.id ?? node.path,
         name: node.name ?? node.path.split('/').pop() ?? '',
@@ -438,6 +438,22 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         owner: node.owner,
         folderId: node.folderId,
       }));
+
+      if (isCreatingFolder && newFolderTempId) {
+        searchMapped.unshift({
+          id: newFolderTempId,
+          name: '',
+          updatedAt: undefined,
+          author: undefined,
+          path: currentPath ?? '/',
+          nodeType: DialFileNodeType.FOLDER,
+          extension: undefined,
+          isTemporary: true,
+          owner: undefined,
+        });
+      }
+
+      return searchMapped;
     }
 
     const query = normalizeToLowerCase(effectiveSearchValue).trim();
@@ -490,7 +506,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
         name: '',
         updatedAt: undefined,
         author: undefined,
-        path: newFolderTempId,
+        path: currentPath ?? '/',
         nodeType: DialFileNodeType.FOLDER,
         extension: undefined,
         isTemporary: true,
@@ -524,6 +540,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     newFolderTempId,
     showFiles,
     showFolders,
+    currentPath,
   ]);
 
   const handleTreeItemClick = useCallback(

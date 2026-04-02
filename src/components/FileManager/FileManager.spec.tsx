@@ -720,4 +720,224 @@ describe('Dial UI Kit :: FileManager', () => {
 
     expect(await findInGridByRowText('inside-hidden')).toBeInTheDocument();
   });
+
+  test('actionsRef.createFolder adds a new row even while in search mode', async () => {
+    const actionsRef = createRef<DialFileManagerActionsRef>();
+
+    renderWithinSizedShell(
+      <DialFileManager
+        items={itemsMock}
+        path="/All files/Design/Icons"
+        actionsRef={actionsRef}
+        treeOptions={{
+          expandedPaths: new Set([
+            '/All files',
+            '/All files/Design',
+            '/All files/Design/Icons',
+          ]),
+          showFiles: true,
+        }}
+        navigationPanelOptions={{ searchable: true }}
+      />,
+    );
+
+    const searchRegion = screen.getByRole('search', { name: 'Search' });
+    const searchInput = within(searchRegion).getByRole('textbox');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'svg');
+
+    expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+
+    const rowsBefore = screen.getAllByRole('row').length;
+
+    actionsRef.current?.createFolder();
+
+    await waitFor(() => {
+      const rowsAfter = screen.getAllByRole('row').length;
+      expect(rowsAfter).toBe(rowsBefore + 1);
+    });
+  });
+
+  describe('search persistence across file operations', () => {
+    const SEARCH_QUERY = 'svg';
+    const CURRENT_PATH = '/All files/Design/Icons/SVG/24px';
+    const EXPANDED_PATHS = new Set([
+      '/All files',
+      '/All files/Design',
+      '/All files/Design/Icons',
+      '/All files/Design/Icons/SVG',
+      '/All files/Design/Icons/SVG/24px',
+    ]);
+
+    const deepCloneItems = (): DialFile[] =>
+      JSON.parse(JSON.stringify(itemsMock)) as DialFile[];
+
+    const find24pxFolder = (items: DialFile[]): DialFile => {
+      const design = items[0].items!.find((i) => i.name === 'Design')!;
+      const icons = design.items!.find((i) => i.name === 'Icons')!;
+      const svg = icons.items!.find((i) => i.name === 'SVG')!;
+      return svg.items!.find((i) => i.name === '24px')!;
+    };
+
+    const renderSearchableManager = (items: DialFile[]) =>
+      renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={CURRENT_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          navigationPanelOptions={{ searchable: true }}
+        />,
+      );
+
+    const rerenderManager = (
+      rerender: ReturnType<typeof render>['rerender'],
+      items: DialFile[],
+    ) =>
+      rerender(
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={items}
+            path={CURRENT_PATH}
+            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+            navigationPanelOptions={{ searchable: true }}
+          />
+        </div>,
+      );
+
+    const typeSearchQuery = async (query: string): Promise<HTMLElement> => {
+      const searchRegion = screen.getByRole('search', { name: 'Search' });
+      const searchInput = within(searchRegion).getByRole('textbox');
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, query);
+      return searchInput;
+    };
+
+    const expectRowAbsent = async (text: string): Promise<void> => {
+      const grid = await waitForGridTable();
+      await waitFor(() => {
+        const rows = grid.querySelectorAll('.ag-center-cols-container .ag-row');
+        const cellTexts = Array.from(rows).map((r) =>
+          (r.textContent ?? '').trim(),
+        );
+        expect(cellTexts).not.toContain(text);
+      });
+    };
+
+    test('rename: search query persists and renamed file appears in results', async () => {
+      const items = deepCloneItems();
+      const { rerender } = renderSearchableManager(items);
+      const searchInput = await typeSearchQuery(SEARCH_QUERY);
+
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+      expect(await findInGridByRowText('logo.svg')).toBeInTheDocument();
+
+      const mutatedItems = deepCloneItems();
+      const folder = find24pxFolder(mutatedItems);
+      const target = folder.items!.find((i) => i.name === 'alert.svg')!;
+      target.name = 'renamed_alert.svg';
+      target.path = `${CURRENT_PATH}/renamed_alert.svg`;
+      target.id = 'renamed-alert-id';
+
+      rerenderManager(rerender, mutatedItems);
+
+      expect(searchInput).toHaveValue(SEARCH_QUERY);
+      expect(
+        await findInGridByRowText('renamed_alert.svg'),
+      ).toBeInTheDocument();
+      expect(await findInGridByRowText('logo.svg')).toBeInTheDocument();
+      await expectRowAbsent('alert.svg');
+    });
+
+    test('delete: search query persists and deleted file disappears from results', async () => {
+      const items = deepCloneItems();
+      const { rerender } = renderSearchableManager(items);
+      const searchInput = await typeSearchQuery(SEARCH_QUERY);
+
+      expect(await findInGridByRowText('logo.svg')).toBeInTheDocument();
+
+      const mutatedItems = deepCloneItems();
+      const folder = find24pxFolder(mutatedItems);
+      folder.items = folder.items!.filter((i) => i.name !== 'logo.svg');
+
+      rerenderManager(rerender, mutatedItems);
+
+      expect(searchInput).toHaveValue(SEARCH_QUERY);
+      await expectRowAbsent('logo.svg');
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+    });
+
+    test('duplicate: search query persists and duplicated file appears in results', async () => {
+      const items = deepCloneItems();
+      const { rerender } = renderSearchableManager(items);
+      const searchInput = await typeSearchQuery(SEARCH_QUERY);
+
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+
+      const mutatedItems = deepCloneItems();
+      const folder = find24pxFolder(mutatedItems);
+      folder.items!.push({
+        id: 'dup-alert',
+        name: 'alert copy.svg',
+        path: `${CURRENT_PATH}/alert copy.svg`,
+        parentPath: CURRENT_PATH,
+        folderId: 'icons-svg-24',
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'svg',
+        contentLength: 1024,
+      });
+
+      rerenderManager(rerender, mutatedItems);
+
+      expect(searchInput).toHaveValue(SEARCH_QUERY);
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+      expect(await findInGridByRowText('alert copy.svg')).toBeInTheDocument();
+    });
+
+    test('copy (new file added): search query persists and copied file appears in results', async () => {
+      const items = deepCloneItems();
+      const { rerender } = renderSearchableManager(items);
+      const searchInput = await typeSearchQuery(SEARCH_QUERY);
+
+      const mutatedItems = deepCloneItems();
+      const folder = find24pxFolder(mutatedItems);
+      folder.items!.push({
+        id: 'copied-icon',
+        name: 'copied-icon.svg',
+        path: `${CURRENT_PATH}/copied-icon.svg`,
+        parentPath: CURRENT_PATH,
+        folderId: 'icons-svg-24',
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'svg',
+        contentLength: 2048,
+      });
+
+      rerenderManager(rerender, mutatedItems);
+
+      expect(searchInput).toHaveValue(SEARCH_QUERY);
+      expect(await findInGridByRowText('copied-icon.svg')).toBeInTheDocument();
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+    });
+
+    test('move (path change): search query persists and moved file reflects new name/path', async () => {
+      const items = deepCloneItems();
+      const { rerender } = renderSearchableManager(items);
+      const searchInput = await typeSearchQuery(SEARCH_QUERY);
+
+      expect(await findInGridByRowText('alert.svg')).toBeInTheDocument();
+
+      const mutatedItems = deepCloneItems();
+      const folder = find24pxFolder(mutatedItems);
+      const target = folder.items!.find((i) => i.name === 'alert.svg')!;
+      target.name = 'alert-moved.svg';
+      target.path = `${CURRENT_PATH}/alert-moved.svg`;
+
+      rerenderManager(rerender, mutatedItems);
+
+      expect(searchInput).toHaveValue(SEARCH_QUERY);
+      expect(await findInGridByRowText('alert-moved.svg')).toBeInTheDocument();
+      await expectRowAbsent('alert.svg');
+    });
+  });
 });
