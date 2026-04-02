@@ -969,6 +969,9 @@ describe('Dial UI Kit :: FileManager', () => {
       expect(searchInput).toHaveValue(SEARCH_QUERY);
       expect(await findInGridByRowText('alert-moved.svg')).toBeInTheDocument();
       await expectRowAbsent('alert.svg');
+    });
+  });
+
   describe('New actions clear search', () => {
     const renderWithNewActions = () =>
       renderWithinSizedShell(
