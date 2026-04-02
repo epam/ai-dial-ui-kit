@@ -374,6 +374,7 @@ export interface DialFileManagerProps {
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  onOpenInNewTab?: (file: DialFile) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
@@ -390,6 +391,7 @@ export interface DialFileManagerProps {
     items: DialFile[],
     parentFolderPath: string,
   ) => void;
+  customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
 }
 
@@ -640,6 +642,7 @@ export const DialFileManagerView: FC = () => {
     onFolderPopupPathChange,
     onManagePermissions,
     onPreview,
+    onOpenInNewTab,
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
@@ -1277,6 +1280,7 @@ export const DialFileManagerView: FC = () => {
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
     onPreview: (path) => onPreview?.(path),
+    onOpenInNewTab: (file) => onOpenInNewTab?.(file),
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,

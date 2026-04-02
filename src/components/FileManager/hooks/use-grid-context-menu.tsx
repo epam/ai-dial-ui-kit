@@ -38,6 +38,7 @@ export interface UseGridContextMenuProps {
     [DialFileManagerActions.Info]?: string;
     [DialFileManagerActions.Unshare]?: string;
     [DialFileManagerActions.RemoveAccess]?: string;
+    [DialFileManagerActions.OpenInNewTab]?: string;
   };
   onDuplicate: (file: DialFile) => void;
   onCopy: (file: DialFile) => void;
@@ -54,6 +55,7 @@ export interface UseGridContextMenuProps {
   onAddChild?: (file: DialFile) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  onOpenInNewTab?: (file: DialFile) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
@@ -77,6 +79,7 @@ export const useGridContextMenu = ({
   onAddChild,
   onManagePermissions,
   onPreview,
+  onOpenInNewTab,
   previewExtensions,
   isRenameFileAvailable = true,
   isDuplicateFolderAvailable = true,
@@ -243,6 +246,22 @@ export const useGridContextMenu = ({
         });
       }
 
+      if (
+        actionLabels[DialFileManagerActions.OpenInNewTab] &&
+        typeof onOpenInNewTab === 'function' &&
+        file.nodeType === DialFileNodeType.ITEM &&
+        !hasRestrictedSymbolsInName
+      ) {
+        items.push({
+          key: DialFileManagerActions.OpenInNewTab,
+          label: actionLabels[DialFileManagerActions.OpenInNewTab],
+          icon: (
+            <IconExternalLink {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onOpenInNewTab?.(file),
+        });
+      }
+
       const emptyOrWritePermissions =
         !file.permissions ||
         file.permissions.includes(DialFilePermission.WRITE);
@@ -340,6 +359,7 @@ export const useGridContextMenu = ({
     sharedByMePaths,
     onManagePermissions,
     onPreview,
+    onOpenInNewTab,
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
