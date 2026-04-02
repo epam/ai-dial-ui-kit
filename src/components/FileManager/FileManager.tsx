@@ -90,6 +90,7 @@ import classNames from 'classnames';
 import {
   DestinationFolderMode,
   DialFileManagerActions,
+  DialFileManagerTabs,
   FileManagerRenameTriggerView,
 } from '@/types/file-manager';
 import {
@@ -135,6 +136,8 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'onCreateFolderValidate'
   | 'folderCreationValidationMessages'
   | 'disabledPathTooltip'
+  | 'emptyStateTitle'
+  | 'emptyStateDescription'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
@@ -371,6 +374,7 @@ export interface DialFileManagerProps {
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  onOpenInNewTab?: (file: DialFile) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
@@ -387,6 +391,7 @@ export interface DialFileManagerProps {
     items: DialFile[],
     parentFolderPath: string,
   ) => void;
+  customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
 }
 
@@ -466,7 +471,7 @@ export interface DialFileManagerProps {
  * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
  * @param [onRenameValidate] - Optional callback to validate a file or folder name during renaming. Should return an error message string if the name is invalid, or null if it's valid.
- * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `warning__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
+ * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `${AlertVariant.Warning}__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
  * @param [forbiddenSymbolsRegExp] - Optional RegExp will be used in the validation for the files and folders names. The "g" and "y" flags are not allowed in this RegExp and will be ignored.
  * @param [forbiddenSymbolsTooltip] - Optional tooltip displayed when a file or folder name contains forbidden characters
  *
@@ -637,6 +642,7 @@ export const DialFileManagerView: FC = () => {
     onFolderPopupPathChange,
     onManagePermissions,
     onPreview,
+    onOpenInNewTab,
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
@@ -1098,7 +1104,16 @@ export const DialFileManagerView: FC = () => {
     sharedWithMeIds,
     sharedByMePaths,
     onClearSelection: clearSelection,
+    forbiddenSymbolsRegExp,
   });
+
+  const handleToolbarTabChange = useCallback(
+    (id: DialFileManagerTabs) => {
+      toolbarOptions?.onTabChange?.(id);
+      cancelFolderCreation();
+    },
+    [toolbarOptions, cancelFolderCreation],
+  );
 
   const renderToolbar = useCallback(() => {
     if (toolbarOptions && selectedPaths.size === 0) {
@@ -1111,6 +1126,7 @@ export const DialFileManagerView: FC = () => {
           {managerLabel}
           <DialFileManagerToolbar
             {...toolbarOptions}
+            onTabChange={handleToolbarTabChange}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
             isNewButtonVisible={isNewButtonVisible}
@@ -1140,6 +1156,7 @@ export const DialFileManagerView: FC = () => {
 
     return null;
   }, [
+    handleToolbarTabChange,
     bulkActionsToolbarOptions,
     selectedPaths,
     clearSelection,
@@ -1263,6 +1280,7 @@ export const DialFileManagerView: FC = () => {
     onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
     onPreview: (path) => onPreview?.(path),
+    onOpenInNewTab: (file) => onOpenInNewTab?.(file),
     previewExtensions,
     isRenameFileAvailable,
     isDuplicateFolderAvailable,

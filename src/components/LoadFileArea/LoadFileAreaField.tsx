@@ -75,9 +75,11 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
   files,
   maxFilesCount,
   maxFileSize,
+  maxMultiFilesSize,
   fileFormatError,
   fileCountError,
   fileSizeError,
+  multiFilesSizeError,
   multiple = true,
   acceptTypes,
   deleteAllButtonLabel,
@@ -118,6 +120,22 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
       });
     },
     [maxFileSize],
+  );
+
+  const getIsMultiFilesSizeError = useCallback(
+    (fileItems: File[] | DataTransferItem[]) => {
+      if (!maxMultiFilesSize || !multiple) {
+        return false;
+      }
+
+      const maxSize = maxMultiFilesSize * 1024 * 1024;
+      const totalSize = fileItems.reduce((acc, item) => {
+        return acc + (item as File).size;
+      }, 0);
+
+      return totalSize > maxSize;
+    },
+    [maxMultiFilesSize, multiple],
   );
 
   const onFileChange = useCallback(
@@ -183,8 +201,10 @@ export const DialLoadFileAreaField: FC<DialLoadFileAreaFieldProps> = ({
         fileFormatError={fileFormatError}
         fileCountError={fileCountError}
         fileSizeError={fileSizeError}
+        multiFilesSizeError={multiFilesSizeError}
         getIsFileFormatError={getIsFileFormatError}
         getIsFileSizeError={getIsFileSizeError}
+        getIsMultiFilesSizeError={getIsMultiFilesSizeError}
         {...props}
       />
     </div>

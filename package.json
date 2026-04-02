@@ -1,6 +1,6 @@
 {
   "name": "@epam/ai-dial-ui-kit",
-  "version": "0.8.0-rc",
+  "version": "0.9.0-rc",
   "type": "module",
   "license": "Apache-2.0",
   "description": "A modern UI kit for building AI DIAL interfaces with React",
@@ -35,9 +35,12 @@
     "build": "vite build && npm run build:css",
     "build:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./dist/index.css",
     "lint": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
+    "lint:check": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test:run": "vitest run",
+    "verify:agent-hook": "npm run typecheck && npm run lint:check && npm run test:run",
     "format": "prettier --check .",
     "format-fix": "prettier --write .",
-    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",
     "storybook:css": "tailwindcss -w -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
@@ -56,7 +59,8 @@
     ]
   },
   "overrides": {
-    "esbuild": "0.25.9"
+    "esbuild": "0.25.9",
+    "lodash": "4.18.0"
   },
   "dependencies": {
     "ag-grid-community": "^34.3.0",
@@ -89,6 +93,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
     "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.15.30",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
@@ -118,6 +123,7 @@
     "storybook": "^10.2.17",
     "storybook-addon-pseudo-states": "^10.2.17",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
     "vite": "^7.1.5",

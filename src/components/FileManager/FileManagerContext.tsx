@@ -207,6 +207,7 @@ export interface FileManagerContextValue {
   onFolderPopupPathChange?: (newPath?: string) => void;
   onManagePermissions?: (path?: string) => void;
   onPreview?: (path?: string) => void;
+  onOpenInNewTab?: (file: DialFile) => void;
   previewExtensions?: string[];
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
@@ -223,6 +224,7 @@ export interface FileManagerContextValue {
     items: DialFile[],
     parentFolderPath: string,
   ) => void;
+  customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
   getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   fileTooLargeTooltip?: string;
