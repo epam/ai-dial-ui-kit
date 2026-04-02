@@ -19,8 +19,11 @@ import {
 import type {
   DialFileAcceptType,
   DialUploadFileItem,
+  DialCopiedItem,
+  DialDeletedItem,
 } from '@/models/file-manager';
 import {
+  DialFileManagerActions,
   DialFileManagerConflictActions,
   DialFileManagerConflictStrategies,
   DialFileManagerTabs,
@@ -1863,4 +1866,222 @@ export const WithAllowedFileTypes: Story = {
     },
   },
   render: WithAllowedFileTypesComponent,
+};
+
+const findFolderByPath = (
+  list: DialFile[],
+  targetPath: string,
+): DialFile | undefined => {
+  for (const item of list) {
+    if (item.path === targetPath) return item;
+    if (item.items) {
+      const found = findFolderByPath(item.items, targetPath);
+      if (found) return found;
+    }
+  }
+  return undefined;
+};
+
+const InteractiveDemoComponent = (args: DialFileManagerProps) => {
+  const [items, setItems] = useState<DialFile[]>(() =>
+    JSON.parse(JSON.stringify(itemsMock)),
+  );
+  const [destinationPath, setDestinationPath] = useState<string | undefined>();
+
+  const onCopyFiles = useCallback(
+    (copiedItems: DialCopiedItem[], destinationFolder: string) => {
+      setItems((currentItems) => {
+        const nextItems = JSON.parse(
+          JSON.stringify(currentItems),
+        ) as DialFile[];
+        const dest = findFolderByPath(nextItems, destinationFolder);
+
+        if (dest) {
+          if (!dest.items) dest.items = [];
+          copiedItems.forEach((item) => {
+            const name = item.destinationUrl.split('/').pop()!;
+            const newItem: DialFile = {
+              id: `${item.sourceUrl}-copy-${Date.now()}`,
+              name,
+              path: item.destinationUrl,
+              parentPath: destinationFolder,
+              folderId: dest.id ?? 'root',
+              nodeType: item.nodeType,
+              updatedAt: new Date().toISOString(),
+              items: item.nodeType === DialFileNodeType.FOLDER ? [] : undefined,
+            };
+            dest.items!.push(newItem);
+          });
+        }
+        return nextItems;
+      });
+    },
+    [],
+  );
+
+  const onMoveToFiles = useCallback(
+    (
+      movedFiles: DialCopiedItem[],
+      _sourceFolder: string,
+      destinationFolder: string,
+    ) => {
+      const movedPaths = new Set(movedFiles.map((f) => f.sourceUrl));
+
+      setItems((currentItems) => {
+        const nextItems = JSON.parse(
+          JSON.stringify(currentItems),
+        ) as DialFile[];
+        const extracted: DialFile[] = [];
+
+        const findAndRemove = (list: DialFile[]) => {
+          for (let i = list.length - 1; i >= 0; i--) {
+            const item = list[i];
+            if (movedPaths.has(item.path)) {
+              extracted.push(list.splice(i, 1)[0]);
+            } else if (item.items) {
+              findAndRemove(item.items);
+            }
+          }
+        };
+        findAndRemove(nextItems);
+
+        const dest = findFolderByPath(nextItems, destinationFolder);
+        if (dest) {
+          extracted.forEach((item) => {
+            const movedMapping = movedFiles.find(
+              (f) => f.sourceUrl === item.path,
+            );
+            const nextPath = movedMapping?.destinationUrl ?? item.path;
+            const name = nextPath.split('/').pop()!;
+
+            item.name = name;
+            item.path = nextPath;
+            item.parentPath = destinationFolder;
+            item.folderId = dest.id ?? 'root';
+            if (!dest.items) dest.items = [];
+            dest.items.push(item);
+
+            const updateChildrenPaths = (it: DialFile, parentPath: string) => {
+              if (it.items) {
+                it.items.forEach((child) => {
+                  child.parentPath = parentPath;
+                  child.path = `${parentPath}/${child.name}`;
+                  updateChildrenPaths(child, child.path);
+                });
+              }
+            };
+            updateChildrenPaths(item, item.path);
+          });
+        }
+
+        return nextItems;
+      });
+    },
+    [],
+  );
+
+  const onCreateFolder = useCallback(
+    async (_file: DialUploadFileItem, folderPath: string) => {
+      setItems((currentItems) => {
+        const nextItems = JSON.parse(
+          JSON.stringify(currentItems),
+        ) as DialFile[];
+        const parentPath = folderPath.substring(0, folderPath.lastIndexOf('/'));
+        const name = folderPath.substring(folderPath.lastIndexOf('/') + 1);
+
+        const parent = findFolderByPath(nextItems, parentPath);
+        if (parent) {
+          if (!parent.items) parent.items = [];
+          parent.items.push({
+            id: `new-folder-${Date.now()}`,
+            name,
+            path: folderPath,
+            parentPath: parent.path,
+            folderId: parent.id ?? 'root',
+            nodeType: DialFileNodeType.FOLDER,
+            updatedAt: new Date().toISOString(),
+            items: [],
+          });
+        }
+        return nextItems;
+      });
+    },
+    [],
+  );
+
+  const onDeleteFiles = useCallback(
+    (filesToDelete: DialDeletedItem[], _sourceFolder: string) => {
+      const pathsToDelete = new Set(filesToDelete.map((f) => f.sourceUrl));
+      setItems((currentItems) => {
+        const nextItems = JSON.parse(
+          JSON.stringify(currentItems),
+        ) as DialFile[];
+        const findAndRemove = (list: DialFile[]) => {
+          for (let i = list.length - 1; i >= 0; i--) {
+            const item = list[i];
+            if (pathsToDelete.has(item.path)) {
+              list.splice(i, 1);
+            } else if (item.items) {
+              findAndRemove(item.items);
+            }
+          }
+        };
+        findAndRemove(nextItems);
+        return nextItems;
+      });
+    },
+    [],
+  );
+
+  return (
+    <div className="h-[740px]">
+      <DialFileManager
+        {...args}
+        items={items}
+        onMoveToFiles={onMoveToFiles}
+        onCopyFiles={onCopyFiles}
+        onDeleteFiles={onDeleteFiles}
+        onCreateFolder={onCreateFolder}
+        destinationFolderPopupOptions={{
+          ...args.destinationFolderPopupOptions,
+          destinationFolderPath: destinationPath,
+          setDestinationFolderPath: setDestinationPath,
+        }}
+        navigationPanelOptions={{ searchable: true }}
+        gridOptions={{
+          ...(args.gridOptions ?? {}),
+          visibleColumns: [
+            FileManagerColumnKey.Name,
+            FileManagerColumnKey.Path,
+            FileManagerColumnKey.UpdatedAt,
+            FileManagerColumnKey.Size,
+            FileManagerColumnKey.Author,
+          ],
+          actionLabels: {
+            [DialFileManagerActions.Duplicate]: 'Duplicate',
+            [DialFileManagerActions.Copy]: 'Copy to',
+            [DialFileManagerActions.Move]: 'Move to',
+            [DialFileManagerActions.Download]: 'Download',
+            [DialFileManagerActions.Delete]: 'Delete',
+            [DialFileManagerActions.Rename]: 'Rename',
+          },
+        }}
+        treeOptions={{
+          ...(args.treeOptions ?? {}),
+          actionLabels: {
+            [DialFileManagerActions.Duplicate]: 'Duplicate',
+            [DialFileManagerActions.Copy]: 'Copy to',
+            [DialFileManagerActions.Move]: 'Move to',
+            [DialFileManagerActions.Download]: 'Download',
+            [DialFileManagerActions.Delete]: 'Delete',
+            [DialFileManagerActions.Rename]: 'Rename',
+          },
+        }}
+      />
+    </div>
+  );
+};
+
+export const ComplexSearch: Story = {
+  render: InteractiveDemoComponent,
 };
