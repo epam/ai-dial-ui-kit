@@ -18,6 +18,7 @@ export enum DialFileManagerActions {
   RemoveAccess = 'removeAccess',
   ManagePermissions = 'managePermissions',
   Preview = 'preview',
+  OpenInNewTab = 'openInNewTab',
 }
 
 export enum DialFileManagerConflictActions {
