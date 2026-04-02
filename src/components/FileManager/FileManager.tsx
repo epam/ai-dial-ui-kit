@@ -90,6 +90,7 @@ import classNames from 'classnames';
 import {
   DestinationFolderMode,
   DialFileManagerActions,
+  DialFileManagerTabs,
   FileManagerRenameTriggerView,
 } from '@/types/file-manager';
 import {
@@ -1106,6 +1107,14 @@ export const DialFileManagerView: FC = () => {
     forbiddenSymbolsRegExp,
   });
 
+  const handleToolbarTabChange = useCallback(
+    (id: DialFileManagerTabs) => {
+      toolbarOptions?.onTabChange?.(id);
+      cancelFolderCreation();
+    },
+    [toolbarOptions, cancelFolderCreation],
+  );
+
   const renderToolbar = useCallback(() => {
     if (toolbarOptions && selectedPaths.size === 0) {
       return (
@@ -1117,6 +1126,7 @@ export const DialFileManagerView: FC = () => {
           {managerLabel}
           <DialFileManagerToolbar
             {...toolbarOptions}
+            onTabChange={handleToolbarTabChange}
             areHiddenFilesVisible={areHiddenFilesVisible}
             onToggleHiddenFiles={toggleHiddenFilesVisibility}
             isNewButtonVisible={isNewButtonVisible}
@@ -1146,6 +1156,7 @@ export const DialFileManagerView: FC = () => {
 
     return null;
   }, [
+    handleToolbarTabChange,
     bulkActionsToolbarOptions,
     selectedPaths,
     clearSelection,

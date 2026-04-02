@@ -156,11 +156,11 @@ The library uses CSS custom properties for comprehensive theming. Override these
 :root {
   /* Background layers */
   --bg-layer-0: #000000;
-  --bg-layer-1: #090D13;
+  --bg-layer-1: #0C101D;
   --bg-layer-2: #171B21;
   
   /* Text colors */
-  --text-primary: #F3F4F6;
+  --text-primary: ##EEF1F7;
   --text-secondary: #9CA3AF;
   --text-tertiary: #6B7280;
    ...
