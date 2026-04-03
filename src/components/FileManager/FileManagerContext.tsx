@@ -229,6 +229,7 @@ export interface FileManagerContextValue {
   getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   fileTooLargeTooltip?: string;
   unsupportedFileTypeTooltip?: string;
+  hideSearchPathItemName?: boolean;
 }
 
 export const FileManagerContext = createContext<

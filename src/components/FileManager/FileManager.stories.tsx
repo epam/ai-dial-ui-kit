@@ -2083,5 +2083,9 @@ const InteractiveDemoComponent = (args: DialFileManagerProps) => {
 };
 
 export const ComplexSearch: Story = {
+  args: {
+    hideSearchPathItemName: false,
+  },
+
   render: InteractiveDemoComponent,
 };

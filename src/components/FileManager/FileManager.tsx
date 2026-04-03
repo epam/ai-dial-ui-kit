@@ -393,6 +393,7 @@ export interface DialFileManagerProps {
   ) => void;
   customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
+  hideSearchPathItemName?: boolean;
 }
 
 /**
@@ -651,6 +652,7 @@ export const DialFileManagerView: FC = () => {
     unsupportedFileTypeTooltip,
     gridClassName,
     nonClickableTableColumns,
+    hideSearchPathItemName,
   } = useFileManagerContext();
 
   const {
@@ -1484,6 +1486,7 @@ export const DialFileManagerView: FC = () => {
                     disabledRowIds: disabledGridRowIds,
                     forbiddenSymbolsRegExp,
                     forbiddenSymbolsTooltip,
+                    hideSearchPathItemName,
                   } as FileManagerGridContext,
                 }}
                 selectedRowIds={selectedGridRowsIds}
