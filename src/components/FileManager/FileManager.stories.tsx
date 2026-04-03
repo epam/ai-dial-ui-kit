@@ -202,6 +202,7 @@ const WithTabsControlledComponent = (args: DialFileManagerProps) => {
     my_files: 'My Files',
     shared: 'Shared with Me',
     organization: 'Organization',
+    review: 'Review',
   });
 
   return (
@@ -233,6 +234,7 @@ const WithTabsInitialTabComponent = (args: DialFileManagerProps) => {
       my_files: 'My Files',
       shared: 'Shared with Me',
       organization: 'Organization',
+      review: 'Review',
     },
     DialFileManagerTabs.Shared,
   );
@@ -280,6 +282,7 @@ const PopupComponent = (args: DialFileManagerProps) => {
     my_files: 'My Files',
     shared: 'Shared with Me',
     organization: 'Organization',
+    review: 'Review',
   });
   const [destinationPath, setDestinationPath] = useState<string | undefined>();
   const [loadedPaths, setLoadedPaths] = useState<Set<string>>(new Set());
@@ -1073,6 +1076,7 @@ const WithFileMetadataInPopupComponent = (args: DialFileManagerProps) => {
     my_files: 'My Files',
     shared: 'Shared with Me',
     organization: 'Organization',
+    review: 'Review',
   });
 
   const handleGetInfo = useCallback(async (file: DialFile) => {
@@ -1463,6 +1467,7 @@ const EmptyStatePerTabComponent = (args: DialFileManagerProps) => {
     my_files: 'My Files',
     shared: 'Shared with Me',
     organization: 'Organization',
+    review: 'Review',
   });
 
   const emptyState = useMemo(() => {
