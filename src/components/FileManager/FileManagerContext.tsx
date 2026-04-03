@@ -39,6 +39,7 @@ export interface FileManagerGridRow {
   size?: number;
   author?: string;
   path: string;
+  parentPath?: string | null;
   nodeType: DialFileNodeType;
   extension?: string;
   isTemporary?: boolean;

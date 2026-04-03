@@ -116,14 +116,10 @@ export function useFileManagerColumns({
           let displayPath = params.data.path;
 
           if (params.context?.hideSearchPathItemName) {
-            const hadTrailingSlash = displayPath.endsWith('/');
-            const parts = displayPath.split('/').filter(Boolean);
-            if (parts.length > 1) {
-              parts.pop();
-              displayPath =
-                (displayPath.startsWith('/') ? '/' : '') +
-                parts.join('/') +
-                (hadTrailingSlash ? '/' : '');
+            if (params.data.parentPath) {
+              displayPath = params.data.parentPath;
+            } else {
+              displayPath = displayPath.replace(/\/[^/]+\/?$/, '') || '/';
             }
           }
 

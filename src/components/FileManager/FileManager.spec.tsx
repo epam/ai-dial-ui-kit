@@ -1116,7 +1116,7 @@ describe('Dial UI Kit :: FileManager', () => {
         data: { path: 'All files/Design/Icons/SVG/' },
         context: { hideSearchPathItemName: true },
       }) as React.ReactElement<{ text: string }>;
-      expect(result.props.text).toBe('All files/Design/Icons/');
+      expect(result.props.text).toBe('All files/Design/Icons');
     });
   });
 });
