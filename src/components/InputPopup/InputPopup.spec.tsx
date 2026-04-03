@@ -125,4 +125,116 @@ describe('Dial UI Kit :: DialInputPopup', () => {
     const renderedErrorText = screen.getByText(errorText);
     expect(renderedErrorText).toBeTruthy();
   });
+
+  // --- Editable mode tests ---
+
+  test('Should render an editable input when editable is true', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue="Editable Value"
+        emptyValueText="None"
+        editable
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'input-popup-field' });
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('Editable Value');
+  });
+
+  test('Should call onValueChange when user types in editable mode', () => {
+    const onValueChange = vi.fn();
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue=""
+        emptyValueText="None"
+        editable
+        onValueChange={onValueChange}
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'input-popup-field' });
+    fireEvent.change(input, { target: { value: 'Hello' } });
+    expect(onValueChange).toHaveBeenCalledWith('Hello');
+  });
+
+  test('Should only open popup via icon click in editable mode', () => {
+    const onOpen = vi.fn();
+    render(
+      <DialInputPopup
+        onOpen={onOpen}
+        selectedValue="Test"
+        emptyValueText="None"
+        editable
+      >
+        <div>Popup Content</div>
+      </DialInputPopup>,
+    );
+
+    // Clicking the input should NOT trigger onOpen
+    const input = screen.getByRole('textbox', { name: 'input-popup-field' });
+    fireEvent.click(input);
+    expect(onOpen).not.toHaveBeenCalled();
+
+    // Clicking the icon button should trigger onOpen
+    const iconButton = screen.getByRole('button', { name: 'open-popup' });
+    fireEvent.click(iconButton);
+    expect(onOpen).toHaveBeenCalledTimes(1);
+  });
+
+  test('Should disable the editable input when disabled is true', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue="Disabled"
+        emptyValueText="None"
+        editable
+        disabled
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'input-popup-field' });
+    expect(input).toBeDisabled();
+  });
+
+  test('Should show placeholder in editable mode when no value', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue=""
+        placeholder="Type here..."
+        editable
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'input-popup-field' });
+    expect(input).toHaveAttribute('placeholder', 'Type here...');
+  });
+
+  test('Should show errorText in editable mode', () => {
+    const errorText = 'Field is required';
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue=""
+        emptyValueText="None"
+        editable
+        errorText={errorText}
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    expect(screen.getByText(errorText)).toBeInTheDocument();
+  });
 });

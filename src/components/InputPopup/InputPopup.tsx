@@ -1,7 +1,8 @@
 import { createPortal } from 'react-dom';
 
 import classNames from 'classnames';
-import type { FC, ReactNode } from 'react';
+import type { ChangeEvent, FC, ReactNode } from 'react';
+import { useCallback } from 'react';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { DialAutocompleteInputValue } from '@/components/AutocompleteInput/AutocompleteInputValue';
@@ -22,6 +23,8 @@ export interface DialInputPopupProps {
   errorText?: string;
   invalid?: boolean;
   emptyValueText?: string;
+  editable?: boolean;
+  onValueChange?: (value: string) => void;
 }
 
 /**
@@ -58,6 +61,8 @@ export interface DialInputPopupProps {
  * @param [errorText] - An optional error message displayed below the input when an error state is present.
  * @param [invalid] - Whether the input is in an invalid state, affecting styling. Applied automatically if errorText is provided.
  * @param [emptyValueText] - The text displayed when no value is selected and placeholder is not provided.
+ * @param [editable=false] - When true, the input area becomes an editable text field; only the icon opens the popup.
+ * @param [onValueChange] - Callback fired when the user types in the editable input.
  */
 export const DialInputPopup: FC<DialInputPopupProps> = ({
   children,
@@ -72,6 +77,8 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   invalid,
   emptyValueText,
   placeholder,
+  editable = false,
+  onValueChange,
 }) => {
   const hasMultipleValues =
     Array.isArray(selectedValue) && selectedValue.length > 0;
@@ -85,6 +92,59 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         : emptyValueText;
 
   const handleClick = disabled ? undefined : onOpen;
+
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onValueChange?.(e.target.value);
+    },
+    [onValueChange],
+  );
+
+  const renderEditableSingleValue = () => (
+    <>
+      <div
+        className={classNames(
+          'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
+          inputClassName,
+          disabled && 'dial-input-disable',
+          (errorText || invalid) && 'dial-input-error',
+        )}
+      >
+        <input
+          type="text"
+          className={classNames(
+            'flex-1 min-w-0 bg-transparent outline-none border-none p-0 dial-small-text text-primary placeholder:text-secondary',
+            valueClassName,
+          )}
+          value={typeof selectedValue === 'string' ? selectedValue : ''}
+          placeholder={placeholder || emptyValueText}
+          onChange={handleInputChange}
+          disabled={disabled}
+          id={elementId}
+          aria-label="input-popup-field"
+        />
+        {!disabled && (
+          <button
+            type="button"
+            className="flex-shrink-0 cursor-pointer bg-transparent border-none p-0 ml-1"
+            onClick={onOpen}
+            aria-label="open-popup"
+          >
+            <DialIcon
+              icon={
+                <OpenPopupIcon
+                  role="img"
+                  width={BASE_ICON_SIZE}
+                  height={BASE_ICON_SIZE}
+                />
+              }
+            />
+          </button>
+        )}
+      </div>
+      <DialErrorText text={errorText} />
+    </>
+  );
 
   const renderSingleValue = () => (
     <>
@@ -160,7 +220,11 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
 
   return (
     <>
-      {hasMultipleValues ? renderMultipleValues() : renderSingleValue()}
+      {hasMultipleValues
+        ? renderMultipleValues()
+        : editable
+          ? renderEditableSingleValue()
+          : renderSingleValue()}
       {open && createPortal(children, document.body)}
     </>
   );

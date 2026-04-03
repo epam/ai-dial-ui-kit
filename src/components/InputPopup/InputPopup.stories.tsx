@@ -21,6 +21,9 @@ const InteractiveInputModal = (args: DialInputPopupProps) => {
         open={modalState}
         selectedValue={selectedValue}
         onOpen={handleOpenModal}
+        onValueChange={
+          args.editable ? (val) => setSelectedValue(val) : undefined
+        }
         emptyValueText="None"
       >
         <DialPopup open onClose={handleCloseModal} header="Select value">
@@ -107,6 +110,17 @@ const meta: Meta<typeof DialInputPopup> = {
       description:
         'Text displayed when no value is selected and placeholder is not provided',
     },
+    editable: {
+      control: 'boolean',
+      description:
+        'When true, the input area becomes an editable text field; only the icon opens the popup',
+    },
+    onValueChange: {
+      action: 'valueChange',
+      control: false,
+      description:
+        'Callback fired when the user types in the editable input. Ignored when editable is false.',
+    },
     onOpen: {
       action: 'open',
       control: false,
@@ -184,6 +198,42 @@ export const WithError: Story = {
   args: {
     selectedValue: '',
     errorText: 'This field is required',
+  },
+};
+
+export const Editable: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: '',
+    editable: true,
+    placeholder: 'Type or pick from popup…',
+  },
+};
+
+export const EditableWithPreselectedValue: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: 'Option 1',
+    editable: true,
+  },
+};
+
+export const EditableDisabled: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: 'Cannot edit',
+    editable: true,
+    disabled: true,
+  },
+};
+
+export const EditableWithError: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: '',
+    editable: true,
+    errorText: 'Please enter or select a value',
+    placeholder: 'Type or pick from popup…',
   },
 };
 
