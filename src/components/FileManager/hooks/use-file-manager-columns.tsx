@@ -33,6 +33,7 @@ export interface FileManagerGridContext {
   onRenameCancel: () => void;
 
   getDisplayName: (item: DialFile) => string;
+  hideSearchPathItemName?: boolean;
 }
 
 export interface UseFileManagerColumnsArgs {
@@ -111,15 +112,26 @@ export function useFileManagerColumns({
         }) => {
           const isDisabled =
             params.context?.disabledRowIds?.has(params.data.path) ?? false;
+
+          let displayPath = params.data.path;
+
+          if (params.context?.hideSearchPathItemName) {
+            if (params.data.parentPath) {
+              displayPath = params.data.parentPath;
+            } else {
+              displayPath = displayPath.replace(/\/[^/]+\/?$/, '') || '/';
+            }
+          }
+
           if (!rootItemPath || !rootItemLabel) {
             return (
               <DialEllipsisTooltip
-                text={params.data.path}
+                text={displayPath}
                 hideTooltip={isDisabled}
               />
             );
           }
-          const path = params.data.path.replace(rootItemPath, rootItemLabel);
+          const path = displayPath.replace(rootItemPath, rootItemLabel);
           return <DialEllipsisTooltip text={path} hideTooltip={isDisabled} />;
         },
       },

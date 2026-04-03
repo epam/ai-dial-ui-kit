@@ -39,6 +39,7 @@ export interface FileManagerGridRow {
   size?: number;
   author?: string;
   path: string;
+  parentPath?: string | null;
   nodeType: DialFileNodeType;
   extension?: string;
   isTemporary?: boolean;
@@ -229,6 +230,7 @@ export interface FileManagerContextValue {
   getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   fileTooLargeTooltip?: string;
   unsupportedFileTypeTooltip?: string;
+  hideSearchPathItemName?: boolean;
 }
 
 export const FileManagerContext = createContext<

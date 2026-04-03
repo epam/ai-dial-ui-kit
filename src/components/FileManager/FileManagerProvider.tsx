@@ -141,6 +141,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   customBreakpointRef,
   gridClassName,
   nonClickableTableColumns,
+  hideSearchPathItemName,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -788,6 +789,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     customUploadFileAction,
     customBreakpointRef,
     nonClickableTableColumns,
+    hideSearchPathItemName,
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,

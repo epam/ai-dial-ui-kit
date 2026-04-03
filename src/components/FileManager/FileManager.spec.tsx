@@ -7,10 +7,17 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { DialFileManager } from './FileManager';
 import { itemsMock } from './__mocks__/files';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
+import {
+  useFileManagerColumns,
+  type FileManagerGridContext,
+  type UseFileManagerColumnsArgs,
+} from './hooks/use-file-manager-columns';
+import type { FileManagerGridRow } from './FileManagerContext';
+import { FileManagerColumnKey } from '@/types/file-manager';
 import {
   DialFileNodeType,
   DialFileResourceType,
@@ -1061,6 +1068,55 @@ describe('Dial UI Kit :: FileManager', () => {
         expect(searchInput).toHaveValue('');
       });
       expect((await queryAllInGridByRowText('SVG')).length).toBe(0);
+    });
+  });
+
+  describe('hideSearchPathItemName: path column cell renderer', () => {
+    let pathCellRenderer: (params: {
+      data: Pick<FileManagerGridRow, 'path'>;
+      context: Partial<FileManagerGridContext>;
+    }) => React.ReactElement;
+
+    beforeEach(() => {
+      let capturedRenderer: typeof pathCellRenderer;
+      function HookHarness() {
+        const { columnDefs } = useFileManagerColumns({
+          effectiveVisibleColumns: [FileManagerColumnKey.Path],
+        } as UseFileManagerColumnsArgs);
+        const pathCol = columnDefs.find(
+          (c) => c.colId === FileManagerColumnKey.Path,
+        )!;
+        capturedRenderer = pathCol.cellRenderer as typeof pathCellRenderer;
+        return null;
+      }
+      render(<HookHarness />);
+      pathCellRenderer = capturedRenderer!;
+    });
+
+    test('renders the trimmed path (without file name) when enabled', () => {
+      const result = pathCellRenderer({
+        data: { path: 'All files/Design/Icons/SVG/24px/logo.svg' },
+        context: { hideSearchPathItemName: true },
+      }) as React.ReactElement<{ text: string }>;
+      expect(result.props.text).toBe('All files/Design/Icons/SVG/24px');
+    });
+
+    test('renders the full path (including file name) when disabled', () => {
+      const result = pathCellRenderer({
+        data: { path: 'All files/Design/Icons/SVG/24px/logo.svg' },
+        context: { hideSearchPathItemName: false },
+      }) as React.ReactElement<{ text: string }>;
+      expect(result.props.text).toBe(
+        'All files/Design/Icons/SVG/24px/logo.svg',
+      );
+    });
+
+    test('strips trailing-slash folder name correctly when enabled', () => {
+      const result = pathCellRenderer({
+        data: { path: 'All files/Design/Icons/SVG/' },
+        context: { hideSearchPathItemName: true },
+      }) as React.ReactElement<{ text: string }>;
+      expect(result.props.text).toBe('All files/Design/Icons');
     });
   });
 });
