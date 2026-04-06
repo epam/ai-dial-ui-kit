@@ -48,4 +48,9 @@ input {
   &:focus {
     outline: none;
   }
+
+  &::selection,
+  &::-moz-selection {
+    @apply text-primary bg-controls-accent-primary;
+  }
 }
