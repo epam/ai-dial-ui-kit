@@ -138,14 +138,14 @@ export const WithHeaderAndFooter: Story = {
   args: {
     header: (
       <div className="px-3 py-2 border-b">
-        <span className="dial-small text-primary font-medium">
+        <span className="dial-small-text text-primary font-medium">
           Select time range
         </span>
       </div>
     ),
     footer: (
       <div className="px-3 py-2 border-t">
-        <span className="dial-small text-primary font-medium">
+        <span className="dial-small-text text-primary font-medium">
           Footer content
         </span>
       </div>
@@ -158,14 +158,14 @@ export const WithFooterClickClose: Story = {
   args: {
     header: (
       <div className="px-3 py-2 border-b">
-        <span className="dial-small text-primary font-medium">
+        <span className="dial-small-text text-primary font-medium">
           Select time range
         </span>
       </div>
     ),
     footer: (
       <div className="px-3 py-2 border-t">
-        <span className="dial-small text-primary font-medium">
+        <span className="dial-small-text text-primary font-medium">
           Click footer to close
         </span>
       </div>
@@ -181,7 +181,7 @@ export const WithFooterClickCallback: Story = {
   args: {
     header: (
       <div className="px-3 py-2 border-b">
-        <span className="dial-small text-primary font-medium">
+        <span className="dial-small-text text-primary font-medium">
           Select time range
         </span>
       </div>

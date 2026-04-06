@@ -25,4 +25,4 @@ export const alertVariantClassNameMap: Record<AlertVariant, string> = {
 };
 
 export const alertBaseClassName =
-  'items-center justify-between gap-2 p-3 border border-solid dial-small-150 rounded flex';
+  'items-center justify-between gap-2 p-3 border border-solid dial-small-text-150 rounded flex';

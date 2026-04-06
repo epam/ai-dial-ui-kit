@@ -65,7 +65,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   const descId = `${inputId}-desc`;
 
   const allLabelClassName = classNames(
-    'dial-small cursor-pointer py-[1px]',
+    'dial-small-text cursor-pointer py-[1px]',
     disabled ? 'text-secondary' : 'text-primary',
     labelClassName,
   );

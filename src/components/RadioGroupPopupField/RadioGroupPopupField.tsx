@@ -171,7 +171,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
           <div className="px-6 py-4">
             <DialRadioGroup
               radioButtons={radioButtons}
-              labelClassName="dial-small"
+              labelClassName="dial-small-text"
               activeRadioButton={selectedRadioValue}
               onChange={onChangeRadioField}
               elementId={id}

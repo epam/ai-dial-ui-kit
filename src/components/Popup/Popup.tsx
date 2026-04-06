@@ -183,7 +183,9 @@ export const DialPopup: FC<DialPopupProps> = ({
               {/* Body area */}
               {children}
             </div>
-            {dividerFooter && <div className={popupDividerClassName} />}
+            {dividerFooter && !footer && (
+              <div className={popupDividerClassName} />
+            )}
             {footer}
           </div>
         </FloatingFocusManager>

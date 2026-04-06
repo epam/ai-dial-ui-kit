@@ -222,7 +222,7 @@ export const AllowedPlacements: Story = {
   name: 'Allowed placements',
   render: (args) => (
     <div className="flex flex-col gap-2">
-      <span className="text-primary dial-small">
+      <span className="text-primary dial-small-text">
         The dropdown below is set to open at bottom-start, but if there is not
         enough space, it can only be placed at top-start or top-end (no right or
         left placements).
@@ -260,7 +260,7 @@ export const WithCustomHeader: Story = {
       header: (
         <div className="px-3 pt-2">
           <div className="flex items-center justify-between text-secondary">
-            <span className="dial-small font-medium">Custom Time Range</span>
+            <span className="dial-small-text font-medium">Custom Time Range</span>
             <IconChevronDown size={14} />
           </div>
         </div>
@@ -278,7 +278,7 @@ export const WithCustomFooter: Story = {
       items: timeItems,
       footer: (
         <div className="px-3 py-2 border-t">
-          <span className="dial-small text-primary font-medium">
+          <span className="dial-small-text text-primary font-medium">
             Footer content
           </span>
         </div>
@@ -294,7 +294,7 @@ export const WithHeaderAndFooter: Story = {
     menu: {
       header: (
         <div className="px-3 py-2 border-b">
-          <span className="dial-small text-primary font-medium">
+          <span className="dial-small-text text-primary font-medium">
             Select time range
           </span>
         </div>
@@ -302,7 +302,7 @@ export const WithHeaderAndFooter: Story = {
       items: timeItems,
       footer: (
         <div className="px-3 py-2 border-t">
-          <span className="dial-small text-primary font-medium">
+          <span className="dial-small-text text-primary font-medium">
             Footer content
           </span>
         </div>

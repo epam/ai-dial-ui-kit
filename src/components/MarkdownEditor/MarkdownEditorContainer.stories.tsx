@@ -93,7 +93,7 @@ export const WithLabelAndHeaderContent: Story = {
         '# Hello World\n\nThis is a **markdown** editor with label and header.',
       label: 'Content Editor',
       headerContent: (
-        <div className="text-secondary dial-small">Additional info</div>
+        <div className="text-secondary dial-small-text">Additional info</div>
       ),
     }),
 };

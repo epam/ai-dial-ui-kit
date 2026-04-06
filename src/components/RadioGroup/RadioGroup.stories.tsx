@@ -438,7 +438,7 @@ export const AllClassNames: Story = {
     activeRadioButton: 'premium',
     containerClassName:
       'p-2 bg-layer-2 border-2 border-dashed border-accent-primary rounded-lg h-full',
-    labelClassName: 'dial-small text-accent-tertiary',
+    labelClassName: 'dial-small-text text-accent-tertiary',
     groupLabelClassName: 'dial-h1 text-accent-secondary',
     formItemChildrenClassName: 'h-full',
     radioGroupClassName:
@@ -453,8 +453,8 @@ export const AllClassNames: Story = {
         id: 'basic',
         name: 'Basic Plan',
         content: (
-          <div className="dial-small">
-            <div className="dial-small-semi text-success">$9/month</div>
+          <div className="dial-small-text">
+            <div className="dial-small-text-semi text-success">$9/month</div>
             <div className="text-secondary">Perfect for getting started</div>
             <ul className="mt-1 dial-tiny-text text-secondary">
               <li>• 5 projects</li>
@@ -467,8 +467,8 @@ export const AllClassNames: Story = {
         id: 'premium',
         name: 'Premium Plan',
         content: (
-          <div className="dial-small">
-            <div className="dial-small-semi text-accent-primary">$29/month</div>
+          <div className="dial-small-text">
+            <div className="dial-small-text-semi text-accent-primary">$29/month</div>
             <div className="text-secondary">Most popular choice</div>
             <ul className="mt-1 dial-tiny-text text-secondary">
               <li>• Unlimited projects</li>

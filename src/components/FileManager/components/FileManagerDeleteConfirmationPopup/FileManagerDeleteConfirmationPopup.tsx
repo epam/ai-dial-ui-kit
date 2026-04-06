@@ -45,7 +45,7 @@ export const FileManagerDeleteConfirmationPopup: FC<
   const title = titleRenderer?.(fileNames) || defaultTitle;
 
   const defaultContent = (
-    <div className="px-6 py-3 dial-small">
+    <div className="px-6 py-3 dial-small-text">
       <p className="text-secondary mb-3">
         {itemsToDelete.length === 1 ? (
           <>
