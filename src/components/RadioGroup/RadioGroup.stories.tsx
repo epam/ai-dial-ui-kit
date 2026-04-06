@@ -468,7 +468,9 @@ export const AllClassNames: Story = {
         name: 'Premium Plan',
         content: (
           <div className="dial-small-text">
-            <div className="dial-small-text-semi text-accent-primary">$29/month</div>
+            <div className="dial-small-text-semi text-accent-primary">
+              $29/month
+            </div>
             <div className="text-secondary">Most popular choice</div>
             <ul className="mt-1 dial-tiny-text text-secondary">
               <li>• Unlimited projects</li>

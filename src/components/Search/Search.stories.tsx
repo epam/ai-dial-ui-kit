@@ -171,7 +171,9 @@ const AllVariantsComponent: FC = () => {
           <div className="flex flex-col gap-4">
             {states.map(({ label, props }) => (
               <div key={label}>
-                <div className="dial-small-text text-secondary mb-1">{label}</div>
+                <div className="dial-small-text text-secondary mb-1">
+                  {label}
+                </div>
                 <InteractiveSearch
                   id={`search-${size}-${label.toLowerCase()}`}
                   placeholder={`Search ${label.toLowerCase()}`}

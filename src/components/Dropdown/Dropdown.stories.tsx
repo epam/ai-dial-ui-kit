@@ -260,7 +260,9 @@ export const WithCustomHeader: Story = {
       header: (
         <div className="px-3 pt-2">
           <div className="flex items-center justify-between text-secondary">
-            <span className="dial-small-text font-medium">Custom Time Range</span>
+            <span className="dial-small-text font-medium">
+              Custom Time Range
+            </span>
             <IconChevronDown size={14} />
           </div>
         </div>
