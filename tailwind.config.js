@@ -72,7 +72,7 @@ const borderColors = {
   primary: 'var(--stroke-primary, #696E7C)',
   secondary: 'var(--stroke-secondary, #242C42)',
   tertiary: 'var(--stroke-tertiary, #0C101D)',
-  focus: 'var(--stroke-focus, ##EEF1F7)',
+  focus: 'var(--stroke-focus, #EEF1F7)',
   error: 'var(--stroke-error, #F76464)',
   warning: 'var(--stroke-warning, #EEC840)',
   info: 'var(--stroke-info, #7DA4FF)',
@@ -84,13 +84,13 @@ const borderColors = {
   // TODO: need review
   'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
   'accent-primary-hover': 'var(--stroke-accent-primary-hover, #4878d2)',
-  hover: 'var(--stroke-hover, ##EEF1F7)',
+  hover: 'var(--stroke-hover, #EEF1F7)',
   'red-900': 'var(--red-900, #402027)',
 };
 
 const textColors = {
   transparent: 'transparent',
-  primary: 'var(--text-primary, ##EEF1F7)',
+  primary: 'var(--text-primary, #EEF1F7)',
   secondary: 'var(--text-secondary, #9FA6BD)',
   error: 'var(--text-error, #F76464)',
   warning: 'var(--text-warning, #EEC840)',
@@ -106,7 +106,7 @@ const textColors = {
 };
 
 const placeholderColor = {
-  primary: 'var(--text-primary, ##EEF1F7)',
+  primary: 'var(--text-primary, #EEF1F7)',
   secondary: 'var(--controls-text-secondary-disable, #575F73)',
 };
 
@@ -167,7 +167,7 @@ export default {
       typography: {
         DEFAULT: {
           css: {
-            color: 'var(--text-primary, ##EEF1F7)',
+            color: 'var(--text-primary, #EEF1F7)',
             a: {
               color: 'var(--text-accent-primary, #7DA4FF)',
             },
