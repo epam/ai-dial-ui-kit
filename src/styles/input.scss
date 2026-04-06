@@ -49,8 +49,11 @@ input {
     outline: none;
   }
 
-  &::selection,
+  &::selection {
+    @apply bg-controls-accent-primary;
+  }
+
   &::-moz-selection {
-    @apply text-primary bg-controls-accent-primary;
+    @apply bg-controls-accent-primary;
   }
 }
