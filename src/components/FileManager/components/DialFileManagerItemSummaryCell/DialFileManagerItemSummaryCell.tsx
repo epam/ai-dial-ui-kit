@@ -101,7 +101,7 @@ export const DialFileManagerItemSummaryCell: FC<
           forbiddenSymbolsRegExp={forbiddenSymbolsRegExp}
           forbiddenSymbolsTooltip={forbiddenSymbolsTooltip}
           details={
-            <div className="flex items-center gap-1 dial-tiny text-secondary">
+            <div className="flex items-center gap-1 dial-tiny-text text-secondary">
               <span>
                 {nodeType === DialFileNodeType.ITEM ? formatBytes(size) : ''}
               </span>
@@ -114,7 +114,7 @@ export const DialFileManagerItemSummaryCell: FC<
                     value={updatedAt}
                     locale={dateLocale?.toString()}
                     options={dateOptions}
-                    className="dial-tiny text-secondary"
+                    className="dial-tiny-text text-secondary"
                     hideTooltip={hideTooltip}
                   />
                 </span>

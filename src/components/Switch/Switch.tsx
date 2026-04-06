@@ -99,7 +99,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
             </span>
           )}
           {caption && (
-            <span id="caption" className="dial-tiny text-secondary">
+            <span id="caption" className="dial-tiny-text text-secondary">
               {caption}
             </span>
           )}

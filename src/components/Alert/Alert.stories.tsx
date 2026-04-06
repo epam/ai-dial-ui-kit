@@ -285,7 +285,7 @@ export const AllVariants: Story = {
         iconSize={14}
         className="py-1 px-2 w-fit"
         message={
-          <span className="dial-tiny">
+          <span className="dial-tiny-text">
             <b>Small</b> info alert
           </span>
         }

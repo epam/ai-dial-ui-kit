@@ -299,14 +299,18 @@ const ControlledExample = () => {
           id: 'pickup',
           name: 'Pickup',
           content: (
-            <div className="dial-tiny text-secondary">Free, ready today</div>
+            <div className="dial-tiny-text text-secondary">
+              Free, ready today
+            </div>
           ),
         },
         {
           id: 'courier',
           name: 'Courier',
           content: (
-            <div className="dial-tiny text-secondary">Arrives tomorrow</div>
+            <div className="dial-tiny-text text-secondary">
+              Arrives tomorrow
+            </div>
           ),
         },
       ]}
@@ -452,7 +456,7 @@ export const AllClassNames: Story = {
           <div className="dial-small">
             <div className="dial-small-semi text-success">$9/month</div>
             <div className="text-secondary">Perfect for getting started</div>
-            <ul className="mt-1 dial-tiny text-secondary">
+            <ul className="mt-1 dial-tiny-text text-secondary">
               <li>• 5 projects</li>
               <li>• Basic support</li>
             </ul>
@@ -466,7 +470,7 @@ export const AllClassNames: Story = {
           <div className="dial-small">
             <div className="dial-small-semi text-accent-primary">$29/month</div>
             <div className="text-secondary">Most popular choice</div>
-            <ul className="mt-1 dial-tiny text-secondary">
+            <ul className="mt-1 dial-tiny-text text-secondary">
               <li>• Unlimited projects</li>
               <li>• Priority support</li>
               <li>• Advanced features</li>

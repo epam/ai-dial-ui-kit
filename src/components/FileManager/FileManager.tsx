@@ -1409,7 +1409,7 @@ export const DialFileManagerView: FC = () => {
               value={effectiveSearchValue}
               onSearchChange={handleSearchChange}
               isCompactView={isCompactView}
-              labelClassName="dial-tiny"
+              labelClassName="dial-tiny-text"
             />
           )}
 
