@@ -71,10 +71,11 @@ export const useFolderCreation = ({
   }, [currentFolder?.path, isCreatingFolder]);
 
   const startFolderCreation = useCallback(() => {
+    if (isCreatingFolder) return;
     const tempId = `__new_folder_${Date.now()}`;
     setNewFolderTempId(tempId);
     setIsCreatingFolder(true);
-  }, []);
+  }, [isCreatingFolder]);
 
   const cancelFolderCreation = useCallback(() => {
     setIsCreatingFolder(false);
