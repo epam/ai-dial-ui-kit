@@ -1302,6 +1302,7 @@ export const DialFileManagerView: FC = () => {
   const dialGridClassName = useMemo(
     () =>
       classNames(
+        'min-h-[248px] overflow-auto md:min-h-[266px]',
         isDragging ? 'border border-dashed border-accent-primary' : '',
         isDraggingOverWindow && !isDragging
           ? 'border border-dashed border-primary'
