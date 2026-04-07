@@ -29,14 +29,14 @@ Use these classes in your components:
 ```css
 :root {
   --bg-layer-0: #000000;
-  --bg-layer-1: #0C101D;
-  --bg-layer-2: #161B2D;
-  --bg-layer-3: #1D2439;
-  --text-primary: #EEF1F7;
-  --text-secondary: #9FA6BD;
-  --text-error: #F76464;
-  --stroke-primary: #696E7C;
-  --controls-bg-accent-primary: #3664E2;
+  --bg-layer-1: #0c101d;
+  --bg-layer-2: #161b2d;
+  --bg-layer-3: #1d2439;
+  --text-primary: #eef1f7;
+  --text-secondary: #9fa6bd;
+  --text-error: #f76464;
+  --stroke-primary: #696e7c;
+  --controls-bg-accent-primary: #3664e2;
   /* ... see tailwind.config.js for full list */
 }
 ```
