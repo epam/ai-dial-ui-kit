@@ -18,6 +18,7 @@ export interface DialRadioButtonProps {
 
 /**
  * A stylized, accessible radio input with optional description.
+ * aliases: ChoiceOption|RadioInput
  *
  * Renders a native `<input type="radio" />` paired with a label. When `checked`
  * and `description` are provided, a supporting text block appears under the control.

@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ai-dial-ui-kit": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./dist/mcp-server.cjs"],
+      "env": {}
+    }
+  }
+}

@@ -32,6 +32,7 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
 - [🚀 Usage in Projects](#-usage-in-projects)
   - [Next.js Integration](#nextjs-integration)
   - [Tree Shaking](#tree-shaking)
+- [🤖 AI Agent MCP Server](#-ai-agent-mcp-server)
 - [🤝 Contributing](#-contributing)
 - [🔒 Security](#-security)
 - [📄 License](#-license)
@@ -268,6 +269,12 @@ import '@epam/ai-dial-ui-kit/styles.css'; // Import styles separately
 // ❌ Avoid - Imports entire library
 import * as UIKit from '@epam/ai-dial-ui-kit';
 ```
+
+## 🤖 AI Agent MCP Server
+
+The AI DIAL UI Kit includes a built-in **MCP (Model Context Protocol) server** that enables AI agents to discover components, types, hooks, and utilities programmatically. This allows AI assistants to generate accurate, type-safe component code without hallucination.
+
+For setup, configuration, and detailed resources, see the [MCP Server Guide](./src/mcp/README.md).
 
 ## 🤝 Contributing
 

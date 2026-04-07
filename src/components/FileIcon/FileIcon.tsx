@@ -18,6 +18,7 @@ export interface DialFileIconProps {
 
 /**
  * Renders a file-type icon based on a file extension.
+ * aliases: ExtensionIcon|TypeIcon
  *
  * Uses DialIcon to provide consistent icon wrapper styling.
  *

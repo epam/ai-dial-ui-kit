@@ -17,6 +17,7 @@ export interface DialSharedEntityIndicatorProps {
 
 /**
  * A compact icon-only indicator to denote a "shared" entity.
+ * aliases: SharedIcon|AccessIndicator
  *
  * Renders a small arrow-up-right icon with token-based colors.
  *

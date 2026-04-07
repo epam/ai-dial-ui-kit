@@ -20,6 +20,8 @@ export interface DialLoadFileAreaProps extends DialEmptyFileAreaProps {
 
 /**
  * A drag-and-drop file upload area component that allows users to upload files
+ * aliases: FileDropZone|DragDropUpload
+ *
  * either by dragging them into the area or by selecting them through the file picker.
  * Displays helpful text, button prompts, and validation errors for file format or count limits.
  *

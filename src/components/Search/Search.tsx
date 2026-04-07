@@ -24,6 +24,8 @@ export interface DialSearchProps
 
 /**
  * A search input component with a customizable placeholder, icons, flexible props, and the ability
+ * aliases: SearchField|QueryInput
+ *
  * to clear the input value via a clear button. Supports multiple sizes for flexible layouts.
  *
  * @example

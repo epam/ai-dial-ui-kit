@@ -31,6 +31,7 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * DialSkeleton
+ * aliases: PlaceholderUI|ShimmerLoader
  *
  * A placeholder component to show while content is loading.
  * Provides various skeleton shapes and configurations.

@@ -6,6 +6,7 @@ import { DialInput, type DialInputProps } from '@/components/Input/Input';
 
 /**
  * A password input component with show/hide functionality and customizable props.
+ * aliases: SecureInput|ToggleablePassword
  *
  * @example
  * ```tsx

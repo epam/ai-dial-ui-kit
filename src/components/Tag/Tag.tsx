@@ -19,6 +19,8 @@ export interface DialTagProps {
 
 /**
  * A small tag component used to display labeled items such as categories, filters, or selections.
+ * aliases: Badge|Chip
+ *
  * Optionally supports removal via a close button and multiple colors variants defined by {@link TagVariant}.
  *
  * @example
