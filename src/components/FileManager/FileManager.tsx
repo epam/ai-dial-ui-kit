@@ -1429,7 +1429,7 @@ export const DialFileManagerView: FC = () => {
   );
 
   return (
-    <section ref={containerRef}>
+    <section ref={containerRef} className="size-full">
       <div
         className={mergeClasses(
           containerBaseClassName,
