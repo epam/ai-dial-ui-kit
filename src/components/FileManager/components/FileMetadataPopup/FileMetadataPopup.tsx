@@ -87,7 +87,7 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
     >
       <div className="px-6 py-4">
         <div
-          className="grid gap-x-4 gap-y-4 items-center dial-small"
+          className="grid gap-x-4 gap-y-4 items-center dial-small-text"
           style={{ gridTemplateColumns: `${LABEL_COLUMN_WIDTH}px 1fr` }}
         >
           {loading ? (

@@ -84,7 +84,7 @@ export const AllVariants: Story = {
           name="photo.jpg"
           type={DialItemType.File}
         />
-        <span className="dial-tiny text-secondary">File</span>
+        <span className="dial-tiny-text text-secondary">File</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <DialFileManagerItemIcon
@@ -93,7 +93,7 @@ export const AllVariants: Story = {
           type={DialItemType.Folder}
           shared
         />
-        <span className="dial-tiny text-secondary">Shared Folder</span>
+        <span className="dial-tiny-text text-secondary">Shared Folder</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <DialFileManagerItemIcon
@@ -102,7 +102,7 @@ export const AllVariants: Story = {
           type={DialItemType.File}
           shared
         />
-        <span className="dial-tiny text-secondary">Shared File</span>
+        <span className="dial-tiny-text text-secondary">Shared File</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <DialFileManagerItemIcon
@@ -111,7 +111,7 @@ export const AllVariants: Story = {
           type={DialItemType.File}
           loading
         />
-        <span className="dial-tiny text-secondary">Loading</span>
+        <span className="dial-tiny-text text-secondary">Loading</span>
       </div>
     </div>
   ),

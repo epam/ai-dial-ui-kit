@@ -138,7 +138,7 @@ export const WithNavigationGuard: Story = {
               checked={hasUnsavedChanges}
               onChange={(e) => setHasUnsavedChanges(e.target.checked)}
             />
-            <span className="dial-small text-primary">
+            <span className="dial-small-text text-primary">
               Has unsaved changes (try clicking breadcrumb items)
             </span>
           </label>

@@ -178,7 +178,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
           <div
             id={captionDescriptionId}
             className={mergeClasses({
-              'dial-tiny text-secondary mt-1': true,
+              'dial-tiny-text text-secondary mt-1': true,
               'text-error': !!error,
             })}
           >

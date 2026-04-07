@@ -51,12 +51,16 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
   test('adds custom classes to container and title element', () => {
     render(
       <ul>
-        <DialBreadcrumbItem label="Styled" href="#s" className="dial-small" />
+        <DialBreadcrumbItem
+          label="Styled"
+          href="#s"
+          className="dial-small-text"
+        />
       </ul>,
     );
     const link = screen.getByRole('link', { name: 'Styled' });
     const li = link.closest('li');
-    expect(li?.className).toContain('dial-small');
+    expect(li?.className).toContain('dial-small-text');
   });
 
   test('renders iconBefore before title', () => {
