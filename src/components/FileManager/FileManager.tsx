@@ -1,63 +1,3 @@
-import { mergeClasses } from '@/utils/merge-classes';
-import {
-  type FC,
-  type ReactNode,
-  useMemo,
-  useCallback,
-  useState,
-  useRef,
-  type Ref,
-  useImperativeHandle,
-  type RefObject,
-  useEffect,
-} from 'react';
-import type { CellClickedEvent, ColDef, GridApi } from 'ag-grid-community';
-import {
-  containerBaseClassName,
-  mainGridClassName,
-  toolbarBaseClassName,
-  treeBaseClassName,
-  contentGridClassName,
-  sidebarWidth,
-  sidebarTitleDefault,
-  gridBaseClassName,
-  FOLDERS_TREE_PANEL_MIN_WIDTH,
-  FOLDERS_TREE_PANEL_MAX_WIDTH,
-  COMPACT_VIEW_HEADER_HEIGHT,
-  COMPACT_VIEW_FILE_ROW_HEIGHT,
-  DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
-  actionsColumnButtonClassName,
-  DEFAULT_VISIBLE_COLUMN,
-} from './constants';
-import { findNodeByPath, isFileAccepted, formatBytes } from './utils';
-import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
-import type { DialFile, DialRootFolder } from '@/models/file';
-import { DialFileNodeType, DialFilePermission } from '@/models/file';
-import {
-  DialFoldersTree,
-  type DialFoldersTreeProps,
-} from './components/FoldersTree/FoldersTree';
-import {
-  DialFileManagerNavigationPanel,
-  type DialFileManagerNavigationPanelProps,
-} from './components/FileManagerNavigationPanel/FileManagerNavigationPanel';
-import { DialGrid, type DialGridProps } from '@/components/Grid/Grid';
-import {
-  DialFileManagerToolbar,
-  type DialFileManagerToolbarProps,
-} from './components/FileManagerToolbar/DialFileManagerToolbar';
-import {
-  DialFileManagerBulkActionsToolbar,
-  type DialFileManagerBulkActionsToolbarProps,
-} from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
-import type { DropdownItem } from '@/models/dropdown';
-import {
-  type DialCopiedItem,
-  type DialDeletedItem,
-  type DialUploadFileItem,
-  type DialFileManagerActionsRef,
-  type DialFileAcceptType,
-} from '@/models/file-manager';
 import {
   IconCopy,
   IconDownload,
@@ -67,54 +7,117 @@ import {
   IconTrashX,
   IconUserX,
 } from '@tabler/icons-react';
-import CopyToIcon from '@/assets/icons/copy-to.svg?react';
-import MoveToIcon from '@/assets/icons/move-to.svg?react';
-import AddChild from '@/assets/icons/add-child.svg?react';
-import AddSibling from '@/assets/icons/add-sibling.svg?react';
-import { BASE_ICON_PROPS } from '@/constants/icon';
-import { FileManagerProvider } from './FileManagerProvider';
-import { useFileManagerContext } from './hooks/use-file-manager-context';
-import type { FileManagerGridRow } from './FileManagerContext';
-import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
-import {
-  DialDestinationFolderPopup,
-  type DestinationFolderPopupProps,
-} from './components/DestinationFolderPopup/DestinationFolderPopup';
-import { useBulkActions } from './hooks/use-bulk-actions';
-import { useGridContextMenu } from './hooks/use-grid-context-menu';
 import type {
-  FileUploadValidationResult,
-  FileUploadValidationMessages,
-} from '@/components/FileManager/hooks/use-file-upload';
+  GridOptions as AgGridOptions,
+  CellClickedEvent,
+  ColDef,
+  GridApi,
+} from 'ag-grid-community';
 import classNames from 'classnames';
 import {
-  DestinationFolderMode,
-  DialFileManagerActions,
-  DialFileManagerTabs,
-  FileManagerRenameTriggerView,
-} from '@/types/file-manager';
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  type FC,
+  type ReactNode,
+  type Ref,
+  type RefObject,
+} from 'react';
+
+import AddChild from '@/assets/icons/add-child.svg?react';
+import AddSibling from '@/assets/icons/add-sibling.svg?react';
+import CopyToIcon from '@/assets/icons/copy-to.svg?react';
+import MoveToIcon from '@/assets/icons/move-to.svg?react';
+import IconUnshare from '@/assets/icons/unshare.svg?react';
+import { DialCollapsibleSidebar } from '@/components/CollapsibleSidebar/CollapsibleSidebar';
 import {
   ConflictResolutionPopup,
   type ConflictResolutionPopupProps,
 } from '@/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup';
-import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
-import type { RenameValidationMessages } from '@/components/FileManager/hooks/use-item-renaming';
-import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
+import type {
+  FileUploadValidationMessages,
+  FileUploadValidationResult,
+} from '@/components/FileManager/hooks/use-file-upload';
 import { useGridActionsColumn } from '@/components/FileManager/hooks/use-grid-actions-column';
-import { FileManagerColumnKey } from '@/types/file-manager';
+import type { RenameValidationMessages } from '@/components/FileManager/hooks/use-item-renaming';
 import { useTriggerViewRename } from '@/components/FileManager/hooks/use-trigger-view-rename';
-import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
-import IconUnshare from '@/assets/icons/unshare.svg?react';
-import { DialNoDataContent } from '../NoDataContent/NoDataContent';
+import { DialGrid, type DialGridProps } from '@/components/Grid/Grid';
+import { DialConditionalResizableContainer } from '@/components/ResizableContainer/ConditionalResizableContainer';
+import { BASE_ICON_PROPS } from '@/constants/icon';
+import { useWidthBreakpoint } from '@/hooks/use-width-breakpoint';
+import type { DropdownItem } from '@/models/dropdown';
+import type { DialFile, DialRootFolder } from '@/models/file';
+import { DialFileNodeType, DialFilePermission } from '@/models/file';
+import {
+  type DialCopiedItem,
+  type DialDeletedItem,
+  type DialFileAcceptType,
+  type DialFileManagerActionsRef,
+  type DialUploadFileItem,
+} from '@/models/file-manager';
+import { GridSelectionMode } from '@/models/selection-mode.ts';
 import { DropdownItemType } from '@/types/dropdown';
+import {
+  DestinationFolderMode,
+  DialFileManagerActions,
+  DialFileManagerTabs,
+  FileManagerColumnKey,
+  FileManagerRenameTriggerView,
+} from '@/types/file-manager';
+import { mergeClasses } from '@/utils/merge-classes';
+import { DialNoDataContent } from '../NoDataContent/NoDataContent';
+import type { FileManagerGridRow } from './FileManagerContext';
+import { FileManagerProvider } from './FileManagerProvider';
+import { FileManagerTooltip } from './FileManagerTooltip';
+import {
+  DialDestinationFolderPopup,
+  type DestinationFolderPopupProps,
+} from './components/DestinationFolderPopup/DestinationFolderPopup';
+import {
+  DialFileManagerBulkActionsToolbar,
+  type DialFileManagerBulkActionsToolbarProps,
+} from './components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
+import { FileManagerDeleteConfirmationPopup } from './components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup';
+import {
+  DialFileManagerNavigationPanel,
+  type DialFileManagerNavigationPanelProps,
+} from './components/FileManagerNavigationPanel/FileManagerNavigationPanel';
+import {
+  DialFileManagerToolbar,
+  type DialFileManagerToolbarProps,
+} from './components/FileManagerToolbar/DialFileManagerToolbar';
+import { FileMetadataPopup } from './components/FileMetadataPopup/FileMetadataPopup';
+import {
+  DialFoldersTree,
+  type DialFoldersTreeProps,
+} from './components/FoldersTree/FoldersTree';
+import {
+  actionsColumnButtonClassName,
+  COMPACT_VIEW_FILE_ROW_HEIGHT,
+  COMPACT_VIEW_HEADER_HEIGHT,
+  containerBaseClassName,
+  contentGridClassName,
+  DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT,
+  DEFAULT_VISIBLE_COLUMN,
+  FOLDERS_TREE_PANEL_MAX_WIDTH,
+  FOLDERS_TREE_PANEL_MIN_WIDTH,
+  gridBaseClassName,
+  mainGridClassName,
+  sidebarTitleDefault,
+  sidebarWidth,
+  toolbarBaseClassName,
+  treeBaseClassName,
+} from './constants';
+import { useBulkActions } from './hooks/use-bulk-actions';
 import {
   useFileManagerColumns,
   type FileManagerGridContext,
 } from './hooks/use-file-manager-columns';
-import { GridSelectionMode } from '@/models/selection-mode.ts';
-import { DialTooltipContainer } from '@/components/Tooltip/TooltipContainer';
-import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
-import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
+import { useFileManagerContext } from './hooks/use-file-manager-context';
+import { useGridContextMenu } from './hooks/use-grid-context-menu';
+import { findNodeByPath, getRowTooltip } from './utils';
 
 type GridRow = FileManagerGridRow;
 
@@ -712,32 +715,13 @@ export const DialFileManagerView: FC = () => {
       allowedFileTypes?: DialFileAcceptType[],
       maxSelectableFileSize?: number,
     ) => {
-      if (file.nodeType === DialFileNodeType.FOLDER) return undefined;
-
-      const isFileSizeAccepted =
-        !file.contentLength ||
-        maxSelectableFileSize == null ||
-        file.contentLength <= maxSelectableFileSize;
-
-      const isFileTypeAccepted =
-        !file.contentType ||
-        isFileAccepted(allowedFileTypes, file.contentType, file.name);
-
-      if (!isFileTypeAccepted) {
-        return (
-          unsupportedFileTypeTooltip ??
-          (allowedFileTypes?.length
-            ? `Unsupported file type. Supported types: ${allowedFileTypes.join(', ')}.`
-            : 'Unsupported file type.')
-        );
-      }
-      if (!isFileSizeAccepted) {
-        return (
-          fileTooLargeTooltip ??
-          `File is too large. Maximum size: ${formatBytes(maxSelectableFileSize!)}.`
-        );
-      }
-      return undefined;
+      return getRowTooltip(
+        file,
+        allowedFileTypes,
+        maxSelectableFileSize,
+        unsupportedFileTypeTooltip,
+        fileTooLargeTooltip,
+      );
     },
     [fileTooLargeTooltip, unsupportedFileTypeTooltip],
   );
@@ -766,70 +750,6 @@ export const DialFileManagerView: FC = () => {
     }
     return ids;
   }, [allowedFileTypes, maxSelectableFileSize, gridRows, isRowDisabled]);
-
-  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
-  const [hoveredRowRect, setHoveredRowRect] = useState<DOMRect | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHoveredRowId(null);
-      setHoveredRowRect(null);
-    };
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll, true);
-  }, []);
-
-  const handleGridViewportMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
-      const rowTarget = (e.target as HTMLElement).closest(
-        '.ag-row',
-      ) as HTMLElement | null;
-      if (!rowTarget) {
-        if (hoveredRowId) setHoveredRowId(null);
-        return;
-      }
-      const rowId = rowTarget.getAttribute('row-id');
-      if (rowId && disabledGridRowIds.has(rowId)) {
-        if (hoveredRowId !== rowId) {
-          setHoveredRowId(rowId);
-          setHoveredRowRect(rowTarget.getBoundingClientRect());
-        }
-      } else {
-        if (hoveredRowId) setHoveredRowId(null);
-      }
-    },
-    [disabledGridRowIds, hoveredRowId],
-  );
-
-  const handleGridViewportMouseLeave = useCallback(() => {
-    setHoveredRowId(null);
-    setHoveredRowRect(null);
-  }, []);
-
-  const hoveredRowFile = useMemo(() => {
-    if (!hoveredRowId) return undefined;
-    return gridRows.find((r) => r.path === hoveredRowId);
-  }, [hoveredRowId, gridRows]);
-
-  const hoveredRowTooltipContent = useMemo(() => {
-    if (!hoveredRowFile) return undefined;
-
-    if (getDisabledTooltip && hoveredRowFile.folderId) {
-      return getDisabledTooltip(hoveredRowFile);
-    }
-
-    return getRowDisabledTooltip(
-      hoveredRowFile,
-      allowedFileTypes,
-      maxSelectableFileSize,
-    );
-  }, [
-    hoveredRowFile,
-    getDisabledTooltip,
-    getRowDisabledTooltip,
-    allowedFileTypes,
-    maxSelectableFileSize,
-  ]);
 
   const getTreeContextMenuItems = useCallback(
     (file: DialFile): DropdownItem[] => {
@@ -1374,236 +1294,285 @@ export const DialFileManagerView: FC = () => {
     [emptyStateDescription, emptyStateIcon, emptyStateTitle],
   );
 
-  return (
-    <section
-      ref={containerRef}
-      className={mergeClasses(
-        containerBaseClassName,
-        {
-          'gap-3 pt-4': bulkActionsToolbarOptions && selectedPaths.size > 0,
-          'gap-4 p-3 pt-4': isCompactView,
-          'gap-2 pt-2':
-            isCompactView &&
-            bulkActionsToolbarOptions &&
-            selectedPaths.size > 0,
-        },
-        className,
-      )}
-    >
-      {renderToolbar()}
-      <div className={mergeClasses(mainGridClassName, gridClassName)}>
-        {renderFoldersTree()}
-        <div
-          className={mergeClasses(contentGridClassName, {
-            'gap-3': isCompactView,
-          })}
-        >
-          {showNavigationPanel && (
-            <DialFileManagerNavigationPanel
-              {...(navigationPanelOptions ?? {})}
-              makeHref={(segments) => segments.join('/')}
-              path={currentPath}
-              onItemClick={handleBreadcrumbItemClick}
-              rootItemPath={rootItem?.path}
-              rootItemLabel={rootItem?.label}
-              value={effectiveSearchValue}
-              onSearchChange={handleSearchChange}
-              isCompactView={isCompactView}
-              labelClassName="dial-tiny"
-            />
-          )}
+  const gridRowIdGetter = useMemo(() => {
+    return (row: GridRow) => row.path;
+  }, []);
 
-          <section
-            role="region"
-            aria-label="File Manager Grid View"
-            className={mergeClasses(gridBaseClassName)}
-            onMouseMove={handleGridViewportMouseMove}
-            onMouseLeave={handleGridViewportMouseLeave}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
+  const dialGridClassName = useMemo(
+    () =>
+      classNames(
+        isDragging ? 'border border-dashed border-accent-primary' : '',
+        isDraggingOverWindow && !isDragging
+          ? 'border border-dashed border-primary'
+          : '',
+      ),
+    [isDragging, isDraggingOverWindow],
+  );
+
+  const gridAdditionalOptions = useMemo<AgGridOptions<GridRow>>(
+    () => ({
+      ...forwardedGridOptions.additionalGridOptions,
+      onCellClicked: cellClickHandler,
+      headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
+      rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+      rowClass: 'group/grid-row',
+      defaultColDef: {
+        ...forwardedGridOptions.additionalGridOptions?.defaultColDef,
+        floatingFilter: navigationPanelOptions?.searchable
+          ? false
+          : forwardedGridOptions.additionalGridOptions?.defaultColDef
+              ?.floatingFilter,
+      },
+      ...(isCompactView
+        ? {
+            getRowHeight: (params) =>
+              params.data?.nodeType === DialFileNodeType.FOLDER
+                ? COMPACT_VIEW_HEADER_HEIGHT
+                : COMPACT_VIEW_FILE_ROW_HEIGHT,
+          }
+        : {}),
+      context: {
+        cancelFolderCreation,
+        saveFolderCreation,
+        getDisplayName,
+        onRenameCancel,
+        onRenameSave,
+        onRenameValidate,
+        renameTriggerView,
+        validateFolderName,
+        renamedItem,
+        renamedPath,
+        newFolderTempId,
+        sharedByMePaths,
+        selectedPaths,
+        disabledRowIds: disabledGridRowIds,
+        forbiddenSymbolsRegExp,
+        forbiddenSymbolsTooltip,
+        hideSearchPathItemName,
+      } as FileManagerGridContext,
+    }),
+    [
+      forwardedGridOptions.additionalGridOptions,
+      cellClickHandler,
+      navigationPanelOptions?.searchable,
+      isCompactView,
+      cancelFolderCreation,
+      saveFolderCreation,
+      getDisplayName,
+      onRenameCancel,
+      onRenameSave,
+      onRenameValidate,
+      renameTriggerView,
+      validateFolderName,
+      renamedItem,
+      renamedPath,
+      newFolderTempId,
+      sharedByMePaths,
+      selectedPaths,
+      disabledGridRowIds,
+      forbiddenSymbolsRegExp,
+      forbiddenSymbolsTooltip,
+      hideSearchPathItemName,
+    ],
+  );
+
+  // Memoize grid content to prevent re-renders when tooltip state changes
+  const memoizedGridContent = useMemo(
+    () =>
+      gridRows.length === 0 && !isSearchMode && !filesLoading ? (
+        emptyStateRenderer()
+      ) : (
+        <DialGrid<GridRow>
+          columnDefs={columnDefs}
+          rowData={gridRows}
+          getRowId={gridRowIdGetter}
+          loading={filesLoading || searchInProgress}
+          getContextMenuItems={getGridContextMenuItems}
+          withoutHeaderBorders={isCompactView}
+          selectionOnHover={!isCompactView}
+          onGridApiChange={onGridApiChange}
+          className={dialGridClassName}
+          {...forwardedGridOptions}
+          selectionMode={selectionMode}
+          wrapCustomCellRenderers={wrapCustomCellRenderers}
+          additionalGridOptions={gridAdditionalOptions}
+          selectedRowIds={selectedGridRowsIds}
+          onSelectionChange={handleSelectionChange}
+          wrapperBorder={!isDragging && !isDraggingOverWindow}
+          disabledRowIds={disabledGridRowIds}
+          allowDisabledContextMenu={allowDisabledContextMenu}
+        />
+      ),
+    [
+      gridRows,
+      isSearchMode,
+      filesLoading,
+      emptyStateRenderer,
+      columnDefs,
+      gridRowIdGetter,
+      searchInProgress,
+      getGridContextMenuItems,
+      isCompactView,
+      onGridApiChange,
+      dialGridClassName,
+      forwardedGridOptions,
+      selectionMode,
+      wrapCustomCellRenderers,
+      gridAdditionalOptions,
+      selectedGridRowsIds,
+      handleSelectionChange,
+      isDragging,
+      isDraggingOverWindow,
+      disabledGridRowIds,
+      allowDisabledContextMenu,
+    ],
+  );
+
+  return (
+    <section ref={containerRef}>
+      <div
+        className={mergeClasses(
+          containerBaseClassName,
+          {
+            'gap-3 pt-4': bulkActionsToolbarOptions && selectedPaths.size > 0,
+            'gap-4 p-3 pt-4': isCompactView,
+            'gap-2 pt-2':
+              isCompactView &&
+              bulkActionsToolbarOptions &&
+              selectedPaths.size > 0,
+          },
+          className,
+        )}
+      >
+        {renderToolbar()}
+        <div className={mergeClasses(mainGridClassName, gridClassName)}>
+          {renderFoldersTree()}
+          <div
+            className={mergeClasses(contentGridClassName, {
+              'gap-3': isCompactView,
+            })}
           >
-            {gridRows.length === 0 && !isSearchMode && !filesLoading ? (
-              emptyStateRenderer()
-            ) : (
-              <DialGrid<GridRow>
-                columnDefs={columnDefs}
-                rowData={gridRows}
-                getRowId={(row) => row.path}
-                loading={filesLoading || searchInProgress}
-                getContextMenuItems={getGridContextMenuItems}
-                withoutHeaderBorders={isCompactView}
-                selectionOnHover={!isCompactView}
-                onGridApiChange={onGridApiChange}
-                className={classNames(
-                  isDragging
-                    ? 'border border-dashed border-accent-primary'
-                    : '',
-                  isDraggingOverWindow && !isDragging
-                    ? 'border border-dashed border-primary'
-                    : '',
-                )}
-                {...forwardedGridOptions}
-                selectionMode={selectionMode}
-                wrapCustomCellRenderers={wrapCustomCellRenderers}
-                additionalGridOptions={{
-                  ...forwardedGridOptions.additionalGridOptions,
-                  onCellClicked: cellClickHandler,
-                  headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                  rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
-                  rowClass: 'group/grid-row',
-                  defaultColDef: {
-                    ...forwardedGridOptions.additionalGridOptions
-                      ?.defaultColDef,
-                    floatingFilter: navigationPanelOptions?.searchable
-                      ? false
-                      : forwardedGridOptions.additionalGridOptions
-                          ?.defaultColDef?.floatingFilter,
-                  },
-                  ...(isCompactView
-                    ? {
-                        getRowHeight: (params) =>
-                          params.data?.nodeType === DialFileNodeType.FOLDER
-                            ? COMPACT_VIEW_HEADER_HEIGHT
-                            : COMPACT_VIEW_FILE_ROW_HEIGHT,
-                      }
-                    : {}),
-                  context: {
-                    cancelFolderCreation,
-                    saveFolderCreation,
-                    getDisplayName,
-                    onRenameCancel,
-                    onRenameSave,
-                    onRenameValidate,
-                    renameTriggerView,
-                    validateFolderName,
-                    renamedItem,
-                    renamedPath,
-                    newFolderTempId,
-                    sharedByMePaths,
-                    selectedPaths,
-                    disabledRowIds: disabledGridRowIds,
-                    forbiddenSymbolsRegExp,
-                    forbiddenSymbolsTooltip,
-                    hideSearchPathItemName,
-                  } as FileManagerGridContext,
-                }}
-                selectedRowIds={selectedGridRowsIds}
-                onSelectionChange={handleSelectionChange}
-                wrapperBorder={!isDragging && !isDraggingOverWindow}
-                disabledRowIds={disabledGridRowIds}
-                allowDisabledContextMenu={allowDisabledContextMenu}
+            {showNavigationPanel && (
+              <DialFileManagerNavigationPanel
+                {...(navigationPanelOptions ?? {})}
+                makeHref={(segments) => segments.join('/')}
+                path={currentPath}
+                onItemClick={handleBreadcrumbItemClick}
+                rootItemPath={rootItem?.path}
+                rootItemLabel={rootItem?.label}
+                value={effectiveSearchValue}
+                onSearchChange={handleSearchChange}
+                isCompactView={isCompactView}
+                labelClassName="dial-tiny"
               />
             )}
-            {hoveredRowTooltipContent && hoveredRowRect && (
-              <DialTooltipContainer open={true} placement="top">
-                <DialTooltipTrigger asChild>
-                  <div
-                    className={classNames(
-                      'fixed z-[-1]',
-                      hoveredRowTooltipContent && 'pointer-events-none',
-                    )}
-                    style={{
-                      top: hoveredRowRect.top,
-                      left: hoveredRowRect.left,
-                      width: hoveredRowRect.width,
-                      height: hoveredRowRect.height,
-                    }}
-                  />
-                </DialTooltipTrigger>
-                <DialTooltipContent className="max-w-[300px] rounded border border-ui-outline-primary bg-ui-popover px-3 py-1.5 text-center text-primary shadow-md fill-ui-popover">
-                  {hoveredRowTooltipContent}
-                </DialTooltipContent>
-              </DialTooltipContainer>
-            )}
-          </section>
+
+            <section
+              role="region"
+              aria-label="File Manager Grid View"
+              className={mergeClasses(gridBaseClassName, 'relative')}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              {memoizedGridContent}
+              <FileManagerTooltip
+                disabledGridRowIds={disabledGridRowIds}
+                gridRows={gridRows}
+                getDisabledTooltip={getDisabledTooltip}
+                getRowDisabledTooltip={getRowDisabledTooltip}
+                allowedFileTypes={allowedFileTypes}
+                maxSelectableFileSize={maxSelectableFileSize}
+              />
+            </section>
+          </div>
         </div>
-      </div>
 
-      <FileManagerDeleteConfirmationPopup
-        {...deleteConfirmationOptions}
-        open={deleteConfirmationOpen}
-        itemsToDelete={itemsToDelete}
-        onClose={closeDeleteConfirmation}
-        onConfirm={confirmDelete}
-      />
-      <DialDestinationFolderPopup
-        {...destinationFolderPopupOptions}
-        open={openDestinationFolderPopup}
-        onClose={handleCloseDestinationFolderPopup}
-        onConfirm={() => {
-          const destinationPath =
-            destinationFolderPopupOptions?.destinationFolderPath ?? '/';
-          if (destinationFolderMode === DestinationFolderMode.Copy) {
-            handleCopyTo(destinationPath);
-          } else {
-            handleMoveTo(destinationPath);
+        <FileManagerDeleteConfirmationPopup
+          {...deleteConfirmationOptions}
+          open={deleteConfirmationOpen}
+          itemsToDelete={itemsToDelete}
+          onClose={closeDeleteConfirmation}
+          onConfirm={confirmDelete}
+        />
+        <DialDestinationFolderPopup
+          {...destinationFolderPopupOptions}
+          open={openDestinationFolderPopup}
+          onClose={handleCloseDestinationFolderPopup}
+          onConfirm={() => {
+            const destinationPath =
+              destinationFolderPopupOptions?.destinationFolderPath ?? '/';
+            if (destinationFolderMode === DestinationFolderMode.Copy) {
+              handleCopyTo(destinationPath);
+            } else {
+              handleMoveTo(destinationPath);
+            }
+            handleCloseDestinationFolderPopup();
+          }}
+          mode={destinationFolderMode}
+          items={items}
+          rootItem={rootItem}
+          gridOptions={{
+            columnDefs: columnDefs.filter(
+              (col) => col.colId !== FileManagerColumnKey.Actions,
+            ),
+            loading: filesLoading,
+          }}
+          onUploadFiles={onUploadFiles}
+          onValidateUpload={onValidateUpload}
+          maxFileSize={maxFileSize}
+          path={
+            destinationFolderPopupOptions?.destinationFolderPath ??
+            destinationFolderPopupOptions?.sourceFolder ??
+            currentPath
           }
-          handleCloseDestinationFolderPopup();
-        }}
-        mode={destinationFolderMode}
-        items={items}
-        rootItem={rootItem}
-        gridOptions={{
-          columnDefs: columnDefs.filter(
-            (col) => col.colId !== FileManagerColumnKey.Actions,
-          ),
-          loading: filesLoading,
-        }}
-        onUploadFiles={onUploadFiles}
-        onValidateUpload={onValidateUpload}
-        maxFileSize={maxFileSize}
-        path={
-          destinationFolderPopupOptions?.destinationFolderPath ??
-          destinationFolderPopupOptions?.sourceFolder ??
-          currentPath
-        }
-        onPathChange={(newPath) => {
-          destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
-        }}
-        sourceFolder={
-          destinationFolderPopupOptions?.sourceFolder ?? currentPath
-        }
-        treeOptions={{ header: treeOptions?.header }}
-        onFolderPopupPathChange={onFolderPopupPathChange}
-      />
-      <ConflictResolutionPopup
-        {...conflictResolutionPopupOptions}
-        open={conflictResolutionOpen}
-        onClose={handleConflictCancel}
-        onReplace={handleConflictReplace}
-        onDuplicate={handleConflictDuplicate}
-        onDecideForEach={handleConflictDecideForEach}
-        conflictingFiles={conflictingFiles}
-      />
+          onPathChange={(newPath) => {
+            destinationFolderPopupOptions?.setDestinationFolderPath?.(newPath);
+          }}
+          sourceFolder={
+            destinationFolderPopupOptions?.sourceFolder ?? currentPath
+          }
+          treeOptions={{ header: treeOptions?.header }}
+          onFolderPopupPathChange={onFolderPopupPathChange}
+        />
+        <ConflictResolutionPopup
+          {...conflictResolutionPopupOptions}
+          open={conflictResolutionOpen}
+          onClose={handleConflictCancel}
+          onReplace={handleConflictReplace}
+          onDuplicate={handleConflictDuplicate}
+          onDecideForEach={handleConflictDecideForEach}
+          conflictingFiles={conflictingFiles}
+        />
 
-      <ConflictResolutionPopup
-        {...conflictResolutionPopupOptions}
-        open={uploadConflictResolutionOpen}
-        onClose={handleUploadConflictCancel}
-        onReplace={handleUploadConflictReplace}
-        onDuplicate={handleUploadConflictDuplicate}
-        onDecideForEach={handleUploadConflictDecideForEach}
-        conflictingFiles={uploadConflictingFiles}
-      />
+        <ConflictResolutionPopup
+          {...conflictResolutionPopupOptions}
+          open={uploadConflictResolutionOpen}
+          onClose={handleUploadConflictCancel}
+          onReplace={handleUploadConflictReplace}
+          onDuplicate={handleUploadConflictDuplicate}
+          onDecideForEach={handleUploadConflictDecideForEach}
+          conflictingFiles={uploadConflictingFiles}
+        />
 
-      <FileMetadataPopup
-        open={isMetadataPopupOpen}
-        onClose={closeMetadataPopup}
-        fileMetadata={
-          fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
-        }
-        loading={fileMetadataPopupOptions?.loading}
-        header={fileMetadataPopupOptions?.header}
-        nameLabel={fileMetadataPopupOptions?.nameLabel}
-        pathLabel={fileMetadataPopupOptions?.pathLabel}
-        modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}
-        sizeLabel={fileMetadataPopupOptions?.sizeLabel}
-        authorLabel={fileMetadataPopupOptions?.authorLabel}
-        dateLocale={gridOptions?.dateLocale}
-        dateOptions={gridOptions?.dateOptions}
-      />
+        <FileMetadataPopup
+          open={isMetadataPopupOpen}
+          onClose={closeMetadataPopup}
+          fileMetadata={
+            fileMetadataPopupOptions?.fileMetadata ?? selectedFileForMetadata
+          }
+          loading={fileMetadataPopupOptions?.loading}
+          header={fileMetadataPopupOptions?.header}
+          nameLabel={fileMetadataPopupOptions?.nameLabel}
+          pathLabel={fileMetadataPopupOptions?.pathLabel}
+          modifiedDateLabel={fileMetadataPopupOptions?.modifiedDateLabel}
+          sizeLabel={fileMetadataPopupOptions?.sizeLabel}
+          authorLabel={fileMetadataPopupOptions?.authorLabel}
+          dateLocale={gridOptions?.dateLocale}
+          dateOptions={gridOptions?.dateOptions}
+        />
+      </div>
     </section>
   );
 };
