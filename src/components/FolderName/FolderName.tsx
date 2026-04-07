@@ -82,7 +82,7 @@ export const DialFolderName: FC<DialFolderNameProps> = ({
       </span>
       <DialEllipsisTooltip
         className={classNames(
-          'dial-small flex-1 min-w-0',
+          'dial-small-text flex-1 min-w-0',
           isInvalidName ? 'text-secondary' : 'text-primary',
         )}
         text={name}

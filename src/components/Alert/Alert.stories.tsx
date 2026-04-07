@@ -175,7 +175,7 @@ const InteractiveComponent: FC = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-secondary dial-small mb-2">
+      <div className="text-secondary dial-small-text mb-2">
         Click close buttons to remove alerts
       </div>
       {alerts.map((alert) => (
@@ -188,7 +188,7 @@ const InteractiveComponent: FC = () => {
         />
       ))}
       {alerts.length === 0 && (
-        <div className="text-secondary dial-small">All alerts closed</div>
+        <div className="text-secondary dial-small-text">All alerts closed</div>
       )}
     </div>
   );
@@ -230,7 +230,7 @@ const WithCustomHandlersComponent: FC = () => {
         style={{ cursor: 'pointer' }}
       />
       {clicked && (
-        <div className="text-secondary dial-small">
+        <div className="text-secondary dial-small-text">
           ✓ Alert click event triggered
         </div>
       )}
@@ -285,7 +285,7 @@ export const AllVariants: Story = {
         iconSize={14}
         className="py-1 px-2 w-fit"
         message={
-          <span className="dial-tiny">
+          <span className="dial-tiny-text">
             <b>Small</b> info alert
           </span>
         }

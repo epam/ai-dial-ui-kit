@@ -44,7 +44,7 @@ export const AllVariants: Story = {
       {supportedExtensions.map((ext) => (
         <div key={ext} className="flex items-center gap-2 p-2 rounded border">
           <DialFileIcon {...args} extension={ext} className="text-primary" />
-          <span className="dial-tiny text-secondary">{ext}</span>
+          <span className="dial-tiny-text text-secondary">{ext}</span>
         </div>
       ))}
     </div>

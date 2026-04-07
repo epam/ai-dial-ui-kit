@@ -48,7 +48,10 @@ export const DialNoDataContent: FC<DialNoDataContentProps> = ({
     >
       {icon || <IconClipboardX width={60} height={60} stroke={0.5} />}
       <span
-        className={mergeClasses('dial-small mt-2 text-primary', titleClassName)}
+        className={mergeClasses(
+          'dial-small-text mt-2 text-primary',
+          titleClassName,
+        )}
         aria-label="no-results-title"
       >
         {title}

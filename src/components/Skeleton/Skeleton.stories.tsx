@@ -350,7 +350,7 @@ export const FormLoadingState: Story = {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Full Name</div>
+          <div className="text-secondary dial-small-text">Full Name</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="100%"
@@ -359,7 +359,7 @@ export const FormLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Email</div>
+          <div className="text-secondary dial-small-text">Email</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="100%"
@@ -368,7 +368,7 @@ export const FormLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Phone</div>
+          <div className="text-secondary dial-small-text">Phone</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="70%"
@@ -377,7 +377,7 @@ export const FormLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Bio</div>
+          <div className="text-secondary dial-small-text">Bio</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Rectangular}
             width="100%"
@@ -434,7 +434,7 @@ export const DetailsPanelLoadingState: Story = {
 
       <div className="border-t border-primary pt-4 space-y-3">
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Status</div>
+          <div className="text-secondary dial-small-text">Status</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="50%"
@@ -443,7 +443,7 @@ export const DetailsPanelLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Created</div>
+          <div className="text-secondary dial-small-text">Created</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="70%"
@@ -452,7 +452,7 @@ export const DetailsPanelLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Last Modified</div>
+          <div className="text-secondary dial-small-text">Last Modified</div>
           <DialSkeleton
             variant={DialSkeletonVariant.Text}
             width="70%"
@@ -461,7 +461,7 @@ export const DetailsPanelLoadingState: Story = {
         </div>
 
         <div className="space-y-2">
-          <div className="text-secondary dial-small">Tags</div>
+          <div className="text-secondary dial-small-text">Tags</div>
           <div className="flex gap-2">
             <DialSkeleton
               variant={DialSkeletonVariant.Rectangular}

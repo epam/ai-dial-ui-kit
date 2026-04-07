@@ -14,7 +14,7 @@ export const dropdownItemBaseClassName = classNames(
   'flex w-full cursor-pointer items-center gap-3',
   'focus-visible:border-none focus-visible:outline-none',
   'hover:bg-accent-primary-alpha px-3',
-  'dial-small h-[34px] rounded text-primary',
+  'dial-small-text h-[34px] rounded text-primary',
 );
 
 export const dropdownItemDisabledClassName = 'opacity-75 !cursor-not-allowed';

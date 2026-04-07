@@ -1,6 +1,7 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import type { ReactNode } from 'react';
+import type { FileManagerGridRow } from './FileManagerContext';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,
@@ -145,6 +146,10 @@ export function isFileAccepted(
   });
 }
 
+export const formatAllowedFileTypesForTooltip = (
+  allowedFileTypes: DialFileAcceptType[] | undefined,
+): string => allowedFileTypes?.join(', ') ?? '';
+
 export const cleanForbiddenSymbolsRegExp = (
   forbiddenSymbolsRegExp?: RegExp,
 ) => {
@@ -169,3 +174,42 @@ export function getForbiddenSymbolsTooltip(
   }
   return undefined;
 }
+
+export const getRowTooltip = (
+  file: FileManagerGridRow,
+  allowedFileTypes?: string[],
+  maxSelectableFileSize?: number,
+  unsupportedFileTypeTooltip?: string,
+  fileTooLargeTooltip?: string,
+): string | undefined => {
+  if (file.nodeType === DialFileNodeType.FOLDER) return undefined;
+
+  const isFileSizeAccepted =
+    !file.contentLength ||
+    maxSelectableFileSize == null ||
+    file.contentLength <= maxSelectableFileSize;
+
+  const isFileTypeAccepted =
+    !file.contentType ||
+    isFileAccepted(
+      allowedFileTypes as DialFileAcceptType[],
+      file.contentType,
+      file.name,
+    );
+
+  if (!isFileTypeAccepted) {
+    return (
+      unsupportedFileTypeTooltip ??
+      (allowedFileTypes?.length
+        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes as DialFileAcceptType[])}.`
+        : 'Unsupported file type.')
+    );
+  }
+  if (!isFileSizeAccepted) {
+    return (
+      fileTooLargeTooltip ??
+      `File is too large. Maximum size: ${formatBytes(maxSelectableFileSize!)}.`
+    );
+  }
+  return undefined;
+};

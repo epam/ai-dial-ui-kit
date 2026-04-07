@@ -373,7 +373,7 @@ export const DialSelect: FC<DialSelectProps> = ({
             }
           />
           {singleSelectedOption?.description && (
-            <div className="text-secondary dial-small">
+            <div className="text-secondary dial-small-text">
               {singleSelectedOption.description}
             </div>
           )}
@@ -533,7 +533,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                         />
 
                         {opt.description && (
-                          <div className="text-secondary dial-small">
+                          <div className="text-secondary dial-small-text">
                             {opt.description}
                           </div>
                         )}
@@ -561,7 +561,7 @@ export const DialSelect: FC<DialSelectProps> = ({
                         <DialEllipsisTooltip text={opt.label} />
 
                         {opt.description && (
-                          <div className="text-secondary dial-small">
+                          <div className="text-secondary dial-small-text">
                             {opt.description}
                           </div>
                         )}
@@ -638,7 +638,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               onKeyDown={(e) => {
                 e.stopPropagation();
               }}
-              className="bg-transparent outline-none w-full dial-small"
+              className="bg-transparent outline-none w-full dial-small-text"
               ref={inlineSearchInputRef}
               disabled={disabled}
               aria-disabled={disabled}

@@ -390,7 +390,7 @@ export const Compact: Story = {
                   elementId={param.data.id}
                   iconSize={BASE_FILE_MANAGER_ICON_SIZE}
                   details={
-                    <div className="flex gap-1 dial-tiny text-secondary">
+                    <div className="flex gap-1 dial-tiny-text text-secondary">
                       <span>{param.data.size}</span>
                       <span>{param.data.updateTime}</span>
                     </div>

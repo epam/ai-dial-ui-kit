@@ -48,7 +48,7 @@ export const DialLabelledText: FC<DialLabelledTextProps> = ({
       )}
     >
       {label && (
-        <label className="dial-tiny mb-2 text-secondary">{label}</label>
+        <label className="dial-tiny-text mb-2 text-secondary">{label}</label>
       )}
       {children ? (
         children

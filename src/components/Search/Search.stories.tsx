@@ -138,7 +138,7 @@ const BlurHandlerComponent: FC = () => {
         onBlur={() => setBlurCount((prev) => prev + 1)}
         size={ElementSize.Standard}
       />
-      <div className="dial-small text-secondary">
+      <div className="dial-small-text text-secondary">
         Blur event triggered: <strong>{blurCount} times</strong>
       </div>
     </div>
@@ -171,7 +171,9 @@ const AllVariantsComponent: FC = () => {
           <div className="flex flex-col gap-4">
             {states.map(({ label, props }) => (
               <div key={label}>
-                <div className="dial-small text-secondary mb-1">{label}</div>
+                <div className="dial-small-text text-secondary mb-1">
+                  {label}
+                </div>
                 <InteractiveSearch
                   id={`search-${size}-${label.toLowerCase()}`}
                   placeholder={`Search ${label.toLowerCase()}`}

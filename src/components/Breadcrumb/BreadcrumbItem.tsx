@@ -1,17 +1,23 @@
-import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
-import { mergeClasses } from '@/utils/merge-classes';
-import {
-  breadcrumbItemBaseClassName,
-  breadcrumbLinkBaseClassName,
-  breadcrumbLinkInteractiveClassName,
-  breadcrumbCurrentClassName,
-  breadcrumbSeparatorClassName,
-  defaultSeparator,
-  breadcrumbItemVisibleClassName,
-  breadcrumbItemLastClassName,
-} from './constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import type { NavigationGuard } from '@/models/breadcrumb';
+import { mergeClasses } from '@/utils/merge-classes';
+import type {
+  FC,
+  HTMLAttributes,
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+} from 'react';
+import {
+  breadcrumbCurrentClassName,
+  breadcrumbItemBaseClassName,
+  breadcrumbItemLastClassName,
+  breadcrumbItemVisibleClassName,
+  breadcrumbLinkBaseClassName,
+  breadcrumbLinkInteractiveClassName,
+  breadcrumbSeparatorClassName,
+  defaultSeparator,
+} from './constants';
 
 export interface DialBreadcrumbItemProps
   extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick'> {
@@ -39,7 +45,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   onBeforeNavigate,
   ...props
 }) => {
-  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = async (e: MouseEvent<HTMLAnchorElement>) => {
     // Check navigation guard before proceeding
     if (onBeforeNavigate && !isLast) {
       const canNavigate = await onBeforeNavigate();
@@ -82,7 +88,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
     ) : (
       <span
         className={mergeClasses(
-          'flex-1 min-w-0 max-w-full truncate cursor-pointer max-w-[300px]',
+          'flex-1 min-w-0 truncate cursor-pointer max-w-[300px]',
           labelClassName,
         )}
         aria-label="breadcrumb-item-content"

@@ -51,7 +51,7 @@ export const DialTag: FC<DialTagProps> = ({
   const variantClass = TAG_VARIANTS_CONFIG[variant];
 
   const containerClassName = mergeClasses(
-    'flex items-center gap-1 dial-tiny rounded p-1 h-[22px] text-primary',
+    'flex items-center gap-1 dial-tiny-text rounded p-1 h-[22px] text-primary',
     variantClass,
     !bordered ? 'border-transparent' : 'border',
     className,

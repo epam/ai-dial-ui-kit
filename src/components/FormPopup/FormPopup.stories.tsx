@@ -76,7 +76,7 @@ export const SimpleForm: Story = {
             <div>
               <label
                 htmlFor="name"
-                className="block dial-small text-secondary mb-1"
+                className="block dial-small-text text-secondary mb-1"
               >
                 Name
               </label>
@@ -124,7 +124,7 @@ export const WithValidationAndDividers: Story = {
             <div>
               <label
                 htmlFor="email"
-                className="block dial-small text-secondary mb-1"
+                className="block dial-small-text text-secondary mb-1"
               >
                 Email
               </label>
@@ -137,7 +137,7 @@ export const WithValidationAndDividers: Story = {
                 invalid={email.length > 0 && !isEmailValid}
               />
               {!isEmailValid && email && (
-                <p className="dial-small text-error mt-1">
+                <p className="dial-small-text text-error mt-1">
                   Enter a valid email.
                 </p>
               )}

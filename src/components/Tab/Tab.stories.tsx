@@ -126,7 +126,7 @@ export const OrientationVariants: Story = {
             </div>
           </div>
           <div>
-            <h4 className="dial-small font-semibold mb-2">Vertical</h4>
+            <h4 className="dial-small-text font-semibold mb-2">Vertical</h4>
             <div className="flex flex-col gap-2 bg-layer-3 p-2 rounded">
               {tabs.map((t) => (
                 <DialTab
