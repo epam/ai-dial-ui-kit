@@ -712,7 +712,7 @@ export const DialFileManagerView: FC = () => {
   const getRowDisabledTooltip = useCallback(
     (
       file: FileManagerGridRow,
-      allowedFileTypes?: DialFileAcceptType[],
+      allowedFileTypes?: string[],
       maxSelectableFileSize?: number,
     ) => {
       return getRowTooltip(

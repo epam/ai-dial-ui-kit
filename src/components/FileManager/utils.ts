@@ -177,11 +177,11 @@ export function getForbiddenSymbolsTooltip(
 
 export const getRowTooltip = (
   file: FileManagerGridRow,
-  allowedFileTypes?: DialFileAcceptType[],
+  allowedFileTypes?: string[],
   maxSelectableFileSize?: number,
   unsupportedFileTypeTooltip?: string,
   fileTooLargeTooltip?: string,
-) => {
+): string | undefined => {
   if (file.nodeType === DialFileNodeType.FOLDER) return undefined;
 
   const isFileSizeAccepted =
@@ -191,13 +191,17 @@ export const getRowTooltip = (
 
   const isFileTypeAccepted =
     !file.contentType ||
-    isFileAccepted(allowedFileTypes, file.contentType, file.name);
+    isFileAccepted(
+      allowedFileTypes as DialFileAcceptType[],
+      file.contentType,
+      file.name,
+    );
 
   if (!isFileTypeAccepted) {
     return (
       unsupportedFileTypeTooltip ??
       (allowedFileTypes?.length
-        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes)}.`
+        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes as DialFileAcceptType[])}.`
         : 'Unsupported file type.')
     );
   }
