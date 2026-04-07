@@ -50,6 +50,7 @@ export interface DialInputProps
 
 /**
  * A flexible input component with icon support and various styling options
+ * aliases: TextField|FormInput
  *
  * @example
  * ```tsx

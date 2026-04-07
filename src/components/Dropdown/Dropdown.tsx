@@ -78,6 +78,8 @@ export interface DialDropdownProps {
 /**
  *
  * Renders the given trigger (`children`) and a floating contextual menu overlay.
+ * aliases: ContextMenu|PopupMenu
+ *
  * Supports click/hover/contextMenu triggers, controlled/uncontrolled open, and an optional
  * close button inside the overlay. Placement is taken directly from Floating UI; when
  * `placement` is **undefined** (default), automatic placement is handled by `autoPlacement`.

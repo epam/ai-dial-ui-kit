@@ -37,6 +37,7 @@ export interface RadioGroupPopupFieldProps
 
 /**
  * A composite field that opens a popup with a radio group selector.
+ * aliases: PopupRadio|ChoicePopup
  *
  * Renders a labeled readout using `DialInputPopup`; when opened, a `DialPopup`
  * displays a `DialRadioGroup` allowing the user to pick from a list of options.

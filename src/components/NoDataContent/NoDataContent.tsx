@@ -13,6 +13,7 @@ export interface DialNoDataContentProps {
 
 /**
  * A component for displaying a message and icon when there is no data to show.
+ * aliases: EmptyState|NoResults
  *
  * @example
  * ```tsx

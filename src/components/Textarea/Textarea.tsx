@@ -27,6 +27,7 @@ export interface DialTextareaProps
 
 /**
  * A flexible textarea component with validation support and consistent styling
+ * aliases: MultilineInput|TextBox
  *
  * @example
  * ```tsx

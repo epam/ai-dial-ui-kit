@@ -24,6 +24,7 @@ export interface DialFormItemProps extends DialFormItemBaseProps {
 
 /**
  * A layout wrapper for form controls with label, helper text and error message.
+ * aliases: FieldWrapper|FormControl
  *
  * Uses `DialLabel` for the label and `DialErrorText` for consistent error styling.
  * Wires accessibility with:

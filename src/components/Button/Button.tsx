@@ -36,6 +36,7 @@ export interface DialButtonProps
 
 /**
  * A Button component with flexible icon and text positioning
+ * aliases: ActionButton|CallToAction
  *
  * @example
  * ```tsx

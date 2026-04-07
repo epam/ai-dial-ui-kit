@@ -19,6 +19,8 @@ export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
 
 /**
  * Single-line text with CSS ellipsis that shows a tooltip **only when actually truncated**.
+ * aliases: TruncatedText|TruncationTooltip
+ *
  * If the text fits, tooltip content is empty and the popup stays hidden.
  *
  * Important: width must be finite for truncation.
