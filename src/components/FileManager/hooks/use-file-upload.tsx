@@ -29,6 +29,7 @@ export interface FileUploadValidationMessages {
   duplicateFiles?: string;
   oversizedFiles?: string;
   unsupportedFiles?: string;
+  foldersNotSupported?: string;
   validationFailed?: string;
   validationError?: string;
 }
@@ -409,8 +410,27 @@ export const useFileUpload = ({
         return;
       }
 
-      const files = Array.from(e.dataTransfer.files);
+      const items = Array.from(e.dataTransfer.items || []);
+      const files: File[] = [];
+      let foldersSkipped = false;
+
+      Array.from(e.dataTransfer.files).forEach((file, index) => {
+        const item = items[index];
+        const entry = item?.webkitGetAsEntry?.();
+        if (entry?.isDirectory) {
+          foldersSkipped = true;
+        } else {
+          files.push(file);
+        }
+      });
+
       if (files.length === 0) {
+        if (foldersSkipped) {
+          setUploadError(
+            validationMessages.foldersNotSupported ||
+              'Folder upload is not supported',
+          );
+        }
         return;
       }
 

@@ -5,10 +5,12 @@ import {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
   type DragEvent,
 } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import type { DialUploadFileItem } from '@/models/file-manager';
 import {
   cleanForbiddenSymbolsRegExp,
   collectAllDescendants,
@@ -152,6 +154,44 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     defaultSelectedPaths,
     onSelectedPathsChange,
   });
+
+  const pendingAutoSelectRef = useRef<{
+    fileNames: Set<string>;
+    destinationFolder: string;
+  } | null>(null);
+
+  const wrappedOnCreateFolder = useCallback(
+    (file: DialUploadFileItem, parentPath: string, id: string) => {
+      pendingAutoSelectRef.current = {
+        fileNames: new Set([file.name]),
+        destinationFolder: parentPath,
+      };
+      onCreateFolder?.(file, parentPath, id);
+    },
+    [onCreateFolder],
+  );
+
+  const wrappedOnUploadFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string) => {
+      pendingAutoSelectRef.current = {
+        fileNames: new Set(files.map((f) => f.name)),
+        destinationFolder,
+      };
+      onUploadFiles?.(files, destinationFolder);
+    },
+    [onUploadFiles],
+  );
+
+  const wrappedOnUploadArchive = useCallback(
+    (file: File, name: string, destinationFolder: string) => {
+      pendingAutoSelectRef.current = {
+        fileNames: new Set([name]),
+        destinationFolder,
+      };
+      onUploadArchive?.(file, name, destinationFolder);
+    },
+    [onUploadArchive],
+  );
 
   const selectedFiles = useMemo(() => {
     const map = new Map<string, DialFile>();
@@ -333,10 +373,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
   } = useFileUpload({
-    onUploadFiles,
+    onUploadFiles: wrappedOnUploadFiles,
     onValidateUpload,
     maxFileSize,
-    onUploadArchive,
+    onUploadArchive: wrappedOnUploadArchive,
     allowedFileTypes,
     validationMessages: uploadValidationMessages,
     uploadEnabled,
@@ -398,7 +438,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     validateFolderName,
   } = useFolderCreation({
     currentFolder,
-    onCreateFolder,
+    onCreateFolder: wrappedOnCreateFolder,
     onValidateFolderName: onCreateFolderValidate,
     validationMessages: folderCreationValidationMessages,
   });
@@ -562,6 +602,30 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     showFolders,
     currentPath,
   ]);
+
+  useEffect(() => {
+    const pending = pendingAutoSelectRef.current;
+    if (!pending) return;
+
+    if ((currentPath ?? '') !== pending.destinationFolder) {
+      pendingAutoSelectRef.current = null;
+      return;
+    }
+
+    const folder = findFolderForPath(items, pending.destinationFolder);
+    if (!folder?.items) return;
+
+    const matchedPaths = new Set<string>();
+    for (const item of folder.items) {
+      if (pending.fileNames.has(item.name)) {
+        matchedPaths.add(item.path);
+      }
+    }
+    if (matchedPaths.size > 0) {
+      setSelectedPaths(matchedPaths);
+      pendingAutoSelectRef.current = null;
+    }
+  }, [items, currentPath, setSelectedPaths]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {

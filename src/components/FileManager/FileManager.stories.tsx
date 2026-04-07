@@ -1715,6 +1715,7 @@ export const WithCustomColumns: Story = {
 };
 
 const ControlledSelectionComponent = (args: DialFileManagerProps) => {
+  const [items, setItems] = useState<DialFile[]>(itemsMock);
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(
     new Set(['All files/Design/Icons/SVG/24px/logo.svg']),
   );
@@ -1732,6 +1733,125 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
 
   const clearSelection = () => setSelectedPaths(new Set());
 
+  const handleUploadArchive = useCallback(
+    (_file: File, name: string, destinationFolder: string) => {
+      setItems((prev) => {
+        const next = JSON.parse(JSON.stringify(prev)) as DialFile[];
+
+        const addToFolder = (folderItems: DialFile[]): boolean => {
+          for (const item of folderItems) {
+            if (
+              item.path === destinationFolder &&
+              item.nodeType === DialFileNodeType.FOLDER
+            ) {
+              item.items = [
+                ...(item.items ?? []),
+                {
+                  id: `archive-${name}-${Date.now()}`,
+                  name: name,
+                  path: `${destinationFolder}/${name}`,
+                  parentPath: destinationFolder,
+                  nodeType: DialFileNodeType.FOLDER,
+                  folderId: item.id ?? '',
+                  updatedAt: new Date().toISOString().split('T')[0],
+                  items: [],
+                },
+              ];
+              return true;
+            }
+            if (item.items && addToFolder(item.items)) return true;
+          }
+          return false;
+        };
+
+        addToFolder(next);
+        return next;
+      });
+    },
+    [],
+  );
+
+  const handleCreateFolder = useCallback(
+    async (_file: DialUploadFileItem, folderPath: string) => {
+      setItems((prev) => {
+        const nextItems = JSON.parse(JSON.stringify(prev)) as DialFile[];
+        const parentPath = folderPath.substring(0, folderPath.lastIndexOf('/'));
+        const name = folderPath.substring(folderPath.lastIndexOf('/') + 1);
+
+        const addToFolder = (folderItems: DialFile[]): boolean => {
+          for (const item of folderItems) {
+            if (
+              item.path === parentPath &&
+              item.nodeType === DialFileNodeType.FOLDER
+            ) {
+              item.items = [
+                ...(item.items || []),
+                {
+                  id: `new-folder-${Date.now()}`,
+                  name,
+                  path: folderPath,
+                  parentPath,
+                  folderId: item.id ?? '',
+                  nodeType: DialFileNodeType.FOLDER,
+                  updatedAt: new Date().toISOString().split('T')[0],
+                  items: [],
+                },
+              ];
+              return true;
+            }
+            if (item.items && addToFolder(item.items)) return true;
+          }
+          return false;
+        };
+
+        addToFolder(nextItems);
+        return nextItems;
+      });
+    },
+    [],
+  );
+
+  const handleUploadFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string) => {
+      setItems((prev) => {
+        const next = JSON.parse(JSON.stringify(prev)) as DialFile[];
+
+        const addToFolder = (folderItems: DialFile[]): boolean => {
+          for (const item of folderItems) {
+            if (
+              item.path === destinationFolder &&
+              item.nodeType === DialFileNodeType.FOLDER
+            ) {
+              item.items = [
+                ...(item.items ?? []),
+                ...files.map((f) => ({
+                  id: `uploaded-${f.name}-${Date.now()}`,
+                  name: f.name,
+                  path: `${destinationFolder}/${f.name}`,
+                  parentPath: destinationFolder,
+                  nodeType: DialFileNodeType.ITEM,
+                  resourceType: DialFileResourceType.FILE,
+                  folderId: item.id ?? '',
+                  extension: f.name.split('.').pop() ?? '',
+                  contentType: f.fileContent.type || 'application/octet-stream',
+                  contentLength: f.fileContent.size,
+                  updatedAt: new Date().toISOString().split('T')[0],
+                })),
+              ];
+              return true;
+            }
+            if (item.items && addToFolder(item.items)) return true;
+          }
+          return false;
+        };
+
+        addToFolder(next);
+        return next;
+      });
+    },
+    [],
+  );
+
   return (
     <div className="h-[640px] flex flex-col gap-3">
       <div className="flex gap-2 px-2">
@@ -1742,9 +1862,21 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
       <DialFileManager
         {...args}
         defaultPath="All files/Design/Icons/SVG/24px"
-        items={itemsMock}
+        items={items}
         selectedPaths={selectedPaths}
         onSelectedPathsChange={setSelectedPaths}
+        onUploadFiles={handleUploadFiles}
+        onCreateFolder={handleCreateFolder}
+        onUploadArchive={handleUploadArchive}
+        uploadEnabled={true}
+        toolbarOptions={{
+          ...(args.toolbarOptions ?? {}),
+          newActions: {
+            newFolder: { label: 'New Folder' },
+            uploadFiles: { label: 'Upload Files' },
+            uploadArchive: { label: 'Upload Archive' },
+          },
+        }}
         gridOptions={{
           ...(args.gridOptions ?? {}),
           filterable: false,
