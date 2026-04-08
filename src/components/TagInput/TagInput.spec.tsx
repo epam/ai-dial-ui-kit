@@ -137,4 +137,41 @@ describe('Dial UI Kit :: DialTagInput', () => {
       'Hint',
     );
   });
+
+  describe('readOnly', () => {
+    test('does not render a textbox', () => {
+      render(<DialTagInput readOnly initialTags={['React', 'TypeScript']} />);
+      expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    });
+
+    test('renders all initial tags', () => {
+      render(<DialTagInput readOnly initialTags={['React', 'TypeScript']} />);
+      expect(screen.getByText('React')).toBeInTheDocument();
+      expect(screen.getByText('TypeScript')).toBeInTheDocument();
+    });
+
+    test('does not render remove buttons on tags', () => {
+      render(<DialTagInput readOnly initialTags={['React', 'TypeScript']} />);
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    test('does not render the outer dial-input wrapper', () => {
+      const { container } = render(
+        <DialTagInput readOnly initialTags={['React']} />,
+      );
+      expect(container.querySelector('.dial-input')).not.toBeInTheDocument();
+    });
+
+    test('with collapseTagOverflow, renders single-line flex row', () => {
+      const { container } = render(
+        <DialTagInput
+          readOnly
+          collapseTagOverflow
+          initialTags={['React', 'TypeScript']}
+        />,
+      );
+      const row = container.querySelector('.flex-nowrap.overflow-hidden');
+      expect(row).toBeTruthy();
+    });
+  });
 });
