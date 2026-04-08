@@ -807,6 +807,9 @@ const WithConflictResolutionComponent = (args: DialFileManagerProps) => {
             `Downloading ${items.length} file(s): ${items.map((f) => f.name).join(', ')}`,
           );
         }}
+        onUploadArchive={(item, destinationFolder) => {
+          alert(`Uploaded ${item.name} to ${destinationFolder}`);
+        }}
       />
     </div>
   );
