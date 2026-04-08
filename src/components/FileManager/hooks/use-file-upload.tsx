@@ -1,15 +1,15 @@
 import {
-  useCallback,
-  useState,
-  useEffect,
   type DragEvent,
-  useRef,
+  useCallback,
+  useEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 import {
+  type DialFile,
   DialFileNodeType,
   DialFilePermission,
-  type DialFile,
 } from '@/models/file';
 import type {
   DialFileAcceptType,
@@ -141,7 +141,10 @@ export const useFileUpload = ({
         })
         .filter(Boolean) as DialUploadFileItem[];
 
-      if (uploadItems.length > 0) {
+      if (uploadItems[0]?.fileContent?.type === 'application/zip') {
+        const { fileContent, name } = uploadItems[0];
+        onUploadArchive?.(fileContent, name, destinationFolder);
+      } else if (uploadItems.length > 0) {
         onUploadFiles?.(uploadItems, destinationFolder);
       }
       clearUploadState();
@@ -547,17 +550,28 @@ export const useFileUpload = ({
 
         const archiveName = file.name.replace(/\.zip$/i, '');
 
-        const conflict = existingFiles.some(
-          (f) =>
-            f.nodeType === DialFileNodeType.FOLDER &&
-            f.name.toLowerCase() === archiveName.toLowerCase(),
+        const dialFile: DialFile = {
+          id: archiveName,
+          name: archiveName,
+          folderId: destinationFolder,
+          path: `${destinationFolder}/${archiveName}`,
+          nodeType: DialFileNodeType.FOLDER,
+          parentPath: destinationFolder,
+          contentLength: file.size,
+          contentType: file.type,
+        };
+
+        existingFilesRef.current = existingFiles;
+        setUploadMetadata({ destinationFolder });
+        setPendingUploadFiles(
+          new Map([[dialFile.path, { fileContent: file, name: archiveName }]]),
         );
 
-        if (conflict) {
-          setUploadError(
-            validationMessages.validationFailed ||
-              `Folder with name "${archiveName}" already exists`,
-          );
+        const result = startConflictResolution(destinationFolder, [dialFile], {
+          destinationFolder,
+        });
+
+        if (result.hasConflicts) {
           document.body.removeChild(input);
           return;
         }
@@ -573,7 +587,7 @@ export const useFileUpload = ({
       document.body.appendChild(input);
       input.click();
     },
-    [uploadEnabled, onUploadArchive, validationMessages, hasWriteAccess],
+    [onUploadArchive, uploadEnabled, hasWriteAccess, startConflictResolution],
   );
 
   const clearError = useCallback(() => {
