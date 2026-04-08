@@ -46,6 +46,7 @@ import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
   children: ReactNode;
+  autoSelectUploadedItems?: boolean;
 }
 
 /**
@@ -144,6 +145,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   gridClassName,
   nonClickableTableColumns,
   hideSearchPathItemName,
+  autoSelectUploadedItems = false,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -161,36 +163,50 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   } | null>(null);
 
   const wrappedOnCreateFolder = useCallback(
-    (file: DialUploadFileItem, parentPath: string, id: string) => {
-      pendingAutoSelectRef.current = {
-        fileNames: new Set([file.name]),
-        destinationFolder: parentPath,
-      };
-      onCreateFolder?.(file, parentPath, id);
+    (file: DialUploadFileItem, folderPath: string, id: string) => {
+      if (autoSelectUploadedItems) {
+        const lastSlashIndex = folderPath.lastIndexOf('/');
+        const createdFolderName =
+          lastSlashIndex >= 0
+            ? folderPath.slice(lastSlashIndex + 1)
+            : folderPath;
+        const destinationFolder =
+          lastSlashIndex >= 0 ? folderPath.slice(0, lastSlashIndex) : '';
+
+        pendingAutoSelectRef.current = {
+          fileNames: new Set([createdFolderName]),
+          destinationFolder,
+        };
+      }
+      onCreateFolder?.(file, folderPath, id);
     },
-    [onCreateFolder],
+    [onCreateFolder, autoSelectUploadedItems],
   );
 
   const wrappedOnUploadFiles = useCallback(
     (files: DialUploadFileItem[], destinationFolder: string) => {
-      pendingAutoSelectRef.current = {
-        fileNames: new Set(files.map((f) => f.name)),
-        destinationFolder,
-      };
+      if (autoSelectUploadedItems) {
+        pendingAutoSelectRef.current = {
+          fileNames: new Set(files.map((f) => f.name)),
+          destinationFolder,
+        };
+      }
       onUploadFiles?.(files, destinationFolder);
     },
-    [onUploadFiles],
+    [onUploadFiles, autoSelectUploadedItems],
   );
 
   const wrappedOnUploadArchive = useCallback(
     (file: File, name: string, destinationFolder: string) => {
-      pendingAutoSelectRef.current = {
-        fileNames: new Set([name]),
-        destinationFolder,
-      };
+      if (autoSelectUploadedItems) {
+        pendingAutoSelectRef.current = {
+          fileNames: new Set([name]),
+          destinationFolder,
+        };
+      }
       onUploadArchive?.(file, name, destinationFolder);
     },
-    [onUploadArchive],
+    [onUploadArchive, autoSelectUploadedItems],
   );
 
   const selectedFiles = useMemo(() => {

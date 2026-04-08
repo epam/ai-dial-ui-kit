@@ -397,6 +397,7 @@ export interface DialFileManagerProps {
   customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
   hideSearchPathItemName?: boolean;
+  autoSelectUploadedItems?: boolean;
 }
 
 /**
@@ -486,7 +487,7 @@ export interface DialFileManagerProps {
  * @param [onUploadFiles] - Callback fired when files are uploaded
  * @param [onValidateUpload] - Callback to validate files before upload
  * @param [maxFileSize] - Maximum allowed file size for uploads in bytes
- * @param [uploadValidationMessages] - Custom validation messages for file uploads
+ * @param [uploadValidationMessages] - Custom validation messages for file uploads. Consumers can customize these strings for a11y and copy consistency.
  * @param [uploadEnabled=true] - Whether files uploads are enabled
  *
  * @param [sharedByMePaths] - Set of items paths that the user has shared with others. Enables UI indicators (icons/badges) in the tree and grid.

@@ -478,10 +478,10 @@ export const DialGrid = <T extends object>({
   };
 
   useEffect(() => {
-    if (gridApi) {
-      gridApi.redrawRows();
+    if (gridApi && rowData) {
+      gridApi.setGridOption('rowData', rowData);
     }
-  }, [gridApi]);
+  }, [gridApi, rowData]);
 
   const emptyStateRenderer = useCallback(
     () => (

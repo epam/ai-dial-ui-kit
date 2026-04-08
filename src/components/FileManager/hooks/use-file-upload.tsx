@@ -26,9 +26,21 @@ export interface FileUploadValidationResult {
 }
 
 export interface FileUploadValidationMessages {
+  /**
+   * Message displayed when duplicate files are selected. Customize for accessibility or copy consistency.
+   */
   duplicateFiles?: string;
+  /**
+   * Message displayed when files exceed the maximum allowed size. Customize for accessibility or copy consistency.
+   */
   oversizedFiles?: string;
+  /**
+   * Message displayed when selected files are of unsupported types. Customize for accessibility or copy consistency.
+   */
   unsupportedFiles?: string;
+  /**
+   * Message displayed when folder uploads are attempted but not supported. Customize for accessibility or copy consistency.
+   */
   foldersNotSupported?: string;
   validationFailed?: string;
   validationError?: string;
@@ -417,12 +429,17 @@ export const useFileUpload = ({
       const files: File[] = [];
       let foldersSkipped = false;
 
-      Array.from(e.dataTransfer.files).forEach((file, index) => {
-        const item = items[index];
-        const entry = item?.webkitGetAsEntry?.();
+      items.forEach((item) => {
+        if (item.kind !== 'file') {
+          return;
+        }
+        const entry = item.webkitGetAsEntry?.();
         if (entry?.isDirectory) {
           foldersSkipped = true;
-        } else {
+          return;
+        }
+        const file = item.getAsFile();
+        if (file) {
           files.push(file);
         }
       });
