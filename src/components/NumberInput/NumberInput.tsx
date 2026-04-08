@@ -84,13 +84,13 @@ export const DialNumberInput: FC<DialNumberInputProps> = ({
 
   return (
     <DialInput
-      {...props}
       type="number"
       min={min}
       max={max}
       onChange={(inputValue) => onChange?.(getInputValue(inputValue))}
       onKeyDown={integer ? handleIntegerKeyDown : onKeyDown}
       onPaste={integer ? handleIntegerPaste : onPaste}
+      {...props}
     />
   );
 };
