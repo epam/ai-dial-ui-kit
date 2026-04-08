@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DialNumberInput } from './NumberInput';
 
@@ -148,5 +149,160 @@ describe('Dial UI Kit :: DialNumberInput', () => {
     fireEvent.change(input, { target: { value: '0.005' } });
 
     expect(onChange).toHaveBeenCalledWith('0.005');
+  });
+
+  describe('integer mode', () => {
+    test('blocks decimal point keystroke', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.keyboard('.');
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    test('blocks minus sign keystroke', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.keyboard('-');
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    test('blocks e, E, and + keys', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.keyboard('e');
+      await user.keyboard('E');
+      await user.keyboard('+');
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    test('allows digit keys', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.keyboard('5');
+
+      expect(onChange).toHaveBeenCalledWith(5);
+    });
+
+    test('onChange emits number, not string', () => {
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      fireEvent.change(input, { target: { value: '42' } });
+
+      expect(onChange).toHaveBeenCalledWith(42);
+      expect(typeof onChange.mock.calls[0][0]).toBe('number');
+    });
+
+    test('strips non-digit characters on paste', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.paste('12.34');
+
+      expect(onChange).toHaveBeenCalledWith(1234);
+    });
+
+    test('does not intercept paste when text is all digits', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="int-test"
+          placeholder="int"
+          integer
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.paste('1234');
+
+      expect(onChange).toHaveBeenCalledWith(1234);
+    });
+
+    test('without integer prop, decimal input still works', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <DialNumberInput
+          id="test-number"
+          placeholder="num"
+          onChange={onChange}
+        />,
+      );
+
+      const input = screen.getByRole('spinbutton');
+      await user.click(input);
+      await user.paste('1.5');
+
+      expect(onChange).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenCalledWith(1.5);
+    });
   });
 });

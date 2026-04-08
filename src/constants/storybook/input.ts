@@ -53,7 +53,9 @@ export const inputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
   },
 };
 
-export const numberInputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
+export const numberInputBaseArgTypes: Partial<ArgTypes<DialInputProps>> & {
+  integer?: ArgTypes[string];
+} = {
   min: {
     control: { type: 'number' as const },
     description: 'Minimum allowed value for the number input',
@@ -61,5 +63,9 @@ export const numberInputBaseArgTypes: Partial<ArgTypes<DialInputProps>> = {
   max: {
     control: { type: 'number' as const },
     description: 'Maximum allowed value for the number input',
+  },
+  integer: {
+    control: { type: 'boolean' as const },
+    description: 'Restrict input to integer values only',
   },
 };
