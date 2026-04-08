@@ -447,7 +447,6 @@ export const useFileUpload = ({
         });
       }
 
-      // fallback для браузеров / тестовой среды где items API неполный
       if (files.length === 0 && e.dataTransfer.files?.length) {
         files.push(...Array.from(e.dataTransfer.files));
       }
