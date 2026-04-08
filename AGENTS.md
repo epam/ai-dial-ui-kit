@@ -42,6 +42,37 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 | `npm run build`     | Library + CSS build                                                   |
 | `npm run storybook` | Local docs and visual QA                                              |
 
+## Architecture details
+
+### Path Alias
+
+`@/*` maps to `src/*` (configured in tsconfig.json)
+
+### Key Directories
+
+- `src/components/` — ~53 React components
+- `src/hooks/` — reusable hooks (useEditableItem, useFlexibleActions, screen breakpoints)
+- `src/models/` — TypeScript type definitions
+- `src/types/` — enums and type exports
+- `src/mcp/` — MCP server for AI agent component discovery
+- `src/utils/` — utilities (mergeClasses, flat-to-hierarchy-convertor)
+
+### Styling details
+
+- Tailwind CSS with custom design tokens defined as CSS variables in `tailwind.config.js`
+- Use `mergeClasses` (from `src/utils/merge-classes`) for Tailwind class merging
+- No inline styles or hardcoded values (hex colors, font sizes, etc.)
+- SCSS mixins in `src/styles/` for reusable patterns
+
+## Development Rules
+
+- **No breaking changes** to existing UI components — follow Open-Closed principle
+- **70% minimum** test coverage (branches, functions, lines, statements)
+- **Always run `typecheck`** after changing `.ts`/`.tsx` files — ESLint doesn't catch all TS errors
+- Tests: prefer roles over tags/text/testId; test layout/callbacks; move complex logic to utils and test separately
+- Branching: `development` is the main branch; create feature branches from it
+- Pre-commit hooks enforce lint + format + tests — do not skip them
+
 ## Cursor-specific assets
 
 - **`.cursor/rules/`** — Always-on and file-scoped rules (this file + `.cursor/rules/*.mdc`).
