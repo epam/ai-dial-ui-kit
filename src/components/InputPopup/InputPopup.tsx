@@ -25,6 +25,7 @@ export interface DialInputPopupProps {
   emptyValueText?: string;
   editable?: boolean;
   onValueChange?: (value: string) => void;
+  collapseTagOverflow?: boolean;
 }
 
 /**
@@ -202,6 +203,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         <DialAutocompleteInputValue
           placeholder={placeholder}
           selectedItems={value as string[]}
+          collapseTagOverflow
         />
         {!disabled && (
           <div className="ml-1">
