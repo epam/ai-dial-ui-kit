@@ -169,6 +169,24 @@ export const MultipleValues: Story = {
   },
 };
 
+export const MultipleValuesWithOverflow: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: [
+      'Tag A',
+      'Tag B',
+      'Tag C',
+      'Tag D',
+      'Tag E',
+      'Tag F',
+      'Tag G',
+      'Tag H',
+      'Tag I',
+    ],
+    collapseTagOverflow: true,
+  },
+};
+
 export const MultipleValuesWithPlaceholder: Story = {
   render: InteractiveInputModal,
   args: {
