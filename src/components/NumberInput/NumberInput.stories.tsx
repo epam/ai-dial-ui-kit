@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialNumberInput, type DialNumberInputProps } from './NumberInput';
-import { inputBaseArgTypes } from '@/constants/storybook/input';
+import {
+  inputBaseArgTypes,
+  numberInputBaseArgTypes,
+} from '@/constants/storybook/input';
 
 const InteractiveNumberInput = (args: DialNumberInputProps) => {
   const [value, setValue] = useState(args.value);
@@ -35,6 +38,7 @@ const meta = {
   },
   argTypes: {
     ...inputBaseArgTypes,
+    ...numberInputBaseArgTypes,
   },
   args: {
     labelProps: { label: 'Number Input' },
@@ -44,6 +48,7 @@ const meta = {
     value: undefined,
     disabled: false,
     invalid: false,
+    integer: false,
     error: undefined,
     min: undefined,
     max: undefined,
@@ -157,6 +162,25 @@ export const MaxValue: Story = {
       description: {
         story:
           'This story demonstrates a number input with only a maximum value constraint.',
+      },
+    },
+  },
+};
+
+export const Integer: Story = {
+  args: {
+    labelProps: { label: 'Port Number' },
+    id: 'port-input',
+    placeholder: 'Enter port number',
+    integer: true,
+    min: 0,
+    max: 65535,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Integer-only input mode. Decimal points, minus signs, plus signs, and scientific notation (e/E) are blocked. Pasted text is sanitized to digits only.',
       },
     },
   },

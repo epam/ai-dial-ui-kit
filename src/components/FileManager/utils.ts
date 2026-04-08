@@ -148,7 +148,17 @@ export function isFileAccepted(
 
 export const formatAllowedFileTypesForTooltip = (
   allowedFileTypes: DialFileAcceptType[] | undefined,
-): string => allowedFileTypes?.join(', ') ?? '';
+): string => {
+  if (!allowedFileTypes) return '';
+  return allowedFileTypes
+    .map((type) => {
+      if (type.startsWith('application/')) {
+        return `.${type.slice('application/'.length)}`;
+      }
+      return type;
+    })
+    .join(', ');
+};
 
 export const cleanForbiddenSymbolsRegExp = (
   forbiddenSymbolsRegExp?: RegExp,

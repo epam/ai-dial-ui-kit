@@ -20,7 +20,7 @@ const TAG_ROW_GAP_PX = 8;
 const COLLAPSED_INPUT_RESERVE_PX = 24;
 
 export interface DialTagInputProps extends DialLabelProps {
-  elementId: string;
+  elementId?: string;
   initialTags?: string[];
   placeholder?: string;
   captionDescription?: string;
@@ -28,6 +28,9 @@ export interface DialTagInputProps extends DialLabelProps {
   invalid?: boolean;
   disabled?: boolean;
   collapseTagOverflow?: boolean;
+  readOnly?: boolean;
+  containerClassName?: string;
+  tagClassName?: string;
   onChange?: (tags: string[]) => void;
 }
 
@@ -60,6 +63,9 @@ export interface DialTagInputProps extends DialLabelProps {
  * @param [invalid=false] - Whether the field should be styled as invalid.
  * @param [disabled=false] - Whether the input and remove buttons are disabled.
  * @param [collapseTagOverflow=false] - When true, keeps tags on one line and shows `+N` for overflow.
+ * @param [readOnly=false] - When true, hides the text input (no new tags can be added). The outer wrapper and label/caption are also omitted so the component can be embedded inside an existing container.
+ * @param [containerClassName] - Additional CSS classes applied to the tag container (the flex row wrapping all tags).
+ * @param [tagClassName] - Additional CSS classes applied to each individual tag.
  * @param [onChange] - Callback fired whenever the tag list changes (tag added or removed).
  */
 export const DialTagInput: FC<DialTagInputProps> = ({
@@ -73,6 +79,9 @@ export const DialTagInput: FC<DialTagInputProps> = ({
   invalid,
   disabled,
   collapseTagOverflow = false,
+  readOnly = false,
+  containerClassName,
+  tagClassName,
   onChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -100,8 +109,8 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     if (rowWidth === 0) return;
 
     const overflowChipWidth = overflowMeasureRef.current?.offsetWidth ?? 0;
-    const effectiveWidth =
-      rowWidth - COLLAPSED_INPUT_RESERVE_PX - TAG_ROW_GAP_PX;
+    const inputReserve = readOnly ? 0 : COLLAPSED_INPUT_RESERVE_PX;
+    const effectiveWidth = rowWidth - inputReserve - TAG_ROW_GAP_PX;
 
     let totalWidth = 0;
     let fitCount = 0;
@@ -125,7 +134,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     }
 
     setVisibleTagCount(fitCount);
-  }, [collapseTagOverflow, tags]);
+  }, [collapseTagOverflow, readOnly, tags.length]);
 
   const addTag = (value: string) => {
     const trimmed = value.trim().replace(/,$/, '');
@@ -208,6 +217,88 @@ export const DialTagInput: FC<DialTagInputProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(initialTags)]);
 
+  const innerContainer = (
+    <div
+      ref={containerRef}
+      className={classNames(
+        'flex gap-2 items-center relative',
+        collapseTagOverflow
+          ? 'flex-nowrap overflow-hidden w-full min-w-0'
+          : classNames('flex-wrap', wraps ? 'flex-col-reverse' : 'flex-row'),
+        containerClassName,
+      )}
+    >
+      {(collapseTagOverflow ? tags.slice(0, visibleTagCount) : tags).map(
+        (tag, index) => (
+          <DialTag
+            key={tag + index}
+            tag={tag}
+            className={tagClassName}
+            remove={
+              !disabled && !readOnly ? () => handleRemove(index) : undefined
+            }
+          />
+        ),
+      )}
+
+      {collapseTagOverflow && visibleTagCount < tags.length && (
+        <DialTooltip
+          tooltip={tags.slice(visibleTagCount).join(', ')}
+          triggerClassName="inline-flex shrink-0 cursor-pointer"
+        >
+          <DialTag tag={`+${tags.length - visibleTagCount}`} />
+        </DialTooltip>
+      )}
+
+      {!readOnly && (
+        <input
+          id={elementId}
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
+          className={classNames(
+            'dial-input outline-none !border-none w-full flex-1 !p-1 !h-auto',
+            collapseTagOverflow ? 'min-w-0' : 'min-w-[100px]',
+          )}
+          placeholder={placeholder ?? ''}
+          disabled={disabled}
+        />
+      )}
+
+      {collapseTagOverflow && (
+        <div
+          className="absolute left-0 top-0 invisible pointer-events-none h-0 overflow-hidden whitespace-nowrap"
+          aria-hidden
+        >
+          {tags.map((tag, index) => (
+            <div
+              key={`measure-${tag}-${index}`}
+              ref={setTagMeasureRef(index)}
+              className="inline-flex shrink-0"
+            >
+              <DialTag
+                tag={tag}
+                className={tagClassName}
+                remove={
+                  !disabled && !readOnly ? () => handleRemove(index) : undefined
+                }
+              />
+            </div>
+          ))}
+          <div ref={overflowMeasureRef} className="inline-flex shrink-0">
+            <DialTag tag={`+${tags.length}`} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  if (readOnly) {
+    return innerContainer;
+  }
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <DialLabel label={label} required={required} htmlFor={elementId} />
@@ -218,74 +309,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           disabled && 'dial-input-disable',
         )}
       >
-        <div
-          ref={containerRef}
-          className={classNames(
-            'flex gap-2 items-center relative',
-            collapseTagOverflow
-              ? 'flex-nowrap overflow-hidden w-full min-w-0'
-              : classNames(
-                  'flex-wrap',
-                  wraps ? 'flex-col-reverse' : 'flex-row',
-                ),
-          )}
-        >
-          {(collapseTagOverflow ? tags.slice(0, visibleTagCount) : tags).map(
-            (tag, index) => (
-              <DialTag
-                key={tag + index}
-                tag={tag}
-                remove={!disabled ? () => handleRemove(index) : undefined}
-              />
-            ),
-          )}
-
-          {collapseTagOverflow && visibleTagCount < tags.length && (
-            <DialTooltip
-              tooltip={tags.slice(visibleTagCount).join(', ')}
-              triggerClassName="inline-flex shrink-0 cursor-pointer"
-            >
-              <DialTag tag={`+${tags.length - visibleTagCount}`} />
-            </DialTooltip>
-          )}
-
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className={classNames(
-              'dial-input outline-none !border-none w-full flex-1 !p-1 !h-auto',
-              collapseTagOverflow ? 'min-w-0' : 'min-w-[100px]',
-            )}
-            placeholder={placeholder ?? ''}
-            disabled={disabled}
-          />
-
-          {collapseTagOverflow && (
-            <div
-              className="absolute left-0 top-0 invisible pointer-events-none h-0 overflow-hidden whitespace-nowrap"
-              aria-hidden
-            >
-              {tags.map((tag, index) => (
-                <div
-                  key={`measure-${tag}-${index}`}
-                  ref={setTagMeasureRef(index)}
-                  className="inline-flex shrink-0"
-                >
-                  <DialTag
-                    tag={tag}
-                    remove={!disabled ? () => handleRemove(index) : undefined}
-                  />
-                </div>
-              ))}
-              <div ref={overflowMeasureRef} className="inline-flex shrink-0">
-                <DialTag tag={`+${tags.length}`} />
-              </div>
-            </div>
-          )}
-        </div>
+        {innerContainer}
       </div>
       {renderCaption()}
     </div>

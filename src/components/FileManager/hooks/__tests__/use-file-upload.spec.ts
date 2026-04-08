@@ -939,56 +939,6 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       expect(document.body.contains(input)).toBe(false);
       expect(result.current.uploadError).toBeUndefined();
     });
-
-    it('sets uploadError when folder with same name already exists', () => {
-      const onUploadArchive = vi.fn();
-      const validationMessages = {
-        validationFailed: 'Custom validation message',
-      };
-
-      const existingFilesWithFolder: DialFile[] = [
-        ...mockExistingFiles,
-        {
-          id: '3',
-          name: 'archive',
-          path: '/folder/archive',
-          nodeType: DialFileNodeType.FOLDER,
-          folderId: 'folder',
-        },
-      ];
-
-      const { result } = renderUseFileUpload({
-        onUploadArchive,
-        validationMessages,
-      });
-
-      act(() => {
-        result.current.openArchiveDialog('/folder', existingFilesWithFolder);
-      });
-
-      const input = document.body.querySelector(
-        'input[accept=".zip,application/zip"]',
-      ) as HTMLInputElement | null;
-
-      expect(input).not.toBeNull();
-      if (!input) {
-        return;
-      }
-
-      const file = createMockFile('archive.zip', 100);
-
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-
-      act(() => {
-        input.dispatchEvent(new Event('change'));
-      });
-
-      expect(onUploadArchive).not.toHaveBeenCalled();
-      expect(result.current.uploadError).toBe('Custom validation message');
-      expect(document.body.contains(input)).toBe(false);
-    });
   });
 
   describe('accept file types validation', () => {

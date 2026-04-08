@@ -72,6 +72,11 @@ const meta: Meta<typeof DialTagInput> = {
       description:
         'Single-line tags with a +N chip when they do not fit the field width',
     },
+    readOnly: {
+      control: 'boolean',
+      description:
+        'Hides the text input so no new tags can be added. The outer label/caption wrapper is also omitted, making the component embeddable inside an existing container.',
+    },
   },
 };
 export default meta;
@@ -150,6 +155,30 @@ export const CollapsedOverflow: Story = {
   },
 };
 
+export const ReadOnly: Story = {
+  render: InteractiveTagInput,
+  args: {
+    readOnly: true,
+    initialTags: ['React', 'TypeScript', 'Storybook'],
+  },
+};
+
+export const ReadOnlyCollapsedOverflow: Story = {
+  render: InteractiveTagInput,
+  args: {
+    readOnly: true,
+    collapseTagOverflow: true,
+    initialTags: [
+      'React',
+      'TypeScript',
+      'Storybook',
+      'Tailwind',
+      'Vite',
+      'Vitest',
+    ],
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-5 w-[450px] text-primary">
@@ -194,6 +223,30 @@ export const AllVariants: Story = {
           label="Tags"
           disabled
           initialTags={['React']}
+        />
+      </div>
+      <div>
+        <h4 className="text-lg font-semibold mb-2">Read Only (embedded)</h4>
+        <InteractiveTagInput
+          readOnly
+          initialTags={['React', 'TypeScript', 'Storybook']}
+        />
+      </div>
+      <div>
+        <h4 className="text-lg font-semibold mb-2">
+          Read Only + Collapsed overflow
+        </h4>
+        <InteractiveTagInput
+          readOnly
+          collapseTagOverflow
+          initialTags={[
+            'React',
+            'TypeScript',
+            'Storybook',
+            'Tailwind',
+            'Vite',
+            'Vitest',
+          ]}
         />
       </div>
     </div>
