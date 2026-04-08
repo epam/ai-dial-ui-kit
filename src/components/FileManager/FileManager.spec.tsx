@@ -1154,6 +1154,7 @@ describe('Dial UI Kit :: FileManager', () => {
           onUploadFiles={onUploadFiles}
           onSelectedPathsChange={onSelectedPathsChange}
           uploadEnabled
+          autoSelectUploadedItems
         />,
       );
 
@@ -1220,6 +1221,7 @@ describe('Dial UI Kit :: FileManager', () => {
             onUploadFiles={onUploadFiles}
             onSelectedPathsChange={onSelectedPathsChange}
             uploadEnabled
+            autoSelectUploadedItems
           />
         </div>,
       );
@@ -1247,6 +1249,7 @@ describe('Dial UI Kit :: FileManager', () => {
           onUploadFiles={onUploadFiles}
           onSelectedPathsChange={onSelectedPathsChange}
           uploadEnabled
+          autoSelectUploadedItems
         />,
       );
 
@@ -1320,6 +1323,7 @@ describe('Dial UI Kit :: FileManager', () => {
           onUploadArchive={onUploadArchive}
           onSelectedPathsChange={onSelectedPathsChange}
           uploadEnabled
+          autoSelectUploadedItems
           toolbarOptions={{
             newActions: {
               uploadArchive: { label: 'Upload Archive' },
@@ -1370,6 +1374,7 @@ describe('Dial UI Kit :: FileManager', () => {
             onUploadArchive={onUploadArchive}
             onSelectedPathsChange={onSelectedPathsChange}
             uploadEnabled
+            autoSelectUploadedItems
           />
         </div>,
       );

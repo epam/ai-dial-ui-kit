@@ -429,20 +429,28 @@ export const useFileUpload = ({
       const files: File[] = [];
       let foldersSkipped = false;
 
-      items.forEach((item) => {
-        if (item.kind !== 'file') {
-          return;
-        }
-        const entry = item.webkitGetAsEntry?.();
-        if (entry?.isDirectory) {
-          foldersSkipped = true;
-          return;
-        }
-        const file = item.getAsFile();
-        if (file) {
-          files.push(file);
-        }
-      });
+      if (items.length > 0) {
+        items.forEach((item) => {
+          if (item.kind === 'file') {
+            const entry = item.webkitGetAsEntry?.();
+
+            if (entry?.isDirectory) {
+              foldersSkipped = true;
+              return;
+            }
+
+            const file = item.getAsFile?.();
+            if (file) {
+              files.push(file);
+            }
+          }
+        });
+      }
+
+      // fallback для браузеров / тестовой среды где items API неполный
+      if (files.length === 0 && e.dataTransfer.files?.length) {
+        files.push(...Array.from(e.dataTransfer.files));
+      }
 
       if (files.length === 0) {
         if (foldersSkipped) {
