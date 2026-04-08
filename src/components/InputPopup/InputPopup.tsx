@@ -82,6 +82,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   placeholder,
   editable = false,
   onValueChange,
+  collapseTagOverflow = false,
 }) => {
   const hasMultipleValues =
     Array.isArray(selectedValue) && selectedValue.length > 0;
@@ -203,7 +204,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         <DialAutocompleteInputValue
           placeholder={placeholder}
           selectedItems={value as string[]}
-          collapseTagOverflow
+          collapseTagOverflow={collapseTagOverflow}
         />
         {!disabled && (
           <div className="ml-1">
