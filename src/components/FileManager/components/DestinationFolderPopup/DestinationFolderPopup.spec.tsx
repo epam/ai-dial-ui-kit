@@ -609,6 +609,6 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
       />,
     );
 
-    expect(screen.findByText('Show hidden files')).not.toBeInTheDocument();
+    expect(screen.queryByText('Show hidden files')).not.toBeInTheDocument();
   });
 });
