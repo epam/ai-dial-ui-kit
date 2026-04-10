@@ -26,9 +26,22 @@ export interface FileUploadValidationResult {
 }
 
 export interface FileUploadValidationMessages {
+  /**
+   * Message displayed when duplicate files are selected. Customize for accessibility or copy consistency.
+   */
   duplicateFiles?: string;
+  /**
+   * Message displayed when files exceed the maximum allowed size. Customize for accessibility or copy consistency.
+   */
   oversizedFiles?: string;
+  /**
+   * Message displayed when selected files are of unsupported types. Customize for accessibility or copy consistency.
+   */
   unsupportedFiles?: string;
+  /**
+   * Message displayed when folder uploads are attempted but not supported. Customize for accessibility or copy consistency.
+   */
+  foldersNotSupported?: string;
   validationFailed?: string;
   validationError?: string;
 }
@@ -412,8 +425,39 @@ export const useFileUpload = ({
         return;
       }
 
-      const files = Array.from(e.dataTransfer.files);
+      const items = Array.from(e.dataTransfer.items || []);
+      const files: File[] = [];
+      let foldersSkipped = false;
+
+      if (items.length > 0) {
+        items.forEach((item) => {
+          if (item.kind === 'file') {
+            const entry = item.webkitGetAsEntry?.();
+
+            if (entry?.isDirectory) {
+              foldersSkipped = true;
+              return;
+            }
+
+            const file = item.getAsFile?.();
+            if (file) {
+              files.push(file);
+            }
+          }
+        });
+      }
+
+      if (files.length === 0 && e.dataTransfer.files?.length) {
+        files.push(...Array.from(e.dataTransfer.files));
+      }
+
       if (files.length === 0) {
+        if (foldersSkipped) {
+          setUploadError(
+            validationMessages.foldersNotSupported ||
+              'Folder upload is not supported',
+          );
+        }
         return;
       }
 

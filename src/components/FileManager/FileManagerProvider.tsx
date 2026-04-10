@@ -5,10 +5,12 @@ import {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
   type DragEvent,
 } from 'react';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
+import type { DialUploadFileItem } from '@/models/file-manager';
 import {
   cleanForbiddenSymbolsRegExp,
   collectAllDescendants,
@@ -44,6 +46,7 @@ import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 export interface FileManagerProviderProps
   extends Omit<DialFileManagerProps, 'children'> {
   children: ReactNode;
+  autoSelectUploadedItems?: boolean;
 }
 
 /**
@@ -143,6 +146,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   nonClickableTableColumns,
   hideSearchPathItemName,
   showHiddenFileSwitcherInDestinationPopup,
+  autoSelectUploadedItems = false,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -153,6 +157,58 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     defaultSelectedPaths,
     onSelectedPathsChange,
   });
+
+  const pendingAutoSelectRef = useRef<{
+    fileNames: Set<string>;
+    destinationFolder: string;
+  } | null>(null);
+
+  const wrappedOnCreateFolder = useCallback(
+    (file: DialUploadFileItem, folderPath: string, id: string) => {
+      if (autoSelectUploadedItems) {
+        const lastSlashIndex = folderPath.lastIndexOf('/');
+        const createdFolderName =
+          lastSlashIndex >= 0
+            ? folderPath.slice(lastSlashIndex + 1)
+            : folderPath;
+        const destinationFolder =
+          lastSlashIndex >= 0 ? folderPath.slice(0, lastSlashIndex) : '';
+
+        pendingAutoSelectRef.current = {
+          fileNames: new Set([createdFolderName]),
+          destinationFolder,
+        };
+      }
+      onCreateFolder?.(file, folderPath, id);
+    },
+    [onCreateFolder, autoSelectUploadedItems],
+  );
+
+  const wrappedOnUploadFiles = useCallback(
+    (files: DialUploadFileItem[], destinationFolder: string) => {
+      if (autoSelectUploadedItems) {
+        pendingAutoSelectRef.current = {
+          fileNames: new Set(files.map((f) => f.name)),
+          destinationFolder,
+        };
+      }
+      onUploadFiles?.(files, destinationFolder);
+    },
+    [onUploadFiles, autoSelectUploadedItems],
+  );
+
+  const wrappedOnUploadArchive = useCallback(
+    (file: File, name: string, destinationFolder: string) => {
+      if (autoSelectUploadedItems) {
+        pendingAutoSelectRef.current = {
+          fileNames: new Set([name]),
+          destinationFolder,
+        };
+      }
+      onUploadArchive?.(file, name, destinationFolder);
+    },
+    [onUploadArchive, autoSelectUploadedItems],
+  );
 
   const selectedFiles = useMemo(() => {
     const map = new Map<string, DialFile>();
@@ -334,10 +390,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleUploadConflictCancel,
     handleUploadConflictDecideForEach,
   } = useFileUpload({
-    onUploadFiles,
+    onUploadFiles: wrappedOnUploadFiles,
     onValidateUpload,
     maxFileSize,
-    onUploadArchive,
+    onUploadArchive: wrappedOnUploadArchive,
     allowedFileTypes,
     validationMessages: uploadValidationMessages,
     uploadEnabled,
@@ -399,7 +455,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     validateFolderName,
   } = useFolderCreation({
     currentFolder,
-    onCreateFolder,
+    onCreateFolder: wrappedOnCreateFolder,
     onValidateFolderName: onCreateFolderValidate,
     validationMessages: folderCreationValidationMessages,
   });
@@ -563,6 +619,30 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     showFolders,
     currentPath,
   ]);
+
+  useEffect(() => {
+    const pending = pendingAutoSelectRef.current;
+    if (!pending) return;
+
+    if ((currentPath ?? '') !== pending.destinationFolder) {
+      pendingAutoSelectRef.current = null;
+      return;
+    }
+
+    const folder = findFolderForPath(items, pending.destinationFolder);
+    if (!folder?.items) return;
+
+    const matchedPaths = new Set<string>();
+    for (const item of folder.items) {
+      if (pending.fileNames.has(item.name)) {
+        matchedPaths.add(item.path);
+      }
+    }
+    if (matchedPaths.size > 0) {
+      setSelectedPaths(matchedPaths);
+      pendingAutoSelectRef.current = null;
+    }
+  }, [items, currentPath, setSelectedPaths]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {

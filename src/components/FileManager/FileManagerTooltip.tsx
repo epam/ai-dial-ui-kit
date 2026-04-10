@@ -49,7 +49,10 @@ export const FileManagerTooltip = ({
         setHoveredRowId((prev) => (prev ? null : prev));
         return;
       }
-      const rowId = rowTarget.getAttribute('row-id');
+      const rowId = new DOMParser().parseFromString(
+        rowTarget.getAttribute('row-id') || '',
+        'text/html',
+      ).documentElement.textContent;
       if (rowId && disabledGridRowIds.has(rowId)) {
         setHoveredRowId((prev) => {
           if (prev !== rowId) {
