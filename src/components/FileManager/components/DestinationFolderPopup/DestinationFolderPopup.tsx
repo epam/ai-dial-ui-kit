@@ -39,6 +39,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   copyLabel?: string;
   moveLabel?: string;
   addFolderLabel?: string;
+  showHiddenFileSwitcher?: boolean;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
   header?: ReactNode;
@@ -100,6 +101,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   addFolderLabel = 'Add folder',
   mode = DestinationFolderMode.Copy,
   hiddenFilesSwitcherLabel = 'Show hidden files',
+  showHiddenFileSwitcher = true,
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
@@ -120,8 +122,8 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     setShowHiddenFiles(value);
   }, []);
 
-  const mobileFooterDropdownItems = useMemo<DropdownItem[]>(
-    () => [
+  const mobileFooterDropdownItems = useMemo<DropdownItem[]>(() => {
+    const footerDropdownItems = [
       {
         key: 'add-folder',
         label: addFolderLabel,
@@ -133,7 +135,10 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           setMobileMenuOpen(false);
         },
       },
-      {
+    ];
+
+    if (showHiddenFileSwitcher) {
+      footerDropdownItems.push({
         key: 'show-hidden-files',
         label: hiddenFilesSwitcherLabel,
         icon: <IconEye {...BASE_ICON_PROPS} className="text-secondary" />,
@@ -141,10 +146,11 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           setShowHiddenFiles((prev) => !prev);
           setMobileMenuOpen(false);
         },
-      },
-    ],
-    [addFolderLabel, hiddenFilesSwitcherLabel],
-  );
+      });
+    }
+
+    return footerDropdownItems;
+  }, [addFolderLabel, hiddenFilesSwitcherLabel, showHiddenFileSwitcher]);
 
   const handleOnPathChange = useCallback(
     (nextPath?: string) => {
@@ -207,15 +213,19 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
                     fileManagerActionRef.current?.createFolder();
                   }}
                 />
-                <div className="w-px h-[26px] bg-controls-disable-accent my-2" />
-                <div className="inline-flex items-center cursor-pointer">
-                  <DialSwitch
-                    label={hiddenFilesSwitcherLabel}
-                    isOn={showHiddenFiles}
-                    onChange={handleShowHiddenFilesChange}
-                    switchId="hidden-files-switch"
-                  />
-                </div>
+                {showHiddenFileSwitcher && (
+                  <>
+                    <div className="w-px h-[26px] bg-controls-disable-accent my-2" />
+                    <div className="inline-flex items-center cursor-pointer">
+                      <DialSwitch
+                        label={hiddenFilesSwitcherLabel}
+                        isOn={showHiddenFiles}
+                        onChange={handleShowHiddenFilesChange}
+                        switchId="hidden-files-switch"
+                      />
+                    </div>
+                  </>
+                )}
               </>
             )}
           </div>

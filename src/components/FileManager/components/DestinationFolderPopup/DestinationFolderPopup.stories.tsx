@@ -148,3 +148,10 @@ export const WithAlert: Story = {
     path: '/Documents',
   },
 };
+
+export const WithoutHiddenFilesSwitcher: Story = {
+  args: {
+    mode: 'move',
+    showHiddenFileSwitcher: false,
+  },
+};

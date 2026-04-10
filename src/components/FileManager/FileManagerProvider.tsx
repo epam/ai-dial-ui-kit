@@ -142,6 +142,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   gridClassName,
   nonClickableTableColumns,
   hideSearchPathItemName,
+  showHiddenFileSwitcherInDestinationPopup,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -793,6 +794,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
+    showHiddenFileSwitcherInDestinationPopup,
   };
 
   return (
