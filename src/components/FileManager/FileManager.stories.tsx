@@ -1872,6 +1872,7 @@ const ControlledSelectionComponent = (args: DialFileManagerProps) => {
         onCreateFolder={handleCreateFolder}
         onUploadArchive={handleUploadArchive}
         uploadEnabled={true}
+        autoSelectUploadedItems
         toolbarOptions={{
           ...(args.toolbarOptions ?? {}),
           newActions: {
