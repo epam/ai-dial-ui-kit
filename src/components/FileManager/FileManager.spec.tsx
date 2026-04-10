@@ -5,6 +5,7 @@ import {
   within,
   waitFor,
   fireEvent,
+  act,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -1117,6 +1118,274 @@ describe('Dial UI Kit :: FileManager', () => {
         context: { hideSearchPathItemName: true },
       }) as React.ReactElement<{ text: string }>;
       expect(result.props.text).toBe('All files/Design/Icons');
+    });
+  });
+
+  describe('auto-select uploaded files', () => {
+    const UPLOAD_PATH = 'All files/Design/Icons/SVG/24px';
+    const EXPANDED_PATHS = new Set([
+      'All files',
+      'All files/Design',
+      'All files/Design/Icons',
+      'All files/Design/Icons/SVG',
+      'All files/Design/Icons/SVG/24px',
+    ]);
+
+    const deepCloneItems = (): DialFile[] =>
+      JSON.parse(JSON.stringify(itemsMock)) as DialFile[];
+
+    const find24pxFolder = (items: DialFile[]): DialFile => {
+      const design = items[0].items!.find((i) => i.name === 'Design')!;
+      const icons = design.items!.find((i) => i.name === 'Icons')!;
+      const svg = icons.items!.find((i) => i.name === 'SVG')!;
+      return svg.items!.find((i) => i.name === '24px')!;
+    };
+
+    test('uploaded files via drag-and-drop are auto-selected after items update', async () => {
+      const items = deepCloneItems();
+      const onUploadFiles = vi.fn();
+      const onSelectedPathsChange = vi.fn();
+
+      const { rerender } = renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={UPLOAD_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          onUploadFiles={onUploadFiles}
+          onSelectedPathsChange={onSelectedPathsChange}
+          uploadEnabled
+          autoSelectUploadedItems
+        />,
+      );
+
+      fireEvent.drop(getGridRegion(), {
+        dataTransfer: {
+          files: [
+            new File(['content1'], 'uploaded1.txt', { type: 'text/plain' }),
+            new File(['content2'], 'uploaded2.txt', { type: 'text/plain' }),
+          ],
+          types: ['Files'],
+        },
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledTimes(1);
+      });
+
+      const uploadedFileNames = onUploadFiles.mock.calls[0][0].map(
+        (f: { name: string }) => f.name,
+      );
+      expect(uploadedFileNames).toEqual(
+        expect.arrayContaining(['uploaded1.txt', 'uploaded2.txt']),
+      );
+
+      const updatedItems = deepCloneItems();
+      const folder = find24pxFolder(updatedItems);
+      folder.items!.push(
+        {
+          id: 'uploaded-1',
+          name: 'uploaded1.txt',
+          path: `${UPLOAD_PATH}/uploaded1.txt`,
+          parentPath: UPLOAD_PATH,
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'txt',
+          contentType: 'text/plain',
+          folderId: 'icons-svg-24',
+          updatedAt: '2025-02-01',
+          contentLength: 8,
+          permissions: [DialFilePermission.READ],
+        },
+        {
+          id: 'uploaded-2',
+          name: 'uploaded2.txt',
+          path: `${UPLOAD_PATH}/uploaded2.txt`,
+          parentPath: UPLOAD_PATH,
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'txt',
+          contentType: 'text/plain',
+          folderId: 'icons-svg-24',
+          updatedAt: '2025-02-01',
+          contentLength: 8,
+          permissions: [DialFilePermission.READ],
+        },
+      );
+
+      rerender(
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={updatedItems}
+            path={UPLOAD_PATH}
+            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+            onUploadFiles={onUploadFiles}
+            onSelectedPathsChange={onSelectedPathsChange}
+            uploadEnabled
+            autoSelectUploadedItems
+          />
+        </div>,
+      );
+
+      await waitFor(() => {
+        expect(onSelectedPathsChange).toHaveBeenCalled();
+        const lastCall = onSelectedPathsChange.mock.calls[
+          onSelectedPathsChange.mock.calls.length - 1
+        ][0] as Set<string>;
+        expect(lastCall.has(`${UPLOAD_PATH}/uploaded1.txt`)).toBe(true);
+        expect(lastCall.has(`${UPLOAD_PATH}/uploaded2.txt`)).toBe(true);
+      });
+    });
+
+    test('auto-selection does not fire when user navigates away before items update', async () => {
+      const items = deepCloneItems();
+      const onUploadFiles = vi.fn();
+      const onSelectedPathsChange = vi.fn();
+
+      const { rerender } = renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={UPLOAD_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          onUploadFiles={onUploadFiles}
+          onSelectedPathsChange={onSelectedPathsChange}
+          uploadEnabled
+          autoSelectUploadedItems
+        />,
+      );
+
+      fireEvent.drop(getGridRegion(), {
+        dataTransfer: {
+          files: [
+            new File(['content'], 'navigated-away.txt', {
+              type: 'text/plain',
+            }),
+          ],
+          types: ['Files'],
+        },
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledTimes(1);
+      });
+
+      onSelectedPathsChange.mockClear();
+
+      const updatedItems = deepCloneItems();
+      const folder = find24pxFolder(updatedItems);
+      folder.items!.push({
+        id: 'nav-away-file',
+        name: 'navigated-away.txt',
+        path: `${UPLOAD_PATH}/navigated-away.txt`,
+        parentPath: UPLOAD_PATH,
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'txt',
+        contentType: 'text/plain',
+        folderId: 'icons-svg-24',
+        updatedAt: '2025-02-01',
+        contentLength: 7,
+        permissions: [DialFilePermission.READ],
+      });
+
+      rerender(
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={updatedItems}
+            path="All files"
+            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+            onUploadFiles={onUploadFiles}
+            onSelectedPathsChange={onSelectedPathsChange}
+            uploadEnabled
+          />
+        </div>,
+      );
+
+      await waitFor(() => {
+        const selectionCalls = onSelectedPathsChange.mock.calls;
+        const hasUploadedFile = selectionCalls.some((call) => {
+          const paths = call[0] as Set<string>;
+          return paths.has(`${UPLOAD_PATH}/navigated-away.txt`);
+        });
+        expect(hasUploadedFile).toBe(false);
+      });
+    });
+
+    test('auto-selects uploaded archive', async () => {
+      const items = deepCloneItems();
+      const onUploadArchive = vi.fn();
+      const onSelectedPathsChange = vi.fn();
+
+      const { rerender } = renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={UPLOAD_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          onUploadArchive={onUploadArchive}
+          onSelectedPathsChange={onSelectedPathsChange}
+          uploadEnabled
+          autoSelectUploadedItems
+          toolbarOptions={{
+            newActions: {
+              uploadArchive: { label: 'Upload Archive' },
+            },
+          }}
+        />,
+      );
+
+      await userEvent.click(screen.getByTestId('action-upload-archive'));
+
+      const input = document.body.querySelector(
+        'input[accept=".zip,application/zip"]',
+      ) as HTMLInputElement;
+
+      expect(input).not.toBeNull();
+
+      const file = new File(['mock content'], 'archive.zip', {
+        type: 'application/zip',
+      });
+      Object.defineProperty(input, 'files', { value: [file] });
+      act(() => {
+        input.dispatchEvent(new Event('change'));
+      });
+
+      await waitFor(() => {
+        expect(onUploadArchive).toHaveBeenCalledTimes(1);
+      });
+
+      const updatedItems = deepCloneItems();
+      const folder = find24pxFolder(updatedItems);
+      folder.items!.push({
+        id: 'archive-0',
+        name: 'archive',
+        path: `${UPLOAD_PATH}/archive`,
+        parentPath: UPLOAD_PATH,
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'icons-svg-24',
+        updatedAt: '2025-02-01',
+        items: [],
+      });
+
+      rerender(
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={updatedItems}
+            path={UPLOAD_PATH}
+            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+            onUploadArchive={onUploadArchive}
+            onSelectedPathsChange={onSelectedPathsChange}
+            uploadEnabled
+            autoSelectUploadedItems
+          />
+        </div>,
+      );
+
+      await waitFor(() => {
+        expect(onSelectedPathsChange).toHaveBeenCalled();
+        const lastCall = onSelectedPathsChange.mock.calls[
+          onSelectedPathsChange.mock.calls.length - 1
+        ][0] as Set<string>;
+        expect(lastCall.has(`${UPLOAD_PATH}/archive`)).toBe(true);
+      });
     });
   });
 });
