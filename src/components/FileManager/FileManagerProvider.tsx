@@ -222,6 +222,28 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     return map;
   }, [effectiveSelectedPaths, items]);
 
+  useEffect(() => {
+    if (effectiveSelectedPaths.size === 0) return;
+
+    let hasMissingPaths = false;
+    for (const path of effectiveSelectedPaths) {
+      if (!findNodeByPath(items, path)) {
+        hasMissingPaths = true;
+        break;
+      }
+    }
+
+    if (hasMissingPaths) {
+      const nextPaths = new Set<string>();
+      for (const path of effectiveSelectedPaths) {
+        if (findNodeByPath(items, path)) {
+          nextPaths.add(path);
+        }
+      }
+      setSelectedPaths(nextPaths);
+    }
+  }, [items, effectiveSelectedPaths, setSelectedPaths]);
+
   const { currentPath, setCurrentPath, handlePathChange } = useCurrentPath({
     path,
     defaultPath,
