@@ -36,9 +36,10 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
     expect(formatAllowedFileTypesForTooltip(['text/*'])).toBe('text/*');
   });
 
-  it('keeps image/ and other MIME types as-is', () => {
-    expect(formatAllowedFileTypesForTooltip(['image/png'])).toBe('image/png');
-    expect(formatAllowedFileTypesForTooltip(['image/*'])).toBe('image/*');
+  it('converts other MIME types to dot-extension', () => {
+    expect(formatAllowedFileTypesForTooltip(['image/png'])).toBe('.png');
+    expect(formatAllowedFileTypesForTooltip(['image/*'])).toBe('.*');
+    expect(formatAllowedFileTypesForTooltip(['audio/mpeg'])).toBe('.mpeg');
   });
 
   it('handles mixed types correctly', () => {
@@ -50,6 +51,6 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
         'text/plain',
         'image/png',
       ]),
-    ).toBe('.svg, svg, .pdf, text/plain, image/png');
+    ).toBe('.svg, svg, .pdf, text/plain, .png');
   });
 });

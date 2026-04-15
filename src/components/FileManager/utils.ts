@@ -152,8 +152,11 @@ export const formatAllowedFileTypesForTooltip = (
   if (!allowedFileTypes) return '';
   return allowedFileTypes
     .map((type) => {
-      if (type.startsWith('application/')) {
-        return `.${type.slice('application/'.length)}`;
+      if (type.startsWith('text/')) {
+        return type;
+      }
+      if (type.includes('/')) {
+        return `.${type.split('/')[1]}`;
       }
       return type;
     })
