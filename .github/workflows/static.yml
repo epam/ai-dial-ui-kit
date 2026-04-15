@@ -35,7 +35,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Upload Storybook artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: ./storybook-static
