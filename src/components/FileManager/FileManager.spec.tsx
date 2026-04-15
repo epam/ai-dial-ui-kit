@@ -512,9 +512,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
-          ),
+          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
         ).toBeInTheDocument();
       });
     });
