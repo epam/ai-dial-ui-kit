@@ -59,6 +59,10 @@ export const useFileClipboard = ({
   } = useConflictResolution({
     getDestinationFiles,
     onResolve: (items, destinationFolder) => {
+      if (!items?.length) {
+        return;
+      }
+
       if (operationMetadata?.type === DestinationFolderMode.Copy) {
         onCopyFiles?.(items, destinationFolder);
         onCopySuccess?.();
