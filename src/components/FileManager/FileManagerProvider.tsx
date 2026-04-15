@@ -145,6 +145,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   gridClassName,
   nonClickableTableColumns,
   hideSearchPathItemName,
+  showHiddenFileSwitcherInDestinationPopup,
   autoSelectUploadedItems = false,
 }) => {
   const {
@@ -895,6 +896,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     getDisabledTooltip,
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
+    showHiddenFileSwitcherInDestinationPopup,
   };
 
   return (

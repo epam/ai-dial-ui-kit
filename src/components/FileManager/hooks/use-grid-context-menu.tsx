@@ -142,6 +142,22 @@ export const useGridContextMenu = ({
         );
       }
 
+      if (
+        actionLabels[DialFileManagerActions.OpenInNewTab] &&
+        typeof onOpenInNewTab === 'function' &&
+        file.nodeType === DialFileNodeType.ITEM &&
+        !hasRestrictedSymbolsInName
+      ) {
+        items.push({
+          key: DialFileManagerActions.OpenInNewTab,
+          label: actionLabels[DialFileManagerActions.OpenInNewTab],
+          icon: (
+            <IconExternalLink {...BASE_ICON_PROPS} className="text-secondary" />
+          ),
+          onClick: () => onOpenInNewTab?.(file),
+        });
+      }
+
       const isDuplicateAvailable =
         file.nodeType === DialFileNodeType.ITEM ||
         (file.nodeType === DialFileNodeType.FOLDER &&
@@ -243,22 +259,6 @@ export const useGridContextMenu = ({
           label: actionLabels[DialFileManagerActions.Preview],
           icon: <IconEye {...BASE_ICON_PROPS} className="text-secondary" />,
           onClick: () => onPreview?.(file.path),
-        });
-      }
-
-      if (
-        actionLabels[DialFileManagerActions.OpenInNewTab] &&
-        typeof onOpenInNewTab === 'function' &&
-        file.nodeType === DialFileNodeType.ITEM &&
-        !hasRestrictedSymbolsInName
-      ) {
-        items.push({
-          key: DialFileManagerActions.OpenInNewTab,
-          label: actionLabels[DialFileManagerActions.OpenInNewTab],
-          icon: (
-            <IconExternalLink {...BASE_ICON_PROPS} className="text-secondary" />
-          ),
-          onClick: () => onOpenInNewTab?.(file),
         });
       }
 

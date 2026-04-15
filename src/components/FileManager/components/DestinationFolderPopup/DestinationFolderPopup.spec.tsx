@@ -590,4 +590,25 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
       screen.getByRole('button', { name: 'Close alert' }),
     ).toBeInTheDocument();
   });
+
+  test('hides hidden files switcher', () => {
+    render(
+      <DialDestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+        showHiddenFileSwitcher={false}
+      />,
+    );
+
+    expect(screen.queryByText('Show hidden files')).not.toBeInTheDocument();
+  });
 });

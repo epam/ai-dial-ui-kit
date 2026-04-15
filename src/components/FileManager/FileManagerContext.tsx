@@ -231,6 +231,7 @@ export interface FileManagerContextValue {
   fileTooLargeTooltip?: string;
   unsupportedFileTypeTooltip?: string;
   hideSearchPathItemName?: boolean;
+  showHiddenFileSwitcherInDestinationPopup?: boolean;
 }
 
 export const FileManagerContext = createContext<

@@ -397,6 +397,7 @@ export interface DialFileManagerProps {
   customDownloadItemsAction?: (items?: DialFile[]) => void;
   nonClickableTableColumns?: FileManagerColumnKey[];
   hideSearchPathItemName?: boolean;
+  showHiddenFileSwitcherInDestinationPopup?: boolean;
   autoSelectUploadedItems?: boolean;
 }
 
@@ -659,6 +660,7 @@ export const DialFileManagerView: FC = () => {
     gridClassName,
     nonClickableTableColumns,
     hideSearchPathItemName,
+    showHiddenFileSwitcherInDestinationPopup,
   } = useFileManagerContext();
 
   const {
@@ -1539,6 +1541,7 @@ export const DialFileManagerView: FC = () => {
           }
           treeOptions={{ header: treeOptions?.header }}
           onFolderPopupPathChange={onFolderPopupPathChange}
+          showHiddenFileSwitcher={showHiddenFileSwitcherInDestinationPopup}
         />
         <ConflictResolutionPopup
           {...conflictResolutionPopupOptions}
