@@ -152,19 +152,18 @@ export function useFileSearch({
     clearSearchResults,
   ]);
 
-  // Cache all files when search results arrive
+  // Cache all files when search results arrive, and update when search is not in progress
   useEffect(() => {
-    if (searchResults.length > 0 && allFilesCache.current.length === 0) {
+    if (!searchInProgress) {
       allFilesCache.current = searchResults;
     }
-  }, [searchResults]);
+  }, [searchResults, searchInProgress]);
 
   const filteredSearchResults = useMemo(() => {
     if (onSearchFiles) {
-      const filesToFilter =
-        allFilesCache.current.length > 0
-          ? allFilesCache.current
-          : searchResults;
+      const filesToFilter = searchInProgress
+        ? allFilesCache.current
+        : searchResults;
 
       if (!effectiveSearchValue || filesToFilter.length === 0) {
         return filesToFilter;
@@ -179,7 +178,13 @@ export function useFileSearch({
 
     const allFiles = collectAllFiles(allItems);
     return filterFilesByName(allFiles, effectiveSearchValue);
-  }, [onSearchFiles, searchResults, effectiveSearchValue, allItems]);
+  }, [
+    onSearchFiles,
+    searchResults,
+    searchInProgress,
+    effectiveSearchValue,
+    allItems,
+  ]);
 
   return {
     isSearchMode,
