@@ -72,6 +72,14 @@ export interface DialSelectProps {
   onChange?: (next: string | string[]) => void;
   inlineSearch?: boolean;
   onFooterClick?: (e: MouseEvent<HTMLDivElement>) => void;
+  customMultiSelectTagsRenderer?: (
+    options: SelectOption[],
+    selectedValues: string[],
+    handleRemoveTag: (
+      event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+      val: string,
+    ) => void,
+  ) => ReactNode;
 }
 
 /**
@@ -164,6 +172,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   open,
   onOpenChange,
   onInlineQueryChange,
+  customMultiSelectTagsRenderer,
 }) => {
   const listId = useId();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -353,7 +362,11 @@ export const DialSelect: FC<DialSelectProps> = ({
   const renderSelectedValue = useCallback(() => {
     if (multiple) {
       return hasSelection ? (
-        renderTags()
+        customMultiSelectTagsRenderer?.(
+          options,
+          selectedValues,
+          handleRemoveTag,
+        ) || renderTags()
       ) : (
         <span className="text-secondary truncate">{placeholder}</span>
       );
@@ -395,6 +408,10 @@ export const DialSelect: FC<DialSelectProps> = ({
     placeholder,
     renderTags,
     singleSelectedOption,
+    options,
+    selectedValues,
+    handleRemoveTag,
+    customMultiSelectTagsRenderer,
   ]);
 
   useImperativeHandle(dismissRef, () => ({
