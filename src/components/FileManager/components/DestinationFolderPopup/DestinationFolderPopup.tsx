@@ -253,7 +253,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     >
       <div className="bg-layer-2 h-full flex flex-col">
         {alertProps && (
-          <div className="px-4 pt-4">
+          <div className="px-6 mb-4 pt-4">
             <DialAlert {...alertProps} />
           </div>
         )}
