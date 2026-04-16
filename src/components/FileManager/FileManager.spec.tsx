@@ -512,9 +512,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
-          ),
+          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
         ).toBeInTheDocument();
       });
     });
@@ -632,9 +630,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
-          ),
+          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
         ).toBeInTheDocument();
       });
 
@@ -643,7 +639,7 @@ describe('Dial UI Kit :: FileManager', () => {
       await waitFor(() => {
         expect(
           screen.queryByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
+            'Unsupported file type. Supported types: .svg+xml.',
           ),
         ).not.toBeInTheDocument();
       });
@@ -662,9 +658,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
-          ),
+          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
         ).toBeInTheDocument();
       });
 
@@ -673,7 +667,7 @@ describe('Dial UI Kit :: FileManager', () => {
       await waitFor(() => {
         expect(
           screen.queryByText(
-            'Unsupported file type. Supported types: image/svg+xml.',
+            'Unsupported file type. Supported types: .svg+xml.',
           ),
         ).not.toBeInTheDocument();
       });
