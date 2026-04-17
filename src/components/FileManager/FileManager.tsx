@@ -1395,7 +1395,6 @@ export const DialFileManagerView: FC = () => {
           loading={filesLoading || searchInProgress}
           getContextMenuItems={getGridContextMenuItems}
           withoutHeaderBorders={isCompactView}
-          selectionOnHover={!isCompactView}
           onGridApiChange={onGridApiChange}
           className={dialGridClassName}
           {...forwardedGridOptions}
