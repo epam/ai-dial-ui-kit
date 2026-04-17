@@ -361,7 +361,6 @@ export const Compact: Story = {
   args: {
     selectedRowIds: undefined,
     onSelectionChange: undefined,
-    selectionOnHover: false,
     withoutHeaderBorders: true,
     additionalGridOptions: {
       headerHeight: 44,

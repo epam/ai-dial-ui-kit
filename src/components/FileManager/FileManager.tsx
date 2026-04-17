@@ -1395,7 +1395,6 @@ export const DialFileManagerView: FC = () => {
           loading={filesLoading || searchInProgress}
           getContextMenuItems={getGridContextMenuItems}
           withoutHeaderBorders={isCompactView}
-          selectionOnHover={!isCompactView}
           onGridApiChange={onGridApiChange}
           className={dialGridClassName}
           {...forwardedGridOptions}
@@ -1542,6 +1541,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions={{ header: treeOptions?.header }}
           onFolderPopupPathChange={onFolderPopupPathChange}
           showHiddenFileSwitcher={showHiddenFileSwitcherInDestinationPopup}
+          hideSearchPathItemName={hideSearchPathItemName}
         />
         <ConflictResolutionPopup
           {...conflictResolutionPopupOptions}
