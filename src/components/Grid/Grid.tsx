@@ -361,11 +361,12 @@ export const DialGrid = <T extends object>({
       } as ColDef<T>;
     }
   }, [
-    disabledRowIds,
-    getRowId,
-    selectionCellRenderer,
     selectionMode,
+    selectionCellRenderer,
+    getHeaderSelectionClasses,
+    getRowId,
     getSelectionClasses,
+    disabledRowIds,
   ]);
 
   const wrapRendererIfNeeded = useCallback(
