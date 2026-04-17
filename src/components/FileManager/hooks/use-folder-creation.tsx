@@ -90,7 +90,7 @@ export const useFolderCreation = ({
         return messages.emptyName;
       }
 
-      if (trimmedName.startsWith('.')) {
+      if (trimmedName.startsWith('.') && trimmedName.length > 1) {
         return messages.hiddenItemWarning;
       }
 
