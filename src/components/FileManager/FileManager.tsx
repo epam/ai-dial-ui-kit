@@ -1541,6 +1541,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions={{ header: treeOptions?.header }}
           onFolderPopupPathChange={onFolderPopupPathChange}
           showHiddenFileSwitcher={showHiddenFileSwitcherInDestinationPopup}
+          hideSearchPathItemName={hideSearchPathItemName}
         />
         <ConflictResolutionPopup
           {...conflictResolutionPopupOptions}
