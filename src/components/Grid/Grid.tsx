@@ -61,7 +61,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   wrapCustomCellRenderers?: boolean | ((col: ColDef<T>) => boolean);
   disabledRowIds?: Set<string>;
   selectedRowIds?: Set<string>;
-  selectionOnHover?: boolean;
   onGridApiChange?: (api: GridApi<T>) => void;
   onSelectionChange?: (selectedRowIds: Set<string>, selectedRows: T[]) => void;
   getRowId?: (row: T) => string;
@@ -154,7 +153,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
  * @param [wrapCustomCellRenderers=true] - Whether to wrap custom cell renderers with context menu support
  * @param [disabledRowIds] - Set of row IDs that should be disabled. Disabled rows are non-interactive and cannot be selected. IDs must match values from `getRowId`.
  * @param [selectedRowIds] - Controlled selection: set of row IDs that should be selected
- * @param [selectionOnHover=true] - Whether row selection highlights are shown on hover
  * @param [onSelectionChange] - Callback invoked when selection changes (selectedIds, selectedRows)
  * @param [onGridApiChange] - Callback invoked when the grid API becomes available
  * @param [getRowId] - Function to extract unique ID from a row object (defaults to 'id' field)
@@ -180,7 +178,6 @@ export const DialGrid = <T extends object>({
   wrapCustomCellRenderers = true,
   disabledRowIds,
   selectedRowIds,
-  selectionOnHover = true,
   onSelectionChange,
   onGridApiChange,
   getRowId = (row: T) =>
@@ -324,15 +321,22 @@ export const DialGrid = <T extends object>({
     [getRowId, disabledRowIds],
   );
 
-  const getSelectionClasses = useCallback((selectionOnHover: boolean) => {
+  const getSelectionClasses = useCallback(() => {
     const baseClass = 'dial-row-select';
     const visibleClass = 'dial-row-select-visible';
 
-    if (!selectionOnHover) {
-      return `${baseClass} ${visibleClass}`;
+    if (!selectedRowIds || selectedRowIds.size === 0) {
+      return baseClass;
     }
-    return baseClass;
-  }, []);
+    return `${baseClass} ${visibleClass}`;
+  }, [selectedRowIds]);
+
+  const getHeaderSelectionClasses = useCallback(() => {
+    if (!selectedRowIds || selectedRowIds.size === 0) {
+      return 'dial-row-not-select-header';
+    }
+    return getSelectionClasses();
+  }, [getSelectionClasses, selectedRowIds]);
 
   const selectionColumnDef = useMemo(() => {
     if (selectionMode === GridSelectionMode.SINGLE) {
@@ -344,10 +348,10 @@ export const DialGrid = <T extends object>({
     if (selectionMode === GridSelectionMode.MULTIPLE) {
       return {
         ...CHECKBOX_COL_DEF,
-        headerClass: () => getSelectionClasses(selectionOnHover),
+        headerClass: () => getHeaderSelectionClasses(),
         cellClass: (p) => {
           const rowId = p.data ? getRowId(p.data) : null;
-          let styles = getSelectionClasses(selectionOnHover);
+          let styles = getSelectionClasses();
 
           if (rowId && disabledRowIds?.has(rowId)) {
             styles += ' opacity-50 pointer-events-none';
@@ -357,12 +361,12 @@ export const DialGrid = <T extends object>({
       } as ColDef<T>;
     }
   }, [
-    disabledRowIds,
-    getRowId,
-    selectionCellRenderer,
     selectionMode,
-    selectionOnHover,
+    selectionCellRenderer,
+    getHeaderSelectionClasses,
+    getRowId,
     getSelectionClasses,
+    disabledRowIds,
   ]);
 
   const wrapRendererIfNeeded = useCallback(
