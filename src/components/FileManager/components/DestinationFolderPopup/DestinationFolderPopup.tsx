@@ -221,7 +221,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
                         label={hiddenFilesSwitcherLabel}
                         isOn={showHiddenFiles}
                         onChange={handleShowHiddenFilesChange}
-                        switchId="hidden-files-switch"
+                        switchId="hidden-files-switch-modal"
                       />
                     </div>
                   </>
