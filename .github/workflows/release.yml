@@ -4,11 +4,6 @@ on:
   push:
     branches: [development, release-*]
   workflow_dispatch:
-    inputs:
-      promote:
-        type: boolean
-        default: false
-        description: Promote release to stable (for release-* branches only)
 
 permissions:
   contents: write
@@ -23,6 +18,6 @@ jobs:
   release:
     uses: epam/ai-dial-ci/.github/workflows/node_release.yml@4.0.0
     with:
-      promote: ${{ github.event_name == 'workflow_dispatch' && inputs.promote }}
+      promote: true # HACK: skip RC phase, project does not require stabilization period before releasing stable versions
       docker-build-enabled: false
     secrets: inherit
