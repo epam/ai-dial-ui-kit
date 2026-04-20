@@ -1,9 +1,8 @@
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
+import { extensions } from 'mime-types';
 import type { ReactNode } from 'react';
 import type { FileManagerGridRow } from './FileManagerContext';
-import { extensions } from 'mime-types';
-import { join } from 'path/win32';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,

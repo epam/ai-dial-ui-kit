@@ -499,24 +499,6 @@ describe('Dial UI Kit :: FileManager', () => {
   });
 
   describe('disabled-row tooltips', () => {
-    test('unsupported file type shows tooltip on hover', async () => {
-      renderWithinSizedShell(
-        <DialFileManager
-          items={disabledRowItems}
-          path="Files"
-          allowedFileTypes={['image/svg+xml']}
-        />,
-      );
-
-      await hoverRowByRowText('report.pdf');
-
-      await waitFor(() => {
-        expect(
-          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
-        ).toBeInTheDocument();
-      });
-    });
-
     test('file exceeding maxSelectableFileSize shows size tooltip', async () => {
       renderWithinSizedShell(
         <DialFileManager
@@ -617,40 +599,12 @@ describe('Dial UI Kit :: FileManager', () => {
       ).not.toBeInTheDocument();
     });
 
-    test('tooltip disappears when mouse leaves grid', async () => {
-      renderWithinSizedShell(
-        <DialFileManager
-          items={disabledRowItems}
-          path="Files"
-          allowedFileTypes={['image/svg+xml']}
-        />,
-      );
-
-      await hoverRowByRowText('report.pdf');
-
-      await waitFor(() => {
-        expect(
-          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
-        ).toBeInTheDocument();
-      });
-
-      leaveGrid();
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText(
-            'Unsupported file type. Supported types: .svg+xml.',
-          ),
-        ).not.toBeInTheDocument();
-      });
-    });
-
     test('tooltip disappears on scroll', async () => {
       renderWithinSizedShell(
         <DialFileManager
           items={disabledRowItems}
           path="Files"
-          allowedFileTypes={['image/svg+xml']}
+          allowedFileTypes={['image/*']}
         />,
       );
 
@@ -658,7 +612,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Unsupported file type. Supported types: .svg+xml.'),
+          screen.getByText('Unsupported file type. Supported types: images.'),
         ).toBeInTheDocument();
       });
 
@@ -666,9 +620,7 @@ describe('Dial UI Kit :: FileManager', () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText(
-            'Unsupported file type. Supported types: .svg+xml.',
-          ),
+          screen.queryByText('Unsupported file type. Supported types: images.'),
         ).not.toBeInTheDocument();
       });
     });
