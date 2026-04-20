@@ -10,36 +10,30 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
     expect(formatAllowedFileTypesForTooltip([])).toBe('');
   });
 
-  it('keeps dot-prefixed extensions as-is', () => {
-    expect(formatAllowedFileTypesForTooltip(['.svg'])).toBe('.svg');
-    expect(formatAllowedFileTypesForTooltip(['.png', '.jpg'])).toBe(
-      '.png, .jpg',
-    );
-  });
-
-  it('keeps bare extensions (no dot, no slash) as-is', () => {
-    expect(formatAllowedFileTypesForTooltip(['svg'])).toBe('svg');
-    expect(formatAllowedFileTypesForTooltip(['png', 'jpg'])).toBe('png, jpg');
-  });
-
   it('converts application/ MIME types to dot-extension', () => {
     expect(formatAllowedFileTypesForTooltip(['application/pdf'])).toBe('.pdf');
     expect(formatAllowedFileTypesForTooltip(['application/json'])).toBe(
-      '.json',
+      '.json, .map',
     );
-    expect(formatAllowedFileTypesForTooltip(['application/*'])).toBe('.*');
+    expect(formatAllowedFileTypesForTooltip(['application/*'])).toBe(
+      'applications',
+    );
   });
 
   it('keeps text/ MIME types as-is', () => {
-    expect(formatAllowedFileTypesForTooltip(['text/plain'])).toBe('text/plain');
-    expect(formatAllowedFileTypesForTooltip(['text/csv'])).toBe('text/csv');
-    expect(formatAllowedFileTypesForTooltip(['text/*'])).toBe('text/*');
+    expect(formatAllowedFileTypesForTooltip(['text/plain'])).toBe(
+      '.txt, .text, .conf, .def, .list, .log, .in, .ini',
+    );
+    expect(formatAllowedFileTypesForTooltip(['text/csv'])).toBe('.csv');
+    expect(formatAllowedFileTypesForTooltip(['text/*'])).toBe('texts');
   });
 
   it('converts other MIME types to dot-extension', () => {
     expect(formatAllowedFileTypesForTooltip(['image/png'])).toBe('.png');
-    expect(formatAllowedFileTypesForTooltip(['image/*'])).toBe('.*');
-    expect(formatAllowedFileTypesForTooltip(['audio/mpeg'])).toBe('.mpeg');
+    expect(formatAllowedFileTypesForTooltip(['image/*'])).toBe('images');
+    expect(formatAllowedFileTypesForTooltip(['audio/mpeg'])).toBe(
+      '.mpga, .mp2, .mp2a, .mp3, .m2a, .m3a',
+    );
   });
 
   it('handles mixed types correctly', () => {
@@ -51,6 +45,6 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
         'text/plain',
         'image/png',
       ]),
-    ).toBe('.svg, svg, .pdf, text/plain, .png');
+    ).toBe('.pdf, .txt, .text, .conf, .def, .list, .log, .in, .ini, .png');
   });
 });

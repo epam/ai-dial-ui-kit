@@ -2,6 +2,8 @@ import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import type { ReactNode } from 'react';
 import type { FileManagerGridRow } from './FileManagerContext';
+import { extensions } from 'mime-types';
+import { join } from 'path/win32';
 
 export const findNodeByPath = (
   nodes: DialFile[] | undefined,
@@ -149,18 +151,39 @@ export function isFileAccepted(
 export const formatAllowedFileTypesForTooltip = (
   allowedFileTypes: DialFileAcceptType[] | undefined,
 ): string => {
-  if (!allowedFileTypes) return '';
-  return allowedFileTypes
-    .map((type) => {
-      if (type.startsWith('text/')) {
-        return type;
+  return (
+    allowedFileTypes
+      ?.map((type) => {
+        if (type.endsWith('/*')) {
+          return type.replace('/*', 's');
+        }
+
+        return getExtensionsListForMimeType(type)
+          .flat()
+          .map((type) => `.${type}`);
+      })
+      .flat()
+      .join(', ') || ''
+  );
+};
+
+export const getExtensionsListForMimeType = (mimeType: string) => {
+  const [subset, name] = mimeType.split('/');
+
+  if (subset === '*') {
+    return ['all'];
+  } else if (name === '*') {
+    return Object.entries(extensions).reduce((acc, [key, value]) => {
+      const [keySubset] = key.split('/');
+      if (keySubset === subset) {
+        acc.push(...value);
       }
-      if (type.includes('/')) {
-        return `.${type.split('/')[1]}`;
-      }
-      return type;
-    })
-    .join(', ');
+
+      return acc;
+    }, [] as string[]);
+  } else {
+    return extensions[mimeType] || [];
+  }
 };
 
 export const cleanForbiddenSymbolsRegExp = (
