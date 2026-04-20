@@ -157,6 +157,9 @@ export const useBulkActions = ({
         label: actionLabels[DialFileManagerActions.Unshare],
         title: actionLabels[DialFileManagerActions.Unshare],
         disabled,
+        tooltip: disabled
+          ? 'Selected items contain item which can not be unshared'
+          : undefined,
         icon: (
           <IconUnshare
             width={BASE_ICON_PROPS.size}
