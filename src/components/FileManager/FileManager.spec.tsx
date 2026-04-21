@@ -313,13 +313,6 @@ const hoverRowByRowText = async (rowText: string) => {
   fireEvent.mouseMove(cell);
 };
 
-const leaveGrid = () => {
-  const gridSection = screen.getByRole('region', {
-    name: 'File Manager Grid View',
-  });
-  fireEvent.mouseLeave(gridSection);
-};
-
 const expectNoDisabledTooltip = () => {
   expect(screen.queryByText(/Unsupported file type/)).not.toBeInTheDocument();
   expect(screen.queryByText(/File is too large/)).not.toBeInTheDocument();
