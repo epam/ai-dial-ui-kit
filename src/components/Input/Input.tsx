@@ -86,7 +86,7 @@ export const DialInput: FC<DialInputProps> = ({
   ...props
 }) => {
   return (
-    <div className={mergeClasses('flex flex-col gap-y-2', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
@@ -205,6 +205,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
           value={value ?? ''}
           className={mergeClasses(
             'border-0 bg-transparent w-full truncate',
+            disabled && 'cursor-not-allowed',
             className,
           )}
           onChange={handleChange}
