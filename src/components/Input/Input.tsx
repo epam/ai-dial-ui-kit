@@ -33,6 +33,7 @@ export interface DialInputProps
   invalid?: boolean;
   error?: string;
   caption?: string;
+  tooltipText?: boolean;
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
@@ -112,6 +113,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   type,
   inputRef,
   value,
+  tooltipText,
   min,
   onChange,
   max,
@@ -226,7 +228,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
     );
   };
   return disabled && type !== 'password' ? (
-    <DialTooltip tooltip={value}>{input()}</DialTooltip>
+    <DialTooltip tooltip={tooltipText || value}>{input()}</DialTooltip>
   ) : (
     input()
   );
