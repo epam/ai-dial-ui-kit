@@ -33,7 +33,7 @@ export interface DialInputProps
   invalid?: boolean;
   error?: string;
   caption?: string;
-  tooltipText?: boolean;
+  tooltipText?: string;
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
