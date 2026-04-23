@@ -72,7 +72,7 @@ export const DialTextarea: FC<DialTextareaProps> = ({
   );
 
   return (
-    <div className={mergeClasses('flex flex-col gap-y-2', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
       <textarea
         id={id}

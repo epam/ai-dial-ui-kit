@@ -33,6 +33,7 @@ export interface DialInputProps
   invalid?: boolean;
   error?: string;
   caption?: string;
+  tooltipText?: string;
 
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
@@ -85,7 +86,7 @@ export const DialInput: FC<DialInputProps> = ({
   ...props
 }) => {
   return (
-    <div className={mergeClasses('flex flex-col gap-y-2', containerClassName)}>
+    <div className={mergeClasses('flex flex-col gap-y-1', containerClassName)}>
       {labelProps && <DialLabel {...labelProps} htmlFor={id} />}
 
       <InputWrapper id={id} {...props} />
@@ -112,6 +113,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   type,
   inputRef,
   value,
+  tooltipText,
   min,
   onChange,
   max,
@@ -203,6 +205,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
           value={value ?? ''}
           className={mergeClasses(
             'border-0 bg-transparent w-full truncate',
+            disabled && 'cursor-not-allowed',
             className,
           )}
           onChange={handleChange}
@@ -226,7 +229,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
     );
   };
   return disabled && type !== 'password' ? (
-    <DialTooltip tooltip={value}>{input()}</DialTooltip>
+    <DialTooltip tooltip={tooltipText || value}>{input()}</DialTooltip>
   ) : (
     input()
   );
