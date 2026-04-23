@@ -94,7 +94,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
 
   return (
     <div className={containerClassName}>
-      <div className="flex flex-row">
+      <div className={classNames('flex flex-row', !caption && 'items-center')}>
         <input
           type="radio"
           id={inputId}
@@ -107,7 +107,7 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           onChange={handleChange}
         />
         {(label || caption) && (
-          <div className="flex flex-col gap-1 ml-2">
+          <div className="flex flex-col gap-1">
             {label && (
               <label
                 className={allLabelClassName}
