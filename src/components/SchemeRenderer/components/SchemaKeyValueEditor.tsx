@@ -2,7 +2,7 @@ import { type FC, useState } from 'react';
 import { IconPlus, IconX } from '@tabler/icons-react';
 import { DialInput } from '@/components/Input/Input';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
-import type { JsonSchemaDef } from '../types';
+import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
 
 interface KeyValuePair {
@@ -73,6 +73,23 @@ export interface SchemaKeyValueEditorProps {
   onChange: (value: unknown) => void;
 }
 
+/**
+ * Renders an `additionalProperties` object schema as an editable key-value list.
+ * aliases: KeyValueSchemaEditor|AdditionalPropertiesEditor
+ *
+ * @example
+ * ```tsx
+ * <SchemaKeyValueEditor
+ *   schema={{ type: 'object', additionalProperties: { type: 'string' } }}
+ *   value={{ foo: 'bar' }}
+ *   onChange={(v) => console.log(v)}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema object definition with `additionalProperties`
+ * @param value - Current object value (treated as a key-value map)
+ * @param onChange - Called with the updated object when pairs are added, removed, or changed
+ */
 export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
   schema,
   value,

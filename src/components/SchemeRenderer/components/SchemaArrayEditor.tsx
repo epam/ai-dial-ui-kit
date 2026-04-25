@@ -2,8 +2,8 @@ import { type FC, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialSelect } from '@/components/Select/Select';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
-import type { JsonSchemaDef } from '../types';
-import { useSchemaContext } from '../context';
+import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
 import {
   resolveRef,
   extractDefaults,
@@ -11,7 +11,7 @@ import {
   validateRequired,
   getItemTitle,
   getSchemaDefault,
-} from '../utils';
+} from '@/components/SchemeRenderer/utils';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
@@ -23,6 +23,27 @@ export interface SchemaArrayEditorProps {
   level: number;
 }
 
+/**
+ * Renders a JSON Schema array as a list of collapsible items with add and remove controls.
+ * aliases: ArraySchemaEditor|SchemaListEditor
+ *
+ * @example
+ * ```tsx
+ * <SchemaArrayEditor
+ *   schema={{ type: 'array', items: { type: 'string' } }}
+ *   value={['foo', 'bar']}
+ *   onChange={(v) => console.log(v)}
+ *   path={['tags']}
+ *   level={1}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema array definition (must include an `items` sub-schema)
+ * @param value - Current array value
+ * @param onChange - Called with the updated array when items are added, removed, or changed
+ * @param path - Field path segments used for validation error tracking
+ * @param level - Nesting depth passed to child section components
+ */
 export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
   schema,
   value,

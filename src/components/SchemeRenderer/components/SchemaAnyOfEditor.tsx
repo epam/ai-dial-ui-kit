@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { DialSelect } from '@/components/Select/Select';
-import type { JsonSchemaDef } from '../types';
-import { useSchemaContext } from '../context';
+import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
 import {
   resolveRef,
   getOptionLabel,
   detectAnyOfVariant,
   extractDefaults,
-} from '../utils';
+} from '@/components/SchemeRenderer/utils';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
 export interface SchemaAnyOfEditorProps {
@@ -18,6 +18,27 @@ export interface SchemaAnyOfEditorProps {
   level: number;
 }
 
+/**
+ * Renders an `anyOf` schema field as a type-selector dropdown with an inline sub-editor.
+ * aliases: AnyOfSchemaEditor|SchemaUnionEditor
+ *
+ * @example
+ * ```tsx
+ * <SchemaAnyOfEditor
+ *   schema={{ anyOf: [{ type: 'null' }, { type: 'string' }] }}
+ *   value={null}
+ *   onChange={(v) => console.log(v)}
+ *   path={['field']}
+ *   level={1}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema definition containing an `anyOf` array
+ * @param value - Current field value
+ * @param onChange - Called with the new value when the type or sub-value changes
+ * @param path - Field path segments used for validation error tracking
+ * @param level - Nesting depth passed to child field components
+ */
 export const SchemaAnyOfEditor: FC<SchemaAnyOfEditorProps> = ({
   schema,
   value,
@@ -71,7 +92,7 @@ export const SchemaAnyOfEditor: FC<SchemaAnyOfEditorProps> = ({
         }}
       />
       {!isNull && selectedSchema && (
-        <div className="pl-3 border-l-2 border-border-secondary">
+        <div className="pl-3 border-l-2 border-secondary">
           <SchemaFieldContent
             schema={selectedSchema}
             value={value}

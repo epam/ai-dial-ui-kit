@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { DialSelect } from '@/components/Select/Select';
-import type { JsonSchemaDef } from '../types';
-import { useSchemaContext } from '../context';
-import { resolveRef, extractDefaults } from '../utils';
+import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import { resolveRef, extractDefaults } from '@/components/SchemeRenderer/utils';
 import { SchemaObjectEditor } from './SchemaObjectEditor';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
@@ -14,6 +14,27 @@ export interface SchemaOneOfEditorProps {
   level: number;
 }
 
+/**
+ * Renders a `oneOf` schema field as a type-selector dropdown with an inline sub-editor.
+ * aliases: OneOfSchemaEditor|SchemaDiscriminatorEditor
+ *
+ * @example
+ * ```tsx
+ * <SchemaOneOfEditor
+ *   schema={{ oneOf: [...], discriminator: { propertyName: 'type', mapping: {...} } }}
+ *   value={{ type: 'foo' }}
+ *   onChange={(v) => console.log(v)}
+ *   path={['config']}
+ *   level={1}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema definition containing a `oneOf` array and optional `discriminator`
+ * @param value - Current field value
+ * @param onChange - Called with the new value when the selected type or sub-value changes
+ * @param path - Field path segments used for validation error tracking
+ * @param level - Nesting depth passed to child editor components
+ */
 export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
   schema,
   value,
@@ -61,7 +82,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
           }}
         />
         {selectedSchema && (
-          <div className="pl-3 border-l-2 border-border-secondary">
+          <div className="pl-3 border-l-2 border-secondary">
             <SchemaObjectEditor
               schema={selectedSchema}
               value={value}
@@ -114,7 +135,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
         }}
       />
       {selectedSchema && (
-        <div className="pl-3 border-l-2 border-border-secondary">
+        <div className="pl-3 border-l-2 border-secondary">
           <SchemaFieldContent
             schema={selectedSchema}
             value={value}

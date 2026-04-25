@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import type { SchemaFieldContentProps } from '../types';
-import { useSchemaContext } from '../context';
-import { resolveRef, isObjectType } from '../utils';
+import type { SchemaFieldContentProps } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import { resolveRef, isObjectType } from '@/components/SchemeRenderer/utils';
 import { SchemaObjectEditor } from './SchemaObjectEditor';
 import { SchemaArrayEditor } from './SchemaArrayEditor';
 import { SchemaOneOfEditor } from './SchemaOneOfEditor';
@@ -9,6 +9,28 @@ import { SchemaAnyOfEditor } from './SchemaAnyOfEditor';
 import { SchemaKeyValueEditor } from './SchemaKeyValueEditor';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
 
+/**
+ * Routes a resolved schema to the appropriate editor component.
+ * aliases: SchemaEditorRouter|SchemaContentDispatcher
+ *
+ * @example
+ * ```tsx
+ * <SchemaFieldContent
+ *   schema={{ type: 'string' }}
+ *   value="hello"
+ *   onChange={(v) => console.log(v)}
+ *   path={['name']}
+ *   level={1}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema definition to render
+ * @param value - Current field value
+ * @param onChange - Called with the updated value when the field changes
+ * @param path - Field path segments used for validation error tracking
+ * @param level - Nesting depth passed to child editor components
+ * @param [required] - Whether the field is required (passed to primitive fields for error styling)
+ */
 export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
   schema,
   value,

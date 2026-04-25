@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import type { JsonSchemaDef } from '../types';
-import { useSchemaContext } from '../context';
-import { resolveRef, toFieldLabel } from '../utils';
+import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import { resolveRef, toFieldLabel } from '@/components/SchemeRenderer/utils';
 import { SchemaField } from './SchemaField';
 
 export interface SchemaObjectEditorProps {
@@ -12,6 +12,27 @@ export interface SchemaObjectEditorProps {
   level: number;
 }
 
+/**
+ * Renders the properties of a JSON Schema object as labeled form fields.
+ * aliases: ObjectSchemaEditor|SchemaPropertiesEditor
+ *
+ * @example
+ * ```tsx
+ * <SchemaObjectEditor
+ *   schema={{ type: 'object', properties: { name: { type: 'string' } } }}
+ *   value={{ name: 'Alice' }}
+ *   onChange={(v) => console.log(v)}
+ *   path={['config']}
+ *   level={1}
+ * />
+ * ```
+ *
+ * @param schema - The JSON Schema object definition
+ * @param value - Current object value
+ * @param onChange - Called with the updated object when any property changes
+ * @param path - Field path segments used for validation error tracking
+ * @param level - Nesting depth passed to child SchemaField instances
+ */
 export const SchemaObjectEditor: FC<SchemaObjectEditorProps> = ({
   schema,
   value,

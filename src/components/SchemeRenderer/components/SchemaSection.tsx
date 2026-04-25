@@ -20,6 +20,26 @@ export interface SchemaSectionProps {
   defaultExpanded?: boolean;
 }
 
+/**
+ * A collapsible section card used to wrap schema property groups.
+ * aliases: CollapsibleSchemaSection|SchemaCard
+ *
+ * @example
+ * ```tsx
+ * <SchemaSection title="Settings" level={0} summary="3/4 fields" errorCount={1}>
+ *   <p>Content</p>
+ * </SchemaSection>
+ * ```
+ *
+ * @param title - Section header title
+ * @param [description] - Optional description shown in collapsed state
+ * @param [summary] - Short summary text shown in the header (e.g. "3/4 fields", "2 items")
+ * @param [errorCount=0] - Number of validation errors; shows error badge when > 0
+ * @param [level=0] - Nesting depth; 0 = top-level card style, 1+ = nested style
+ * @param [children] - Section body content rendered when expanded
+ * @param [onRemove] - If provided, shows a remove button in the section header
+ * @param [defaultExpanded=true] - Whether the section starts in the expanded state
+ */
 export const SchemaSection: FC<SchemaSectionProps> = ({
   title,
   description,
@@ -33,10 +53,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const isTopLevel = level === 0;
 
-  const containerClass = mergeClasses(
-    'rounded border',
-    isTopLevel ? 'border-border-secondary' : 'border-border-secondary',
-  );
+  const containerClass = 'rounded border border-secondary';
 
   const headerClass = mergeClasses(
     'flex items-center gap-2 cursor-pointer select-none transition-colors',
@@ -47,7 +64,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
   );
 
   const contentClass = mergeClasses(
-    'border-t border-border-secondary',
+    'border-t border-secondary',
     isTopLevel ? 'p-4' : 'p-3',
   );
 

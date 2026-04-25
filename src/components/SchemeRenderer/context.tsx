@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { JsonSchema } from './types';
+import type { JsonSchema } from '@/components/SchemeRenderer/types';
 
 interface SchemaRendererContextValue {
   rootSchema: JsonSchema;
