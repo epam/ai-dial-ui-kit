@@ -237,4 +237,52 @@ describe('Dial UI Kit :: DialInputPopup', () => {
 
     expect(screen.getByText(errorText)).toBeInTheDocument();
   });
+
+  // --- iconBefore tests ---
+
+  test('Should render iconBefore in single value mode', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue="Some Value"
+        emptyValueText="None"
+        iconBefore={<svg data-testid="prefix-icon" />}
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    expect(screen.getByTestId('prefix-icon')).toBeInTheDocument();
+  });
+
+  test('Should render iconBefore in editable mode', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue="Editable Value"
+        emptyValueText="None"
+        editable
+        iconBefore={<svg data-testid="prefix-icon" />}
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    expect(screen.getByTestId('prefix-icon')).toBeInTheDocument();
+  });
+
+  test('Should render iconBefore in multiple values mode', () => {
+    render(
+      <DialInputPopup
+        onOpen={mockFunction}
+        selectedValue={['Value 1', 'Value 2']}
+        emptyValueText="None"
+        iconBefore={<svg data-testid="prefix-icon" />}
+      >
+        <div></div>
+      </DialInputPopup>,
+    );
+
+    expect(screen.getByTestId('prefix-icon')).toBeInTheDocument();
+  });
 });

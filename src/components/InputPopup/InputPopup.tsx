@@ -26,6 +26,7 @@ export interface DialInputPopupProps {
   editable?: boolean;
   onValueChange?: (value: string) => void;
   collapseTagOverflow?: boolean;
+  iconBefore?: ReactNode;
 }
 
 /**
@@ -66,6 +67,7 @@ export interface DialInputPopupProps {
  * @param [emptyValueText] - The text displayed when no value is selected and placeholder is not provided.
  * @param [editable=false] - When true, the input area becomes an editable text field; only the icon opens the popup.
  * @param [onValueChange] - Callback fired when the user types in the editable input.
+ * @param [iconBefore] - Optional icon rendered at the start of the field, before the value.
  */
 export const DialInputPopup: FC<DialInputPopupProps> = ({
   children,
@@ -83,6 +85,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
   editable = false,
   onValueChange,
   collapseTagOverflow = false,
+  iconBefore,
 }) => {
   const hasMultipleValues =
     Array.isArray(selectedValue) && selectedValue.length > 0;
@@ -108,12 +111,13 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
     <>
       <div
         className={classNames(
-          'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between',
+          'dial-input px-3 py-2 dial-input-field flex flex-row items-center gap-x-2 w-full justify-between',
           inputClassName,
           disabled && 'dial-input-disable',
           (errorText || invalid) && 'dial-input-error',
         )}
       >
+        {iconBefore && <DialIcon icon={iconBefore} />}
         <input
           type="text"
           className={classNames(
@@ -161,12 +165,13 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
       >
         <div
           className={classNames(
-            'dial-input px-3 py-2 dial-input-field flex flex-row items-center w-full justify-between cursor-pointer',
+            'dial-input px-3 py-2 dial-input-field flex flex-row items-center gap-x-2 w-full justify-between cursor-pointer',
             inputClassName,
             disabled && 'dial-input-disable',
             (errorText || invalid) && 'dial-input-error',
           )}
         >
+          {iconBefore && <DialIcon icon={iconBefore} />}
           <DialTooltip tooltip={value == null ? undefined : String(value)}>
             {value || !placeholder ? (
               <span className={valueClassName}>{value}</span>
@@ -197,10 +202,11 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
     <div className="w-full" onClick={handleClick}>
       <div
         className={classNames(
-          'dial-input px-3 py-2 flex flex-row items-center w-full justify-between cursor-pointer',
+          'dial-input px-3 py-2 flex flex-row items-center gap-x-2 w-full justify-between cursor-pointer',
           disabled && 'dial-input-disable',
         )}
       >
+        {iconBefore && <DialIcon icon={iconBefore} />}
         <DialAutocompleteInputValue
           placeholder={placeholder}
           selectedItems={value as string[]}
