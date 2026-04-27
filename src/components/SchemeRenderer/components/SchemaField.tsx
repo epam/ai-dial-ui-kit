@@ -1,6 +1,5 @@
 import type { FC } from 'react';
-import { DialLabel } from '@/components/Label/Label';
-import { DialErrorText } from '@/components/CaptionText/CaptionText';
+import { DialFormItem } from '@/components/FormItem/FormItem';
 import type { SchemaFieldProps } from '@/components/SchemeRenderer/types';
 import { useSchemaContext } from '@/components/SchemeRenderer/context';
 import {
@@ -86,14 +85,12 @@ export const SchemaField: FC<SchemaFieldProps> = ({
       : undefined;
 
   return (
-    <div className="flex flex-col gap-1">
-      {label && (
-        <DialLabel
-          label={label}
-          required={required}
-          caption={resolved.description}
-        />
-      )}
+    <DialFormItem
+      label={label}
+      required={required}
+      description={resolved.description}
+      error={error}
+    >
       <SchemaFieldContent
         schema={resolved}
         value={value}
@@ -102,7 +99,6 @@ export const SchemaField: FC<SchemaFieldProps> = ({
         level={level}
         required={required}
       />
-      {error && <DialErrorText text={error} />}
-    </div>
+    </DialFormItem>
   );
 };

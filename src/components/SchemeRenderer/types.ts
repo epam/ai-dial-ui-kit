@@ -29,9 +29,50 @@ export interface ValidationError {
   message: string;
 }
 
+export interface SchemaRendererTexts {
+  noItemSchema: string;
+  noItemsYet: string;
+  addItem: string;
+  selectTypeToAdd: string;
+  noConfigurableProperties: string;
+  noFieldsYet: string;
+  keyColumnHeader: string;
+  valueColumnHeader: string;
+  addField: string;
+  keyInputPlaceholder: string;
+  stringInputPlaceholder: string;
+  integerInputPlaceholder: string;
+  numberInputPlaceholder: string;
+  enumSelectPlaceholder: string;
+  selectTypePlaceholder: string;
+  removeItemAriaLabel: string;
+  removeFieldAriaLabel: string;
+}
+
+export const DEFAULT_SCHEMA_TEXTS: SchemaRendererTexts = {
+  noItemSchema: 'No item schema defined.',
+  noItemsYet: 'No items yet. Add one below.',
+  addItem: 'Add Item',
+  selectTypeToAdd: 'Select type to add…',
+  noConfigurableProperties: 'No configurable properties.',
+  noFieldsYet: 'No fields yet. Add one below.',
+  keyColumnHeader: 'Key',
+  valueColumnHeader: 'Value',
+  addField: 'Add Field',
+  keyInputPlaceholder: 'Enter key',
+  stringInputPlaceholder: 'Enter a value',
+  integerInputPlaceholder: 'Enter a whole number',
+  numberInputPlaceholder: 'Enter a number',
+  enumSelectPlaceholder: 'Select an option',
+  selectTypePlaceholder: 'Select type',
+  removeItemAriaLabel: 'Remove item',
+  removeFieldAriaLabel: 'Remove field',
+};
+
 export interface DialSchemeRendererProps {
   schema: JsonSchema;
   defaultValue?: Record<string, unknown>;
+  texts?: Partial<SchemaRendererTexts>;
   className?: string;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;

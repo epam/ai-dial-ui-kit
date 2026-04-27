@@ -1,11 +1,23 @@
+import { type ReactElement } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
+import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
+import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemeRenderer/types';
 import { SchemaKeyValueEditor } from '@/components/SchemeRenderer/components/SchemaKeyValueEditor';
+
+const renderWithSchema = (ui: ReactElement) =>
+  render(
+    <SchemaRendererContext.Provider
+      value={{ rootSchema: {}, texts: DEFAULT_SCHEMA_TEXTS }}
+    >
+      {ui}
+    </SchemaRendererContext.Provider>,
+  );
 
 describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
   test('renders empty state when value is an empty object', () => {
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: true }}
         value={{}}
@@ -16,7 +28,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
   });
 
   test('renders existing key-value pairs on mount', () => {
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: 'bar' }}
@@ -28,7 +40,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
   });
 
   test('shows column headers when pairs exist', () => {
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ x: 'y' }}
@@ -40,7 +52,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
   });
 
   test('adds a new empty row when "Add Field" is clicked', () => {
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: true }}
         value={{}}
@@ -53,7 +65,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
 
   test('removes a pair and calls onChange with updated object', () => {
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: 'bar' }}
@@ -66,7 +78,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
 
   test('removes the correct pair when multiple pairs exist', () => {
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ a: '1', b: '2', c: '3' }}
@@ -82,7 +94,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
 
   test('calls onChange immediately when value input changes', () => {
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: '' }}
@@ -97,7 +109,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
 
   test('does not call onChange while typing in key input', () => {
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: 'bar' }}
@@ -111,7 +123,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
 
   test('calls onChange with new key after key input is blurred', () => {
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: 'bar' }}
@@ -127,7 +139,7 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
   test('does not call onChange on blur when key has not changed', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(
+    renderWithSchema(
       <SchemaKeyValueEditor
         schema={{ type: 'object', additionalProperties: { type: 'string' } }}
         value={{ foo: 'bar' }}

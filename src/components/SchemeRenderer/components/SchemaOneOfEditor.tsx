@@ -42,7 +42,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const { rootSchema, texts } = useSchemaContext();
   const discriminator = schema.discriminator;
 
   if (discriminator) {
@@ -75,7 +75,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
         <DialSelect
           options={options}
           value={currentType}
-          placeholder="Select type…"
+          placeholder={texts.selectTypePlaceholder}
           onChange={(next) => {
             const val = typeof next === 'string' ? next : next[0];
             if (val) handleTypeChange(val);

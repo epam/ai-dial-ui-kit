@@ -2,12 +2,17 @@ import { type ReactElement } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
-import type { JsonSchema } from '@/components/SchemeRenderer/types';
+import {
+  type JsonSchema,
+  DEFAULT_SCHEMA_TEXTS,
+} from '@/components/SchemeRenderer/types';
 import { SchemaOneOfEditor } from '@/components/SchemeRenderer/components/SchemaOneOfEditor';
 
 const renderWithSchema = (ui: ReactElement, schema: JsonSchema = {}) =>
   render(
-    <SchemaRendererContext.Provider value={{ rootSchema: schema }}>
+    <SchemaRendererContext.Provider
+      value={{ rootSchema: schema, texts: DEFAULT_SCHEMA_TEXTS }}
+    >
       {ui}
     </SchemaRendererContext.Provider>,
   );

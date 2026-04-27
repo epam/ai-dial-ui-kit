@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialSchemeRenderer } from './SchemeRenderer';
 import type { JsonSchema } from './types';
-import { SCHEME_JSON } from './scheme';
 
 const simpleSchema: JsonSchema = {
   properties: {
@@ -185,11 +184,5 @@ export const ArrayWithDiscriminator: Story = {
     defaultValue: {
       tools: [{ type: 'rest-api', name: 'My API', url: 'https://example.com' }],
     },
-  },
-};
-
-export const QuickAppScheme: Story = {
-  args: {
-    schema: SCHEME_JSON,
   },
 };

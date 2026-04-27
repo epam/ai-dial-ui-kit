@@ -4,9 +4,9 @@ import {
   IconChevronRight,
   IconAlertTriangle,
   IconCheck,
-  IconX,
 } from '@tabler/icons-react';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface SchemaSectionProps {
@@ -18,6 +18,7 @@ export interface SchemaSectionProps {
   children?: ReactNode;
   onRemove?: () => void;
   defaultExpanded?: boolean;
+  removeItemAriaLabel?: string;
 }
 
 /**
@@ -49,6 +50,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
   children,
   onRemove,
   defaultExpanded = true,
+  removeItemAriaLabel = 'Remove item',
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const isTopLevel = level === 0;
@@ -76,7 +78,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
         role="button"
         aria-expanded={isExpanded}
       >
-        <span className="flex-shrink-0 text-text-secondary">
+        <span className="flex-shrink-0 text-secondary">
           {isExpanded ? (
             <IconChevronDown size={16} stroke={2} />
           ) : (
@@ -88,27 +90,27 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
           className={mergeClasses(
             'flex-1 truncate',
             isTopLevel
-              ? 'dial-small-semi text-text-primary'
-              : 'dial-small text-text-primary',
+              ? 'dial-small-semi-text text-primary'
+              : 'dial-small-text text-primary',
           )}
         >
           {title}
         </span>
 
         {!isExpanded && description && (
-          <span className="dial-tiny text-text-secondary truncate max-w-[180px] hidden sm:block">
+          <span className="dial-tiny-text text-secondary truncate max-w-[180px] hidden sm:block">
             {description}
           </span>
         )}
 
         {summary && (
-          <span className="dial-tiny text-text-secondary whitespace-nowrap ml-2">
+          <span className="dial-tiny-text text-secondary whitespace-nowrap ml-2">
             {summary}
           </span>
         )}
 
         {errorCount > 0 ? (
-          <span className="flex items-center gap-1 dial-tiny text-error whitespace-nowrap">
+          <span className="flex items-center gap-1 dial-tiny-text text-error whitespace-nowrap">
             <DialIcon icon={<IconAlertTriangle size={13} stroke={2} />} />
             {errorCount} error{errorCount > 1 ? 's' : ''}
           </span>
@@ -120,17 +122,15 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
         )}
 
         {onRemove && (
-          <button
-            type="button"
-            onClick={(e) => {
+          <DialCloseButton
+            size={14}
+            onClose={(e) => {
               e.stopPropagation();
               onRemove();
             }}
-            className="ml-1 flex-shrink-0 text-text-secondary hover:text-error transition-colors rounded p-0.5"
-            aria-label="Remove item"
-          >
-            <IconX size={14} stroke={2} />
-          </button>
+            ariaLabel={removeItemAriaLabel}
+            className="ml-1 flex-shrink-0 hover:enabled:text-error p-0.5"
+          />
         )}
       </div>
 

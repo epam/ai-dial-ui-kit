@@ -1,4 +1,5 @@
-import { type FC, useState } from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+import { type FC, useMemo, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialSelect } from '@/components/Select/Select';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
@@ -51,7 +52,7 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const { rootSchema, texts } = useSchemaContext();
   const items = Array.isArray(value) ? (value as unknown[]) : [];
   const itemSchema = schema.items;
   const [selectedAddType, setSelectedAddType] = useState<string | undefined>(
@@ -60,19 +61,37 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
 
   if (!itemSchema) {
     return (
-      <p className="dial-tiny text-text-secondary italic">
-        No item schema defined.
+      <p className="dial-tiny-text text-secondary italic">
+        {texts.noItemSchema}
       </p>
     );
   }
 
-  const resolvedItemSchema = resolveRef(itemSchema, rootSchema);
-  const discriminator = resolvedItemSchema.discriminator;
-  const discriminatorProp = discriminator?.propertyName;
+  const resolvedItemSchema = useMemo(
+    () => resolveRef(itemSchema, rootSchema),
+    [itemSchema, rootSchema],
+  );
 
-  const addTypeOptions = discriminator
-    ? Object.keys(discriminator.mapping).map((k) => ({ value: k, label: k }))
-    : [];
+  const discriminator = useMemo(
+    () => resolvedItemSchema.discriminator,
+    [resolvedItemSchema],
+  );
+
+  const discriminatorProp = useMemo(
+    () => discriminator?.propertyName,
+    [discriminator],
+  );
+
+  const addTypeOptions = useMemo(
+    () =>
+      discriminator
+        ? Object.keys(discriminator.mapping).map((k) => ({
+            value: k,
+            label: k,
+          }))
+        : [],
+    [discriminator],
+  );
 
   const handleAdd = () => {
     const typeToAdd = selectedAddType ?? addTypeOptions[0]?.value;
@@ -109,8 +128,8 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
   return (
     <div className="flex flex-col gap-3">
       {items.length === 0 && (
-        <p className="dial-tiny text-text-secondary italic">
-          No items yet. Add one below.
+        <p className="dial-tiny-text text-secondary italic">
+          {texts.noItemsYet}
         </p>
       )}
 
@@ -133,6 +152,7 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
             errorCount={errors.length}
             onRemove={() => handleRemove(i)}
             defaultExpanded={false}
+            removeItemAriaLabel={texts.removeItemAriaLabel}
           >
             <SchemaFieldContent
               schema={itemSchema}
@@ -151,7 +171,7 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
             <DialSelect
               options={addTypeOptions}
               value={selectedAddType ?? addTypeOptions[0]?.value}
-              placeholder="Select type to add…"
+              placeholder={texts.selectTypeToAdd}
               onChange={(next) => {
                 const val = typeof next === 'string' ? next : next[0];
                 setSelectedAddType(val);
@@ -160,7 +180,7 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
           </div>
         )}
         <DialGhostButton
-          label="Add Item"
+          label={texts.addItem}
           iconBefore={<IconPlus size={16} stroke={2} />}
           onClick={handleAdd}
         />

@@ -4,6 +4,7 @@ import { DialNumberInput } from '@/components/NumberInput/NumberInput';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { DialSelect } from '@/components/Select/Select';
 import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
+import { useSchemaContext } from '@/components/SchemeRenderer/context';
 
 export interface SchemaPrimitiveFieldProps {
   schema: JsonSchemaDef;
@@ -37,6 +38,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
   invalid,
 }) => {
   const switchId = useId();
+  const { texts } = useSchemaContext();
   const isConst = schema.const !== undefined;
   const hasEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
 
@@ -62,7 +64,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         value={value != null ? String(value) : undefined}
         invalid={invalid}
         onChange={(next) => onChange(typeof next === 'string' ? next : next[0])}
-        placeholder="Select an option…"
+        placeholder={texts.enumSelectPlaceholder}
       />
     );
   }
@@ -84,7 +86,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         value={value !== undefined && value !== null ? String(value) : ''}
         invalid={invalid}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
-        placeholder="Enter a whole number…"
+        placeholder={texts.integerInputPlaceholder}
       />
     );
   }
@@ -95,7 +97,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         value={value !== undefined && value !== null ? String(value) : ''}
         invalid={invalid}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
-        placeholder="Enter a number…"
+        placeholder={texts.numberInputPlaceholder}
       />
     );
   }
@@ -105,7 +107,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       value={value !== undefined && value !== null ? String(value) : ''}
       invalid={invalid}
       onChange={(v) => onChange(v ?? undefined)}
-      placeholder="Enter a value…"
+      placeholder={texts.stringInputPlaceholder}
     />
   );
 };

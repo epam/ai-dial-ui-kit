@@ -40,7 +40,7 @@ export const SchemaObjectEditor: FC<SchemaObjectEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const { rootSchema, texts } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
   const properties = Object.entries(resolved.properties ?? {});
   const required = resolved.required ?? [];
@@ -48,8 +48,8 @@ export const SchemaObjectEditor: FC<SchemaObjectEditorProps> = ({
 
   if (properties.length === 0) {
     return (
-      <p className="dial-tiny text-text-secondary italic">
-        No configurable properties.
+      <p className="dial-tiny-text text-secondary italic">
+        {texts.noConfigurableProperties}
       </p>
     );
   }
