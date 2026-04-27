@@ -23,7 +23,9 @@ describe('Dial UI Kit :: SchemaPrimitiveField', () => {
         onChange={vi.fn()}
       />,
     );
-    expect(screen.getByPlaceholderText('Enter a value…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('calls onChange when string input changes', () => {
@@ -35,9 +37,12 @@ describe('Dial UI Kit :: SchemaPrimitiveField', () => {
         onChange={onChange}
       />,
     );
-    fireEvent.change(screen.getByPlaceholderText('Enter a value…'), {
-      target: { value: 'hello' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+      {
+        target: { value: 'hello' },
+      },
+    );
     expect(onChange).toHaveBeenCalledWith('hello');
   });
 
@@ -111,7 +116,7 @@ describe('Dial UI Kit :: SchemaPrimitiveField', () => {
       />,
     );
     expect(
-      screen.getByPlaceholderText('Enter a whole number…'),
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.integerInputPlaceholder),
     ).toBeInTheDocument();
   });
 
@@ -123,7 +128,9 @@ describe('Dial UI Kit :: SchemaPrimitiveField', () => {
         onChange={vi.fn()}
       />,
     );
-    expect(screen.getByPlaceholderText('Enter a number…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.numberInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('renders empty string value for undefined string input', () => {
@@ -134,7 +141,9 @@ describe('Dial UI Kit :: SchemaPrimitiveField', () => {
         onChange={vi.fn()}
       />,
     );
-    const input = screen.getByPlaceholderText('Enter a value…');
+    const input = screen.getByPlaceholderText(
+      DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder,
+    );
     expect((input as HTMLInputElement).value).toBe('');
   });
 });

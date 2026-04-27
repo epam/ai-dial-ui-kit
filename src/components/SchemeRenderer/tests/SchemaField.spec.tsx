@@ -30,7 +30,9 @@ describe('Dial UI Kit :: SchemaField', () => {
       />,
     );
     expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter a value…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('calls onChange when primitive field value changes', () => {
@@ -45,9 +47,12 @@ describe('Dial UI Kit :: SchemaField', () => {
         level={0}
       />,
     );
-    fireEvent.change(screen.getByPlaceholderText('Enter a value…'), {
-      target: { value: 'Bob' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+      {
+        target: { value: 'Bob' },
+      },
+    );
     expect(onChange).toHaveBeenCalledWith('Bob');
   });
 

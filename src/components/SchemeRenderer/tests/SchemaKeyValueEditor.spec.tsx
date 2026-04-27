@@ -60,7 +60,9 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
       />,
     );
     fireEvent.click(screen.getByRole('button', { name: /add field/i }));
-    expect(screen.getByPlaceholderText('Key…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.keyInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('removes a pair and calls onChange with updated object', () => {
@@ -101,9 +103,12 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
         onChange={onChange}
       />,
     );
-    fireEvent.change(screen.getByPlaceholderText('Enter a value…'), {
-      target: { value: 'baz' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+      {
+        target: { value: 'baz' },
+      },
+    );
     expect(onChange).toHaveBeenCalledWith({ foo: 'baz' });
   });
 

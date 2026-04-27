@@ -28,7 +28,9 @@ describe('Dial UI Kit :: SchemaFieldContent', () => {
         level={0}
       />,
     );
-    expect(screen.getByPlaceholderText('Enter a value…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('routes boolean schema to a switch', () => {
@@ -55,7 +57,7 @@ describe('Dial UI Kit :: SchemaFieldContent', () => {
       />,
     );
     expect(
-      screen.getByPlaceholderText('Enter a whole number…'),
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.integerInputPlaceholder),
     ).toBeInTheDocument();
   });
 

@@ -74,9 +74,12 @@ describe('Dial UI Kit :: SchemaObjectEditor', () => {
       />,
       schema,
     );
-    fireEvent.change(screen.getByPlaceholderText('Enter a value…'), {
-      target: { value: 'Alice' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+      {
+        target: { value: 'Alice' },
+      },
+    );
     expect(onChange).toHaveBeenCalledWith({ name: 'Alice' });
   });
 
@@ -112,7 +115,9 @@ describe('Dial UI Kit :: SchemaObjectEditor', () => {
       />,
       schema,
     );
-    const inputs = screen.getAllByPlaceholderText('Enter a value…');
+    const inputs = screen.getAllByPlaceholderText(
+      DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder,
+    );
     expect(inputs).toHaveLength(3);
   });
 });

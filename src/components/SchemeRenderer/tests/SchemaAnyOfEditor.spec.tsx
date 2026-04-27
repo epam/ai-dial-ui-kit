@@ -50,7 +50,9 @@ describe('Dial UI Kit :: SchemaAnyOfEditor', () => {
       nullableStringSchema,
     );
     expect(
-      screen.queryByPlaceholderText('Enter a value…'),
+      screen.queryByPlaceholderText(
+        DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder,
+      ),
     ).not.toBeInTheDocument();
   });
 
@@ -65,7 +67,9 @@ describe('Dial UI Kit :: SchemaAnyOfEditor', () => {
       />,
       nullableStringSchema,
     );
-    expect(screen.getByPlaceholderText('Enter a value…')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(DEFAULT_SCHEMA_TEXTS.stringInputPlaceholder),
+    ).toBeInTheDocument();
   });
 
   test('calls onChange with null when null variant is selected', () => {
