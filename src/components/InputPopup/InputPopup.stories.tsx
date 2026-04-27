@@ -4,6 +4,8 @@ import { DialButton } from '@/components/Button/Button';
 import { DialInputPopup, type DialInputPopupProps } from './InputPopup';
 import { DialPopup } from '@/components/Popup/Popup';
 import { DialFormItem } from '@/components/FormItem/FormItem';
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { BASE_ICON_SIZE } from '@/constants/icon';
 
 const InteractiveInputModal = (args: DialInputPopupProps) => {
   const [modalState, setModalState] = useState<boolean>(false);
@@ -125,6 +127,11 @@ const meta: Meta<typeof DialInputPopup> = {
       action: 'open',
       control: false,
       description: 'Callback fired when user clicks to open modal',
+    },
+    iconBefore: {
+      control: false,
+      description:
+        'Optional icon rendered at the start of the field, before the value',
     },
   },
 };
@@ -252,6 +259,14 @@ export const EditableWithError: Story = {
     editable: true,
     errorText: 'Please enter or select a value',
     placeholder: 'Type or pick from popup…',
+  },
+};
+
+export const WithIconBefore: Story = {
+  render: InteractiveInputModal,
+  args: {
+    selectedValue: 'Option 1',
+    iconBefore: <IconAlertTriangle size={BASE_ICON_SIZE} />,
   },
 };
 
