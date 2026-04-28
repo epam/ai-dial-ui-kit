@@ -74,6 +74,9 @@ export interface DialSchemeRendererProps {
   defaultValue?: Record<string, unknown>;
   texts?: Partial<SchemaRendererTexts>;
   className?: string;
+  readonly?: boolean;
+  defaultExpanded?: boolean;
+  inputClassName?: string;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;
   onDefaultValues?: (value: Record<string, unknown>) => void;

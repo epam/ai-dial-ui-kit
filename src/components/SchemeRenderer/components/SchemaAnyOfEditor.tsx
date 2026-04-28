@@ -46,7 +46,7 @@ export const SchemaAnyOfEditor: FC<SchemaAnyOfEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const { rootSchema, readonly = false } = useSchemaContext();
   const anyOfSchemas = schema.anyOf ?? [];
 
   const options = anyOfSchemas.map((s, i) => ({
@@ -83,14 +83,17 @@ export const SchemaAnyOfEditor: FC<SchemaAnyOfEditorProps> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <DialSelect
-        options={options}
-        value={String(currentIndex)}
-        onChange={(next) => {
-          const val = typeof next === 'string' ? next : next[0];
-          handleChange(Number(val));
-        }}
-      />
+      <div className="flex-1 max-w-[280px]">
+        <DialSelect
+          options={options}
+          value={String(currentIndex)}
+          disabled={readonly}
+          onChange={(next) => {
+            const val = typeof next === 'string' ? next : next[0];
+            handleChange(Number(val));
+          }}
+        />
+      </div>
       {!isNull && selectedSchema && (
         <div className="pl-3 border-l-2 border-secondary">
           <SchemaFieldContent

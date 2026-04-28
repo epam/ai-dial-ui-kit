@@ -42,7 +42,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema, texts } = useSchemaContext();
+  const { rootSchema, texts, readonly = false } = useSchemaContext();
   const discriminator = schema.discriminator;
 
   if (discriminator) {
@@ -72,15 +72,18 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
 
     return (
       <div className="flex flex-col gap-3">
-        <DialSelect
-          options={options}
-          value={currentType}
-          placeholder={texts.selectTypePlaceholder}
-          onChange={(next) => {
-            const val = typeof next === 'string' ? next : next[0];
-            if (val) handleTypeChange(val);
-          }}
-        />
+        <div className="flex-1 max-w-[280px]">
+          <DialSelect
+            options={options}
+            value={currentType}
+            placeholder={texts.selectTypePlaceholder}
+            disabled={readonly}
+            onChange={(next) => {
+              const val = typeof next === 'string' ? next : next[0];
+              if (val) handleTypeChange(val);
+            }}
+          />
+        </div>
         {selectedSchema && (
           <div className="pl-3 border-l-2 border-secondary">
             <SchemaObjectEditor
@@ -126,14 +129,17 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <DialSelect
-        options={options}
-        value={String(currentIndex)}
-        onChange={(next) => {
-          const val = typeof next === 'string' ? next : next[0];
-          handleIndexChange(Number(val));
-        }}
-      />
+      <div className="flex-1 max-w-[280px]">
+        <DialSelect
+          options={options}
+          value={String(currentIndex)}
+          disabled={readonly}
+          onChange={(next) => {
+            const val = typeof next === 'string' ? next : next[0];
+            handleIndexChange(Number(val));
+          }}
+        />
+      </div>
       {selectedSchema && (
         <div className="pl-3 border-l-2 border-secondary">
           <SchemaFieldContent

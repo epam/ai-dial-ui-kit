@@ -30,6 +30,8 @@ import { SchemaFieldContent } from '@/components/SchemeRenderer/components/Schem
  * @param [defaultValue] - Initial form value; if omitted, defaults are extracted from schema
  * @param [texts] - Override any user-visible strings rendered by the component
  * @param [className] - Additional CSS classes for the root container
+ * @param [readonly=false] - When true all inputs are disabled; sections remain collapsible
+ * @param [defaultExpanded=true] - Initial expanded state for all collapsible sections
  * @param [onChange] - Called with the full form value on every change
  * @param [onPropertyChange] - Called with `(path, value)` for each individual property change
  * @param [onDefaultValues] - Called once on mount with the resolved default values
@@ -39,6 +41,9 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
   defaultValue,
   texts,
   className,
+  readonly = false,
+  defaultExpanded = true,
+  inputClassName,
   onChange,
   onPropertyChange,
   onDefaultValues,
@@ -73,7 +78,13 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
 
   return (
     <SchemaRendererContext.Provider
-      value={{ rootSchema: schema, texts: mergedTexts }}
+      value={{
+        rootSchema: schema,
+        texts: mergedTexts,
+        readonly,
+        defaultExpanded,
+        inputClassName,
+      }}
     >
       <div className={mergeClasses('flex flex-col gap-4', className)}>
         {topLevelProperties.map(([key, propSchema]) => {
@@ -92,6 +103,7 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
               description={resolved.description}
               level={0}
               summary={summary}
+              defaultExpanded={defaultExpanded}
               errorCount={
                 isRequired && (propValue === undefined || propValue === null)
                   ? Math.max(errors.length, 1)
