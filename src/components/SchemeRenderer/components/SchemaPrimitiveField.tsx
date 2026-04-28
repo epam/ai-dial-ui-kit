@@ -90,7 +90,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         disabled={readonly}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
         placeholder={texts.integerInputPlaceholder}
-        className={inputClassName}
+        containerClassName={inputClassName}
       />
     );
   }
@@ -103,7 +103,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         disabled={readonly}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
         placeholder={texts.numberInputPlaceholder}
-        className={inputClassName}
+        containerClassName={inputClassName}
       />
     );
   }
@@ -115,7 +115,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       disabled={readonly}
       onChange={(v) => onChange(v ?? undefined)}
       placeholder={texts.stringInputPlaceholder}
-      className={inputClassName}
+      containerClassName={inputClassName}
     />
   );
 };
