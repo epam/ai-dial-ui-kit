@@ -7,6 +7,9 @@ import type {
 interface SchemaRendererContextValue {
   rootSchema: JsonSchema;
   texts: SchemaRendererTexts;
+  readonly?: boolean;
+  defaultExpanded?: boolean;
+  inputClassName?: string;
 }
 
 export const SchemaRendererContext =

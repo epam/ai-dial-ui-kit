@@ -52,7 +52,12 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
   path,
   level,
 }) => {
-  const { rootSchema, texts } = useSchemaContext();
+  const {
+    rootSchema,
+    texts,
+    readonly = false,
+    defaultExpanded = true,
+  } = useSchemaContext();
   const items = Array.isArray(value) ? (value as unknown[]) : [];
   const itemSchema = schema.items;
   const [selectedAddType, setSelectedAddType] = useState<string | undefined>(
@@ -150,8 +155,8 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
             level={level}
             summary={summary}
             errorCount={errors.length}
-            onRemove={() => handleRemove(i)}
-            defaultExpanded={false}
+            onRemove={readonly ? undefined : () => handleRemove(i)}
+            defaultExpanded={defaultExpanded}
             removeItemAriaLabel={texts.removeItemAriaLabel}
           >
             <SchemaFieldContent
@@ -165,26 +170,28 @@ export const SchemaArrayEditor: FC<SchemaArrayEditorProps> = ({
         );
       })}
 
-      <div className="flex items-center gap-2 pt-1">
-        {addTypeOptions.length > 0 && (
-          <div className="flex-1 max-w-[280px]">
-            <DialSelect
-              options={addTypeOptions}
-              value={selectedAddType ?? addTypeOptions[0]?.value}
-              placeholder={texts.selectTypeToAdd}
-              onChange={(next) => {
-                const val = typeof next === 'string' ? next : next[0];
-                setSelectedAddType(val);
-              }}
-            />
-          </div>
-        )}
-        <DialGhostButton
-          label={texts.addItem}
-          iconBefore={<IconPlus size={16} stroke={2} />}
-          onClick={handleAdd}
-        />
-      </div>
+      {!readonly && (
+        <div className="flex items-center gap-2 pt-1">
+          {addTypeOptions.length > 0 && (
+            <div className="flex-1 max-w-[280px]">
+              <DialSelect
+                options={addTypeOptions}
+                value={selectedAddType ?? addTypeOptions[0]?.value}
+                placeholder={texts.selectTypeToAdd}
+                onChange={(next) => {
+                  const val = typeof next === 'string' ? next : next[0];
+                  setSelectedAddType(val);
+                }}
+              />
+            </div>
+          )}
+          <DialGhostButton
+            label={texts.addItem}
+            iconBefore={<IconPlus size={16} stroke={2} />}
+            onClick={handleAdd}
+          />
+        </div>
+      )}
     </div>
   );
 };

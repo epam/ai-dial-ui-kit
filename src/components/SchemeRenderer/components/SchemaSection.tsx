@@ -6,7 +6,9 @@ import {
   IconCheck,
 } from '@tabler/icons-react';
 import { DialIcon } from '@/components/Icon/Icon';
-import { DialCloseButton } from '@/components/CloseButton/CloseButton';
+import { DialInfoButton } from '@/components/InfoButton/InfoButton';
+import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface SchemaSectionProps {
@@ -97,11 +99,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
           {title}
         </span>
 
-        {!isExpanded && description && (
-          <span className="dial-tiny-text text-secondary truncate max-w-[180px] hidden sm:block">
-            {description}
-          </span>
-        )}
+        {description && <DialInfoButton caption={description} />}
 
         {summary && (
           <span className="dial-tiny-text text-secondary whitespace-nowrap ml-2">
@@ -122,14 +120,14 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
         )}
 
         {onRemove && (
-          <DialCloseButton
-            size={14}
-            onClose={(e) => {
+          <DialRemoveButton
+            size={ElementSize.Small}
+            onClick={(e) => {
               e.stopPropagation();
               onRemove();
             }}
-            ariaLabel={removeItemAriaLabel}
-            className="ml-1 flex-shrink-0 hover:enabled:text-error p-0.5"
+            aria-label={removeItemAriaLabel}
+            className="ml-1 flex-shrink-0 p-0.5"
           />
         )}
       </div>

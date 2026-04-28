@@ -2,7 +2,8 @@ import { type FC, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialInput } from '@/components/Input/Input';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
-import { DialCloseButton } from '@/components/CloseButton/CloseButton';
+import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
+import { ElementSize } from '@/types/size';
 import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
 import { useSchemaContext } from '@/components/SchemeRenderer/context';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
@@ -28,6 +29,8 @@ interface KeyValueRowProps {
   onRemove: () => void;
   keyInputPlaceholder: string;
   removeFieldAriaLabel: string;
+  readonly?: boolean;
+  inputClassName?: string;
 }
 
 const KeyValueRow: FC<KeyValueRowProps> = ({
@@ -39,6 +42,8 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
   onRemove,
   keyInputPlaceholder,
   removeFieldAriaLabel,
+  readonly = false,
+  inputClassName,
 }) => {
   const [keyDraft, setKeyDraft] = useState(pairKey);
 
@@ -47,11 +52,13 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
       <div className="w-2/5 min-w-0">
         <DialInput
           value={keyDraft}
+          disabled={readonly}
           onChange={(v) => setKeyDraft(v ?? '')}
           onBlur={() => {
             if (keyDraft !== pairKey) onKeyChange(keyDraft);
           }}
           placeholder={keyInputPlaceholder}
+          className={inputClassName}
         />
       </div>
       <div className="flex-1 min-w-0">
@@ -61,12 +68,14 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
           onChange={onValueChange}
         />
       </div>
-      <DialCloseButton
-        size={14}
-        onClose={onRemove}
-        ariaLabel={removeFieldAriaLabel}
-        className="flex-shrink-0 hover:enabled:text-error p-1"
-      />
+      {!readonly && (
+        <DialRemoveButton
+          size={ElementSize.Small}
+          onClick={onRemove}
+          aria-label={removeFieldAriaLabel}
+          className="flex-shrink-0 p-1"
+        />
+      )}
     </div>
   );
 };
@@ -99,7 +108,7 @@ export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
   value,
   onChange,
 }) => {
-  const { texts } = useSchemaContext();
+  const { texts, readonly = false, inputClassName } = useSchemaContext();
 
   const valueSchema: JsonSchemaDef =
     schema.additionalProperties === true || schema.additionalProperties == null
@@ -175,16 +184,20 @@ export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
           onRemove={() => handleRemove(i)}
           keyInputPlaceholder={texts.keyInputPlaceholder}
           removeFieldAriaLabel={texts.removeFieldAriaLabel}
+          readonly={readonly}
+          inputClassName={inputClassName}
         />
       ))}
 
-      <div className="pt-1">
-        <DialGhostButton
-          label={texts.addField}
-          iconBefore={<IconPlus size={16} stroke={2} />}
-          onClick={handleAdd}
-        />
-      </div>
+      {!readonly && (
+        <div className="pt-1">
+          <DialGhostButton
+            label={texts.addField}
+            iconBefore={<IconPlus size={16} stroke={2} />}
+            onClick={handleAdd}
+          />
+        </div>
+      )}
     </div>
   );
 };

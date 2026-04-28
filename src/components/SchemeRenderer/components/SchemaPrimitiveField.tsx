@@ -38,7 +38,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
   invalid,
 }) => {
   const switchId = useId();
-  const { texts } = useSchemaContext();
+  const { texts, readonly = false, inputClassName } = useSchemaContext();
   const isConst = schema.const !== undefined;
   const hasEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
 
@@ -63,6 +63,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         options={options}
         value={value != null ? String(value) : undefined}
         invalid={invalid}
+        disabled={readonly}
         onChange={(next) => onChange(typeof next === 'string' ? next : next[0])}
         placeholder={texts.enumSelectPlaceholder}
       />
@@ -74,6 +75,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       <DialSwitch
         switchId={switchId}
         isOn={Boolean(value)}
+        disabled={readonly}
         onChange={(v) => onChange(v)}
       />
     );
@@ -85,8 +87,10 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         integer
         value={value !== undefined && value !== null ? String(value) : ''}
         invalid={invalid}
+        disabled={readonly}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
         placeholder={texts.integerInputPlaceholder}
+        className={inputClassName}
       />
     );
   }
@@ -96,8 +100,10 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       <DialNumberInput
         value={value !== undefined && value !== null ? String(value) : ''}
         invalid={invalid}
+        disabled={readonly}
         onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
         placeholder={texts.numberInputPlaceholder}
+        className={inputClassName}
       />
     );
   }
@@ -106,8 +112,10 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
     <DialInput
       value={value !== undefined && value !== null ? String(value) : ''}
       invalid={invalid}
+      disabled={readonly}
       onChange={(v) => onChange(v ?? undefined)}
       placeholder={texts.stringInputPlaceholder}
+      className={inputClassName}
     />
   );
 };

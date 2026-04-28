@@ -45,7 +45,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
   required,
   label,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const { rootSchema, defaultExpanded = true } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
   const isObject = isObjectType(resolved);
@@ -66,6 +66,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
         level={level}
         summary={summary}
         errorCount={errors.length}
+        defaultExpanded={defaultExpanded}
       >
         <SchemaFieldContent
           schema={resolved}
