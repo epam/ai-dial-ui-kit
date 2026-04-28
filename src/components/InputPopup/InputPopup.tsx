@@ -117,20 +117,22 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           (errorText || invalid) && 'dial-input-error',
         )}
       >
-        {iconBefore && <DialIcon icon={iconBefore} />}
-        <input
-          type="text"
-          className={classNames(
-            'flex-1 min-w-0 bg-transparent outline-none border-none p-0 dial-small-text text-primary placeholder:text-secondary',
-            valueClassName,
-          )}
-          value={typeof selectedValue === 'string' ? selectedValue : ''}
-          placeholder={placeholder || emptyValueText}
-          onChange={handleInputChange}
-          disabled={disabled}
-          id={elementId}
-          aria-label="input-popup-field"
-        />
+        <div className="flex flex-row items-center gap-x-2 flex-1 min-w-0">
+          {iconBefore && <DialIcon icon={iconBefore} />}
+          <input
+            type="text"
+            className={classNames(
+              'flex-1 min-w-0 bg-transparent outline-none border-none p-0 dial-small-text text-primary placeholder:text-secondary',
+              valueClassName,
+            )}
+            value={typeof selectedValue === 'string' ? selectedValue : ''}
+            placeholder={placeholder || emptyValueText}
+            onChange={handleInputChange}
+            disabled={disabled}
+            id={elementId}
+            aria-label="input-popup-field"
+          />
+        </div>
         {!disabled && (
           <button
             type="button"
@@ -171,14 +173,16 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
             (errorText || invalid) && 'dial-input-error',
           )}
         >
-          {iconBefore && <DialIcon icon={iconBefore} />}
-          <DialTooltip tooltip={value == null ? undefined : String(value)}>
-            {value || !placeholder ? (
-              <span className={valueClassName}>{value}</span>
-            ) : (
-              <span className="text-secondary">{placeholder}</span>
-            )}
-          </DialTooltip>
+          <div className="flex flex-row items-center gap-x-2 min-w-0">
+            {iconBefore && <DialIcon icon={iconBefore} />}
+            <DialTooltip tooltip={value == null ? undefined : String(value)}>
+              {value || !placeholder ? (
+                <span className={valueClassName}>{value}</span>
+              ) : (
+                <span className="text-secondary">{placeholder}</span>
+              )}
+            </DialTooltip>
+          </div>
           {!disabled && (
             <div className="flex-shrink-0">
               <DialIcon
@@ -206,12 +210,14 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           disabled && 'dial-input-disable',
         )}
       >
-        {iconBefore && <DialIcon icon={iconBefore} />}
-        <DialAutocompleteInputValue
-          placeholder={placeholder}
-          selectedItems={value as string[]}
-          collapseTagOverflow={collapseTagOverflow}
-        />
+        <div className="flex flex-row items-center gap-x-2 min-w-0">
+          {iconBefore && <DialIcon icon={iconBefore} />}
+          <DialAutocompleteInputValue
+            placeholder={placeholder}
+            selectedItems={value as string[]}
+            collapseTagOverflow={collapseTagOverflow}
+          />
+        </div>
         {!disabled && (
           <div className="ml-1">
             <DialIcon
