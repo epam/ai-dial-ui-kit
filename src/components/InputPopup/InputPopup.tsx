@@ -173,7 +173,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
             (errorText || invalid) && 'dial-input-error',
           )}
         >
-          <div className="flex flex-row items-center gap-x-2 min-w-0">
+          <div className="flex flex-row items-center gap-x-2 flex-1 min-w-0">
             {iconBefore && <DialIcon icon={iconBefore} />}
             <DialTooltip tooltip={value == null ? undefined : String(value)}>
               {value || !placeholder ? (
@@ -210,7 +210,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           disabled && 'dial-input-disable',
         )}
       >
-        <div className="flex flex-row items-center gap-x-2 min-w-0">
+        <div className="flex flex-row items-center gap-x-2 flex-1 min-w-0">
           {iconBefore && <DialIcon icon={iconBefore} />}
           <DialAutocompleteInputValue
             placeholder={placeholder}
