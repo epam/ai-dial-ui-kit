@@ -58,7 +58,7 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
             if (keyDraft !== pairKey) onKeyChange(keyDraft);
           }}
           placeholder={keyInputPlaceholder}
-          className={inputClassName}
+          containerClassName={inputClassName}
         />
       </div>
       <div className="flex-1 min-w-0">
