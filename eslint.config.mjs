@@ -20,6 +20,10 @@ export default [
       '**/jest.config.ts',
       '**/**.spec.ts',
       '**/**.spec.tsx',
+      '**/dist',
+      '**/storybook-static',
+      '**/.cursor',
+      'setupTests.ts',
     ],
   },
 
@@ -70,14 +74,6 @@ export default [
       'no-empty': 'error',
 
       'no-constant-condition': 'error',
-
-      'no-multiple-empty-lines': [
-        'warn',
-        {
-          max: 1,
-          maxBOF: 0,
-        },
-      ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

@@ -301,10 +301,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   };
 
   return (
-    <div
-      className="flex-1 w-full h-full overflow-y-auto"
-      aria-label="folders-tree"
-    >
+    <div className="flex-1 size-full overflow-y-auto" aria-label="folders-tree">
       {items.length > 0 ? (
         renderTree(items, 0)
       ) : (

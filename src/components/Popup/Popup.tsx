@@ -177,10 +177,7 @@ export const DialPopup: FC<DialPopupProps> = ({
                 />
               )}
             </div>
-            <div
-              className="flex-grow overflow-auto"
-              aria-label="popup-description"
-            >
+            <div className="grow overflow-auto" aria-label="popup-description">
               {/* Body area */}
               {children}
             </div>

@@ -54,7 +54,7 @@ export const AllVariants: Story = {
 
 export const WithIndicator: Story = {
   render: (args) => (
-    <div className="w-12 h-12 flex items-center justify-center bg-layer-3">
+    <div className="size-12 flex items-center justify-center bg-layer-3">
       <DialFileIcon {...args} indicator={<DialSharedEntityIndicator />} />
     </div>
   ),

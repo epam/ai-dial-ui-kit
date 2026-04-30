@@ -73,7 +73,7 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
           size={ElementSize.Small}
           onClick={onRemove}
           aria-label={removeFieldAriaLabel}
-          className="flex-shrink-0 p-1"
+          className="shrink-0 p-1"
         />
       )}
     </div>

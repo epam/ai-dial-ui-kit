@@ -46,7 +46,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Single: Story = {
   render: (args) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value, setValue] = useState<string>('WS');
     return (
       <div className="w-[320px]">
@@ -69,7 +68,6 @@ export const MultipleSearchable: Story = {
     captionDescription: 'Select one or more transports.',
   },
   render: (args) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value, setValue] = useState<string[]>(['SSE']);
     return (
       <div className="w-[420px]">
