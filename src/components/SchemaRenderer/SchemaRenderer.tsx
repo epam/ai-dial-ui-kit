@@ -1,7 +1,10 @@
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
+import {
+  DEFAULT_SCHEMA_TEXTS,
+  SchemaRendererVariant,
+} from '@/components/SchemaRenderer/types';
 import type { DialSchemaRendererProps } from '@/components/SchemaRenderer/types';
-import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemaRenderer/types';
 import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
@@ -33,7 +36,7 @@ import { SchemaField } from '@/components/SchemaRenderer/components/SchemaField'
  * @param [className] - Additional CSS classes for the root container
  * @param [readonly=false] - When true all inputs are disabled; sections remain collapsible
  * @param [defaultExpanded=true] - Initial expanded state for all collapsible sections
- * @param [variant='sections'] - `'sections'` wraps every top-level property in a collapsible card; `'flat'` renders primitives as plain DialFormItem fields
+ * @param [variant=SchemaRendererVariant.Sections] - `Sections` wraps every top-level property in a collapsible card; `Flat` renders primitives as plain DialFormItem fields
  * @param [renderField] - Override the rendered element for any field by path; return `defaultElement` to fall back to built-in rendering
  * @param [onChange] - Called with the full form value on every change
  * @param [onPropertyChange] - Called with `(path, value)` for each individual property change
@@ -47,7 +50,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   readonly = false,
   defaultExpanded = true,
   inputClassName,
-  variant = 'sections',
+  variant = SchemaRendererVariant.Sections,
   onChange,
   onPropertyChange,
   onDefaultValues,
@@ -112,7 +115,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
           const isRequired = topLevelRequired.includes(key);
           const propValue = value[key];
 
-          if (variant === 'flat') {
+          if (variant === SchemaRendererVariant.Flat) {
             return (
               <SchemaField
                 key={key}
@@ -144,7 +147,8 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
               defaultExpanded={defaultExpanded}
               errorCount={
                 isSectionTouched
-                  ? isRequired && (propValue === undefined || propValue === null)
+                  ? isRequired &&
+                    (propValue === undefined || propValue === null)
                     ? Math.max(errors.length, 1)
                     : errors.length
                   : 0

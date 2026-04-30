@@ -1,4 +1,5 @@
 import type { FC, ReactElement } from 'react';
+import { JsonSchemaType } from '@/components/SchemaRenderer/types';
 import type { SchemaFieldContentProps } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import { resolveRef, isObjectType } from '@/components/SchemaRenderer/utils';
@@ -56,17 +57,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
 
   let defaultElement: ReactElement;
 
-  if (resolved.discriminator && resolved.oneOf) {
-    defaultElement = (
-      <SchemaOneOfEditor
-        schema={resolved}
-        value={value}
-        onChange={handleChange}
-        path={path}
-        level={level}
-      />
-    );
-  } else if (resolved.oneOf) {
+  if (resolved.oneOf) {
     defaultElement = (
       <SchemaOneOfEditor
         schema={resolved}
@@ -112,7 +103,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
         />
       );
     }
-  } else if (resolved.type === 'array') {
+  } else if (resolved.type === JsonSchemaType.Array) {
     defaultElement = (
       <SchemaArrayEditor
         schema={resolved}

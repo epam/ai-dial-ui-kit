@@ -15,6 +15,16 @@ export enum SchemaOrientation {
   Column = 'column',
 }
 
+export enum JsonSchemaType {
+  String = 'string',
+  Number = 'number',
+  Integer = 'integer',
+  Boolean = 'boolean',
+  Object = 'object',
+  Array = 'array',
+  Null = 'null',
+}
+
 export interface JsonSchemaDef {
   $ref?: string;
   type?: string | string[];

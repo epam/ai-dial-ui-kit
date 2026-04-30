@@ -197,6 +197,7 @@ export {
   SchemaRendererVariant,
   SchemaDisplayMode,
   SchemaOrientation,
+  JsonSchemaType,
 } from './components/SchemaRenderer/types';
 export type {
   DialSchemaRendererProps,

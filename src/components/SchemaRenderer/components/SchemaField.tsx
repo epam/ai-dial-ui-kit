@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { DialFormItem } from '@/components/FormItem/FormItem';
+import { JsonSchemaType } from '@/components/SchemaRenderer/types';
 import type { SchemaFieldProps } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
@@ -53,7 +54,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
   const resolved = resolveRef(schema, rootSchema);
 
   const isObject = isObjectType(resolved);
-  const isArray = resolved.type === 'array';
+  const isArray = resolved.type === JsonSchemaType.Array;
 
   if (isObject || isArray) {
     const summary = buildSummary(value, resolved, rootSchema);
@@ -91,7 +92,9 @@ export const SchemaField: FC<SchemaFieldProps> = ({
 
   const isTouched = touchedPaths.has(path.join('.'));
   const error =
-    isTouched && required && (value === undefined || value === null || value === '')
+    isTouched &&
+    required &&
+    (value === undefined || value === null || value === '')
       ? `${label ?? 'Field'} is required`
       : undefined;
 

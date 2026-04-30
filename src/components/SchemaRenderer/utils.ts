@@ -1,3 +1,4 @@
+import { JsonSchemaType } from './types';
 import type { JsonSchema, JsonSchemaDef, ValidationError } from './types';
 
 export function resolveRef(
@@ -23,7 +24,7 @@ export function resolveRef(
 
 export function isObjectType(schema: JsonSchemaDef): boolean {
   return (
-    schema.type === 'object' ||
+    schema.type === JsonSchemaType.Object ||
     (schema.properties != null &&
       schema.oneOf == null &&
       schema.anyOf == null &&
@@ -42,7 +43,7 @@ export function getOptionLabel(
   schema: JsonSchemaDef,
   rootSchema: JsonSchema,
 ): string {
-  if (schema.type === 'null') return 'null';
+  if (schema.type === JsonSchemaType.Null) return 'null';
   if (schema.$ref) {
     const resolved = resolveRef(schema, rootSchema);
     return resolved.title ?? schema.$ref.split('/').pop() ?? 'Option';
@@ -99,7 +100,9 @@ export function validateRequired(
   const resolved = resolveRef(schema, rootSchema);
 
   if (resolved.anyOf) {
-    const nonNullSchemas = resolved.anyOf.filter((s) => s.type !== 'null');
+    const nonNullSchemas = resolved.anyOf.filter(
+      (s) => s.type !== JsonSchemaType.Null,
+    );
     if (value !== null && value !== undefined && nonNullSchemas.length === 1) {
       return validateRequired(
         value,
@@ -131,7 +134,10 @@ export function validateRequired(
     return errors;
   }
 
-  if (resolved.type === 'array' || (!resolved.type && Array.isArray(value))) {
+  if (
+    resolved.type === JsonSchemaType.Array ||
+    (!resolved.type && Array.isArray(value))
+  ) {
     if (Array.isArray(value) && resolved.items) {
       for (let i = 0; i < value.length; i++) {
         const childErrors = validateRequired(
@@ -212,14 +218,14 @@ export function detectAnyOfVariant(
   rootSchema: JsonSchema,
 ): number {
   if (value === null || value === undefined) {
-    const nullIdx = schemas.findIndex((s) => s.type === 'null');
+    const nullIdx = schemas.findIndex((s) => s.type === JsonSchemaType.Null);
     return nullIdx >= 0 ? nullIdx : 0;
   }
 
   if (Array.isArray(value)) {
     const idx = schemas.findIndex((s) => {
       const r = resolveRef(s, rootSchema);
-      return r.type === 'array';
+      return r.type === JsonSchemaType.Array;
     });
     return idx >= 0 ? idx : 0;
   }
@@ -227,7 +233,7 @@ export function detectAnyOfVariant(
   if (typeof value === 'boolean') {
     const idx = schemas.findIndex((s) => {
       const r = resolveRef(s, rootSchema);
-      return r.type === 'boolean';
+      return r.type === JsonSchemaType.Boolean;
     });
     return idx >= 0 ? idx : 0;
   }
@@ -235,7 +241,9 @@ export function detectAnyOfVariant(
   if (typeof value === 'number') {
     const idx = schemas.findIndex((s) => {
       const r = resolveRef(s, rootSchema);
-      return r.type === 'number' || r.type === 'integer';
+      return (
+        r.type === JsonSchemaType.Number || r.type === JsonSchemaType.Integer
+      );
     });
     return idx >= 0 ? idx : 0;
   }
@@ -243,7 +251,7 @@ export function detectAnyOfVariant(
   if (typeof value === 'string') {
     const idx = schemas.findIndex((s) => {
       const r = resolveRef(s, rootSchema);
-      return r.type === 'string';
+      return r.type === JsonSchemaType.String;
     });
     return idx >= 0 ? idx : 0;
   }
@@ -287,14 +295,14 @@ export function getItemTitle(
 export function getSchemaDefault(schema: JsonSchemaDef): unknown {
   const type = Array.isArray(schema.type) ? schema.type[0] : schema.type;
   switch (type) {
-    case 'string':
+    case JsonSchemaType.String:
       return '';
-    case 'boolean':
+    case JsonSchemaType.Boolean:
       return false;
-    case 'array':
+    case JsonSchemaType.Array:
       return [];
-    case 'integer':
-    case 'number':
+    case JsonSchemaType.Integer:
+    case JsonSchemaType.Number:
       return undefined;
     default:
       return {};

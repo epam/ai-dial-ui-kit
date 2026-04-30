@@ -5,6 +5,11 @@ import { DialNumberInput } from '@/components/NumberInput/NumberInput';
 import { DialSwitch } from '@/components/Switch/Switch';
 import { DialSelect } from '@/components/Select/Select';
 import { DialRadioButton } from '@/components/RadioButton/RadioButton';
+import {
+  JsonSchemaType,
+  SchemaDisplayMode,
+  SchemaOrientation,
+} from '@/components/SchemaRenderer/types';
 import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 
@@ -59,12 +64,16 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
     );
   }
 
-  if (hasEnum && schema.enumDisplay === 'radio') {
-    const isRow = schema.enumOrientation === 'row';
+  if (hasEnum && schema.enumDisplay === SchemaDisplayMode.Radio) {
+    const isRow = schema.enumOrientation === SchemaOrientation.Row;
     return (
       <div
         role="radiogroup"
-        className={isRow ? 'flex flex-row flex-wrap gap-x-4 gap-y-2' : 'flex flex-col gap-2'}
+        className={
+          isRow
+            ? 'flex flex-row flex-wrap gap-x-4 gap-y-2'
+            : 'flex flex-col gap-2'
+        }
       >
         {(schema.enum as unknown[]).map((v) => {
           const strVal = String(v);
@@ -102,65 +111,61 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
     );
   }
 
-  if (schema.type === 'boolean') {
-    return (
-      <DialSwitch
-        switchId={switchId}
-        isOn={Boolean(value)}
-        disabled={readonly}
-        onChange={(v) => onChange(v)}
-      />
-    );
+  switch (schema.type) {
+    case JsonSchemaType.Boolean:
+      return (
+        <DialSwitch
+          switchId={switchId}
+          isOn={Boolean(value)}
+          disabled={readonly}
+          onChange={(v) => onChange(v)}
+        />
+      );
+    case JsonSchemaType.Integer:
+      return (
+        <DialNumberInput
+          integer
+          value={value !== undefined && value !== null ? String(value) : ''}
+          invalid={invalid}
+          disabled={readonly}
+          onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
+          placeholder={texts.integerInputPlaceholder}
+          containerClassName={inputClassName}
+        />
+      );
+    case JsonSchemaType.Number:
+      return (
+        <DialNumberInput
+          value={value !== undefined && value !== null ? String(value) : ''}
+          invalid={invalid}
+          disabled={readonly}
+          onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
+          placeholder={texts.numberInputPlaceholder}
+          containerClassName={inputClassName}
+        />
+      );
+    default:
+      if (schema.isProtected) {
+        return (
+          <DialPasswordInput
+            value={value !== undefined && value !== null ? String(value) : ''}
+            invalid={invalid}
+            disabled={readonly}
+            onChange={(v) => onChange(v ?? undefined)}
+            placeholder={texts.stringInputPlaceholder}
+            containerClassName={inputClassName}
+          />
+        );
+      }
+      return (
+        <DialInput
+          value={value !== undefined && value !== null ? String(value) : ''}
+          invalid={invalid}
+          disabled={readonly}
+          onChange={(v) => onChange(v ?? undefined)}
+          placeholder={texts.stringInputPlaceholder}
+          containerClassName={inputClassName}
+        />
+      );
   }
-
-  if (schema.type === 'integer') {
-    return (
-      <DialNumberInput
-        integer
-        value={value !== undefined && value !== null ? String(value) : ''}
-        invalid={invalid}
-        disabled={readonly}
-        onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
-        placeholder={texts.integerInputPlaceholder}
-        containerClassName={inputClassName}
-      />
-    );
-  }
-
-  if (schema.type === 'number') {
-    return (
-      <DialNumberInput
-        value={value !== undefined && value !== null ? String(value) : ''}
-        invalid={invalid}
-        disabled={readonly}
-        onChange={(v) => onChange(v !== undefined ? Number(v) : undefined)}
-        placeholder={texts.numberInputPlaceholder}
-        containerClassName={inputClassName}
-      />
-    );
-  }
-
-  if (schema.isProtected) {
-    return (
-      <DialPasswordInput
-        value={value !== undefined && value !== null ? String(value) : ''}
-        invalid={invalid}
-        disabled={readonly}
-        onChange={(v) => onChange(v ?? undefined)}
-        placeholder={texts.stringInputPlaceholder}
-        containerClassName={inputClassName}
-      />
-    );
-  }
-
-  return (
-    <DialInput
-      value={value !== undefined && value !== null ? String(value) : ''}
-      invalid={invalid}
-      disabled={readonly}
-      onChange={(v) => onChange(v ?? undefined)}
-      placeholder={texts.stringInputPlaceholder}
-      containerClassName={inputClassName}
-    />
-  );
 };

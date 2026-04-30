@@ -1,6 +1,10 @@
 import { type FC, useId } from 'react';
 import { DialSelect } from '@/components/Select/Select';
 import { DialRadioButton } from '@/components/RadioButton/RadioButton';
+import {
+  SchemaDisplayMode,
+  SchemaOrientation,
+} from '@/components/SchemaRenderer/types';
 import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
@@ -76,15 +80,15 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
       onChange({ ...defaults, [discProp]: newType });
     };
 
-    if (schema.discriminatorDisplay === 'radio') {
-      const isRow = schema.discriminatorOrientation === 'row';
+    if (schema.discriminatorDisplay === SchemaDisplayMode.Radio) {
+      const isRow = schema.discriminatorOrientation === SchemaOrientation.Row;
       const selectedFilteredSchema = currentType
         ? (() => {
             const optSchema = resolveRef(
               { $ref: mapping[currentType] },
               rootSchema,
             );
-            const { [discProp]: _disc, ...visibleProperties } =
+            const { [discProp]: __disc, ...visibleProperties } =
               optSchema.properties ?? {};
             return { ...optSchema, properties: visibleProperties };
           })()
@@ -131,7 +135,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
           {Object.keys(mapping).map((key) => {
             const optSchema = resolveRef({ $ref: mapping[key] }, rootSchema);
             const isSelected = currentType === key;
-            const { [discProp]: _disc, ...visibleProperties } =
+            const { [discProp]: __disc, ...visibleProperties } =
               optSchema.properties ?? {};
             const filteredSchema = {
               ...optSchema,
@@ -219,7 +223,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
 
   const selectedSchema = oneOfSchemas[currentIndex];
 
-  if (schema.discriminatorDisplay === 'radio') {
+  if (schema.discriminatorDisplay === SchemaDisplayMode.Radio) {
     return (
       <div role="radiogroup" className="flex flex-col gap-2">
         {oneOfSchemas.map((s, i) => {
