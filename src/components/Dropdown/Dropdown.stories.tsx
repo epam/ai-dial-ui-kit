@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState, type ReactNode } from 'react';
 import type { Placement } from '@floating-ui/react';

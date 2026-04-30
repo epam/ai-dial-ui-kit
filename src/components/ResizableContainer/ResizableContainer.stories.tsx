@@ -150,7 +150,7 @@ export const ResizeFromLeft: Story = {
 export const CustomHandler: Story = {
   args: {
     defaultWidth: 260,
-    resizeHandler: <IconGripVertical className="h-4 w-4" />,
+    resizeHandler: <IconGripVertical className="size-4" />,
     resizeHandlerClassName: 'bg-error text-error w-2',
     children: (
       <div className="p-4 text-primary">

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';

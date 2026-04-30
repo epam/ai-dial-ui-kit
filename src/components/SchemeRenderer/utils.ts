@@ -12,6 +12,7 @@ export function resolveRef(
     resolved = (resolved as Record<string, unknown>)?.[part];
   }
   if (!resolved || typeof resolved !== 'object') return schema;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { $ref: _ref, ...siblings } = schema;
   const resolvedDef = resolved as JsonSchemaDef;
   const fullyResolved = resolvedDef.$ref

@@ -28,14 +28,13 @@ interface DialFilledInputProps extends DialInputProps {
  *
  * @component
  * @param {DialFilledInputProps} props - The properties for the filled input component.
- * @param {string} [props.errorText] - Optional text to display in a tooltip when the input is invalid.
+ * @param {string} [props.error] - Optional text to display in a tooltip when the input is invalid.
  * @param {() => void} [props.onClick] - Optional click handler for the input container.
  * @returns {JSX.Element} The rendered filled input component.
  */
 export const DialFilledInput: FC<DialFilledInputProps> = ({
   iconBefore,
   className,
-  error: errorText,
   ...props
 }) => {
   const isInvalid = props.invalid;

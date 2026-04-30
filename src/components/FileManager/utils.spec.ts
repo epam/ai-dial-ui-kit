@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { DialFileAcceptType } from '@/models/file-manager';
 import { formatAllowedFileTypesForTooltip } from './utils';
 
 describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
@@ -40,7 +41,7 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
     expect(
       formatAllowedFileTypesForTooltip([
         '.svg',
-        'svg',
+        'svg' as DialFileAcceptType,
         'application/pdf',
         'text/plain',
         'image/png',

@@ -97,6 +97,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
       .filter(isValidElement)
       .map((child) => {
         const childProps = child.props as DialBreadcrumbItemProps;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { labelClassName, isLast, separator, ...props } = childProps;
         return props;
       });

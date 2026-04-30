@@ -1,8 +1,11 @@
 import { useMemo, type ReactNode } from 'react';
 import type { ColDef, SuppressKeyboardEventParams } from 'ag-grid-community';
 import { type DialFile } from '@/models/file';
-import { FileManagerRenameTriggerView } from '@/types/file-manager';
-import { FileManagerColumnKey } from '@/types/file-manager';
+import {
+  FileManagerRenameTriggerView,
+  FileManagerColumnKey,
+} from '@/types/file-manager';
+
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import {

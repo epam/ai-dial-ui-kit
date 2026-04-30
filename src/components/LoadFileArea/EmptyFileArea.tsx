@@ -231,7 +231,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
           htmlFor="file"
           tabIndex={0}
           onKeyDown={handleKeyDown}
-          className="flex flex-col items-center cursor-pointer h-full w-full text-secondary dial-tiny-text justify-center"
+          className="flex flex-col items-center cursor-pointer size-full text-secondary dial-tiny-text justify-center"
         >
           {emptyTextFirstLine && <p className="mb-1">{emptyTextFirstLine}</p>}
           {emptyTextSecondLine && (

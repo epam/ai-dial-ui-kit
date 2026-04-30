@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { type FC, useMemo, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialSelect } from '@/components/Select/Select';

@@ -184,7 +184,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
       dividers={false}
       className="md:!h-[800px] !bg-layer-2"
       footer={
-        <div className="flex justify-between items-center gap-2 py-4 px-4 md:px-6">
+        <div className="flex justify-between items-center gap-2 p-4 md:px-6">
           <div className="flex items-center gap-4 min-w-0">
             {isMobile ? (
               <DialDropdown
@@ -193,7 +193,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
                 onOpenChange={setMobileMenuOpen}
               >
                 <DialButton
-                  className="h-9 w-9 shrink-0"
+                  className="size-9 shrink-0"
                   aria-label="More options"
                   iconBefore={
                     <IconDotsVertical

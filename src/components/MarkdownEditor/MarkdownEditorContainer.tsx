@@ -3,6 +3,7 @@ import {
   useEffect,
   useId,
   useState,
+  type ComponentType,
   type FC,
   type ReactNode,
 } from 'react';
@@ -76,7 +77,7 @@ export const DialMarkdownEditorContainer: FC<
   const switchId = useId();
   const [isJSONContentMode, setIsJSONContentMode] = useState(false);
   const [DialJsonEditorComponent, setDialJsonEditorComponent] =
-    useState<React.ComponentType<DialJsonEditorProps> | null>(null);
+    useState<ComponentType<DialJsonEditorProps> | null>(null);
 
   /**
    * Dynamically loads JsonEditor component only on client-side when JSON mode is active.
@@ -108,7 +109,7 @@ export const DialMarkdownEditorContainer: FC<
   const showSwitcher = Boolean(switcherLabel);
 
   return (
-    <div className="h-full flex flex-col w-full">
+    <div className="size-full flex flex-col">
       <div className="flex flex-col gap-8">
         <div>
           {(label || headerContent || showSwitcher) && (

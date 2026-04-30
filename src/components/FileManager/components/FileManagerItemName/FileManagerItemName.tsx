@@ -10,8 +10,7 @@ import { DialFolderName } from '@/components/FolderName/FolderName';
 import { BASE_ICON_SIZE } from '@/constants/icon';
 import { getForbiddenSymbolsTooltip } from '../../utils';
 
-export interface DialFileManagerItemNameProps
-  extends DialFileManagerItemNameInputProps {
+export interface DialFileManagerItemNameProps extends DialFileManagerItemNameInputProps {
   name: string;
   type: DialItemType;
   elementId: string;
