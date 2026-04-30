@@ -1,8 +1,10 @@
 import { createContext, useContext } from 'react';
+import type React from 'react';
 import type {
   JsonSchema,
+  JsonSchemaDef,
   SchemaRendererTexts,
-} from '@/components/SchemeRenderer/types';
+} from '@/components/SchemaRenderer/types';
 
 interface SchemaRendererContextValue {
   rootSchema: JsonSchema;
@@ -10,6 +12,13 @@ interface SchemaRendererContextValue {
   readonly?: boolean;
   defaultExpanded?: boolean;
   inputClassName?: string;
+  renderField?: (
+    path: string[],
+    schema: JsonSchemaDef,
+    defaultElement: React.ReactElement,
+  ) => React.ReactNode;
+  touchedPaths?: ReadonlySet<string>;
+  markTouched?: (path: string) => void;
 }
 
 export const SchemaRendererContext =
@@ -18,6 +27,6 @@ export const SchemaRendererContext =
 export function useSchemaContext(): SchemaRendererContextValue {
   const ctx = useContext(SchemaRendererContext);
   if (!ctx)
-    throw new Error('useSchemaContext must be used inside DialSchemeRenderer');
+    throw new Error('useSchemaContext must be used inside DialSchemaRenderer');
   return ctx;
 }

@@ -190,10 +190,17 @@ export {
   NOT_ALLOWED_SYMBOLS_REGEXP,
   NOT_ALLOWED_SPACES_REGEXP,
 } from './constants/validation.ts';
-export { DialSchemeRenderer } from './components/SchemeRenderer/SchemeRenderer';
+
+// SchemaRenderer
+export { DialSchemaRenderer } from './components/SchemaRenderer/SchemaRenderer';
+export {
+  SchemaRendererVariant,
+  SchemaDisplayMode,
+  SchemaOrientation,
+} from './components/SchemaRenderer/types';
 export type {
-  DialSchemeRendererProps,
+  DialSchemaRendererProps,
   JsonSchema,
   JsonSchemaDef,
   ValidationError,
-} from './components/SchemeRenderer/types';
+} from './components/SchemaRenderer/types';

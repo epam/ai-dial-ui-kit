@@ -1,8 +1,30 @@
+import type React from 'react';
+
+export enum SchemaRendererVariant {
+  Sections = 'sections',
+  Flat = 'flat',
+}
+
+export enum SchemaDisplayMode {
+  Select = 'select',
+  Radio = 'radio',
+}
+
+export enum SchemaOrientation {
+  Row = 'row',
+  Column = 'column',
+}
+
 export interface JsonSchemaDef {
   $ref?: string;
   type?: string | string[];
   title?: string;
   description?: string;
+  isProtected?: boolean;
+  enumDisplay?: SchemaDisplayMode;
+  enumOrientation?: SchemaOrientation;
+  discriminatorDisplay?: SchemaDisplayMode;
+  discriminatorOrientation?: SchemaOrientation;
   default?: unknown;
   const?: unknown;
   enum?: unknown[];
@@ -69,7 +91,7 @@ export const DEFAULT_SCHEMA_TEXTS: SchemaRendererTexts = {
   removeFieldAriaLabel: 'Remove field',
 };
 
-export interface DialSchemeRendererProps {
+export interface DialSchemaRendererProps {
   schema: JsonSchema;
   defaultValue?: Record<string, unknown>;
   texts?: Partial<SchemaRendererTexts>;
@@ -77,9 +99,27 @@ export interface DialSchemeRendererProps {
   readonly?: boolean;
   defaultExpanded?: boolean;
   inputClassName?: string;
+  /**
+   * `'sections'` (default) — every top-level property is a collapsible SchemaSection card.
+   * `'flat'` — primitive top-level properties render as plain DialFormItem fields; object/array
+   * properties still use collapsible sections.
+   */
+  variant?: SchemaRendererVariant;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;
   onDefaultValues?: (value: Record<string, unknown>) => void;
+  /**
+   * Override the rendered element for any field by path.
+   * Return `defaultElement` to fall back to the built-in renderer.
+   * @param path - Array of schema property keys leading to this field (e.g. ['connection', 'token'])
+   * @param schema - The resolved JSON Schema definition for this field
+   * @param defaultElement - The element that would be rendered without customization
+   */
+  renderField?: (
+    path: string[],
+    schema: JsonSchemaDef,
+    defaultElement: React.ReactElement,
+  ) => React.ReactNode;
 }
 
 export interface SchemaFieldContentProps {

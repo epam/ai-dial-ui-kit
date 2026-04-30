@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import type { SchemaFieldContentProps } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
-import { resolveRef, isObjectType } from '@/components/SchemeRenderer/utils';
+import type { FC, ReactElement } from 'react';
+import type { SchemaFieldContentProps } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
+import { resolveRef, isObjectType } from '@/components/SchemaRenderer/utils';
 import { SchemaObjectEditor } from './SchemaObjectEditor';
 import { SchemaArrayEditor } from './SchemaArrayEditor';
 import { SchemaOneOfEditor } from './SchemaOneOfEditor';
@@ -39,46 +39,54 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
   level,
   required,
 }) => {
-  const { rootSchema } = useSchemaContext();
+  const {
+    rootSchema,
+    renderField,
+    markTouched = () => {},
+    touchedPaths = new Set<string>(),
+  } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
+  const handleChange = (v: unknown) => {
+    markTouched(path.join('.'));
+    onChange(v);
+  };
+
+  const isTouched = touchedPaths.has(path.join('.'));
+
+  let defaultElement: ReactElement;
+
   if (resolved.discriminator && resolved.oneOf) {
-    return (
+    defaultElement = (
       <SchemaOneOfEditor
         schema={resolved}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         path={path}
         level={level}
       />
     );
-  }
-
-  if (resolved.oneOf) {
-    return (
+  } else if (resolved.oneOf) {
+    defaultElement = (
       <SchemaOneOfEditor
         schema={resolved}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         path={path}
         level={level}
       />
     );
-  }
-
-  if (resolved.anyOf) {
-    return (
+  } else if (resolved.anyOf) {
+    defaultElement = (
       <SchemaAnyOfEditor
         schema={resolved}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         path={path}
         level={level}
       />
     );
-  }
-
-  if (isObjectType(resolved)) {
+  } else if (isObjectType(resolved)) {
     const hasAdditionalProps =
       resolved.additionalProperties != null &&
       resolved.additionalProperties !== false;
@@ -86,46 +94,50 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
       !resolved.properties || Object.keys(resolved.properties).length === 0;
 
     if (hasAdditionalProps && hasNoFixedProps) {
-      return (
+      defaultElement = (
         <SchemaKeyValueEditor
           schema={resolved}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
+        />
+      );
+    } else {
+      defaultElement = (
+        <SchemaObjectEditor
+          schema={resolved}
+          value={value}
+          onChange={handleChange}
+          path={path}
+          level={level}
         />
       );
     }
-
-    return (
-      <SchemaObjectEditor
-        schema={resolved}
-        value={value}
-        onChange={onChange}
-        path={path}
-        level={level}
-      />
-    );
-  }
-
-  if (resolved.type === 'array') {
-    return (
+  } else if (resolved.type === 'array') {
+    defaultElement = (
       <SchemaArrayEditor
         schema={resolved}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         path={path}
         level={level}
       />
     );
+  } else {
+    defaultElement = (
+      <SchemaPrimitiveField
+        schema={resolved}
+        value={value}
+        onChange={handleChange}
+        invalid={
+          isTouched &&
+          required &&
+          (value === undefined || value === null || value === '')
+        }
+      />
+    );
   }
 
-  return (
-    <SchemaPrimitiveField
-      schema={resolved}
-      value={value}
-      onChange={onChange}
-      invalid={
-        required && (value === undefined || value === null || value === '')
-      }
-    />
-  );
+  return renderField
+    ? (renderField(path, resolved, defaultElement) as ReactElement)
+    : defaultElement;
 };

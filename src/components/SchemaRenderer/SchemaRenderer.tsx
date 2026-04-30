@@ -1,17 +1,18 @@
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
-import type { DialSchemeRendererProps } from '@/components/SchemeRenderer/types';
-import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemeRenderer/types';
-import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
+import type { DialSchemaRendererProps } from '@/components/SchemaRenderer/types';
+import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemaRenderer/types';
+import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   extractDefaults,
   buildSummary,
   validateRequired,
   toFieldLabel,
-} from '@/components/SchemeRenderer/utils';
-import { SchemaSection } from '@/components/SchemeRenderer/components/SchemaSection';
-import { SchemaFieldContent } from '@/components/SchemeRenderer/components/SchemaFieldContent';
+} from '@/components/SchemaRenderer/utils';
+import { SchemaSection } from '@/components/SchemaRenderer/components/SchemaSection';
+import { SchemaFieldContent } from '@/components/SchemaRenderer/components/SchemaFieldContent';
+import { SchemaField } from '@/components/SchemaRenderer/components/SchemaField';
 
 /**
  * Renders a JSON Schema as a form UI with collapsible sections, validation, and default values.
@@ -19,7 +20,7 @@ import { SchemaFieldContent } from '@/components/SchemeRenderer/components/Schem
  *
  * @example
  * ```tsx
- * <DialSchemeRenderer
+ * <DialSchemaRenderer
  *   schema={mySchema}
  *   onChange={(v) => console.log(v)}
  *   onDefaultValues={(defaults) => console.log(defaults)}
@@ -32,11 +33,13 @@ import { SchemaFieldContent } from '@/components/SchemeRenderer/components/Schem
  * @param [className] - Additional CSS classes for the root container
  * @param [readonly=false] - When true all inputs are disabled; sections remain collapsible
  * @param [defaultExpanded=true] - Initial expanded state for all collapsible sections
+ * @param [variant='sections'] - `'sections'` wraps every top-level property in a collapsible card; `'flat'` renders primitives as plain DialFormItem fields
+ * @param [renderField] - Override the rendered element for any field by path; return `defaultElement` to fall back to built-in rendering
  * @param [onChange] - Called with the full form value on every change
  * @param [onPropertyChange] - Called with `(path, value)` for each individual property change
  * @param [onDefaultValues] - Called once on mount with the resolved default values
  */
-export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
+export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   schema,
   defaultValue,
   texts,
@@ -44,9 +47,11 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
   readonly = false,
   defaultExpanded = true,
   inputClassName,
+  variant = 'sections',
   onChange,
   onPropertyChange,
   onDefaultValues,
+  renderField,
 }) => {
   const mergedTexts = useMemo(
     () => ({ ...DEFAULT_SCHEMA_TEXTS, ...texts }),
@@ -60,6 +65,16 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [value, setValue] = useState<Record<string, unknown>>(initialValue);
+  const [touchedPaths, setTouchedPaths] = useState<ReadonlySet<string>>(
+    new Set(),
+  );
+
+  const markTouched = useCallback((path: string) => {
+    setTouchedPaths((prev) => {
+      if (prev.has(path)) return prev;
+      return new Set([...prev, path]);
+    });
+  }, []);
 
   // fired once on mount to provide default values to parent
   useEffect(() => {
@@ -84,6 +99,9 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
         readonly,
         defaultExpanded,
         inputClassName,
+        renderField,
+        touchedPaths,
+        markTouched,
       }}
     >
       <div className={mergeClasses('flex flex-col gap-4', className)}>
@@ -93,8 +111,28 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
             resolved.title ?? propSchema.title ?? toFieldLabel(key);
           const isRequired = topLevelRequired.includes(key);
           const propValue = value[key];
+
+          if (variant === 'flat') {
+            return (
+              <SchemaField
+                key={key}
+                schema={propSchema}
+                value={propValue}
+                onChange={(v) => handlePropertyChange(key, v)}
+                path={[key]}
+                level={0}
+                required={isRequired}
+                label={propLabel}
+              />
+            );
+          }
+
           const summary = buildSummary(propValue, resolved, schema);
           const errors = validateRequired(propValue, resolved, schema, key);
+          const prefix = key + '.';
+          const isSectionTouched =
+            touchedPaths.has(key) ||
+            [...touchedPaths].some((p) => p.startsWith(prefix));
 
           return (
             <SchemaSection
@@ -105,9 +143,11 @@ export const DialSchemeRenderer: FC<DialSchemeRendererProps> = ({
               summary={summary}
               defaultExpanded={defaultExpanded}
               errorCount={
-                isRequired && (propValue === undefined || propValue === null)
-                  ? Math.max(errors.length, 1)
-                  : errors.length
+                isSectionTouched
+                  ? isRequired && (propValue === undefined || propValue === null)
+                    ? Math.max(errors.length, 1)
+                    : errors.length
+                  : 0
               }
             >
               <SchemaFieldContent

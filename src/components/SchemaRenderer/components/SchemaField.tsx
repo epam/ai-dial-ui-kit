@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { DialFormItem } from '@/components/FormItem/FormItem';
-import type { SchemaFieldProps } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import type { SchemaFieldProps } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   isObjectType,
   buildSummary,
   validateRequired,
-} from '@/components/SchemeRenderer/utils';
+} from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
@@ -45,7 +45,11 @@ export const SchemaField: FC<SchemaFieldProps> = ({
   required,
   label,
 }) => {
-  const { rootSchema, defaultExpanded = true } = useSchemaContext();
+  const {
+    rootSchema,
+    defaultExpanded = true,
+    touchedPaths = new Set<string>(),
+  } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
   const isObject = isObjectType(resolved);
@@ -59,13 +63,18 @@ export const SchemaField: FC<SchemaFieldProps> = ({
       rootSchema,
       path.join('.'),
     );
+    const pathStr = path.join('.');
+    const prefix = pathStr + '.';
+    const isSectionTouched =
+      touchedPaths.has(pathStr) ||
+      [...touchedPaths].some((p) => p.startsWith(prefix));
     return (
       <SchemaSection
         title={label ?? resolved.title ?? path[path.length - 1] ?? 'Section'}
         description={resolved.description}
         level={level}
         summary={summary}
-        errorCount={errors.length}
+        errorCount={isSectionTouched ? errors.length : 0}
         defaultExpanded={defaultExpanded}
       >
         <SchemaFieldContent
@@ -80,8 +89,9 @@ export const SchemaField: FC<SchemaFieldProps> = ({
     );
   }
 
+  const isTouched = touchedPaths.has(path.join('.'));
   const error =
-    required && (value === undefined || value === null || value === '')
+    isTouched && required && (value === undefined || value === null || value === '')
       ? `${label ?? 'Field'} is required`
       : undefined;
 

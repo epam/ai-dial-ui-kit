@@ -1,12 +1,12 @@
 import { type ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
+import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   type JsonSchema,
   DEFAULT_SCHEMA_TEXTS,
-} from '@/components/SchemeRenderer/types';
-import { SchemaFieldContent } from '@/components/SchemeRenderer/components/SchemaFieldContent';
+} from '@/components/SchemaRenderer/types';
+import { SchemaFieldContent } from '@/components/SchemaRenderer/components/SchemaFieldContent';
 
 const renderWithSchema = (ui: ReactElement, schema: JsonSchema = {}) =>
   render(

@@ -1,12 +1,14 @@
 import { type ReactElement } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
+import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   type JsonSchema,
   DEFAULT_SCHEMA_TEXTS,
-} from '@/components/SchemeRenderer/types';
-import { SchemaOneOfEditor } from '@/components/SchemeRenderer/components/SchemaOneOfEditor';
+  SchemaDisplayMode,
+  SchemaOrientation,
+} from '@/components/SchemaRenderer/types';
+import { SchemaOneOfEditor } from '@/components/SchemaRenderer/components/SchemaOneOfEditor';
 
 const renderWithSchema = (ui: ReactElement, schema: JsonSchema = {}) =>
   render(
@@ -105,6 +107,105 @@ describe('Dial UI Kit :: SchemaOneOfEditor', () => {
         discriminatorSchema,
       );
       expect(screen.queryByText('Dog Name')).not.toBeInTheDocument();
+      expect(screen.queryByText('Lives')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('with discriminatorDisplay radio', () => {
+    const radioSchema: JsonSchema = {
+      ...discriminatorSchema,
+      discriminatorDisplay: SchemaDisplayMode.Radio,
+    };
+
+    test('renders radio buttons for each discriminator option', () => {
+      renderWithSchema(
+        <SchemaOneOfEditor
+          schema={radioSchema}
+          value={undefined}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+        radioSchema,
+      );
+      expect(screen.getByRole('radio', { name: 'dog' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'cat' })).toBeInTheDocument();
+    });
+
+    test('shows sub-fields for the selected radio option', () => {
+      renderWithSchema(
+        <SchemaOneOfEditor
+          schema={radioSchema}
+          value={{ kind: 'dog', name: '' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+        radioSchema,
+      );
+      expect(screen.getByText('Dog Name')).toBeInTheDocument();
+      expect(screen.queryByText('Lives')).not.toBeInTheDocument();
+    });
+
+    test('calls onChange with correct type when a radio is selected', () => {
+      const onChange = vi.fn();
+      renderWithSchema(
+        <SchemaOneOfEditor
+          schema={radioSchema}
+          value={{ kind: 'dog', name: '' }}
+          onChange={onChange}
+          path={[]}
+          level={0}
+        />,
+        radioSchema,
+      );
+      fireEvent.click(screen.getByRole('radio', { name: 'cat' }));
+      expect(onChange).toHaveBeenCalledWith(
+        expect.objectContaining({ kind: 'cat' }),
+      );
+    });
+
+    test('row orientation renders all radio buttons in one radiogroup without inline sub-content', () => {
+      const rowSchema: JsonSchema = {
+        ...discriminatorSchema,
+        discriminatorDisplay: SchemaDisplayMode.Radio,
+        discriminatorOrientation: SchemaOrientation.Row,
+      };
+      const { container } = renderWithSchema(
+        <SchemaOneOfEditor
+          schema={rowSchema}
+          value={{ kind: 'dog', name: '' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+        rowSchema,
+      );
+      const radiogroup = container.querySelector('[role="radiogroup"]');
+      expect(radiogroup).toBeInTheDocument();
+      expect(radiogroup?.className).toContain('flex-row');
+      // both options present in the same group
+      expect(screen.getByRole('radio', { name: 'dog' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'cat' })).toBeInTheDocument();
+    });
+
+    test('row orientation shows selected type sub-content below the radio row', () => {
+      const rowSchema: JsonSchema = {
+        ...discriminatorSchema,
+        discriminatorDisplay: SchemaDisplayMode.Radio,
+        discriminatorOrientation: SchemaOrientation.Row,
+      };
+      renderWithSchema(
+        <SchemaOneOfEditor
+          schema={rowSchema}
+          value={{ kind: 'dog', name: '' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+        rowSchema,
+      );
+      expect(screen.getByText('Dog Name')).toBeInTheDocument();
       expect(screen.queryByText('Lives')).not.toBeInTheDocument();
     });
   });

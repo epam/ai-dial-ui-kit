@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { DialSelect } from '@/components/Select/Select';
-import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   getOptionLabel,
   detectAnyOfVariant,
   extractDefaults,
-} from '@/components/SchemeRenderer/utils';
+} from '@/components/SchemaRenderer/utils';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
 export interface SchemaAnyOfEditorProps {

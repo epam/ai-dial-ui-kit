@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { DialSchemeRenderer } from './SchemeRenderer';
-import type { JsonSchema } from './types';
+import { DialSchemaRenderer } from './SchemaRenderer';
+import { SchemaRendererVariant, type JsonSchema } from './types';
 
 const simpleSchema: JsonSchema = {
   properties: {
@@ -45,9 +45,9 @@ const oneOfSchema: JsonSchema = {
   },
 };
 
-describe('DialSchemeRenderer', () => {
+describe('DialSchemaRenderer', () => {
   it('renders top-level section titles', () => {
-    render(<DialSchemeRenderer schema={simpleSchema} />);
+    render(<DialSchemaRenderer schema={simpleSchema} />);
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Count')).toBeInTheDocument();
     expect(screen.getByText('Enabled')).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('DialSchemeRenderer', () => {
   it('calls onDefaultValues on mount with schema defaults', () => {
     const onDefaultValues = vi.fn();
     render(
-      <DialSchemeRenderer
+      <DialSchemaRenderer
         schema={simpleSchema}
         onDefaultValues={onDefaultValues}
       />,
@@ -70,7 +70,7 @@ describe('DialSchemeRenderer', () => {
   it('calls onDefaultValues with provided defaultValue', () => {
     const onDefaultValues = vi.fn();
     render(
-      <DialSchemeRenderer
+      <DialSchemaRenderer
         schema={simpleSchema}
         defaultValue={{ name: 'Test', count: 99 }}
         onDefaultValues={onDefaultValues}
@@ -81,18 +81,34 @@ describe('DialSchemeRenderer', () => {
     );
   });
 
-  it('shows required error indicator when required field missing', () => {
-    render(<DialSchemeRenderer schema={simpleSchema} />);
+  it('does not show error indicator before a field is touched', () => {
+    render(<DialSchemaRenderer schema={simpleSchema} />);
     const nameSectionHeader = screen
       .getByText('Name')
       .closest('[role="button"]');
     expect(nameSectionHeader).toBeInTheDocument();
+    expect(nameSectionHeader?.textContent).not.toContain('error');
+  });
+
+  it('shows error indicator after a required field is touched and left empty', () => {
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: '', count: 5, enabled: true }}
+      />,
+    );
+    const input = screen.getAllByRole('textbox')[0];
+    fireEvent.change(input, { target: { value: 'x' } });
+    fireEvent.change(input, { target: { value: '' } });
+    const nameSectionHeader = screen
+      .getByText('Name')
+      .closest('[role="button"]');
     expect(nameSectionHeader?.textContent).toContain('error');
   });
 
   it('collapses and expands a section on header click', () => {
     render(
-      <DialSchemeRenderer
+      <DialSchemaRenderer
         schema={simpleSchema}
         defaultValue={{ name: 'hi' }}
       />,
@@ -107,7 +123,7 @@ describe('DialSchemeRenderer', () => {
   it('calls onChange with full value when a field changes', () => {
     const onChange = vi.fn();
     render(
-      <DialSchemeRenderer
+      <DialSchemaRenderer
         schema={simpleSchema}
         defaultValue={{ name: '', count: 5, enabled: true }}
         onChange={onChange}
@@ -123,7 +139,7 @@ describe('DialSchemeRenderer', () => {
   it('calls onPropertyChange with path and value', () => {
     const onPropertyChange = vi.fn();
     render(
-      <DialSchemeRenderer
+      <DialSchemaRenderer
         schema={simpleSchema}
         defaultValue={{ name: '', count: 5, enabled: true }}
         onPropertyChange={onPropertyChange}
@@ -139,7 +155,97 @@ describe('DialSchemeRenderer', () => {
   });
 
   it('renders oneOf discriminator selector', () => {
-    render(<DialSchemeRenderer schema={oneOfSchema} />);
+    render(<DialSchemaRenderer schema={oneOfSchema} />);
     expect(screen.getByText('Config')).toBeInTheDocument();
+  });
+
+  it('flat variant renders primitives without collapsible section headers', () => {
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        variant={SchemaRendererVariant.Flat}
+      />,
+    );
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    // In flat mode, primitive fields have no expand/collapse button wrapping them
+    const nameLabel = screen.getByText('Name');
+    expect(nameLabel.closest('[role="button"]')).toBeNull();
+  });
+
+  it('flat variant still renders object fields as collapsible sections', () => {
+    const schema: JsonSchema = {
+      properties: {
+        title: { title: 'Title', type: 'string' },
+        group: {
+          title: 'Group',
+          type: 'object',
+          properties: { field: { title: 'Field', type: 'string' } },
+        },
+      },
+    };
+    render(
+      <DialSchemaRenderer
+        schema={schema}
+        variant={SchemaRendererVariant.Flat}
+      />,
+    );
+    const groupHeader = screen.getByText('Group').closest('[role="button"]');
+    expect(groupHeader).toBeInTheDocument();
+    const titleLabel = screen.getByText('Title');
+    expect(titleLabel.closest('[role="button"]')).toBeNull();
+  });
+
+  it('calls renderField with path, schema, and default element', () => {
+    const renderField = vi.fn(
+      (_path, _schema, defaultElement) => defaultElement,
+    );
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi', count: 5, enabled: true }}
+        renderField={renderField}
+      />,
+    );
+    expect(renderField).toHaveBeenCalled();
+    const paths = renderField.mock.calls.map((c) =>
+      (c[0] as string[]).join('.'),
+    );
+    expect(paths).toContain('name');
+  });
+
+  it('disables all inputs when readonly is true', () => {
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi', count: 5, enabled: true }}
+        readonly
+      />,
+    );
+    screen.getAllByRole('textbox').forEach((input) => {
+      expect(input).toBeDisabled();
+    });
+    screen.getAllByRole('spinbutton').forEach((input) => {
+      expect(input).toBeDisabled();
+    });
+    screen.getAllByRole('checkbox').forEach((checkbox) => {
+      expect(checkbox).toBeDisabled();
+    });
+  });
+
+  it('renders the custom element returned by renderField', () => {
+    const renderField = vi.fn((path: string[], _schema, defaultElement) => {
+      if (path[path.length - 1] === 'name') {
+        return <span data-testid="custom-name-field">custom</span>;
+      }
+      return defaultElement;
+    });
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi' }}
+        renderField={renderField}
+      />,
+    );
+    expect(screen.getByTestId('custom-name-field')).toBeInTheDocument();
   });
 });
