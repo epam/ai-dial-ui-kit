@@ -25,8 +25,10 @@ import {
 } from './Button/InputButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 
-export interface DialInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface DialInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'onChange'
+> {
   labelProps?: DialLabelProps;
   inputButtonProps?: DialInputButtonProps;
 

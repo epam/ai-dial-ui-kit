@@ -158,8 +158,10 @@ export interface FileMetadataPopupOptions {
   authorLabel?: string;
 }
 
-export interface FileTreeOptions
-  extends Omit<DialFoldersTreeProps, 'items' | 'selectedPath' | 'onItemClick'> {
+export interface FileTreeOptions extends Omit<
+  DialFoldersTreeProps,
+  'items' | 'selectedPath' | 'onItemClick'
+> {
   width?: number;
   header?: ReactNode;
   containerClassName?: string;
@@ -196,8 +198,10 @@ export type NavigationPanelOptions = Omit<
   'path' | 'makeHref' | 'onItemClick'
 >;
 
-export interface GridOptions
-  extends Omit<DialGridProps<GridRow>, 'rowData' | 'columnDefs'> {
+export interface GridOptions extends Omit<
+  DialGridProps<GridRow>,
+  'rowData' | 'columnDefs'
+> {
   columnDefs?: (
     | ColDef<GridRow>
     | ((

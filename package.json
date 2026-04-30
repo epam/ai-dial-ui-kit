@@ -39,7 +39,7 @@
     "build:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./dist/index.css",
     "build:manifest": "tsx src/mcp/generate-manifest.ts",
     "build:mcp": "node tools/build-mcp.mjs",
-    "lint": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0 && prettier --write .",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:check": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test:run": "vitest run",
