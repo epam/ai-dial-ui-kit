@@ -123,7 +123,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
             <DialRadioButton
               name={elementId}
               value={radio.id}
-              inputId={radio.id}
+              inputId={`${elementId}-${radio.id}`}
               disabled={disabled}
               className={radioClassName}
               labelClassName={mergeClasses(
