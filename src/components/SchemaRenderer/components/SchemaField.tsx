@@ -8,6 +8,7 @@ import {
   isObjectType,
   buildSummary,
   validateRequired,
+  isMissingRequiredValue,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
@@ -36,6 +37,7 @@ import { SchemaFieldContent } from './SchemaFieldContent';
  * @param [level=0] - Nesting depth; object/array fields render as collapsible sections
  * @param [required] - Whether the field is required (shows error when empty)
  * @param [label] - Display label; falls back to schema title or path segment
+ * @param [skipUntouched] - When `true`, required-field errors are only shown after the user has interacted with a field.
  */
 export const SchemaField: FC<SchemaFieldProps> = ({
   schema,
@@ -50,6 +52,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
     rootSchema,
     defaultExpanded = true,
     touchedPaths = new Set<string>(),
+    skipUntouched = false,
   } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
@@ -67,6 +70,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
     const pathStr = path.join('.');
     const prefix = pathStr + '.';
     const isSectionTouched =
+      !skipUntouched ||
       touchedPaths.has(pathStr) ||
       [...touchedPaths].some((p) => p.startsWith(prefix));
     return (
@@ -90,11 +94,9 @@ export const SchemaField: FC<SchemaFieldProps> = ({
     );
   }
 
-  const isTouched = touchedPaths.has(path.join('.'));
+  const isTouched = !skipUntouched || touchedPaths.has(path.join('.'));
   const error =
-    isTouched &&
-    required &&
-    (value === undefined || value === null || value === '')
+    isTouched && required && isMissingRequiredValue(value)
       ? `${label ?? 'Field'} is required`
       : undefined;
 
