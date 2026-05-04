@@ -530,3 +530,30 @@ export const CustomFieldRenderer: Story = {
     },
   },
 };
+
+export const SkipUntouchedComparison: StoryObj = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '32px' }}>
+      <div style={{ flex: 1 }}>
+        <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
+          skipUntouched: false (default) — errors shown immediately
+        </h3>
+        <DialSchemaRenderer
+          schema={credentialsSchema}
+          variant={SchemaRendererVariant.Flat}
+          skipUntouched={false}
+        />
+      </div>
+      <div style={{ flex: 1 }}>
+        <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
+          skipUntouched: true — errors shown only after interaction
+        </h3>
+        <DialSchemaRenderer
+          schema={credentialsSchema}
+          variant={SchemaRendererVariant.Flat}
+          skipUntouched={true}
+        />
+      </div>
+    </div>
+  ),
+};

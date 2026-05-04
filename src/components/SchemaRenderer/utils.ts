@@ -22,6 +22,10 @@ export function resolveRef(
   return { ...fullyResolved, ...siblings };
 }
 
+export function isMissingRequiredValue(value: unknown): boolean {
+  return value === undefined || value === null || value === '';
+}
+
 export function isObjectType(schema: JsonSchemaDef): boolean {
   return (
     schema.type === JsonSchemaType.Object ||
@@ -161,7 +165,7 @@ export function validateRequired(
   for (const key of required) {
     const fieldPath = path ? `${path}.${key}` : key;
     const v = obj?.[key];
-    if (v === undefined || v === null) {
+    if (isMissingRequiredValue(v)) {
       const propSchema = resolved.properties?.[key];
       const label = propSchema?.title ?? toFieldLabel(key);
       errors.push({ path: fieldPath, message: `${label} is required` });
