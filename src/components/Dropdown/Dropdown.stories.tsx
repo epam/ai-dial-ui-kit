@@ -496,3 +496,52 @@ export const DropdownDynamicButtons: Story = {
     );
   },
 };
+
+export const WithSubMenu: Story = {
+  name: 'With sub-menu items',
+  render: (args) => (
+    <DialDropdown
+      {...args}
+      placement="bottom-start"
+      menu={{
+        items: [
+          {
+            key: 'profile',
+            label: 'Profile',
+            icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+          },
+          {
+            key: 'more',
+            label: 'More actions',
+            icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+            children: [
+              {
+                key: 'open',
+                label: 'Open in new tab',
+                icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
+              },
+              {
+                key: 'copy',
+                label: 'Duplicate',
+                icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
+              },
+              {
+                key: 'del',
+                label: 'Delete',
+                icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
+                danger: true,
+              },
+            ],
+          },
+          {
+            key: 'logout',
+            label: 'Logout',
+            icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+          },
+        ],
+      }}
+    >
+      <TriggerBtn label="Sub-menu" />
+    </DialDropdown>
+  ),
+};
