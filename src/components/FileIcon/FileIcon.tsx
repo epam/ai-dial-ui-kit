@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import type { FC } from 'react';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { fileIconFactories } from './constants';

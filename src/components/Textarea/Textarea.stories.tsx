@@ -123,7 +123,7 @@ export const AllVariants: Story = {
         'This is a caption text providing additional information about the textarea.',
     };
     return (
-      <div className="flex flex-col h-full w-full items-center">
+      <div className="flex flex-col size-full items-center">
         <h2 className="text-primary font-semibold mb-8">Textarea</h2>
 
         <div className="flex-1 min-h-0 flex flex-col gap-y-6">

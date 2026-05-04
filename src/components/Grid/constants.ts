@@ -12,16 +12,14 @@ export const GRID_THEME_COLORS = {
   borderRadius: 3,
   browserColorScheme: 'dark',
   chromeBackgroundColor: 'var(--bg-layer-1, #0C101D)',
-  foregroundColor: 'var(--text-primary, ##EEF1F7)',
+  foregroundColor: 'var(--text-primary, #EEF1F7)',
   headerFontSize: 14,
   headerFontWeight: 600,
   headerTextColor: 'var(--text-secondary, #7F8792)',
   spacing: 4,
   wrapperBorderRadius: 3,
   fontSize: 14,
-  fontFamily: {
-    googleFont: 'var(--theme-font, var(--font-inter))',
-  },
+  fontFamily: 'var(--theme-font, var(--font-inter))',
 };
 
 export const ROW_HEIGHT = 40;

@@ -80,7 +80,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
         role="button"
         aria-expanded={isExpanded}
       >
-        <span className="flex-shrink-0 text-secondary">
+        <span className="shrink-0 text-secondary">
           {isExpanded ? (
             <IconChevronDown size={16} stroke={2} />
           ) : (
@@ -115,7 +115,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
         ) : (
           <DialIcon
             icon={<IconCheck size={13} stroke={2} />}
-            className="text-success flex-shrink-0"
+            className="text-success shrink-0"
           />
         )}
 
@@ -127,7 +127,7 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
               onRemove();
             }}
             aria-label={removeItemAriaLabel}
-            className="ml-1 flex-shrink-0 p-0.5"
+            className="ml-1 shrink-0 p-0.5"
           />
         )}
       </div>

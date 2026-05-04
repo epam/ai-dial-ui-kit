@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import { DialSelect } from '@/components/Select/Select';
-import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import { JsonSchemaType } from '@/components/SchemaRenderer/types';
+import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   getOptionLabel,
   detectAnyOfVariant,
   extractDefaults,
-} from '@/components/SchemeRenderer/utils';
+} from '@/components/SchemaRenderer/utils';
 import { SchemaFieldContent } from './SchemaFieldContent';
 
 export interface SchemaAnyOfEditorProps {
@@ -57,27 +58,36 @@ export const SchemaAnyOfEditor: FC<SchemaAnyOfEditorProps> = ({
   const currentIndex = detectAnyOfVariant(value, anyOfSchemas, rootSchema);
   const selectedSchema = anyOfSchemas[currentIndex];
   const resolvedSelected = resolveRef(selectedSchema, rootSchema);
-  const isNull = resolvedSelected.type === 'null';
+  const isNull = resolvedSelected.type === JsonSchemaType.Null;
 
   const handleChange = (idx: number) => {
     const newSchema = resolveRef(anyOfSchemas[idx], rootSchema);
-    if (newSchema.type === 'null') {
+    if (newSchema.type === JsonSchemaType.Null) {
       onChange(null);
       return;
     }
     const defaults = extractDefaults(newSchema, rootSchema);
     if (defaults !== undefined) {
       onChange(defaults);
-    } else if (newSchema.type === 'array') {
-      onChange([]);
-    } else if (newSchema.type === 'string') {
-      onChange('');
-    } else if (newSchema.type === 'boolean') {
-      onChange(false);
-    } else if (newSchema.type === 'integer' || newSchema.type === 'number') {
-      onChange(0);
-    } else {
-      onChange({});
+      return;
+    }
+    switch (newSchema.type) {
+      case JsonSchemaType.Array:
+        onChange([]);
+        break;
+      case JsonSchemaType.String:
+        onChange('');
+        break;
+      case JsonSchemaType.Boolean:
+        onChange(false);
+        break;
+      case JsonSchemaType.Integer:
+      case JsonSchemaType.Number:
+        onChange(0);
+        break;
+      default:
+        onChange({});
+        break;
     }
   };
 

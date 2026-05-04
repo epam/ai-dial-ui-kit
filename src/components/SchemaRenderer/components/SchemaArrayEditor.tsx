@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { type FC, useMemo, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialSelect } from '@/components/Select/Select';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
-import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   extractDefaults,
@@ -12,7 +11,7 @@ import {
   validateRequired,
   getItemTitle,
   getSchemaDefault,
-} from '@/components/SchemeRenderer/utils';
+} from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
 

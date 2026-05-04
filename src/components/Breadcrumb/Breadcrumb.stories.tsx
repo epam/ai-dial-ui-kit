@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialBreadcrumb } from './Breadcrumb';
 import { DialBreadcrumbItem } from './BreadcrumbItem';

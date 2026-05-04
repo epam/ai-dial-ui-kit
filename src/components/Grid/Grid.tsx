@@ -9,6 +9,7 @@ import {
   type ICellRendererParams,
   ModuleRegistry,
   type RowSelectionOptions,
+  type SelectionChangedEvent,
   setupAgTestIds,
   themeBalham,
 } from 'ag-grid-community';
@@ -45,7 +46,7 @@ import {
   CHECKBOX_COL_DEF,
   RADIO_BUTTON_COL_DEF,
 } from '@/components/Grid/renderers/constants.ts';
-import type { SelectionChangedEvent } from 'ag-grid-community';
+
 import { debounceFn } from '@/utils/debounce.ts';
 import { ariaDescription } from '@/components/Checkbox/constants';
 
@@ -295,9 +296,9 @@ export const DialGrid = <T extends object>({
       const inputId = `row-select-${rowId}`;
 
       return (
-        <div className="h-6 w-6 flex items-center justify-center">
+        <div className="size-6 flex items-center justify-center">
           <DialRadioButton
-            className="w-[18px] h-[18px]"
+            className="size-[18px]"
             inputId={inputId}
             checked={checked}
             disabled={disabled}

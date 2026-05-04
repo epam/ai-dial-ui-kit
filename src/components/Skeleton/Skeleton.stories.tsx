@@ -180,7 +180,7 @@ const LoadingComponent: FC = () => {
     <div className="w-[600px]">
       <DialSkeleton loading={loading} avatar paragraph={{ rows: 4 }}>
         <div className="flex gap-4">
-          <div className="w-10 h-10 rounded-full bg-accent-primary flex items-center justify-center text-white">
+          <div className="size-10 rounded-full bg-accent-primary flex items-center justify-center text-white">
             JD
           </div>
           <div className="flex-1">

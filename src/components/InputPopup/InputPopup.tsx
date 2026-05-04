@@ -136,7 +136,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         {!disabled && (
           <button
             type="button"
-            className="flex-shrink-0 cursor-pointer bg-transparent border-none p-0 ml-1"
+            className="shrink-0 cursor-pointer bg-transparent border-none p-0 ml-1"
             onClick={onOpen}
             aria-label="open-popup"
           >
@@ -184,7 +184,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
             </DialTooltip>
           </div>
           {!disabled && (
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <DialIcon
                 icon={
                   <OpenPopupIcon

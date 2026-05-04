@@ -6,11 +6,14 @@ import {
   DialDateCellRenderer,
   type DialDateCellRendererProps,
 } from '@/components/Grid/renderers/DateCellRenderer';
-import { FileManagerRenameTriggerView } from '@/types/file-manager';
+import {
+  FileManagerRenameTriggerView,
+  FileManagerColumnKey,
+} from '@/types/file-manager';
 import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
 import { DialItemType } from '@/types/item';
 import { DialFileManagerItemSummaryCell } from '@/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell';
-import { FileManagerColumnKey } from '@/types/file-manager';
+
 import type { FileManagerGridRow } from '@/components/FileManager/FileManagerContext';
 import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
 import type { FileManagerGridContext } from '@/components/FileManager/hooks/use-file-manager-columns';

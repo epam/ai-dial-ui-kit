@@ -69,7 +69,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
         onChange={onClick}
         id={switchId}
         disabled={disabled}
-        className="invisible w-0 h-0"
+        className="invisible size-0"
         checked={isOn}
       />
       <label

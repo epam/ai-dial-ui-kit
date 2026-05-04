@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ReactNode } from 'react';
 
 const meta = {
   title: 'DIAL/Typography',
@@ -29,7 +30,7 @@ const Section = ({
   children,
 }: {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) => (
   <div className="mb-8">
     <h3 className="mb-3 border-b-2 border-accent-primary pb-1 text-sm font-semibold uppercase tracking-widest text-secondary">

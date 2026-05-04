@@ -213,7 +213,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   return (
     <div className="flex w-full justify-between gap-4 items-center overflow-x-auto">
       <div className="flex-1 min-w-0">{renderTabs()}</div>
-      <div className="flex gap-4 flex-shrink-0 items-center">
+      <div className="flex gap-4 shrink-0 items-center">
         {isMobile ? renderMobileActions() : renderDesktopActions()}
       </div>
     </div>

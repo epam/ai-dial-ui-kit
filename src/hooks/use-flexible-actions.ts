@@ -1,6 +1,12 @@
 import { BASE_ICON_SIZE } from '@/constants/icon';
 import { FlexibleActionsDirection } from '@/types/flexible-actions';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 interface UseFlexibleActionsOptions<T> {
   actions: T[];
@@ -16,7 +22,9 @@ interface UseFlexibleActionsOptions<T> {
  * can fit within a container and moves overflowing ones into a hidden list (e.g. a dropdown).
  *
  * It measures each action's width and dynamically recalculates visible and hidden actions
- * whenever the container resizes or dependencies change.
+ * whenever the container resizes or dependencies change. The first fit is computed in
+ * `useLayoutEffect` (before paint) so actions do not briefly show inline and then move
+ * into overflow after a later frame.
  *
  * This hook is reusable for toolbars or action strips that can have:
  * - a **left fixed section** (e.g., selection info),
@@ -91,14 +99,57 @@ export function useFlexibleActions<T extends { key: string }>({
   const actionWidthsRef = useRef<number[]>([]);
   const [visibleCount, setVisibleCount] = useState(actions.length);
 
-  useLayoutEffect(() => {
-    if (!measureRef.current) return;
-    const children = Array.from(measureRef.current.children) as HTMLElement[];
-    actionWidthsRef.current = children.map((el) =>
-      Math.ceil(el.getBoundingClientRect().width),
-    );
+  const recalcWithMeasuredWidths = useCallback(
+    (widths: number[], container: HTMLElement) => {
+      const leftWidth = leftSectionRef.current?.offsetWidth ?? 0;
+      const rightWidth = rightSectionRef.current?.offsetWidth ?? 0;
+      const reservedWidth = leftWidth + rightWidth;
+      const containerWidth = container.getBoundingClientRect().width;
+
+      const availableWidth =
+        containerWidth -
+        reservedWidth -
+        moreButtonWidth -
+        actionsGap * 2 -
+        containerPadding * 2;
+
+      let total = 0;
+      let count = 0;
+
+      if (direction === FlexibleActionsDirection.Reverse) {
+        for (let i = widths.length - 1; i >= 0; i--) {
+          total += widths[i] + actionsGap;
+          if (total > availableWidth) break;
+          count++;
+        }
+      } else {
+        for (const width of widths) {
+          total += width + actionsGap;
+          if (total > availableWidth) break;
+          count++;
+        }
+      }
+
+      setVisibleCount(count);
+    },
+    [actionsGap, containerPadding, direction, moreButtonWidth],
+  );
+
+  useLayoutEffect(
+    () => {
+      if (!measureRef.current || !containerRef.current) return;
+      const children = Array.from(measureRef.current.children) as HTMLElement[];
+      const widths = children.map((el) =>
+        Math.ceil(el.getBoundingClientRect().width),
+      );
+      actionWidthsRef.current = widths;
+      if (widths.length === 0) return;
+      recalcWithMeasuredWidths(widths, containerRef.current!);
+    },
+    // Re-measure when the action list or layout-affecting deps (e.g. isMobile) change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions, ...dependencies]);
+    [actions, recalcWithMeasuredWidths, ...dependencies],
+  );
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -108,38 +159,11 @@ export function useFlexibleActions<T extends { key: string }>({
     const measureVisible = () => {
       if (frameId) cancelAnimationFrame(frameId);
       frameId = requestAnimationFrame(() => {
-        const container = containerRef.current!;
-        const leftWidth = leftSectionRef.current?.offsetWidth ?? 0;
-        const rightWidth = rightSectionRef.current?.offsetWidth ?? 0;
-        const reservedWidth = leftWidth + rightWidth;
-        const containerWidth = container.getBoundingClientRect().width;
-
-        const availableWidth =
-          containerWidth -
-          reservedWidth -
-          moreButtonWidth -
-          actionsGap * 2 -
-          containerPadding * 2;
-
+        if (!containerRef.current) return;
+        const container = containerRef.current;
         const widths = actionWidthsRef.current;
-        let total = 0;
-        let count = 0;
-
-        if (direction === FlexibleActionsDirection.Reverse) {
-          for (let i = widths.length - 1; i >= 0; i--) {
-            total += widths[i] + actionsGap;
-            if (total > availableWidth) break;
-            count++;
-          }
-        } else {
-          for (const width of widths) {
-            total += width + actionsGap;
-            if (total > availableWidth) break;
-            count++;
-          }
-        }
-
-        setVisibleCount(count);
+        if (widths.length === 0) return;
+        recalcWithMeasuredWidths(widths, container);
       });
     };
 
@@ -151,8 +175,12 @@ export function useFlexibleActions<T extends { key: string }>({
       if (frameId) cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
     };
+  }, [
+    actions.length,
+    recalcWithMeasuredWidths,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions.length, direction, ...dependencies]);
+    ...dependencies,
+  ]);
 
   const hiddenActions =
     direction === FlexibleActionsDirection.Reverse
