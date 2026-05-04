@@ -130,6 +130,24 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
             );
           }
 
+          if (variant === SchemaRendererVariant.FlatSections) {
+            return (
+              <div key={key} className="flex flex-col gap-3">
+                <h2 className="dial-small-semi-text text-primary">
+                  {propLabel}
+                </h2>
+                <SchemaFieldContent
+                  schema={propSchema}
+                  value={propValue}
+                  onChange={(v) => handlePropertyChange(key, v)}
+                  path={[key]}
+                  level={0}
+                  required={isRequired}
+                />
+              </div>
+            );
+          }
+
           const summary = buildSummary(propValue, resolved, schema);
           const errors = validateRequired(propValue, resolved, schema, key);
           const prefix = key + '.';

@@ -3,6 +3,7 @@ import type React from 'react';
 export enum SchemaRendererVariant {
   Sections = 'sections',
   Flat = 'flat',
+  FlatSections = 'flat-sections',
 }
 
 export enum SchemaDisplayMode {
