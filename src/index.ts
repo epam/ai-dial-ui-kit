@@ -98,6 +98,7 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 //File Manager
 export { DialFileManager } from './components/FileManager/FileManager';
+export type { FileManagerGridRow } from './components/FileManager/FileManagerContext';
 export type {
   GridOptions,
   ToolbarOptions,
@@ -158,6 +159,7 @@ export {
   DialFilePermission,
   DialFileResourceType,
 } from './models/file';
+export type { DialRootFolder } from './models/file';
 export {
   type DialCopiedItem,
   type DialDeletedItem,
