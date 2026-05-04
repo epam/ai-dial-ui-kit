@@ -4,8 +4,8 @@ import { DialInput } from '@/components/Input/Input';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
 import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
 import { ElementSize } from '@/types/size';
-import type { JsonSchemaDef } from '@/components/SchemeRenderer/types';
-import { useSchemaContext } from '@/components/SchemeRenderer/context';
+import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
+import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
 
 interface KeyValuePair {

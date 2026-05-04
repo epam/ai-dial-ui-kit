@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { SchemaSection } from '@/components/SchemeRenderer/components/SchemaSection';
+import { SchemaSection } from '@/components/SchemaRenderer/components/SchemaSection';
 
 describe('Dial UI Kit :: SchemaSection', () => {
   test('renders title', () => {

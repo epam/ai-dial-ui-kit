@@ -10,11 +10,11 @@ import {
   detectAnyOfVariant,
   getItemTitle,
   getSchemaDefault,
-} from '@/components/SchemeRenderer/utils';
+} from '@/components/SchemaRenderer/utils';
 import type {
   JsonSchema,
   JsonSchemaDef,
-} from '@/components/SchemeRenderer/types';
+} from '@/components/SchemaRenderer/types';
 
 // ---------------------------------------------------------------------------
 // resolveRef

@@ -1,17 +1,21 @@
 import { type ReactElement } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
+import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   type JsonSchema,
   DEFAULT_SCHEMA_TEXTS,
-} from '@/components/SchemeRenderer/types';
-import { SchemaField } from '@/components/SchemeRenderer/components/SchemaField';
+} from '@/components/SchemaRenderer/types';
+import { SchemaField } from '@/components/SchemaRenderer/components/SchemaField';
 
-const renderWithSchema = (ui: ReactElement, schema: JsonSchema = {}) =>
+const renderWithSchema = (
+  ui: ReactElement,
+  schema: JsonSchema = {},
+  touchedPaths?: ReadonlySet<string>,
+) =>
   render(
     <SchemaRendererContext.Provider
-      value={{ rootSchema: schema, texts: DEFAULT_SCHEMA_TEXTS }}
+      value={{ rootSchema: schema, texts: DEFAULT_SCHEMA_TEXTS, touchedPaths }}
     >
       {ui}
     </SchemaRendererContext.Provider>,
@@ -93,7 +97,24 @@ describe('Dial UI Kit :: SchemaField', () => {
     expect(container.querySelector('[aria-expanded]')).toBeInTheDocument();
   });
 
-  test('shows required error when required and value is empty', () => {
+  test('shows required error when required, value is empty, and field is touched', () => {
+    renderWithSchema(
+      <SchemaField
+        schema={{ type: 'string' }}
+        value=""
+        onChange={vi.fn()}
+        path={['field']}
+        label="Email"
+        level={0}
+        required
+      />,
+      {},
+      new Set(['field']),
+    );
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+  });
+
+  test('does not show required error before the field is touched', () => {
     renderWithSchema(
       <SchemaField
         schema={{ type: 'string' }}
@@ -105,7 +126,7 @@ describe('Dial UI Kit :: SchemaField', () => {
         required
       />,
     );
-    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
   });
 
   test('does not show error when value is provided', () => {

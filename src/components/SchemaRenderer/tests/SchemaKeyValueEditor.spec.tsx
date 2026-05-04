@@ -2,9 +2,9 @@ import { type ReactElement } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
-import { SchemaRendererContext } from '@/components/SchemeRenderer/context';
-import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemeRenderer/types';
-import { SchemaKeyValueEditor } from '@/components/SchemeRenderer/components/SchemaKeyValueEditor';
+import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
+import { DEFAULT_SCHEMA_TEXTS } from '@/components/SchemaRenderer/types';
+import { SchemaKeyValueEditor } from '@/components/SchemaRenderer/components/SchemaKeyValueEditor';
 
 const renderWithSchema = (ui: ReactElement) =>
   render(
