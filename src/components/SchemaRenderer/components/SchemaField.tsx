@@ -114,6 +114,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
         path={path}
         level={level}
         required={required}
+        suppressInlineError
       />
     </DialFormItem>
   );
