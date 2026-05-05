@@ -12,6 +12,7 @@ import {
   buildSummary,
   validateRequired,
   toFieldLabel,
+  isMissingRequiredValue,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from '@/components/SchemaRenderer/components/SchemaSection';
 import { SchemaFieldContent } from '@/components/SchemaRenderer/components/SchemaFieldContent';
@@ -168,8 +169,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
               defaultExpanded={defaultExpanded}
               errorCount={
                 isSectionTouched
-                  ? isRequired &&
-                    (propValue === undefined || propValue === null)
+                  ? isRequired && isMissingRequiredValue(propValue)
                     ? Math.max(errors.length, 1)
                     : errors.length
                   : 0
