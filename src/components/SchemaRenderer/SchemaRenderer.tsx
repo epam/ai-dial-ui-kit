@@ -55,6 +55,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   onPropertyChange,
   onDefaultValues,
   renderField,
+  skipUntouched = false,
 }) => {
   const mergedTexts = useMemo(
     () => ({ ...DEFAULT_SCHEMA_TEXTS, ...texts }),
@@ -105,6 +106,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
         renderField,
         touchedPaths,
         markTouched,
+        skipUntouched,
       }}
     >
       <div className={mergeClasses('flex flex-col gap-4', className)}>
@@ -130,10 +132,29 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
             );
           }
 
+          if (variant === SchemaRendererVariant.FlatSections) {
+            return (
+              <div key={key} className="flex flex-col gap-3">
+                <h2 className="dial-small-semi-text text-primary">
+                  {propLabel}
+                </h2>
+                <SchemaFieldContent
+                  schema={propSchema}
+                  value={propValue}
+                  onChange={(v) => handlePropertyChange(key, v)}
+                  path={[key]}
+                  level={0}
+                  required={isRequired}
+                />
+              </div>
+            );
+          }
+
           const summary = buildSummary(propValue, resolved, schema);
           const errors = validateRequired(propValue, resolved, schema, key);
           const prefix = key + '.';
           const isSectionTouched =
+            !skipUntouched ||
             touchedPaths.has(key) ||
             [...touchedPaths].some((p) => p.startsWith(prefix));
 

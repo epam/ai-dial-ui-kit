@@ -3,6 +3,7 @@ import type React from 'react';
 export enum SchemaRendererVariant {
   Sections = 'sections',
   Flat = 'flat',
+  FlatSections = 'flat-sections',
 }
 
 export enum SchemaDisplayMode {
@@ -115,6 +116,11 @@ export interface DialSchemaRendererProps {
    * properties still use collapsible sections.
    */
   variant?: SchemaRendererVariant;
+  /**
+   * When `true`, required-field errors are only shown after the user has interacted
+   * with a field. When `false` (default), all unfilled required fields are highlighted immediately.
+   */
+  skipUntouched?: boolean;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;
   onDefaultValues?: (value: Record<string, unknown>) => void;
