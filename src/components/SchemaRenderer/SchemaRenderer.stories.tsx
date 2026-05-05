@@ -212,9 +212,13 @@ const meta: Meta<typeof DialSchemaRenderer> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: [SchemaRendererVariant.Sections, SchemaRendererVariant.Flat],
+      options: [
+        SchemaRendererVariant.Sections,
+        SchemaRendererVariant.Flat,
+        SchemaRendererVariant.FlatSections,
+      ],
       description:
-        "'sections' wraps each top-level property in a collapsible card; 'flat' renders primitives as plain form fields",
+        "'sections' wraps each top-level property in a collapsible card; 'flat' renders primitives as plain form fields; 'flat-sections' renders an h2 heading above each section's fields",
     },
     readonly: {
       control: { type: 'boolean' },
@@ -269,6 +273,13 @@ export const ArrayWithDiscriminator: Story = {
     defaultValue: {
       tools: [{ type: 'rest-api', name: 'My API', url: 'https://example.com' }],
     },
+  },
+};
+
+export const FlatSectionsVariant: Story = {
+  args: {
+    variant: SchemaRendererVariant.FlatSections,
+    schema: flatMixedSchema,
   },
 };
 
@@ -518,4 +529,31 @@ export const CustomFieldRenderer: Story = {
       return defaultElement;
     },
   },
+};
+
+export const SkipUntouchedComparison: StoryObj = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '32px' }}>
+      <div style={{ flex: 1 }}>
+        <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
+          skipUntouched: false (default) — errors shown immediately
+        </h3>
+        <DialSchemaRenderer
+          schema={credentialsSchema}
+          variant={SchemaRendererVariant.Flat}
+          skipUntouched={false}
+        />
+      </div>
+      <div style={{ flex: 1 }}>
+        <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
+          skipUntouched: true — errors shown only after interaction
+        </h3>
+        <DialSchemaRenderer
+          schema={credentialsSchema}
+          variant={SchemaRendererVariant.Flat}
+          skipUntouched={true}
+        />
+      </div>
+    </div>
+  ),
 };

@@ -19,6 +19,7 @@ interface SchemaRendererContextValue {
   ) => React.ReactNode;
   touchedPaths?: ReadonlySet<string>;
   markTouched?: (path: string) => void;
+  skipUntouched?: boolean;
 }
 
 export const SchemaRendererContext =

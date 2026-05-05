@@ -12,10 +12,16 @@ const renderWithSchema = (
   ui: ReactElement,
   schema: JsonSchema = {},
   touchedPaths?: ReadonlySet<string>,
+  skipUntouched?: boolean,
 ) =>
   render(
     <SchemaRendererContext.Provider
-      value={{ rootSchema: schema, texts: DEFAULT_SCHEMA_TEXTS, touchedPaths }}
+      value={{
+        rootSchema: schema,
+        texts: DEFAULT_SCHEMA_TEXTS,
+        touchedPaths,
+        skipUntouched,
+      }}
     >
       {ui}
     </SchemaRendererContext.Provider>,
@@ -114,7 +120,7 @@ describe('Dial UI Kit :: SchemaField', () => {
     expect(screen.getByText('Email is required')).toBeInTheDocument();
   });
 
-  test('does not show required error before the field is touched', () => {
+  test('show required error before the field is touched when skipUntouched is undefined', () => {
     renderWithSchema(
       <SchemaField
         schema={{ type: 'string' }}
@@ -125,6 +131,24 @@ describe('Dial UI Kit :: SchemaField', () => {
         level={0}
         required
       />,
+    );
+    expect(screen.queryByText('Email is required')).toBeInTheDocument();
+  });
+
+  test('does not show required error before the field is touched if skipUntouched is true', () => {
+    renderWithSchema(
+      <SchemaField
+        schema={{ type: 'string' }}
+        value=""
+        onChange={vi.fn()}
+        path={['field']}
+        label="Email"
+        level={0}
+        required
+      />,
+      {},
+      undefined,
+      true,
     );
     expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
   });

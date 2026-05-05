@@ -81,8 +81,17 @@ describe('DialSchemaRenderer', () => {
     );
   });
 
-  it('does not show error indicator before a field is touched', () => {
-    render(<DialSchemaRenderer schema={simpleSchema} />);
+  it('show error indicator before a field is touched when skipUntouched is false', () => {
+    render(<DialSchemaRenderer schema={simpleSchema} skipUntouched={false} />);
+    const nameSectionHeader = screen
+      .getByText('Name')
+      .closest('[role="button"]');
+    expect(nameSectionHeader).toBeInTheDocument();
+    expect(nameSectionHeader?.textContent).toContain('error');
+  });
+
+  it('does not show error indicator before a field is touched when skipUntouched is true', () => {
+    render(<DialSchemaRenderer schema={simpleSchema} skipUntouched={true} />);
     const nameSectionHeader = screen
       .getByText('Name')
       .closest('[role="button"]');
