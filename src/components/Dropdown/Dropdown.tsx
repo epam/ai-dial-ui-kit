@@ -30,7 +30,7 @@ import {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { DropdownTrigger } from '@/types/dropdown';
+import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
 
 import {
   dropdownBaseClassName,
@@ -43,7 +43,7 @@ import {
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
 import { DialCloseButton } from '@/components/CloseButton/CloseButton';
-import { DropdownItemType } from '@/types/dropdown';
+
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DropdownMenuProps {

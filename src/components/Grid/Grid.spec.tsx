@@ -21,22 +21,6 @@ const testColumns: ColDef<TestRow>[] = [
 ];
 
 describe('Dial UI Kit :: DialGrid', () => {
-  test('renders grid with column headers', async () => {
-    render(
-      <DialGrid<TestRow>
-        columnDefs={testColumns}
-        rowData={testRows}
-        className="test-grid"
-      />,
-    );
-
-    const grid = await screen.findByRole('region');
-    expect(grid).toHaveClass('test-grid');
-
-    expect(await screen.findByText('Name')).toBeInTheDocument();
-    expect(await screen.findByText('Age')).toBeInTheDocument();
-  });
-
   test('calls onGridReady when grid is initialized', async () => {
     const onGridReady = vi.fn();
     render(

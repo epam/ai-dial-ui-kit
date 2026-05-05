@@ -2,12 +2,17 @@ import { useMemo } from 'react';
 import { DialFilePermission, type DialFile } from '@/models/file';
 import { DialFileManagerActions } from '@/types/file-manager';
 import type { DialActionDropdownItem } from '@/components/FileManager/components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar';
-import { IconCopy, IconDownload, IconTrashX } from '@tabler/icons-react';
+import {
+  IconCopy,
+  IconDownload,
+  IconTrashX,
+  IconUserX,
+} from '@tabler/icons-react';
 import CopyToIcon from '@/assets/icons/copy-to.svg?react';
 import MoveToIcon from '@/assets/icons/move-to.svg?react';
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import IconUnshare from '@/assets/icons/unshare.svg?react';
-import { IconUserX } from '@tabler/icons-react';
+
 import { cleanForbiddenSymbolsRegExp } from '@/components/FileManager/utils';
 
 export interface UseBulkActionsProps {

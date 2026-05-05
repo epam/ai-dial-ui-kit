@@ -98,6 +98,7 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 
 //File Manager
 export { DialFileManager } from './components/FileManager/FileManager';
+export type { FileManagerGridRow } from './components/FileManager/FileManagerContext';
 export type {
   GridOptions,
   ToolbarOptions,
@@ -158,6 +159,7 @@ export {
   DialFilePermission,
   DialFileResourceType,
 } from './models/file';
+export type { DialRootFolder } from './models/file';
 export {
   type DialCopiedItem,
   type DialDeletedItem,
@@ -190,3 +192,18 @@ export {
   NOT_ALLOWED_SYMBOLS_REGEXP,
   NOT_ALLOWED_SPACES_REGEXP,
 } from './constants/validation.ts';
+
+// SchemaRenderer
+export { DialSchemaRenderer } from './components/SchemaRenderer/SchemaRenderer';
+export {
+  SchemaRendererVariant,
+  SchemaDisplayMode,
+  SchemaOrientation,
+  JsonSchemaType,
+} from './components/SchemaRenderer/types';
+export type {
+  DialSchemaRendererProps,
+  JsonSchema,
+  JsonSchemaDef,
+  ValidationError,
+} from './components/SchemaRenderer/types';
