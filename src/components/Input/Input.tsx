@@ -1,6 +1,8 @@
 import {
+  useCallback,
   useEffect,
   useRef,
+  useState,
   type ChangeEvent,
   type FC,
   type InputHTMLAttributes,
@@ -124,6 +126,22 @@ const InputWrapper: FC<InputWrapperProps> = ({
 }) => {
   const innerRef = useRef<HTMLInputElement | null>(null);
   const ref = useMergeRefs([inputRef, innerRef]);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  const checkTruncation = useCallback(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    setIsTruncated(el.scrollWidth > el.clientWidth);
+  }, []);
+
+  useEffect(() => {
+    checkTruncation();
+  }, [value, checkTruncation]);
+
+  useEffect(() => {
+    window.addEventListener('resize', checkTruncation);
+    return () => window.removeEventListener('resize', checkTruncation);
+  }, [checkTruncation]);
 
   // disable mouse wheel changing input value
   useEffect(() => {
@@ -230,8 +248,11 @@ const InputWrapper: FC<InputWrapperProps> = ({
       </div>
     );
   };
-  return disabled && type !== 'password' ? (
-    <DialTooltip tooltip={tooltipText || value}>{input()}</DialTooltip>
+  const showTooltip = (disabled && type !== 'password') || isTruncated;
+  const resolvedTooltip = tooltipText || value;
+
+  return showTooltip && resolvedTooltip ? (
+    <DialTooltip tooltip={resolvedTooltip}>{input()}</DialTooltip>
   ) : (
     input()
   );
