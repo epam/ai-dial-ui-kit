@@ -101,7 +101,7 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
                 iconAfter={removeFile(file.name)}
                 iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}
                 invalid={isInvalid?.(file)}
-                error={errorText}
+                error={isInvalid?.(file) ? errorText : ''}
               />
             ))}
           </div>

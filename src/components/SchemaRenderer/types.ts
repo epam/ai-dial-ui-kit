@@ -145,6 +145,7 @@ export interface SchemaFieldContentProps {
   path: string[];
   level: number;
   required?: boolean;
+  suppressInlineError?: boolean;
 }
 
 export interface SchemaFieldProps extends SchemaFieldContentProps {

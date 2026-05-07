@@ -1,8 +1,13 @@
 import type { FC, ReactElement } from 'react';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { JsonSchemaType } from '@/components/SchemaRenderer/types';
 import type { SchemaFieldContentProps } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
-import { resolveRef, isObjectType } from '@/components/SchemaRenderer/utils';
+import {
+  resolveRef,
+  isObjectType,
+  isMissingRequiredValue,
+} from '@/components/SchemaRenderer/utils';
 import { SchemaObjectEditor } from './SchemaObjectEditor';
 import { SchemaArrayEditor } from './SchemaArrayEditor';
 import { SchemaOneOfEditor } from './SchemaOneOfEditor';
@@ -39,12 +44,14 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
   path,
   level,
   required,
+  suppressInlineError = false,
 }) => {
   const {
     rootSchema,
     renderField,
     markTouched = () => {},
     touchedPaths = new Set<string>(),
+    skipUntouched = false,
   } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
@@ -53,7 +60,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
     onChange(v);
   };
 
-  const isTouched = touchedPaths.has(path.join('.'));
+  const isTouched = !skipUntouched || touchedPaths.has(path.join('.'));
 
   let defaultElement: ReactElement;
 
@@ -114,17 +121,22 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
       />
     );
   } else {
+    const isPrimitiveInvalid =
+      isTouched && required && isMissingRequiredValue(value);
+    const primitiveErrorMessage =
+      !suppressInlineError && isPrimitiveInvalid
+        ? `${resolved.title ?? 'Field'} is required`
+        : undefined;
     defaultElement = (
-      <SchemaPrimitiveField
-        schema={resolved}
-        value={value}
-        onChange={handleChange}
-        invalid={
-          isTouched &&
-          required &&
-          (value === undefined || value === null || value === '')
-        }
-      />
+      <>
+        <SchemaPrimitiveField
+          schema={resolved}
+          value={value}
+          onChange={handleChange}
+          invalid={isPrimitiveInvalid}
+        />
+        <DialErrorText text={primitiveErrorMessage} />
+      </>
     );
   }
 
