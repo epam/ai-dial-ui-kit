@@ -45,6 +45,7 @@ import { type DropdownItem } from '@/models/dropdown';
 import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 
 import { mergeClasses } from '@/utils/merge-classes';
+import { DropdownSubMenuItem } from './DropdownSubMenuItem';
 
 export interface DropdownMenuProps {
   items: DropdownItem[];
@@ -122,6 +123,14 @@ export interface DialDropdownProps {
  * @param [matchReferenceWidth=false] - Whether to match the reference element's width
  * @param [maxDropdownHeight] - Maximum height of the dropdown menu; when omitted, no limit is applied
  */
+const getRefWidth = (el: ReferenceElement): number => {
+  if ('clientWidth' in el) return (el as Element).clientWidth;
+  const rect = (
+    el as { getBoundingClientRect?: () => DOMRect }
+  ).getBoundingClientRect?.();
+  return rect?.width ?? 0;
+};
+
 export const DialDropdown: FC<DialDropdownProps> = ({
   children,
   menu,
@@ -158,14 +167,6 @@ export const DialDropdown: FC<DialDropdownProps> = ({
 
   const listId = useId();
   const useAuto = placement === undefined;
-
-  const getRefWidth = (el: ReferenceElement): number => {
-    if ('clientWidth' in el) return (el as Element).clientWidth;
-    const rect = (
-      el as { getBoundingClientRect?: () => DOMRect }
-    ).getBoundingClientRect?.();
-    return rect?.width ?? 0;
-  };
 
   const { refs, floatingStyles, context } = useFloating({
     placement,
@@ -348,6 +349,15 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 </div>
               );
             }
+            if (it.children?.length) {
+              return (
+                <DropdownSubMenuItem
+                  key={it.key}
+                  item={it}
+                  onRootClose={() => setOpen(false)}
+                />
+              );
+            }
             return (
               <button
                 key={it.key}
@@ -393,7 +403,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         )}
       </>
     );
-  }, [handleItemClick, menu, renderOverlay]);
+  }, [handleItemClick, menu, renderOverlay, setOpen]);
 
   const referenceProps = getReferenceProps({
     onContextMenu,

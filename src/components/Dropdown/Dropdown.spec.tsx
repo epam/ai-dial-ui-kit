@@ -720,4 +720,115 @@ describe('Dial UI Kit :: Dropdown', () => {
     fireEvent.mouseDown(wrapper);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
+
+  test('item with children renders as submenu trigger (no onClick, has aria-haspopup)', () => {
+    const itemsWithSub: DropdownItem[] = [
+      { key: 'a', label: 'Normal' },
+      {
+        key: 'sub',
+        label: 'More',
+        children: [
+          { key: 'sub-1', label: 'Sub One' },
+          { key: 'sub-2', label: 'Sub Two' },
+        ],
+      },
+    ];
+    render(
+      <DialDropdown menu={{ items: itemsWithSub }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    const trigger = screen.getByRole('menuitem', { name: /more/i });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    // should not have a direct click handler that closes root
+    expect(trigger.tagName).toBe('BUTTON');
+  });
+
+  test('submenu opens on hover and child click fires handler + closes root', async () => {
+    const user = userEvent.setup();
+    const onChild = vi.fn();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        children: [
+          { key: 'sub-1', label: 'Sub One', onClick: onChild },
+          { key: 'sub-2', label: 'Sub Two' },
+        ],
+      },
+    ];
+    const { container } = render(
+      <DialDropdown menu={{ items: itemsWithSub }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+
+    const subTrigger = screen.getByRole('menuitem', { name: /more/i });
+    await user.hover(subTrigger);
+
+    const subOne = await screen.findByRole('menuitem', { name: 'Sub One' });
+    expect(subOne).toBeInTheDocument();
+
+    fireEvent.click(subOne);
+    expect(onChild).toHaveBeenCalledTimes(1);
+    // root dropdown should close
+    await waitFor(() =>
+      expect(container.querySelector('[aria-haspopup="menu"]')).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      ),
+    );
+  });
+
+  test('disabled submenu trigger does not open submenu', async () => {
+    const user = userEvent.setup();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        disabled: true,
+        children: [{ key: 'sub-1', label: 'Sub One' }],
+      },
+    ];
+    render(
+      <DialDropdown menu={{ items: itemsWithSub }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    const subTrigger = screen.getByRole('menuitem', { name: /more/i });
+    expect(subTrigger).toBeDisabled();
+    await user.hover(subTrigger);
+    expect(
+      screen.queryByRole('menuitem', { name: 'Sub One' }),
+    ).not.toBeInTheDocument();
+  });
+
+  test('disabled child in submenu does not call onClick', async () => {
+    const user = userEvent.setup();
+    const onChild = vi.fn();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        children: [
+          { key: 'sub-1', label: 'Sub One', disabled: true, onClick: onChild },
+        ],
+      },
+    ];
+    render(
+      <DialDropdown menu={{ items: itemsWithSub }}>
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+    await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+    const child = await screen.findByRole('menuitem', { name: 'Sub One' });
+    expect(child).toBeDisabled();
+    fireEvent.click(child);
+    expect(onChild).not.toHaveBeenCalled();
+  });
 });
