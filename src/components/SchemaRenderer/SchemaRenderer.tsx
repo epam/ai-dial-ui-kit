@@ -9,7 +9,6 @@ import { SchemaRendererContext } from '@/components/SchemaRenderer/context';
 import {
   resolveRef,
   extractDefaults,
-  buildSummary,
   validateRequired,
   toFieldLabel,
   isMissingRequiredValue,
@@ -151,7 +150,6 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
             );
           }
 
-          const summary = buildSummary(propValue, resolved, schema);
           const errors = validateRequired(propValue, resolved, schema, key);
           const prefix = key + '.';
           const isSectionTouched =
@@ -165,7 +163,6 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
               title={propLabel}
               description={resolved.description}
               level={0}
-              summary={summary}
               defaultExpanded={defaultExpanded}
               errorCount={
                 isSectionTouched
