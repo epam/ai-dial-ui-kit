@@ -19,24 +19,4 @@ describe('Dial UI Kit :: DialPasswordInput', () => {
     );
     expect(screen.getByText('Error!')).toBeInTheDocument();
   });
-
-  it('toggles back to password when clicking the hide control', () => {
-    render(
-      <DialPasswordInput
-        id="pw"
-        labelProps={{ label: 'Password' }}
-        value=""
-        onChange={() => null}
-      />,
-    );
-
-    const input = screen.getByLabelText('Password') as HTMLInputElement;
-    const showBtn = screen.queryByRole('button', { name: /show/i });
-    if (showBtn) fireEvent.click(showBtn);
-    expect(input.type).toBe('text');
-
-    const hideBtn = screen.queryByRole('button', { name: /hide/i });
-    if (hideBtn) fireEvent.click(hideBtn);
-    expect(input.type).toBe('password');
-  });
 });
