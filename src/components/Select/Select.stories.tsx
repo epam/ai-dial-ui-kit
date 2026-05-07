@@ -292,3 +292,44 @@ export const CustomTriggerClass: Story = {
     className: 'min-h-[48px] p-8',
   },
 };
+
+export const WithSubMenuOptions: Story = {
+  name: 'With sub-menu options',
+  render: (args) => (
+    <div className="w-[280px]">
+      <DialSelect
+        {...args}
+        placeholder="Select option..."
+        options={[
+          {
+            value: 'contain',
+            label: 'Contain',
+            icon: <IconAbc size={iconSize} />,
+          },
+          {
+            value: 'equal',
+            label: 'Equal',
+            icon: <IconEqual size={iconSize} />,
+          },
+          {
+            value: 'group-compare',
+            label: 'Compare',
+            children: [
+              { value: 'gt', label: 'Greater than' },
+              { value: 'gte', label: 'Greater than or equal' },
+              { value: 'lt', label: 'Less than' },
+              { value: 'lte', label: 'Less than or equal' },
+            ],
+          },
+          {
+            value: 'disabled-group',
+            label: 'Disabled group',
+            disabled: true,
+            icon: <IconDashboardOff size={iconSize} />,
+            children: [{ value: 'x', label: 'Child X' }],
+          },
+        ]}
+      />
+    </div>
+  ),
+};

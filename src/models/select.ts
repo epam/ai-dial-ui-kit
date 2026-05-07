@@ -6,4 +6,5 @@ export interface SelectOption {
   description?: string;
   disabled?: boolean;
   icon?: ReactNode;
+  children?: SelectOption[];
 }

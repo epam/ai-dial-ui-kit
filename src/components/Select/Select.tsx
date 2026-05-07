@@ -19,7 +19,12 @@ import { DialButton } from '@/components/Button/Button';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
-
+import { DialSearch } from '@/components/Search/Search';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { DialMultiSelectTags } from './MultiSelectTags';
+import type { SelectOption } from '@/models/select';
+import { SelectSize, SelectVariant } from '@/types/select';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import {
   selectTriggerBaseClassName,
   selectOverlayBaseClassName,
@@ -30,14 +35,8 @@ import {
   selectChevronIcon,
   dropdownMenuMaxHeight,
 } from './constants';
-
-import { DialSearch } from '@/components/Search/Search';
-import type { SelectOption } from '@/models/select';
-import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialMultiSelectTags } from './MultiSelectTags';
-import { SelectSize, SelectVariant } from '@/types/select';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { SelectSubMenuItem } from './SelectSubMenuItem';
 
 export interface DialSelectProps {
   options: SelectOption[];
@@ -249,7 +248,9 @@ export const DialSelect: FC<DialSelectProps> = ({
       }
       setSelection(val);
       if (inlineSearch) {
-        const selectedOption = options.find((o) => o.value === val);
+        const selectedOption =
+          options.find((o) => o.value === val) ??
+          options.flatMap((o) => o.children ?? []).find((c) => c.value === val);
         if (selectedOption) {
           setQuery(selectedOption.label);
           onInlineQueryChange?.(selectedOption.label);
@@ -293,35 +294,41 @@ export const DialSelect: FC<DialSelectProps> = ({
     [selectableFiltered, selectedValues],
   );
 
-  const handleClose = (value: boolean) => {
-    if (inlineSearch && !multiple && !value) {
-      handleToggle(query);
-    }
-    setOpen(value);
-  };
+  const handleClose = useCallback(
+    (value: boolean) => {
+      if (inlineSearch && !multiple && !value) handleToggle(query);
+      setOpen(value);
+    },
+    [handleToggle, inlineSearch, multiple, query, setOpen],
+  );
 
-  const allSelectedInFiltered =
-    selectableFiltered.length > 0 &&
-    selectedInFilteredCount === selectableFiltered.length;
+  const { allSelectedInFiltered, someSelectedInFiltered } = useMemo(() => {
+    const all =
+      selectableFiltered.length > 0 &&
+      selectedInFilteredCount === selectableFiltered.length;
+    return {
+      allSelectedInFiltered: all,
+      someSelectedInFiltered: selectedInFilteredCount > 0 && !all,
+    };
+  }, [selectableFiltered, selectedInFilteredCount]);
 
-  const someSelectedInFiltered =
-    selectedInFilteredCount > 0 && !allSelectedInFiltered;
-
-  const toggleSelectAll = () => {
+  const toggleSelectAll = useCallback(() => {
     if (!multiple || selectableFiltered.length === 0) return;
-
     if (allSelectedInFiltered) {
       const filteredIds = new Set(selectableFiltered.map((o) => o.value));
-      const next = selectedValues.filter((v) => !filteredIds.has(v));
-
-      setSelection(next);
+      setSelection(selectedValues.filter((v) => !filteredIds.has(v)));
     } else {
       const union = new Set(selectedValues);
       selectableFiltered.forEach((o) => union.add(o.value));
-
       setSelection(Array.from(union));
     }
-  };
+  }, [
+    allSelectedInFiltered,
+    multiple,
+    selectableFiltered,
+    selectedValues,
+    setSelection,
+  ]);
 
   const hasSelection = selectedValues.length > 0;
 
@@ -343,32 +350,30 @@ export const DialSelect: FC<DialSelectProps> = ({
   const singleSelectedOption = useMemo(
     () =>
       singleSelectedValue
-        ? options.find((o) => o.value === singleSelectedValue)
+        ? (options.find((o) => o.value === singleSelectedValue) ??
+          options
+            .flatMap((o) => o.children ?? [])
+            .find((c) => c.value === singleSelectedValue))
         : undefined,
     [options, singleSelectedValue],
   );
 
-  const renderTags = useCallback(() => {
-    if (!multiple || selectedValues.length === 0) return null;
-    return (
-      <DialMultiSelectTags
-        options={options}
-        selectedValues={selectedValues}
-        handleRemoveTag={handleRemoveTag}
-      />
-    );
-  }, [multiple, options, selectedValues, handleRemoveTag]);
-
   const renderSelectedValue = useCallback(() => {
     if (multiple) {
-      return hasSelection ? (
+      if (!hasSelection)
+        return <span className="text-secondary truncate">{placeholder}</span>;
+      return (
         customMultiSelectTagsRenderer?.(
           options,
           selectedValues,
           handleRemoveTag,
-        ) || renderTags()
-      ) : (
-        <span className="text-secondary truncate">{placeholder}</span>
+        ) || (
+          <DialMultiSelectTags
+            options={options}
+            selectedValues={selectedValues}
+            handleRemoveTag={handleRemoveTag}
+          />
+        )
       );
     }
 
@@ -406,7 +411,6 @@ export const DialSelect: FC<DialSelectProps> = ({
     prefix,
     value,
     placeholder,
-    renderTags,
     singleSelectedOption,
     options,
     selectedValues,
@@ -555,6 +559,17 @@ export const DialSelect: FC<DialSelectProps> = ({
                           </div>
                         )}
                       </div>
+                    );
+                  }
+
+                  if (opt.children?.length) {
+                    return (
+                      <SelectSubMenuItem
+                        key={opt.value}
+                        opt={opt}
+                        selectedValues={selectedValues}
+                        onSelect={handleToggle}
+                      />
                     );
                   }
 
