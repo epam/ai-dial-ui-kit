@@ -248,11 +248,13 @@ const InputWrapper: FC<InputWrapperProps> = ({
       </div>
     );
   };
-  const showTooltip = (disabled && type !== 'password') || isTruncated;
+
   const resolvedTooltip = tooltipText || value;
 
-  return showTooltip && resolvedTooltip ? (
-    <DialTooltip tooltip={resolvedTooltip}>{input()}</DialTooltip>
+  return type !== 'password' ? (
+    <DialTooltip tooltip={isTruncated ? resolvedTooltip : undefined}>
+      {input()}
+    </DialTooltip>
   ) : (
     input()
   );
