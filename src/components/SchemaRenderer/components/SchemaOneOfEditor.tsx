@@ -185,7 +185,7 @@ export const SchemaOneOfEditor: FC<SchemaOneOfEditorProps> = ({
           />
         </div>
         {selectedSchema && (
-          <div className="pl-3 border-l-2 border-secondary">
+          <div className="pl-3">
             <SchemaObjectEditor
               schema={selectedSchema}
               value={value}
