@@ -861,6 +861,71 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
     expect(menuItems[0].key).toBe(DialFileManagerActions.Delete);
   });
 
+  test('rename action is not shown when file lacks WRITE permission', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Rename]: 'Rename' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithoutWritePermission);
+
+    expect(menuItems).toHaveLength(0);
+    expect(
+      menuItems.find((item) => item.key === DialFileManagerActions.Rename),
+    ).toBeUndefined();
+  });
+
+  test('rename action is shown when file has WRITE permission', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Rename]: 'Rename' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithWritePermission);
+
+    expect(menuItems).toHaveLength(1);
+    expect(menuItems[0].key).toBe(DialFileManagerActions.Rename);
+  });
+
+  test('rename action is shown when file has no permissions defined', () => {
+    const { result } = renderHook(() =>
+      useGridContextMenu({
+        actionLabels: { [DialFileManagerActions.Rename]: 'Rename' },
+        onDuplicate: vi.fn(),
+        onCopy: vi.fn(),
+        onMove: vi.fn(),
+        onDownload: vi.fn(),
+        onRename: vi.fn(),
+        onDelete: vi.fn(),
+        onInfo: vi.fn(),
+        onUnshare: vi.fn(),
+      }),
+    );
+
+    const menuItems = result.current(fileWithoutPermissions);
+
+    expect(menuItems).toHaveLength(1);
+    expect(menuItems[0].key).toBe(DialFileManagerActions.Rename);
+  });
+
   test('delete action is shown when file has no permissions defined', () => {
     const { result } = renderHook(() =>
       useGridContextMenu({
