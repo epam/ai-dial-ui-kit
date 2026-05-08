@@ -626,7 +626,7 @@ export const DialSelect: FC<DialSelectProps> = ({
         aria-controls={`list-${elementId || listId}`}
         className={mergeClasses(
           selectTriggerBaseClassName,
-          disabled && 'opacity-75 !cursor-not-allowed',
+          disabled && 'opacity-75 !cursor-not-allowed !border-primary',
           size === SelectSize.Sm
             ? 'min-h-[25px] px-1.5 py-1'
             : 'min-h-[38px] px-3 py-2',

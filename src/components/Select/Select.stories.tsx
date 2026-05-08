@@ -217,6 +217,7 @@ export const InlineSearch: Story = {
   name: 'Inline search',
   args: {
     inlineSearch: true,
+    disabled: true,
     searchPlaceholder: 'Display name',
   },
 };
