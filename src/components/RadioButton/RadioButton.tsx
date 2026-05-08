@@ -69,22 +69,26 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
     'dial-small-text cursor-pointer py-[1px]',
     disabled ? 'text-secondary' : 'text-primary',
     labelClassName,
+    disabled && 'cursor-not-allowed',
   );
 
   const inputClassName = classNames(
     'cursor-pointer dial-input-radio',
     !!label && 'mr-2',
     className,
+    disabled && '!cursor-not-allowed',
   );
 
   const containerClassName = classNames(
     'flex flex-col',
     !!description && 'mb-2',
+    disabled && 'cursor-not-allowed',
   );
 
   const allDescriptionClassName = classNames(
     'dial-tiny-text mt-2 ml-[26px] text-secondary',
     descriptionClassName,
+    disabled && 'cursor-not-allowed',
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

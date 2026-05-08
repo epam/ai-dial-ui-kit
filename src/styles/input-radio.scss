@@ -15,8 +15,8 @@
     }
   }
 
-  &:hover,
-  &:focus {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
     @apply border bg-transparent border-accent-primary;
   }
 
