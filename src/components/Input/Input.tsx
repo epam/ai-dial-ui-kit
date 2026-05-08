@@ -1,8 +1,6 @@
 import {
-  useCallback,
   useEffect,
   useRef,
-  useState,
   type ChangeEvent,
   type FC,
   type InputHTMLAttributes,
@@ -13,19 +11,19 @@ import {
 
 import { useMergeRefs } from '@floating-ui/react';
 
-import { mergeClasses } from '@/utils/merge-classes';
 import {
   DialCaptionText,
   DialErrorText,
 } from '@/components/CaptionText/CaptionText';
-import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
-import { handleKeyDown } from './utils';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { mergeClasses } from '@/utils/merge-classes';
 import {
   DialInputButton,
   type DialInputButtonProps,
 } from './Button/InputButton';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { handleKeyDown } from './utils';
 
 export interface DialInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -126,22 +124,6 @@ const InputWrapper: FC<InputWrapperProps> = ({
 }) => {
   const innerRef = useRef<HTMLInputElement | null>(null);
   const ref = useMergeRefs([inputRef, innerRef]);
-  const [isTruncated, setIsTruncated] = useState(false);
-
-  const checkTruncation = useCallback(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    setIsTruncated(el.scrollWidth > el.clientWidth);
-  }, []);
-
-  useEffect(() => {
-    checkTruncation();
-  }, [value, checkTruncation]);
-
-  useEffect(() => {
-    window.addEventListener('resize', checkTruncation);
-    return () => window.removeEventListener('resize', checkTruncation);
-  }, [checkTruncation]);
 
   // disable mouse wheel changing input value
   useEffect(() => {
@@ -249,12 +231,8 @@ const InputWrapper: FC<InputWrapperProps> = ({
     );
   };
 
-  const resolvedTooltip = tooltipText || value;
-
-  return type !== 'password' ? (
-    <DialTooltip tooltip={isTruncated ? resolvedTooltip : undefined}>
-      {input()}
-    </DialTooltip>
+  return disabled && type !== 'password' ? (
+    <DialTooltip tooltip={tooltipText || value}>{input()}</DialTooltip>
   ) : (
     input()
   );
