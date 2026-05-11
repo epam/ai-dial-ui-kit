@@ -92,7 +92,9 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
     onPropertyChange?.(key, newVal);
   };
 
-  const topLevelProperties = Object.entries(schema.properties ?? {});
+  const topLevelProperties = Object.entries(schema.properties ?? {}).filter(
+    ([, propSchema]) => !resolveRef(propSchema, schema).isHidden,
+  );
   const topLevelRequired = schema.required ?? [];
 
   return (

@@ -352,6 +352,21 @@ describe('validateRequired', () => {
     const errors = validateRequired({}, schema, {}, 'parent');
     expect(errors[0].path).toBe('parent.name');
   });
+
+  test('ignores required hidden fields', () => {
+    const schema: JsonSchemaDef = {
+      type: 'object',
+      required: ['visible', 'secret'],
+      properties: {
+        visible: { type: 'string', title: 'Visible' },
+        secret: { type: 'string', title: 'Secret', isHidden: true },
+      },
+    };
+
+    const errors = validateRequired({}, schema, {}, '');
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('visible');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -405,6 +420,21 @@ describe('buildSummary', () => {
 
   test('returns empty string for undefined value', () => {
     expect(buildSummary(undefined, { type: 'string' }, {})).toBe('');
+  });
+
+  test('excludes hidden fields from totals', () => {
+    const schema: JsonSchemaDef = {
+      type: 'object',
+      properties: {
+        visibleA: { type: 'string' },
+        hiddenB: { type: 'string', isHidden: true },
+        visibleC: { type: 'string' },
+      },
+    };
+
+    expect(buildSummary({ visibleA: 'x', hiddenB: '', visibleC: '' }, schema, {})).toBe(
+      '1/2 fields',
+    );
   });
 });
 

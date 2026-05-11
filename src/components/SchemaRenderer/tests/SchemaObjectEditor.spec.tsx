@@ -120,4 +120,38 @@ describe('Dial UI Kit :: SchemaObjectEditor', () => {
     );
     expect(inputs).toHaveLength(3);
   });
+
+  test('does not render hidden properties', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        visibleField: { type: 'string', title: 'Visible Field' },
+        hiddenField: {
+          type: 'string',
+          title: 'Hidden Field',
+          isHidden: true,
+        },
+        hiddenField2: {
+          type: 'string',
+          title: 'Hidden Field 2',
+          isHidden: true,
+        },
+      },
+    };
+
+    renderWithSchema(
+      <SchemaObjectEditor
+        schema={schema}
+        value={{ visibleField: '', hiddenField: '', hiddenField2: '' }}
+        onChange={vi.fn()}
+        path={[]}
+        level={0}
+      />,
+      schema,
+    );
+
+    expect(screen.getByText('Visible Field')).toBeInTheDocument();
+    expect(screen.queryByText('Hidden Field')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hidden Field 2')).not.toBeInTheDocument();
+  });
 });

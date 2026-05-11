@@ -163,10 +163,14 @@ export function validateRequired(
   const obj = value as Record<string, unknown> | undefined;
 
   for (const key of required) {
+    const propSchema = resolved.properties?.[key];
+    if (propSchema && resolveRef(propSchema, rootSchema).isHidden) {
+      continue;
+    }
+
     const fieldPath = path ? `${path}.${key}` : key;
     const v = obj?.[key];
     if (isMissingRequiredValue(v)) {
-      const propSchema = resolved.properties?.[key];
       const label = propSchema?.title ?? toFieldLabel(key);
       errors.push({ path: fieldPath, message: `${label} is required` });
     }
@@ -174,6 +178,10 @@ export function validateRequired(
 
   if (obj && resolved.properties) {
     for (const [key, propSchema] of Object.entries(resolved.properties)) {
+      if (resolveRef(propSchema, rootSchema).isHidden) {
+        continue;
+      }
+
       const fieldPath = path ? `${path}.${key}` : key;
       const v = obj[key];
       if (v !== undefined && v !== null) {
@@ -204,9 +212,12 @@ export function buildSummary(
   }
 
   if (isObjectType(resolved) && resolved.properties) {
-    const total = Object.keys(resolved.properties).length;
+    const visibleEntries = Object.entries(resolved.properties).filter(
+      ([, propSchema]) => !resolveRef(propSchema, rootSchema).isHidden,
+    );
+    const total = visibleEntries.length;
     const obj = value as Record<string, unknown> | undefined;
-    const filled = Object.keys(resolved.properties).filter((key) => {
+    const filled = visibleEntries.filter(([key]) => {
       const v = obj?.[key];
       return v !== undefined && v !== null && v !== '';
     }).length;
