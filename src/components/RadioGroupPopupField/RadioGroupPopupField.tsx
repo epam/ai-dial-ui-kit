@@ -19,8 +19,7 @@ import { PopupSize } from '@/types/popup';
 import { RadioGroupOrientation } from '@/types/radio-group';
 
 export interface RadioGroupPopupFieldProps
-  extends
-    Pick<DialLabelProps, 'label' | 'htmlFor'>,
+  extends Pick<DialLabelProps, 'label' | 'htmlFor'>,
     Omit<DialInputPopupProps, 'onOpen' | 'children'>,
     Pick<DialRadioGroupProps, 'radioButtons'>,
     Pick<DialPopupProps, 'onClose' | 'portalId' | 'size'> {

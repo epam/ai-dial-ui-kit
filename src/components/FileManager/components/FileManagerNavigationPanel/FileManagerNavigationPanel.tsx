@@ -25,8 +25,7 @@ import {
 } from './constants';
 
 export interface DialFileManagerNavigationPanelProps
-  extends
-    Omit<
+  extends Omit<
       DialBreadcrumbProps,
       'pathItems' | 'children' | 'className' | 'separator'
     >,

@@ -11,10 +11,11 @@ import {
 } from '@/components/CaptionText/CaptionText';
 import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 
-export interface DialTextareaProps extends DetailedHTMLProps<
-  Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
-  HTMLTextAreaElement
-> {
+export interface DialTextareaProps
+  extends DetailedHTMLProps<
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
+    HTMLTextAreaElement
+  > {
   labelProps?: DialLabelProps;
   invalid?: boolean;
   containerClassName?: string;

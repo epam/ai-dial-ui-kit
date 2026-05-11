@@ -25,10 +25,8 @@ import {
 } from './Button/InputButton';
 import { handleKeyDown } from './utils';
 
-export interface DialInputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
-> {
+export interface DialInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   labelProps?: DialLabelProps;
   inputButtonProps?: DialInputButtonProps;
 

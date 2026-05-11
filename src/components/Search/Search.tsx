@@ -5,18 +5,19 @@ import { ElementSize } from '@/types/size';
 import { DialInput, type DialInputProps } from '../Input/Input';
 import { SIZE_CONFIG } from './constants';
 
-export interface DialSearchProps extends Omit<
-  DialInputProps,
-  | 'type'
-  | 'size'
-  | 'inputButtonProps'
-  | 'labelProps'
-  | 'iconBefore'
-  | 'iconAfter'
-  | 'prefix'
-  | 'postfix'
-  | 'onChange'
-> {
+export interface DialSearchProps
+  extends Omit<
+    DialInputProps,
+    | 'type'
+    | 'size'
+    | 'inputButtonProps'
+    | 'labelProps'
+    | 'iconBefore'
+    | 'iconAfter'
+    | 'prefix'
+    | 'postfix'
+    | 'onChange'
+  > {
   size?: ElementSize;
   onChange?: (value: string) => void;
 }
