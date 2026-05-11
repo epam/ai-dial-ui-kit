@@ -8,7 +8,11 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger } from '@/types/dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import classNames from 'classnames';
-import { CARET_ICON_PROPS, FOLDER_LEVEL_PADDING } from './constants';
+import {
+  CARET_ICON_PROPS,
+  FOLDER_LEVEL_PADDING,
+  NEW_FOLDER_TEMP_NAME,
+} from './constants';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import {
   getForbiddenSymbolsTooltip,
@@ -27,6 +31,7 @@ export interface DialFoldersTreeProps {
   sharedByMePaths?: Set<string>;
   selectedPath?: string;
   renamedPath?: string;
+  createdFolderPath?: string | null;
   showFiles?: boolean;
   rootItemPath?: string;
   rootItemLabel?: string;
@@ -37,11 +42,14 @@ export interface DialFoldersTreeProps {
   onRenameSave?: (value: string) => void;
   onRenameCancel?: () => void;
   onRenameValidate?: (value: string, item: DialFile) => string | null;
+  onCreateFolderSave?: (value: string) => void;
+  onCreateFolderCancel?: () => void;
   getContextMenuItems?: (item: DialFile) => DropdownItem[];
   areHiddenFilesVisible?: boolean;
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   forbiddenSymbolsRegExp?: RegExp;
   forbiddenSymbolsTooltip?: ReactNode;
+  createdFolderPlaceholder?: string;
 }
 
 /**
@@ -133,6 +141,10 @@ export interface DialFoldersTreeProps {
  * @param [rootItemLabel] - Label to display for the root node instead of its actual name.
  * @param [forbiddenSymbolsRegExp] - Optional RegExp used to validate folder and file names for forbidden characters.
  * @param [forbiddenSymbolsTooltip] - Optional tooltip content displayed when a name contains forbidden characters.
+ * @param [createdFolderPath] - Optional Path of the new created folder.
+ * @param [onCreateFolderSave] - Optional Callback fired when create new folder is confirmed
+ * @param [onCreateFolderCancel] - Optional Callback fired when create new folder is cancelled
+ * @param [createdFolderPlaceholder] - Optional new folder default name.
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
  * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
@@ -153,6 +165,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   emptyStateIcon,
   areHiddenFilesVisible = false,
   renamedPath,
+  createdFolderPath,
   rootItemLabel,
   rootItemPath,
   onItemClick,
@@ -161,8 +174,11 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onRenameCancel,
   onRenameValidate,
   onExpandedPathsChange,
+  onCreateFolderSave,
+  onCreateFolderCancel,
   forbiddenSymbolsRegExp,
   forbiddenSymbolsTooltip,
+  createdFolderPlaceholder,
 }) => {
   const { expandedPaths, togglePath } = useExpandedPaths({
     expandedPaths: externalExpandedPaths ?? new Set(),
@@ -174,8 +190,28 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
     togglePath(node.path);
   };
 
-  const renderTree = (nodes: DialFile[], level: number) => {
-    return nodes.map((node) => {
+  const renderTree = (
+    nodes: DialFile[],
+    level: number,
+    parentNode?: DialFile,
+  ) => {
+    let newNodes = nodes;
+    if (parentNode && parentNode.path === createdFolderPath) {
+      const tempId = `${NEW_FOLDER_TEMP_NAME}_${Date.now()}`;
+      newNodes = [
+        {
+          folderId: tempId,
+          id: tempId,
+          items: [],
+          name: createdFolderPlaceholder || '',
+          nodeType: DialFileNodeType.FOLDER,
+          parentPath: createdFolderPath,
+          path: `${createdFolderPath}/${NEW_FOLDER_TEMP_NAME}`,
+        },
+        ...nodes,
+      ];
+    }
+    return newNodes.map((node) => {
       const { path, nodeType, name, items } = node;
 
       const isFolder = nodeType === DialFileNodeType.FOLDER;
@@ -192,7 +228,9 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
       const isExpanded = expandedPaths.has(path);
       const isSelected = selectedPath === path;
       const isLoading = loadingPaths.has(path);
-      const isRenaming = renamedPath === path;
+      const isRenaming =
+        renamedPath === path ||
+        path === `${createdFolderPath}/${NEW_FOLDER_TEMP_NAME}`;
       const isLoaded = loadedPaths.has(path);
       const isSharedByMe = sharedByMePaths.has(path);
       const isRootFolder =
@@ -267,9 +305,14 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                       forbiddenSymbolsTooltip={tooltipContent}
                       {...(!isRootFolder && {
                         editing: isRenaming,
+                        creating:
+                          path ===
+                          `${createdFolderPath}/${NEW_FOLDER_TEMP_NAME}`,
                         onSave: onRenameSave,
                         onCancel: onRenameCancel,
                         validate: validateHandler,
+                        onCreateFolderSave: onCreateFolderSave,
+                        onCreateFolderCancel: onCreateFolderCancel,
                       })}
                     />
                   </>
@@ -293,7 +336,9 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
               </div>
             </DialDropdown>
 
-            {isExpanded && items && renderTree(items, level + 1)}
+            {isExpanded &&
+              (items || node?.path === createdFolderPath) &&
+              renderTree(items || [], level + 1, node)}
           </div>
         </div>
       );

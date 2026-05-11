@@ -43,10 +43,8 @@ import { useFileSearch } from './hooks/use-file-search';
 import { usePathsSelection } from './hooks/use-paths-selection';
 import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 
-export interface FileManagerProviderProps extends Omit<
-  DialFileManagerProps,
-  'children'
-> {
+export interface FileManagerProviderProps
+  extends Omit<DialFileManagerProps, 'children'> {
   children: ReactNode;
   autoSelectUploadedItems?: boolean;
 }
@@ -96,8 +94,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onDeleteFiles,
   onDownloadFiles,
   onRenameValidate,
-  onAddSibling,
-  onAddChild,
   renameValidationMessages,
   forbiddenSymbolsRegExp = NOT_ALLOWED_SYMBOLS_REGEXP,
   forbiddenSymbolsTooltip,
@@ -109,6 +105,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onUploadArchive,
   onCreateFolder,
   onCreateFolderValidate,
+  createdFolderPlaceholder,
   folderCreationValidationMessages,
   fileMetadataPopupOptions,
   onGetInfo,
@@ -473,7 +470,12 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const {
     isCreatingFolder,
     newFolderTempId,
+    createdFolderPath,
     startFolderCreation: startFolderCreationBase,
+    startGridSiblingFolderCreation,
+    startTreeSiblingFolderCreation,
+    startGridChildFolderCreation,
+    startTreeChildFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
@@ -704,6 +706,62 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     additionalButtons: treeOptions?.additionalButtons,
   });
 
+  const handleGridAddSibling = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        startGridSiblingFolderCreation(files[0]);
+      }
+    },
+    [handleSearchClear, startGridSiblingFolderCreation],
+  );
+
+  const handleGridAddChild = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        setCurrentPath(files[0].path);
+        setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
+        startGridChildFolderCreation(files[0]);
+      }
+    },
+    [
+      handleSearchClear,
+      startGridChildFolderCreation,
+      expandedPaths,
+      setExpandedPaths,
+      setCurrentPath,
+    ],
+  );
+
+  const handleTreeAddSibling = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        startTreeSiblingFolderCreation(files[0]);
+      }
+    },
+    [handleSearchClear, startTreeSiblingFolderCreation],
+  );
+
+  const handleTreeAddChild = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        setCurrentPath(files[0].path);
+        setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
+        startTreeChildFolderCreation(files[0]);
+      }
+    },
+    [
+      handleSearchClear,
+      startTreeChildFolderCreation,
+      setCurrentPath,
+      expandedPaths,
+      setExpandedPaths,
+    ],
+  );
+
   const {
     isMetadataPopupOpen,
     selectedFileForMetadata,
@@ -786,8 +844,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleCloseDestinationFolderPopup,
     handleOpenDestinationFolderPopup,
     destinationFolderMode,
-    handleAddSibling: onAddSibling,
-    handleAddChild: onAddChild,
+    handleGridAddSibling,
+    handleGridAddChild,
+    handleTreeAddSibling,
+    handleTreeAddChild,
 
     handleDownloadFiles,
 
@@ -836,6 +896,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     isCreatingFolder,
     newFolderTempId,
+    createdFolderPath,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
@@ -899,6 +960,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
     showHiddenFileSwitcherInDestinationPopup,
+    createdFolderPlaceholder,
   };
 
   return (

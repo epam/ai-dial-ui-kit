@@ -56,6 +56,8 @@ export const NAME_COLUMN =
           sharedByMePaths,
           selectedPaths,
           disabledRowIds,
+          createdFolderPlaceholder,
+          filesLoading,
         } = params.context;
 
         const isSharedByMe = sharedByMePaths?.has(params.data.path);
@@ -70,16 +72,20 @@ export const NAME_COLUMN =
         if (params.data?.isTemporary && params.data.id === newFolderTempId) {
           return (
             <DialFileManagerItemName
-              name=""
+              name={createdFolderPlaceholder || ''}
               type={DialItemType.Folder}
               elementId={`new-folder-${params.data.id}`}
               editing={true}
+              creating={true}
+              loading={filesLoading}
               shared={isSharedByMe}
               sharedIndicatorClassName={sharedIndicatorClassName}
               iconSize={BASE_FILE_MANAGER_ICON_SIZE}
               validate={validateFolderName}
               onSave={saveFolderCreation}
               onCancel={cancelFolderCreation}
+              onCreateFolderSave={saveFolderCreation}
+              onCreateFolderCancel={cancelFolderCreation}
               inputContainerClassName={mergeClasses([
                 '!h-9',
                 isCompactView && type === DialFileNodeType.ITEM && '!h-10',

@@ -37,6 +37,8 @@ export interface FileManagerGridContext {
 
   getDisplayName: (item: DialFile) => string;
   hideSearchPathItemName?: boolean;
+  createdFolderPlaceholder?: string;
+  filesLoading?: boolean;
 }
 
 export interface UseFileManagerColumnsArgs {
@@ -60,6 +62,9 @@ export interface UseFileManagerColumnsArgs {
 
   rootItemPath?: string;
   rootItemLabel?: string;
+
+  createdFolderPlaceholder?: string;
+  isLoading?: boolean;
 }
 
 export interface UseFileManagerColumnsResult {
