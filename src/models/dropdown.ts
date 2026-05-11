@@ -10,4 +10,5 @@ export interface DropdownItem {
   type?: DropdownItemType;
   className?: string;
   onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
+  children?: DropdownItem[];
 }

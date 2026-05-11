@@ -3,13 +3,13 @@
   @apply bg-transparent truncate dial-small-text;
   @apply w-full outline-0;
 
-  &:hover {
+  &:not(:disabled):hover {
     @apply border-accent-primary;
   }
 
-  &:focus,
-  &:active,
-  &:focus-within {
+  &:not(:disabled):focus,
+  &:not(:disabled):active,
+  &:not(:disabled):focus-within {
     @apply border-focus;
   }
 

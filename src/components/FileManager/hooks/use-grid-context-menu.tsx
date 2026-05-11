@@ -279,7 +279,11 @@ export const useGridContextMenu = ({
       const isRenameAvailable =
         file.nodeType === DialFileNodeType.FOLDER ||
         (file.nodeType === DialFileNodeType.ITEM && isRenameFileAvailable);
-      if (actionLabels[DialFileManagerActions.Rename] && isRenameAvailable) {
+      if (
+        actionLabels[DialFileManagerActions.Rename] &&
+        isRenameAvailable &&
+        emptyOrWritePermissions
+      ) {
         items.push({
           key: DialFileManagerActions.Rename,
           label: actionLabels[DialFileManagerActions.Rename],

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DialSelect, type DialSelectProps } from './Select';
 
@@ -172,5 +173,133 @@ describe('Dial UI Kit :: DialSelect', () => {
     expect(
       screen.queryByRole('option', { name: 'Disabled option' }),
     ).not.toBeInTheDocument();
+  });
+
+  test('option with children renders as submenu trigger (aria-haspopup, not selectable directly)', () => {
+    renderSelect({
+      options: [
+        { value: 'a', label: 'Alpha' },
+        {
+          value: 'grp',
+          label: 'Group',
+          children: [
+            { value: 'g1', label: 'G One' },
+            { value: 'g2', label: 'G Two' },
+          ],
+        },
+      ],
+    });
+    openSelect();
+    const trigger = screen.getByText('Group').closest('button')!;
+    expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger.tagName).toBe('BUTTON');
+  });
+
+  test('submenu opens on hover and child click selects value + closes dropdown', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderSelect({
+      onChange,
+      options: [
+        {
+          value: 'grp',
+          label: 'Group',
+          children: [
+            { value: 'g1', label: 'G One' },
+            { value: 'g2', label: 'G Two' },
+          ],
+        },
+      ],
+    });
+    openSelect();
+    await user.hover(screen.getByText('Group').closest('button')!);
+    const child = await screen.findByText('G One');
+    fireEvent.click(child.closest('button')!);
+    expect(onChange).toHaveBeenCalledWith('g1');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  test('selected child value is shown as selected in trigger', async () => {
+    const user = userEvent.setup();
+    const { container } = renderSelect({
+      options: [
+        {
+          value: 'grp',
+          label: 'Group',
+          children: [{ value: 'g1', label: 'G One' }],
+        },
+      ],
+    });
+    const trigger = container.querySelector(
+      '[aria-haspopup="listbox"]',
+    ) as HTMLElement;
+    fireEvent.click(trigger);
+    await user.hover(screen.getByText('Group').closest('button')!);
+    fireEvent.click((await screen.findByText('G One')).closest('button')!);
+    expect(trigger).toHaveTextContent('G One');
+  });
+
+  test('parent trigger shows selected state when a child is selected', async () => {
+    const user = userEvent.setup();
+    const { container } = renderSelect({
+      options: [
+        {
+          value: 'grp',
+          label: 'Group',
+          children: [{ value: 'g1', label: 'G One' }],
+        },
+      ],
+    });
+    const trigger = container.querySelector(
+      '[aria-haspopup="listbox"]',
+    ) as HTMLElement;
+    fireEvent.click(trigger);
+    await user.hover(screen.getByText('Group').closest('button')!);
+    fireEvent.click((await screen.findByText('G One')).closest('button')!);
+    fireEvent.click(trigger);
+    const parentTrigger = screen.getByText('Group').closest('button')!;
+    expect(parentTrigger).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('disabled submenu trigger does not open submenu on hover', async () => {
+    const user = userEvent.setup();
+    renderSelect({
+      options: [
+        {
+          value: 'grp',
+          label: 'Group',
+          disabled: true,
+          children: [{ value: 'g1', label: 'G One' }],
+        },
+      ],
+    });
+    openSelect();
+    const trigger = screen.getByText('Group').closest('button')!;
+    expect(trigger).toBeDisabled();
+    await user.hover(trigger);
+    expect(screen.queryByText('G One')).not.toBeInTheDocument();
+  });
+
+  test('disabled child in submenu is not selectable', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderSelect({
+      onChange,
+      options: [
+        {
+          value: 'grp',
+          label: 'Group',
+          children: [{ value: 'g1', label: 'G One', disabled: true }],
+        },
+      ],
+    });
+    openSelect();
+    await user.hover(screen.getByText('Group').closest('button')!);
+    const childEl = await screen.findByText('G One');
+    const childBtn = childEl.closest('button')!;
+    expect(childBtn).toBeDisabled();
+    fireEvent.click(childBtn);
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

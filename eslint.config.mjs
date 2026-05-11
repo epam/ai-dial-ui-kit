@@ -22,6 +22,7 @@ export default [
       '**/**.spec.tsx',
       '**/dist',
       '**/storybook-static',
+      '**/coverage',
       '**/.cursor',
       'setupTests.ts',
     ],
