@@ -50,6 +50,7 @@ import {
 import { debounceFn } from '@/utils/debounce.ts';
 import { ariaDescription } from '@/components/Checkbox/constants';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 
 setupAgTestIds({ testIdAttribute: 'dataQA' });
 
@@ -199,6 +200,7 @@ export const DialGrid = <T extends object>({
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
   const a11yId = useId();
   const isMobileScreen = useIsMobileScreen();
+  const isTabletScreen = useIsTabletScreen();
   const selectedNodesRef = useRef<Set<string>>(new Set());
   const lastSelectionSourceRef = useRef<SelectionEventSourceType | undefined>(
     undefined,
@@ -328,7 +330,11 @@ export const DialGrid = <T extends object>({
     const baseClass = 'dial-row-select';
     const visibleClass = 'dial-row-select-visible';
 
-    if (isMobileScreen || (selectedRowIds && selectedRowIds.size > 0)) {
+    if (
+      isMobileScreen ||
+      isTabletScreen ||
+      (selectedRowIds && selectedRowIds.size > 0)
+    ) {
       return `${baseClass} ${visibleClass}`;
     }
 
@@ -336,10 +342,10 @@ export const DialGrid = <T extends object>({
       return baseClass;
     }
     return `${baseClass} ${visibleClass}`;
-  }, [isMobileScreen, selectedRowIds]);
+  }, [isMobileScreen, isTabletScreen, selectedRowIds]);
 
   const getHeaderSelectionClasses = useCallback(() => {
-    if (isMobileScreen) {
+    if (isMobileScreen || isTabletScreen) {
       return getSelectionClasses();
     }
 
@@ -347,7 +353,7 @@ export const DialGrid = <T extends object>({
       return 'dial-row-not-select-header';
     }
     return getSelectionClasses();
-  }, [getSelectionClasses, isMobileScreen, selectedRowIds]);
+  }, [getSelectionClasses, isMobileScreen, isTabletScreen, selectedRowIds]);
 
   const selectionColumnDef = useMemo(() => {
     if (selectionMode === GridSelectionMode.SINGLE) {
