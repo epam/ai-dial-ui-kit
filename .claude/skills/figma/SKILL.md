@@ -7,7 +7,7 @@ description: Design-to-code workflow for Figma designs. Use when the user shares
 
 ## Overview
 
-Translate Figma designs into production-ready React components that match project conventions: React 19, Tailwind CSS, TypeScript, and `@epam/ai-dial-ui-kit`.
+Translate Figma designs into production-ready React components that match this repository's conventions: React 19, TypeScript, Tailwind CSS + SCSS, Storybook, and Vitest in `@epam/ai-dial-ui-kit`.
 
 ## When to Use
 
@@ -22,45 +22,63 @@ Translate Figma designs into production-ready React components that match projec
 Call `get_design_context` with the `fileKey` and `nodeId` extracted from the URL.
 
 URL parsing rules:
+
 - `figma.com/design/:fileKey/...?node-id=:nodeId` → replace `-` with `:` in nodeId
 - `figma.com/board/:fileKey/...` → FigJam file, use `get_figjam` instead
 
 If the design context includes **Code Connect** snippets, prefer those — they map directly to codebase components.
 
-### Step 2 — Map to project components
+### Step 2 — Map design to existing UI kit components first
 
-Before writing any new code, check whether ui-kit or existing project components cover the need:
+Before writing any new code, check whether existing components already cover the design:
 
-| Design need | Check first |
-|---|---|
-| Buttons, inputs, modals, icons | `@epam/ai-dial-ui-kit` |
-| Generic icons | `@tabler/icons-react` |
-| Layout, spacing, color | Tailwind CSS classes |
-| Project-specific patterns | `libs/` and `apps/` in this monorepo |
+| Design need                            | Check first                                    |
+| -------------------------------------- | ---------------------------------------------- |
+| Buttons, inputs, popups, tabs, loaders | `src/components/`                              |
+| Types and models                       | `src/types/` and `src/models/`                 |
+| Reusable behavior                      | `src/hooks/` and `src/utils/`                  |
+| Icons and icon wrappers                | `src/assets/icons/` and `src/components/Icon/` |
 
-Grep the codebase before building from scratch:
+Search the codebase before building from scratch:
+
 ```
-Grep("ComponentName", path="libs/")
+rg "Dial|ComponentName" src/components
 ```
 
 ### Step 3 — Implement
 
-- Write TypeScript + JSX; no plain JS
-- Use Tailwind for all styling — no inline styles, no CSS modules unless they already exist in the target file
-- Do not copy raw hex colors from Figma; map to Tailwind tokens or CSS variables already in the project
-- Match the naming conventions of surrounding files (PascalCase components, kebab-case files)
-- Keep components small and focused — split at logical boundaries, not at line count
+- Create or update files under `src/components/<ComponentName>/`
+- Keep exported component names prefixed with `Dial` (for example, `DialButton`)
+- Use TypeScript + TSX only
+- Use Tailwind classes and existing tokens/utilities; avoid inline styles and hardcoded design values
+- Use `mergeClasses` from `src/utils/merge-classes` when class composition is non-trivial
+- Keep accessibility parity with the design (labels, roles, keyboard interactions, focus handling)
+- Preserve existing visual language and patterns from nearby components
 
 ### Step 4 — Verify
 
 After implementation:
-1. Run `pnpm nx lint <project>` — fix any lint errors before reporting done
-2. If the component has logic, add a unit test in the same lib
-3. If the dev server is running, open the component in the browser and compare with the Figma screenshot
+
+1. Add or update stories in `Component.stories.tsx`
+2. Add or update tests in `Component.spec.tsx` (prefer role-based queries)
+3. Export new public component/types in `src/index.ts`
+4. Run `npm run typecheck`
+5. Run `npm run lint`
+6. Run `npm run test`
 
 ## Constraints
 
-- Never use absolute positioning unless the Figma design explicitly requires it and no flex/grid alternative exists
-- Do not add new dependencies without asking — check if the need is already met
-- Pixel-perfect fidelity matters less than semantic correctness and accessibility
-- If the design is ambiguous or missing states (hover, disabled, error), flag them explicitly rather than guessing
+- No breaking changes to existing component APIs unless explicitly requested
+- Do not introduce new dependencies unless necessary and approved
+- Do not copy raw Figma hex values; map to project tokens and existing theme primitives
+- Prefer semantic HTML and robust keyboard navigation over pixel-perfect but inaccessible markup
+- If Figma misses interaction states (hover, disabled, loading, error), implement sensible defaults and call out assumptions
+
+## File Checklist For New Public Components
+
+When adding a new public component from Figma, include all of the following:
+
+- `src/components/<Name>/<Name>.tsx`
+- `src/components/<Name>/<Name>.stories.tsx`
+- `src/components/<Name>/<Name>.spec.tsx`
+- `src/index.ts` export updates (`export` and `export type` as needed)
