@@ -196,7 +196,6 @@ export const DialGrid = <T extends object>({
   allowDisabledContextMenu = false,
   selectionMode,
 }: DialGridProps<T>) => {
-  const [rowHeight, setRowHeight] = useState<number>(ROW_HEIGHT);
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
   const a11yId = useId();
   const isMobileScreen = useIsMobileScreen();
@@ -219,7 +218,6 @@ export const DialGrid = <T extends object>({
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
     e.api.sizeColumnsToFit();
-    setRowHeight(ROW_HEIGHT);
   }, []);
 
   const renderDataCell = useCallback(
@@ -616,7 +614,7 @@ export const DialGrid = <T extends object>({
         <AgGridReact<T>
           rowModelType="clientSide"
           headerHeight={ROW_HEIGHT}
-          rowHeight={rowHeight}
+          rowHeight={ROW_HEIGHT}
           cellSelection={false}
           theme={themeBalham
             .withPart(colorSchemeDark)
