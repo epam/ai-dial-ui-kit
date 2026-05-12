@@ -35,11 +35,13 @@ export const DialSteps: FC<DialStepsProps> = ({
     const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
     const targetStepIndex = steps.findIndex((s) => s.id === step);
 
-    if (
-      (step !== currentStep &&
-        steps[currentStepIndex].status === StepStatus.VALID) ||
-      targetStepIndex < currentStepIndex
-    ) {
+    if (step === currentStep) return;
+
+    const allPreviousValid = steps
+      .slice(0, targetStepIndex)
+      .every((s) => s.status === StepStatus.VALID);
+
+    if (allPreviousValid || targetStepIndex < currentStepIndex) {
       onChangeStep(step);
     }
   };
