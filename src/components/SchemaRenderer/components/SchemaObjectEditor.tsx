@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
+import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
 import { resolveRef, toFieldLabel } from '@/components/SchemaRenderer/utils';
+import type { FC } from 'react';
 import { SchemaField } from './SchemaField';
 
 export interface SchemaObjectEditorProps {
@@ -42,7 +42,9 @@ export const SchemaObjectEditor: FC<SchemaObjectEditorProps> = ({
 }) => {
   const { rootSchema, texts } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
-  const properties = Object.entries(resolved.properties ?? {});
+  const properties = Object.entries(resolved.properties ?? {}).filter(
+    ([, propSchema]) => !resolveRef(propSchema, rootSchema).isHidden,
+  );
   const required = resolved.required ?? [];
   const obj = (value as Record<string, unknown>) ?? {};
 
