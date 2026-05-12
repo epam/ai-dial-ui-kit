@@ -171,3 +171,26 @@
 .dial-error-solid-button:disabled {
   @apply dial-button-solid-disable;
 }
+
+.dial-neutral-rounded-button {
+  @apply dial-base-button bg-transparent text-controls-neutral;
+  @apply border-primary rounded-full;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-controls-neutral-hover;
+    }
+  }
+
+  &:active {
+    @apply border-transparent bg-controls-neutral-active;
+  }
+
+  &.selected {
+    @apply bg-accent-primary-alpha border-accent-primary;
+  }
+
+  &:disabled {
+    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+  }
+}

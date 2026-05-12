@@ -6,6 +6,8 @@ export { DialLabel } from './components/Label/Label';
 export { DialIcon } from './components/Icon/Icon';
 export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
+export { DialSpinner } from './components/Spinner/Spinner';
+export type { DialSpinnerProps } from './components/Spinner/Spinner';
 export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
@@ -44,7 +46,9 @@ export {
   DialPrimaryButton,
   DialGhostButton,
   DialLinkButton,
+  DialRoundedButton,
 } from './components/Button/ButtonWrappers';
+export type { DialRoundedButtonProps } from './components/Button/ButtonWrappers';
 export {
   DialErrorIconButton,
   DialGhostIconButton,
