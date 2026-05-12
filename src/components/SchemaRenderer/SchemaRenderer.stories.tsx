@@ -205,6 +205,27 @@ const credentialsSchema: JsonSchema = {
   required: ['url', 'token'],
 };
 
+const hiddenFieldsSchema: JsonSchema = {
+  properties: {
+    name: {
+      title: 'Name',
+      type: 'string',
+    },
+    internalId: {
+      title: 'Internal ID',
+      type: 'string',
+      isHidden: true,
+      default: 'system-generated',
+    },
+    secret: {
+      title: 'Secret',
+      type: 'string',
+      isHidden: true,
+    },
+  },
+  required: ['name', 'internalId'],
+};
+
 const meta: Meta<typeof DialSchemaRenderer> = {
   title: 'Components/SchemaRenderer',
   component: DialSchemaRenderer,
@@ -503,6 +524,13 @@ export const RadioEnumFields: Story = {
 
 export const Credentials: Story = {
   args: { schema: credentialsSchema, variant: SchemaRendererVariant.Flat },
+};
+
+export const HiddenFields: Story = {
+  args: {
+    schema: hiddenFieldsSchema,
+    variant: SchemaRendererVariant.Flat,
+  },
 };
 
 export const FlatWithGroups: Story = {

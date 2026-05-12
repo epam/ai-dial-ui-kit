@@ -1,18 +1,19 @@
-import { type FC, useMemo } from 'react';
-import { DialTabs } from '@/components/Tabs/Tabs';
+import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialSwitch } from '@/components/Switch/Switch';
-import { DialButton } from '@/components/Button/Button';
-import { IconDotsVertical, IconEye, IconEyeOff } from '@tabler/icons-react';
+import { DialTabs } from '@/components/Tabs/Tabs';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { BASE_ICON_PROPS, DIAL_ICON_SIZE } from '@/constants/icon';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import type { DropdownItem } from '@/models/dropdown';
 import type { TabModel } from '@/models/tab';
 import { ButtonVariant } from '@/types/button';
-import { DialButtonDropdown } from '@/components/ButtonDropdown/ButtonDropdown';
-import type { DropdownItem } from '@/models/dropdown';
-import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialFileManagerTabs } from '@/types/file-manager';
 import { ScreenResolution } from '@/types/tab';
-import { DialDropdown } from '@/components/Dropdown/Dropdown';
-import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { IconDotsVertical, IconEye, IconEyeOff } from '@tabler/icons-react';
+import { type FC, useMemo } from 'react';
+import { ElementSize } from '@/types/size';
+import { DialGhostIconButton } from '@/components/IconButton/IconButtonWrappers';
 
 export interface DialFileManagerToolbarProps {
   tabs?: TabModel[];
@@ -180,14 +181,9 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
         menu={{ items: dropdownItems }}
         allowedPlacements={['bottom', 'bottom-start']}
       >
-        <DialButton
-          className="h-[38px]"
-          iconBefore={
-            <IconDotsVertical
-              {...BASE_ICON_PROPS}
-              className="text-secondary hover:text-accent-primary"
-            />
-          }
+        <DialGhostIconButton
+          size={ElementSize.Small}
+          icon={<IconDotsVertical stroke={2} size={DIAL_ICON_SIZE.SM} />}
         />
       </DialDropdown>
 
@@ -213,7 +209,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   return (
     <div className="flex w-full justify-between gap-4 items-center overflow-x-auto">
       <div className="flex-1 min-w-0">{renderTabs()}</div>
-      <div className="flex gap-4 shrink-0 items-center">
+      <div className="flex gap-2 shrink-0 items-center">
         {isMobile ? renderMobileActions() : renderDesktopActions()}
       </div>
     </div>

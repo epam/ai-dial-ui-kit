@@ -45,6 +45,23 @@ const oneOfSchema: JsonSchema = {
   },
 };
 
+const hiddenFieldsSchema: JsonSchema = {
+  properties: {
+    visibleName: { title: 'Visible Name', type: 'string' },
+    hiddenToken: {
+      title: 'Hidden Token',
+      type: 'string',
+      isHidden: true,
+    },
+    hiddenKey: {
+      title: 'Hidden Key',
+      type: 'string',
+      isHidden: true,
+    },
+  },
+  required: ['visibleName', 'hiddenToken'],
+};
+
 describe('DialSchemaRenderer', () => {
   it('renders top-level section titles', () => {
     render(<DialSchemaRenderer schema={simpleSchema} />);
@@ -166,6 +183,22 @@ describe('DialSchemaRenderer', () => {
   it('renders oneOf discriminator selector', () => {
     render(<DialSchemaRenderer schema={oneOfSchema} />);
     expect(screen.getByText('Config')).toBeInTheDocument();
+  });
+
+  it('does not render hidden top-level fields', () => {
+    render(<DialSchemaRenderer schema={hiddenFieldsSchema} />);
+    expect(screen.getByText('Visible Name')).toBeInTheDocument();
+    expect(screen.queryByText('Hidden Token')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hidden Key')).not.toBeInTheDocument();
+  });
+
+  it('does not show error indicator for hidden required fields', () => {
+    render(<DialSchemaRenderer schema={hiddenFieldsSchema} skipUntouched />);
+    const sectionHeader = screen
+      .getByText('Visible Name')
+      .closest('[role="button"]');
+    expect(sectionHeader).toBeInTheDocument();
+    expect(sectionHeader?.textContent).not.toContain('error');
   });
 
   it('flat variant renders primitives without collapsible section headers', () => {
