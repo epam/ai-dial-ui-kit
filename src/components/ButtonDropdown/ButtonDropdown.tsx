@@ -6,8 +6,10 @@ import type { DropdownItem } from '@/models/dropdown';
 import { buttonChevronDown, buttonChevronUp } from './constants';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 
-export interface DialButtonDropdownProps
-  extends Omit<DialButtonProps, 'iconAfter'> {
+export interface DialButtonDropdownProps extends Omit<
+  DialButtonProps,
+  'iconAfter'
+> {
   items: DropdownItem[];
 }
 

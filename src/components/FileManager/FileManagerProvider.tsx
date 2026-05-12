@@ -43,8 +43,10 @@ import { useFileSearch } from './hooks/use-file-search';
 import { usePathsSelection } from './hooks/use-paths-selection';
 import { NOT_ALLOWED_SYMBOLS_REGEXP } from '@/constants/validation';
 
-export interface FileManagerProviderProps
-  extends Omit<DialFileManagerProps, 'children'> {
+export interface FileManagerProviderProps extends Omit<
+  DialFileManagerProps,
+  'children'
+> {
   children: ReactNode;
   autoSelectUploadedItems?: boolean;
 }
