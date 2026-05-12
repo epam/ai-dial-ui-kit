@@ -5,6 +5,14 @@
       "command": "node",
       "args": ["./dist/mcp-server.cjs"],
       "env": {}
+    },
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2"
+    },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
     }
   }
 }
