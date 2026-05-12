@@ -1,10 +1,7 @@
 import type { FC } from 'react';
 import type { JsonSchemaDef } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
-import {
-  resolveRef,
-  toFieldLabel,
-} from '@/components/SchemaRenderer/utils';
+import { resolveRef, toFieldLabel } from '@/components/SchemaRenderer/utils';
 import { SchemaField } from './SchemaField';
 
 export interface SchemaObjectEditorProps {

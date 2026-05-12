@@ -7,10 +7,8 @@ import { ButtonAppearance } from '@/types/button';
 import { DialErrorIconButton } from '@/components/IconButton/IconButtonWrappers';
 import { DialErrorButton } from '@/components/Button/ButtonWrappers';
 
-export interface DialRemoveButtonProps extends Omit<
-  DialButtonProps,
-  'iconBefore' | 'iconAfter'
-> {
+export interface DialRemoveButtonProps
+  extends Omit<DialButtonProps, 'iconBefore' | 'iconAfter'> {
   iconClassName?: string;
 }
 

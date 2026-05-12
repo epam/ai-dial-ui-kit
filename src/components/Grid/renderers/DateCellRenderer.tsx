@@ -12,9 +12,8 @@ import { convertToDate } from './utils';
 
 export type DateValue = string | number | Date;
 
-export interface DialDateCellRendererProps extends Partial<
-  ICellRendererParams<Record<string, unknown>, DateValue>
-> {
+export interface DialDateCellRendererProps
+  extends Partial<ICellRendererParams<Record<string, unknown>, DateValue>> {
   value?: DateValue | null;
   locale?: string;
   options?: Intl.DateTimeFormatOptions;

@@ -432,9 +432,9 @@ describe('buildSummary', () => {
       },
     };
 
-    expect(buildSummary({ visibleA: 'x', hiddenB: '', visibleC: '' }, schema, {})).toBe(
-      '1/2 fields',
-    );
+    expect(
+      buildSummary({ visibleA: 'x', hiddenB: '', visibleC: '' }, schema, {}),
+    ).toBe('1/2 fields');
   });
 });
 

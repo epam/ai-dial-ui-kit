@@ -10,10 +10,8 @@ import { DialSharedEntityIndicator } from '@/components/SharedEntityIndicator/Sh
 import { IconFolder } from '@tabler/icons-react';
 import { DialLoader } from '@/components/Loader/Loader';
 
-export interface DialFileManagerItemIconProps extends Omit<
-  DialFileIconProps,
-  'extension'
-> {
+export interface DialFileManagerItemIconProps
+  extends Omit<DialFileIconProps, 'extension'> {
   type: DialItemType;
   name: string;
   shared?: boolean;

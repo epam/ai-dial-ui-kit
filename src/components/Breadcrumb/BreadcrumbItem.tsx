@@ -19,10 +19,8 @@ import {
   defaultSeparator,
 } from './constants';
 
-export interface DialBreadcrumbItemProps extends Omit<
-  HTMLAttributes<HTMLLIElement>,
-  'onClick'
-> {
+export interface DialBreadcrumbItemProps
+  extends Omit<HTMLAttributes<HTMLLIElement>, 'onClick'> {
   label: ReactNode;
   href?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
