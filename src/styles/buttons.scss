@@ -176,8 +176,10 @@
   @apply dial-base-button bg-transparent text-controls-neutral;
   @apply border-primary rounded-full;
 
-  &:hover {
-    @apply bg-controls-neutral-hover;
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-controls-neutral-hover;
+    }
   }
 
   &:active {
