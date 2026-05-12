@@ -210,7 +210,9 @@ describe('Dial UI Kit :: DialRoundedButton', () => {
 
   test('does not apply selected class when selected is false', () => {
     render(<DialRoundedButton label="Tag" selected={false} />);
-    expect(screen.getByRole('button', { name: 'Tag' })).not.toHaveClass('selected');
+    expect(screen.getByRole('button', { name: 'Tag' })).not.toHaveClass(
+      'selected',
+    );
   });
 
   test('is disabled when disabled prop is true', () => {
@@ -227,6 +229,8 @@ describe('Dial UI Kit :: DialRoundedButton', () => {
 
   test('merges additional className', () => {
     render(<DialRoundedButton label="Tag" className="extra-class" />);
-    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass('extra-class');
+    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass(
+      'extra-class',
+    );
   });
 });
