@@ -31,6 +31,7 @@ export interface JsonSchemaDef {
   type?: string | string[];
   title?: string;
   description?: string;
+  isHidden?: boolean;
   isProtected?: boolean;
   enumDisplay?: SchemaDisplayMode;
   enumOrientation?: SchemaOrientation;
