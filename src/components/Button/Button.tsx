@@ -18,11 +18,10 @@ import {
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
-export interface DialButtonProps
-  extends DetailedHTMLProps<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > {
+export interface DialButtonProps extends DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+> {
   variant?: ButtonVariant;
   size?: ElementSize;
   appearance?: ButtonAppearance;

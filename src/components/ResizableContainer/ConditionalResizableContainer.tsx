@@ -4,8 +4,7 @@ import {
   type DialResizableContainerProps,
 } from './ResizableContainer';
 
-export interface DialConditionalResizableContainerProps
-  extends DialResizableContainerProps {
+export interface DialConditionalResizableContainerProps extends DialResizableContainerProps {
   enabled?: boolean;
 }
 
