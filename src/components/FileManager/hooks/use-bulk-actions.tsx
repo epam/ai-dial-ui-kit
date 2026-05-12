@@ -71,6 +71,26 @@ export const useBulkActions = ({
       ? selectedFilesArray.some((file) => regexp.test(file.name))
       : false;
 
+    if (actionLabels[DialFileManagerActions.RemoveAccess] && onRemoveAccess) {
+      const disabled = selectedFilesArray.some(
+        (file) => !sharedByMePaths?.has(file.path),
+      );
+
+      actions.push({
+        key: DialFileManagerActions.RemoveAccess,
+        label: actionLabels[DialFileManagerActions.RemoveAccess],
+        title: actionLabels[DialFileManagerActions.RemoveAccess],
+        disabled,
+        icon: (
+          <IconUserX size={BASE_ICON_PROPS.size} className="text-secondary" />
+        ),
+        onClick: () => {
+          onRemoveAccess(selectedFilesArray);
+          onClearSelection();
+        },
+      });
+    }
+
     if (actionLabels[DialFileManagerActions.Move] && !hasAnyRestrictedSymbols) {
       actions.push({
         key: DialFileManagerActions.Move,
@@ -174,26 +194,6 @@ export const useBulkActions = ({
         ),
         onClick: () => {
           onUnshare(selectedFilesArray);
-          onClearSelection();
-        },
-      });
-    }
-
-    if (actionLabels[DialFileManagerActions.RemoveAccess] && onRemoveAccess) {
-      const disabled = selectedFilesArray.some(
-        (file) => !sharedByMePaths?.has(file.path),
-      );
-
-      actions.push({
-        key: DialFileManagerActions.RemoveAccess,
-        label: actionLabels[DialFileManagerActions.RemoveAccess],
-        title: actionLabels[DialFileManagerActions.RemoveAccess],
-        disabled,
-        icon: (
-          <IconUserX size={BASE_ICON_PROPS.size} className="text-secondary" />
-        ),
-        onClick: () => {
-          onRemoveAccess(selectedFilesArray);
           onClearSelection();
         },
       });
