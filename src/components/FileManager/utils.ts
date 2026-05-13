@@ -224,7 +224,7 @@ export const splitPathAndName = (
 
 export const isFileSelectable = (
   file: Pick<DialFile, 'contentLength' | 'contentType' | 'name'>,
-  allowedFileTypes?: string[],
+  allowedFileTypes?: DialFileAcceptType[],
   maxSelectableFileSize?: number,
 ): boolean => {
   const isSizeOk =
@@ -234,18 +234,14 @@ export const isFileSelectable = (
 
   const isTypeOk =
     !file.contentType ||
-    isFileAccepted(
-      allowedFileTypes as DialFileAcceptType[],
-      file.contentType,
-      file.name,
-    );
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
 
   return isSizeOk && isTypeOk;
 };
 
 export const getRowTooltip = (
   file: FileManagerGridRow,
-  allowedFileTypes?: string[],
+  allowedFileTypes?: DialFileAcceptType[],
   maxSelectableFileSize?: number,
   unsupportedFileTypeTooltip?: string,
   fileTooLargeTooltip?: string,
@@ -259,17 +255,13 @@ export const getRowTooltip = (
 
   const isFileTypeAccepted =
     !file.contentType ||
-    isFileAccepted(
-      allowedFileTypes as DialFileAcceptType[],
-      file.contentType,
-      file.name,
-    );
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
 
   if (!isFileTypeAccepted) {
     return (
       unsupportedFileTypeTooltip ??
       (allowedFileTypes?.length
-        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes as DialFileAcceptType[])}.`
+        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes)}.`
         : 'Unsupported file type.')
     );
   }
