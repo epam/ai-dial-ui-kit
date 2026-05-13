@@ -210,6 +210,39 @@ export function getForbiddenSymbolsTooltip(
   return undefined;
 }
 
+export const splitPathAndName = (
+  fullPath: string,
+): { parent: string; name: string } => {
+  const lastSlash = fullPath.lastIndexOf('/');
+  return lastSlash >= 0
+    ? {
+        parent: fullPath.slice(0, lastSlash),
+        name: fullPath.slice(lastSlash + 1),
+      }
+    : { parent: '', name: fullPath };
+};
+
+export const isFileSelectable = (
+  file: Pick<DialFile, 'contentLength' | 'contentType' | 'name'>,
+  allowedFileTypes?: string[],
+  maxSelectableFileSize?: number,
+): boolean => {
+  const isSizeOk =
+    !file.contentLength ||
+    maxSelectableFileSize == null ||
+    file.contentLength <= maxSelectableFileSize;
+
+  const isTypeOk =
+    !file.contentType ||
+    isFileAccepted(
+      allowedFileTypes as DialFileAcceptType[],
+      file.contentType,
+      file.name,
+    );
+
+  return isSizeOk && isTypeOk;
+};
+
 export const getRowTooltip = (
   file: FileManagerGridRow,
   allowedFileTypes?: string[],
