@@ -1378,28 +1378,37 @@ describe('Dial UI Kit :: FileManager', () => {
         permissions: [DialFilePermission.READ],
       });
 
-      rerender(
-        <div style={{ height: 640, width: 1100 }}>
-          <DialFileManager
-            items={updatedItems}
-            path={UPLOAD_PATH}
-            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
-            onUploadFiles={onUploadFiles}
-            onSelectedPathsChange={onSelectedPathsChange}
-            uploadEnabled
-            autoSelectUploadedItems
-            maxSelectableFileSize={MAX_SIZE}
-          />
-        </div>,
-      );
+      vi.useFakeTimers();
+      try {
+        rerender(
+          <div style={{ height: 640, width: 1100 }}>
+            <DialFileManager
+              items={updatedItems}
+              path={UPLOAD_PATH}
+              treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+              onUploadFiles={onUploadFiles}
+              onSelectedPathsChange={onSelectedPathsChange}
+              uploadEnabled
+              autoSelectUploadedItems
+              maxSelectableFileSize={MAX_SIZE}
+            />
+          </div>,
+        );
 
-      await new Promise((r) => setTimeout(r, 50));
+        await act(async () => {
+          await vi.runAllTimersAsync();
+        });
 
-      const hasOversizedFile = onSelectedPathsChange.mock.calls.some((call) => {
-        const paths = call[0] as Set<string>;
-        return paths.has(`${UPLOAD_PATH}/too-large.png`);
-      });
-      expect(hasOversizedFile).toBe(false);
+        const hasOversizedFile = onSelectedPathsChange.mock.calls.some(
+          (call) => {
+            const paths = call[0] as Set<string>;
+            return paths.has(`${UPLOAD_PATH}/too-large.png`);
+          },
+        );
+        expect(hasOversizedFile).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
     });
 
     test('auto-selects only files that pass constraints when batch has mixed results', async () => {
