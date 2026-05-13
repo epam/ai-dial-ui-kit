@@ -3,10 +3,10 @@ import { ScreenType } from '@/types/screen';
 /**
  * Checks if the current viewport width is within the "medium" (tablet) screen range.
  *
- * Specifically, it returns `true` if the window width is less than 1024 pixels.
+ * Specifically, it returns `true` if the window width is less than 1280 pixels.
  * Safely handles server-side rendering by verifying that `window` is defined.
  *
- * @returns {boolean} `true` if the viewport width is less than 1024px, otherwise `false`.
+ * @returns {boolean} `true` if the viewport width is less than 1279px, otherwise `false`.
  *
  * @example
  * if (isMediumScreen()) {
@@ -14,7 +14,7 @@ import { ScreenType } from '@/types/screen';
  * }
  */
 export const isMediumScreen = () =>
-  typeof window !== 'undefined' && window.innerWidth < 1024;
+  typeof window !== 'undefined' && window.innerWidth < 1279;
 
 /**
  * Checks if the current viewport width is within the "small" (mobile) screen range.

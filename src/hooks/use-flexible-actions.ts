@@ -97,7 +97,7 @@ export function useFlexibleActions<T extends { key: string }>({
   const rightSectionRef = useRef<HTMLDivElement | null>(null);
 
   const actionWidthsRef = useRef<number[]>([]);
-  const [visibleCount, setVisibleCount] = useState(actions.length);
+  const [visibleCount, setVisibleCount] = useState(0);
 
   const recalcWithMeasuredWidths = useCallback(
     (widths: number[], container: HTMLElement) => {
