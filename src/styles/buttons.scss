@@ -17,6 +17,10 @@
   @apply dial-button-disable text-controls-accent-disable bg-controls-disable-accent;
 }
 
+.dial-button-outlined-disable {
+  @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+}
+
 .dial-primary-solid-button {
   @apply dial-base-button bg-controls-accent-primary text-controls-permanent;
 
@@ -86,7 +90,7 @@
   }
 
   &:disabled {
-    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+    @apply dial-button-outlined-disable;
   }
 }
 
@@ -109,6 +113,29 @@
     &:hover {
       @apply bg-error;
     }
+  }
+
+  &:active {
+    @apply bg-controls-error-alpha-active;
+  }
+}
+
+.dial-error-outlined-button {
+  @apply dial-base-button text-error;
+  @apply border-error;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-error;
+    }
+  }
+
+  &:active {
+    @apply text-error bg-controls-error-alpha-active;
+  }
+
+  &:disabled {
+    @apply dial-button-outlined-disable;
   }
 }
 

@@ -55,16 +55,72 @@ rg "Dial|ComponentName" src/components
 - Keep accessibility parity with the design (labels, roles, keyboard interactions, focus handling)
 - Preserve existing visual language and patterns from nearby components
 
-### Step 4 — Verify
+### Step 4 — Stories
 
-After implementation:
+Add or update `Component.stories.tsx`. Every new prop and every Figma variant must have its own named story.
 
-1. Add or update stories in `Component.stories.tsx`
-2. Add or update tests in `Component.spec.tsx` (prefer role-based queries)
-3. Export new public component/types in `src/index.ts`
-4. Run `npm run typecheck`
-5. Run `npm run lint`
-6. Run `npm run test`
+Story checklist:
+
+- One story per Figma variant (e.g. `Info`, `Success`, `Warning`, `Error`, `Loading`)
+- One story per significant new prop (e.g. `WithTitle`, `Closable`)
+- An `AllVariants` render story showing every variant side-by-side
+- Add the new prop to `argTypes` with `control` and `description`
+- Add the new variant to any `options` array in `argTypes`
+
+Pattern:
+
+```tsx
+export const MyVariant: Story = {
+  args: { variant: MyVariantEnum.Value, message: 'Example text' },
+};
+
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4 p-6">
+      <DialComponent variant={MyVariantEnum.A} message="A" />
+      <DialComponent variant={MyVariantEnum.B} message="B" />
+    </div>
+  ),
+};
+```
+
+### Step 5 — Tests
+
+Add or update `Component.spec.tsx`. Cover every new prop and new variant.
+
+Test checklist:
+
+- Query by role first (`getByRole`), fall back to text only when no role applies
+- Test that new props render the expected output (e.g. title renders above message)
+- Test that new variants render their distinguishing element (e.g. spinner for Loading)
+- Test callback props are called with the correct event
+- Aim for ≥ 95% branch coverage on the component file
+
+Pattern:
+
+```tsx
+test('Should render title above message when title is provided', () => {
+  render(<DialComponent title="Heading" message="Body" />);
+  const title = screen.getByText('Heading');
+  const message = screen.getByText('Body');
+  expect(title).toHaveClass('font-semibold');
+  expect(title.compareDocumentPosition(message)).toBe(
+    Node.DOCUMENT_POSITION_FOLLOWING,
+  );
+});
+
+test('Should render spinner for Loading variant', () => {
+  render(<DialComponent variant="loading" message="Wait…" />);
+  expect(screen.getByRole('status')).toBeInTheDocument();
+});
+```
+
+### Step 6 — Verify
+
+1. Export new public component/types in `src/index.ts`
+2. Run `npm run typecheck`
+3. Run `npm run lint`
+4. Run `npm run test`
 
 ## Constraints
 
