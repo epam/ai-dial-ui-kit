@@ -14,6 +14,7 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
   [ButtonVariant.Error]: {
     [ButtonAppearance.Solid]: 'dial-error-solid-button',
     [ButtonAppearance.Ghost]: 'dial-error-ghost-button',
+    [ButtonAppearance.Outlined]: 'dial-error-outlined-button',
   },
 
   [ButtonVariant.Success]: {
