@@ -58,8 +58,8 @@ export interface UseGridContextMenuProps {
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
   forbiddenSymbolsRegExp?: RegExp;
-  onGridCreateSiblingFolder?: (files: DialFile[]) => void;
-  onGridCreateChildFolder?: (files: DialFile[]) => void;
+  onGridCreateSiblingFolder: (files: DialFile[]) => void;
+  onGridCreateChildFolder: (files: DialFile[]) => void;
 }
 
 export const useGridContextMenu = ({
@@ -111,7 +111,7 @@ export const useGridContextMenu = ({
               className="text-secondary"
             />
           ),
-          onClick: () => onGridCreateSiblingFolder?.([file]),
+          onClick: () => onGridCreateSiblingFolder([file]),
         });
       }
 
@@ -131,7 +131,7 @@ export const useGridContextMenu = ({
                 className="text-secondary"
               />
             ),
-            onClick: () => onGridCreateChildFolder?.([file]),
+            onClick: () => onGridCreateChildFolder([file]),
           },
           {
             key: 'divider',

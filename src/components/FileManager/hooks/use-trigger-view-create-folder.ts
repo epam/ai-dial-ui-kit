@@ -17,7 +17,7 @@ interface UseTriggerViewCreateFolderOptions {
  * to apply view-specific logic or UI updates.
  *
  * Returns the last folder creation trigger source and four handlers
- * (`onGridCreateSiblingFolder`, `onTreeCreateSiblingFolder`, `onGridCreateChildFolder`, `onTreeCreateChildFolder`) that wrap the provided `onAddSibling` and `onAddChild` callbacks.
+ * (`onGridCreateSiblingFolder`, `onTreeCreateSiblingFolder`, `onGridCreateChildFolder`, `onTreeCreateChildFolder`) that wrap the provided `onGridAddSibling`, `onTreeAddSibling`, `onGridAddChild` and `onTreeAddChild` callbacks.
  */
 export const useTriggerViewCreateFolder = ({
   onGridAddSibling,

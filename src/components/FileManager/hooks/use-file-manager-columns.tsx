@@ -62,9 +62,6 @@ export interface UseFileManagerColumnsArgs {
 
   rootItemPath?: string;
   rootItemLabel?: string;
-
-  createdFolderPlaceholder?: string;
-  isLoading?: boolean;
 }
 
 export interface UseFileManagerColumnsResult {

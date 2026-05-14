@@ -154,21 +154,28 @@ export function useEditableItem({
     if (restoreOnCancel) {
       setValue(initialValue);
     }
-    resetValidationState();
-    onCancel?.();
-    onCreateFolderCancel?.();
+
+    if (isCreating) {
+      onCreateFolderCancel?.();
+    } else {
+      onCancel?.();
+    }
+
     cancelSavingRef.current = true;
+    resetValidationState();
   }, [
     initialValue,
     onCancel,
     restoreOnCancel,
     resetValidationState,
     onCreateFolderCancel,
+    isCreating,
   ]);
 
   useEffect(() => {
     if (!isEditing && !isCreating) return;
 
+    cancelSavingRef.current = false;
     setValue(initialValue);
     resetValidationState();
 
