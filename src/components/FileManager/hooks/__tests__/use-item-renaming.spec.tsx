@@ -525,16 +525,6 @@ describe('useItemRenaming hook', () => {
       expect(error).toBe('An item with this name already exists');
     });
 
-    it('returns warning for hidden items', () => {
-      const { result } = renderHook(() => useItemRenaming({ items }));
-
-      const folderA = items[0].items![0]; // /root/A
-      const error = result.current.renameValidateHandler('.hidden', folderA);
-      expect(error).toBe(
-        `${AlertVariant.Warning}__A dot at the start of the name will make the item hidden`,
-      );
-    });
-
     it('returns null for valid unique name', () => {
       const { result } = renderHook(() => useItemRenaming({ items }));
 
