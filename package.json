@@ -21,7 +21,7 @@
     }
   },
   "bin": {
-    "ai-dial-ui-kit-mcp": "./dist/mcp-server.cjs"
+    "ai-dial-ui-kit-mcp": "dist/mcp-server.cjs"
   },
   "files": [
     "dist"
