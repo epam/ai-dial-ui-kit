@@ -1326,5 +1326,180 @@ describe('Dial UI Kit :: FileManager', () => {
         expect(lastCall.has(`${UPLOAD_PATH}/archive`)).toBe(true);
       });
     });
+
+    test('does not auto-select uploaded file that exceeds maxSelectableFileSize', async () => {
+      const items = deepCloneItems();
+      const onUploadFiles = vi.fn();
+      const onSelectedPathsChange = vi.fn();
+      const MAX_SIZE = 100 * 1024; // 100 KB
+
+      const { rerender } = renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={UPLOAD_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          onUploadFiles={onUploadFiles}
+          onSelectedPathsChange={onSelectedPathsChange}
+          uploadEnabled
+          autoSelectUploadedItems
+          maxSelectableFileSize={MAX_SIZE}
+        />,
+      );
+
+      fireEvent.drop(getGridRegion(), {
+        dataTransfer: {
+          files: [
+            new File(['content'], 'too-large.png', { type: 'image/png' }),
+          ],
+          types: ['Files'],
+        },
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledTimes(1);
+      });
+
+      onSelectedPathsChange.mockClear();
+
+      const updatedItems = deepCloneItems();
+      const folder = find24pxFolder(updatedItems);
+      folder.items!.push({
+        id: 'too-large-1',
+        name: 'too-large.png',
+        path: `${UPLOAD_PATH}/too-large.png`,
+        parentPath: UPLOAD_PATH,
+        nodeType: DialFileNodeType.ITEM,
+        resourceType: DialFileResourceType.FILE,
+        extension: 'png',
+        contentType: 'image/png',
+        folderId: 'icons-svg-24',
+        updatedAt: '2025-02-01',
+        contentLength: MAX_SIZE + 1,
+        permissions: [DialFilePermission.READ],
+      });
+
+      vi.useFakeTimers();
+      try {
+        rerender(
+          <div style={{ height: 640, width: 1100 }}>
+            <DialFileManager
+              items={updatedItems}
+              path={UPLOAD_PATH}
+              treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+              onUploadFiles={onUploadFiles}
+              onSelectedPathsChange={onSelectedPathsChange}
+              uploadEnabled
+              autoSelectUploadedItems
+              maxSelectableFileSize={MAX_SIZE}
+            />
+          </div>,
+        );
+
+        await act(async () => {
+          await vi.runAllTimersAsync();
+        });
+
+        const hasOversizedFile = onSelectedPathsChange.mock.calls.some(
+          (call) => {
+            const paths = call[0] as Set<string>;
+            return paths.has(`${UPLOAD_PATH}/too-large.png`);
+          },
+        );
+        expect(hasOversizedFile).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    test('auto-selects only files that pass constraints when batch has mixed results', async () => {
+      const items = deepCloneItems();
+      const onUploadFiles = vi.fn();
+      const onSelectedPathsChange = vi.fn();
+      const MAX_SIZE = 100 * 1024;
+
+      const { rerender } = renderWithinSizedShell(
+        <DialFileManager
+          items={items}
+          path={UPLOAD_PATH}
+          treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+          onUploadFiles={onUploadFiles}
+          onSelectedPathsChange={onSelectedPathsChange}
+          uploadEnabled
+          autoSelectUploadedItems
+          maxSelectableFileSize={MAX_SIZE}
+        />,
+      );
+
+      fireEvent.drop(getGridRegion(), {
+        dataTransfer: {
+          files: [
+            new File(['ok'], 'small.txt', { type: 'text/plain' }),
+            new File(['big'], 'large.txt', { type: 'text/plain' }),
+          ],
+          types: ['Files'],
+        },
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledTimes(1);
+      });
+
+      const updatedItems = deepCloneItems();
+      const folder = find24pxFolder(updatedItems);
+      folder.items!.push(
+        {
+          id: 'small-1',
+          name: 'small.txt',
+          path: `${UPLOAD_PATH}/small.txt`,
+          parentPath: UPLOAD_PATH,
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'txt',
+          contentType: 'text/plain',
+          folderId: 'icons-svg-24',
+          updatedAt: '2025-02-01',
+          contentLength: 3,
+          permissions: [DialFilePermission.READ],
+        },
+        {
+          id: 'large-1',
+          name: 'large.txt',
+          path: `${UPLOAD_PATH}/large.txt`,
+          parentPath: UPLOAD_PATH,
+          nodeType: DialFileNodeType.ITEM,
+          resourceType: DialFileResourceType.FILE,
+          extension: 'txt',
+          contentType: 'text/plain',
+          folderId: 'icons-svg-24',
+          updatedAt: '2025-02-01',
+          contentLength: MAX_SIZE + 1,
+          permissions: [DialFilePermission.READ],
+        },
+      );
+
+      rerender(
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={updatedItems}
+            path={UPLOAD_PATH}
+            treeOptions={{ expandedPaths: EXPANDED_PATHS, showFiles: true }}
+            onUploadFiles={onUploadFiles}
+            onSelectedPathsChange={onSelectedPathsChange}
+            uploadEnabled
+            autoSelectUploadedItems
+            maxSelectableFileSize={MAX_SIZE}
+          />
+        </div>,
+      );
+
+      await waitFor(() => {
+        expect(onSelectedPathsChange).toHaveBeenCalled();
+        const lastCall = onSelectedPathsChange.mock.calls[
+          onSelectedPathsChange.mock.calls.length - 1
+        ][0] as Set<string>;
+        expect(lastCall.has(`${UPLOAD_PATH}/small.txt`)).toBe(true);
+        expect(lastCall.has(`${UPLOAD_PATH}/large.txt`)).toBe(false);
+      });
+    });
   });
 });

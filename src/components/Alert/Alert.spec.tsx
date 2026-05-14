@@ -43,4 +43,21 @@ describe('Dial UI Kit :: DialAlert', () => {
     expect(onClose).toHaveBeenCalledWith(expect.any(Object));
     expect(onClose.mock.calls[0][0]).toHaveProperty('type', 'click');
   });
+
+  test('Should render title above message when title is provided', () => {
+    render(<DialAlert title="Alert title" message="Alert message" />);
+    const title = screen.getByText('Alert title');
+    const message = screen.getByText('Alert message');
+    expect(title).toBeInTheDocument();
+    expect(message).toBeInTheDocument();
+    expect(title).toHaveClass('dial-small-semi-text');
+    expect(title.compareDocumentPosition(message)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  test('Should render spinner for Loading variant', () => {
+    render(<DialAlert variant="loading" message="Loading…" />);
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
 });

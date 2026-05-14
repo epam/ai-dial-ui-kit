@@ -210,9 +210,38 @@ export function getForbiddenSymbolsTooltip(
   return undefined;
 }
 
+export const splitPathAndName = (
+  fullPath: string,
+): { parent: string; name: string } => {
+  const lastSlash = fullPath.lastIndexOf('/');
+  return lastSlash >= 0
+    ? {
+        parent: fullPath.slice(0, lastSlash),
+        name: fullPath.slice(lastSlash + 1),
+      }
+    : { parent: '', name: fullPath };
+};
+
+export const isFileSelectable = (
+  file: Pick<DialFile, 'contentLength' | 'contentType' | 'name'>,
+  allowedFileTypes?: DialFileAcceptType[],
+  maxSelectableFileSize?: number,
+): boolean => {
+  const isSizeOk =
+    !file.contentLength ||
+    maxSelectableFileSize == null ||
+    file.contentLength <= maxSelectableFileSize;
+
+  const isTypeOk =
+    !file.contentType ||
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
+
+  return isSizeOk && isTypeOk;
+};
+
 export const getRowTooltip = (
   file: FileManagerGridRow,
-  allowedFileTypes?: string[],
+  allowedFileTypes?: DialFileAcceptType[],
   maxSelectableFileSize?: number,
   unsupportedFileTypeTooltip?: string,
   fileTooLargeTooltip?: string,
@@ -226,17 +255,13 @@ export const getRowTooltip = (
 
   const isFileTypeAccepted =
     !file.contentType ||
-    isFileAccepted(
-      allowedFileTypes as DialFileAcceptType[],
-      file.contentType,
-      file.name,
-    );
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
 
   if (!isFileTypeAccepted) {
     return (
       unsupportedFileTypeTooltip ??
       (allowedFileTypes?.length
-        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes as DialFileAcceptType[])}.`
+        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes)}.`
         : 'Unsupported file type.')
     );
   }
