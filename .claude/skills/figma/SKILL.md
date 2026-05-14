@@ -60,6 +60,7 @@ rg "Dial|ComponentName" src/components
 Add or update `Component.stories.tsx`. Every new prop and every Figma variant must have its own named story.
 
 Story checklist:
+
 - One story per Figma variant (e.g. `Info`, `Success`, `Warning`, `Error`, `Loading`)
 - One story per significant new prop (e.g. `WithTitle`, `Closable`)
 - An `AllVariants` render story showing every variant side-by-side
@@ -67,6 +68,7 @@ Story checklist:
 - Add the new variant to any `options` array in `argTypes`
 
 Pattern:
+
 ```tsx
 export const MyVariant: Story = {
   args: { variant: MyVariantEnum.Value, message: 'Example text' },
@@ -87,6 +89,7 @@ export const AllVariants: Story = {
 Add or update `Component.spec.tsx`. Cover every new prop and new variant.
 
 Test checklist:
+
 - Query by role first (`getByRole`), fall back to text only when no role applies
 - Test that new props render the expected output (e.g. title renders above message)
 - Test that new variants render their distinguishing element (e.g. spinner for Loading)
@@ -94,13 +97,16 @@ Test checklist:
 - Aim for ≥ 95% branch coverage on the component file
 
 Pattern:
+
 ```tsx
 test('Should render title above message when title is provided', () => {
   render(<DialComponent title="Heading" message="Body" />);
   const title = screen.getByText('Heading');
   const message = screen.getByText('Body');
   expect(title).toHaveClass('font-semibold');
-  expect(title.compareDocumentPosition(message)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  expect(title.compareDocumentPosition(message)).toBe(
+    Node.DOCUMENT_POSITION_FOLLOWING,
+  );
 });
 
 test('Should render spinner for Loading variant', () => {
