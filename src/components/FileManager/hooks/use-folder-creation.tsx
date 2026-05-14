@@ -5,6 +5,7 @@ import type { DialUploadFileItem } from '@/models/file-manager';
 import { FOLDER_PLACEHOLDER_FILE_NAME } from '@/components/FileManager/constants';
 import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
 import { FileManagerCreateFolderType } from '@/types/file-manager';
+import { findFolderForPath } from '../utils';
 
 export interface FolderCreationValidationMessages {
   emptyName?: string;
@@ -24,6 +25,7 @@ export interface UseFolderCreationProps {
     parentFolder: DialFile,
   ) => string | null;
   validationMessages?: FolderCreationValidationMessages;
+  items: DialFile[];
 }
 
 export interface UseFolderCreationResult {
@@ -52,6 +54,7 @@ export const useFolderCreation = ({
   onCreateFolder,
   onValidateFolderName,
   validationMessages,
+  items,
 }: UseFolderCreationProps): UseFolderCreationResult => {
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderTempId, setNewFolderTempId] = useState<string | null>(null);
@@ -77,9 +80,10 @@ export const useFolderCreation = ({
       return currentFolder;
     }
     if (creationType === FileManagerCreateFolderType.Sibling && targetFile) {
+      const target = findFolderForPath(items, targetFile.parentPath || '');
       return {
         path: targetFile.parentPath,
-        items: [],
+        items: target?.items || [],
         nodeType: DialFileNodeType.FOLDER,
         name: targetFile?.parentPath?.split('/')?.pop() || '',
         folderId: '',
@@ -89,7 +93,7 @@ export const useFolderCreation = ({
       return targetFile;
     }
     return currentFolder;
-  }, [creationType, targetFile, currentFolder]);
+  }, [creationType, targetFile, currentFolder, items]);
 
   useEffect(() => {
     const currentPath = currentFolder?.path;

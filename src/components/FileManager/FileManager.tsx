@@ -1286,7 +1286,6 @@ export const DialFileManagerView: FC = () => {
     actionsColumnDef,
     rootItemLabel: rootItem?.label,
     rootItemPath: rootItem?.path,
-    createdFolderPlaceholder,
   });
 
   const cellClickHandler = useCallback(

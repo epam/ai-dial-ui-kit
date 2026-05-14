@@ -486,6 +486,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCreateFolder: wrappedOnCreateFolder,
     onValidateFolderName: onCreateFolderValidate,
     validationMessages: folderCreationValidationMessages,
+    items,
   });
 
   const startFolderCreation = useCallback(() => {
