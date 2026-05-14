@@ -76,9 +76,6 @@ export { DialConfirmationPopup } from './components/ConfirmationPopup/Confirmati
 export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/RadioGroupPopupField';
 export { DialFormPopup } from './components/FormPopup/FormPopup';
 
-// Not SSR safe, todo: figure out how to make them not break other SSE-safe components
-// // JSON Editor
-// export { DialJsonEditor } from './components/JsonEditor/JsonEditor';
 // Inputs
 export { DialInput } from './components/Input/Input';
 export type { DialInputButtonProps } from './components/Input/Button/InputButton';
@@ -211,3 +208,11 @@ export type {
   JsonSchemaDef,
   ValidationError,
 } from './components/SchemaRenderer/types';
+
+// JSON Editor - lazy loader to avoid loading in SSR
+export const LazyDialJsonEditor = () =>
+  import('./components/JsonEditor/JsonEditor');
+
+// Markdown Editor - lazy loader to avoid loading in SSR
+export const LazyDialMarkdownEditor = () =>
+  import('./components/MarkdownEditor/MarkdownEditor');

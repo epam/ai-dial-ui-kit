@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import { EDITOR_THEMES_CONFIG } from '@/constants/editor';
 import { EditorThemes } from '@/types/editor';
 import { Editor, type Monaco, type OnValidate } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import type { editor } from 'monaco-editor';
 
 export interface DialJsonEditorProps {
   value?: string | undefined;
