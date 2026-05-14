@@ -9,6 +9,8 @@ import {
   DialLinkButton,
   DialNeutralButton,
   DialPrimaryButton,
+  DialRoundedButton,
+  type DialRoundedButtonProps,
 } from './ButtonWrappers';
 import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -161,42 +163,6 @@ export const WithCustomTextStyling: Story = {
   },
 };
 
-export const Hover: Story = {
-  args: {
-    label: 'Hover Button',
-    variant: ButtonVariant.Primary,
-  },
-  parameters: {
-    pseudo: {
-      hover: true,
-    },
-  },
-};
-
-export const Focus: Story = {
-  args: {
-    label: 'Focus Button',
-    variant: ButtonVariant.Primary,
-  },
-  parameters: {
-    pseudo: {
-      focus: true,
-    },
-  },
-};
-
-export const Active: Story = {
-  args: {
-    label: 'Active Button',
-    variant: ButtonVariant.Primary,
-  },
-  parameters: {
-    pseudo: {
-      active: true,
-    },
-  },
-};
-
 export const AllVariants: Story = {
   render: () => {
     const baseProps: DialButtonProps = {
@@ -253,6 +219,12 @@ export const AllVariants: Story = {
         ),
       },
       {
+        title: 'Error · Ghost',
+        render: (p) => (
+          <DialErrorButton {...p} appearance={ButtonAppearance.Ghost} />
+        ),
+      },
+      {
         title: 'Ghost Wrapper (Primary)',
         render: (p) => <DialGhostButton {...p} />,
       },
@@ -285,14 +257,6 @@ export const AllVariants: Story = {
           'Matrix of primary/neutral/error variants with solid, ghost, link, and outlined appearances, shown in standard and small sizes with enabled/disabled states.',
       },
     },
-  },
-};
-
-export const SmallPrimaryButton: Story = {
-  args: {
-    label: 'Small Primary',
-    variant: ButtonVariant.Primary,
-    size: ElementSize.Small,
   },
 };
 
@@ -363,33 +327,29 @@ export const SubmitTypeButton: Story = {
   },
 };
 
-export const LinkWrapperButton: Story = {
-  render: (args) => <DialLinkButton {...args} />,
-  args: {
-    label: 'Link Button',
-    iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
-  },
+export const RoundedAllStates: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {(
+        [
+          { label: 'Default' },
+          { label: 'Selected', selected: true },
+          { label: 'Disabled', disabled: true },
+          {
+            label: 'With icons',
+            iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
+            iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
+          },
+        ] as DialRoundedButtonProps[]
+      ).map((props) => (
+        <DialRoundedButton key={props.label as string} {...props} />
+      ))}
+    </div>
+  ),
   parameters: {
     docs: {
       description: {
-        story:
-          'Preconfigured Link appearance via `DialLinkButton` wrapper (primary variant by default).',
-      },
-    },
-  },
-};
-
-export const GhostWrapperButton: Story = {
-  render: (args) => <DialGhostButton {...args} />,
-  args: {
-    label: 'Ghost Button',
-    iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Preconfigured Ghost appearance via `DialGhostButton` wrapper (primary variant by default).',
+        story: 'All visual states of the rounded button.',
       },
     },
   },

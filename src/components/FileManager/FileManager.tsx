@@ -96,7 +96,6 @@ import {
 } from './components/FoldersTree/FoldersTree';
 import {
   actionsColumnButtonClassName,
-  COMPACT_VIEW_FILE_ROW_HEIGHT,
   COMPACT_VIEW_HEADER_HEIGHT,
   containerBaseClassName,
   contentGridClassName,
@@ -1363,14 +1362,6 @@ export const DialFileManagerView: FC = () => {
           : forwardedGridOptions.additionalGridOptions?.defaultColDef
               ?.floatingFilter,
       },
-      ...(isCompactView
-        ? {
-            getRowHeight: (params) =>
-              params.data?.nodeType === DialFileNodeType.FOLDER
-                ? COMPACT_VIEW_HEADER_HEIGHT
-                : COMPACT_VIEW_FILE_ROW_HEIGHT,
-          }
-        : {}),
       context: {
         cancelFolderCreation,
         saveFolderCreation,
@@ -1398,7 +1389,6 @@ export const DialFileManagerView: FC = () => {
       forwardedGridOptions.additionalGridOptions,
       cellClickHandler,
       navigationPanelOptions?.searchable,
-      isCompactView,
       cancelFolderCreation,
       saveFolderCreation,
       getDisplayName,

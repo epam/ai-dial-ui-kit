@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialButton } from '../Button';
+import { DialRoundedButton } from '../ButtonWrappers';
 import { ButtonAppearance, ButtonVariant } from '@/index';
 
 describe('Dial UI Kit :: DialButton', () => {
@@ -192,4 +193,44 @@ describe('Dial UI Kit :: DialButton', () => {
       expect(btn).toHaveClass(expectedClass);
     },
   );
+});
+
+describe('Dial UI Kit :: DialRoundedButton', () => {
+  test('renders with label and base class', () => {
+    render(<DialRoundedButton label="Tag" />);
+    const btn = screen.getByRole('button', { name: 'Tag' });
+    expect(btn).toBeInTheDocument();
+    expect(btn).toHaveClass('dial-neutral-rounded-button');
+  });
+
+  test('applies selected class when selected prop is true', () => {
+    render(<DialRoundedButton label="Tag" selected />);
+    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass('selected');
+  });
+
+  test('does not apply selected class when selected is false', () => {
+    render(<DialRoundedButton label="Tag" selected={false} />);
+    expect(screen.getByRole('button', { name: 'Tag' })).not.toHaveClass(
+      'selected',
+    );
+  });
+
+  test('is disabled when disabled prop is true', () => {
+    render(<DialRoundedButton label="Tag" disabled />);
+    expect(screen.getByRole('button', { name: 'Tag' })).toBeDisabled();
+  });
+
+  test('calls onClick when clicked', () => {
+    const onClick = vi.fn();
+    render(<DialRoundedButton label="Tag" onClick={onClick} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Tag' }));
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  test('merges additional className', () => {
+    render(<DialRoundedButton label="Tag" className="extra-class" />);
+    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass(
+      'extra-class',
+    );
+  });
 });
