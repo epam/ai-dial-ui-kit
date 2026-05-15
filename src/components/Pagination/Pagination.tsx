@@ -11,7 +11,6 @@ export interface DialPaginationProps {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  siblingCount?: number;
   className?: string;
 }
 
@@ -19,10 +18,9 @@ export const DialPagination: FC<DialPaginationProps> = ({
   page,
   totalPages,
   onPageChange,
-  siblingCount = 1,
   className,
 }) => {
-  const pages = getPageRange(page, totalPages, siblingCount);
+  const pages = getPageRange(totalPages);
 
   return (
     <nav
