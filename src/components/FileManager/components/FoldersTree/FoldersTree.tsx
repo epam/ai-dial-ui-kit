@@ -197,11 +197,10 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   ) => {
     let newNodes = nodes;
     if (parentNode && parentNode.path === createdFolderPath) {
-      const tempId = `${NEW_FOLDER_TEMP_NAME}_${Date.now()}`;
       newNodes = [
         {
-          folderId: tempId,
-          id: tempId,
+          folderId: NEW_FOLDER_TEMP_NAME,
+          id: NEW_FOLDER_TEMP_NAME,
           items: [],
           name: createdFolderPlaceholder || '',
           nodeType: DialFileNodeType.FOLDER,

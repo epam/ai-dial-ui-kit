@@ -140,6 +140,7 @@ export function useEditableItem({
     } else {
       inputRef.current?.focus();
     }
+    cancelSavingRef.current = false;
   }, [
     validate,
     onSave,
@@ -201,7 +202,7 @@ export function useEditableItem({
 
     el.addEventListener('keydown', handleKey);
     return () => el.removeEventListener('keydown', handleKey);
-  }, [isEditing, isCreating, save, cancel, onCreateFolderCancel]);
+  }, [isEditing, isCreating, save, cancel]);
 
   useEffect(() => {
     if (!isEditing && !isCreating) return;
