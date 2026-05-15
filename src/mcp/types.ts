@@ -6,6 +6,13 @@ export interface PropEntry {
   description?: string;
 }
 
+export interface LazyComponentEntry {
+  loaderExportName: string;
+  packageImport: string;
+  ssr: false;
+  nextDynamicExample: string;
+}
+
 export interface ComponentEntry {
   name: string;
   category: string;
@@ -13,6 +20,7 @@ export interface ComponentEntry {
   props: PropEntry[];
   examples: string[];
   sourceFile: string;
+  lazy?: LazyComponentEntry;
 }
 
 export interface TypeMember {

@@ -16,6 +16,7 @@ import type {
   PropEntry,
   TypeMember,
   KitInfo,
+  LazyComponentEntry,
 } from './types.ts';
 
 // ─── constants ────────────────────────────────────────────────────────────────
@@ -130,6 +131,12 @@ interface IndexExport {
   isTypeOnly: boolean;
   resolvedPath: string;
   section: string;
+  lazyLoaderName?: string;
+}
+
+interface LazyExportDescriptor {
+  loaderExportName: string;
+  componentName: string;
 }
 
 function buildSectionMap(content: string): string[] {
@@ -172,28 +179,108 @@ function parseIndexFile(): IndexExport[] {
   const records: IndexExport[] = [];
 
   ts.forEachChild(sf, (node) => {
-    if (!ts.isExportDeclaration(node)) return;
-    if (!node.moduleSpecifier || !node.exportClause) return;
-    if (!ts.isNamedExports(node.exportClause)) return;
+    if (ts.isExportDeclaration(node)) {
+      if (!node.moduleSpecifier || !node.exportClause) return;
+      if (!ts.isNamedExports(node.exportClause)) return;
 
-    const moduleSpec = (node.moduleSpecifier as ts.StringLiteral).text;
-    const resolvedPath = resolveModulePath(moduleSpec, indexDir);
-    if (!resolvedPath) {
-      console.warn(`Could not resolve: ${moduleSpec}`);
+      const moduleSpec = (node.moduleSpecifier as ts.StringLiteral).text;
+      const resolvedPath = resolveModulePath(moduleSpec, indexDir);
+      if (!resolvedPath) {
+        console.warn(`Could not resolve: ${moduleSpec}`);
+        return;
+      }
+
+      const startLine = sf.getLineAndCharacterOfPosition(
+        node.getStart(sf),
+      ).line;
+      const section = sectionByLine[startLine] ?? 'component';
+
+      for (const element of node.exportClause.elements) {
+        const isTypeOnly = node.isTypeOnly || element.isTypeOnly;
+        const name = element.name.text;
+        records.push({ name, isTypeOnly, resolvedPath, section });
+      }
       return;
     }
 
-    const startLine = sf.getLineAndCharacterOfPosition(node.getStart(sf)).line;
-    const section = sectionByLine[startLine] ?? 'component';
+    // Lazy component loader: `export const LazyDialX = () => import('./path')`
+    if (ts.isVariableStatement(node)) {
+      const hasExport = node.modifiers?.some(
+        (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+      );
+      if (!hasExport) return;
 
-    for (const element of node.exportClause.elements) {
-      const isTypeOnly = node.isTypeOnly || element.isTypeOnly;
-      const name = element.name.text;
-      records.push({ name, isTypeOnly, resolvedPath, section });
+      for (const decl of node.declarationList.declarations) {
+        if (!ts.isIdentifier(decl.name)) continue;
+        const varName = decl.name.text;
+        if (!varName.startsWith('Lazy')) continue;
+
+        const init = decl.initializer;
+        if (!init || !ts.isArrowFunction(init)) continue;
+
+        // Find an `import('...')` call inside the arrow body
+        const moduleSpec = findDynamicImportSpec(init.body);
+        if (!moduleSpec) continue;
+
+        const resolvedPath = resolveModulePath(moduleSpec, indexDir);
+        if (!resolvedPath) {
+          console.warn(`Could not resolve lazy import: ${moduleSpec}`);
+          continue;
+        }
+
+        // Strip `Lazy` prefix to match the underlying component declaration
+        const underlyingName = varName.slice('Lazy'.length);
+        const startLine = sf.getLineAndCharacterOfPosition(
+          node.getStart(sf),
+        ).line;
+        const section = sectionByLine[startLine] ?? 'component';
+
+        records.push({
+          name: underlyingName,
+          isTypeOnly: false,
+          resolvedPath,
+          section,
+          lazyLoaderName: varName,
+        });
+      }
     }
   });
 
   return records;
+}
+
+// Locate a dynamic `import('module')` call within an arrow function body.
+function findDynamicImportSpec(body: ts.ConciseBody): string | null {
+  let expr: ts.Expression | undefined;
+  if (ts.isBlock(body)) {
+    for (const stmt of body.statements) {
+      if (ts.isReturnStatement(stmt) && stmt.expression) {
+        expr = stmt.expression;
+        break;
+      }
+    }
+  } else {
+    expr = body;
+  }
+  if (!expr) return null;
+
+  // Unwrap potential `.then(...)` chains: import('x').then(m => m.default)
+  while (
+    ts.isCallExpression(expr) &&
+    ts.isPropertyAccessExpression(expr.expression)
+  ) {
+    expr = expr.expression.expression;
+  }
+
+  if (
+    ts.isCallExpression(expr) &&
+    expr.expression.kind === ts.SyntaxKind.ImportKeyword &&
+    expr.arguments.length > 0 &&
+    ts.isStringLiteralLike(expr.arguments[0])
+  ) {
+    return (expr.arguments[0] as ts.StringLiteralLike).text;
+  }
+  return null;
 }
 
 // ─── component extraction ─────────────────────────────────────────────────────
@@ -288,6 +375,38 @@ function getStoryCategory(sourceFilePath: string): string {
   return middle.length > 0 ? middle.join('/') : (parts[start] ?? 'Other');
 }
 
+function buildLazyComponentEntry(
+  descriptor: LazyExportDescriptor,
+): LazyComponentEntry {
+  return {
+    loaderExportName: descriptor.loaderExportName,
+    packageImport: '@epam/ai-dial-ui-kit',
+    ssr: false,
+    nextDynamicExample: [
+      "import dynamic from 'next/dynamic';",
+      `import { ${descriptor.loaderExportName} } from '@epam/ai-dial-ui-kit';`,
+      '',
+      `const ${descriptor.componentName} = dynamic(`,
+      `  async () => (await ${descriptor.loaderExportName}()).${descriptor.componentName},`,
+      '  { ssr: false },',
+      ');',
+    ].join('\n'),
+  };
+}
+
+function appendLazyDescriptionNote(
+  description: string,
+  loaderExportName: string,
+): string {
+  const lazyNote = [
+    'Lazy-loaded component.',
+    'This component is not exported directly from the UI kit to avoid errors when using with SSR.',
+    `Use \`${loaderExportName}\` and the manifest \`lazy\` field for dynamic import guidance.`,
+  ].join(' ');
+
+  return description ? `${description}\n\n${lazyNote}` : lazyNote;
+}
+
 function buildComponentEntry(rec: IndexExport): ComponentEntry | null {
   const sf = readSf(rec.resolvedPath);
   let description = '';
@@ -326,15 +445,27 @@ function buildComponentEntry(rec: IndexExport): ComponentEntry | null {
   const propsInterfaceName = `${rec.name}Props`;
   const props = extractProps(sf, propsInterfaceName, paramDescs, defaults);
   const category = getStoryCategory(rec.resolvedPath);
+  const finalDescription = rec.lazyLoaderName
+    ? appendLazyDescriptionNote(description, rec.lazyLoaderName)
+    : description;
 
-  return {
+  const entry: ComponentEntry = {
     name: rec.name,
     category,
-    description,
+    description: finalDescription,
     props,
     examples,
     sourceFile: relSrc(rec.resolvedPath),
   };
+
+  if (rec.lazyLoaderName) {
+    entry.lazy = buildLazyComponentEntry({
+      loaderExportName: rec.lazyLoaderName,
+      componentName: rec.name,
+    });
+  }
+
+  return entry;
 }
 
 // ─── type extraction ──────────────────────────────────────────────────────────

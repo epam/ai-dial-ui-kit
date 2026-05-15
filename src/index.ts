@@ -8,6 +8,13 @@ export { DialAlert } from './components/Alert/Alert';
 export { DialLoader } from './components/Loader/Loader';
 export { DialSpinner } from './components/Spinner/Spinner';
 export type { DialSpinnerProps } from './components/Spinner/Spinner';
+export {
+  DialProgressBar,
+  DialProgressBarSize,
+} from './components/ProgressBar/ProgressBar';
+export type { DialProgressBarProps } from './components/ProgressBar/ProgressBar';
+export { DialPagination } from './components/Pagination/Pagination';
+export type { DialPaginationProps } from './components/Pagination/Pagination';
 export { DialCheckbox } from './components/Checkbox/Checkbox';
 export { DialSteps } from './components/Steps/Steps';
 export { DialRadioButton } from './components/RadioButton/RadioButton';
