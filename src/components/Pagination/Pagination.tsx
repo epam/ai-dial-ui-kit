@@ -5,7 +5,7 @@ import { DialIconButton } from '@/components/IconButton/IconButton';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
-import { getPageRange } from './utils';
+import { getPageRange, getPageDisplayType } from './utils';
 
 export interface DialPaginationProps {
   page: number;
@@ -42,8 +42,9 @@ export const DialPagination: FC<DialPaginationProps> = ({
       />
 
       <div className="flex flex-row items-center gap-2">
-        {pages.map((p) =>
-          p === page ? (
+        {pages.map((p) => {
+          const displayType = getPageDisplayType(p, page, totalPages);
+          return (
             <button
               key={p}
               type="button"
@@ -51,22 +52,14 @@ export const DialPagination: FC<DialPaginationProps> = ({
               aria-label={`Page ${p}`}
               aria-current={p === page ? 'page' : undefined}
               className={mergeClasses(
-                'bg-secondary h-[8px] w-[32px] rounded-full focus-visible:outline outline-offset-0',
+                'bg-secondary rounded-full focus-visible:outline outline-offset-0 transition-all duration-300 ease-in-out',
+                displayType === 'active' && 'h-[8px] w-[32px]',
+                displayType === 'adjacent' && 'size-[8px]',
+                displayType === 'far' && 'size-[4px]',
               )}
             />
-          ) : (
-            <button
-              key={p}
-              type="button"
-              onClick={() => onPageChange(p)}
-              aria-label={`Page ${p}`}
-              aria-current={p === page ? 'page' : undefined}
-              className={mergeClasses(
-                'bg-secondary size-[8px] rounded-full focus-visible:outline outline-offset-0',
-              )}
-            />
-          ),
-        )}
+          );
+        })}
       </div>
 
       <DialIconButton

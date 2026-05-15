@@ -10,7 +10,9 @@ const meta = {
     docs: {
       description: {
         component:
-          'Page navigation control with prev/next buttons and numbered page items.',
+          'Page navigation control with prev/next buttons and dot indicators. ' +
+          'For 6 pages or fewer all dots are the same size. ' +
+          'For 7 or more pages the active page is wide, adjacent pages (±2) are regular dots, and far pages shrink to small dots.',
       },
     },
   },
@@ -34,8 +36,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const FirstPage: Story = {
+export const FewPages: Story = {
+  name: '6 pages — show all dots',
   args: { page: 1, totalPages: 6 },
+};
+
+export const ManyPagesStart: Story = {
+  name: '7+ pages — active near start',
+  args: { page: 2, totalPages: 10 },
+};
+
+export const ManyPagesMiddle: Story = {
+  name: '7+ pages — active in middle',
+  args: { page: 5, totalPages: 10 },
+};
+
+export const ManyPagesEnd: Story = {
+  name: '7+ pages — active near end',
+  args: { page: 9, totalPages: 10 },
 };
 
 export const Interactive: Story = {
