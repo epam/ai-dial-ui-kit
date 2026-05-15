@@ -16,9 +16,11 @@ import {
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
+  isFileSelectable,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
+  splitPathAndName,
 } from './utils';
 import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
 import { useCollapseTree } from './hooks/use-collapse-tree';
@@ -168,17 +170,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const wrappedOnCreateFolder = useCallback(
     (file: DialUploadFileItem, folderPath: string, id: string) => {
       if (autoSelectUploadedItems) {
-        const lastSlashIndex = folderPath.lastIndexOf('/');
-        const createdFolderName =
-          lastSlashIndex >= 0
-            ? folderPath.slice(lastSlashIndex + 1)
-            : folderPath;
-        const destinationFolder =
-          lastSlashIndex >= 0 ? folderPath.slice(0, lastSlashIndex) : '';
-
+        const { parent, name } = splitPathAndName(folderPath);
         pendingAutoSelectRef.current = {
-          fileNames: new Set([createdFolderName]),
-          destinationFolder,
+          fileNames: new Set([name]),
+          destinationFolder: parent,
         };
       }
       onCreateFolder?.(file, folderPath, id);
@@ -658,15 +653,22 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     const matchedPaths = new Set<string>();
     for (const item of folder.items) {
-      if (pending.fileNames.has(item.name)) {
-        matchedPaths.add(item.path);
-      }
+      if (!pending.fileNames.has(item.name)) continue;
+      if (!isFileSelectable(item, allowedFileTypes, maxSelectableFileSize))
+        continue;
+      matchedPaths.add(item.path);
     }
     if (matchedPaths.size > 0) {
       setSelectedPaths(matchedPaths);
       pendingAutoSelectRef.current = null;
     }
-  }, [items, currentPath, setSelectedPaths]);
+  }, [
+    items,
+    currentPath,
+    setSelectedPaths,
+    allowedFileTypes,
+    maxSelectableFileSize,
+  ]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {
