@@ -55,6 +55,16 @@ function formatComponent(comp: ComponentEntry): string {
 
   if (comp.description) lines.push(comp.description, '');
 
+  if (comp.lazy) {
+    lines.push('## Lazy Loading', '');
+    lines.push(`- Loader export: \`${comp.lazy.loaderExportName}\``);
+    lines.push(`- Package import: \`${comp.lazy.packageImport}\``);
+    lines.push(`- SSR disabled: ${String(comp.lazy.ssr)}`);
+    lines.push('');
+    lines.push('### Next.js', '');
+    lines.push('```tsx', comp.lazy.nextDynamicExample, '```', '');
+  }
+
   if (comp.props.length > 0) {
     lines.push('## Props', '');
     lines.push('| Prop | Type | Required | Default | Description |');
