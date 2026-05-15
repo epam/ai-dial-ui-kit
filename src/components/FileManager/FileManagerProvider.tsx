@@ -635,6 +635,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     showFiles,
     showFolders,
     currentPath,
