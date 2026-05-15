@@ -158,6 +158,7 @@ export interface FileManagerContextValue {
 
   isCreatingFolder: boolean;
   newFolderTempId: string | null;
+  newFolderDefaultName: string;
   startFolderCreation: () => void;
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;

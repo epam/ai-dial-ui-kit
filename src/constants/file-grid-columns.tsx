@@ -70,7 +70,7 @@ export const NAME_COLUMN =
         if (params.data?.isTemporary && params.data.id === newFolderTempId) {
           return (
             <DialFileManagerItemName
-              name=""
+              name={params.data.name}
               type={DialItemType.Folder}
               elementId={`new-folder-${params.data.id}`}
               editing={true}

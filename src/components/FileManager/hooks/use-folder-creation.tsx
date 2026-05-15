@@ -28,6 +28,7 @@ export interface UseFolderCreationProps {
 export interface UseFolderCreationResult {
   isCreatingFolder: boolean;
   newFolderTempId: string | null;
+  newFolderDefaultName: string;
   startFolderCreation: () => void;
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -41,6 +42,33 @@ const DEFAULT_VALIDATION_MESSAGES: Required<FolderCreationValidationMessages> =
     hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
   };
 
+const DEFAULT_FOLDER_BASE_NAME = 'New folder';
+
+const getNextFolderName = (existingFolders: DialFile[]): string => {
+  const prefix = `${DEFAULT_FOLDER_BASE_NAME} `;
+  const regex = new RegExp(`^${DEFAULT_FOLDER_BASE_NAME} (\\d+)$`);
+
+  const existingNames = new Set(
+    existingFolders.map((f) => f.name.toLowerCase()),
+  );
+
+  const maxNumber = existingFolders
+    .map((f) => {
+      const match = f.name.match(regex);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .reduce((max, n) => Math.max(max, n), 0);
+
+  let candidate = `${prefix}${maxNumber + 1}`;
+  let counter = maxNumber + 1;
+  while (existingNames.has(candidate.toLowerCase())) {
+    counter++;
+    candidate = `${prefix}${counter}`;
+  }
+
+  return candidate;
+};
+
 export const useFolderCreation = ({
   currentFolder,
   onCreateFolder,
@@ -49,6 +77,7 @@ export const useFolderCreation = ({
 }: UseFolderCreationProps): UseFolderCreationResult => {
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderTempId, setNewFolderTempId] = useState<string | null>(null);
+  const [newFolderDefaultName, setNewFolderDefaultName] = useState('');
   const previousPathRef = useRef<string | undefined>(currentFolder?.path);
 
   const messages = useMemo(
@@ -65,6 +94,7 @@ export const useFolderCreation = ({
     if (previousPathRef.current !== currentPath && isCreatingFolder) {
       setIsCreatingFolder(false);
       setNewFolderTempId(null);
+      setNewFolderDefaultName('');
     }
 
     previousPathRef.current = currentPath;
@@ -73,13 +103,19 @@ export const useFolderCreation = ({
   const startFolderCreation = useCallback(() => {
     if (isCreatingFolder) return;
     const tempId = `__new_folder_${Date.now()}`;
+    const siblingFolders = (currentFolder?.items ?? []).filter(
+      (item) => item.nodeType === DialFileNodeType.FOLDER,
+    );
+    const defaultName = getNextFolderName(siblingFolders);
     setNewFolderTempId(tempId);
+    setNewFolderDefaultName(defaultName);
     setIsCreatingFolder(true);
-  }, [isCreatingFolder]);
+  }, [isCreatingFolder, currentFolder]);
 
   const cancelFolderCreation = useCallback(() => {
     setIsCreatingFolder(false);
     setNewFolderTempId(null);
+    setNewFolderDefaultName('');
   }, []);
 
   const validateFolderName = useCallback(
@@ -151,6 +187,7 @@ export const useFolderCreation = ({
   return {
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
