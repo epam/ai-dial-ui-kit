@@ -66,6 +66,7 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 
 ## Development Rules
 
+- **String enums for variants/sizes** — use `export enum` with PascalCase keys and lowercase string values (e.g. `enum FooSize { Small = 'sm', Medium = 'md' }`); never use plain string union types for public prop enumerations
 - **No breaking changes** to existing UI components — follow Open-Closed principle
 - **70% minimum** test coverage (branches, functions, lines, statements)
 - **Always run `typecheck`** after changing `.ts`/`.tsx` files — ESLint doesn't catch all TS errors
