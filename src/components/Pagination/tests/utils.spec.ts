@@ -50,16 +50,24 @@ describe('getPageDisplayType', () => {
     const total = threshold;
     const currentPage = 4;
     for (let offset = 1; offset <= window; offset++) {
-      expect(getPageDisplayType(currentPage - offset, currentPage, total)).toBe('adjacent');
-      expect(getPageDisplayType(currentPage + offset, currentPage, total)).toBe('adjacent');
+      expect(getPageDisplayType(currentPage - offset, currentPage, total)).toBe(
+        'adjacent',
+      );
+      expect(getPageDisplayType(currentPage + offset, currentPage, total)).toBe(
+        'adjacent',
+      );
     }
   });
 
   test('pages beyond ADJACENT_WINDOW return "far" when totalPages >= threshold', () => {
     const total = threshold;
     const currentPage = 4;
-    expect(getPageDisplayType(currentPage - (window + 1), currentPage, total)).toBe('far');
-    expect(getPageDisplayType(currentPage + (window + 1), currentPage, total)).toBe('far');
+    expect(
+      getPageDisplayType(currentPage - (window + 1), currentPage, total),
+    ).toBe('far');
+    expect(
+      getPageDisplayType(currentPage + (window + 1), currentPage, total),
+    ).toBe('far');
   });
 
   test('boundary: page exactly at ADJACENT_WINDOW distance returns "adjacent"', () => {

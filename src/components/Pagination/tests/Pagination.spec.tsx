@@ -37,9 +37,7 @@ describe('Dial UI Kit :: DialPagination', () => {
 
   test('next button is disabled on last page', () => {
     render(<DialPagination totalPages={6} page={6} onPageChange={vi.fn()} />);
-    expect(
-      screen.getByRole('button', { name: 'Next page' }),
-    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
   });
 
   test('next button is enabled when not on last page', () => {

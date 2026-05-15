@@ -18,22 +18,34 @@ describe('Dial UI Kit :: DialProgressBar', () => {
 
   test('uses default aria-label', () => {
     render(<DialProgressBar value={50} />);
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-label', 'Progress');
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-label',
+      'Progress',
+    );
   });
 
   test('respects custom aria-label', () => {
     render(<DialProgressBar value={50} ariaLabel="Upload progress" />);
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-label', 'Upload progress');
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-label',
+      'Upload progress',
+    );
   });
 
   test('clamps value below 0 to 0', () => {
     render(<DialProgressBar value={-10} />);
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0');
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '0',
+    );
   });
 
   test('clamps value above max to max', () => {
     render(<DialProgressBar value={150} max={100} />);
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '100');
+    expect(screen.getByRole('progressbar')).toHaveAttribute(
+      'aria-valuenow',
+      '100',
+    );
   });
 
   test('fill width reflects percentage', () => {
