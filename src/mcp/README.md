@@ -173,6 +173,12 @@ interface ComponentEntry {
   }[];
   examples: string[];            // TSX from JSDoc @example
   sourceFile: string;            // path in src/
+  lazy?: {
+    loaderExportName: string;    // "LazyDialJsonEditor"
+    packageImport: string;       // "@epam/ai-dial-ui-kit"
+    ssr: false;                  // intended for client-only dynamic imports
+    nextDynamicExample: string;  // copyable Next.js dynamic() snippet
+  };
 }
 
 interface TypeEntry {
