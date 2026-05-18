@@ -4,6 +4,7 @@ import { DialFileNodeType } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FOLDER_PLACEHOLDER_FILE_NAME } from '@/components/FileManager/constants';
 import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
+import { getNextFolderName } from '@/components/FileManager/utils';
 
 export interface FolderCreationValidationMessages {
   emptyName?: string;
@@ -41,33 +42,6 @@ const DEFAULT_VALIDATION_MESSAGES: Required<FolderCreationValidationMessages> =
     duplicateName: 'A folder with this name already exists',
     hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
   };
-
-const DEFAULT_FOLDER_BASE_NAME = 'New folder';
-
-const getNextFolderName = (existingFolders: DialFile[]): string => {
-  const prefix = `${DEFAULT_FOLDER_BASE_NAME} `;
-  const regex = new RegExp(`^${DEFAULT_FOLDER_BASE_NAME} (\\d+)$`);
-
-  const existingNames = new Set(
-    existingFolders.map((f) => f.name.toLowerCase()),
-  );
-
-  const maxNumber = existingFolders
-    .map((f) => {
-      const match = f.name.match(regex);
-      return match ? parseInt(match[1], 10) : 0;
-    })
-    .reduce((max, n) => Math.max(max, n), 0);
-
-  let candidate = `${prefix}${maxNumber + 1}`;
-  let counter = maxNumber + 1;
-  while (existingNames.has(candidate.toLowerCase())) {
-    counter++;
-    candidate = `${prefix}${counter}`;
-  }
-
-  return candidate;
-};
 
 export const useFolderCreation = ({
   currentFolder,
