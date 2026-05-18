@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
+import { AlertVariant } from '@/types/alert';
 import { DialAlert } from './Alert';
 
 describe('Dial UI Kit :: DialAlert', () => {
@@ -57,7 +58,7 @@ describe('Dial UI Kit :: DialAlert', () => {
   });
 
   test('Should render spinner for Loading variant', () => {
-    render(<DialAlert variant="loading" message="Loading…" />);
+    render(<DialAlert variant={AlertVariant.Loading} message="Loading…" />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });
