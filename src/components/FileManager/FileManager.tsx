@@ -740,13 +740,12 @@ export const DialFileManagerView: FC = () => {
       allowedFileTypes?: DialFileAcceptType[],
       maxSelectableFileSize?: number,
     ) => {
-      return !!getRowDisabledTooltip(
-        row,
-        allowedFileTypes,
-        maxSelectableFileSize,
+      return (
+        !!getDisabledTooltip?.(row) ||
+        !!getRowDisabledTooltip(row, allowedFileTypes, maxSelectableFileSize)
       );
     },
-    [getRowDisabledTooltip],
+    [getRowDisabledTooltip, getDisabledTooltip],
   );
 
   const disabledGridRowIds = useMemo(() => {
