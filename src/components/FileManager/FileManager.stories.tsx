@@ -1582,7 +1582,6 @@ export const WithInsertSiblingChildrenActions: Story = {
         onCreateFolder={(_, folder) => {
           alert(`Folder added ${folder}`);
         }}
-        createdFolderPlaceholder="New Folder"
       />
     </div>
   ),

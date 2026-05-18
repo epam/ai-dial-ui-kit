@@ -49,7 +49,7 @@ export interface DialFoldersTreeProps {
   onExpandedPathsChange?: (expandedPaths: Set<string>) => void;
   forbiddenSymbolsRegExp?: RegExp;
   forbiddenSymbolsTooltip?: ReactNode;
-  createdFolderPlaceholder?: string;
+  newFolderDefaultName?: string;
 }
 
 /**
@@ -144,7 +144,7 @@ export interface DialFoldersTreeProps {
  * @param [createdFolderPath] - Optional Path of the new created folder.
  * @param [onCreateFolderSave] - Optional Callback fired when create new folder is confirmed
  * @param [onCreateFolderCancel] - Optional Callback fired when create new folder is cancelled
- * @param [createdFolderPlaceholder] - Optional new folder default name.
+ * @param [newFolderDefaultName] - Optional new folder default name.
  * @remarks
  * - Folder and file data must follow the `DialFile` model.
  * - The `expandedPaths`, `loadingPaths`, `selectedPath`, and `renamedPath` props are externally controlled.
@@ -178,7 +178,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
   onCreateFolderCancel,
   forbiddenSymbolsRegExp,
   forbiddenSymbolsTooltip,
-  createdFolderPlaceholder,
+  newFolderDefaultName,
 }) => {
   const { expandedPaths, togglePath } = useExpandedPaths({
     expandedPaths: externalExpandedPaths ?? new Set(),
@@ -202,7 +202,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
           folderId: NEW_FOLDER_TEMP_NAME,
           id: NEW_FOLDER_TEMP_NAME,
           items: [],
-          name: createdFolderPlaceholder || '',
+          name: newFolderDefaultName || '',
           nodeType: DialFileNodeType.FOLDER,
           parentPath: createdFolderPath,
           path: `${createdFolderPath}/${NEW_FOLDER_TEMP_NAME}`,

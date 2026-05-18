@@ -37,7 +37,6 @@ export interface FileManagerGridContext {
 
   getDisplayName: (item: DialFile) => string;
   hideSearchPathItemName?: boolean;
-  createdFolderPlaceholder?: string;
   filesLoading?: boolean;
 }
 

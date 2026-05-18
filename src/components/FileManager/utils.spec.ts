@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import type { DialFileAcceptType } from '@/models/file-manager';
+import { DialFileNodeType, type DialFile } from '@/models/file';
 import {
   formatAllowedFileTypesForTooltip,
   isFileSelectable,
   splitPathAndName,
+  getNextFolderName,
 } from './utils';
 
 describe('Dial UI Kit :: splitPathAndName', () => {
@@ -126,5 +128,53 @@ describe('Dial UI Kit :: formatAllowedFileTypesForTooltip', () => {
         'image/png',
       ]),
     ).toBe('.pdf, .txt, .text, .conf, .def, .list, .log, .in, .ini, .png');
+  });
+});
+
+describe('Dial UI Kit :: getNextFolderName', () => {
+  it('returns "New folder 1" if there are no existing sibling folders', () => {
+    expect(getNextFolderName([])).toBe('New folder 1');
+  });
+
+  it('returns "New folder 2" if "New folder 1" already exists', () => {
+    const existing: DialFile[] = [
+      {
+        name: 'New folder 1',
+        nodeType: DialFileNodeType.FOLDER,
+        id: '1',
+        path: 'root/New folder 1',
+      } as DialFile,
+    ];
+    expect(getNextFolderName(existing)).toBe('New folder 2');
+  });
+
+  it('increments max number even if there are gaps', () => {
+    const existing: DialFile[] = [
+      {
+        name: 'New folder 1',
+        nodeType: DialFileNodeType.FOLDER,
+        id: '1',
+        path: 'root/New folder 1',
+      } as DialFile,
+      {
+        name: 'New folder 3',
+        nodeType: DialFileNodeType.FOLDER,
+        id: '3',
+        path: 'root/New folder 3',
+      } as DialFile,
+    ];
+    expect(getNextFolderName(existing)).toBe('New folder 4');
+  });
+
+  it('skips non-matching folder names', () => {
+    const existing: DialFile[] = [
+      {
+        name: 'Other folder',
+        nodeType: DialFileNodeType.FOLDER,
+        id: '1',
+        path: 'root/Other folder',
+      } as DialFile,
+    ];
+    expect(getNextFolderName(existing)).toBe('New folder 1');
   });
 });

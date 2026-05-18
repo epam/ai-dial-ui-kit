@@ -161,6 +161,7 @@ export interface FileManagerContextValue {
 
   isCreatingFolder: boolean;
   newFolderTempId: string | null;
+  newFolderDefaultName: string;
   startFolderCreation: () => void;
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -235,7 +236,6 @@ export interface FileManagerContextValue {
   unsupportedFileTypeTooltip?: string;
   hideSearchPathItemName?: boolean;
   showHiddenFileSwitcherInDestinationPopup?: boolean;
-  createdFolderPlaceholder?: string;
 }
 
 export const FileManagerContext = createContext<

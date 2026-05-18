@@ -92,38 +92,6 @@ export const Small: Story = {
   },
 };
 
-export const Filled: Story = {
-  render: InteractiveSearch,
-  args: {
-    id: 'search-filled',
-    placeholder: 'Search',
-    value: 'What is it?',
-    size: ElementSize.Standard,
-  },
-};
-
-export const Disabled: Story = {
-  render: InteractiveSearch,
-  args: {
-    id: 'search-disabled',
-    placeholder: 'Search',
-    value: '',
-    size: ElementSize.Standard,
-    disabled: true,
-  },
-};
-
-export const Invalid: Story = {
-  render: InteractiveSearch,
-  args: {
-    id: 'search-invalid',
-    placeholder: 'Search',
-    value: 'Invalid input',
-    size: ElementSize.Standard,
-    invalid: true,
-  },
-};
-
 const BlurHandlerComponent: FC = () => {
   const [value, setValue] = useState('');
   const [blurCount, setBlurCount] = useState(0);

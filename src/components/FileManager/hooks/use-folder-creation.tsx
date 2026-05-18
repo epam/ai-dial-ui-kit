@@ -6,6 +6,7 @@ import { FOLDER_PLACEHOLDER_FILE_NAME } from '@/components/FileManager/constants
 import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
 import { FileManagerCreateFolderType } from '@/types/file-manager';
 import { findFolderForPath } from '../utils';
+import { getNextFolderName } from '@/components/FileManager/utils';
 
 export interface FolderCreationValidationMessages {
   emptyName?: string;
@@ -31,6 +32,7 @@ export interface UseFolderCreationProps {
 export interface UseFolderCreationResult {
   isCreatingFolder: boolean;
   newFolderTempId: string | null;
+  newFolderDefaultName: string;
   createdFolderPath: string | null;
   startFolderCreation: () => void;
   startGridSiblingFolderCreation: (targetFile: DialFile) => void;
@@ -65,6 +67,7 @@ export const useFolderCreation = ({
   const [createdFolderPath, setCreatedFolderPath] = useState<string | null>(
     null,
   );
+  const [newFolderDefaultName, setNewFolderDefaultName] = useState('');
   const previousPathRef = useRef<string | undefined>(currentFolder?.path);
 
   const messages = useMemo(
@@ -96,21 +99,27 @@ export const useFolderCreation = ({
   }, [creationType, targetFile, currentFolder, items]);
 
   useEffect(() => {
-    const currentPath = currentFolder?.path;
+    const currentPath = targetFolder?.path;
 
     if (previousPathRef.current !== currentPath && isCreatingFolder) {
       setIsCreatingFolder(false);
       setNewFolderTempId(null);
+      setNewFolderDefaultName('');
     }
 
     previousPathRef.current = currentPath;
-  }, [currentFolder?.path, isCreatingFolder]);
+  }, [targetFolder?.path, isCreatingFolder]);
 
   const startFolderCreation = useCallback(() => {
     if (isCreatingFolder) return;
     previousPathRef.current = currentFolder?.path || '/';
     const tempId = `__new_folder_${Date.now()}`;
+    const siblingFolders = (currentFolder?.items ?? []).filter(
+      (item) => item.nodeType === DialFileNodeType.FOLDER,
+    );
+    const defaultName = getNextFolderName(siblingFolders);
     setNewFolderTempId(tempId);
+    setNewFolderDefaultName(defaultName);
     setIsCreatingFolder(true);
     setCreationType(FileManagerCreateFolderType.Folder);
     setTargetFile(currentFolder || null);
@@ -121,13 +130,19 @@ export const useFolderCreation = ({
       if (isCreatingFolder) return;
       previousPathRef.current = target?.parentPath || '/';
       const tempId = `__new_folder_${Date.now()}`;
+      const parentFolder = findFolderForPath(items, target?.parentPath || '/');
+      const siblingFolders = (parentFolder?.items ?? []).filter(
+        (item) => item.nodeType === DialFileNodeType.FOLDER,
+      );
+      const defaultName = getNextFolderName(siblingFolders);
+      setNewFolderDefaultName(defaultName);
       setNewFolderTempId(tempId);
       setIsCreatingFolder(true);
       setCreationType(FileManagerCreateFolderType.Sibling);
       setTargetFile(target);
       setCreatedFolderPath(target?.parentPath || '/');
     },
-    [isCreatingFolder],
+    [isCreatingFolder, items],
   );
 
   const startGridChildFolderCreation = useCallback(
@@ -135,6 +150,11 @@ export const useFolderCreation = ({
       if (isCreatingFolder) return;
       previousPathRef.current = target.path;
       const tempId = `__new_folder_${Date.now()}`;
+      const siblingFolders = (target?.items ?? []).filter(
+        (item) => item.nodeType === DialFileNodeType.FOLDER,
+      );
+      const defaultName = getNextFolderName(siblingFolders);
+      setNewFolderDefaultName(defaultName);
       setNewFolderTempId(tempId);
       setIsCreatingFolder(true);
       setCreationType(FileManagerCreateFolderType.Child);
@@ -148,18 +168,29 @@ export const useFolderCreation = ({
     (target: DialFile) => {
       if (isCreatingFolder) return;
       previousPathRef.current = target?.parentPath || '/';
+      const parentFolder = findFolderForPath(items, target?.parentPath || '/');
+      const siblingFolders = (parentFolder?.items ?? []).filter(
+        (item) => item.nodeType === DialFileNodeType.FOLDER,
+      );
+      const defaultName = getNextFolderName(siblingFolders);
+      setNewFolderDefaultName(defaultName);
       setCreationType(FileManagerCreateFolderType.Sibling);
       setTargetFile(target);
       setCreatedFolderPath(target?.parentPath || '/');
       setIsCreatingFolder(true);
     },
-    [isCreatingFolder],
+    [isCreatingFolder, items],
   );
 
   const startTreeChildFolderCreation = useCallback(
     (target: DialFile) => {
       if (isCreatingFolder) return;
       previousPathRef.current = target.path;
+      const siblingFolders = (target?.items ?? []).filter(
+        (item) => item.nodeType === DialFileNodeType.FOLDER,
+      );
+      const defaultName = getNextFolderName(siblingFolders);
+      setNewFolderDefaultName(defaultName);
       setCreationType(FileManagerCreateFolderType.Child);
       setTargetFile(target);
       setCreatedFolderPath(target?.path || '/');
@@ -175,6 +206,7 @@ export const useFolderCreation = ({
     setTargetFile(null);
     setCreatedFolderPath(null);
     previousPathRef.current = undefined;
+    setNewFolderDefaultName('');
   }, []);
 
   const validateFolderName = useCallback(
@@ -245,8 +277,9 @@ export const useFolderCreation = ({
 
   return {
     isCreatingFolder,
-    newFolderTempId,
     createdFolderPath,
+    newFolderTempId,
+    newFolderDefaultName,
     startFolderCreation,
     startGridSiblingFolderCreation,
     startTreeSiblingFolderCreation,

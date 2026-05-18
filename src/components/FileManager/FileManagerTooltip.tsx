@@ -93,8 +93,9 @@ export const FileManagerTooltip = ({
   const hoveredRowTooltipContent = useMemo(() => {
     if (!hoveredRowFile) return undefined;
 
-    if (getDisabledTooltip && hoveredRowFile.folderId) {
-      return getDisabledTooltip(hoveredRowFile);
+    if (getDisabledTooltip) {
+      const tooltip = getDisabledTooltip(hoveredRowFile);
+      if (tooltip) return tooltip;
     }
 
     return getRowDisabledTooltip(

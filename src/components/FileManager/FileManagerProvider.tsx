@@ -109,7 +109,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onUploadArchive,
   onCreateFolder,
   onCreateFolderValidate,
-  createdFolderPlaceholder,
   folderCreationValidationMessages,
   fileMetadataPopupOptions,
   onGetInfo,
@@ -468,6 +467,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     isCreatingFolder,
     newFolderTempId,
     createdFolderPath,
+    newFolderDefaultName,
     startFolderCreation: startFolderCreationBase,
     startGridSiblingFolderCreation,
     startTreeSiblingFolderCreation,
@@ -543,7 +543,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       if (isCreatingFolder && newFolderTempId) {
         searchMapped.unshift({
           id: newFolderTempId,
-          name: '',
+          name: newFolderDefaultName,
           updatedAt: undefined,
           author: undefined,
           path: currentPath ?? '/',
@@ -604,7 +604,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     if (isCreatingFolder && newFolderTempId && !query) {
       mapped.unshift({
         id: newFolderTempId,
-        name: '',
+        name: newFolderDefaultName,
         updatedAt: undefined,
         author: undefined,
         path: currentPath ?? '/',
@@ -639,6 +639,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     showFiles,
     showFolders,
     currentPath,
@@ -902,6 +903,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     isCreatingFolder,
     newFolderTempId,
     createdFolderPath,
+    newFolderDefaultName,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
@@ -965,7 +967,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
     showHiddenFileSwitcherInDestinationPopup,
-    createdFolderPlaceholder,
   };
 
   return (

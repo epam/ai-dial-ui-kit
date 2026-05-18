@@ -402,7 +402,6 @@ export interface DialFileManagerProps {
   hideSearchPathItemName?: boolean;
   showHiddenFileSwitcherInDestinationPopup?: boolean;
   autoSelectUploadedItems?: boolean;
-  createdFolderPlaceholder?: string;
 }
 
 /**
@@ -509,7 +508,6 @@ export interface DialFileManagerProps {
  * @param [sharedWithMeIds] - Optional list of file IDs that are shared with the current user.
  * @param [unsupportedFileTypeTooltip] - Optional tooltip text displayed when an unsupported file type is selected.
  * @param [fileTooLargeTooltip] - Optional tooltip text displayed when a file is too large.
- * @param [createdFolderPlaceholder] - Optional new folder default name.
  */
 export const DialFileManager: FC<DialFileManagerProps> = (props) => {
   return (
@@ -667,7 +665,7 @@ export const DialFileManagerView: FC = () => {
     nonClickableTableColumns,
     hideSearchPathItemName,
     showHiddenFileSwitcherInDestinationPopup,
-    createdFolderPlaceholder,
+    newFolderDefaultName,
   } = useFileManagerContext();
 
   const {
@@ -757,13 +755,12 @@ export const DialFileManagerView: FC = () => {
       allowedFileTypes?: DialFileAcceptType[],
       maxSelectableFileSize?: number,
     ) => {
-      return !!getRowDisabledTooltip(
-        row,
-        allowedFileTypes,
-        maxSelectableFileSize,
+      return (
+        !!getDisabledTooltip?.(row) ||
+        !!getRowDisabledTooltip(row, allowedFileTypes, maxSelectableFileSize)
       );
     },
-    [getRowDisabledTooltip],
+    [getRowDisabledTooltip, getDisabledTooltip],
   );
 
   const disabledGridRowIds = useMemo(() => {
@@ -1178,7 +1175,7 @@ export const DialFileManagerView: FC = () => {
               }
               onCreateFolderCancel={cancelFolderCreation}
               onCreateFolderSave={saveFolderCreation}
-              createdFolderPlaceholder={createdFolderPlaceholder}
+              newFolderDefaultName={newFolderDefaultName}
             />
           </DialCollapsibleSidebar>
         </DialConditionalResizableContainer>
@@ -1212,7 +1209,7 @@ export const DialFileManagerView: FC = () => {
     createdFolderPath,
     cancelFolderCreation,
     saveFolderCreation,
-    createdFolderPlaceholder,
+    newFolderDefaultName,
   ]);
 
   const gridContextMenu = useGridContextMenu({
@@ -1380,7 +1377,7 @@ export const DialFileManagerView: FC = () => {
         forbiddenSymbolsRegExp,
         forbiddenSymbolsTooltip,
         hideSearchPathItemName,
-        createdFolderPlaceholder,
+        newFolderDefaultName,
         filesLoading,
       } as FileManagerGridContext,
     }),
@@ -1406,7 +1403,7 @@ export const DialFileManagerView: FC = () => {
       forbiddenSymbolsRegExp,
       forbiddenSymbolsTooltip,
       hideSearchPathItemName,
-      createdFolderPlaceholder,
+      newFolderDefaultName,
       filesLoading,
     ],
   );

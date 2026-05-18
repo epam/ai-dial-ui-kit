@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { mergeClasses } from '@/utils/merge-classes';
 import type { FC } from 'react';
 
 export interface DialSpinnerProps {
@@ -17,7 +17,7 @@ export const DialSpinner: FC<DialSpinnerProps> = ({
   return (
     <div
       role="status"
-      className={classNames(
+      className={mergeClasses(
         'flex items-center justify-center',
         { 'size-full': fullWidth },
         className,

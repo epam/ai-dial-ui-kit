@@ -66,6 +66,8 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 
 ## Development Rules
 
+- **Arrow functions** — always use arrow function expressions (`export const fn = () => {}`) instead of function declarations (`function fn() {}`)
+- **String enums for variants/sizes** — use `export enum` with PascalCase keys and lowercase string values (e.g. `enum FooSize { Small = 'sm', Medium = 'md' }`); never use plain string union types for public prop enumerations
 - **No breaking changes** to existing UI components — follow Open-Closed principle
 - **70% minimum** test coverage (branches, functions, lines, statements)
 - **Always run `typecheck`** after changing `.ts`/`.tsx` files — ESLint doesn't catch all TS errors
@@ -82,7 +84,21 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 | --------------------- | ------------------------------------------------ |
 | `plan-component`      | Plan only; no code until approved                |
 | `implement-from-plan` | Code only; follow the agreed plan                |
-| `review-changes`      | Review only; no edits                            |
+| `review-changes`      | Review only; no edits (alias of `code-review`)   |
+| `code-review`         | Review only; no edits (cross-harness command)    |
 | `apply-review`        | Fixes only; address listed feedback              |
 | `feature-pipeline`    | Run all four phases in order in one thread       |
 | `story-and-test`      | Align Storybook + Vitest for components in scope |
+
+## Cross-harness code-review agent
+
+A single `code-reviewer` agent works the same in **Cursor**, **Claude Code**, and **Codex**. The rubric, output format, and constraints live in one file; each harness ships a thin wrapper.
+
+| Surface     | Where to invoke                                                                     |
+| ----------- | ----------------------------------------------------------------------------------- |
+| Source      | `agents/code-reviewer.md` — single source of truth, read this first                 |
+| Cursor      | `/code-review` (or alias `/review-changes`) — `.cursor/commands/code-review.md`     |
+| Claude Code | `/code-review` slash command + `code-reviewer` subagent (`.claude/agents/`)         |
+| Codex CLI   | `/code-review` prompt — copy `.codex/prompts/code-review.md` to `~/.codex/prompts/` |
+
+The agent is **review-only**: it never edits files. To apply must-fix items, run `/apply-review` (Cursor) or re-prompt with "apply must-fix items".

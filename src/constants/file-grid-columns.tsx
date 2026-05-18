@@ -56,7 +56,6 @@ export const NAME_COLUMN =
           sharedByMePaths,
           selectedPaths,
           disabledRowIds,
-          createdFolderPlaceholder,
           filesLoading,
         } = params.context;
 
@@ -72,7 +71,7 @@ export const NAME_COLUMN =
         if (params.data?.isTemporary && params.data.id === newFolderTempId) {
           return (
             <DialFileManagerItemName
-              name={createdFolderPlaceholder || ''}
+              name={params.data.name}
               type={DialItemType.Folder}
               elementId={`new-folder-${params.data.id}`}
               editing={true}
