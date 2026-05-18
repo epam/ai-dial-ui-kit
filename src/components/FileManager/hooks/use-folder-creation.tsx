@@ -112,6 +112,7 @@ export const useFolderCreation = ({
 
   const startFolderCreation = useCallback(() => {
     if (isCreatingFolder) return;
+
     previousPathRef.current = currentFolder?.path || '/';
     const tempId = `__new_folder_${Date.now()}`;
     const siblingFolders = (currentFolder?.items ?? []).filter(
@@ -128,6 +129,7 @@ export const useFolderCreation = ({
   const startGridSiblingFolderCreation = useCallback(
     (target: DialFile) => {
       if (isCreatingFolder) return;
+
       previousPathRef.current = target?.parentPath || '/';
       const tempId = `__new_folder_${Date.now()}`;
       const parentFolder = findFolderForPath(items, target?.parentPath || '/');
@@ -148,6 +150,7 @@ export const useFolderCreation = ({
   const startGridChildFolderCreation = useCallback(
     (target: DialFile) => {
       if (isCreatingFolder) return;
+
       previousPathRef.current = target.path;
       const tempId = `__new_folder_${Date.now()}`;
       const siblingFolders = (target?.items ?? []).filter(
@@ -167,6 +170,7 @@ export const useFolderCreation = ({
   const startTreeSiblingFolderCreation = useCallback(
     (target: DialFile) => {
       if (isCreatingFolder) return;
+
       previousPathRef.current = target?.parentPath || '/';
       const parentFolder = findFolderForPath(items, target?.parentPath || '/');
       const siblingFolders = (parentFolder?.items ?? []).filter(
@@ -185,6 +189,7 @@ export const useFolderCreation = ({
   const startTreeChildFolderCreation = useCallback(
     (target: DialFile) => {
       if (isCreatingFolder) return;
+
       previousPathRef.current = target.path;
       const siblingFolders = (target?.items ?? []).filter(
         (item) => item.nodeType === DialFileNodeType.FOLDER,
