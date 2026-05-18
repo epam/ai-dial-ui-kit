@@ -4,6 +4,7 @@ import { DialFileNodeType } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FOLDER_PLACEHOLDER_FILE_NAME } from '@/components/FileManager/constants';
 import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
+import { getNextFolderName } from '@/components/FileManager/utils';
 
 export interface FolderCreationValidationMessages {
   emptyName?: string;
@@ -28,6 +29,7 @@ export interface UseFolderCreationProps {
 export interface UseFolderCreationResult {
   isCreatingFolder: boolean;
   newFolderTempId: string | null;
+  newFolderDefaultName: string;
   startFolderCreation: () => void;
   cancelFolderCreation: () => void;
   saveFolderCreation: (name: string) => Promise<void>;
@@ -49,6 +51,7 @@ export const useFolderCreation = ({
 }: UseFolderCreationProps): UseFolderCreationResult => {
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderTempId, setNewFolderTempId] = useState<string | null>(null);
+  const [newFolderDefaultName, setNewFolderDefaultName] = useState('');
   const previousPathRef = useRef<string | undefined>(currentFolder?.path);
 
   const messages = useMemo(
@@ -65,6 +68,7 @@ export const useFolderCreation = ({
     if (previousPathRef.current !== currentPath && isCreatingFolder) {
       setIsCreatingFolder(false);
       setNewFolderTempId(null);
+      setNewFolderDefaultName('');
     }
 
     previousPathRef.current = currentPath;
@@ -73,13 +77,19 @@ export const useFolderCreation = ({
   const startFolderCreation = useCallback(() => {
     if (isCreatingFolder) return;
     const tempId = `__new_folder_${Date.now()}`;
+    const siblingFolders = (currentFolder?.items ?? []).filter(
+      (item) => item.nodeType === DialFileNodeType.FOLDER,
+    );
+    const defaultName = getNextFolderName(siblingFolders);
     setNewFolderTempId(tempId);
+    setNewFolderDefaultName(defaultName);
     setIsCreatingFolder(true);
-  }, [isCreatingFolder]);
+  }, [isCreatingFolder, currentFolder]);
 
   const cancelFolderCreation = useCallback(() => {
     setIsCreatingFolder(false);
     setNewFolderTempId(null);
+    setNewFolderDefaultName('');
   }, []);
 
   const validateFolderName = useCallback(
@@ -151,6 +161,7 @@ export const useFolderCreation = ({
   return {
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,

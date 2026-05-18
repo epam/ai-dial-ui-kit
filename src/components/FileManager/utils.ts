@@ -2,6 +2,7 @@ import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import { extensions } from 'mime-types';
 import type { ReactNode } from 'react';
+import { DEFAULT_FOLDER_BASE_NAME } from './constants';
 import type { FileManagerGridRow } from './FileManagerContext';
 
 export const findNodeByPath = (
@@ -272,4 +273,29 @@ export const getRowTooltip = (
     );
   }
   return undefined;
+};
+
+export const getNextFolderName = (existingFolders: DialFile[]): string => {
+  const prefix = `${DEFAULT_FOLDER_BASE_NAME} `;
+  const regex = new RegExp(`^${DEFAULT_FOLDER_BASE_NAME} (\\d+)$`);
+
+  const existingNames = new Set(
+    existingFolders.map((f) => f.name.toLowerCase()),
+  );
+
+  const maxNumber = existingFolders
+    .map((f) => {
+      const match = f.name.match(regex);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .reduce((max, n) => Math.max(max, n), 0);
+
+  let candidate = `${prefix}${maxNumber + 1}`;
+  let counter = maxNumber + 1;
+  while (existingNames.has(candidate.toLowerCase())) {
+    counter++;
+    candidate = `${prefix}${counter}`;
+  }
+
+  return candidate;
 };

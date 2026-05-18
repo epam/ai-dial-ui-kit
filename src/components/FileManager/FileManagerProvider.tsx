@@ -468,6 +468,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const {
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     startFolderCreation: startFolderCreationBase,
     cancelFolderCreation,
     saveFolderCreation,
@@ -538,7 +539,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       if (isCreatingFolder && newFolderTempId) {
         searchMapped.unshift({
           id: newFolderTempId,
-          name: '',
+          name: newFolderDefaultName,
           updatedAt: undefined,
           author: undefined,
           path: currentPath ?? '/',
@@ -599,7 +600,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     if (isCreatingFolder && newFolderTempId && !query) {
       mapped.unshift({
         id: newFolderTempId,
-        name: '',
+        name: newFolderDefaultName,
         updatedAt: undefined,
         author: undefined,
         path: currentPath ?? '/',
@@ -634,6 +635,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     showFiles,
     showFolders,
     currentPath,
@@ -838,6 +840,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
