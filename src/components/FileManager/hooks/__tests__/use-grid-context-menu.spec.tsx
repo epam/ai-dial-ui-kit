@@ -93,6 +93,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -113,6 +115,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [testFile.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -143,6 +147,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [testFolder.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -178,6 +184,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -203,6 +211,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -230,6 +240,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -257,6 +269,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -284,6 +298,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -311,6 +327,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -338,6 +356,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete,
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -370,6 +390,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete,
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -396,6 +418,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo,
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -422,6 +446,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -446,6 +472,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare,
         sharedWithMeIds: [testFile.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -474,6 +502,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare,
         sharedWithMeIds: [testFolder.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -505,6 +535,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onUnshare: vi.fn(),
         onRemoveAccess,
         sharedByMePaths: new Set([testFile.path]),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -536,6 +568,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onUnshare: vi.fn(),
         onRemoveAccess,
         sharedByMePaths: new Set([testFolder.path]),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -563,6 +597,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [testFile.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -586,6 +622,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       onDelete: vi.fn(),
       onInfo: vi.fn(),
       onUnshare: vi.fn(),
+      onGridCreateSiblingFolder: vi.fn(),
+      onGridCreateChildFolder: vi.fn(),
     };
 
     const sharedWithMeIds: string[] = [];
@@ -619,6 +657,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -645,6 +685,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [testFile.path, testFolder.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -680,6 +722,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
           onDelete: vi.fn(),
           onInfo: vi.fn(),
           onUnshare: vi.fn(),
+          onGridCreateSiblingFolder: vi.fn(),
+          onGridCreateChildFolder: vi.fn(),
         }),
       { initialProps: { onDuplicate: onDuplicate1 } },
     );
@@ -711,6 +755,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
       onDelete: vi.fn(),
       onInfo: vi.fn(),
       onUnshare: vi.fn(),
+      onGridCreateSiblingFolder: vi.fn(),
+      onGridCreateChildFolder: vi.fn(),
     };
 
     const { result } = renderHook(() =>
@@ -747,6 +793,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         sharedWithMeIds: [testFile.path],
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -775,6 +823,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
           onInfo: vi.fn(),
           onUnshare,
           sharedWithMeIds: [testFile.path],
+          onGridCreateSiblingFolder: vi.fn(),
+          onGridCreateChildFolder: vi.fn(),
         }),
       { initialProps: { onUnshare: onUnshare1 } },
     );
@@ -808,6 +858,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -831,6 +883,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -852,6 +906,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -873,6 +929,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -896,6 +954,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -917,6 +977,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onDelete: vi.fn(),
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
@@ -939,6 +1001,8 @@ describe('Dial UI Kit :: useGridContextMenu', () => {
         onInfo: vi.fn(),
         onUnshare: vi.fn(),
         forbiddenSymbolsRegExp: /[!@#%^&*(),.?":{}|<>]/gy,
+        onGridCreateSiblingFolder: vi.fn(),
+        onGridCreateChildFolder: vi.fn(),
       }),
     );
 
