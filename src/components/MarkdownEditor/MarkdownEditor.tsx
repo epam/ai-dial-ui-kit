@@ -1,6 +1,8 @@
-import { EditorThemes } from '@/types/editor';
 import MDEditor, { type PreviewType } from '@uiw/react-md-editor';
 import type { FC, ReactNode } from 'react';
+
+import { EditorThemes } from '@/types/editor';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialMarkdownEditorProps {
   value?: string;
@@ -46,7 +48,10 @@ export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
   const showPlaceholder = placeholder !== undefined && !value;
 
   return (
-    <div data-color-mode={theme} className={`relative ${className ?? ''}`}>
+    <div
+      data-color-mode={theme}
+      className={mergeClasses('relative', className)}
+    >
       <MDEditor
         value={value}
         onChange={(val) => onChange?.(val || '')}
