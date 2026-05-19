@@ -105,11 +105,14 @@ export interface FileManagerContextValue {
   destinationFolderMode: DestinationFolderMode;
   handleSetCopiedFiles: (files: DialFile[]) => void;
   handleSetMovedFiles: (files: DialFile[]) => void;
-  handleAddSibling?: (files: DialFile[]) => void;
-  handleAddChild?: (files: DialFile[]) => void;
+  handleGridAddSibling?: (files: DialFile[]) => void;
+  handleGridAddChild?: (files: DialFile[]) => void;
+  handleTreeAddSibling?: (files: DialFile[]) => void;
+  handleTreeAddChild?: (files: DialFile[]) => void;
 
   renamedPath?: string;
   renamedItem?: DialFile;
+  createdFolderPath?: string | null;
   onRename: (file: string) => void;
   onRenameSave: (value: string) => void;
   onRenameCancel: () => void;

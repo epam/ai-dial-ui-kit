@@ -65,6 +65,7 @@ import {
   DialFileManagerTabs,
   FileManagerColumnKey,
   FileManagerRenameTriggerView,
+  FileManagerCreateFolderTriggerView,
 } from '@/types/file-manager';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DialNoDataContent } from '../NoDataContent/NoDataContent';
@@ -117,6 +118,7 @@ import {
 import { useFileManagerContext } from './hooks/use-file-manager-context';
 import { useGridContextMenu } from './hooks/use-grid-context-menu';
 import { findNodeByPath, getRowTooltip } from './utils';
+import { useTriggerViewCreateFolder } from './hooks/use-trigger-view-create-folder';
 
 type GridRow = FileManagerGridRow;
 
@@ -320,8 +322,6 @@ export interface DialFileManagerProps {
   ) => void;
   onDeleteFiles?: (items: DialDeletedItem[], sourceFolder: string) => void;
   onDownloadFiles?: (items: DialFile[]) => void;
-  onAddSibling?: (items: DialFile[]) => void;
-  onAddChild?: (items: DialFile[]) => void;
 
   onRenameValidate?: (value: string, item: DialFile) => string | null;
   renameValidationMessages?: RenameValidationMessages;
@@ -477,8 +477,6 @@ export interface DialFileManagerProps {
  * @param [onCopyFiles] - Callback fired when files copy-paste
  * @param [onMoveToFiles] - Callback fired when files cut-paste or rename
  * @param [onDeleteFiles] - Callback fired when files are deleted
- * @param [onAddSibling] -  Callback fired when when a new folder is added as a sibling to the selected folder
- * @param [onAddChild] - Callback fired when when a new folder is added as a child to the selected folder
  *
  * @param [onRenameValidate] - Optional callback to validate a file or folder name during renaming. Should return an error message string if the name is invalid, or null if it's valid.
  * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `${AlertVariant.Warning}__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
@@ -579,8 +577,10 @@ export const DialFileManagerView: FC = () => {
     handleDuplicate,
     handleCopyTo,
     handleMoveTo,
-    handleAddSibling,
-    handleAddChild,
+    handleGridAddSibling,
+    handleGridAddChild,
+    handleTreeAddSibling,
+    handleTreeAddChild,
 
     handleDownloadFiles,
 
@@ -595,6 +595,7 @@ export const DialFileManagerView: FC = () => {
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    createdFolderPath,
     forbiddenSymbolsRegExp,
     forbiddenSymbolsTooltip,
     getDisplayName,
@@ -664,6 +665,7 @@ export const DialFileManagerView: FC = () => {
     nonClickableTableColumns,
     hideSearchPathItemName,
     showHiddenFileSwitcherInDestinationPopup,
+    newFolderDefaultName,
   } = useFileManagerContext();
 
   const {
@@ -678,6 +680,19 @@ export const DialFileManagerView: FC = () => {
 
   const { renameTriggerView, onGridRename, onTreeRename } =
     useTriggerViewRename({ onRename });
+
+  const {
+    createFolderTriggerView,
+    onGridCreateSiblingFolder,
+    onTreeCreateSiblingFolder,
+    onGridCreateChildFolder,
+    onTreeCreateChildFolder,
+  } = useTriggerViewCreateFolder({
+    onGridAddSibling: handleGridAddSibling,
+    onGridAddChild: handleGridAddChild,
+    onTreeAddSibling: handleTreeAddSibling,
+    onTreeAddChild: handleTreeAddChild,
+  });
 
   const sidebarThrottledRef = useRef<number | null>(null);
 
@@ -769,7 +784,6 @@ export const DialFileManagerView: FC = () => {
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
-          typeof handleAddSibling === 'function' &&
           file.nodeType === DialFileNodeType.FOLDER &&
           !isRootNode
         ) {
@@ -783,13 +797,12 @@ export const DialFileManagerView: FC = () => {
                 className="text-secondary"
               />
             ),
-            onClick: () => handleAddSibling([file]),
+            onClick: () => onTreeCreateSiblingFolder([file]),
           });
         }
 
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddChild] &&
-          typeof handleAddChild === 'function' &&
           file.nodeType === DialFileNodeType.FOLDER &&
           !hasRestrictedSymbolsInName
         ) {
@@ -803,7 +816,7 @@ export const DialFileManagerView: FC = () => {
                 className="text-secondary"
               />
             ),
-            onClick: () => handleAddChild([file]),
+            onClick: () => onTreeCreateChildFolder([file]),
           });
         }
 
@@ -980,9 +993,7 @@ export const DialFileManagerView: FC = () => {
     },
     [
       treeOptions?.actionLabels,
-      handleAddSibling,
       forbiddenSymbolsRegExp,
-      handleAddChild,
       onManagePermissions,
       handleDuplicate,
       handleSetCopiedFiles,
@@ -995,6 +1006,8 @@ export const DialFileManagerView: FC = () => {
       sharedWithMeIds,
       sharedByMePaths,
       openDeleteConfirmation,
+      onTreeCreateChildFolder,
+      onTreeCreateSiblingFolder,
     ],
   );
 
@@ -1154,6 +1167,15 @@ export const DialFileManagerView: FC = () => {
               onRenameSave={onRenameSave}
               onRenameCancel={onRenameCancel}
               onRenameValidate={onRenameValidate}
+              createdFolderPath={
+                createFolderTriggerView ===
+                FileManagerCreateFolderTriggerView.Tree
+                  ? createdFolderPath
+                  : null
+              }
+              onCreateFolderCancel={cancelFolderCreation}
+              onCreateFolderSave={saveFolderCreation}
+              newFolderDefaultName={newFolderDefaultName}
             />
           </DialCollapsibleSidebar>
         </DialConditionalResizableContainer>
@@ -1179,10 +1201,15 @@ export const DialFileManagerView: FC = () => {
     areHiddenFilesVisible,
     getTreeContextMenuItems,
     renameTriggerView,
+    createFolderTriggerView,
     renamedPath,
     onRenameSave,
     onRenameCancel,
     onRenameValidate,
+    createdFolderPath,
+    cancelFolderCreation,
+    saveFolderCreation,
+    newFolderDefaultName,
   ]);
 
   const gridContextMenu = useGridContextMenu({
@@ -1205,8 +1232,6 @@ export const DialFileManagerView: FC = () => {
     onRemoveAccess: (file) => onRemoveFilesAccess?.([file]),
     sharedWithMeIds,
     sharedByMePaths,
-    onAddChild: (file) => handleAddChild?.([file]),
-    onAddSibling: (file) => handleAddSibling?.([file]),
     onManagePermissions: (path) => onManagePermissions?.(path),
     onPreview: (path) => onPreview?.(path),
     onOpenInNewTab: (file) => onOpenInNewTab?.(file),
@@ -1214,6 +1239,8 @@ export const DialFileManagerView: FC = () => {
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
     forbiddenSymbolsRegExp,
+    onGridCreateSiblingFolder,
+    onGridCreateChildFolder,
   });
 
   const getGridContextMenuItems = useCallback(
@@ -1342,6 +1369,7 @@ export const DialFileManagerView: FC = () => {
         validateFolderName,
         renamedItem,
         renamedPath,
+        createdFolderPath,
         newFolderTempId,
         sharedByMePaths,
         selectedPaths,
@@ -1349,6 +1377,8 @@ export const DialFileManagerView: FC = () => {
         forbiddenSymbolsRegExp,
         forbiddenSymbolsTooltip,
         hideSearchPathItemName,
+        newFolderDefaultName,
+        filesLoading,
       } as FileManagerGridContext,
     }),
     [
@@ -1365,6 +1395,7 @@ export const DialFileManagerView: FC = () => {
       validateFolderName,
       renamedItem,
       renamedPath,
+      createdFolderPath,
       newFolderTempId,
       sharedByMePaths,
       selectedPaths,
@@ -1372,6 +1403,8 @@ export const DialFileManagerView: FC = () => {
       forbiddenSymbolsRegExp,
       forbiddenSymbolsTooltip,
       hideSearchPathItemName,
+      newFolderDefaultName,
+      filesLoading,
     ],
   );
 

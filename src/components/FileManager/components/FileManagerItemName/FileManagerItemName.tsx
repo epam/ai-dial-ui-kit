@@ -16,6 +16,7 @@ export interface DialFileManagerItemNameProps extends DialFileManagerItemNameInp
   elementId: string;
   editing?: boolean;
   loading?: boolean;
+  creating?: boolean;
   shared?: boolean;
   details?: ReactNode;
   sharedIndicatorTooltip?: ReactNode;
@@ -23,6 +24,8 @@ export interface DialFileManagerItemNameProps extends DialFileManagerItemNameInp
   validate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
+  onCreateFolderSave?: (value: string) => void;
+  onCreateFolderCancel?: () => void;
   hideTooltip?: boolean;
   forbiddenSymbolsRegExp?: RegExp;
   forbiddenSymbolsTooltip?: ReactNode;
@@ -67,12 +70,15 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
   elementId,
   editing = false,
   loading = false,
+  creating = false,
   shared = false,
   iconSize = BASE_ICON_SIZE,
   validate,
   onSave,
   fileExtension,
   onCancel,
+  onCreateFolderCancel,
+  onCreateFolderSave,
   inputContainerClassName,
   sharedIndicatorClassName,
   sharedIndicatorTooltip,
@@ -85,12 +91,16 @@ export const DialFileManagerItemName: FC<DialFileManagerItemNameProps> = ({
     useEditableItem({
       value: name,
       isEditing: editing,
+      isCreating: creating,
+      isLoading: loading,
       onValidate: validate,
       onCancel,
       onSave,
+      onCreateFolderCancel,
+      onCreateFolderSave,
     });
 
-  if (!editing) {
+  if (!editing && !creating) {
     const tooltipContent = getForbiddenSymbolsTooltip(
       {
         name,
