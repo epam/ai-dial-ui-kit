@@ -45,11 +45,11 @@ export interface UseFolderCreationResult {
 }
 
 const DEFAULT_VALIDATION_MESSAGES: Required<FolderCreationValidationMessages> =
-{
-  emptyName: 'Folder name cannot be empty',
-  duplicateName: 'A folder with this name already exists',
-  hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
-};
+  {
+    emptyName: 'Folder name cannot be empty',
+    duplicateName: 'A folder with this name already exists',
+    hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
+  };
 
 export const useFolderCreation = ({
   currentFolder,
@@ -83,7 +83,10 @@ export const useFolderCreation = ({
       return currentFolder;
     }
     if (creationType === FileManagerCreateFolderType.Sibling && targetFile) {
-      const target = findFolderForPath(items || [], targetFile.parentPath || '');
+      const target = findFolderForPath(
+        items || [],
+        targetFile.parentPath || '',
+      );
       return {
         path: targetFile.parentPath,
         items: target?.items || [],
@@ -132,7 +135,10 @@ export const useFolderCreation = ({
 
       previousPathRef.current = target?.parentPath || '/';
       const tempId = `__new_folder_${Date.now()}`;
-      const parentFolder = findFolderForPath(items || [], target?.parentPath || '/');
+      const parentFolder = findFolderForPath(
+        items || [],
+        target?.parentPath || '/',
+      );
       const siblingFolders = (parentFolder?.items ?? []).filter(
         (item) => item.nodeType === DialFileNodeType.FOLDER,
       );
@@ -172,7 +178,10 @@ export const useFolderCreation = ({
       if (isCreatingFolder) return;
 
       previousPathRef.current = target?.parentPath || '/';
-      const parentFolder = findFolderForPath(items || [], target?.parentPath || '/');
+      const parentFolder = findFolderForPath(
+        items || [],
+        target?.parentPath || '/',
+      );
       const siblingFolders = (parentFolder?.items ?? []).filter(
         (item) => item.nodeType === DialFileNodeType.FOLDER,
       );
