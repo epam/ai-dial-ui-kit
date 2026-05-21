@@ -88,4 +88,34 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
     const editor = screen.getByRole('textbox');
     expect(editor).toBeInTheDocument();
   });
+
+  test('Should render placeholder when value is empty', () => {
+    render(
+      <DialMarkdownEditor
+        value=""
+        placeholder={<span>Start typing here…</span>}
+        theme={EditorThemes.dark}
+      />,
+    );
+
+    expect(screen.getByText('Start typing here…')).toBeInTheDocument();
+  });
+
+  test('Should not render placeholder when value is provided', () => {
+    render(
+      <DialMarkdownEditor
+        value="# Hello"
+        placeholder={<span>Start typing here…</span>}
+        theme={EditorThemes.dark}
+      />,
+    );
+
+    expect(screen.queryByText('Start typing here…')).not.toBeInTheDocument();
+  });
+
+  test('Should not render placeholder when placeholder prop is not provided', () => {
+    render(<DialMarkdownEditor value="" theme={EditorThemes.dark} />);
+
+    expect(screen.queryByText('Start typing here…')).not.toBeInTheDocument();
+  });
 });
