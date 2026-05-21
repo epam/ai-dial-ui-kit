@@ -26,7 +26,7 @@ export interface UseFolderCreationProps {
     parentFolder: DialFile,
   ) => string | null;
   validationMessages?: FolderCreationValidationMessages;
-  items?: DialFile[];
+  items: DialFile[];
 }
 
 export interface UseFolderCreationResult {
