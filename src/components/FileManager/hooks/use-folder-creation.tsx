@@ -26,7 +26,7 @@ export interface UseFolderCreationProps {
     parentFolder: DialFile,
   ) => string | null;
   validationMessages?: FolderCreationValidationMessages;
-  items: DialFile[];
+  items?: DialFile[];
 }
 
 export interface UseFolderCreationResult {
@@ -56,7 +56,7 @@ export const useFolderCreation = ({
   onCreateFolder,
   onValidateFolderName,
   validationMessages,
-  items,
+  items = [],
 }: UseFolderCreationProps): UseFolderCreationResult => {
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderTempId, setNewFolderTempId] = useState<string | null>(null);
@@ -258,6 +258,8 @@ export const useFolderCreation = ({
         return;
       }
 
+      cancelFolderCreation();
+
       const parentPath = targetFolder?.path ?? '/';
       const folderPath = `${parentPath}/${trimmedName}`;
       const placeholderFilePath = `${folderPath}/${FOLDER_PLACEHOLDER_FILE_NAME}`;
@@ -274,8 +276,6 @@ export const useFolderCreation = ({
       if (onCreateFolder) {
         await onCreateFolder(uploadFileItem, folderPath, placeholderFilePath);
       }
-
-      cancelFolderCreation();
     },
     [targetFolder, onCreateFolder, cancelFolderCreation],
   );
