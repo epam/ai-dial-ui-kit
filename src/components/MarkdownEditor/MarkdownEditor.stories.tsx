@@ -1,6 +1,7 @@
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import React, { useState } from 'react';
 import {
   DialMarkdownEditor,
   type DialMarkdownEditorProps,
@@ -42,6 +43,10 @@ const meta = {
       action: 'changed',
       description: 'Callback fired when the editor content changes',
     },
+    placeholder: {
+      control: false,
+      description: 'Content to display when the editor value is empty',
+    },
   },
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor.',
@@ -54,11 +59,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const renderWithContainer = (args: Story['args']) => (
-  <div className="w-[600px]">
-    <DialMarkdownEditor {...args} value={args?.value ?? ''} />
-  </div>
-);
+const renderWithContainer = (args: Story['args']) => {
+  const [value, setValue] = useState(args?.value ?? '');
+  return (
+    <div className="w-[600px]">
+      <DialMarkdownEditor
+        {...args}
+        value={value}
+        onChange={(val) => {
+          setValue(val);
+          args?.onChange?.(val);
+        }}
+      />
+    </div>
+  );
+};
 
 // Stories for DialMarkdownEditor
 export const Default: Story = {
@@ -88,6 +103,16 @@ export const PreviewOnly: Story = {
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor in preview mode.',
     preview: 'preview',
+  },
+  render: renderWithContainer,
+};
+
+export const WithPlaceholder: Story = {
+  args: {
+    value: '',
+    placeholder: (
+      <span className="italic">Start typing your markdown here…</span>
+    ),
   },
   render: renderWithContainer,
 };

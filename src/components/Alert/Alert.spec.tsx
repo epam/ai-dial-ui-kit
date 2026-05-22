@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
+import { AlertVariant } from '@/types/alert';
 import { DialAlert } from './Alert';
 
 describe('Dial UI Kit :: DialAlert', () => {
@@ -42,5 +43,22 @@ describe('Dial UI Kit :: DialAlert', () => {
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalledWith(expect.any(Object));
     expect(onClose.mock.calls[0][0]).toHaveProperty('type', 'click');
+  });
+
+  test('Should render title above message when title is provided', () => {
+    render(<DialAlert title="Alert title" message="Alert message" />);
+    const title = screen.getByText('Alert title');
+    const message = screen.getByText('Alert message');
+    expect(title).toBeInTheDocument();
+    expect(message).toBeInTheDocument();
+    expect(title).toHaveClass('dial-small-semi-text');
+    expect(title.compareDocumentPosition(message)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  test('Should render spinner for Loading variant', () => {
+    render(<DialAlert variant={AlertVariant.Loading} message="Loading…" />);
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });

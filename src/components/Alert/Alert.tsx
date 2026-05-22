@@ -1,14 +1,15 @@
 import { IconX } from '@tabler/icons-react';
 import {
   type FC,
+  type HTMLAttributes,
   type MouseEvent,
   type ReactNode,
   useMemo,
-  type HTMLAttributes,
 } from 'react';
 
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { AlertVariant } from '@/types/alert';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
@@ -16,10 +17,13 @@ import {
   alertVariantClassNameMap,
   variantIcons,
 } from './constants';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
 
-export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
+export interface DialAlertProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'title'
+> {
   variant?: AlertVariant;
+  title?: ReactNode;
   message: ReactNode;
   closable?: boolean;
   iconSize?: number;
@@ -43,6 +47,7 @@ export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
  *
  * <DialAlert
  *   variant={AlertVariant.Success}
+ *   title="Saved"
  *   message="Changes saved successfully."
  * />
  *
@@ -54,14 +59,14 @@ export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Warning}
- *   message="Custom alert"
- *   aria-live="polite"
- *   id="warning-alert"
+ *   variant={AlertVariant.Loading}
+ *   title="Processing"
+ *   message="Please wait..."
  * />
  * ```
  *
  * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
+ * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
  * @param [className] - Additional CSS classes applied to the alert container
  * @param [closable=false] - Whether the alert has a close button
@@ -71,6 +76,7 @@ export interface DialAlertProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const DialAlert: FC<DialAlertProps> = ({
   variant = AlertVariant.Info,
+  title,
   message,
   className,
   iconSize = 24,
@@ -94,9 +100,16 @@ export const DialAlert: FC<DialAlertProps> = ({
         className,
       )}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 flex-1">
         <DialIcon icon={icon} />
-        <div className="text-primary">{message}</div>
+        {title ? (
+          <div className="flex flex-col gap-1 text-primary">
+            <div className="dial-small-semi-text">{title}</div>
+            <div className="dial-small-text">{message}</div>
+          </div>
+        ) : (
+          <div className="dial-small-text text-primary">{message}</div>
+        )}
       </div>
 
       {children}
@@ -104,7 +117,7 @@ export const DialAlert: FC<DialAlertProps> = ({
         <DialButton
           className="ml-2 text-secondary hover:text-primary"
           aria-label="Close alert"
-          iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
+          iconBefore={<IconX size={DIAL_ICON_SIZE.LG} />}
           onClick={onClose}
         />
       )}

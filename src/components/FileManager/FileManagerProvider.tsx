@@ -16,9 +16,11 @@ import {
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
+  isFileSelectable,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
   normalizeToLowerCase,
+  splitPathAndName,
 } from './utils';
 import { useShowHiddenFiles } from './hooks/use-show-hidden-files';
 import { useCollapseTree } from './hooks/use-collapse-tree';
@@ -96,8 +98,6 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   onDeleteFiles,
   onDownloadFiles,
   onRenameValidate,
-  onAddSibling,
-  onAddChild,
   renameValidationMessages,
   forbiddenSymbolsRegExp = NOT_ALLOWED_SYMBOLS_REGEXP,
   forbiddenSymbolsTooltip,
@@ -168,17 +168,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const wrappedOnCreateFolder = useCallback(
     (file: DialUploadFileItem, folderPath: string, id: string) => {
       if (autoSelectUploadedItems) {
-        const lastSlashIndex = folderPath.lastIndexOf('/');
-        const createdFolderName =
-          lastSlashIndex >= 0
-            ? folderPath.slice(lastSlashIndex + 1)
-            : folderPath;
-        const destinationFolder =
-          lastSlashIndex >= 0 ? folderPath.slice(0, lastSlashIndex) : '';
-
+        const { parent, name } = splitPathAndName(folderPath);
         pendingAutoSelectRef.current = {
-          fileNames: new Set([createdFolderName]),
-          destinationFolder,
+          fileNames: new Set([name]),
+          destinationFolder: parent,
         };
       }
       onCreateFolder?.(file, folderPath, id);
@@ -473,7 +466,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const {
     isCreatingFolder,
     newFolderTempId,
+    createdFolderPath,
+    newFolderDefaultName,
     startFolderCreation: startFolderCreationBase,
+    startGridSiblingFolderCreation,
+    startTreeSiblingFolderCreation,
+    startGridChildFolderCreation,
+    startTreeChildFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,
     validateFolderName,
@@ -482,6 +481,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onCreateFolder: wrappedOnCreateFolder,
     onValidateFolderName: onCreateFolderValidate,
     validationMessages: folderCreationValidationMessages,
+    items,
   });
 
   const startFolderCreation = useCallback(() => {
@@ -543,7 +543,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       if (isCreatingFolder && newFolderTempId) {
         searchMapped.unshift({
           id: newFolderTempId,
-          name: '',
+          name: newFolderDefaultName,
           updatedAt: undefined,
           author: undefined,
           path: currentPath ?? '/',
@@ -604,7 +604,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     if (isCreatingFolder && newFolderTempId && !query) {
       mapped.unshift({
         id: newFolderTempId,
-        name: '',
+        name: newFolderDefaultName,
         updatedAt: undefined,
         author: undefined,
         path: currentPath ?? '/',
@@ -639,6 +639,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     areHiddenFilesVisible,
     isCreatingFolder,
     newFolderTempId,
+    newFolderDefaultName,
     showFiles,
     showFolders,
     currentPath,
@@ -658,15 +659,22 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     const matchedPaths = new Set<string>();
     for (const item of folder.items) {
-      if (pending.fileNames.has(item.name)) {
-        matchedPaths.add(item.path);
-      }
+      if (!pending.fileNames.has(item.name)) continue;
+      if (!isFileSelectable(item, allowedFileTypes, maxSelectableFileSize))
+        continue;
+      matchedPaths.add(item.path);
     }
     if (matchedPaths.size > 0) {
       setSelectedPaths(matchedPaths);
       pendingAutoSelectRef.current = null;
     }
-  }, [items, currentPath, setSelectedPaths]);
+  }, [
+    items,
+    currentPath,
+    setSelectedPaths,
+    allowedFileTypes,
+    maxSelectableFileSize,
+  ]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {
@@ -703,6 +711,62 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     expandedPathsLength: expandedPaths.size,
     additionalButtons: treeOptions?.additionalButtons,
   });
+
+  const handleGridAddSibling = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        startGridSiblingFolderCreation(files[0]);
+      }
+    },
+    [handleSearchClear, startGridSiblingFolderCreation],
+  );
+
+  const handleGridAddChild = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        setCurrentPath(files[0].path);
+        setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
+        startGridChildFolderCreation(files[0]);
+      }
+    },
+    [
+      handleSearchClear,
+      startGridChildFolderCreation,
+      expandedPaths,
+      setExpandedPaths,
+      setCurrentPath,
+    ],
+  );
+
+  const handleTreeAddSibling = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        startTreeSiblingFolderCreation(files[0]);
+      }
+    },
+    [handleSearchClear, startTreeSiblingFolderCreation],
+  );
+
+  const handleTreeAddChild = useCallback(
+    (files: DialFile[]) => {
+      if (files.length > 0) {
+        handleSearchClear();
+        setCurrentPath(files[0].path);
+        setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
+        startTreeChildFolderCreation(files[0]);
+      }
+    },
+    [
+      handleSearchClear,
+      startTreeChildFolderCreation,
+      setCurrentPath,
+      expandedPaths,
+      setExpandedPaths,
+    ],
+  );
 
   const {
     isMetadataPopupOpen,
@@ -786,8 +850,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleCloseDestinationFolderPopup,
     handleOpenDestinationFolderPopup,
     destinationFolderMode,
-    handleAddSibling: onAddSibling,
-    handleAddChild: onAddChild,
+    handleGridAddSibling,
+    handleGridAddChild,
+    handleTreeAddSibling,
+    handleTreeAddChild,
 
     handleDownloadFiles,
 
@@ -836,6 +902,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
     isCreatingFolder,
     newFolderTempId,
+    createdFolderPath,
+    newFolderDefaultName,
     startFolderCreation,
     cancelFolderCreation,
     saveFolderCreation,

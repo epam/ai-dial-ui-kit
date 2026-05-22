@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import type { FileManagerGridRow } from './FileManagerContext';
+import type { DialFileAcceptType } from '@/models/file-manager';
 import { DialTooltipContainer } from '../Tooltip/TooltipContainer';
 import { DialTooltipTrigger } from '../Tooltip/TooltipTrigger';
 import classNames from 'classnames';
@@ -12,10 +13,10 @@ interface FileManagerTooltipProps {
   getDisabledTooltip?: (row: FileManagerGridRow) => string | undefined;
   getRowDisabledTooltip: (
     row: FileManagerGridRow,
-    allowedFileTypes?: string[],
+    allowedFileTypes?: DialFileAcceptType[],
     maxSelectableFileSize?: number,
   ) => string | undefined;
-  allowedFileTypes?: string[];
+  allowedFileTypes?: DialFileAcceptType[];
   maxSelectableFileSize?: number;
 }
 
@@ -92,8 +93,9 @@ export const FileManagerTooltip = ({
   const hoveredRowTooltipContent = useMemo(() => {
     if (!hoveredRowFile) return undefined;
 
-    if (getDisabledTooltip && hoveredRowFile.folderId) {
-      return getDisabledTooltip(hoveredRowFile);
+    if (getDisabledTooltip) {
+      const tooltip = getDisabledTooltip(hoveredRowFile);
+      if (tooltip) return tooltip;
     }
 
     return getRowDisabledTooltip(

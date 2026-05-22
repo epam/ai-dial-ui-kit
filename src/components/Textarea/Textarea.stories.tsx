@@ -73,36 +73,6 @@ export const Default: Story = {
   },
 };
 
-export const Filled: Story = {
-  render: InteractiveTextarea,
-  args: {
-    id: 'textarea-with-value',
-    placeholder: 'Enter your text here...',
-    value: 'This is some default text in the textarea',
-  },
-};
-
-export const Disabled: Story = {
-  render: InteractiveTextarea,
-  args: {
-    id: 'disabled-textarea',
-    placeholder: 'This textarea is disabled',
-    value: 'This textarea is disabled and cannot be edited',
-    disabled: true,
-  },
-};
-
-export const Invalid: Story = {
-  render: InteractiveTextarea,
-  args: {
-    id: 'invalid-textarea',
-    placeholder: 'Enter valid text...',
-    value: 'This text has validation errors',
-    invalid: true,
-    error: 'This field is required and must be valid.',
-  },
-};
-
 export const Resize: Story = {
   render: InteractiveTextarea,
   args: {
