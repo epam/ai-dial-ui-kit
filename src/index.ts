@@ -60,6 +60,8 @@ export {
 } from './components/IconButton/IconButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
+export { DialFabButton } from './components/FabButton/FabButton';
+export type { DialFabButtonProps } from './components/FabButton/FabButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
