@@ -199,6 +199,31 @@
   @apply dial-button-solid-disable;
 }
 
+.dial-fab-button {
+  @apply flex items-center justify-center rounded-full;
+  @apply h-[40px] w-[40px];
+  @apply border border-solid border-tertiary;
+  @apply bg-layer-3 text-primary;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      @apply bg-controls-neutral-hover;
+    }
+  }
+
+  &:active:not(:disabled) {
+    @apply bg-controls-neutral-active;
+  }
+
+  &:focus-visible {
+    @apply outline-none border-focus;
+  }
+
+  &:disabled {
+    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+  }
+}
+
 .dial-neutral-rounded-button {
   @apply dial-base-button bg-transparent text-controls-neutral;
   @apply border-primary rounded-full;
