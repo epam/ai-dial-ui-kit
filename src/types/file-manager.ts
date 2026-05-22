@@ -44,6 +44,17 @@ export enum FileManagerRenameTriggerView {
   Grid = 'grid',
 }
 
+export enum FileManagerCreateFolderTriggerView {
+  Tree = 'tree',
+  Grid = 'grid',
+}
+
+export enum FileManagerCreateFolderType {
+  Folder = 'folder',
+  Child = 'child',
+  Sibling = 'sibling',
+}
+
 export enum FileManagerColumnKey {
   Name = 'name',
   UpdatedAt = 'updatedAt',

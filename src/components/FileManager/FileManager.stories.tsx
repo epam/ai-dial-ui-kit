@@ -1579,11 +1579,8 @@ export const WithInsertSiblingChildrenActions: Story = {
             rename: 'Rename',
           },
         }}
-        onAddChild={(files) => {
-          alert(`Adding child to: ${files.map((f) => f.name).join(',')}`);
-        }}
-        onAddSibling={(files) => {
-          alert(`Adding sibling to: ${files.map((f) => f.name).join(',')}`);
+        onCreateFolder={(_, folder) => {
+          alert(`Folder added ${folder}`);
         }}
       />
     </div>

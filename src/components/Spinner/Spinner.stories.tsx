@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialSpinner, type DialSpinnerProps } from './Spinner';
 
 const meta = {
-  title: 'Feedback/Spinner',
+  title: 'DIAL/Status/Spinner',
   component: DialSpinner,
   parameters: {
     layout: 'padded',

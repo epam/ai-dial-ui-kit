@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type FC } from 'react';
-import { DialAlert, type DialAlertProps } from './Alert';
 import { AlertVariant } from '@/types/alert';
+import { DialAlert, type DialAlertProps } from './Alert';
 
 const meta = {
-  title: 'Feedback/Alert',
+  title: 'DIAL/Elements/Alert',
   component: DialAlert,
   parameters: {
     layout: 'padded',
@@ -23,8 +23,13 @@ const meta = {
         AlertVariant.Success,
         AlertVariant.Warning,
         AlertVariant.Error,
+        AlertVariant.Loading,
       ],
       description: 'Defines the visual style and icon of the alert',
+    },
+    title: {
+      control: { type: 'text' },
+      description: 'Optional heading displayed above the message in semibold',
     },
     message: {
       control: { type: 'text' },
@@ -61,28 +66,56 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Info: Story = {
-  args: { variant: AlertVariant.Info, message: 'Information alert' },
-};
+export const AllVariants: Story = {
+  render: () => (
+    <div className="p-6 flex flex-col gap-4">
+      <DialAlert variant={AlertVariant.Info} message="Info alert" />
+      <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
+      <DialAlert variant={AlertVariant.Error} message="Error alert" />
+      <DialAlert variant={AlertVariant.Success} message="Success alert" />
+      <DialAlert variant={AlertVariant.Loading} message="Loading alert" />
 
-export const Success: Story = {
-  args: { variant: AlertVariant.Success, message: 'Operation successful' },
-};
+      <div className="text-primary mt-2">With title + message</div>
+      <DialAlert
+        variant={AlertVariant.Info}
+        title="Info"
+        message="This is an informational message."
+        closable
+      />
+      <DialAlert
+        variant={AlertVariant.Warning}
+        title="Warning"
+        message="This is a warning message."
+        closable
+      />
 
-export const Warning: Story = {
-  args: { variant: AlertVariant.Warning, message: 'Be careful' },
-};
+      <DialAlert
+        variant={AlertVariant.Error}
+        title="Error"
+        message="This is an error message."
+        closable
+      />
 
-export const Error: Story = {
-  args: { variant: AlertVariant.Error, message: 'Something went wrong' },
-};
-
-export const Closable: Story = {
-  args: {
-    variant: AlertVariant.Success,
-    message: 'Closable alert example',
-    closable: true,
-    onClose: (e) => alert('Alert closed! Event: ' + e.type),
+      <DialAlert
+        variant={AlertVariant.Success}
+        title="Success"
+        message="This is a success message."
+        closable
+      />
+      <DialAlert
+        variant={AlertVariant.Loading}
+        title="Loading"
+        message="Loading data, please wait..."
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A comprehensive showcase of all alert variants including the Loading variant and title+message layout.',
+      },
+    },
   },
 };
 
@@ -120,43 +153,6 @@ export const CustomClass: Story = {
       description: {
         story:
           'An example of an alert with a custom CSS class applied to change its border style.',
-      },
-    },
-  },
-};
-
-const WithAccessibilityComponent: FC = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <DialAlert
-        variant={AlertVariant.Info}
-        message="Polite announcement (default)"
-        aria-live="polite"
-        id="polite-alert"
-      />
-      <DialAlert
-        variant={AlertVariant.Error}
-        message="Assertive announcement for critical errors"
-        aria-live="assertive"
-        aria-atomic="true"
-        id="assertive-alert"
-      />
-      <DialAlert
-        variant={AlertVariant.Warning}
-        message="Alert with custom ID"
-        id="custom-alert"
-      />
-    </div>
-  );
-};
-
-export const WithAccessibility: Story = {
-  render: () => <WithAccessibilityComponent />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Examples of alerts with enhanced accessibility attributes like `aria-live`, `aria-atomic`, and custom IDs.',
       },
     },
   },
@@ -200,113 +196,7 @@ export const Interactive: Story = {
     docs: {
       description: {
         story:
-          'An interactive example showing multiple closable alerts that can be dismissed. Demonstrates state management and dynamic alert rendering.',
-      },
-    },
-  },
-};
-
-const WithCustomHandlersComponent: FC = () => {
-  const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
-
-  return (
-    <div className="flex flex-col gap-4">
-      <DialAlert
-        variant={AlertVariant.Info}
-        message={
-          hovered ? 'Mouse is hovering over this alert!' : 'Hover over me'
-        }
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{ transition: 'all 0.3s' }}
-      />
-      <DialAlert
-        variant={AlertVariant.Success}
-        message={
-          clicked ? 'Alert was clicked!' : 'Click anywhere on this alert'
-        }
-        onClick={() => setClicked(true)}
-        style={{ cursor: 'pointer' }}
-      />
-      {clicked && (
-        <div className="text-secondary dial-small-text">
-          ✓ Alert click event triggered
-        </div>
-      )}
-    </div>
-  );
-};
-
-export const WithCustomHandlers: Story = {
-  render: () => <WithCustomHandlersComponent />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates using standard HTML event handlers like `onClick`, `onMouseEnter`, and `onMouseLeave` on alerts.',
-      },
-    },
-  },
-};
-
-export const WithInlineStyles: Story = {
-  args: {
-    variant: AlertVariant.Warning,
-    message: 'Alert with inline styles',
-    style: {
-      maxWidth: '400px',
-      margin: '0 auto',
-      backgroundColor: '#423189',
-      borderColor: '#6C5DD3',
-      color: '#FFFFFF',
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Example of using inline `style` prop to customize alert appearance.',
-      },
-    },
-  },
-};
-
-export const AllVariants: Story = {
-  render: () => (
-    <div className="p-6 flex flex-col gap-4">
-      <DialAlert variant={AlertVariant.Info} message="Info alert" />
-      <DialAlert variant={AlertVariant.Success} message="Success alert" />
-      <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
-      <DialAlert variant={AlertVariant.Error} message="Error alert" />
-      <div className="text-primary mt-2">Customized</div>
-      <DialAlert
-        variant={AlertVariant.Info}
-        iconSize={14}
-        className="py-1 px-2 w-fit"
-        message={
-          <span className="dial-tiny-text">
-            <b>Small</b> info alert
-          </span>
-        }
-      />
-      <DialAlert
-        closable
-        variant={AlertVariant.Error}
-        message="Closable error alert"
-      />
-      <DialAlert
-        variant={AlertVariant.Success}
-        message="Alert with custom ID"
-        id="success-notification"
-      />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'A comprehensive showcase of all alert variants with various configurations including custom IDs.',
+          'An interactive example showing multiple closable alerts that can be dismissed.',
       },
     },
   },

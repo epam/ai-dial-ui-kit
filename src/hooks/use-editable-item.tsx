@@ -10,10 +10,14 @@ import {
 export interface UseEditableItemOptions {
   value: string;
   isEditing: boolean;
+  isCreating?: boolean;
+  isLoading?: boolean;
   onValidate?: (value: string) => string | null;
   onSave?: (value: string) => void;
   onCancel?: () => void;
   restoreOnCancel?: boolean;
+  onCreateFolderSave?: (value: string) => void;
+  onCreateFolderCancel?: () => void;
 }
 
 interface UseEditableItemResult {
@@ -74,15 +78,20 @@ interface UseEditableItemResult {
 export function useEditableItem({
   value: initialValue,
   isEditing,
+  isCreating,
+  isLoading = false,
   restoreOnCancel = true,
   onValidate,
   onSave,
   onCancel,
+  onCreateFolderSave,
+  onCreateFolderCancel,
 }: UseEditableItemOptions): UseEditableItemResult {
   const [value, setValue] = useState(initialValue);
   const [invalid, setInvalid] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const cancelSavingRef = useRef<boolean>(false);
 
   const resetValidationState = useCallback((state = false, error = '') => {
     setInvalid(state);
@@ -123,23 +132,51 @@ export function useEditableItem({
 
   const save = useCallback(() => {
     if (validate(value)) {
-      onSave?.(value);
+      if (isCreating && !cancelSavingRef.current && !isLoading) {
+        onCreateFolderSave?.(value);
+      } else if (!isCreating && isEditing) {
+        onSave?.(value);
+      }
     } else {
       inputRef.current?.focus();
     }
-  }, [validate, onSave, value]);
+    cancelSavingRef.current = false;
+  }, [
+    validate,
+    onSave,
+    value,
+    onCreateFolderSave,
+    isCreating,
+    isEditing,
+    isLoading,
+  ]);
 
   const cancel = useCallback(() => {
     if (restoreOnCancel) {
       setValue(initialValue);
     }
+
+    if (isCreating) {
+      onCreateFolderCancel?.();
+    } else {
+      onCancel?.();
+    }
+
+    cancelSavingRef.current = true;
     resetValidationState();
-    onCancel?.();
-  }, [initialValue, onCancel, restoreOnCancel, resetValidationState]);
+  }, [
+    initialValue,
+    onCancel,
+    restoreOnCancel,
+    resetValidationState,
+    onCreateFolderCancel,
+    isCreating,
+  ]);
 
   useEffect(() => {
-    if (!isEditing) return;
+    if (!isEditing && !isCreating) return;
 
+    cancelSavingRef.current = false;
     setValue(initialValue);
     resetValidationState();
 
@@ -147,11 +184,11 @@ export function useEditableItem({
       inputRef.current?.focus();
       inputRef.current?.select();
     });
-  }, [isEditing, initialValue, resetValidationState]);
+  }, [isEditing, isCreating, initialValue, resetValidationState]);
 
   useEffect(() => {
     const el = inputRef.current;
-    if (!isEditing || !el) return;
+    if ((!isEditing && !isCreating) || !el) return;
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
@@ -165,10 +202,10 @@ export function useEditableItem({
 
     el.addEventListener('keydown', handleKey);
     return () => el.removeEventListener('keydown', handleKey);
-  }, [isEditing, save, cancel]);
+  }, [isEditing, isCreating, save, cancel]);
 
   useEffect(() => {
-    if (!isEditing) return;
+    if (!isEditing && !isCreating) return;
 
     const el = inputRef.current;
     if (!el) return;
@@ -177,7 +214,7 @@ export function useEditableItem({
       const nextTarget = e.relatedTarget as Node | null;
       const stillInside = nextTarget && el.contains(nextTarget);
 
-      if (!stillInside) {
+      if (!stillInside && !isLoading) {
         if (validate(value)) {
           save();
         } else {
@@ -191,7 +228,7 @@ export function useEditableItem({
     return () => {
       el.removeEventListener('blur', handleBlur);
     };
-  }, [isEditing, value, validate, save]);
+  }, [isEditing, isCreating, value, validate, save, isLoading]);
 
   return { inputRef, value, onChange, invalid, invalidMessage };
 }

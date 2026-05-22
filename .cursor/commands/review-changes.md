@@ -1,12 +1,15 @@
-# Review recent changes
+# /review-changes
 
-Act as a focused code reviewer for this UI kit:
+Alias for `/code-review` kept for backwards compatibility with the existing
+`/feature-pipeline` workflow.
 
-1. **Correctness** — Props typing, edge cases, controlled vs uncontrolled patterns, React 19 idioms. Confirm changes would pass **`npm run typecheck`** (not only ESLint).
-2. **API consistency** — Matches other `Dial*` components; naming and export from `src/index.ts`.
-3. **A11y** — Labels, roles, focus, keyboard; Storybook a11y addon considerations.
-4. **Tests** — Meaningful coverage for behavior, not only snapshots; missing cases.
-5. **Styles** — Tailwind/class patterns aligned with the rest of the kit; no unnecessary specificity.
-6. **Churn** — Call out unrelated edits or scope creep.
+Run the **code-reviewer** agent as defined in `agents/code-reviewer.md` (root
+of the repo). Read that file first and follow it verbatim — rubric, output
+format, and the "must not do" list live there.
 
-Output: prioritized list (must-fix vs nice-to-have) with file references.
+Scope: changes since divergence from `origin/development` (or files explicitly
+named by the user). Output the standard three-section report
+(`### Summary` / `### Must-fix` / `### Nice-to-have`) and finish with the
+handoff hint to `/apply-review`.
+
+This command is **review-only**. Do not edit files.

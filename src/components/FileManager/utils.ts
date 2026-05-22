@@ -2,6 +2,7 @@ import { DialFileNodeType, type DialFile } from '@/models/file';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import { extensions } from 'mime-types';
 import type { ReactNode } from 'react';
+import { DEFAULT_FOLDER_BASE_NAME } from './constants';
 import type { FileManagerGridRow } from './FileManagerContext';
 
 export const findNodeByPath = (
@@ -210,9 +211,38 @@ export function getForbiddenSymbolsTooltip(
   return undefined;
 }
 
+export const splitPathAndName = (
+  fullPath: string,
+): { parent: string; name: string } => {
+  const lastSlash = fullPath.lastIndexOf('/');
+  return lastSlash >= 0
+    ? {
+        parent: fullPath.slice(0, lastSlash),
+        name: fullPath.slice(lastSlash + 1),
+      }
+    : { parent: '', name: fullPath };
+};
+
+export const isFileSelectable = (
+  file: Pick<DialFile, 'contentLength' | 'contentType' | 'name'>,
+  allowedFileTypes?: DialFileAcceptType[],
+  maxSelectableFileSize?: number,
+): boolean => {
+  const isSizeOk =
+    !file.contentLength ||
+    maxSelectableFileSize == null ||
+    file.contentLength <= maxSelectableFileSize;
+
+  const isTypeOk =
+    !file.contentType ||
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
+
+  return isSizeOk && isTypeOk;
+};
+
 export const getRowTooltip = (
   file: FileManagerGridRow,
-  allowedFileTypes?: string[],
+  allowedFileTypes?: DialFileAcceptType[],
   maxSelectableFileSize?: number,
   unsupportedFileTypeTooltip?: string,
   fileTooLargeTooltip?: string,
@@ -226,17 +256,13 @@ export const getRowTooltip = (
 
   const isFileTypeAccepted =
     !file.contentType ||
-    isFileAccepted(
-      allowedFileTypes as DialFileAcceptType[],
-      file.contentType,
-      file.name,
-    );
+    isFileAccepted(allowedFileTypes, file.contentType, file.name);
 
   if (!isFileTypeAccepted) {
     return (
       unsupportedFileTypeTooltip ??
       (allowedFileTypes?.length
-        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes as DialFileAcceptType[])}.`
+        ? `Unsupported file type. Supported types: ${formatAllowedFileTypesForTooltip(allowedFileTypes)}.`
         : 'Unsupported file type.')
     );
   }
@@ -247,4 +273,29 @@ export const getRowTooltip = (
     );
   }
   return undefined;
+};
+
+export const getNextFolderName = (existingFolders: DialFile[]): string => {
+  const prefix = `${DEFAULT_FOLDER_BASE_NAME} `;
+  const regex = new RegExp(`^${DEFAULT_FOLDER_BASE_NAME} (\\d+)$`);
+
+  const existingNames = new Set(
+    existingFolders.map((f) => f.name.toLowerCase()),
+  );
+
+  const maxNumber = existingFolders
+    .map((f) => {
+      const match = f.name.match(regex);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .reduce((max, n) => Math.max(max, n), 0);
+
+  let candidate = `${prefix}${maxNumber + 1}`;
+  let counter = maxNumber + 1;
+  while (existingNames.has(candidate.toLowerCase())) {
+    counter++;
+    candidate = `${prefix}${counter}`;
+  }
+
+  return candidate;
 };

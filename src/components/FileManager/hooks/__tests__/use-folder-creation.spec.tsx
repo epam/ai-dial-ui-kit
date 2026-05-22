@@ -39,6 +39,7 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       expect(result.current.isCreatingFolder).toBe(false);
       expect(result.current.newFolderTempId).toBeNull();
+      expect(result.current.newFolderDefaultName).toBe('');
 
       act(() => {
         result.current.startFolderCreation();
@@ -46,11 +47,91 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       expect(result.current.isCreatingFolder).toBe(true);
       expect(result.current.newFolderTempId).toMatch(/^__new_folder_\d+$/);
+      expect(result.current.newFolderDefaultName).toBe('New folder 1');
+    });
+
+    test('generates "New folder 1" when no folders exist', () => {
+      const emptyFolder: DialFile = { ...mockCurrentFolder, items: [] };
+      const { result } = renderHook(() =>
+        useFolderCreation({ currentFolder: emptyFolder }),
+      );
+
+      act(() => {
+        result.current.startFolderCreation();
+      });
+
+      expect(result.current.newFolderDefaultName).toBe('New folder 1');
+    });
+
+    test('increments name when "New folder 1" already exists', () => {
+      const folderWithNew1: DialFile = {
+        ...mockCurrentFolder,
+        items: [
+          {
+            id: '/test-folder/New folder 1',
+            name: 'New folder 1',
+            path: '/test-folder/New folder 1',
+            parentPath: '/test-folder',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: '/test-folder/New folder 1',
+          },
+        ],
+      };
+      const { result } = renderHook(() =>
+        useFolderCreation({ currentFolder: folderWithNew1 }),
+      );
+
+      act(() => {
+        result.current.startFolderCreation();
+      });
+
+      expect(result.current.newFolderDefaultName).toBe('New folder 2');
+    });
+
+    test('skips over existing numbered folders', () => {
+      const folderWithMultiple: DialFile = {
+        ...mockCurrentFolder,
+        items: [
+          {
+            id: '/f/New folder 1',
+            name: 'New folder 1',
+            path: '/f/New folder 1',
+            parentPath: '/f',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: '/f',
+          },
+          {
+            id: '/f/New folder 2',
+            name: 'New folder 2',
+            path: '/f/New folder 2',
+            parentPath: '/f',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: '/f',
+          },
+          {
+            id: '/f/New folder 3',
+            name: 'New folder 3',
+            path: '/f/New folder 3',
+            parentPath: '/f',
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: '/f',
+          },
+        ],
+      };
+      const { result } = renderHook(() =>
+        useFolderCreation({ currentFolder: folderWithMultiple }),
+      );
+
+      act(() => {
+        result.current.startFolderCreation();
+      });
+
+      expect(result.current.newFolderDefaultName).toBe('New folder 4');
     });
   });
 
   describe('cancelFolderCreation', () => {
-    test('resets creation state', () => {
+    test('resets creation state including default name', () => {
       const { result } = renderHook(() =>
         useFolderCreation({
           currentFolder: mockCurrentFolder,
@@ -63,6 +144,7 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       expect(result.current.isCreatingFolder).toBe(true);
       expect(result.current.newFolderTempId).not.toBeNull();
+      expect(result.current.newFolderDefaultName).toBe('New folder 1');
 
       act(() => {
         result.current.cancelFolderCreation();
@@ -70,6 +152,7 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       expect(result.current.isCreatingFolder).toBe(false);
       expect(result.current.newFolderTempId).toBeNull();
+      expect(result.current.newFolderDefaultName).toBe('');
     });
   });
 
@@ -287,6 +370,52 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       await act(async () => {
         await result.current.saveFolderCreation('New Folder');
+      });
+
+      expect(result.current.isCreatingFolder).toBe(false);
+    });
+
+    test('resets creation state before onCreateFolder resolves', async () => {
+      let resolveCreate!: () => void;
+      const onCreateFolder = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveCreate = resolve;
+          }),
+      );
+
+      const { result } = renderHook(() =>
+        useFolderCreation({
+          currentFolder: mockCurrentFolder,
+          onCreateFolder,
+        }),
+      );
+
+      act(() => {
+        result.current.startFolderCreation();
+      });
+      expect(result.current.isCreatingFolder).toBe(true);
+
+      // Use async act so React flushes state updates from cancelFolderCreation,
+      // even though onCreateFolder is still pending.
+      let savePromise: Promise<void> | undefined;
+      await act(async () => {
+        savePromise = result.current.saveFolderCreation('New Folder');
+        // Yield to microtasks so the synchronous part of saveFolderCreation
+        // (including cancelFolderCreation's state updates) is flushed.
+        await Promise.resolve();
+      });
+
+      // onCreateFolder was called but is still pending.
+      expect(onCreateFolder).toHaveBeenCalledTimes(1);
+      // State has been reset even though onCreateFolder hasn't resolved.
+      expect(result.current.isCreatingFolder).toBe(false);
+      expect(result.current.newFolderTempId).toBeNull();
+
+      // Now resolve and let saveFolderCreation finish.
+      await act(async () => {
+        resolveCreate();
+        await savePromise;
       });
 
       expect(result.current.isCreatingFolder).toBe(false);
