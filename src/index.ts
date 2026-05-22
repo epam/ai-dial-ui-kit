@@ -103,6 +103,8 @@ export { DialLoadFileAreaField } from './components/LoadFileArea/LoadFileAreaFie
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
 export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
+export { DialDropdownIcon } from './components/DropdownIcon/DropdownIcon';
+export type { DialDropdownIconProps } from './components/DropdownIcon/DropdownIcon';
 
 //File Manager
 export { DialFileManager } from './components/FileManager/FileManager';
