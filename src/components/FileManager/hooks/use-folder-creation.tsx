@@ -83,10 +83,7 @@ export const useFolderCreation = ({
       return currentFolder;
     }
     if (creationType === FileManagerCreateFolderType.Sibling && targetFile) {
-      const target = findFolderForPath(
-        items || [],
-        targetFile.parentPath || '',
-      );
+      const target = findFolderForPath(items, targetFile.parentPath || '');
       return {
         path: targetFile.parentPath,
         items: target?.items || [],
@@ -135,10 +132,7 @@ export const useFolderCreation = ({
 
       previousPathRef.current = target?.parentPath || '/';
       const tempId = `__new_folder_${Date.now()}`;
-      const parentFolder = findFolderForPath(
-        items || [],
-        target?.parentPath || '/',
-      );
+      const parentFolder = findFolderForPath(items, target?.parentPath || '/');
       const siblingFolders = (parentFolder?.items ?? []).filter(
         (item) => item.nodeType === DialFileNodeType.FOLDER,
       );
@@ -178,10 +172,7 @@ export const useFolderCreation = ({
       if (isCreatingFolder) return;
 
       previousPathRef.current = target?.parentPath || '/';
-      const parentFolder = findFolderForPath(
-        items || [],
-        target?.parentPath || '/',
-      );
+      const parentFolder = findFolderForPath(items, target?.parentPath || '/');
       const siblingFolders = (parentFolder?.items ?? []).filter(
         (item) => item.nodeType === DialFileNodeType.FOLDER,
       );
