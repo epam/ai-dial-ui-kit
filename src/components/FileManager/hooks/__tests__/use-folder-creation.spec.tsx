@@ -374,6 +374,52 @@ describe('Dial UI Kit :: useFolderCreation', () => {
 
       expect(result.current.isCreatingFolder).toBe(false);
     });
+
+    test('resets creation state before onCreateFolder resolves', async () => {
+      let resolveCreate!: () => void;
+      const onCreateFolder = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveCreate = resolve;
+          }),
+      );
+
+      const { result } = renderHook(() =>
+        useFolderCreation({
+          currentFolder: mockCurrentFolder,
+          onCreateFolder,
+        }),
+      );
+
+      act(() => {
+        result.current.startFolderCreation();
+      });
+      expect(result.current.isCreatingFolder).toBe(true);
+
+      // Use async act so React flushes state updates from cancelFolderCreation,
+      // even though onCreateFolder is still pending.
+      let savePromise: Promise<void> | undefined;
+      await act(async () => {
+        savePromise = result.current.saveFolderCreation('New Folder');
+        // Yield to microtasks so the synchronous part of saveFolderCreation
+        // (including cancelFolderCreation's state updates) is flushed.
+        await Promise.resolve();
+      });
+
+      // onCreateFolder was called but is still pending.
+      expect(onCreateFolder).toHaveBeenCalledTimes(1);
+      // State has been reset even though onCreateFolder hasn't resolved.
+      expect(result.current.isCreatingFolder).toBe(false);
+      expect(result.current.newFolderTempId).toBeNull();
+
+      // Now resolve and let saveFolderCreation finish.
+      await act(async () => {
+        resolveCreate();
+        await savePromise;
+      });
+
+      expect(result.current.isCreatingFolder).toBe(false);
+    });
   });
 
   describe('path change behavior', () => {
