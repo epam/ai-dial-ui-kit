@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconArrowDown } from '@tabler/icons-react';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { DialFabButton, type DialFabButtonProps } from './FabButton';
 
 const meta = {
