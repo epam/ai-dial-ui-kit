@@ -10,7 +10,7 @@ import {
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
-import { AlertVariant } from '@/types/alert';
+import { AlertVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   alertBaseClassName,
@@ -18,7 +18,7 @@ import {
   variantIcons,
 } from './constants';
 
-export interface DialAlertProps extends Omit<
+export interface DialNotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   'title'
 > {
@@ -74,7 +74,7 @@ export interface DialAlertProps extends Omit<
  * @param [iconStroke=2] - Stroke width of the icon displayed in the alert
  * @param [onClose] - Callback fired when the close button is clicked
  */
-export const DialAlert: FC<DialAlertProps> = ({
+export const DialNotification: FC<DialNotificationProps> = ({
   variant = AlertVariant.Info,
   title,
   message,

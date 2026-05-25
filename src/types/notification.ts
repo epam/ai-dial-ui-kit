@@ -1,4 +1,4 @@
-export enum AlertVariant {
+export enum NotificationVariant {
   Info = 'info',
   Success = 'success',
   Warning = 'warning',

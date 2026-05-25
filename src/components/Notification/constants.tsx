@@ -1,5 +1,5 @@
 import { DialSpinner } from '@/components/Spinner/Spinner';
-import { AlertVariant } from '@/types/alert';
+import { AlertVariant } from '@/types/notification';
 import {
   IconAlertCircleFilled,
   IconAlertTriangleFilled,

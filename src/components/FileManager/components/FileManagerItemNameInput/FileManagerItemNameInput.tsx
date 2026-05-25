@@ -9,7 +9,7 @@ import {
 import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import { AlertVariant } from '@/types/alert';
+import { NotificationVariant } from '@/types/notification';
 
 export interface DialFileManagerItemNameInputProps {
   type: DialItemType;
@@ -105,13 +105,13 @@ export const DialFileManagerItemNameInput: FC<
 }) => {
   const getInputIconAfter = () => {
     const isWarning = inputInvalidMessage?.startsWith(
-      `${AlertVariant.Warning}__`,
+      `${NotificationVariant.Warning}__`,
     );
 
     if (!inputInvalid && !isWarning) return null;
 
     const cleanedMessage = inputInvalidMessage?.replace(
-      `${AlertVariant.Warning}__`,
+      `${NotificationVariant.Warning}__`,
       '',
     );
     return (
