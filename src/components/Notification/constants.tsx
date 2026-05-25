@@ -1,5 +1,5 @@
 import { DialSpinner } from '@/components/Spinner/Spinner';
-import { AlertVariant } from '@/types/notification';
+import { NotificationVariant } from '@/types/notification';
 import {
   IconAlertCircleFilled,
   IconAlertTriangleFilled,
@@ -11,7 +11,7 @@ import {
 export const variantIcons = (props: {
   size: number;
   stroke: number;
-}): Record<AlertVariant, ReactNode> => ({
+}): Record<NotificationVariant, ReactNode> => ({
   info: <IconInfoCircleFilled size={props.size} />,
   error: <IconAlertCircleFilled size={props.size} />,
   warning: <IconAlertTriangleFilled size={props.size} />,
@@ -19,12 +19,15 @@ export const variantIcons = (props: {
   loading: <DialSpinner size={props.size} />,
 });
 
-export const alertVariantClassNameMap: Record<AlertVariant, string> = {
-  [AlertVariant.Info]: 'bg-info border-info text-info',
-  [AlertVariant.Success]: 'bg-success border-success text-success',
-  [AlertVariant.Warning]: 'bg-warning border-warning text-warning',
-  [AlertVariant.Error]: 'bg-error border-error text-error',
-  [AlertVariant.Loading]: 'bg-info border-info text-info',
+export const notificationVariantClassNameMap: Record<
+  NotificationVariant,
+  string
+> = {
+  [NotificationVariant.Info]: 'bg-info border-info text-info',
+  [NotificationVariant.Success]: 'bg-success border-success text-success',
+  [NotificationVariant.Warning]: 'bg-warning border-warning text-warning',
+  [NotificationVariant.Error]: 'bg-error border-error text-error',
+  [NotificationVariant.Loading]: 'bg-info border-info text-info',
 };
 
 export const alertBaseClassName =

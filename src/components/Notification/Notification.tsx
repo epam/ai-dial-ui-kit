@@ -10,11 +10,11 @@ import {
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
-import { AlertVariant } from '@/types/notification';
+import { NotificationVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   alertBaseClassName,
-  alertVariantClassNameMap,
+  notificationVariantClassNameMap,
   variantIcons,
 } from './constants';
 
@@ -22,7 +22,7 @@ export interface DialNotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   'title'
 > {
-  variant?: AlertVariant;
+  variant?: NotificationVariant;
   title?: ReactNode;
   message: ReactNode;
   closable?: boolean;
@@ -41,31 +41,31 @@ export interface DialNotificationProps extends Omit<
  * @example
  * ```tsx
  * <DialAlert
- *   variant={AlertVariant.Info}
+ *   variant={NotificationVariant.Info}
  *   message="This is an info alert."
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Success}
+ *   variant={NotificationVariant.Success}
  *   title="Saved"
  *   message="Changes saved successfully."
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Error}
+ *   variant={NotificationVariant.Error}
  *   closable
  *   message="Something went wrong."
  *   onClose={(e) => console.log('closed', e)}
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Loading}
+ *   variant={NotificationVariant.Loading}
  *   title="Processing"
  *   message="Please wait..."
  * />
  * ```
  *
- * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
+ * @param [variant=NotificationVariant.Info] - Defines the visual style and icon of the alert
  * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
  * @param [className] - Additional CSS classes applied to the alert container
@@ -75,7 +75,7 @@ export interface DialNotificationProps extends Omit<
  * @param [onClose] - Callback fired when the close button is clicked
  */
 export const DialNotification: FC<DialNotificationProps> = ({
-  variant = AlertVariant.Info,
+  variant = NotificationVariant.Info,
   title,
   message,
   className,
@@ -96,7 +96,7 @@ export const DialNotification: FC<DialNotificationProps> = ({
       role="alert"
       className={mergeClasses(
         alertBaseClassName,
-        alertVariantClassNameMap[variant],
+        notificationVariantClassNameMap[variant],
         className,
       )}
     >
