@@ -4,6 +4,10 @@
   "type": "module",
   "license": "Apache-2.0",
   "description": "A modern UI kit for building AI DIAL interfaces with React",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epam/ai-dial-ui-kit.git"
+  },
   "types": "dist/src/index.d.ts",
   "engines": {
     "node": ">=22.2.0",
