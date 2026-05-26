@@ -25,7 +25,10 @@ import { DestinationFolderMode } from '@/types/file-manager';
 import type { DialFileManagerActionsRef } from '@/models/file-manager';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialAlert, type DialAlertProps } from '@/components/Alert/Alert';
+import {
+  DialNotification,
+  type DialNotificationProps,
+} from '@/components/Notification/Notification';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import type { DropdownItem } from '@/models/dropdown';
@@ -46,7 +49,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   sourceFolder?: string;
   disabledPathTooltip?: string;
   collapsedFileTree?: boolean;
-  alertProps?: DialAlertProps;
+  alertProps?: DialNotificationProps;
   onFolderPopupPathChange?: (newPath?: string) => void;
 }
 
@@ -254,7 +257,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
       <div className="bg-layer-2 h-full flex flex-col">
         {alertProps && (
           <div className="px-6 mb-4 pt-4">
-            <DialAlert {...alertProps} />
+            <DialNotification {...alertProps} />
           </div>
         )}
         <div className="flex-1 min-h-0">

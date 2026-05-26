@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { DialDestinationFolderPopup } from './DestinationFolderPopup';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
-import { AlertVariant } from '@/types/alert';
+import { NotificationVariant } from '@/types/notification';
 
 const mockFiles: DialFile[] = [
   {
@@ -569,7 +569,7 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
         items={mockFiles}
         alertProps={{
           message: 'Action unavailable in this folder',
-          variant: AlertVariant.Warning,
+          variant: NotificationVariant.Warning,
           closable: true,
         }}
         rootItem={{
@@ -587,7 +587,7 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
       'Action unavailable in this folder',
     );
     expect(
-      screen.getByRole('button', { name: 'Close alert' }),
+      screen.getByRole('button', { name: 'Close notification' }),
     ).toBeInTheDocument();
   });
 

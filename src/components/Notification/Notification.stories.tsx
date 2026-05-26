@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type FC } from 'react';
-import { AlertVariant } from '@/types/alert';
-import { DialAlert, type DialAlertProps } from './Alert';
+import { NotificationVariant } from '@/types/notification';
+import { DialNotification, type DialNotificationProps } from './Notification';
 
 const meta = {
-  title: 'DIAL/Elements/Alert',
-  component: DialAlert,
+  title: 'DIAL/Elements/Notification',
+  component: DialNotification,
   parameters: {
     layout: 'padded',
     docs: {
@@ -19,11 +19,11 @@ const meta = {
     variant: {
       control: { type: 'select' },
       options: [
-        AlertVariant.Info,
-        AlertVariant.Success,
-        AlertVariant.Warning,
-        AlertVariant.Error,
-        AlertVariant.Loading,
+        NotificationVariant.Info,
+        NotificationVariant.Success,
+        NotificationVariant.Warning,
+        NotificationVariant.Error,
+        NotificationVariant.Loading,
       ],
       description: 'Defines the visual style and icon of the alert',
     },
@@ -57,11 +57,11 @@ const meta = {
     },
   },
   args: {
-    variant: AlertVariant.Info,
+    variant: NotificationVariant.Info,
     message: 'This is an info alert',
     closable: false,
   },
-} satisfies Meta<DialAlertProps>;
+} satisfies Meta<DialNotificationProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -69,41 +69,56 @@ type Story = StoryObj<typeof meta>;
 export const AllVariants: Story = {
   render: () => (
     <div className="p-6 flex flex-col gap-4">
-      <DialAlert variant={AlertVariant.Info} message="Info alert" />
-      <DialAlert variant={AlertVariant.Warning} message="Warning alert" />
-      <DialAlert variant={AlertVariant.Error} message="Error alert" />
-      <DialAlert variant={AlertVariant.Success} message="Success alert" />
-      <DialAlert variant={AlertVariant.Loading} message="Loading alert" />
+      <DialNotification
+        variant={NotificationVariant.Info}
+        message="Info alert"
+      />
+      <DialNotification
+        variant={NotificationVariant.Warning}
+        message="Warning alert"
+      />
+      <DialNotification
+        variant={NotificationVariant.Error}
+        message="Error alert"
+      />
+      <DialNotification
+        variant={NotificationVariant.Success}
+        message="Success alert"
+      />
+      <DialNotification
+        variant={NotificationVariant.Loading}
+        message="Loading alert"
+      />
 
       <div className="text-primary mt-2">With title + message</div>
-      <DialAlert
-        variant={AlertVariant.Info}
+      <DialNotification
+        variant={NotificationVariant.Info}
         title="Info"
         message="This is an informational message."
         closable
       />
-      <DialAlert
-        variant={AlertVariant.Warning}
+      <DialNotification
+        variant={NotificationVariant.Warning}
         title="Warning"
         message="This is a warning message."
         closable
       />
 
-      <DialAlert
-        variant={AlertVariant.Error}
+      <DialNotification
+        variant={NotificationVariant.Error}
         title="Error"
         message="This is an error message."
         closable
       />
 
-      <DialAlert
-        variant={AlertVariant.Success}
+      <DialNotification
+        variant={NotificationVariant.Success}
         title="Success"
         message="This is a success message."
         closable
       />
-      <DialAlert
-        variant={AlertVariant.Loading}
+      <DialNotification
+        variant={NotificationVariant.Loading}
         title="Loading"
         message="Loading data, please wait..."
       />
@@ -121,7 +136,7 @@ export const AllVariants: Story = {
 
 export const LongMessage: Story = {
   args: {
-    variant: AlertVariant.Warning,
+    variant: NotificationVariant.Warning,
     message:
       "This is a long alert message that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly.",
     closable: true,
@@ -138,7 +153,7 @@ export const LongMessage: Story = {
 
 export const CustomClass: Story = {
   args: {
-    variant: AlertVariant.Info,
+    variant: NotificationVariant.Info,
     message: (
       <span>
         Alert with <span className="italic">custom CSS class</span>
@@ -160,9 +175,9 @@ export const CustomClass: Story = {
 
 const InteractiveComponent: FC = () => {
   const [alerts, setAlerts] = useState([
-    { id: 1, variant: AlertVariant.Info, message: 'First alert' },
-    { id: 2, variant: AlertVariant.Success, message: 'Second alert' },
-    { id: 3, variant: AlertVariant.Warning, message: 'Third alert' },
+    { id: 1, variant: NotificationVariant.Info, message: 'First alert' },
+    { id: 2, variant: NotificationVariant.Success, message: 'Second alert' },
+    { id: 3, variant: NotificationVariant.Warning, message: 'Third alert' },
   ]);
 
   const removeAlert = (id: number) => {
@@ -175,7 +190,7 @@ const InteractiveComponent: FC = () => {
         Click close buttons to remove alerts
       </div>
       {alerts.map((alert) => (
-        <DialAlert
+        <DialNotification
           key={alert.id}
           variant={alert.variant}
           message={alert.message}

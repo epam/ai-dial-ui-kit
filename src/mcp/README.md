@@ -107,10 +107,10 @@ User: "Build a file upload form with validation and error messages"
 
 Agent:
   1. Calls searchEntity("component", "file upload")
-  2. Finds DialFileInput, DialFormItem, DialButton, DialAlert
+  2. Finds DialFileInput, DialFormItem, DialButton, DialNotification
   3. Calls getEntityDetails("component", "DialFileInput")  → props, examples
   4. Calls getEntityDetails("component", "DialFormItem")   → how to wire up validation
-  5. Calls getEntityDetails("component", "DialAlert")      → error display
+  5. Calls getEntityDetails("component", "DialNotification")      → error display
   6. Generates complete form code with types and error handling
 ```
 

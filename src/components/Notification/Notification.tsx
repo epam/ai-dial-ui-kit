@@ -10,19 +10,19 @@ import {
 import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
-import { AlertVariant } from '@/types/alert';
+import { NotificationVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   alertBaseClassName,
-  alertVariantClassNameMap,
+  notificationVariantClassNameMap,
   variantIcons,
 } from './constants';
 
-export interface DialAlertProps extends Omit<
+export interface DialNotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   'title'
 > {
-  variant?: AlertVariant;
+  variant?: NotificationVariant;
   title?: ReactNode;
   message: ReactNode;
   closable?: boolean;
@@ -41,31 +41,31 @@ export interface DialAlertProps extends Omit<
  * @example
  * ```tsx
  * <DialAlert
- *   variant={AlertVariant.Info}
+ *   variant={NotificationVariant.Info}
  *   message="This is an info alert."
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Success}
+ *   variant={NotificationVariant.Success}
  *   title="Saved"
  *   message="Changes saved successfully."
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Error}
+ *   variant={NotificationVariant.Error}
  *   closable
  *   message="Something went wrong."
  *   onClose={(e) => console.log('closed', e)}
  * />
  *
  * <DialAlert
- *   variant={AlertVariant.Loading}
+ *   variant={NotificationVariant.Loading}
  *   title="Processing"
  *   message="Please wait..."
  * />
  * ```
  *
- * @param [variant=AlertVariant.Info] - Defines the visual style and icon of the alert
+ * @param [variant=NotificationVariant.Info] - Defines the visual style and icon of the alert
  * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
  * @param [className] - Additional CSS classes applied to the alert container
@@ -74,8 +74,8 @@ export interface DialAlertProps extends Omit<
  * @param [iconStroke=2] - Stroke width of the icon displayed in the alert
  * @param [onClose] - Callback fired when the close button is clicked
  */
-export const DialAlert: FC<DialAlertProps> = ({
-  variant = AlertVariant.Info,
+export const DialNotification: FC<DialNotificationProps> = ({
+  variant = NotificationVariant.Info,
   title,
   message,
   className,
@@ -96,7 +96,7 @@ export const DialAlert: FC<DialAlertProps> = ({
       role="alert"
       className={mergeClasses(
         alertBaseClassName,
-        alertVariantClassNameMap[variant],
+        notificationVariantClassNameMap[variant],
         className,
       )}
     >
@@ -116,7 +116,7 @@ export const DialAlert: FC<DialAlertProps> = ({
       {closable && (
         <DialButton
           className="ml-2 text-secondary hover:text-primary"
-          aria-label="Close alert"
+          aria-label="Close notification"
           iconBefore={<IconX size={DIAL_ICON_SIZE.LG} />}
           onClick={onClose}
         />

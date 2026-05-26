@@ -4,7 +4,7 @@ export {
 } from './components/CaptionText/CaptionText';
 export { DialLabel } from './components/Label/Label';
 export { DialIcon } from './components/Icon/Icon';
-export { DialAlert } from './components/Alert/Alert';
+export { DialNotification } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
 export { DialSpinner } from './components/Spinner/Spinner';
 export type { DialSpinnerProps } from './components/Spinner/Spinner';
@@ -119,7 +119,7 @@ export type {
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
 
 // Types
-export { AlertVariant } from './types/alert';
+export { NotificationVariant } from './types/notification.ts';
 export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';

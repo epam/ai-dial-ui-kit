@@ -1,10 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
 import { useItemRenaming } from '@/components/FileManager/hooks/use-item-renaming';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialCopiedItem } from '@/models/file-manager';
-import { AlertVariant } from '@/types/alert';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 function buildTree(): DialFile[] {
   return [

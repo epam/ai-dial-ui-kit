@@ -7,7 +7,7 @@ import {
   type DestinationFolderPopupProps,
 } from './DestinationFolderPopup';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
-import { AlertVariant } from '@/types/alert';
+import { NotificationVariant } from '@/types/notification';
 
 const StoryWrapper = (args: DestinationFolderPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -140,7 +140,7 @@ export const WithAlert: Story = {
     mode: 'move',
     header: 'Moving items',
     alertProps: {
-      variant: AlertVariant.Warning,
+      variant: NotificationVariant.Warning,
       message:
         'You cannot move items to the current folder. Choose another one.',
     },
