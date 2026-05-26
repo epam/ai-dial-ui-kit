@@ -587,7 +587,7 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
       'Action unavailable in this folder',
     );
     expect(
-      screen.getByRole('button', { name: 'Close alert' }),
+      screen.getByRole('button', { name: 'Close notification' }),
     ).toBeInTheDocument();
   });
 

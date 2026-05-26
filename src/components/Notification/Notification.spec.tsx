@@ -43,7 +43,7 @@ describe('Dial UI Kit :: DialNotification', () => {
     render(
       <DialNotification message="Event test" onClose={onClose} closable />,
     );
-    const closeBtn = screen.getByRole('button', { name: 'Close alert' });
+    const closeBtn = screen.getByRole('button', { name: 'Close notification' });
     fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalledWith(expect.any(Object));
     expect(onClose.mock.calls[0][0]).toHaveProperty('type', 'click');
