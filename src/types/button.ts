@@ -2,10 +2,10 @@ export enum ButtonVariant {
   // Common
   Primary = 'primary',
   Neutral = 'neutral',
-  Error = 'error',
+  Danger = 'danger',
 
   // icon button specific
-  Success = 'Success',
+  Success = 'success',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
 }

@@ -4,7 +4,7 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 import { DialButton, type DialButtonProps } from './Button';
 import {
-  DialErrorButton,
+  DialDangerButton,
   DialGhostButton,
   DialLinkButton,
   DialNeutralButton,
@@ -98,10 +98,10 @@ export const NeutralOutlinedButton: Story = {
   },
 };
 
-export const ErrorSolidButton: Story = {
+export const DangerSolidButton: Story = {
   args: {
-    label: 'Error Solid Button',
-    variant: ButtonVariant.Error,
+    label: 'Danger Solid Button',
+    variant: ButtonVariant.Danger,
     appearance: ButtonAppearance.Solid,
   },
 };
@@ -207,21 +207,21 @@ export const AllVariants: Story = {
         ),
       },
       {
-        title: 'Error · Solid',
+        title: 'Danger · Solid',
         render: (p) => (
-          <DialErrorButton {...p} appearance={ButtonAppearance.Solid} />
+          <DialDangerButton {...p} appearance={ButtonAppearance.Solid} />
         ),
       },
       {
-        title: 'Error · Outlined',
+        title: 'Danger · Outlined',
         render: (p) => (
-          <DialErrorButton {...p} appearance={ButtonAppearance.Outlined} />
+          <DialDangerButton {...p} appearance={ButtonAppearance.Outlined} />
         ),
       },
       {
-        title: 'Error · Ghost',
+        title: 'Danger · Ghost',
         render: (p) => (
-          <DialErrorButton {...p} appearance={ButtonAppearance.Ghost} />
+          <DialDangerButton {...p} appearance={ButtonAppearance.Ghost} />
         ),
       },
       {

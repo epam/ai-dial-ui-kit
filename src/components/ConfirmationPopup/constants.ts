@@ -36,10 +36,9 @@ export const variantConfig: Record<
     },
   },
   [ConfirmationPopupVariant.Danger]: {
-    // TODO: rename to Error after implement Design system changes
     container: 'dial-danger-popup',
     confirm: {
-      variant: ButtonVariant.Error,
+      variant: ButtonVariant.Danger,
       appearance: ButtonAppearance.Solid,
     },
     cancel: {

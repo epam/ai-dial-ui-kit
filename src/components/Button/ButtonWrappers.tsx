@@ -74,10 +74,10 @@ export const DialNeutralButton = ButtonVariantCreator(
   ButtonAppearance.Outlined,
 );
 
-/** A Error Button component with predefined error variant
+/** A Danger Button component with predefined danger variant
  * @example
  * ```tsx
- * <DialErrorButton
+ * <DialDangerButton
  * label="Click me"
  * onClick={handleClick}
  * className="custom-button"
@@ -86,8 +86,8 @@ export const DialNeutralButton = ButtonVariantCreator(
  *
  * Inherits all properties from the `DialButtonProps`
  */
-export const DialErrorButton = ButtonVariantCreator(
-  ButtonVariant.Error,
+export const DialDangerButton = ButtonVariantCreator(
+  ButtonVariant.Danger,
   ButtonAppearance.Outlined,
 );
 /** A Link Button component with predefined link appearance

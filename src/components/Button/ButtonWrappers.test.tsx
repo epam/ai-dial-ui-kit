@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import {
   DialPrimaryButton,
   DialNeutralButton,
-  DialErrorButton,
+  DialDangerButton,
   DialLinkButton,
   DialGhostButton,
 } from './ButtonWrappers';
@@ -98,9 +98,9 @@ describe('Dial UI Kit :: ButtonWrappers', () => {
     });
   });
 
-  describe('DialErrorButton', () => {
+  describe('DialDangerButton', () => {
     it('renders with label', () => {
-      const { getByRole } = render(<DialErrorButton label="Error" />);
+      const { getByRole } = render(<DialDangerButton label="Error" />);
       const button = getByRole('button', { name: 'Error' });
       expect(button).toBeTruthy();
     });
@@ -108,7 +108,7 @@ describe('Dial UI Kit :: ButtonWrappers', () => {
     it('handles click events', () => {
       const handleClick = vi.fn();
       const { getByRole } = render(
-        <DialErrorButton label="Delete" onClick={handleClick} />,
+        <DialDangerButton label="Delete" onClick={handleClick} />,
       );
       const button = getByRole('button', { name: 'Delete' });
       fireEvent.click(button);
@@ -118,7 +118,7 @@ describe('Dial UI Kit :: ButtonWrappers', () => {
     it('can be disabled', () => {
       const handleClick = vi.fn();
       const { getByRole } = render(
-        <DialErrorButton label="Disabled" onClick={handleClick} disabled />,
+        <DialDangerButton label="Disabled" onClick={handleClick} disabled />,
       );
       const button = getByRole('button', { name: 'Disabled' });
       expect(button).toHaveProperty('disabled', true);
@@ -128,7 +128,7 @@ describe('Dial UI Kit :: ButtonWrappers', () => {
 
     it('allows appearance override', () => {
       const { getByRole } = render(
-        <DialErrorButton
+        <DialDangerButton
           label="Solid Error"
           appearance={ButtonAppearance.Solid}
         />,
@@ -205,7 +205,7 @@ describe('Dial UI Kit :: ButtonWrappers', () => {
 
     it('allows variant override', () => {
       const { getByRole } = render(
-        <DialGhostButton label="Error Ghost" variant={ButtonVariant.Error} />,
+        <DialGhostButton label="Error Ghost" variant={ButtonVariant.Danger} />,
       );
       const button = getByRole('button', { name: 'Error Ghost' });
       expect(button).toBeTruthy();
