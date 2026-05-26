@@ -52,7 +52,7 @@
     "build-storybook": "concurrently \"npm run build-storybook:css\" \"storybook build\"",
     "build-storybook:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./src/index.css",
     "prepare": "husky",
-    "publish": "npm publish --access public",
+    "publish:npm": "npm publish --access public",
     "publish:dry": "npm publish --access public --dry-run",
     "test": "vitest --coverage",
     "storybook-docs": "storybook dev --docs",
