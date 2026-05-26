@@ -73,10 +73,10 @@ export const DialNeutralIconButton = IconButtonVariantCreator(
   ButtonAppearance.Outlined,
 );
 
-/** A Error Icon Button component with predefined error variant
+/** A Danger Icon Button component with predefined danger variant
  * @example
  * ```tsx
- * <DialErrorIconButton
+ * <DialDangerIconButton
  *  icon={<Icon />}
  *  onClick={handleClick}
  *  className="custom-button"
@@ -85,12 +85,12 @@ export const DialNeutralIconButton = IconButtonVariantCreator(
  *
  * Inherits all properties from the `DialIconButtonProps`
  */
-export const DialErrorIconButton = IconButtonVariantCreator(
-  ButtonVariant.Error,
+export const DialDangerIconButton = IconButtonVariantCreator(
+  ButtonVariant.Danger,
   ButtonAppearance.Outlined,
 );
 
-/** A Secondary Icon Button component with predefined error variant
+/** A Secondary Icon Button component with predefined secondary variant
  * @example
  * ```tsx
  * <DialSecondaryIconButton
@@ -107,7 +107,7 @@ export const DialSecondaryIconButton = IconButtonVariantCreator(
   ButtonAppearance.Ghost,
 );
 
-/** A Tertiary Icon Button component with predefined error variant
+/** A Tertiary Icon Button component with predefined tertiary variant
  * @example
  * ```tsx
  * <DialTertiaryIconButton
@@ -124,7 +124,7 @@ export const DialTertiaryIconButton = IconButtonVariantCreator(
   ButtonAppearance.Ghost,
 );
 
-/** A Success Icon Button component with predefined error variant
+/** A Success Icon Button component with predefined success variant
  * @example
  * ```tsx
  * <DialSuccessIconButton

@@ -11,10 +11,10 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
     [ButtonAppearance.Outlined]: 'dial-neutral-outlined-button',
   },
 
-  [ButtonVariant.Error]: {
-    [ButtonAppearance.Solid]: 'dial-error-solid-button',
-    [ButtonAppearance.Ghost]: 'dial-error-ghost-button',
-    [ButtonAppearance.Outlined]: 'dial-error-outlined-button',
+  [ButtonVariant.Danger]: {
+    [ButtonAppearance.Solid]: 'dial-danger-solid-button',
+    [ButtonAppearance.Ghost]: 'dial-danger-ghost-button',
+    [ButtonAppearance.Outlined]: 'dial-danger-outlined-button',
   },
 
   [ButtonVariant.Success]: {

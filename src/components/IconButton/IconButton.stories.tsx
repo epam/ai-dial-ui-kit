@@ -4,7 +4,7 @@ import { IconRefresh } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 import { DialIconButton, type DialIconButtonProps } from './IconButton';
 import {
-  DialErrorIconButton,
+  DialDangerIconButton,
   DialNeutralIconButton,
   DialPrimaryIconButton,
   DialSecondaryIconButton,
@@ -85,9 +85,9 @@ export const IconButtonWithTooltip: Story = {
   },
 };
 
-export const ErrorSolidIconButton: Story = {
+export const DangerSolidIconButton: Story = {
   args: {
-    variant: ButtonVariant.Error,
+    variant: ButtonVariant.Danger,
     appearance: ButtonAppearance.Solid,
   },
 };
@@ -174,9 +174,9 @@ export const AllVariants: Story = {
       },
 
       {
-        title: 'Error · Ghost',
+        title: 'Danger · Ghost',
         render: (p) => (
-          <DialErrorIconButton {...p} appearance={ButtonAppearance.Ghost} />
+          <DialDangerIconButton {...p} appearance={ButtonAppearance.Ghost} />
         ),
       },
       {

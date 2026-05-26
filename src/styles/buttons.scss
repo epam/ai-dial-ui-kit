@@ -94,7 +94,7 @@
   }
 }
 
-.dial-error-solid-button {
+.dial-danger-solid-button {
   @apply dial-base-button bg-controls-error text-controls-permanent;
 
   @media (hover: hover) {
@@ -107,7 +107,7 @@
   }
 }
 
-.dial-error-ghost-button {
+.dial-danger-ghost-button {
   @apply text-error;
   @media (hover: hover) {
     &:hover {
@@ -120,7 +120,7 @@
   }
 }
 
-.dial-error-outlined-button {
+.dial-danger-outlined-button {
   @apply dial-base-button text-error;
   @apply border-error;
 
@@ -182,7 +182,7 @@
 .dial-success-ghost-button,
 .dial-secondary-ghost-button,
 .dial-tertiary-ghost-button,
-.dial-error-ghost-button {
+.dial-danger-ghost-button {
   @apply dial-base-button bg-transparent;
 }
 
@@ -190,12 +190,12 @@
 .dial-success-ghost-button:disabled,
 .dial-secondary-ghost-button:disabled,
 .dial-tertiary-ghost-button:disabled,
-.dial-error-ghost-button:disabled {
+.dial-danger-ghost-button:disabled {
   @apply dial-button-disable text-controls-secondary-disable bg-transparent;
 }
 
 .dial-primary-solid-button:disabled,
-.dial-error-solid-button:disabled {
+.dial-danger-solid-button:disabled {
   @apply dial-button-solid-disable;
 }
 
