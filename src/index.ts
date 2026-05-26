@@ -48,7 +48,7 @@ export { DialButton } from './components/Button/Button';
 export { DialIconButton } from './components/IconButton/IconButton';
 export type { DialIconButtonProps } from './components/IconButton/IconButton';
 export {
-  DialErrorButton,
+  DialDangerButton,
   DialNeutralButton,
   DialPrimaryButton,
   DialGhostButton,
@@ -57,7 +57,7 @@ export {
 } from './components/Button/ButtonWrappers';
 export type { DialRoundedButtonProps } from './components/Button/ButtonWrappers';
 export {
-  DialErrorIconButton,
+  DialDangerIconButton,
   DialGhostIconButton,
   DialNeutralIconButton,
   DialPrimaryIconButton,
