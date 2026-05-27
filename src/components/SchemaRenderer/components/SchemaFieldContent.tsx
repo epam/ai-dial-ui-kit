@@ -74,7 +74,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
         level={level}
       />
     );
-  } else if (resolved.anyOf) {
+  } else if (resolved.anyOf && resolved.type !== JsonSchemaType.Object) {
     defaultElement = (
       <SchemaAnyOfEditor
         schema={resolved}
