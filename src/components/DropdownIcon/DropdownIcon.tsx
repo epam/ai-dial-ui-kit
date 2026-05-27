@@ -113,7 +113,7 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
         />
         {showCaret && (
           <div className="relative z-10 inline-grid size-5 shrink-0 place-items-center">
-            <div className="absolute inset-0 rounded-full bg-layer-4" />
+            <div className="absolute inset-0 rounded-full bg-layer-2" />
             <DialIcon
               icon={caretIcon}
               className={mergeClasses(
