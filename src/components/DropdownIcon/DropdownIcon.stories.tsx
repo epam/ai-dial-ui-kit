@@ -31,6 +31,21 @@ const modelItems: DropdownItem[] = [
     label: 'Anthropic Claude 4.6',
     icon: <IconBolt size={DIAL_ICON_SIZE.SM} />,
   },
+  {
+    key: 'assistant',
+    label: 'Assistant 10k',
+    icon: <IconMessageCircle size={DIAL_ICON_SIZE.SM} />,
+  },
+  {
+    key: 'testing',
+    label: 'Testing-flask',
+    icon: <IconRobot size={DIAL_ICON_SIZE.SM} />,
+  },
+  {
+    key: 'claude-4-6',
+    label: 'Anthropic Claude 4.6',
+    icon: <IconBolt size={DIAL_ICON_SIZE.SM} />,
+  },
   { key: 'divider', type: DropdownItemType.Divider },
   {
     key: 'assistant',
@@ -190,6 +205,7 @@ export const ModelSelector: Story = {
           </span>
         }
         menu={{ items }}
+        maxDropdownHeight={200}
       />
     );
   },
