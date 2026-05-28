@@ -145,6 +145,7 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
+  processDestinationFolderPath?: (path: string) => string;
 };
 
 export interface FileMetadataPopupOptions {

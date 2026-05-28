@@ -51,6 +51,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   collapsedFileTree?: boolean;
   alertProps?: DialNotificationProps;
   onFolderPopupPathChange?: (newPath?: string) => void;
+  processDestinationFolderPath?: (path: string) => string;
 }
 
 /**
@@ -92,6 +93,9 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param [sourceFolder] - The source folder path for move operations
  * @param [disabledPathTooltip="Unavailable for the original path. Please select another folder"] - Tooltip text when destination is disabled
  * @param [collapsedFileTree=false] - Whether the file tree should be initially collapsed
+ * @param [processDestinationFolderPath] - Optional function to process the destination folder path before setting it
+ *
+ * @returns A React component for the destination folder selection popup
  */
 export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   onClose,
@@ -114,6 +118,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   path,
   collapsedFileTree = false,
   alertProps,
+  processDestinationFolderPath,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
@@ -158,11 +163,18 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   const handleOnPathChange = useCallback(
     (nextPath?: string) => {
       if (nextPath) {
-        onFolderPopupPathChange?.(nextPath);
-        setDestinationFolderPath?.(nextPath);
+        let path = processDestinationFolderPath
+          ? processDestinationFolderPath(nextPath)
+          : nextPath;
+        onFolderPopupPathChange?.(path);
+        setDestinationFolderPath?.(path);
       }
     },
-    [onFolderPopupPathChange, setDestinationFolderPath],
+    [
+      onFolderPopupPathChange,
+      setDestinationFolderPath,
+      processDestinationFolderPath,
+    ],
   );
 
   const defaultTitle =
