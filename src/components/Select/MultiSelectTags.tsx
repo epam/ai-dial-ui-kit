@@ -25,9 +25,9 @@ export const DialMultiSelectTags: FC<DialMultiSelectTagsProps> = ({
         return (
           <DialTag
             key={v}
-            tag={label}
-            remove={(e) => handleRemoveTag?.(e, v)}
-            iconBefore={icon ? <DialIcon icon={icon} /> : null}
+            label={label}
+            onRemove={(e) => handleRemoveTag?.(e, v)}
+            icon={icon ? <DialIcon icon={icon} /> : null}
             className="max-w-full"
           />
         );
