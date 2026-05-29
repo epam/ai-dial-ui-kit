@@ -53,7 +53,7 @@ export const DialFilledInput: FC<DialFilledInputProps> = ({
     <DialInput
       {...props}
       iconBefore={getIcon()}
-      containerClassName="h-[40px] p-0"
+      containerClassName={classNames('h-[40px] p-0', isInvalid && 'h-[60px]')}
       className={classNames(
         'rounded-r-none border-r-0',
         isInvalid && 'text-error',

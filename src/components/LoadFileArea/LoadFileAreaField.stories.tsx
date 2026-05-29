@@ -161,6 +161,7 @@ export const InvalidFormat: Story = {
   },
   args: {
     ...Empty.args,
+    errorText: 'Unsupported file type',
     fileFormatError: 'Unsupported file type',
     isInvalid: (file: File) => file.name.endsWith('.exe'),
   },
