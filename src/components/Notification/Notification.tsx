@@ -115,9 +115,9 @@ export const DialNotification: FC<DialNotificationProps> = ({
       {children}
       {closable && (
         <DialButton
-          className="ml-2 text-secondary hover:text-primary"
+          className="text-secondary hover:text-primary absolute top-0 right-0"
           aria-label="Close notification"
-          iconBefore={<IconX size={DIAL_ICON_SIZE.LG} />}
+          iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
           onClick={onClose}
         />
       )}

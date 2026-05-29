@@ -31,4 +31,4 @@ export const notificationVariantClassNameMap: Record<
 };
 
 export const alertBaseClassName =
-  'items-center justify-between gap-3 p-3 border border-solid dial-small-text-150 rounded shadow flex';
+  'items-center justify-between relative gap-3 p-3 border border-solid dial-small-text-150 rounded shadow flex';
