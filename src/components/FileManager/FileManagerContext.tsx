@@ -236,6 +236,7 @@ export interface FileManagerContextValue {
   unsupportedFileTypeTooltip?: string;
   hideSearchPathItemName?: boolean;
   showHiddenFileSwitcherInDestinationPopup?: boolean;
+  showCreateFolderButtonInDestinationPopup?: boolean;
 }
 
 export const FileManagerContext = createContext<
