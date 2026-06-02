@@ -155,3 +155,10 @@ export const WithoutHiddenFilesSwitcher: Story = {
     showHiddenFileSwitcher: false,
   },
 };
+
+export const WithoutAddFolderButton: Story = {
+  args: {
+    mode: 'move',
+    showCreateFolderButton: false,
+  },
+};

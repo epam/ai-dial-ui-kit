@@ -402,6 +402,7 @@ export interface DialFileManagerProps {
   nonClickableTableColumns?: FileManagerColumnKey[];
   hideSearchPathItemName?: boolean;
   showHiddenFileSwitcherInDestinationPopup?: boolean;
+  showCreateFolderButtonInDestinationPopup?: boolean;
   autoSelectUploadedItems?: boolean;
 }
 
@@ -666,6 +667,7 @@ export const DialFileManagerView: FC = () => {
     nonClickableTableColumns,
     hideSearchPathItemName,
     showHiddenFileSwitcherInDestinationPopup,
+    showCreateFolderButtonInDestinationPopup,
     newFolderDefaultName,
   } = useFileManagerContext();
 
@@ -1568,6 +1570,7 @@ export const DialFileManagerView: FC = () => {
           treeOptions={{ header: treeOptions?.header }}
           onFolderPopupPathChange={onFolderPopupPathChange}
           showHiddenFileSwitcher={showHiddenFileSwitcherInDestinationPopup}
+          showCreateFolderButton={showCreateFolderButtonInDestinationPopup}
           hideSearchPathItemName={hideSearchPathItemName}
         />
         <ConflictResolutionPopup
