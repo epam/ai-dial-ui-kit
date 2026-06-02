@@ -130,7 +130,6 @@ export {
   DropdownItemType,
 } from './types/dropdown';
 export { ElementSize } from './types/size';
-export { TagVariant } from './types/tag';
 export { TabOrientation } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';

@@ -65,7 +65,7 @@ const ColorValue = ({ value }: { value: string }) => (
         backgroundColor: value !== 'N/A' ? value : 'transparent',
       }}
     />
-    <DialTag tag={value} bordered={false} className="bg-layer-2" />
+    <DialTag label={value} className="bg-layer-2" />
   </div>
 );
 

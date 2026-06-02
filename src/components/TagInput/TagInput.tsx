@@ -232,9 +232,10 @@ export const DialTagInput: FC<DialTagInputProps> = ({
         (tag, index) => (
           <DialTag
             key={tag + index}
-            tag={tag}
+            label={tag}
             className={tagClassName}
-            remove={
+            closable={!disabled && !readOnly}
+            onRemove={
               !disabled && !readOnly ? () => handleRemove(index) : undefined
             }
           />
@@ -246,7 +247,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           tooltip={tags.slice(visibleTagCount).join(', ')}
           triggerClassName="inline-flex shrink-0 cursor-pointer"
         >
-          <DialTag tag={`+${tags.length - visibleTagCount}`} />
+          <DialTag label={`+${tags.length - visibleTagCount}`} />
         </DialTooltip>
       )}
 
@@ -279,16 +280,17 @@ export const DialTagInput: FC<DialTagInputProps> = ({
               className="inline-flex shrink-0"
             >
               <DialTag
-                tag={tag}
+                label={tag}
                 className={tagClassName}
-                remove={
+                closable={!disabled && !readOnly}
+                onRemove={
                   !disabled && !readOnly ? () => handleRemove(index) : undefined
                 }
               />
             </div>
           ))}
           <div ref={overflowMeasureRef} className="inline-flex shrink-0">
-            <DialTag tag={`+${tags.length}`} />
+            <DialTag label={`+${tags.length}`} />
           </div>
         </div>
       )}
