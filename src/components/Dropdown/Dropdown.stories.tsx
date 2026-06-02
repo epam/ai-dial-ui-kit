@@ -262,9 +262,7 @@ export const WithCustomHeader: Story = {
     menuHeader: (
       <div className="px-3 pt-2">
         <div className="flex items-center justify-between text-secondary">
-          <span className="dial-small-text font-medium">
-            Custom Time Range
-          </span>
+          <span className="dial-small-text font-medium">Custom Time Range</span>
           <IconChevronDown size={14} />
         </div>
       </div>
@@ -322,10 +320,7 @@ const FooterActionsExample = (args: DialDropdownProps) => {
       menuFooter={() => (
         <div className="px-2 pb-2 pt-1 border-t border-divider">
           <div className="flex items-center justify-end gap-2">
-            <DialNeutralButton
-              label="Cancel"
-              onClick={() => setOpen(false)}
-            />
+            <DialNeutralButton label="Cancel" onClick={() => setOpen(false)} />
             <DialPrimaryButton label="Apply" onClick={() => setOpen(false)} />
           </div>
         </div>
