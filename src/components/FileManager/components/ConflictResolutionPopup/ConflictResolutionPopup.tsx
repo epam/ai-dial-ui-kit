@@ -294,19 +294,17 @@ export const ConflictResolutionPopup: FC<ConflictResolutionPopupProps> = ({
               <DialDropdown
                 trigger={[DropdownTrigger.Click]}
                 open={isOpen}
-                menu={{
-                  items: dropdownItems,
-                  onClick: ({ key }) => {
-                    setFileDecisions((prev) => {
-                      const next = new Map(prev);
-                      next.set(
-                        params.data.path,
-                        key as DialFileManagerConflictActions,
-                      );
-                      return next;
-                    });
-                    setOpenDropdownPath(undefined);
-                  },
+                items={dropdownItems}
+                onItemClick={({ key }) => {
+                  setFileDecisions((prev) => {
+                    const next = new Map(prev);
+                    next.set(
+                      params.data.path,
+                      key as DialFileManagerConflictActions,
+                    );
+                    return next;
+                  });
+                  setOpenDropdownPath(undefined);
                 }}
                 placement="bottom-start"
                 matchReferenceWidth={false}

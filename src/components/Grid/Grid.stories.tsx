@@ -400,18 +400,16 @@ export const Compact: Story = {
                 <DialDropdown
                   placement="bottom-start"
                   allowedPlacements={['top-start', 'top-end']}
-                  menu={{
-                    items: [
-                      {
-                        key: 'copy',
-                        label: 'Copy',
-                      },
-                      {
-                        key: 'delete',
-                        label: 'Delete',
-                      },
-                    ],
-                  }}
+                  items={[
+                    {
+                      key: 'copy',
+                      label: 'Copy',
+                    },
+                    {
+                      key: 'delete',
+                      label: 'Delete',
+                    },
+                  ]}
                   className="sticky right-0"
                 >
                   <DialIcon

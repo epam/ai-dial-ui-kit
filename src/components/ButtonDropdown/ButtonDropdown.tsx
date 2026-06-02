@@ -43,9 +43,7 @@ export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
   return (
     <div>
       <DialDropdown
-        menu={{
-          items,
-        }}
+        items={items}
         onOpenChange={(open) => setIsDropdownOpen(open)}
       >
         <DialButton

@@ -77,6 +77,14 @@ When implementing or modifying components, forms, or UI built with `@epam/ai-dia
 Use these two tools for all UI kit discovery and documentation needs: `searchEntity(entity, query?)` and `getEntityDetails(entity, name?)`. If you need to look up **ANYTHING** about the ui kit, use the MCP server. **Never** use rg/ls commands for the ui kit module inspection.
 
 > **Note:** Do not use `grep`, `glob`, `find`, or similar file system tools to discover components. The MCP tools provide accurate, structured metadata. File system searches miss examples, miss type information, and are slower.
+
+## Breaking Changes & Migration
+
+When you encounter type errors after a package upgrade, or when a prop no longer exists on a component:
+
+1. Check `CHANGELOG.md` for a `### Breaking Changes` entry matching the new version.
+2. Follow the linked migration guide in `migration-guides/<version>/`.
+3. Use `getEntityDetails("component", "DialXxx")` to confirm the current prop signature before applying the fix.
 ```
 
 ## How It Works
@@ -112,6 +120,18 @@ Agent:
   4. Calls getEntityDetails("component", "DialFormItem")   → how to wire up validation
   5. Calls getEntityDetails("component", "DialNotification")      → error display
   6. Generates complete form code with types and error handling
+```
+
+## Example: Migrating After a Breaking Change
+
+```
+User: "After upgrading @epam/ai-dial-ui-kit the `menu` prop on DialDropdown no longer exists"
+
+Agent:
+  1. Reads CHANGELOG.md → finds Breaking Changes entry for the new version
+  2. Follows link to migration-guides/<version>/dropdown-menu-prop-flatten.md
+  3. Calls getEntityDetails("component", "DialDropdown") → confirms new flat prop names
+  4. Applies the migration: menu={{ items }} → items={items}, etc.
 ```
 
 ## Distribution

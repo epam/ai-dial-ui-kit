@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -19,6 +19,89 @@ import type {
 const manifest: Manifest = JSON.parse(
   readFileSync(join(__dirname, 'components-manifest.json'), 'utf-8'),
 );
+
+// ─── changelog & migration-guides ────────────────────────────────────────────
+
+const changelogPath = join(__dirname, 'CHANGELOG.md');
+const changelogRaw = existsSync(changelogPath)
+  ? readFileSync(changelogPath, 'utf-8')
+  : '';
+
+const migrationGuidesDir = join(__dirname, 'migration-guides');
+
+/**
+ * Parse the CHANGELOG into a map of version → section text.
+ * Sections are delimited by `## [x.y.z]` headings.
+ */
+function parseChangelog(content: string): Map<string, string> {
+  const map = new Map<string, string>();
+  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]/gm;
+  const sections: { version: string; start: number }[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = sectionRegex.exec(content)) !== null) {
+    sections.push({ version: match[1], start: match.index });
+  }
+  for (let i = 0; i < sections.length; i++) {
+    const { version, start } = sections[i];
+    const end =
+      i + 1 < sections.length ? sections[i + 1].start : content.length;
+    map.set(version, content.slice(start, end).trim());
+  }
+  return map;
+}
+
+const changelogSections = parseChangelog(changelogRaw);
+
+function parseSemver(v: string): [number, number, number] {
+  const p = v.split('.').map(Number);
+  return [p[0] ?? 0, p[1] ?? 0, p[2] ?? 0];
+}
+
+/** Returns true when a > b */
+function semverGt(a: string, b: string): boolean {
+  const [a0, a1, a2] = parseSemver(a);
+  const [b0, b1, b2] = parseSemver(b);
+  if (a0 !== b0) return a0 > b0;
+  if (a1 !== b1) return a1 > b1;
+  return a2 > b2;
+}
+
+/**
+ * Returns versions from `changelogSections` that fall in the range
+ * (fromVersion, toVersion] — i.e. newer than `from` and at most `to`.
+ */
+function versionsInRange(from: string, to: string): string[] {
+  return [...changelogSections.keys()].filter(
+    (v) => semverGt(v, from) && !semverGt(v, to),
+  );
+}
+
+/**
+ * Read all migration-guide markdown files for the given versions.
+ * Returns an array of { version, filename, content } objects.
+ */
+function readMigrationGuides(
+  versions: string[],
+): { version: string; filename: string; content: string }[] {
+  const guides: { version: string; filename: string; content: string }[] = [];
+  if (!existsSync(migrationGuidesDir)) return guides;
+
+  for (const version of versions) {
+    const vDir = join(migrationGuidesDir, version);
+    if (!existsSync(vDir)) continue;
+    const files = readdirSync(vDir).filter(
+      (f) => f.endsWith('.md') && !f.startsWith('_'),
+    );
+    for (const file of files.sort()) {
+      guides.push({
+        version,
+        filename: file,
+        content: readFileSync(join(vDir, file), 'utf-8'),
+      });
+    }
+  }
+  return guides;
+}
 
 // ─── entity kinds ─────────────────────────────────────────────────────────────
 
@@ -272,6 +355,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: ['entity'],
       },
     },
+    {
+      name: 'getMigrationGuides',
+      description:
+        'Returns the CHANGELOG entries and step-by-step migration guides for all breaking changes introduced between two versions of @epam/ai-dial-ui-kit.\n\nPass the version you are currently on as `fromVersion` and the version you are upgrading to as `toVersion`. The tool returns the changelog section for each intermediate release plus the full text of every migration guide that applies.\n\nExamples:\n  getMigrationGuides("0.9.0", "0.10.0") → changelog + guides for 0.10.0\n  getMigrationGuides("0.8.0", "0.10.0") → changelog + guides for 0.9.0 and 0.10.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          fromVersion: {
+            type: 'string',
+            description:
+              'The version you are upgrading FROM (exclusive), e.g. "0.9.0".',
+          },
+          toVersion: {
+            type: 'string',
+            description:
+              'The version you are upgrading TO (inclusive), e.g. "0.10.0".',
+          },
+        },
+        required: ['fromVersion', 'toVersion'],
+      },
+    },
   ],
 }));
 
@@ -458,6 +562,56 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       );
     }
     return { content: [{ type: 'text', text: formatExport(entry) }] };
+  }
+
+  // ── getMigrationGuides ────────────────────────────────────────────────────
+
+  if (name === 'getMigrationGuides') {
+    const fromVersion =
+      typeof a.fromVersion === 'string' ? a.fromVersion.trim() : '';
+    const toVersion = typeof a.toVersion === 'string' ? a.toVersion.trim() : '';
+
+    if (!fromVersion || !toVersion) {
+      throw new Error('"fromVersion" and "toVersion" are required.');
+    }
+
+    const versions = versionsInRange(fromVersion, toVersion).sort((a, b) =>
+      semverGt(a, b) ? 1 : -1,
+    );
+
+    if (versions.length === 0) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `No changelog entries found for versions between ${fromVersion} (exclusive) and ${toVersion} (inclusive). Either this range is already up to date or the versions are unknown.`,
+          },
+        ],
+      };
+    }
+
+    const sections: string[] = [];
+
+    for (const version of versions) {
+      const changelogSection = changelogSections.get(version);
+      if (changelogSection) sections.push(changelogSection);
+
+      const guides = readMigrationGuides([version]);
+      for (const guide of guides) {
+        sections.push(
+          `---\n\n<!-- Migration guide: ${guide.version}/${guide.filename} -->\n\n${guide.content}`,
+        );
+      }
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: sections.join('\n\n'),
+        },
+      ],
+    };
   }
 
   throw new Error(`Unknown tool: ${name}`);

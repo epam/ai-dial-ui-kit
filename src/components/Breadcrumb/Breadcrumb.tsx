@@ -167,10 +167,8 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
 
         <li className={mergeClasses(breadcrumbItemBaseClassName)}>
           <DialDropdown
-            menu={{
-              items: dropdownItems,
-              onClick: handleDropdownItemClick,
-            }}
+            items={dropdownItems}
+            onItemClick={handleDropdownItemClick}
             placement="bottom-start"
             matchReferenceWidth={false}
           >

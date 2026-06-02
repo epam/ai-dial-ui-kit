@@ -178,7 +178,7 @@ export const DialFileManagerToolbar: FC<DialFileManagerToolbarProps> = ({
   const renderMobileActions = () => (
     <>
       <DialDropdown
-        menu={{ items: dropdownItems }}
+        items={dropdownItems}
         allowedPlacements={['bottom', 'bottom-start']}
       >
         <DialGhostIconButton

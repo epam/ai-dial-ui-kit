@@ -4,7 +4,6 @@ import { type FC, type ReactNode, useState } from 'react';
 import {
   DialDropdown,
   type DialDropdownProps,
-  type DropdownMenuProps,
 } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -13,9 +12,8 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialDropdownIconProps extends Omit<
   DialDropdownProps,
-  'children' | 'menu' | 'className'
+  'children' | 'className'
 > {
-  menu: DropdownMenuProps;
   icon: ReactNode;
   ariaLabel: string;
   size?: ElementSize;
@@ -35,11 +33,11 @@ export interface DialDropdownIconProps extends Omit<
  * <DialDropdownIcon
  *   ariaLabel="Select model"
  *   icon={<IconBrandOpenai size={18} />}
- *   menu={{ items }}
+ *   items={items}
  * />
  * ```
  *
- * @param menu - Dropdown menu definition.
+ * @param items - Menu items to display.
  * @param icon - Primary trigger icon.
  * @param ariaLabel - Accessible name for the trigger button.
  * @param [size=ElementSize.Standard] - Trigger size.
@@ -50,7 +48,6 @@ export interface DialDropdownIconProps extends Omit<
  * @param [showCaret=true] - Whether to render the caret.
  */
 export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
-  menu,
   icon,
   ariaLabel,
   size = ElementSize.Standard,
@@ -80,7 +77,6 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
   return (
     <DialDropdown
       {...dropdownProps}
-      menu={menu}
       disabled={disabled}
       placement={placement}
       matchReferenceWidth={matchReferenceWidth}

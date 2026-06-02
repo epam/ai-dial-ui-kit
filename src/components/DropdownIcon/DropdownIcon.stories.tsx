@@ -91,7 +91,7 @@ const meta = {
     showCaret: { control: { type: 'boolean' } },
     icon: { control: false },
     caretIcon: { control: false },
-    menu: { control: false },
+    items: { control: false },
     placement: { control: false },
     allowedPlacements: { control: false },
     className: { control: false },
@@ -101,7 +101,7 @@ const meta = {
   args: {
     ariaLabel: 'Select model',
     icon: <IconBrandOpenai size={DIAL_ICON_SIZE.MD} />,
-    menu: { items: modelItems },
+    items: modelItems,
     showCaret: true,
     disabled: false,
   },
@@ -204,7 +204,7 @@ export const ModelSelector: Story = {
             {selected.icon}
           </span>
         }
-        menu={{ items }}
+        items={items}
         maxDropdownHeight={200}
       />
     );

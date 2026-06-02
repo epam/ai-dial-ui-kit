@@ -233,7 +233,7 @@ export const DialGrid = <T extends object>({
         return (
           <DialDropdown
             trigger={[DropdownTrigger.ContextMenu]}
-            menu={{ items }}
+            items={items}
             anchorToMouse
             matchReferenceWidth
             className="w-full"
@@ -418,7 +418,7 @@ export const DialGrid = <T extends object>({
         return (
           <DialDropdown
             trigger={[DropdownTrigger.ContextMenu]}
-            menu={{ items }}
+            items={items}
             anchorToMouse
             matchReferenceWidth
             className={classNames(

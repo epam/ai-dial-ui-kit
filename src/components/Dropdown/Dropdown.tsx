@@ -47,16 +47,12 @@ import { DialCloseButton } from '@/components/CloseButton/CloseButton';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DropdownSubMenuItem } from './DropdownSubMenuItem';
 
-export interface DropdownMenuProps {
-  items: DropdownItem[];
-  onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
-  header?: ReactNode | (() => ReactNode);
-  footer?: ReactNode | (() => ReactNode);
-}
-
 export interface DialDropdownProps {
   children: ReactNode;
-  menu?: DropdownMenuProps;
+  items?: DropdownItem[];
+  onItemClick?: (info: { key: string; domEvent: MouseEvent }) => void;
+  menuHeader?: ReactNode | (() => ReactNode);
+  menuFooter?: ReactNode | (() => ReactNode);
   renderOverlay?: () => ReactNode;
   trigger?: DropdownTrigger[];
   placement?: Placement;
@@ -88,12 +84,12 @@ export interface DialDropdownProps {
  * @example
  * ```tsx
  * // Simple items menu
- * <DialDropdown menu={{ items: [{ key: 'profile', label: 'Profile' }, { key: 'logout', label: 'Logout' }] }}>
+ * <DialDropdown items={[{ key: 'profile', label: 'Profile' }, { key: 'logout', label: 'Logout' }]}>
  *   <button type="button" className="px-3 py-2 rounded border">Open</button>
  * </DialDropdown>
  *
  * // Hover trigger
- * <DialDropdown trigger={[DropdownTrigger.Hover]} placement="bottom-end" menu={{ items }}>
+ * <DialDropdown trigger={[DropdownTrigger.Hover]} placement="bottom-end" items={items}>
  *   <button type="button" className="px-3 py-2 rounded border">Hover me</button>
  * </DialDropdown>
  *
@@ -104,8 +100,11 @@ export interface DialDropdownProps {
  * ```
  *
  * @param children - Trigger element(s) to anchor and open the menu
- * @param [menu] - Items-based menu definition
- * @param [renderOverlay] - Render function for fully custom overlay content (ignored when `menu` is provided)
+ * @param [items] - Menu items to render
+ * @param [onItemClick] - Global handler fired when any item is clicked
+ * @param [menuHeader] - Content rendered above the items list
+ * @param [menuFooter] - Content rendered below the items list
+ * @param [renderOverlay] - Render function for fully custom overlay content (ignored when `items` is provided)
  * @param [trigger=[DropdownTrigger.Click]] - Interactions that open the menu
  * @param [placement] - Floating UI placement string; when omitted, auto placement is used
  * @param [allowedPlacements] - Restricts the allowed placements
@@ -133,7 +132,10 @@ const getRefWidth = (el: ReferenceElement): number => {
 
 export const DialDropdown: FC<DialDropdownProps> = ({
   children,
-  menu,
+  items,
+  onItemClick,
+  menuHeader,
+  menuFooter,
   renderOverlay,
   trigger = [DropdownTrigger.Click],
   placement,
@@ -309,24 +311,24 @@ export const DialDropdown: FC<DialDropdownProps> = ({
     (item: DropdownItem) => (e: MouseEvent) => {
       if (item.disabled) return;
       item.onClick?.({ key: item.key, domEvent: e });
-      menu?.onClick?.({ key: item.key, domEvent: e });
+      onItemClick?.({ key: item.key, domEvent: e });
       setOpen(false);
     },
-    [menu, setOpen],
+    [onItemClick, setOpen],
   );
 
   const overlayContent: ReactNode = useMemo(() => {
     if (renderOverlay) return renderOverlay();
-    if (!menu) return null;
+    if (!items) return null;
 
     return (
       <>
-        {menu.header && (
-          <>{typeof menu.header === 'function' ? menu.header() : menu.header}</>
+        {menuHeader && (
+          <>{typeof menuHeader === 'function' ? menuHeader() : menuHeader}</>
         )}
 
         <div role="none" className="py-1" aria-label="dropdown">
-          {menu.items.map((it) => {
+          {items.map((it) => {
             if (it.type === DropdownItemType.Divider) {
               return (
                 <div
@@ -398,12 +400,12 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           })}
         </div>
 
-        {menu.footer && (
-          <>{typeof menu.footer === 'function' ? menu.footer() : menu.footer}</>
+        {menuFooter && (
+          <>{typeof menuFooter === 'function' ? menuFooter() : menuFooter}</>
         )}
       </>
     );
-  }, [handleItemClick, menu, renderOverlay, setOpen]);
+  }, [handleItemClick, items, menuFooter, menuHeader, renderOverlay, setOpen]);
 
   const referenceProps = getReferenceProps({
     onContextMenu,

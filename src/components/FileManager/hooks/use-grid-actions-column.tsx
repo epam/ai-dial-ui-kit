@@ -56,7 +56,7 @@ export const useGridActionsColumn = ({
         <DialDropdown
           placement="bottom-start"
           allowedPlacements={['top-start', 'top-end', 'bottom-start']}
-          menu={{ items }}
+          items={items}
           className={mergeClasses('sticky right-0', buttonClassName)}
         >
           <DialIcon
