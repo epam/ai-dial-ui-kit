@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { DialSchemaRenderer } from './SchemaRenderer';
 import {
   SchemaRendererVariant,
   SchemaDisplayMode,
   SchemaOrientation,
   type JsonSchema,
+  type DialSchemaRendererProps,
 } from './types';
 
 const simpleSchema: JsonSchema = {
@@ -226,9 +228,50 @@ const hiddenFieldsSchema: JsonSchema = {
   required: ['name', 'internalId'],
 };
 
+const SchemaRendererWithPreview = (props: DialSchemaRendererProps) => {
+  const [formValue, setFormValue] = useState<Record<string, unknown>>({});
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <details open>
+        <summary
+          style={{ cursor: 'pointer', fontWeight: 600, marginBottom: '8px' }}
+        >
+          Form Value (JSON)
+        </summary>
+        <pre
+          style={{
+            padding: '12px',
+            borderRadius: '6px',
+            fontSize: '12px',
+            maxHeight: '240px',
+            overflow: 'auto',
+            background: '#1e1e1e',
+            color: '#d4d4d4',
+          }}
+        >
+          {JSON.stringify(formValue, null, 2)}
+        </pre>
+      </details>
+      <DialSchemaRenderer
+        {...props}
+        onChange={(v) => {
+          setFormValue(v);
+          props.onChange?.(v);
+        }}
+        onDefaultValues={(v) => {
+          setFormValue(v);
+          props.onDefaultValues?.(v);
+        }}
+      />
+    </div>
+  );
+};
+
 const meta: Meta<typeof DialSchemaRenderer> = {
   title: 'Components/SchemaRenderer',
   component: DialSchemaRenderer,
+  render: (args) => <SchemaRendererWithPreview {...args} />,
   parameters: { layout: 'padded' },
   argTypes: {
     variant: {
@@ -566,7 +609,7 @@ export const SkipUntouchedComparison: StoryObj = {
         <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
           skipUntouched: false (default) — errors shown immediately
         </h3>
-        <DialSchemaRenderer
+        <SchemaRendererWithPreview
           schema={credentialsSchema}
           variant={SchemaRendererVariant.Flat}
           skipUntouched={false}
@@ -576,7 +619,7 @@ export const SkipUntouchedComparison: StoryObj = {
         <h3 style={{ marginBottom: '12px', fontWeight: 600 }}>
           skipUntouched: true — errors shown only after interaction
         </h3>
-        <DialSchemaRenderer
+        <SchemaRendererWithPreview
           schema={credentialsSchema}
           variant={SchemaRendererVariant.Flat}
           skipUntouched={true}
