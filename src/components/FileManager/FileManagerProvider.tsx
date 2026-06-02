@@ -148,6 +148,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   nonClickableTableColumns,
   hideSearchPathItemName,
   showHiddenFileSwitcherInDestinationPopup,
+  showCreateFolderButtonInDestinationPopup,
   autoSelectUploadedItems = false,
 }) => {
   const {
@@ -967,6 +968,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     fileTooLargeTooltip,
     unsupportedFileTypeTooltip,
     showHiddenFileSwitcherInDestinationPopup,
+    showCreateFolderButtonInDestinationPopup,
   };
 
   return (

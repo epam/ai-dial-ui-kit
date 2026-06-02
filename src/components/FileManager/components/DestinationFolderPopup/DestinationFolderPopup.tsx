@@ -43,6 +43,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   moveLabel?: string;
   addFolderLabel?: string;
   showHiddenFileSwitcher?: boolean;
+  showCreateFolderButton?: boolean;
   hiddenFilesSwitcherLabel?: string;
   mode?: 'copy' | 'move';
   header?: ReactNode;
@@ -109,6 +110,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   mode = DestinationFolderMode.Copy,
   hiddenFilesSwitcherLabel = 'Show hidden files',
   showHiddenFileSwitcher = true,
+  showCreateFolderButton = true,
   onUploadFiles,
   onValidateUpload,
   maxFileSize,
@@ -131,8 +133,10 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   }, []);
 
   const mobileFooterDropdownItems = useMemo<DropdownItem[]>(() => {
-    const footerDropdownItems = [
-      {
+    const footerDropdownItems = [];
+
+    if (showCreateFolderButton) {
+      footerDropdownItems.push({
         key: 'add-folder',
         label: addFolderLabel,
         icon: (
@@ -142,8 +146,8 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           fileManagerActionRef.current?.createFolder();
           setMobileMenuOpen(false);
         },
-      },
-    ];
+      });
+    }
 
     if (showHiddenFileSwitcher) {
       footerDropdownItems.push({
@@ -158,7 +162,12 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
     }
 
     return footerDropdownItems;
-  }, [addFolderLabel, hiddenFilesSwitcherLabel, showHiddenFileSwitcher]);
+  }, [
+    addFolderLabel,
+    hiddenFilesSwitcherLabel,
+    showHiddenFileSwitcher,
+    showCreateFolderButton,
+  ]);
 
   const handleOnPathChange = useCallback(
     (nextPath?: string) => {
@@ -220,17 +229,21 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
               </DialDropdown>
             ) : (
               <>
-                <DialPrimaryButton
-                  label={addFolderLabel}
-                  appearance={ButtonAppearance.Ghost}
-                  iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
-                  onClick={() => {
-                    fileManagerActionRef.current?.createFolder();
-                  }}
-                />
+                {showCreateFolderButton && (
+                  <DialPrimaryButton
+                    label={addFolderLabel}
+                    appearance={ButtonAppearance.Ghost}
+                    iconBefore={<IconFolderPlus {...BASE_ICON_PROPS} />}
+                    onClick={() => {
+                      fileManagerActionRef.current?.createFolder();
+                    }}
+                  />
+                )}
+                {showCreateFolderButton && showHiddenFileSwitcher && (
+                  <div className="w-px h-[26px] bg-controls-disable-accent my-2" />
+                )}
                 {showHiddenFileSwitcher && (
                   <>
-                    <div className="w-px h-[26px] bg-controls-disable-accent my-2" />
                     <div className="inline-flex items-center cursor-pointer">
                       <DialSwitch
                         label={hiddenFilesSwitcherLabel}

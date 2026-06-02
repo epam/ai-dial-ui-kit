@@ -76,17 +76,28 @@ export function extractDefaults(
     return resolved.default;
   }
 
-  if (isObjectType(resolved) && resolved.properties) {
-    const obj: Record<string, unknown> = {};
-    let hasAny = false;
-    for (const [key, propSchema] of Object.entries(resolved.properties)) {
-      const def = extractDefaults(propSchema, rootSchema, depth + 1);
-      if (def !== undefined) {
-        obj[key] = def;
-        hasAny = true;
+  if (isObjectType(resolved)) {
+    if (resolved.properties) {
+      const obj: Record<string, unknown> = {};
+      let hasAny = false;
+      for (const [key, propSchema] of Object.entries(resolved.properties)) {
+        const def = extractDefaults(propSchema, rootSchema, depth + 1);
+        if (def !== undefined) {
+          obj[key] = def;
+          hasAny = true;
+        }
       }
+      return hasAny ? obj : undefined;
     }
-    return hasAny ? obj : undefined;
+
+    // Key-value map objects (additionalProperties only, no fixed properties)
+    // default to an empty object so required map fields are not left as null.
+    if (
+      resolved.additionalProperties != null &&
+      resolved.additionalProperties !== false
+    ) {
+      return {};
+    }
   }
 
   return undefined;

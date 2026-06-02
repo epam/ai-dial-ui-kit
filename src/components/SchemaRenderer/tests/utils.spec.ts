@@ -235,6 +235,48 @@ describe('extractDefaults', () => {
     };
     expect(extractDefaults({ $ref: '#/$defs/Base' }, root)).toBe('from-ref');
   });
+
+  test('returns empty object for additionalProperties-only object schema', () => {
+    const schema: JsonSchemaDef = {
+      type: 'object',
+      additionalProperties: { type: 'string' },
+    };
+    expect(extractDefaults(schema, {})).toEqual({});
+  });
+
+  test('returns empty object for required key-value map without explicit default', () => {
+    const root: JsonSchema = {
+      $defs: {
+        CustomConfig: {
+          type: 'object',
+          properties: {
+            variables: {
+              type: 'object',
+              additionalProperties: { type: 'string' },
+              title: 'Variables',
+            },
+            type: {
+              const: 'custom',
+              default: 'custom',
+              type: 'string',
+            },
+            content: {
+              type: 'string',
+              title: 'Content',
+            },
+          },
+          required: ['variables', 'content'],
+        },
+      },
+    };
+    const result = extractDefaults(
+      { $ref: '#/$defs/CustomConfig' },
+      root,
+    ) as Record<string, unknown>;
+    expect(result).toBeDefined();
+    expect(result.type).toBe('custom');
+    expect(result.variables).toEqual({});
+  });
 });
 
 // ---------------------------------------------------------------------------
