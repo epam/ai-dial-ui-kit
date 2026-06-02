@@ -234,6 +234,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
             key={tag + index}
             label={tag}
             className={tagClassName}
+            closable={!disabled && !readOnly}
             onRemove={
               !disabled && !readOnly ? () => handleRemove(index) : undefined
             }
@@ -281,6 +282,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
               <DialTag
                 label={tag}
                 className={tagClassName}
+                closable={!disabled && !readOnly}
                 onRemove={
                   !disabled && !readOnly ? () => handleRemove(index) : undefined
                 }
