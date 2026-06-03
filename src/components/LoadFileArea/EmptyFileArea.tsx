@@ -165,24 +165,29 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
     () => ({
       accept: [NativeTypes.FILE],
       drop(selectedFiles: { files: File[] }) {
-        const files = selectedFiles.files;
-        if (
-          !getIsFileFormatError?.(files) &&
-          !getIsFileSizeError?.(files) &&
-          !getIsFileCountError(files)
-        ) {
-          onChange(files);
+        const droppedFiles = selectedFiles.files;
+
+        const hasFormatError = getIsFileFormatError?.(droppedFiles) ?? false;
+        const hasSizeError = getIsFileSizeError?.(droppedFiles) ?? false;
+        const hasCountError = getIsFileCountError?.(droppedFiles) ?? false;
+
+        setIsErrorFileFormat(hasFormatError);
+        setIsErrorFileSize(hasSizeError);
+
+        if (hasFormatError || hasSizeError || hasCountError) {
+          setFiles(droppedFiles);
+          return;
         }
+
+        onChange(droppedFiles);
         clearErrorState();
       },
-      collect: (monitor: DropTargetMonitor) => {
-        return {
-          isOver: monitor.isOver(),
-          canDrop: monitor.canDrop(),
-        };
-      },
+      collect: (monitor: DropTargetMonitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
     }),
-    [onFileChange],
+    [onChange, getIsFileFormatError, getIsFileSizeError, getIsFileCountError],
   );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLLabelElement>) => {
