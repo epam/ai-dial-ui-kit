@@ -28,6 +28,7 @@ export interface DialNotificationProps extends Omit<
   closable?: boolean;
   iconSize?: number;
   iconStroke?: number;
+  textClassName?: string;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -40,25 +41,25 @@ export interface DialNotificationProps extends Omit<
  *
  * @example
  * ```tsx
- * <DialAlert
+ * <DialNotification
  *   variant={NotificationVariant.Info}
  *   message="This is an info alert."
  * />
  *
- * <DialAlert
+ * <DialNotification
  *   variant={NotificationVariant.Success}
  *   title="Saved"
  *   message="Changes saved successfully."
  * />
  *
- * <DialAlert
+ * <DialNotification
  *   variant={NotificationVariant.Error}
  *   closable
  *   message="Something went wrong."
  *   onClose={(e) => console.log('closed', e)}
  * />
  *
- * <DialAlert
+ * <DialNotification
  *   variant={NotificationVariant.Loading}
  *   title="Processing"
  *   message="Please wait..."
@@ -69,6 +70,7 @@ export interface DialNotificationProps extends Omit<
  * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
  * @param [className] - Additional CSS classes applied to the alert container
+ * @param [textClassName] - Additional CSS classes applied to the message text
  * @param [closable=false] - Whether the alert has a close button
  * @param [iconSize=24] - Size of the icon displayed in the alert
  * @param [iconStroke=2] - Stroke width of the icon displayed in the alert
@@ -84,6 +86,7 @@ export const DialNotification: FC<DialNotificationProps> = ({
   closable = false,
   onClose,
   children,
+  textClassName = 'flex-col',
   ...props
 }) => {
   const icon = useMemo(() => {
@@ -103,7 +106,12 @@ export const DialNotification: FC<DialNotificationProps> = ({
       <div className="flex items-center gap-3 flex-1">
         <DialIcon icon={icon} />
         {title ? (
-          <div className="flex flex-col gap-1 text-primary">
+          <div
+            className={mergeClasses(
+              'flex flex-col gap-1 text-primary',
+              textClassName,
+            )}
+          >
             <div className="dial-small-semi-text">{title}</div>
             <div className="dial-small-text">{message}</div>
           </div>
