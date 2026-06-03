@@ -258,7 +258,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
               trigger={[DropdownTrigger.ContextMenu]}
               className="w-full"
               anchorToMouse
-              menu={{ items: menuItems }}
+              items={menuItems}
             >
               <div
                 style={{ paddingLeft: `${level * FOLDER_LEVEL_PADDING}px` }}
@@ -322,7 +322,7 @@ export const DialFoldersTree: FC<DialFoldersTreeProps> = ({
                     <DialDropdown
                       placement="bottom-start"
                       allowedPlacements={['top-start', 'top-end']}
-                      menu={{ items: menuItems }}
+                      items={menuItems}
                       className="sticky right-0"
                     >
                       <DialIcon

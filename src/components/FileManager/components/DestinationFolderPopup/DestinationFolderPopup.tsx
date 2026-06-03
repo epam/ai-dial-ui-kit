@@ -212,7 +212,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
           <div className="flex items-center gap-4 min-w-0">
             {isMobile ? (
               <DialDropdown
-                menu={{ items: mobileFooterDropdownItems }}
+                items={mobileFooterDropdownItems}
                 open={mobileMenuOpen}
                 onOpenChange={setMobileMenuOpen}
               >

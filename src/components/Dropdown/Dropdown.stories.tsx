@@ -120,7 +120,10 @@ const meta = {
     defaultOpen: { control: false },
     onOpenChange: { control: false },
     onClose: { control: false },
-    menu: { control: false },
+    items: { control: false },
+    onItemClick: { control: false },
+    menuHeader: { control: false },
+    menuFooter: { control: false },
     renderOverlay: { control: false },
     children: { control: false },
   },
@@ -131,7 +134,7 @@ const meta = {
     anchorToMouse: false,
     matchReferenceWidth: true,
     children: <TriggerBtn />,
-    menu: { items },
+    items,
   },
 } satisfies Meta<typeof DialDropdown>;
 
@@ -153,7 +156,7 @@ export const SpecWidthHugContent: Story = {
   args: {
     placement: 'bottom-start',
     matchReferenceWidth: false,
-    menu: { items: specItems },
+    items: specItems,
   },
 };
 
@@ -212,7 +215,7 @@ export const SecondaryEllipsisTrigger: Story = {
         iconBefore={<IconDots size={DIAL_ICON_SIZE.SM} />}
       />
     ),
-    menu: { items: specItems },
+    items: specItems,
     placement: 'bottom-end',
   },
 };
@@ -230,7 +233,7 @@ export const AllowedPlacements: Story = {
         {...args}
         placement="bottom-start"
         allowedPlacements={['top-start', 'top-end']}
-        menu={{ items: specItems }}
+        items={specItems}
       >
         <TriggerBtn label="Allowed Placements" />
       </DialDropdown>
@@ -255,19 +258,15 @@ export const WithCustomHeader: Story = {
   name: 'With custom header',
   args: {
     placement: 'bottom-start',
-    menu: {
-      header: (
-        <div className="px-3 pt-2">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="dial-small-text font-medium">
-              Custom Time Range
-            </span>
-            <IconChevronDown size={14} />
-          </div>
+    items: [{ key: 'divider', type: DropdownItemType.Divider }, ...timeItems],
+    menuHeader: (
+      <div className="px-3 pt-2">
+        <div className="flex items-center justify-between text-secondary">
+          <span className="dial-small-text font-medium">Custom Time Range</span>
+          <IconChevronDown size={14} />
         </div>
-      ),
-      items: [{ key: 'divider', type: DropdownItemType.Divider }, ...timeItems],
-    },
+      </div>
+    ),
   },
 };
 
@@ -275,16 +274,14 @@ export const WithCustomFooter: Story = {
   name: 'With custom footer',
   args: {
     placement: 'bottom-start',
-    menu: {
-      items: timeItems,
-      footer: (
-        <div className="px-3 py-2 border-t">
-          <span className="dial-small-text text-primary font-medium">
-            Footer content
-          </span>
-        </div>
-      ),
-    },
+    items: timeItems,
+    menuFooter: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small-text text-primary font-medium">
+          Footer content
+        </span>
+      </div>
+    ),
   },
 };
 
@@ -292,23 +289,21 @@ export const WithHeaderAndFooter: Story = {
   name: 'With header and footer',
   args: {
     placement: 'bottom-start',
-    menu: {
-      header: (
-        <div className="px-3 py-2 border-b">
-          <span className="dial-small-text text-primary font-medium">
-            Select time range
-          </span>
-        </div>
-      ),
-      items: timeItems,
-      footer: (
-        <div className="px-3 py-2 border-t">
-          <span className="dial-small-text text-primary font-medium">
-            Footer content
-          </span>
-        </div>
-      ),
-    },
+    items: timeItems,
+    menuHeader: (
+      <div className="px-3 py-2 border-b">
+        <span className="dial-small-text text-primary font-medium">
+          Select time range
+        </span>
+      </div>
+    ),
+    menuFooter: (
+      <div className="px-3 py-2 border-t">
+        <span className="dial-small-text text-primary font-medium">
+          Footer content
+        </span>
+      </div>
+    ),
   },
 };
 
@@ -321,20 +316,15 @@ const FooterActionsExample = (args: DialDropdownProps) => {
       trigger={[DropdownTrigger.Click]}
       open={open}
       onOpenChange={setOpen}
-      menu={{
-        items: timeItems,
-        footer: () => (
-          <div className="px-2 pb-2 pt-1 border-t border-divider">
-            <div className="flex items-center justify-end gap-2">
-              <DialNeutralButton
-                label="Cancel"
-                onClick={() => setOpen(false)}
-              />
-              <DialPrimaryButton label="Apply" onClick={() => setOpen(false)} />
-            </div>
+      items={timeItems}
+      menuFooter={() => (
+        <div className="px-2 pb-2 pt-1 border-t border-divider">
+          <div className="flex items-center justify-end gap-2">
+            <DialNeutralButton label="Cancel" onClick={() => setOpen(false)} />
+            <DialPrimaryButton label="Apply" onClick={() => setOpen(false)} />
           </div>
-        ),
-      }}
+        </div>
+      )}
     >
       <TriggerBtn label="With footer actions" />
     </DialDropdown>
@@ -351,7 +341,7 @@ export const ContextMenuAtCursor: Story = {
     trigger: [DropdownTrigger.ContextMenu],
     anchorToMouse: true,
     matchReferenceWidth: false,
-    menu: { items: specItems },
+    items: specItems,
   },
   render: (args) => (
     <DialDropdown {...args}>
@@ -368,7 +358,7 @@ export const ClickNearCursor: Story = {
     trigger: [DropdownTrigger.Click],
     anchorToMouse: true,
     matchReferenceWidth: false,
-    menu: { items: specItems },
+    items: specItems,
   },
   render: (args) => (
     <DialDropdown {...args}>
@@ -489,7 +479,7 @@ export const DropdownDynamicButtons: Story = {
         onOpenChange={setOpen}
         onClose={() => setOpen(false)}
         placement="bottom"
-        menu={{ items }}
+        items={items}
       >
         <TriggerBtn label="Dynamic items" />
       </DialDropdown>
@@ -503,43 +493,41 @@ export const WithSubMenu: Story = {
     <DialDropdown
       {...args}
       placement="bottom-start"
-      menu={{
-        items: [
-          {
-            key: 'profile',
-            label: 'Profile',
-            icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
-          },
-          {
-            key: 'more',
-            label: 'More actions',
-            icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
-            children: [
-              {
-                key: 'open',
-                label: 'Open in new tab',
-                icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
-              },
-              {
-                key: 'copy',
-                label: 'Duplicate',
-                icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
-              },
-              {
-                key: 'del',
-                label: 'Delete',
-                icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
-                danger: true,
-              },
-            ],
-          },
-          {
-            key: 'logout',
-            label: 'Logout',
-            icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
-          },
-        ],
-      }}
+      items={[
+        {
+          key: 'profile',
+          label: 'Profile',
+          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+        },
+        {
+          key: 'more',
+          label: 'More actions',
+          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          children: [
+            {
+              key: 'open',
+              label: 'Open in new tab',
+              icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
+            },
+            {
+              key: 'copy',
+              label: 'Duplicate',
+              icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
+            },
+            {
+              key: 'del',
+              label: 'Delete',
+              icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
+              danger: true,
+            },
+          ],
+        },
+        {
+          key: 'logout',
+          label: 'Logout',
+          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+        },
+      ]}
     >
       <TriggerBtn label="Sub-menu" />
     </DialDropdown>

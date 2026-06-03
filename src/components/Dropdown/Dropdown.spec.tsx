@@ -25,7 +25,7 @@ const readPosition = (el: HTMLElement) =>
 describe('Dial UI Kit :: Dropdown', () => {
   test('renders & toggles aria-expanded on open/close', () => {
     const { container } = render(
-      <DialDropdown menu={{ items }}>
+      <DialDropdown items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -44,13 +44,11 @@ describe('Dial UI Kit :: Dropdown', () => {
     const onMenu = vi.fn();
     render(
       <DialDropdown
-        menu={{
-          items: [
-            { key: 'a', label: 'A', onClick: onItem },
-            { key: 'b', label: 'B' },
-          ],
-          onClick: onMenu,
-        }}
+        items={[
+          { key: 'a', label: 'A', onClick: onItem },
+          { key: 'b', label: 'B' },
+        ]}
+        onItemClick={onMenu}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -65,7 +63,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('disabled prevents opening', () => {
     render(
-      <DialDropdown disabled menu={{ items }}>
+      <DialDropdown disabled items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -78,7 +76,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('opens on context menu trigger', () => {
     render(
-      <DialDropdown trigger={[DropdownTrigger.ContextMenu]} menu={{ items }}>
+      <DialDropdown trigger={[DropdownTrigger.ContextMenu]} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -89,7 +87,7 @@ describe('Dial UI Kit :: Dropdown', () => {
   test('closable overlay shows button and calls onClose', () => {
     const onClose = vi.fn();
     render(
-      <DialDropdown closable onClose={onClose} menu={{ items }}>
+      <DialDropdown closable onClose={onClose} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -105,13 +103,11 @@ describe('Dial UI Kit :: Dropdown', () => {
     const onMenu = vi.fn();
     render(
       <DialDropdown
-        menu={{
-          items: [
-            { key: 'x', label: 'X', disabled: true, onClick: onItem },
-            { key: 'y', label: 'Y' },
-          ],
-          onClick: onMenu,
-        }}
+        items={[
+          { key: 'x', label: 'X', disabled: true, onClick: onItem },
+          { key: 'y', label: 'Y' },
+        ]}
+        onItemClick={onMenu}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -125,7 +121,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('error item has proper class and overlay width hugs content', () => {
     render(
-      <DialDropdown menu={{ items }} matchReferenceWidth={false}>
+      <DialDropdown items={items} matchReferenceWidth={false}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -148,7 +144,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       { key: 'item2', label: 'Item 2' },
     ];
     render(
-      <DialDropdown menu={{ items: itemsWithHeader }}>
+      <DialDropdown items={itemsWithHeader}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -173,7 +169,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       },
     ];
     render(
-      <DialDropdown menu={{ items: itemsWithHeader, onClick: onMenu }}>
+      <DialDropdown items={itemsWithHeader} onItemClick={onMenu}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -186,7 +182,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('outsideClosable=false keeps menu open on outside press', () => {
     render(
-      <DialDropdown outsideClosable={false} menu={{ items }}>
+      <DialDropdown outsideClosable={false} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -208,22 +204,20 @@ describe('Dial UI Kit :: Dropdown', () => {
   test('icon is rendered and inherits state classes (danger/disabled)', () => {
     render(
       <DialDropdown
-        menu={{
-          items: [
-            {
-              key: 'i1',
-              label: 'With Icon Danger',
-              danger: true,
-              icon: <IconCheck />,
-            },
-            {
-              key: 'i2',
-              label: 'With Icon Disabled',
-              disabled: true,
-              icon: <IconCheck />,
-            },
-          ],
-        }}
+        items={[
+          {
+            key: 'i1',
+            label: 'With Icon Danger',
+            danger: true,
+            icon: <IconCheck />,
+          },
+          {
+            key: 'i2',
+            label: 'With Icon Disabled',
+            disabled: true,
+            icon: <IconCheck />,
+          },
+        ]}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -252,12 +246,10 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     render(
       <DialDropdown
-        menu={{
-          items: [
-            { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
-          ],
-          onClick: onMenu,
-        }}
+        items={[
+          { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
+        ]}
+        onItemClick={onMenu}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -278,7 +270,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('becomes disabled while open -> closes via effect', () => {
     const { rerender } = render(
-      <DialDropdown disabled={false} menu={{ items }}>
+      <DialDropdown disabled={false} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -287,7 +279,7 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
     rerender(
-      <DialDropdown disabled menu={{ items }}>
+      <DialDropdown disabled items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -297,7 +289,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('ignores contextmenu when trigger does not include ContextMenu', () => {
     render(
-      <DialDropdown menu={{ items }}>
+      <DialDropdown items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -318,7 +310,7 @@ describe('Dial UI Kit :: Dropdown', () => {
         >
           <button type="button">Safe Outside</button>
         </div>
-        <DialDropdown outsidePressIgnoreRef={ignoreRef} menu={{ items }}>
+        <DialDropdown outsidePressIgnoreRef={ignoreRef} items={items}>
           <button type="button">Open</button>
         </DialDropdown>
       </div>,
@@ -337,7 +329,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('explicit placement uses flip middleware path', () => {
     render(
-      <DialDropdown placement="bottom-end" menu={{ items }}>
+      <DialDropdown placement="bottom-end" items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -348,7 +340,7 @@ describe('Dial UI Kit :: Dropdown', () => {
   test('opens on hover when enabled', async () => {
     const user = userEvent.setup();
     const { container } = render(
-      <DialDropdown trigger={[DropdownTrigger.Hover]} menu={{ items }}>
+      <DialDropdown trigger={[DropdownTrigger.Hover]} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -367,7 +359,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('controlled mode uses the `open` prop (isControlled ? !!open) regardless of defaultOpen or clicks', () => {
     const { container, rerender } = render(
-      <DialDropdown open={false} defaultOpen={true} menu={{ items }}>
+      <DialDropdown open={false} defaultOpen={true} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -380,7 +372,7 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
     rerender(
-      <DialDropdown open={true} defaultOpen={true} menu={{ items }}>
+      <DialDropdown open={true} defaultOpen={true} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -389,7 +381,7 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
     rerender(
-      <DialDropdown open={false} defaultOpen={true} menu={{ items }}>
+      <DialDropdown open={false} defaultOpen={true} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -404,12 +396,10 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     render(
       <DialDropdown
-        menu={{
-          items: [
-            { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
-          ],
-          onClick: onMenu,
-        }}
+        items={[
+          { key: 'd', label: 'Disabled', disabled: true, onClick: onItem },
+        ]}
+        onItemClick={onMenu}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -436,11 +426,9 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     render(
       <DialDropdown
-        menu={{
-          header: () => <div>{headerText}</div>,
-          footer: <div>{footerText}</div>,
-          items,
-        }}
+        items={items}
+        menuHeader={() => <div>{headerText}</div>}
+        menuFooter={<div>{footerText}</div>}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -473,7 +461,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       <DialDropdown
         disabled
         trigger={[DropdownTrigger.ContextMenu]}
-        menu={{ items }}
+        items={items}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -490,10 +478,8 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     render(
       <DialDropdown
-        menu={{
-          header: () => <div role="hdr">{headerText}</div>,
-          items: simpleItems,
-        }}
+        items={simpleItems}
+        menuHeader={() => <div role="hdr">{headerText}</div>}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -524,13 +510,11 @@ describe('Dial UI Kit :: Dropdown', () => {
     const headerText = 'Filters';
     render(
       <DialDropdown
-        menu={{
-          header: <div>{headerText}</div>,
-          items: [
-            { key: 'a', label: 'A' },
-            { key: 'b', label: 'B' },
-          ],
-        }}
+        items={[
+          { key: 'a', label: 'A' },
+          { key: 'b', label: 'B' },
+        ]}
+        menuHeader={<div>{headerText}</div>}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -552,13 +536,11 @@ describe('Dial UI Kit :: Dropdown', () => {
 
     render(
       <DialDropdown
-        menu={{
-          items: [
-            { key: 'a', label: 'A' },
-            { key: 'b', label: 'B' },
-          ],
-          footer: footerFn,
-        }}
+        items={[
+          { key: 'a', label: 'A' },
+          { key: 'b', label: 'B' },
+        ]}
+        menuFooter={footerFn}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -584,7 +566,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       <DialDropdown
         anchorToMouse
         trigger={[DropdownTrigger.ContextMenu]}
-        menu={{ items }}
+        items={items}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -599,7 +581,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       <DialDropdown
         anchorToMouse
         trigger={[DropdownTrigger.Click]}
-        menu={{ items }}
+        items={items}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -612,7 +594,7 @@ describe('Dial UI Kit :: Dropdown', () => {
   test('calls onOpenChange on open and close', () => {
     const onOpenChange = vi.fn();
     render(
-      <DialDropdown onOpenChange={onOpenChange} menu={{ items }}>
+      <DialDropdown onOpenChange={onOpenChange} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -626,7 +608,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('matchReferenceWidth=false -> menu has w-max and no inline min-width', () => {
     render(
-      <DialDropdown matchReferenceWidth={false} menu={{ items }}>
+      <DialDropdown matchReferenceWidth={false} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -643,7 +625,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       <DialDropdown
         anchorToMouse
         trigger={[DropdownTrigger.Click]}
-        menu={{ items }}
+        items={items}
       >
         <button type="button">Open</button>
       </DialDropdown>,
@@ -675,7 +657,7 @@ describe('Dial UI Kit :: Dropdown', () => {
 
   test('does not change position when anchorToMouse=false (covers early return)', async () => {
     const { container } = render(
-      <DialDropdown trigger={[DropdownTrigger.Click]} menu={{ items }}>
+      <DialDropdown trigger={[DropdownTrigger.Click]} items={items}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -704,7 +686,7 @@ describe('Dial UI Kit :: Dropdown', () => {
     const { container } = render(
       <DialDropdown
         trigger={[DropdownTrigger.ContextMenu]}
-        menu={{ items }}
+        items={items}
         anchorToMouse
       >
         <button type="button">Open</button>
@@ -734,7 +716,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       },
     ];
     render(
-      <DialDropdown menu={{ items: itemsWithSub }}>
+      <DialDropdown items={itemsWithSub}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -760,7 +742,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       },
     ];
     const { container } = render(
-      <DialDropdown menu={{ items: itemsWithSub }}>
+      <DialDropdown items={itemsWithSub}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -794,7 +776,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       },
     ];
     render(
-      <DialDropdown menu={{ items: itemsWithSub }}>
+      <DialDropdown items={itemsWithSub}>
         <button type="button">Open</button>
       </DialDropdown>,
     );
@@ -820,7 +802,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       },
     ];
     render(
-      <DialDropdown menu={{ items: itemsWithSub }}>
+      <DialDropdown items={itemsWithSub}>
         <button type="button">Open</button>
       </DialDropdown>,
     );

@@ -17,7 +17,7 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai />}
-        menu={{ items }}
+        items={items}
       />,
     );
 
@@ -37,7 +37,7 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai data-testid="model-icon" />}
-        menu={{ items }}
+        items={items}
         size={ElementSize.Small}
         showCaret={false}
       />,
@@ -56,7 +56,7 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai />}
-        menu={{ items }}
+        items={items}
         showCaret={false}
       />,
     );
@@ -72,7 +72,7 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai />}
-        menu={{ items }}
+        items={items}
         disabled
       />,
     );
@@ -90,7 +90,7 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai />}
-        menu={{ items }}
+        items={items}
         open={false}
         onOpenChange={onOpenChange}
       />,
@@ -106,7 +106,8 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       <DialDropdownIcon
         ariaLabel="Select model"
         icon={<IconBrandOpenai />}
-        menu={{ items, onClick }}
+        items={items}
+        onItemClick={onClick}
         className="custom-wrapper"
         buttonClassName="custom-button"
         iconClassName="custom-icon"
