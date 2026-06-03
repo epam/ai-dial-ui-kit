@@ -212,12 +212,12 @@ describe('Dial UI Kit :: Dropdown', () => {
             icon: <IconCheck />,
           },
           {
-              key: 'i2',
-              label: 'With Icon Disabled',
-              disabled: true,
-              icon: <IconCheck />,
-            },
-          ]}
+            key: 'i2',
+            label: 'With Icon Disabled',
+            disabled: true,
+            icon: <IconCheck />,
+          },
+        ]}
       >
         <button type="button">Open</button>
       </DialDropdown>,
