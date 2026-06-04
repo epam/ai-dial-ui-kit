@@ -113,7 +113,7 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
         <span
           id={id}
           className={mergeClasses(
-            'block truncate flex-1 min-w-0 max-w-full text-left',
+            'block truncate flex-1 min-w-0 max-w-full text-start',
             className,
           )}
           aria-label={isTruncated ? fullText : undefined}

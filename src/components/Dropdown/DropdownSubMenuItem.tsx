@@ -65,7 +65,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         )}
         <span
           className={classNames(
-            'flex-1 truncate text-left',
+            'flex-1 truncate text-start',
             item.disabled && 'text-secondary',
           )}
         >
@@ -118,7 +118,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
                 )}
                 <span
                   className={classNames(
-                    'flex-1 truncate text-left',
+                    'flex-1 truncate text-start',
                     child.danger && 'text-error',
                     child.disabled && 'text-secondary',
                   )}
