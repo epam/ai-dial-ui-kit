@@ -20,6 +20,7 @@ import {
   popupSizeClassMap,
 } from './constants';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_ICON_SIZE } from '../../constants/icon';
 
 export interface DialPopupProps {
   open?: boolean;
@@ -172,6 +173,7 @@ export const DialPopup: FC<DialPopupProps> = ({
               {renderTitle(header)}
               {!hideClose && (
                 <DialCloseButton
+                  size={DIAL_ICON_SIZE.SM}
                   ariaLabel="Close dialog"
                   onClose={(e) => onClose?.(e)}
                 />
