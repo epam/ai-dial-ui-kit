@@ -3,6 +3,7 @@ import type { DialFileAcceptType } from '@/models/file-manager';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import {
   formatAllowedFileTypesForTooltip,
+  getFolderNestingDepth,
   isFileSelectable,
   splitPathAndName,
   getNextFolderName,
@@ -176,5 +177,22 @@ describe('Dial UI Kit :: getNextFolderName', () => {
       } as DialFile,
     ];
     expect(getNextFolderName(existing)).toBe('New folder 1');
+  });
+});
+
+describe('Dial UI Kit :: getFolderNestingDepth', () => {
+  it('returns 1 for root folder', () => {
+    expect(getFolderNestingDepth('public/')).toBe(1);
+    expect(getFolderNestingDepth('public')).toBe(1);
+  });
+
+  it('returns 3 for third-level folder', () => {
+    expect(getFolderNestingDepth('public/folder1/folder2')).toBe(3);
+    expect(getFolderNestingDepth('public/folder1/folder2/')).toBe(3);
+  });
+
+  it('returns 5 for fifth-level folder', () => {
+    expect(getFolderNestingDepth('public/a/b/c/d')).toBe(5);
+    expect(getFolderNestingDepth('public/a/b/c/d/')).toBe(5);
   });
 });

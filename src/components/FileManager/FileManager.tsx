@@ -404,6 +404,8 @@ export interface DialFileManagerProps {
   showHiddenFileSwitcherInDestinationPopup?: boolean;
   showCreateFolderButtonInDestinationPopup?: boolean;
   autoSelectUploadedItems?: boolean;
+  maxNewFolderDepth?: number;
+  onNewFolderDepthExceeded?: () => void;
 }
 
 /**
