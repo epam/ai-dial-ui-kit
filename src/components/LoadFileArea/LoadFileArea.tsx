@@ -1,6 +1,13 @@
-import { type FC, type MouseEvent, type ReactNode } from 'react';
+import {
+  useCallback,
+  useMemo,
+  type FC,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import {
   DialEmptyFileArea,
   type DialEmptyFileAreaProps,
@@ -8,6 +15,7 @@ import {
 import { DialFilledInput } from './FilledInput';
 import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
 import { DialErrorText } from '@/components/CaptionText/CaptionText';
+import { FilledDropZone } from './FilledDropZone';
 
 export interface DialLoadFileAreaProps extends DialEmptyFileAreaProps {
   files?: File[];
@@ -66,50 +74,70 @@ export const DialLoadFileArea: FC<DialLoadFileAreaProps> = (props) => {
     removeButtonAriaLabel,
     getIsMultiFilesSizeError,
     multiFilesSizeError,
+    getIsFileFormatError,
+    getIsFileSizeError,
+    maxFilesCount,
   } = props;
 
-  const removeClick = (e: MouseEvent, fileUrl: string) => {
-    e.stopPropagation();
-    onChangeFile(files?.filter((f) => f.name !== fileUrl) || []);
-  };
-
-  const removeFile = (fileUrl: string) => (
-    <DialRemoveButton
-      aria-label={removeButtonAriaLabel}
-      onClick={(e) => removeClick(e, fileUrl)}
-    />
+  const removeClick = useCallback(
+    (e: MouseEvent, fileUrl: string) => {
+      e.stopPropagation();
+      onChangeFile(files?.filter((f) => f.name !== fileUrl) || []);
+    },
+    [onChangeFile, files],
   );
 
-  const onChange = (files: File[]) => {
-    onChangeFile(files);
-  };
+  const removeFile = useCallback(
+    (fileUrl: string) => (
+      <DialRemoveButton
+        aria-label={removeButtonAriaLabel}
+        onClick={(e) => removeClick(e, fileUrl)}
+      />
+    ),
+    [removeButtonAriaLabel, removeClick],
+  );
 
-  return !files || files.length === 0 ? (
-    <DndProvider backend={HTML5Backend}>
-      <DialEmptyFileArea {...props} onChange={onChange} />
-    </DndProvider>
-  ) : (
-    <>
-      <div className="flex-1 min-h-0 border border-solid border-primary rounded p-2 overflow-y-auto">
-        {files && files.length > 0 && (
-          <div className="flex flex-col gap-y-1">
-            {files.map((file, index) => (
-              <DialFilledInput
-                key={file.name + index}
-                id={file.name}
-                value={file.name}
-                iconAfter={removeFile(file.name)}
-                iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}
-                invalid={isInvalid?.(file)}
-                error={isInvalid?.(file) ? errorText : ''}
-              />
-            ))}
-          </div>
-        )}
+  const fileList = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-y-1">
+        {files?.map((file, index) => (
+          <DialFilledInput
+            key={file.name + index}
+            id={file.name}
+            value={file.name}
+            iconAfter={removeFile(file.name)}
+            iconBefore={iconBeforeInput || dynamicIcon?.(file.name)}
+            invalid={isInvalid?.(file)}
+            error={isInvalid?.(file) ? errorText : ''}
+          />
+        ))}
       </div>
-      {getIsMultiFilesSizeError?.(files) && (
-        <DialErrorText text={multiFilesSizeError} />
+    );
+  }, [files, iconBeforeInput, dynamicIcon, isInvalid, errorText, removeFile]);
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      {!files || files.length === 0 ? (
+        <DialEmptyFileArea {...props} onChange={onChangeFile} />
+      ) : (
+        <>
+          <FilledDropZone
+            existingFiles={files}
+            onDrop={onChangeFile}
+            getIsFileFormatError={getIsFileFormatError}
+            getIsFileSizeError={getIsFileSizeError}
+            maxFilesCount={maxFilesCount}
+            fileFormatError={props.fileFormatError}
+            fileSizeError={props.fileSizeError}
+            fileCountError={props.fileCountError}
+          >
+            {fileList}
+          </FilledDropZone>
+          {getIsMultiFilesSizeError?.(files) && (
+            <DialErrorText text={multiFilesSizeError} />
+          )}
+        </>
       )}
-    </>
+    </DndProvider>
   );
 };

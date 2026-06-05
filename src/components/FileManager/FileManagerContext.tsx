@@ -237,6 +237,8 @@ export interface FileManagerContextValue {
   hideSearchPathItemName?: boolean;
   showHiddenFileSwitcherInDestinationPopup?: boolean;
   showCreateFolderButtonInDestinationPopup?: boolean;
+  maxNewFolderDepth?: number;
+  onNewFolderDepthExceeded?: () => void;
 }
 
 export const FileManagerContext = createContext<
