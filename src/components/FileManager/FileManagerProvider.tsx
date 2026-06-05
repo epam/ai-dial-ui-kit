@@ -16,6 +16,7 @@ import {
   collectAllDescendants,
   findFolderForPath,
   findNodeByPath,
+  getFolderNestingDepth,
   isFileSelectable,
   isHiddenDotFile,
   normalizeExtensionWithoutDot,
@@ -150,6 +151,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   showHiddenFileSwitcherInDestinationPopup,
   showCreateFolderButtonInDestinationPopup,
   autoSelectUploadedItems = false,
+  maxNewFolderDepth,
+  onNewFolderDepthExceeded,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -330,6 +333,18 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     [items, currentPath],
   );
 
+  const isMaxNestingDepthReached = useCallback(
+    (folder: DialFile, maxDepth?: number) => {
+      if (!maxDepth || !folder) return false;
+      return getFolderNestingDepth(folder.path) > maxDepth;
+    },
+    [],
+  );
+
+  const showNewFolderNestingError = useCallback(() => {
+    onNewFolderDepthExceeded?.();
+  }, [onNewFolderDepthExceeded]);
+
   const {
     handleCopyTo,
     handleMoveTo,
@@ -486,9 +501,23 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   });
 
   const startFolderCreation = useCallback(() => {
+    if (
+      maxNewFolderDepth &&
+      isMaxNestingDepthReached(currentFolder, maxNewFolderDepth - 1)
+    ) {
+      showNewFolderNestingError();
+      return;
+    }
     handleSearchClear();
     startFolderCreationBase();
-  }, [handleSearchClear, startFolderCreationBase]);
+  }, [
+    handleSearchClear,
+    startFolderCreationBase,
+    currentFolder,
+    maxNewFolderDepth,
+    isMaxNestingDepthReached,
+    showNewFolderNestingError,
+  ]);
 
   const { newActions, isNewButtonVisible, isNewButtonDisabled } = useNewActions(
     {
@@ -716,16 +745,36 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   const handleGridAddSibling = useCallback(
     (files: DialFile[]) => {
       if (files.length > 0) {
+        if (
+          maxNewFolderDepth &&
+          isMaxNestingDepthReached(files[0], maxNewFolderDepth)
+        ) {
+          showNewFolderNestingError();
+          return;
+        }
         handleSearchClear();
         startGridSiblingFolderCreation(files[0]);
       }
     },
-    [handleSearchClear, startGridSiblingFolderCreation],
+    [
+      handleSearchClear,
+      startGridSiblingFolderCreation,
+      maxNewFolderDepth,
+      isMaxNestingDepthReached,
+      showNewFolderNestingError,
+    ],
   );
 
   const handleGridAddChild = useCallback(
     (files: DialFile[]) => {
       if (files.length > 0) {
+        if (
+          maxNewFolderDepth &&
+          isMaxNestingDepthReached(files[0], maxNewFolderDepth - 1)
+        ) {
+          showNewFolderNestingError();
+          return;
+        }
         handleSearchClear();
         setCurrentPath(files[0].path);
         setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
@@ -738,22 +787,45 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       expandedPaths,
       setExpandedPaths,
       setCurrentPath,
+      showNewFolderNestingError,
+      maxNewFolderDepth,
+      isMaxNestingDepthReached,
     ],
   );
 
   const handleTreeAddSibling = useCallback(
     (files: DialFile[]) => {
       if (files.length > 0) {
+        if (
+          maxNewFolderDepth &&
+          isMaxNestingDepthReached(files[0], maxNewFolderDepth)
+        ) {
+          showNewFolderNestingError();
+          return;
+        }
         handleSearchClear();
         startTreeSiblingFolderCreation(files[0]);
       }
     },
-    [handleSearchClear, startTreeSiblingFolderCreation],
+    [
+      handleSearchClear,
+      startTreeSiblingFolderCreation,
+      maxNewFolderDepth,
+      isMaxNestingDepthReached,
+      showNewFolderNestingError,
+    ],
   );
 
   const handleTreeAddChild = useCallback(
     (files: DialFile[]) => {
       if (files.length > 0) {
+        if (
+          maxNewFolderDepth &&
+          isMaxNestingDepthReached(files[0], maxNewFolderDepth - 1)
+        ) {
+          showNewFolderNestingError();
+          return;
+        }
         handleSearchClear();
         setCurrentPath(files[0].path);
         setExpandedPaths(new Set(expandedPaths).add(files[0].path || '/'));
@@ -766,6 +838,9 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
       setCurrentPath,
       expandedPaths,
       setExpandedPaths,
+      maxNewFolderDepth,
+      isMaxNestingDepthReached,
+      showNewFolderNestingError,
     ],
   );
 
@@ -969,6 +1044,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     unsupportedFileTypeTooltip,
     showHiddenFileSwitcherInDestinationPopup,
     showCreateFolderButtonInDestinationPopup,
+    maxNewFolderDepth,
+    onNewFolderDepthExceeded,
   };
 
   return (

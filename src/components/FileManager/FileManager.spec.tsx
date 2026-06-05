@@ -1502,4 +1502,121 @@ describe('Dial UI Kit :: FileManager', () => {
       });
     });
   });
+
+  describe('maxNewFolderDepth / onNewFolderDepthExceeded', () => {
+    const ROOT_PATH = '/L1';
+    const L2 = `${ROOT_PATH}/L2`;
+    const L3 = `${L2}/L3`;
+    const L4 = `${L3}/L4`;
+    const L5 = `${L4}/L5`;
+
+    const deepItems: DialFile[] = [
+      {
+        id: 'l1',
+        name: 'L1',
+        path: ROOT_PATH,
+        parentPath: '',
+        nodeType: DialFileNodeType.FOLDER,
+        folderId: 'l1',
+        items: [
+          {
+            id: 'l2',
+            name: 'L2',
+            path: L2,
+            parentPath: ROOT_PATH,
+            nodeType: DialFileNodeType.FOLDER,
+            folderId: 'l2',
+            items: [
+              {
+                id: 'l3',
+                name: 'L3',
+                path: L3,
+                parentPath: L2,
+                nodeType: DialFileNodeType.FOLDER,
+                folderId: 'l3',
+                items: [
+                  {
+                    id: 'l4',
+                    name: 'L4',
+                    path: L4,
+                    parentPath: L3,
+                    nodeType: DialFileNodeType.FOLDER,
+                    folderId: 'l4',
+                    items: [],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    test('calls onNewFolderDepthExceeded when creating folder at max depth via toolbar', async () => {
+      const onNewFolderDepthExceeded = vi.fn();
+      const onCreateFolder = vi.fn();
+
+      renderWithinSizedShell(
+        <DialFileManager
+          items={deepItems}
+          path={L4}
+          maxNewFolderDepth={4}
+          onNewFolderDepthExceeded={onNewFolderDepthExceeded}
+          onCreateFolder={onCreateFolder}
+          toolbarOptions={{
+            newActions: { newFolder: { label: 'New Folder' } },
+          }}
+        />,
+      );
+
+      const newFolderBtn = await screen.findByTestId('action-new-folder');
+      await userEvent.click(newFolderBtn);
+
+      expect(onNewFolderDepthExceeded).toHaveBeenCalledTimes(1);
+      expect(onCreateFolder).not.toHaveBeenCalled();
+    });
+
+    test('does not call onNewFolderDepthExceeded when below max depth', async () => {
+      const onNewFolderDepthExceeded = vi.fn();
+
+      renderWithinSizedShell(
+        <DialFileManager
+          items={deepItems}
+          path={L3}
+          maxNewFolderDepth={4}
+          onNewFolderDepthExceeded={onNewFolderDepthExceeded}
+          onCreateFolder={vi.fn()}
+          toolbarOptions={{
+            newActions: { newFolder: { label: 'New Folder' } },
+          }}
+        />,
+      );
+
+      const newFolderBtn = await screen.findByTestId('action-new-folder');
+      await userEvent.click(newFolderBtn);
+
+      expect(onNewFolderDepthExceeded).not.toHaveBeenCalled();
+    });
+
+    test('does not restrict creation when maxNewFolderDepth is not set', async () => {
+      const onNewFolderDepthExceeded = vi.fn();
+
+      renderWithinSizedShell(
+        <DialFileManager
+          items={deepItems}
+          path={L4}
+          onNewFolderDepthExceeded={onNewFolderDepthExceeded}
+          onCreateFolder={vi.fn()}
+          toolbarOptions={{
+            newActions: { newFolder: { label: 'New Folder' } },
+          }}
+        />,
+      );
+
+      const newFolderBtn = await screen.findByTestId('action-new-folder');
+      await userEvent.click(newFolderBtn);
+
+      expect(onNewFolderDepthExceeded).not.toHaveBeenCalled();
+    });
+  });
 });
