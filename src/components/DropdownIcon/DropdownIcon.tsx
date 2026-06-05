@@ -68,6 +68,11 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isOpen = controlledOpen ?? uncontrolledOpen;
   const squareSizeClass = isSmall ? 'w-8 px-0' : 'w-10 px-0';
+  const iconSizeClass = {
+    [ElementSize.Small]: 'size-5',
+    [ElementSize.Standard]: 'size-6',
+    [ElementSize.Large]: 'size-7',
+  }
 
   const handleOpenChange = (value: boolean) => {
     setUncontrolledOpen(value);
@@ -102,7 +107,7 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
           icon={icon}
           className={mergeClasses(
             'flex items-center justify-center text-inherit',
-            isSmall ? 'size-5' : 'size-6',
+            iconSizeClass[size],
             showCaret && '-mr-2',
             iconClassName,
           )}
