@@ -55,7 +55,7 @@ export const DialTooltipTrigger: FC<TooltipTriggerProps> = ({
     <span
       ref={ref}
       {...context.getReferenceProps(props)}
-      className={props.className ?? 'dial-tooltip-trigger text-left'}
+      className={props.className ?? 'dial-tooltip-trigger text-start'}
     >
       {children}
     </span>
