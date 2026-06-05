@@ -221,9 +221,21 @@ export const DialSelect: FC<DialSelectProps> = ({
     if (!isOpen && !inlineSearch) setQuery('');
   }, [inlineSearch, isOpen, setQuery]);
 
+  const prevCustomSelectedValueRef = useRef(customSelectedValue);
   useEffect(() => {
-    if (inlineSearch && !isOpen && customSelectedValue)
+    if (!inlineSearch) return;
+    // Sync the inline input only when the selected value changes externally —
+    // never merely because the dropdown closed. Reverting to customSelectedValue
+    // on close would resurrect a value the user just cleared whenever the consumer
+    // commits the change asynchronously (see issue #3053).
+    if (customSelectedValue === prevCustomSelectedValueRef.current) return;
+    // Defer both the ref bump and the sync until the dropdown is closed: while it
+    // is open the user may be editing, so we must not clobber their input — but we
+    // must still apply the change once they close (don't swallow it).
+    if (!isOpen) {
+      prevCustomSelectedValueRef.current = customSelectedValue;
       setQuery(customSelectedValue || '');
+    }
   }, [customSelectedValue, inlineSearch, isOpen, setQuery]);
 
   const setSelection = useCallback(
@@ -252,8 +264,8 @@ export const DialSelect: FC<DialSelectProps> = ({
           options.find((o) => o.value === val) ??
           options.flatMap((o) => o.children ?? []).find((c) => c.value === val);
         if (selectedOption) {
+          // setQuery already fires onInlineQueryChange — don't call it again.
           setQuery(selectedOption.label);
-          onInlineQueryChange?.(selectedOption.label);
         }
       }
       setOpen(false);
@@ -266,7 +278,6 @@ export const DialSelect: FC<DialSelectProps> = ({
       selectedValues,
       options,
       setQuery,
-      onInlineQueryChange,
     ],
   );
 

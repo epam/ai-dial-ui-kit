@@ -175,6 +175,97 @@ describe('Dial UI Kit :: DialSelect', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('inlineSearch: a cleared input is not resurrected on close when customSelectedValue is stale (issue #3053)', () => {
+    const onInlineQueryChange = vi.fn();
+    // open is controlled so we can drive the close transition deterministically.
+    // customSelectedValue stays stale, mimicking a consumer that commits the
+    // cleared value asynchronously.
+    const { rerender } = renderSelect({
+      inlineSearch: true,
+      open: true,
+      customSelectedValue: 'Option 2',
+      value: 'opt-2',
+      onInlineQueryChange,
+    });
+
+    const inlineInput = screen.getByDisplayValue(
+      'Option 2',
+    ) as HTMLInputElement;
+    fireEvent.change(inlineInput, { target: { value: '' } });
+    expect(inlineInput).toHaveValue('');
+    expect(onInlineQueryChange).toHaveBeenLastCalledWith('');
+
+    // Close the dropdown while customSelectedValue is still the stale old value.
+    rerender(
+      <DialSelect
+        options={baseOptions}
+        inlineSearch
+        open={false}
+        customSelectedValue="Option 2"
+        value="opt-2"
+        onInlineQueryChange={onInlineQueryChange}
+      />,
+    );
+
+    // The cleared input must stick — it must not snap back to the stale value.
+    expect(inlineInput).toHaveValue('');
+  });
+
+  test('inlineSearch: external customSelectedValue change still syncs the closed input', () => {
+    const { rerender } = renderSelect({
+      inlineSearch: true,
+      customSelectedValue: 'Option 2',
+      value: 'opt-2',
+    });
+
+    expect(screen.getByDisplayValue('Option 2')).toBeInTheDocument();
+
+    rerender(
+      <DialSelect
+        options={baseOptions}
+        inlineSearch
+        customSelectedValue="Option 4"
+        value="opt-4"
+      />,
+    );
+
+    expect(screen.getByDisplayValue('Option 4')).toBeInTheDocument();
+  });
+
+  test('inlineSearch: a value changed while open is applied to the input on close (not swallowed)', () => {
+    const { rerender } = renderSelect({
+      inlineSearch: true,
+      open: true,
+      customSelectedValue: 'Option 2',
+      value: 'opt-2',
+    });
+    expect(screen.getByDisplayValue('Option 2')).toBeInTheDocument();
+
+    // Value changes externally while the dropdown is open — must not clobber editing.
+    rerender(
+      <DialSelect
+        options={baseOptions}
+        inlineSearch
+        open
+        customSelectedValue="Option 4"
+        value="opt-4"
+      />,
+    );
+    expect(screen.getByDisplayValue('Option 2')).toBeInTheDocument();
+
+    // On close the change made while open must now be applied.
+    rerender(
+      <DialSelect
+        options={baseOptions}
+        inlineSearch
+        open={false}
+        customSelectedValue="Option 4"
+        value="opt-4"
+      />,
+    );
+    expect(screen.getByDisplayValue('Option 4')).toBeInTheDocument();
+  });
+
   test('option with children renders as submenu trigger (aria-haspopup, not selectable directly)', () => {
     renderSelect({
       options: [
