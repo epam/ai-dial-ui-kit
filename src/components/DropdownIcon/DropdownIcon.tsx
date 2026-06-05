@@ -72,7 +72,7 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
     [ElementSize.Small]: 'size-5',
     [ElementSize.Standard]: 'size-6',
     [ElementSize.Large]: 'size-7',
-  }
+  };
 
   const handleOpenChange = (value: boolean) => {
     setUncontrolledOpen(value);
