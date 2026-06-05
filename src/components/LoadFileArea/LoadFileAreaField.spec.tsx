@@ -139,6 +139,40 @@ describe('Dial UI Kit :: DialLoadFileAreaField', () => {
     expect(mockOnChange).toHaveBeenCalledWith([file]);
   });
 
+  test('Should display fileSizeError when selected file exceeds maxFileSize', () => {
+    const mockOnChange = vi.fn();
+
+    render(
+      <DialLoadFileAreaField
+        fieldTitle="Files"
+        elementId="file-input"
+        files={[]}
+        onChange={mockOnChange}
+        acceptTypes="image/png"
+        maxFileSize={1}
+        fileSizeError="File is too large"
+      />,
+    );
+
+    const fileInput = document.querySelector('input[type="file"]');
+    expect(fileInput).toBeInTheDocument();
+
+    const oversizedContent = new Array(2 * 1024 * 1024).fill('a').join('');
+    const file = new File([oversizedContent], 'large.png', {
+      type: 'image/png',
+    });
+    const mockFileList = {
+      length: 1,
+      item: (index: number) => (index === 0 ? file : null),
+      0: file,
+    };
+
+    fireEvent.change(fileInput!, { target: { files: mockFileList } });
+
+    expect(screen.getByText('File is too large')).toBeInTheDocument();
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
+
   test('Should display fileFormatError when invalid format file is selected', () => {
     const mockOnChange = vi.fn();
 
