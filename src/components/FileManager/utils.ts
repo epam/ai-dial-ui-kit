@@ -275,6 +275,11 @@ export const getRowTooltip = (
   return undefined;
 };
 
+export const getFolderNestingDepth = (folderPath: string): number => {
+  const segments = folderPath.replace(/\/+$/, '').split('/').filter(Boolean);
+  return segments.length;
+};
+
 export const getNextFolderName = (existingFolders: DialFile[]): string => {
   const prefix = `${DEFAULT_FOLDER_BASE_NAME} `;
   const regex = new RegExp(`^${DEFAULT_FOLDER_BASE_NAME} (\\d+)$`);

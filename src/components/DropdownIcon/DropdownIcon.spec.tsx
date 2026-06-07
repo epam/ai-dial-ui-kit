@@ -51,6 +51,22 @@ describe('Dial UI Kit :: DropdownIcon', () => {
     expect(screen.getByRole('menuitem', { name: 'GPT 5.4' })).toBeVisible();
   });
 
+  test('uses large sizing with correct icon size', () => {
+    const { container } = render(
+      <DialDropdownIcon
+        ariaLabel="Select model"
+        icon={<IconBrandOpenai />}
+        items={items}
+        size={ElementSize.Large}
+        showCaret={false}
+      />,
+    );
+
+    const button = screen.getByRole('button', { name: 'Select model' });
+    expect(button).toHaveClass('h-10', 'w-10', 'px-0');
+    expect(container.querySelector('.size-7')).toBeInTheDocument();
+  });
+
   test('applies square sizing on standard size without caret', () => {
     render(
       <DialDropdownIcon

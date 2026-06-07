@@ -404,6 +404,8 @@ export interface DialFileManagerProps {
   showHiddenFileSwitcherInDestinationPopup?: boolean;
   showCreateFolderButtonInDestinationPopup?: boolean;
   autoSelectUploadedItems?: boolean;
+  maxNewFolderDepth?: number;
+  onNewFolderDepthExceeded?: () => void;
 }
 
 /**
@@ -893,6 +895,42 @@ export const DialFileManagerView: FC = () => {
           });
         }
         if (
+          treeOptions.actionLabels[DialFileManagerActions.ManagePermissions] &&
+          typeof onManagePermissions === 'function' &&
+          file.nodeType === DialFileNodeType.FOLDER &&
+          !isRootNode
+        ) {
+          elements.push({
+            key: DialFileManagerActions.ManagePermissions,
+            label:
+              treeOptions.actionLabels[
+                DialFileManagerActions.ManagePermissions
+              ],
+            icon: (
+              <IconExternalLink
+                {...BASE_ICON_PROPS}
+                className="text-secondary"
+              />
+            ),
+            onClick: () => onManagePermissions?.(file.path),
+          });
+        }
+        if (
+          treeOptions.actionLabels[DialFileManagerActions.Delete] &&
+          file.permissions?.includes(DialFilePermission.WRITE) &&
+          !isRootNode
+        ) {
+          elements.push({
+            key: 'delete',
+            label: treeOptions.actionLabels[DialFileManagerActions.Delete],
+            icon: (
+              <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />
+            ),
+            onClick: () =>
+              openDeleteConfirmation([file], file.parentPath ?? ''),
+          });
+        }
+        if (
           treeOptions.actionLabels[DialFileManagerActions.Rename] &&
           !isRootNode
         ) {
@@ -942,42 +980,6 @@ export const DialFileManagerView: FC = () => {
               />
             ),
             onClick: () => onRemoveFilesAccess?.([file]),
-          });
-        }
-        if (
-          treeOptions.actionLabels[DialFileManagerActions.ManagePermissions] &&
-          typeof onManagePermissions === 'function' &&
-          file.nodeType === DialFileNodeType.FOLDER &&
-          !isRootNode
-        ) {
-          elements.push({
-            key: DialFileManagerActions.ManagePermissions,
-            label:
-              treeOptions.actionLabels[
-                DialFileManagerActions.ManagePermissions
-              ],
-            icon: (
-              <IconExternalLink
-                {...BASE_ICON_PROPS}
-                className="text-secondary"
-              />
-            ),
-            onClick: () => onManagePermissions?.(file.path),
-          });
-        }
-        if (
-          treeOptions.actionLabels[DialFileManagerActions.Delete] &&
-          file.permissions?.includes(DialFilePermission.WRITE) &&
-          !isRootNode
-        ) {
-          elements.push({
-            key: 'delete',
-            label: treeOptions.actionLabels[DialFileManagerActions.Delete],
-            icon: (
-              <IconTrashX {...BASE_ICON_PROPS} className="text-secondary" />
-            ),
-            onClick: () =>
-              openDeleteConfirmation([file], file.parentPath ?? ''),
           });
         }
       }
