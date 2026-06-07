@@ -107,7 +107,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
     if (isLoading) {
       return (
         <div className="px-6 py-4 h-[120px]">
-          <DialLoader size={44} />
+          <DialLoader size={40} />
         </div>
       );
     }
