@@ -148,15 +148,6 @@ export function useEditableItem({
     [onSave, onCreateFolderSave, isCreating, isEditing, isLoading],
   );
 
-  const save = useCallback(() => {
-    if (validate(value)) {
-      commit(value);
-    } else {
-      inputRef.current?.focus();
-    }
-    cancelSavingRef.current = false;
-  }, [validate, value, commit]);
-
   const cancel = useCallback(() => {
     if (restoreOnCancel) {
       setValue(initialValue);
@@ -233,7 +224,7 @@ export function useEditableItem({
 
     el.addEventListener('keydown', handleKey);
     return () => el.removeEventListener('keydown', handleKey);
-  }, [isEditing, isCreating, save, cancel]);
+  }, [isEditing, isCreating, cancel]);
 
   useEffect(() => {
     if ((!isEditing && !isCreating) || isLoading) return;
