@@ -126,7 +126,7 @@ export const DialPopup: FC<DialPopupProps> = ({
       <h3
         id={headingId}
         className={classNames(
-          'flex-1 min-w-0 mr-3 truncate dial-h3 text-primary',
+          'flex-1 min-w-0 mr-3 truncate dial-h3-text text-primary',
           titleClassName,
         )}
       >
