@@ -7,6 +7,11 @@ import {
   type RefObject,
 } from 'react';
 
+export const EDITABLE_CONTAINER_ATTRIBUTE = 'data-editable-container';
+export const editableContainerProps = {
+  [EDITABLE_CONTAINER_ATTRIBUTE]: '',
+} as const;
+
 export interface UseEditableItemOptions {
   value: string;
   isEditing: boolean;
@@ -92,6 +97,7 @@ export function useEditableItem({
   const [invalidMessage, setInvalidMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const cancelSavingRef = useRef<boolean>(false);
+  const committedRef = useRef<boolean>(false);
 
   const resetValidationState = useCallback((state = false, error = '') => {
     setInvalid(state);
@@ -130,26 +136,17 @@ export function useEditableItem({
     [validate],
   );
 
-  const save = useCallback(() => {
-    if (validate(value)) {
+  const commit = useCallback(
+    (valueToCommit: string) => {
       if (isCreating && !cancelSavingRef.current && !isLoading) {
-        onCreateFolderSave?.(value);
+        onCreateFolderSave?.(valueToCommit);
       } else if (!isCreating && isEditing) {
-        onSave?.(value);
+        onSave?.(valueToCommit);
       }
-    } else {
-      inputRef.current?.focus();
-    }
-    cancelSavingRef.current = false;
-  }, [
-    validate,
-    onSave,
-    value,
-    onCreateFolderSave,
-    isCreating,
-    isEditing,
-    isLoading,
-  ]);
+      cancelSavingRef.current = false;
+    },
+    [onSave, onCreateFolderSave, isCreating, isEditing, isLoading],
+  );
 
   const cancel = useCallback(() => {
     if (restoreOnCancel) {
@@ -173,10 +170,35 @@ export function useEditableItem({
     isCreating,
   ]);
 
+  /**
+   * Commits the edit when focus leaves the input (outside click / blur).
+   * Always exits edit mode: a valid value is saved as-is, while an invalid
+   * value falls back to the default name (`initialValue`) and is committed,
+   * instead of trapping the user inside the field.
+   */
+  const saveOnBlur = useCallback(() => {
+    if (committedRef.current) return;
+    committedRef.current = true;
+
+    if (validate(value)) {
+      commit(value);
+      return;
+    }
+
+    if (validate(initialValue)) {
+      setValue(initialValue);
+      resetValidationState();
+      commit(initialValue);
+    } else {
+      cancel();
+    }
+  }, [validate, value, initialValue, commit, cancel, resetValidationState]);
+
   useEffect(() => {
     if (!isEditing && !isCreating) return;
 
     cancelSavingRef.current = false;
+    committedRef.current = false;
     setValue(initialValue);
     resetValidationState();
 
@@ -202,33 +224,40 @@ export function useEditableItem({
 
     el.addEventListener('keydown', handleKey);
     return () => el.removeEventListener('keydown', handleKey);
-  }, [isEditing, isCreating, save, cancel]);
+  }, [isEditing, isCreating, cancel]);
 
   useEffect(() => {
-    if (!isEditing && !isCreating) return;
+    if ((!isEditing && !isCreating) || isLoading) return;
 
     const el = inputRef.current;
     if (!el) return;
 
-    const handleBlur = (e: FocusEvent) => {
-      const nextTarget = e.relatedTarget as Node | null;
-      const stillInside = nextTarget && el.contains(nextTarget);
+    const isInsideField = (node: Node | null): boolean => {
+      if (!node) return false;
+      const container = el.closest(`[${EDITABLE_CONTAINER_ATTRIBUTE}]`) ?? el;
+      return container.contains(node);
+    };
 
-      if (!stillInside && !isLoading) {
-        if (validate(value)) {
-          save();
-        } else {
-          el.focus();
-        }
+    const handlePointerDown = (e: PointerEvent) => {
+      if (!isInsideField(e.target as Node | null)) {
+        saveOnBlur();
       }
     };
 
+    const handleBlur = (e: FocusEvent) => {
+      if (!isInsideField(e.relatedTarget as Node | null)) {
+        saveOnBlur();
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown, true);
     el.addEventListener('blur', handleBlur);
 
     return () => {
+      document.removeEventListener('pointerdown', handlePointerDown, true);
       el.removeEventListener('blur', handleBlur);
     };
-  }, [isEditing, isCreating, value, validate, save, isLoading]);
+  }, [isEditing, isCreating, isLoading, saveOnBlur]);
 
   return { inputRef, value, onChange, invalid, invalidMessage };
 }
