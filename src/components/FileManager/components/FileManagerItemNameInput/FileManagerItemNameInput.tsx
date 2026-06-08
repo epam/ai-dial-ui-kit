@@ -10,6 +10,7 @@ import { BASE_ICON_PROPS } from '@/constants/icon';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { NotificationVariant } from '@/types/notification';
+import { editableContainerProps } from '@/hooks/use-editable-item';
 
 export interface DialFileManagerItemNameInputProps {
   type: DialItemType;
@@ -135,7 +136,7 @@ export const DialFileManagerItemNameInput: FC<
   };
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center" {...editableContainerProps}>
       <DialFileManagerItemIcon
         name={name}
         type={type}
