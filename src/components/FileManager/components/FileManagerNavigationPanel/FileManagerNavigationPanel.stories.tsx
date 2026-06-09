@@ -69,6 +69,12 @@ export const LongPath: Story = {
   },
 };
 
+export const LongLabels: Story = {
+  args: {
+    path: 'Organization/Product Design Team/UI Components Library/Breadcrumb Navigation/Very Long Subfolder Name That Will Definitely Be Truncated/Another Very Long Subfolder With Lots Of Extra Words That Should Be Truncated Because It Is Way Too Long To Fit/Current Working Folder With An Extremely Long Descriptive Name That Exceeds The Available Space And Must Be Truncated With Ellipsis At The End Of The Text',
+  },
+};
+
 export const WithLinks: Story = {
   args: {
     path: 'Org/Team/Design/Assets',
