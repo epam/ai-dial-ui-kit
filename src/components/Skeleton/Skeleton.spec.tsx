@@ -226,6 +226,49 @@ describe('Dial UI Kit :: DialSkeleton', () => {
     expect(rows?.[2]).toHaveStyle({ width: '61%' });
   });
 
+  it('renders overlay centered above a variant skeleton', () => {
+    const { container } = render(
+      <DialSkeleton
+        variant={DialSkeletonVariant.Rectangular}
+        width={100}
+        height={100}
+        overlay={<span data-testid="overlay-icon" />}
+      />,
+    );
+    const skeleton = container.firstChild as HTMLElement;
+    expect(skeleton).toHaveClass('relative');
+    expect(screen.getByTestId('overlay-icon')).toBeInTheDocument();
+    const overlayWrapper = container.querySelector(
+      '.absolute.inset-0.flex.items-center.justify-center',
+    );
+    expect(overlayWrapper).toBeInTheDocument();
+  });
+
+  it('does not render overlay wrapper when overlay is not provided', () => {
+    const { container } = render(
+      <DialSkeleton
+        variant={DialSkeletonVariant.Rectangular}
+        width={100}
+        height={100}
+      />,
+    );
+    const skeleton = container.firstChild as HTMLElement;
+    expect(skeleton).not.toHaveClass('relative');
+    const overlayWrapper = container.querySelector('.absolute.inset-0');
+    expect(overlayWrapper).not.toBeInTheDocument();
+  });
+
+  it('renders overlay centered above a default variant skeleton', () => {
+    const { container } = render(
+      <DialSkeleton overlay={<span data-testid="overlay-icon" />} />,
+    );
+    expect(screen.getByTestId('overlay-icon')).toBeInTheDocument();
+    const overlayWrapper = container.querySelector(
+      '.absolute.inset-0.flex.items-center.justify-center',
+    );
+    expect(overlayWrapper).toBeInTheDocument();
+  });
+
   it('renders all skeleton variants', () => {
     const variants = [
       DialSkeletonVariant.Default,

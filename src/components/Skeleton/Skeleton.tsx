@@ -27,6 +27,7 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   variant?: DialSkeletonVariant;
   width?: string | number;
   height?: string | number;
+  overlay?: ReactNode;
 }
 
 /**
@@ -95,6 +96,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   variant = DialSkeletonVariant.Default,
   width,
   height,
+  overlay,
   className,
   ...props
 }) => {
@@ -114,6 +116,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
       variant === DialSkeletonVariant.Circular && 'rounded-full',
       variant === DialSkeletonVariant.Rectangular && 'rounded',
       variant === DialSkeletonVariant.Text && 'rounded',
+      !!overlay && 'relative',
     );
 
     const style: CSSProperties = {};
@@ -121,7 +124,15 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
     if (height)
       style.height = typeof height === 'number' ? `${height}px` : height;
 
-    return <div className={variantClass} style={style} {...props} />;
+    return (
+      <div className={variantClass} style={style} {...props}>
+        {overlay && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {overlay}
+          </div>
+        )}
+      </div>
+    );
   }
 
   const showAvatar = !!avatar;
@@ -150,7 +161,10 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   };
 
   return (
-    <div {...props} className={mergeClasses('flex gap-4', className)}>
+    <div
+      {...props}
+      className={mergeClasses('flex gap-4', !!overlay && 'relative', className)}
+    >
       {showAvatar && (
         <div
           className={mergeClasses(
@@ -182,6 +196,11 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
           </div>
         )}
       </div>
+      {overlay && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {overlay}
+        </div>
+      )}
     </div>
   );
 };

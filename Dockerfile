@@ -1,5 +1,7 @@
 FROM node:24-alpine AS base
 
+RUN apk upgrade --no-cache
+
 # Set working directory
 WORKDIR /app
 COPY package*.json ./
