@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { IconPhoto, IconUser } from '@tabler/icons-react';
 import { DialSkeleton } from './Skeleton';
 import {
   DialSkeletonVariant,
@@ -148,6 +149,50 @@ export const RectangularVariant: Story = {
     width: '300px',
     height: '200px',
     active: true,
+  },
+};
+
+export const ImageThumbnailLoading: Story = {
+  args: {
+    variant: DialSkeletonVariant.Rectangular,
+    width: 100,
+    height: 100,
+    active: true,
+    overlay: (
+      <span className="text-secondary">
+        <IconPhoto size={24} aria-hidden />
+      </span>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Rectangular skeleton with a centered icon overlay — use this pattern for lazy-loading image thumbnails (e.g. AttachmentCard).',
+      },
+    },
+  },
+};
+
+export const CircularWithOverlay: Story = {
+  args: {
+    variant: DialSkeletonVariant.Circular,
+    width: 40,
+    height: 40,
+    active: true,
+    overlay: (
+      <span className="text-secondary">
+        <IconUser size={20} aria-hidden />
+      </span>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Circular skeleton with a centered icon overlay — use this pattern for lazy-loading user avatars.',
+      },
+    },
   },
 };
 
