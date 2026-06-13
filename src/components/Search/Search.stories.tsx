@@ -117,6 +117,15 @@ export const WithBlurHandler: Story = {
   render: () => <BlurHandlerComponent />,
 };
 
+export const WithoutBorder: Story = {
+  render: InteractiveSearch,
+  args: {
+    id: 'search-without-border',
+    placeholder: 'Search without border',
+    withoutBorder: true,
+  },
+};
+
 const AllVariantsComponent: FC = () => {
   const sizes = [ElementSize.Standard, ElementSize.Small] as const;
   const states = [

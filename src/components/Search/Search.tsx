@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
 import { ElementSize } from '@/types/size';
 import { DialInput, type DialInputProps } from '../Input/Input';
 import { SIZE_CONFIG } from './constants';
+import { mergeClasses } from '../../utils/merge-classes';
 
 export interface DialSearchProps extends Omit<
   DialInputProps,
@@ -17,6 +18,7 @@ export interface DialSearchProps extends Omit<
   | 'postfix'
   | 'onChange'
 > {
+  withoutBorder?: boolean;
   size?: ElementSize;
   onChange?: (value: string) => void;
 }
@@ -44,12 +46,14 @@ export interface DialSearchProps extends Omit<
  * (like `iconBefore`, `iconAfter`, and `inputButtonProps` which are managed internally). The `size`
  * prop allows you to choose between predefined size configurations that adjust the input's appearance
  * @param [size=ElementSize.Standard] - The size of the search input. Uses the {@link ElementSize} enum.
+ * @param [withoutBorder] - If true, the search input will be rendered without a border.
  */
 export const DialSearch: FC<DialSearchProps> = ({
   size = ElementSize.Standard,
   placeholder = 'Search...',
   value,
   onChange,
+  withoutBorder,
   ...props
 }) => {
   const [query, setQuery] = useState(value || '');
@@ -83,10 +87,11 @@ export const DialSearch: FC<DialSearchProps> = ({
           role="button"
         />
       ),
+      className: withoutBorder ? 'bg-transparent' : '',
       onClick: onClickClear,
       size,
     };
-  }, [onClickClear, query, size, sizeConfig.iconSize]);
+  }, [onClickClear, query, size, sizeConfig.iconSize, withoutBorder]);
 
   return (
     <DialInput
@@ -99,7 +104,10 @@ export const DialSearch: FC<DialSearchProps> = ({
       inputButtonProps={inputButtonProps}
       containerClassName={sizeConfig.containerClassName}
       className={sizeConfig.className}
-      wrapperClassName={sizeConfig.wrapperClassName}
+      wrapperClassName={mergeClasses(
+        sizeConfig.wrapperClassName,
+        withoutBorder ? '!border-0 ps-5 [&>div]:!border-0' : '',
+      )}
       {...props}
     />
   );
