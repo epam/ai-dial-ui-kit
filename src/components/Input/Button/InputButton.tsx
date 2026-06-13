@@ -10,6 +10,7 @@ export interface DialInputButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   size?: ElementSize;
+  className?: string;
 }
 /**
  * An Input button component with a customizable icon and accessible label.
@@ -31,6 +32,7 @@ export const DialInputButton: FC<DialInputButtonProps> = ({
   onClick,
   disabled,
   size = ElementSize.Standard,
+  className,
 }) => {
   return (
     <div
@@ -45,6 +47,7 @@ export const DialInputButton: FC<DialInputButtonProps> = ({
         className={classNames(
           inputButtonClassName,
           size === ElementSize.Small && 'p-1',
+          className,
         )}
         icon={icon}
         onClick={onClick}

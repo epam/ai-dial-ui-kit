@@ -1,6 +1,15 @@
 import { ElementSize } from '@/types/size';
 
-export const SIZE_CONFIG = {
+export const SIZE_CONFIG: Record<
+  ElementSize,
+  {
+    className: string;
+    wrapperClassName: string;
+    containerClassName: string;
+    iconSize: number;
+    iconStroke: number;
+  }
+> = {
   [ElementSize.Small]: {
     className: 'dial-tiny-text',
     wrapperClassName: 'pl-2 py-0',

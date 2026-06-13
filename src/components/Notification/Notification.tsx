@@ -7,11 +7,11 @@ import {
   useMemo,
 } from 'react';
 
-import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { NotificationVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialGhostIconButton } from '../IconButton/IconButtonWrappers';
 import {
   alertBaseClassName,
   notificationVariantClassNameMap,
@@ -103,7 +103,7 @@ export const DialNotification: FC<DialNotificationProps> = ({
         className,
       )}
     >
-      <div className="flex items-center gap-3 flex-1">
+      <div className="flex items-start gap-3 flex-1 min-w-0">
         <DialIcon icon={icon} />
         {title ? (
           <div
@@ -122,12 +122,14 @@ export const DialNotification: FC<DialNotificationProps> = ({
 
       {children}
       {closable && (
-        <DialButton
-          className="text-secondary hover:text-primary absolute top-0 right-0"
-          aria-label="Close notification"
-          iconBefore={<IconX size={DIAL_ICON_SIZE.SM} />}
-          onClick={onClose}
-        />
+        <div className="relative size-[40px]">
+          <DialGhostIconButton
+            className="absolute top-0 right-0 size-auto"
+            aria-label="Close notification"
+            icon={<IconX size={DIAL_ICON_SIZE.SM} />}
+            onClick={onClose}
+          />
+        </div>
       )}
     </div>
   );
