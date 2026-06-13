@@ -7,17 +7,16 @@ import {
   useMemo,
 } from 'react';
 
-import { DialButton } from '@/components/Button/Button';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { NotificationVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialGhostIconButton } from '../IconButton/IconButtonWrappers';
 import {
   alertBaseClassName,
   notificationVariantClassNameMap,
   variantIcons,
 } from './constants';
-import { DialGhostIconButton } from '../IconButton/IconButtonWrappers';
 
 export interface DialNotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
