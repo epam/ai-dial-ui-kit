@@ -118,7 +118,7 @@
     "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "^10.5.0",
     "concurrently": "^10.0.3",
-    "esbuild": "^0.28.1",
+    "esbuild": "0.28.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
