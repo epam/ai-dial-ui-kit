@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { IconPhoto, IconUser } from '@tabler/icons-react';
 import { DialSkeleton } from './Skeleton';
 import {
   DialSkeletonVariant,
@@ -35,6 +36,11 @@ const meta: Meta<typeof DialSkeleton> = {
     height: {
       control: 'text',
       description: 'Height of the skeleton',
+    },
+    color: {
+      control: 'color',
+      description:
+        'Custom background color for skeleton elements (overrides the default design token)',
     },
   },
 };
@@ -148,6 +154,50 @@ export const RectangularVariant: Story = {
     width: '300px',
     height: '200px',
     active: true,
+  },
+};
+
+export const ImageThumbnailLoading: Story = {
+  args: {
+    variant: DialSkeletonVariant.Rectangular,
+    width: 100,
+    height: 100,
+    active: true,
+    overlay: (
+      <span className="text-secondary">
+        <IconPhoto size={24} aria-hidden />
+      </span>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Rectangular skeleton with a centered icon overlay — use this pattern for lazy-loading image thumbnails (e.g. AttachmentCard).',
+      },
+    },
+  },
+};
+
+export const CircularWithOverlay: Story = {
+  args: {
+    variant: DialSkeletonVariant.Circular,
+    width: 40,
+    height: 40,
+    active: true,
+    overlay: (
+      <span className="text-secondary">
+        <IconUser size={20} aria-hidden />
+      </span>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Circular skeleton with a centered icon overlay — use this pattern for lazy-loading user avatars.',
+      },
+    },
   },
 };
 
@@ -281,6 +331,83 @@ export const CardSkeleton: Story = {
       />
     </div>
   ),
+};
+
+export const CustomColor: Story = {
+  args: {
+    active: true,
+    color: '#a855f7',
+    avatar: true,
+    paragraph: { rows: 3 },
+  },
+  render: (args) => (
+    <div className="w-[600px]">
+      <DialSkeleton {...args} />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use the `color` prop to set a custom background color on all skeleton elements. This is useful when the component is rendered on a non-standard background where the default token color would blend in.',
+      },
+    },
+  },
+};
+
+export const CustomColorVariants: Story = {
+  render: () => (
+    <div className="space-y-6">
+      <div className="p-4 rounded" style={{ backgroundColor: '#1e1b4b' }}>
+        <DialSkeleton
+          active
+          color="rgba(139, 92, 246, 0.4)"
+          avatar
+          paragraph={{ rows: 2 }}
+        />
+      </div>
+      <div className="p-4 rounded bg-accent-primary">
+        <DialSkeleton
+          active
+          color="rgba(255,255,255,0.3)"
+          paragraph={{ rows: 2 }}
+        />
+      </div>
+      <div className="p-4 rounded">
+        <div className="flex gap-3 items-center mb-3">
+          <DialSkeleton
+            variant={DialSkeletonVariant.Circular}
+            width={40}
+            height={40}
+            active
+            color="#f97316"
+          />
+          <DialSkeleton
+            variant={DialSkeletonVariant.Text}
+            width="50%"
+            height={16}
+            active
+            color="#f97316"
+          />
+        </div>
+        <DialSkeleton
+          variant={DialSkeletonVariant.Rectangular}
+          width="100%"
+          height={100}
+          active
+          color="#f97316"
+        />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Custom colors applied across different variants and backgrounds.',
+      },
+    },
+  },
 };
 
 export const AllAvatarSizes: Story = {

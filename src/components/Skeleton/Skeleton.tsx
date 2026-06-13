@@ -27,6 +27,8 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   variant?: DialSkeletonVariant;
   width?: string | number;
   height?: string | number;
+  overlay?: ReactNode;
+  color?: string;
 }
 
 /**
@@ -84,6 +86,8 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * @param [width] - Width of the skeleton
  * @param [height] - Height of the skeleton
  * @param [className] - Additional CSS classes
+ * @param [overlay] - Content to overlay on top of the skeleton (e.g., a spinner)
+ * @param [color] - Custom background color for the skeleton elements (overrides the default token)
  */
 export const DialSkeleton: FC<DialSkeletonProps> = ({
   active = true,
@@ -95,6 +99,8 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   variant = DialSkeletonVariant.Default,
   width,
   height,
+  overlay,
+  color,
   className,
   ...props
 }) => {
@@ -114,14 +120,24 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
       variant === DialSkeletonVariant.Circular && 'rounded-full',
       variant === DialSkeletonVariant.Rectangular && 'rounded',
       variant === DialSkeletonVariant.Text && 'rounded',
+      !!overlay && 'relative',
     );
 
     const style: CSSProperties = {};
     if (width) style.width = typeof width === 'number' ? `${width}px` : width;
     if (height)
       style.height = typeof height === 'number' ? `${height}px` : height;
+    if (color) style.backgroundColor = color;
 
-    return <div className={variantClass} style={style} {...props} />;
+    return (
+      <div className={variantClass} style={style} {...props}>
+        {overlay && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {overlay}
+          </div>
+        )}
+      </div>
+    );
   }
 
   const showAvatar = !!avatar;
@@ -150,7 +166,10 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   };
 
   return (
-    <div {...props} className={mergeClasses('flex gap-4', className)}>
+    <div
+      {...props}
+      className={mergeClasses('flex gap-4', !!overlay && 'relative', className)}
+    >
       {showAvatar && (
         <div
           className={mergeClasses(
@@ -160,14 +179,21 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
               : 'rounded',
             'flex-shrink-0',
           )}
-          style={{ width: avatarSize, height: avatarSize }}
+          style={{
+            width: avatarSize,
+            height: avatarSize,
+            ...(color && { backgroundColor: color }),
+          }}
         />
       )}
       <div className="flex-1 flex flex-col gap-3">
         {displayTitle && (
           <div
             className={mergeClasses(baseClass, 'h-4 rounded')}
-            style={{ width: titleWidth }}
+            style={{
+              width: titleWidth,
+              ...(color && { backgroundColor: color }),
+            }}
           />
         )}
         {showParagraph && (
@@ -176,12 +202,20 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
               <div
                 key={index}
                 className={mergeClasses(baseClass, 'h-4 rounded')}
-                style={{ width: getParagraphWidth(index) }}
+                style={{
+                  width: getParagraphWidth(index),
+                  ...(color && { backgroundColor: color }),
+                }}
               />
             ))}
           </div>
         )}
       </div>
+      {overlay && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {overlay}
+        </div>
+      )}
     </div>
   );
 };
