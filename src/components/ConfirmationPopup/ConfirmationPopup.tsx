@@ -85,6 +85,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
   variant = ConfirmationPopupVariant.Info,
   size = PopupSize.Sm,
   footer,
+  hideClose,
 }) => {
   const defaultFooter = !isLoading ? (
     <div className={actionsBaseClassName}>
@@ -138,6 +139,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}
       size={size}
+      hideClose={hideClose ?? (!isLoading && footer === undefined)}
     >
       {renderContent()}
     </DialPopup>

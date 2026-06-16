@@ -106,7 +106,13 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
 
   test('header close (from DialPopup) triggers onClose', () => {
     const onClose = vi.fn();
-    render(<DialConfirmationPopup {...baseProps} onClose={onClose} />);
+    render(
+      <DialConfirmationPopup
+        {...baseProps}
+        onClose={onClose}
+        hideClose={false}
+      />,
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Close dialog' }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
