@@ -125,10 +125,13 @@ const InputWrapper: FC<InputWrapperProps> = ({
   const innerRef = useRef<HTMLInputElement | null>(null);
   const ref = useMergeRefs([inputRef, innerRef]);
 
-  // disable mouse wheel changing input value
+  const isNumericInput =
+    type === 'number' || min !== undefined || max !== undefined;
+
+  // Prevent mouse wheel from changing numeric input values only.
   useEffect(() => {
     const el = innerRef.current;
-    if (!el) return;
+    if (!el || !isNumericInput || disabled) return;
 
     const stopScroll = (e: Event) => {
       e.preventDefault();
@@ -139,10 +142,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
     return () => {
       el.removeEventListener('wheel', stopScroll);
     };
-  }, []);
-
-  const isNumericInput =
-    type === 'number' || min !== undefined || max !== undefined;
+  }, [disabled, isNumericInput, type]);
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     handleKeyDown(e, type, min, max);
