@@ -6,6 +6,7 @@ import {
 import classNames from 'classnames';
 import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { useTooltipContext } from '@/components/Tooltip/TooltipContext';
 
 export interface Props extends HTMLProps<HTMLDivElement> {
@@ -19,10 +20,11 @@ export interface Props extends HTMLProps<HTMLDivElement> {
  */
 export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
   const context = useTooltipContext();
+  const isMobile = useIsMobileScreen();
   const propRef = useRef(null);
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
-  if (!context.open) {
+  if (!context.open || isMobile) {
     return null;
   }
 
