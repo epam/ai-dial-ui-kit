@@ -5,7 +5,7 @@ import { DialIconButton } from '@/components/IconButton/IconButton';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
-import { getPageRange, getPageDisplayType } from './utils';
+import { getPageRange, getPageDisplayType, PageDisplayType } from './utils';
 
 export interface DialPaginationProps {
   page: number;
@@ -52,10 +52,10 @@ export const DialPagination: FC<DialPaginationProps> = ({
               aria-label={`Page ${p}`}
               aria-current={p === page ? 'page' : undefined}
               className={mergeClasses(
-                'bg-secondary rounded-full focus-visible:outline outline-offset-0 transition-all duration-300 ease-in-out',
-                displayType === 'active' && 'h-[8px] w-[32px]',
-                displayType === 'adjacent' && 'size-[8px]',
-                displayType === 'far' && 'size-[4px]',
+                'dial-pagination-dot rounded-full focus-visible:outline outline-offset-0 transition-all duration-300 ease-in-out',
+                displayType === PageDisplayType.Active && 'h-[8px] w-[32px]',
+                displayType === PageDisplayType.Adjacent && 'size-[8px]',
+                displayType === PageDisplayType.Far && 'size-[4px]',
               )}
             />
           );

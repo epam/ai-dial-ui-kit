@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
   getPageRange,
   getPageDisplayType,
+  PageDisplayType,
   MANY_PAGES_THRESHOLD,
   ADJACENT_WINDOW,
 } from '../utils';
@@ -33,15 +34,15 @@ describe('getPageDisplayType', () => {
   const window = ADJACENT_WINDOW;
 
   test('active page always returns "active"', () => {
-    expect(getPageDisplayType(3, 3, 6)).toBe('active');
-    expect(getPageDisplayType(5, 5, 10)).toBe('active');
+    expect(getPageDisplayType(3, 3, 6)).toBe(PageDisplayType.Active);
+    expect(getPageDisplayType(5, 5, 10)).toBe(PageDisplayType.Active);
   });
 
   test('all non-active pages return "adjacent" when totalPages < threshold', () => {
     const total = threshold - 1;
     for (let p = 1; p <= total; p++) {
       if (p !== 3) {
-        expect(getPageDisplayType(p, 3, total)).toBe('adjacent');
+        expect(getPageDisplayType(p, 3, total)).toBe(PageDisplayType.Adjacent);
       }
     }
   });
@@ -51,10 +52,10 @@ describe('getPageDisplayType', () => {
     const currentPage = 4;
     for (let offset = 1; offset <= window; offset++) {
       expect(getPageDisplayType(currentPage - offset, currentPage, total)).toBe(
-        'adjacent',
+        PageDisplayType.Adjacent,
       );
       expect(getPageDisplayType(currentPage + offset, currentPage, total)).toBe(
-        'adjacent',
+        PageDisplayType.Adjacent,
       );
     }
   });
@@ -64,19 +65,19 @@ describe('getPageDisplayType', () => {
     const currentPage = 4;
     expect(
       getPageDisplayType(currentPage - (window + 1), currentPage, total),
-    ).toBe('far');
+    ).toBe(PageDisplayType.Far);
     expect(
       getPageDisplayType(currentPage + (window + 1), currentPage, total),
-    ).toBe('far');
+    ).toBe(PageDisplayType.Far);
   });
 
   test('boundary: page exactly at ADJACENT_WINDOW distance returns "adjacent"', () => {
-    expect(getPageDisplayType(3, 5, 10)).toBe('adjacent');
-    expect(getPageDisplayType(7, 5, 10)).toBe('adjacent');
+    expect(getPageDisplayType(3, 5, 10)).toBe(PageDisplayType.Adjacent);
+    expect(getPageDisplayType(7, 5, 10)).toBe(PageDisplayType.Adjacent);
   });
 
   test('boundary: page one beyond ADJACENT_WINDOW distance returns "far"', () => {
-    expect(getPageDisplayType(2, 5, 10)).toBe('far');
-    expect(getPageDisplayType(8, 5, 10)).toBe('far');
+    expect(getPageDisplayType(2, 5, 10)).toBe(PageDisplayType.Far);
+    expect(getPageDisplayType(8, 5, 10)).toBe(PageDisplayType.Far);
   });
 });
