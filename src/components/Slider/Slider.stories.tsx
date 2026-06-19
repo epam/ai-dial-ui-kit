@@ -68,23 +68,39 @@ const meta = {
     },
     trackClassName: {
       control: { type: 'text' },
-      description: 'Additional classes for the track bar (default: `bg-layer-1`)',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+      description:
+        'Additional classes for the track bar (default: `bg-layer-1`)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
     fillClassName: {
       control: { type: 'text' },
-      description: 'Additional classes for the filled portion of the track (default: `bg-controls-accent-primary`)',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+      description:
+        'Additional classes for the filled portion of the track (default: `bg-controls-accent-primary`)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
     thumbClassName: {
       control: { type: 'text' },
-      description: 'Additional classes for the thumb circle (default: `bg-layer-3 text-primary dial-small-text`)',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+      description:
+        'Additional classes for the thumb circle (default: `bg-layer-3 text-primary dial-small-text`)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
     labelsClassName: {
       control: { type: 'text' },
-      description: 'Additional classes for the labels row (default: `text-secondary dial-tiny-text`)',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+      description:
+        'Additional classes for the labels row (default: `text-secondary dial-tiny-text`)',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
     },
   },
   args: {
@@ -223,7 +239,9 @@ export const CustomStyling: Story = {
 export const Disabled: Story = {
   parameters: {
     docs: {
-      description: { story: 'Disabled state — interaction and focus are blocked.' },
+      description: {
+        story: 'Disabled state — interaction and focus are blocked.',
+      },
     },
   },
   render: ControlledExample,

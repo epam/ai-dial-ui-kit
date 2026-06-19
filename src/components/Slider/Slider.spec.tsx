@@ -156,7 +156,15 @@ describe('Dial UI Kit :: DialSlider', () => {
   });
 
   test('integer step formats value without decimals', () => {
-    render(<DialSlider value={50} min={0} max={100} step={1} onChange={() => undefined} />);
+    render(
+      <DialSlider
+        value={50}
+        min={0}
+        max={100}
+        step={1}
+        onChange={() => undefined}
+      />,
+    );
     expect(screen.getByRole('slider')).toHaveTextContent('50');
   });
 });

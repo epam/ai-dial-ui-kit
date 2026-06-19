@@ -8,8 +8,10 @@ import {
 
 import { mergeClasses } from '@/utils/merge-classes';
 
-export interface DialSliderProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface DialSliderProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'onChange'
+> {
   value: number;
   min?: number;
   max?: number;
@@ -84,9 +86,14 @@ export const DialSlider: FC<DialSliderProps> = ({
 }) => {
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+  const percent = Math.max(
+    0,
+    Math.min(100, ((value - min) / (max - min)) * 100),
+  );
   const precision = getPrecision(step);
-  const displayValue = formatValue ? formatValue(value) : value.toFixed(precision);
+  const displayValue = formatValue
+    ? formatValue(value)
+    : value.toFixed(precision);
 
   const getValueFromClientX = useCallback(
     (clientX: number): number => {
