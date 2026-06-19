@@ -6,15 +6,20 @@ export const getPageRange = (totalPages: number): number[] => {
   return Array.from({ length: totalPages }, (_, i) => i + 1);
 };
 
-export type PageDisplayType = 'active' | 'adjacent' | 'far';
+export enum PageDisplayType {
+  Active = 'active',
+  Adjacent = 'adjacent',
+  Far = 'far',
+}
 
 export const getPageDisplayType = (
   p: number,
   currentPage: number,
   totalPages: number,
 ): PageDisplayType => {
-  if (p === currentPage) return 'active';
-  if (totalPages < MANY_PAGES_THRESHOLD) return 'adjacent';
-  if (Math.abs(p - currentPage) <= ADJACENT_WINDOW) return 'adjacent';
-  return 'far';
+  if (p === currentPage) return PageDisplayType.Active;
+  if (totalPages < MANY_PAGES_THRESHOLD) return PageDisplayType.Adjacent;
+  if (Math.abs(p - currentPage) <= ADJACENT_WINDOW)
+    return PageDisplayType.Adjacent;
+  return PageDisplayType.Far;
 };
