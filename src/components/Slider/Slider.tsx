@@ -20,6 +20,14 @@ export interface DialSliderProps
   /** Custom formatter for the thumb value; defaults to fixed-decimal based on step */
   formatValue?: (value: number) => string;
   onChange?: (value: number) => void;
+  /** Additional classes for the track bar (default: `bg-layer-1`) */
+  trackClassName?: string;
+  /** Additional classes for the filled portion of the track (default: `bg-controls-accent-primary`) */
+  fillClassName?: string;
+  /** Additional classes for the thumb circle (default: `bg-layer-3 text-primary dial-small-text`) */
+  thumbClassName?: string;
+  /** Additional classes for the labels row (default: `text-secondary dial-tiny-text`) */
+  labelsClassName?: string;
 }
 
 const getPrecision = (step: number): number =>
@@ -51,6 +59,10 @@ const getPrecision = (step: number): number =>
  * @param [formatValue] - Custom value formatter for the thumb display
  * @param [onChange] - Callback fired with the new value on interaction
  * @param [className] - Additional CSS classes for the outer container
+ * @param [trackClassName] - Additional CSS classes for the track bar
+ * @param [fillClassName] - Additional CSS classes for the fill portion of the track
+ * @param [thumbClassName] - Additional CSS classes for the thumb circle
+ * @param [labelsClassName] - Additional CSS classes for the labels row
  */
 export const DialSlider: FC<DialSliderProps> = ({
   value,
@@ -62,6 +74,10 @@ export const DialSlider: FC<DialSliderProps> = ({
   formatValue,
   onChange,
   className,
+  trackClassName,
+  fillClassName,
+  thumbClassName,
+  labelsClassName,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   ...divProps
@@ -155,10 +171,18 @@ export const DialSlider: FC<DialSliderProps> = ({
         onPointerMove={handlePointerMove}
       >
         {/* Track bar */}
-        <div className="pointer-events-none absolute inset-x-0 h-3 rounded-[10px] bg-layer-1" />
+        <div
+          className={mergeClasses(
+            'pointer-events-none absolute inset-x-0 h-3 rounded-[10px] bg-layer-1',
+            trackClassName,
+          )}
+        />
         {/* Fill */}
         <div
-          className="pointer-events-none absolute left-0 h-3 rounded-[10px] bg-controls-accent-primary"
+          className={mergeClasses(
+            'pointer-events-none absolute left-0 h-3 rounded-[10px] bg-controls-accent-primary',
+            fillClassName,
+          )}
           style={{ width: `${percent}%` }}
         />
         {/* Thumb */}
@@ -171,7 +195,10 @@ export const DialSlider: FC<DialSliderProps> = ({
           aria-disabled={disabled || undefined}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
-          className="dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          className={mergeClasses(
+            'dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+            thumbClassName,
+          )}
           style={{ left: `${percent}%` }}
           onKeyDown={handleKeyDown}
         >
@@ -179,7 +206,12 @@ export const DialSlider: FC<DialSliderProps> = ({
         </div>
       </div>
       {labels && (
-        <div className="dial-tiny-text flex text-secondary">
+        <div
+          className={mergeClasses(
+            'dial-tiny-text flex text-secondary',
+            labelsClassName,
+          )}
+        >
           {labels.length === 3 ? (
             <>
               <span>{labels[0]}</span>

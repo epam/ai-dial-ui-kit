@@ -66,6 +66,26 @@ const meta = {
       description: 'Callback fired with the new value',
       table: { type: { summary: '(value: number) => void' } },
     },
+    trackClassName: {
+      control: { type: 'text' },
+      description: 'Additional classes for the track bar (default: `bg-layer-1`)',
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+    },
+    fillClassName: {
+      control: { type: 'text' },
+      description: 'Additional classes for the filled portion of the track (default: `bg-controls-accent-primary`)',
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+    },
+    thumbClassName: {
+      control: { type: 'text' },
+      description: 'Additional classes for the thumb circle (default: `bg-layer-3 text-primary dial-small-text`)',
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+    },
+    labelsClassName: {
+      control: { type: 'text' },
+      description: 'Additional classes for the labels row (default: `text-secondary dial-tiny-text`)',
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'undefined' } },
+    },
   },
   args: {
     value: 0.5,
@@ -178,6 +198,25 @@ export const CustomFormat: Story = {
   args: {
     labels: ['0%', '50%', '100%'],
     formatValue: (v) => `${Math.round(v * 100)}%`,
+  },
+};
+
+export const CustomStyling: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates trackClassName, fillClassName, thumbClassName, and labelsClassName overrides.',
+      },
+    },
+  },
+  render: ControlledExample,
+  args: {
+    labels: ['Precise', 'Neutral', 'Creative'],
+    trackClassName: 'bg-layer-2',
+    fillClassName: 'bg-accent-secondary',
+    thumbClassName: 'bg-layer-4 text-accent-secondary dial-tiny-text',
+    labelsClassName: 'text-primary',
   },
 };
 
