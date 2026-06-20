@@ -1,6 +1,6 @@
 {
   "name": "@epam/ai-dial-ui-kit",
-  "version": "0.0.0",
+  "version": "0.11.0",
   "type": "module",
   "license": "Apache-2.0",
   "description": "A modern UI kit for building AI DIAL interfaces with React",
