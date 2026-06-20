@@ -9,7 +9,7 @@ export interface DialSpinnerProps {
 }
 
 export const DialSpinner: FC<DialSpinnerProps> = ({
-  size = 24,
+  size = 40,
   className,
   fullWidth = false,
   ariaLabel = 'Loading',
