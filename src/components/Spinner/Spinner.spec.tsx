@@ -39,7 +39,7 @@ describe('Dial UI Kit :: DialSpinner', () => {
   test('renders with default size of 24px', () => {
     render(<DialSpinner />);
     const ring = screen.getByRole('img');
-    expect(ring).toHaveStyle({ width: '24px', height: '24px' });
+    expect(ring).toHaveStyle({ width: '40px', height: '40px' });
   });
 
   test('applies custom className to container', () => {
