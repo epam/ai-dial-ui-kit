@@ -7,31 +7,35 @@ import {
   type FC,
 } from 'react';
 
-import classNames from 'classnames';
-import type { TabModel } from '@/models/tab';
-import { ScreenResolution, TabOrientation } from '@/types/tab';
-import { DialDropdown } from '@/components/Dropdown/Dropdown';
-import { DropdownTrigger } from '@/types/dropdown';
-import { DialIcon } from '@/components/Icon/Icon';
 import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
-import { DialTab } from '@/components/Tab/Tab';
+import classNames from 'classnames';
+
 import { DialButton } from '@/components/Button/Button';
-import { DESKTOP_TABS_GAP_PX } from './constants';
-import { mergeClasses } from '@/utils/merge-classes';
-import { ScreenType } from '@/types/screen';
-import { useScreenType } from '@/hooks/use-screen-type';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { DialIcon } from '@/components/Icon/Icon';
+import { DialTab } from '@/components/Tab/Tab';
 import { BASE_ICON_SIZE, DIAL_ICON_SIZE } from '@/constants/icon';
+import { useScreenType } from '@/hooks/use-screen-type';
+import type { TabModel } from '@/models/tab';
+import { DropdownTrigger } from '@/types/dropdown';
+import { ScreenType } from '@/types/screen';
+import { ScreenResolution, TabOrientation, TabView } from '@/types/tab';
+import { mergeClasses } from '@/utils/merge-classes';
+import { DESKTOP_TABS_GAP_PX } from './constants';
 
 export interface DialTabsProps {
   tabs: TabModel[];
   activeTab: string;
   onClick: (id: string) => void;
   orientation?: TabOrientation;
+  view?: TabView;
   screenThreshold?: ScreenResolution;
   smallScreenContainerClassName?: string;
   smallScreenDropdownItemClassName?: string;
   desktopDropdownClassName?: string;
   desktopTabClassName?: string;
+  inlineContainerClassName?: string;
+  inlineTabClassName?: string;
 }
 
 /**
@@ -69,6 +73,9 @@ export interface DialTabsProps {
  * @param activeTab - The identifier of the currently active tab.
  * @param onClick - Callback fired when a tab is selected. Receives the tab's `id` as an argument.
  * @param [orientation=TabOrientation.Horizontal] - Layout direction of the tabs. Uses the {@link TabOrientation} enum.
+ * @param [view=TabView.Default] - Visual style of the tabs. Uses the {@link TabView} enum.
+ *   `Inline` renders a compact segmented control where the active tab is marked with a
+ *   leading check icon. The inline view is not responsive and ignores overflow/dropdown logic.
  * @param [screenThreshold=ScreenResolution.Tablet] - Defines the screen size threshold
  *   below which tabs collapse into a dropdown. Uses the {@link ScreenRelosution} enum.
  *   When set to `Tablet`, both mobile and tablet screens will trigger dropdown mode.
@@ -89,11 +96,14 @@ export const DialTabs: FC<DialTabsProps> = ({
   activeTab,
   onClick,
   orientation = TabOrientation.Horizontal,
+  view = TabView.Default,
   screenThreshold = ScreenResolution.Tablet,
   smallScreenContainerClassName,
   smallScreenDropdownItemClassName,
   desktopDropdownClassName,
   desktopTabClassName,
+  inlineContainerClassName,
+  inlineTabClassName,
 }) => {
   // TODO: Add support for additional mobile views (chat, mindmap) or customizable mobile layouts.
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
@@ -189,6 +199,29 @@ export const DialTabs: FC<DialTabsProps> = ({
   useEffect(() => {
     scrollToActiveTab();
   }, [activeTab, scrollToActiveTab]);
+
+  if (view === TabView.Inline) {
+    return (
+      <div
+        role="tablist"
+        className={mergeClasses(
+          'flex flex-row items-center gap-0.5 bg-layer-4 rounded w-fit p-0.5',
+          inlineContainerClassName,
+        )}
+      >
+        {tabs.map((tab) => (
+          <DialTab
+            key={tab.id}
+            tab={tab}
+            active={activeTab === tab.id}
+            view={TabView.Inline}
+            onClick={handleClick}
+            className={inlineTabClassName}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return isSmallScreen ? (
     <div

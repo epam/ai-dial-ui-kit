@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { TabModel } from '@/models/tab';
 import { DialTab } from './Tab';
+import { TabView } from '@/types/tab';
 
 const sampleTab: TabModel = { id: 'overview', label: 'Overview' };
 
@@ -30,6 +31,12 @@ const meta: Meta<typeof DialTab> = {
     horizontal: {
       control: 'boolean',
       description: 'Determines horizontal vs vertical orientation.',
+    },
+    view: {
+      control: 'select',
+      options: Object.values(TabView),
+      description:
+        'Visual style of the tab. `inline` renders a compact pill with a leading check icon when active.',
     },
     className: {
       control: 'text',
@@ -94,6 +101,24 @@ export const TooLongText: Story = {
     },
     active: false,
     horizontal: true,
+    onClick: () => null,
+  },
+};
+
+export const InlineActive: Story = {
+  args: {
+    tab: sampleTab,
+    active: true,
+    view: TabView.Inline,
+    onClick: () => null,
+  },
+};
+
+export const InlineInactive: Story = {
+  args: {
+    tab: { id: 'details', label: 'Details' },
+    active: false,
+    view: TabView.Inline,
     onClick: () => null,
   },
 };
