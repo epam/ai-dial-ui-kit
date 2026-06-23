@@ -535,6 +535,23 @@ export const InPopup: Story = {
   },
 };
 
+export const InPopupWithInitiallyOpenedUpload: Story = {
+  render: PopupComponent,
+  args: {
+    path: 'All files/Design/Icons/SVG',
+    initialUploadFilesOpen: true,
+    uploadEnabled: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'File Manager in a popup with instant upload triggering after opening modal.',
+      },
+    },
+  },
+};
+
 export const WithCustomProvider: Story = {
   render: (args) => (
     <div className="h-[640px] flex flex-col gap-3">
