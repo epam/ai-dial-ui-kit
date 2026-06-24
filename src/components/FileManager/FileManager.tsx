@@ -406,6 +406,7 @@ export interface DialFileManagerProps {
   autoSelectUploadedItems?: boolean;
   maxNewFolderDepth?: number;
   onNewFolderDepthExceeded?: () => void;
+  initialUploadFilesOpen?: boolean;
 }
 
 /**
