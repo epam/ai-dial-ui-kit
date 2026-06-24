@@ -68,13 +68,13 @@ gh release view <tag> --json tagName
 
 The raw CI's `## Features` / `## Fixes` / `## Tests` / `## Other` partition is unreliable. Reclassify by actual consumer impact:
 
-| Where CI put it                         | Where it belongs | Rule                                         |
-| --------------------------------------- | ---------------- | -------------------------------------------- |
-| `Other` starting with `feat(...)`       | `Features`       | A feat that lost its slot to a scope prefix. |
-| `Other` starting with `fix(...)`        | `Fixes`          | Same, for fix.                               |
-| `Tests` — any entry                     | **Drop**         | Zero consumer impact.                        |
-| Multiple PRs on the same new component  | one folded entry | Cite PR numbers in parens.                   |
-| `Other` for a security dep bump (CVE)   | `Fixes`          | Security items are consumer-relevant.        |
+| Where CI put it                        | Where it belongs | Rule                                         |
+| -------------------------------------- | ---------------- | -------------------------------------------- |
+| `Other` starting with `feat(...)`      | `Features`       | A feat that lost its slot to a scope prefix. |
+| `Other` starting with `fix(...)`       | `Fixes`          | Same, for fix.                               |
+| `Tests` — any entry                    | **Drop**         | Zero consumer impact.                        |
+| Multiple PRs on the same new component | one folded entry | Cite PR numbers in parens.                   |
+| `Other` for a security dep bump (CVE)  | `Fixes`          | Security items are consumer-relevant.        |
 
 **Drop these entirely** — no consumer-visible effect:
 
