@@ -134,11 +134,7 @@ export const DialConfirmationPopup: FC<DialConfirmationPopupProps> = ({
     <DialPopup
       open={open}
       header={header}
-      className={classNames(
-        variantConfig[variant].container,
-        className,
-        'mx-4',
-      )}
+      className={classNames(variantConfig[variant].container, className)}
       dividers={dividers}
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}
