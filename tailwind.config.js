@@ -146,6 +146,10 @@ export default {
     gradientColorStops: backgroundsColors,
 
     extend: {
+      screens: {
+        mobile: { max: '768px' },
+        desktop: { min: '769px' },
+      },
       animation: {
         'spin-steps': 'spin 0.75s steps(8, end) infinite',
       },
