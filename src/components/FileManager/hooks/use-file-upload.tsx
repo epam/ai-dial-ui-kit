@@ -526,7 +526,7 @@ export const useFileUpload = ({
 
       input.value = '';
     };
-  });
+  }, [uploadEnabled, hasWriteAccess, filterAcceptedFiles, handleUpload, validationMessages]);
 
   useEffect(() => {
     const input = document.createElement('input');
