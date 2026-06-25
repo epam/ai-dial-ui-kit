@@ -153,6 +153,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   autoSelectUploadedItems = false,
   maxNewFolderDepth,
   onNewFolderDepthExceeded,
+  initialUploadFilesOpen,
 }) => {
   const {
     selectedPaths: effectiveSelectedPaths,
@@ -164,6 +165,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     onSelectedPathsChange,
   });
 
+  const initialUploadFilesTriggeredRef = useRef(false);
   const pendingAutoSelectRef = useRef<{
     fileNames: Set<string>;
     destinationFolder: string;
@@ -705,6 +707,13 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     allowedFileTypes,
     maxSelectableFileSize,
   ]);
+
+  useEffect(() => {
+    if (!initialUploadFilesTriggeredRef.current && initialUploadFilesOpen) {
+      openFileDialog();
+      initialUploadFilesTriggeredRef.current = true;
+    }
+  }, [initialUploadFilesOpen, openFileDialog]);
 
   const handleTreeItemClick = useCallback(
     (item: DialFile) => {

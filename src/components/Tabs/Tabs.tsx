@@ -8,7 +8,6 @@ import {
 } from 'react';
 
 import { IconChevronDown, IconDotsVertical } from '@tabler/icons-react';
-import classNames from 'classnames';
 
 import { DialButton } from '@/components/Button/Button';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
@@ -29,6 +28,7 @@ export interface DialTabsProps {
   onClick: (id: string) => void;
   orientation?: TabOrientation;
   view?: TabView;
+  className?: string;
   screenThreshold?: ScreenResolution;
   smallScreenContainerClassName?: string;
   smallScreenDropdownItemClassName?: string;
@@ -95,6 +95,7 @@ export const DialTabs: FC<DialTabsProps> = ({
   tabs,
   activeTab,
   onClick,
+  className,
   orientation = TabOrientation.Horizontal,
   view = TabView.Default,
   screenThreshold = ScreenResolution.Tablet,
@@ -127,7 +128,7 @@ export const DialTabs: FC<DialTabsProps> = ({
 
   const scrollContainerClass = useMemo(
     () =>
-      classNames(
+      mergeClasses(
         'flex gap-2',
         isHorizontal
           ? 'flex-row flex-nowrap overflow-x-auto'
@@ -265,7 +266,7 @@ export const DialTabs: FC<DialTabsProps> = ({
           />
           <DialIcon
             icon={<IconChevronDown size={DIAL_ICON_SIZE.SM} />}
-            className={classNames(
+            className={mergeClasses(
               'text-primary transition-transform',
               isMobileDropdownOpen && 'rotate-180',
             )}
@@ -275,7 +276,10 @@ export const DialTabs: FC<DialTabsProps> = ({
     </div>
   ) : (
     // Desktop
-    <div ref={containerRef} className="flex w-full items-start">
+    <div
+      ref={containerRef}
+      className={mergeClasses('flex items-center', className)}
+    >
       <div ref={scrollableRef} role="tablist" className={scrollContainerClass}>
         {tabs.map((tab) => (
           <div
