@@ -26,6 +26,14 @@
   @apply font-semibold text-[16px]/[24px];
 }
 
+.dial-body-paragraph-text {
+  @apply font-normal text-[16px]/[26px];
+}
+
+.dial-body-paragraph-semi-text {
+  @apply font-semibold text-[16px]/[26px];
+}
+
 .dial-small-text {
   @apply font-normal text-[14px]/[20px];
 }
