@@ -148,6 +148,7 @@ export const DialFormItem: FC<DialFormItemProps> = ({
       className={mergeClasses(
         containerBaseClassName,
         orientationClassMap[orientation],
+        'py-4 gap-3',
         className,
       )}
     >

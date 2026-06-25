@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 
+import { DialLabel, type DialLabelProps } from '@/components/Label/Label';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialSliderProps extends Omit<
@@ -17,6 +18,7 @@ export interface DialSliderProps extends Omit<
   max?: number;
   step?: number;
   disabled?: boolean;
+  labelProps?: DialLabelProps;
   /** 2-element or 3-element label tuple rendered below the track */
   labels?: [string, string] | [string, string, string];
   /** Custom formatter for the thumb value; defaults to fixed-decimal based on step */
@@ -57,6 +59,7 @@ const getPrecision = (step: number): number =>
  * @param [max=1] - Maximum value
  * @param [step=0.1] - Step increment
  * @param [disabled=false] - Disables interaction
+ * @param [labelProps] - Props forwarded to DialLabel rendered above the slider
  * @param [labels] - 2 or 3 strings rendered below the track (start, [middle,] end)
  * @param [formatValue] - Custom value formatter for the thumb display
  * @param [onChange] - Callback fired with the new value on interaction
@@ -72,6 +75,7 @@ export const DialSlider: FC<DialSliderProps> = ({
   max = 1,
   step = 0.1,
   disabled = false,
+  labelProps,
   labels,
   formatValue,
   onChange,
@@ -170,6 +174,7 @@ export const DialSlider: FC<DialSliderProps> = ({
       )}
       {...divProps}
     >
+      {labelProps && <DialLabel {...labelProps} htmlFor={divProps.id} />}
       {/* Track area — 38px tall to contain the thumb without clipping */}
       <div
         ref={trackRef}
