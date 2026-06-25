@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import { mergeClasses } from '@/utils/merge-classes';
+import { DialFormItem } from '@/components/FormItem/FormItem';
 
 export interface DialSliderProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
@@ -17,6 +18,10 @@ export interface DialSliderProps extends Omit<
   max?: number;
   step?: number;
   disabled?: boolean;
+  /** The label text or element to display for the form item */
+  label?: string | React.ReactNode;
+  /** Description text to display near the label */
+  labelDescription?: string;
   /** 2-element or 3-element label tuple rendered below the track */
   labels?: [string, string] | [string, string, string];
   /** Custom formatter for the thumb value; defaults to fixed-decimal based on step */
@@ -30,6 +35,10 @@ export interface DialSliderProps extends Omit<
   thumbClassName?: string;
   /** Additional classes for the labels row (default: `text-secondary dial-tiny-text`) */
   labelsClassName?: string;
+  /** Additional classes for the label element (default: inherited from DialFormItem) */
+  labelClassName?: string;
+  /** Additional classes for the outer container (default: inherited from DialFormItem) */
+  containerClassName?: string;
 }
 
 const getPrecision = (step: number): number =>
@@ -58,13 +67,17 @@ const getPrecision = (step: number): number =>
  * @param [step=0.1] - Step increment
  * @param [disabled=false] - Disables interaction
  * @param [labels] - 2 or 3 strings rendered below the track (start, [middle,] end)
- * @param [formatValue] - Custom value formatter for the thumb display
+ * @param [formatValue] - Custom value formatter for the thumb display *
+ * @param [label] - The label text or element to display for the form item
+ * @param [labelDescription] - Description text to display near the label
  * @param [onChange] - Callback fired with the new value on interaction
  * @param [className] - Additional CSS classes for the outer container
  * @param [trackClassName] - Additional CSS classes for the track bar
  * @param [fillClassName] - Additional CSS classes for the fill portion of the track
  * @param [thumbClassName] - Additional CSS classes for the thumb circle
  * @param [labelsClassName] - Additional CSS classes for the labels row
+ * @param [labelClassName] - Additional CSS classes for the label element
+ * @param [containerClassName] - Additional CSS classes for the outer container
  */
 export const DialSlider: FC<DialSliderProps> = ({
   value,
@@ -75,11 +88,15 @@ export const DialSlider: FC<DialSliderProps> = ({
   labels,
   formatValue,
   onChange,
+  containerClassName,
   className,
+  label,
+  labelDescription,
   trackClassName,
   fillClassName,
   thumbClassName,
   labelsClassName,
+  labelClassName,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   ...divProps
@@ -162,77 +179,85 @@ export const DialSlider: FC<DialSliderProps> = ({
   );
 
   return (
-    <div
-      className={mergeClasses(
-        'flex flex-col gap-2',
-        disabled && 'pointer-events-none opacity-50',
-        className,
-      )}
-      {...divProps}
+    <DialFormItem
+      id={divProps.id}
+      label={label}
+      labelClassName={labelClassName}
+      description={labelDescription}
+      className={containerClassName}
     >
-      {/* Track area — 38px tall to contain the thumb without clipping */}
       <div
-        ref={trackRef}
-        className="relative flex h-[38px] cursor-pointer items-center"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
+        className={mergeClasses(
+          'flex flex-col gap-2',
+          disabled && 'pointer-events-none opacity-50',
+          className,
+        )}
+        {...divProps}
       >
-        {/* Track bar */}
+        {/* Track area — 38px tall to contain the thumb without clipping */}
         <div
-          className={mergeClasses(
-            'pointer-events-none absolute inset-x-0 h-3 rounded-[10px] bg-layer-1',
-            trackClassName,
-          )}
-        />
-        {/* Fill */}
-        <div
-          className={mergeClasses(
-            'pointer-events-none absolute left-0 h-3 rounded-[10px] bg-controls-accent-primary',
-            fillClassName,
-          )}
-          style={{ width: `${percent}%` }}
-        />
-        {/* Thumb */}
-        <div
-          role="slider"
-          tabIndex={disabled ? -1 : 0}
-          aria-valuenow={value}
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-disabled={disabled || undefined}
-          aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
-          className={mergeClasses(
-            'dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
-            thumbClassName,
-          )}
-          style={{ left: `${percent}%` }}
-          onKeyDown={handleKeyDown}
+          ref={trackRef}
+          className="relative flex h-[38px] cursor-pointer items-center"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
         >
-          {displayValue}
+          {/* Track bar */}
+          <div
+            className={mergeClasses(
+              'pointer-events-none absolute inset-x-0 h-3 rounded-[10px] bg-layer-1',
+              trackClassName,
+            )}
+          />
+          {/* Fill */}
+          <div
+            className={mergeClasses(
+              'pointer-events-none absolute left-0 h-3 rounded-[10px] bg-controls-accent-primary',
+              fillClassName,
+            )}
+            style={{ width: `${percent}%` }}
+          />
+          {/* Thumb */}
+          <div
+            role="slider"
+            tabIndex={disabled ? -1 : 0}
+            aria-valuenow={value}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-disabled={disabled || undefined}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            className={mergeClasses(
+              'dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+              thumbClassName,
+            )}
+            style={{ left: `${percent}%` }}
+            onKeyDown={handleKeyDown}
+          >
+            {displayValue}
+          </div>
         </div>
+        {labels && (
+          <div
+            className={mergeClasses(
+              'dial-tiny-text flex text-secondary',
+              labelsClassName,
+            )}
+          >
+            {labels.length === 3 ? (
+              <>
+                <span>{labels[0]}</span>
+                <span className="flex-1 text-center">{labels[1]}</span>
+                <span>{labels[2]}</span>
+              </>
+            ) : (
+              <>
+                <span>{labels[0]}</span>
+                <span className="ml-auto">{labels[1]}</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
-      {labels && (
-        <div
-          className={mergeClasses(
-            'dial-tiny-text flex text-secondary',
-            labelsClassName,
-          )}
-        >
-          {labels.length === 3 ? (
-            <>
-              <span>{labels[0]}</span>
-              <span className="flex-1 text-center">{labels[1]}</span>
-              <span>{labels[2]}</span>
-            </>
-          ) : (
-            <>
-              <span>{labels[0]}</span>
-              <span className="ml-auto">{labels[1]}</span>
-            </>
-          )}
-        </div>
-      )}
-    </div>
+    </DialFormItem>
   );
 };

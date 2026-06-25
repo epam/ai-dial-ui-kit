@@ -152,7 +152,7 @@ describe('Dial UI Kit :: DialSlider', () => {
         onChange={() => undefined}
       />,
     );
-    expect(container.firstChild).toHaveClass('custom-class');
+    expect(container.querySelector('.custom-class')).toBeInTheDocument();
   });
 
   test('integer step formats value without decimals', () => {
