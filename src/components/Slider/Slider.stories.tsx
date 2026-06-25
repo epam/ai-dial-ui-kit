@@ -236,6 +236,41 @@ export const CustomStyling: Story = {
   },
 };
 
+export const WithLabel: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Slider with a DialLabel rendered above the track.',
+      },
+    },
+  },
+  render: ControlledExample,
+  args: {
+    id: 'temperature',
+    labels: ['Precise', 'Neutral', 'Creative'],
+    labelProps: { label: 'Temperature' },
+  },
+};
+
+export const WithLabelAndCaption: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Slider with a label and caption text.',
+      },
+    },
+  },
+  render: ControlledExample,
+  args: {
+    id: 'temperature-caption',
+    labels: ['Precise', 'Neutral', 'Creative'],
+    labelProps: {
+      label: 'Temperature',
+      caption: 'Controls response creativity',
+    },
+  },
+};
+
 export const Disabled: Story = {
   parameters: {
     docs: {
