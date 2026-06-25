@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialTab } from './Tab';
+import { TabView } from '@/types/tab';
 
 describe('Dial UI Kit :: DialTab', () => {
   const baseTab = { id: 'tab1', label: 'Tab 1' };
@@ -199,5 +200,62 @@ describe('Dial UI Kit :: DialTab', () => {
     render(<DialTab tab={baseTab} active={false} onClick={vi.fn()} />);
     const tab = screen.getByRole('tab');
     expect(tab.className).toMatch(/h-\[38px\]/);
+  });
+
+  describe('inline view', () => {
+    test('renders check icon and active styles when active', () => {
+      const { container } = render(
+        <DialTab
+          tab={baseTab}
+          active
+          view={TabView.Inline}
+          onClick={vi.fn()}
+        />,
+      );
+      const btn = screen.getByRole('tab');
+      expect(btn.className).toMatch(/bg-accent-primary-alpha/);
+      expect(btn.className).toMatch(/h-6/);
+      expect(container.querySelector('.tabler-icon-check')).toBeInTheDocument();
+    });
+
+    test('does not render check icon when inactive', () => {
+      const { container } = render(
+        <DialTab
+          tab={baseTab}
+          active={false}
+          view={TabView.Inline}
+          onClick={vi.fn()}
+        />,
+      );
+      expect(container.querySelector('.tabler-icon-check')).toBeNull();
+    });
+
+    test('does not render check icon when disabled even if active', () => {
+      const { container } = render(
+        <DialTab
+          tab={{ ...baseTab, disabled: true }}
+          active
+          view={TabView.Inline}
+          onClick={vi.fn()}
+        />,
+      );
+      const btn = screen.getByRole('tab');
+      expect(btn.className).toMatch(/pointer-events-none/);
+      expect(container.querySelector('.tabler-icon-check')).toBeNull();
+    });
+
+    test('calls onClick with tab id', () => {
+      const onClick = vi.fn();
+      render(
+        <DialTab
+          tab={baseTab}
+          active={false}
+          view={TabView.Inline}
+          onClick={onClick}
+        />,
+      );
+      fireEvent.click(screen.getByRole('tab'));
+      expect(onClick).toHaveBeenCalledWith('tab1');
+    });
   });
 });

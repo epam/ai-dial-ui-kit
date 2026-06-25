@@ -2,7 +2,22 @@ export {
   DialCaptionText,
   DialErrorText,
 } from './components/CaptionText/CaptionText';
+export { DialAnalyticsCard } from './components/Analytics';
+export type { DialAnalyticsCardProps } from './components/Analytics';
+export { AnalyticsCardVariant } from './types/analytics';
+export { DialAnalyticsBar } from './components/Analytics';
+export type { DialAnalyticsBarProps } from './components/Analytics';
+export { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from './components/Analytics';
+export type { AnalyticsBarColorStop } from './models/analytics';
+export { DialAnalyticsErrorTag } from './components/Analytics';
+export type { DialAnalyticsErrorTagProps } from './components/Analytics';
+export { DialAnalyticsBarGroup } from './components/Analytics';
+export type { DialAnalyticsBarGroupProps } from './components/Analytics';
+export { DialAnalyticsHistogram } from './components/Analytics';
+export type { DialAnalyticsHistogramProps } from './components/Analytics';
 export { DialLabel } from './components/Label/Label';
+export { DialAccordion } from './components/Accordion/Accordion';
+export type { DialAccordionProps } from './components/Accordion/Accordion';
 export { DialIcon } from './components/Icon/Icon';
 export { DialNotification } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
@@ -132,7 +147,7 @@ export {
   DropdownItemType,
 } from './types/dropdown';
 export { ElementSize } from './types/size';
-export { TabOrientation } from './types/tab';
+export { TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { SelectSize, SelectVariant } from './types/select';

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialTabs } from './Tabs';
-import { TabOrientation } from '@/types/tab';
+import { TabOrientation, TabView } from '@/types/tab';
 import * as useScreenTypeHook from '@/hooks/use-screen-type';
 import { ScreenType } from '@/types/screen';
 import type { TabModel } from '@/models/tab';
@@ -82,6 +82,43 @@ describe('Dial UI Kit :: DialTabs', () => {
     expect(tab2).toBeInTheDocument();
 
     fireEvent.click(tab2!);
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick).toHaveBeenCalledWith('tab2');
+  });
+
+  test('renders inline view and marks active tab with a check icon', () => {
+    const { container } = render(
+      <DialTabs
+        tabs={tabsMock}
+        activeTab="tab1"
+        onClick={vi.fn()}
+        view={TabView.Inline}
+      />,
+    );
+
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(2);
+
+    const checkIcons = container.querySelectorAll('.tabler-icon-check');
+    expect(checkIcons).toHaveLength(1);
+
+    const activeTab = tabs.find((el) => el.textContent === 'Tab1');
+    expect(activeTab?.querySelector('.tabler-icon-check')).toBeInTheDocument();
+  });
+
+  test('handles tab click in inline view', () => {
+    const onClick = vi.fn();
+    render(
+      <DialTabs
+        tabs={tabsMock}
+        activeTab="tab1"
+        onClick={onClick}
+        view={TabView.Inline}
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Tab2'));
 
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(onClick).toHaveBeenCalledWith('tab2');

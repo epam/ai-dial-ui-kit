@@ -487,31 +487,19 @@ export const useFileUpload = ({
     ],
   );
 
+  const handleChangeRef = useRef<() => void | Promise<void>>(() => {});
+
   useEffect(() => {
-    let input = fileInputRef.current;
+    handleChangeRef.current = async () => {
+      const input = fileInputRef.current;
+      if (!input) return;
 
-    if (!input) {
-      input = document.createElement('input');
-      input.type = 'file';
-      input.multiple = true;
-      input.style.display = 'none';
-      document.body.appendChild(input);
-      fileInputRef.current = input;
-    }
-
-    if (allowedFileTypes && allowedFileTypes.length > 0) {
-      input.accept = allowedFileTypes.join(',');
-    } else {
-      input.removeAttribute('accept');
-    }
-
-    const handleChange = async () => {
       if (!uploadEnabled || !hasWriteAccess) {
-        if (input) input.value = '';
+        input.value = '';
         return;
       }
 
-      if (!input?.files?.length) return;
+      if (!input.files?.length) return;
 
       const files = Array.from(input.files);
       const uploadItems: DialUploadFileItem[] = files.map((file) => ({
@@ -530,35 +518,56 @@ export const useFileUpload = ({
         return;
       }
 
-      await handleUpload(
-        acceptedItems,
-        destinationFolderRef.current,
-        existingFilesRef.current,
-      );
-
-      input.value = '';
+      try {
+        await handleUpload(
+          acceptedItems,
+          destinationFolderRef.current,
+          existingFilesRef.current,
+        );
+      } catch {
+        setUploadError(validationMessages.validationError || 'Upload failed');
+      } finally {
+        input.value = '';
+      }
     };
+  }, [
+    uploadEnabled,
+    hasWriteAccess,
+    filterAcceptedFiles,
+    handleUpload,
+    validationMessages,
+  ]);
 
-    input.addEventListener('change', handleChange);
+  useEffect(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.style.display = 'none';
+    document.body.appendChild(input);
+    fileInputRef.current = input;
+
+    const listener = () => handleChangeRef.current?.();
+    input.addEventListener('change', listener);
 
     return () => {
-      if (!input) return;
-
-      input.removeEventListener('change', handleChange);
-
+      input.removeEventListener('change', listener);
       if (fileInputRef.current === input) {
         document.body.removeChild(input);
         fileInputRef.current = null;
       }
     };
-  }, [
-    uploadEnabled,
-    allowedFileTypes,
-    filterAcceptedFiles,
-    handleUpload,
-    validationMessages,
-    hasWriteAccess,
-  ]);
+  }, []);
+
+  useEffect(() => {
+    const input = fileInputRef.current;
+    if (!input) return;
+
+    if (allowedFileTypes && allowedFileTypes.length > 0) {
+      input.accept = allowedFileTypes.join(',');
+    } else {
+      input.removeAttribute('accept');
+    }
+  }, [allowedFileTypes]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
