@@ -518,13 +518,17 @@ export const useFileUpload = ({
         return;
       }
 
-      await handleUpload(
-        acceptedItems,
-        destinationFolderRef.current,
-        existingFilesRef.current,
-      );
-
-      input.value = '';
+      try {
+        await handleUpload(
+          acceptedItems,
+          destinationFolderRef.current,
+          existingFilesRef.current,
+        );
+      } catch {
+        setUploadError(validationMessages.validationError || 'Upload failed');
+      } finally {
+        input.value = '';
+      }
     };
   }, [
     uploadEnabled,

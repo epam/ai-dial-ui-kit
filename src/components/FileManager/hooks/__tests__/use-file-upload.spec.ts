@@ -1353,5 +1353,32 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       rerender({ allowedFileTypes: [] });
       expect(getHiddenFileInputs()[0]?.hasAttribute('accept')).toBe(false);
     });
+
+    it('surfaces an error and resets input value when the upload throws', async () => {
+      const onUploadFiles = vi.fn(() => {
+        throw new Error('boom');
+      });
+      const { result } = renderUseFileUpload({ onUploadFiles });
+
+      const input = getHiddenFileInputs()[0];
+      expect(input).toBeDefined();
+
+      const file = createMockFile('file1.txt', 1024);
+      Object.defineProperty(input, 'files', {
+        value: [file],
+        configurable: true,
+      });
+
+      await act(async () => {
+        input.dispatchEvent(new Event('change'));
+        await Promise.resolve();
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalled();
+        expect(result.current.uploadError).toBe('Upload failed');
+      });
+      expect(input.value).toBe('');
+    });
   });
 });
