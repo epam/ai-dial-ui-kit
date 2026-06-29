@@ -96,6 +96,10 @@ export { DialTooltip } from './components/Tooltip/Tooltip';
 // Switch
 export { DialSwitch } from './components/Switch/Switch';
 
+// Segmented Control
+export { DialSegmentedControl } from './components/SegmentedControl/SegmentedControl';
+export type { DialSegmentedControlProps } from './components/SegmentedControl/SegmentedControl';
+
 // Popups
 export { DialPopup } from './components/Popup/Popup';
 export { DialConfirmationPopup } from './components/ConfirmationPopup/ConfirmationPopup';
@@ -178,6 +182,7 @@ export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
+export type { SegmentedControlOption } from './models/segmented-control';
 export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
 export type { DialModifiedEntity } from './models/base-entity';
