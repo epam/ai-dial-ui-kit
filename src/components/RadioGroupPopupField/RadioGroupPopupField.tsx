@@ -74,6 +74,7 @@ export interface RadioGroupPopupFieldProps
  * @param [selectedValue] - Current value id used to resolve the displayed option name
  * @param radioButtons - Collection of radio options (id/name)
  * @param [customInputValue] - Custom value text to display instead of a radio option name
+ * @param [placeholder] - Placeholder text shown in the field when no value is selected; unlike `emptyValueText`, it suppresses the tooltip
  * @param [valueClassName] - Extra classes applied to the value text in the collapsed field
  * @param [inputClassName] - Extra classes applied to the collapsed input container
  * @param emptyValueText - Placeholder text when no value is selected
@@ -100,6 +101,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   valueClassName,
   inputClassName,
   emptyValueText,
+  placeholder,
   onClose,
   header,
   portalId,
@@ -148,6 +150,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
         valueClassName={valueClassName}
         inputClassName={classNames(inputClassName, 'py-2', 'px-3')}
         emptyValueText={emptyValueText}
+        placeholder={placeholder}
         onOpen={onOpenPopup}
       >
         <DialPopup
