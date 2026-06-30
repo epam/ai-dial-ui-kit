@@ -100,6 +100,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   valueClassName,
   inputClassName,
   emptyValueText,
+  placeholder,
   onClose,
   header,
   portalId,
@@ -148,6 +149,7 @@ export const DialRadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
         valueClassName={valueClassName}
         inputClassName={classNames(inputClassName, 'py-2', 'px-3')}
         emptyValueText={emptyValueText}
+        placeholder={placeholder}
         onOpen={onOpenPopup}
       >
         <DialPopup

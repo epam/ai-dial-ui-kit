@@ -175,7 +175,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
         >
           <div className="flex flex-row items-center gap-x-2 flex-1 min-w-0">
             {iconBefore && <DialIcon icon={iconBefore} />}
-            <DialTooltip tooltip={hasSingleValue ? String(value) : undefined}>
+            <DialTooltip tooltip={value == null ? undefined : String(value)}>
               {value || !placeholder ? (
                 <span className={valueClassName}>{value}</span>
               ) : (
