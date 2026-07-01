@@ -490,6 +490,79 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
   });
 
+  describe('prepareUploadFileName', () => {
+    it('applies the mapper to names passed to onUploadFiles when no conflict', async () => {
+      const onUploadFiles = vi.fn();
+      const prepareUploadFileName = vi.fn((name: string) =>
+        name.replace(/:/g, ''),
+      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        prepareUploadFileName,
+      });
+
+      const files = [createMockFile('inva:lid.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(prepareUploadFileName).toHaveBeenCalledWith('inva:lid.txt');
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [{ fileContent: files[0], name: 'invalid.txt' }],
+        '/folder',
+      );
+    });
+
+    it('detects conflicts against the mapped name (rename before conflict check)', async () => {
+      const onUploadFiles = vi.fn();
+      // Maps "existing:.txt" -> "existing.txt" which collides with an existing file.
+      const prepareUploadFileName = vi.fn((name: string) =>
+        name.replace(/:/g, ''),
+      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        prepareUploadFileName,
+      });
+
+      const files = [createMockFile('existing:.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(
+          mockEvent,
+          '/folder',
+          mockExistingFiles,
+        );
+      });
+
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+        expect(result.current.uploadConflictingFiles[0]?.name).toBe(
+          'existing.txt',
+        );
+        expect(onUploadFiles).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('file size validation', () => {
     it('shows error when file exceeds max size', async () => {
       const onUploadFiles = vi.fn();

@@ -347,6 +347,7 @@ export interface DialFileManagerProps {
     files: DialUploadFileItem[],
     destinationFolder: string,
   ) => void;
+  prepareUploadFileName?: (name: string) => string;
   onValidateUpload?: (
     files: DialUploadFileItem[],
     existingFiles: DialFile[],
@@ -492,6 +493,7 @@ export interface DialFileManagerProps {
  *
  * @param [onUploadArchive] - Callback fired when archive files are uploaded
  * @param [onUploadFiles] - Callback fired when files are uploaded
+ * @param [prepareUploadFileName] - Optional mapper applied to each uploaded item's name before conflict resolution runs and before `onUploadFiles`/`onUploadArchive` are called. Use it to sanitize or normalize names (e.g. stripping forbidden symbols). Conflict detection is performed against the mapped names, so renames take place before the conflict check.
  * @param [onValidateUpload] - Callback to validate files before upload
  * @param [maxFileSize] - Maximum allowed file size for uploads in bytes
  * @param [uploadValidationMessages] - Custom validation messages for file uploads. Consumers can customize these strings for a11y and copy consistency.

@@ -65,6 +65,7 @@ export interface UseFileUploadOptions {
     name: string,
     destinationFolder: string,
   ) => void;
+  prepareUploadFileName?: (name: string) => string;
   currentFolder?: DialFile;
 }
 
@@ -81,6 +82,7 @@ export const useFileUpload = ({
   allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
+  prepareUploadFileName,
   uploadEnabled = true,
   currentFolder,
 }: UseFileUploadOptions = {}) => {
@@ -260,7 +262,14 @@ export const useFileUpload = ({
       setUploadError(undefined);
       existingFilesRef.current = existingFiles;
 
-      const oversizedFiles = checkFileSize(files);
+      const preparedFiles = prepareUploadFileName
+        ? files.map((file) => ({
+            ...file,
+            name: prepareUploadFileName(file.name),
+          }))
+        : files;
+
+      const oversizedFiles = checkFileSize(preparedFiles);
       if (oversizedFiles.length > 0) {
         const sizeMB = maxFileSize
           ? (maxFileSize / (1024 * 1024)).toFixed(2)
@@ -275,7 +284,7 @@ export const useFileUpload = ({
       if (onValidateUpload) {
         try {
           const validationResult = await onValidateUpload(
-            files,
+            preparedFiles,
             existingFiles,
             destinationFolder,
           );
@@ -295,10 +304,13 @@ export const useFileUpload = ({
         }
       }
 
-      const filesMap = new Map(files.map((f) => [f.name, f]));
+      const filesMap = new Map(preparedFiles.map((f) => [f.name, f]));
       setPendingUploadFiles(filesMap);
 
-      const dialFiles = convertUploadItemsToDialFiles(files, destinationFolder);
+      const dialFiles = convertUploadItemsToDialFiles(
+        preparedFiles,
+        destinationFolder,
+      );
 
       setUploadMetadata({ destinationFolder });
 
@@ -310,7 +322,7 @@ export const useFileUpload = ({
         return false;
       }
 
-      onUploadFiles?.(files, destinationFolder);
+      onUploadFiles?.(preparedFiles, destinationFolder);
       clearUploadState();
       return true;
     },
@@ -318,6 +330,7 @@ export const useFileUpload = ({
       uploadEnabled,
       onUploadFiles,
       onValidateUpload,
+      prepareUploadFileName,
       checkFileSize,
       maxFileSize,
       validationMessages,
@@ -601,7 +614,10 @@ export const useFileUpload = ({
           return;
         }
 
-        const archiveName = file.name.replace(/\.zip$/i, '');
+        const rawArchiveName = file.name.replace(/\.zip$/i, '');
+        const archiveName = prepareUploadFileName
+          ? prepareUploadFileName(rawArchiveName)
+          : rawArchiveName;
 
         const dialFile: DialFile = {
           id: archiveName,
@@ -640,7 +656,13 @@ export const useFileUpload = ({
       document.body.appendChild(input);
       input.click();
     },
-    [onUploadArchive, uploadEnabled, hasWriteAccess, startConflictResolution],
+    [
+      onUploadArchive,
+      uploadEnabled,
+      hasWriteAccess,
+      startConflictResolution,
+      prepareUploadFileName,
+    ],
   );
 
   const clearError = useCallback(() => {
