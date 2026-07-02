@@ -25,6 +25,10 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
       control: 'boolean',
       description: 'Whether the accordion is expanded initially.',
     },
+    isLoading: {
+      control: 'boolean',
+      description: 'Renders a loader in place of the bars while data loads.',
+    },
     className: { control: 'text' },
   },
 };
@@ -54,6 +58,15 @@ export const CustomMaxValue: Story = {
     title: 'Token usage',
     data: { prompt: 420, completion: 180, total: 600 },
     maxValue: 1000,
+    className: 'w-[420px]',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91 },
+    isLoading: true,
     className: 'w-[420px]',
   },
 };

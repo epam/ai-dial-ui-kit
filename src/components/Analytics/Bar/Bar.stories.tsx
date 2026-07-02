@@ -33,6 +33,11 @@ const meta: Meta<typeof DialAnalyticsBar> = {
       description:
         'Renders the error state: error-colored bar and an error tag instead of the value.',
     },
+    isLoading: {
+      control: 'boolean',
+      description:
+        'Renders the loading state: a loader instead of the value and an empty track.',
+    },
     className: { control: 'text' },
     ariaLabel: { control: 'text' },
   },
@@ -82,6 +87,14 @@ export const Error: Story = {
   args: {
     title: 'Relevance',
     error: true,
+    className: 'w-[280px]',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    title: 'Relevance',
+    isLoading: true,
     className: 'w-[280px]',
   },
 };
