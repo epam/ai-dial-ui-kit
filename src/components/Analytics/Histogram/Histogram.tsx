@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/Analytics/Bar/utils';
+import { DialLoader } from '@/components/Loader/Loader';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -22,6 +23,8 @@ export interface DialAnalyticsHistogramProps {
   valueTitle?: string;
   /** When `true`, renders each column's count inside its bar. */
   showCount?: boolean;
+  /** Renders a loader in place of the histogram while the data is being fetched. */
+  isLoading?: boolean;
   /** Additional CSS classes for the outer container. */
   className?: string;
 }
@@ -48,6 +51,7 @@ export interface DialAnalyticsHistogramProps {
  * @param [colorMap=DEFAULT_ANALYTICS_BAR_COLOR_MAP] - Color bands defining the columns.
  * @param [valueTitle='values'] - Noun used in the hover tooltip.
  * @param [showCount] - When `true`, renders each column's count inside its bar.
+ * @param [isLoading] - Renders a loader in place of the histogram while the data is being fetched.
  * @param [className] - Additional CSS classes for the outer container.
  */
 export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
@@ -56,6 +60,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
   colorMap = DEFAULT_ANALYTICS_BAR_COLOR_MAP,
   valueTitle = 'values',
   showCount,
+  isLoading,
   className,
 }) => {
   const columns = buildHistogramColumns(values, colorMap);
@@ -65,59 +70,84 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
     <div className={mergeClasses('flex flex-col gap-2', className)}>
       <span className="dial-small-text text-primary">{title}</span>
 
-      <div className="flex flex-col gap-1">
+      {isLoading ? (
         <div
-          className="flex items-end gap-1 border-b border-primary"
+          className="flex items-center justify-center"
           style={{ height: HISTOGRAM_HEIGHT_PX }}
         >
-          {columns.map((column, index) => {
-            const colored = !column.isZeroBucket && column.count > 0;
-            const label = `${column.count} out of ${total} ${valueTitle}`;
-            return (
-              <DialTooltip
-                key={index}
-                placement="bottom"
-                tooltip={label}
-                triggerClassName="flex h-full flex-1 items-end"
-              >
-                <div
-                  role="img"
-                  aria-label={label}
-                  className={mergeClasses(
-                    'flex min-h-2 w-full items-center justify-center rounded-sm border',
-                    column.isZeroBucket
-                      ? 'border-secondary'
-                      : colored
-                        ? 'border-transparent'
-                        : 'border-primary',
-                  )}
-                  style={{
-                    height: `${column.ratio * 100}%`,
-                    backgroundColor: colored ? column.color : undefined,
-                  }}
-                >
-                  {showCount && column.count > 0 && (
-                    <span className="dial-tiny-semi-text text-primary">
-                      {column.count}
-                    </span>
-                  )}
-                </div>
-              </DialTooltip>
-            );
-          })}
+          <DialLoader fullWidth={false} />
         </div>
+      ) : (
+        <div className="flex flex-col gap-1">
+          <div
+            className="flex items-end gap-1 border-b border-primary"
+            style={{ height: HISTOGRAM_HEIGHT_PX }}
+          >
+            {columns.map((column, index) => {
+              const colored = !column.isZeroBucket && column.count > 0;
+              const label = `${column.count} out of ${total} ${valueTitle}`;
 
-        <div className="flex gap-1">
-          {columns.map((column, index) => (
-            <span
-              key={index}
-              className="dial-caption-text flex-1 text-center text-secondary"
-            >
-              {formatHistogramColumnLabel(column.from, column.to)}
-            </span>
-          ))}
+              if (column.count === 0) {
+                return (
+                  <div
+                    key={index}
+                    className="flex h-full flex-1 items-end"
+                    aria-hidden="true"
+                  >
+                    <div
+                      className="min-h-2 w-full rounded-sm"
+                      style={{ height: `${column.ratio * 100}%` }}
+                    />
+                  </div>
+                );
+              }
+
+              return (
+                <DialTooltip
+                  key={index}
+                  placement="bottom"
+                  tooltip={label}
+                  triggerClassName="flex h-full flex-1 items-end"
+                >
+                  <div
+                    role="img"
+                    aria-label={label}
+                    className={mergeClasses(
+                      'flex min-h-2 w-full items-center justify-center rounded-sm border',
+                      column.isZeroBucket
+                        ? 'border-secondary'
+                        : colored
+                          ? 'border-transparent'
+                          : 'border-primary',
+                    )}
+                    style={{
+                      height: `${column.ratio * 100}%`,
+                      backgroundColor: colored ? column.color : undefined,
+                    }}
+                  >
+                    {showCount && column.count > 0 && (
+                      <span className="dial-tiny-semi-text text-primary">
+                        {column.count}
+                      </span>
+                    )}
+                  </div>
+                </DialTooltip>
+              );
+            })}
+          </div>
+
+          <div className="flex gap-1">
+            {columns.map((column, index) => (
+              <span
+                key={index}
+                className="dial-caption-text flex-1 text-center text-secondary"
+              >
+                {formatHistogramColumnLabel(column.from, column.to)}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
