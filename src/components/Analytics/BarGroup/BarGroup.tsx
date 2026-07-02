@@ -8,6 +8,8 @@ import type { AnalyticsBarColorStop } from '@/models/analytics';
 export interface DialAnalyticsBarGroupProps {
   /** Title passed to the accordion header. */
   title: ReactNode;
+  /** Description passed to the accordion header. Defaults to the number of entries. */
+  description?: ReactNode;
   /** Map of metric name to numeric value. Each entry renders one bar. */
   data: Record<string, number>;
   /** Upper bound passed to every bar. Defaults to the bar's own default (`1`). */
@@ -18,6 +20,8 @@ export interface DialAnalyticsBarGroupProps {
   defaultExpanded?: boolean;
   /** Renders a loader in place of the bars while the data is being fetched. */
   isLoading?: boolean;
+  /** Invoked with the entry key and value when a bar is clicked. When set, each bar becomes an interactive button. */
+  onBarClick?: (key: string, value: number) => void;
   /** Additional CSS classes for the accordion container. */
   className?: string;
 }
@@ -38,20 +42,24 @@ export interface DialAnalyticsBarGroupProps {
  * ```
  *
  * @param title - Title passed to the accordion header.
+ * @param [description] - Description passed to the accordion header. Defaults to the number of entries.
  * @param data - Map of metric name to numeric value. Each entry renders one bar.
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
  * @param [isLoading] - Renders a loader in place of the bars while the data is being fetched.
+ * @param [onBarClick] - Invoked with the entry key and value when a bar is clicked.
  * @param [className] - Additional CSS classes for the accordion container.
  */
 export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   title,
+  description,
   data,
   maxValue,
   colorMap,
   defaultExpanded = true,
   isLoading,
+  onBarClick,
   className,
 }) => {
   const entries = Object.entries(data);
@@ -59,7 +67,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   return (
     <DialAccordion
       title={title}
-      description={`${entries.length} numeric results`}
+      description={description ?? `${entries.length} numeric results`}
       defaultExpanded={defaultExpanded}
       className={className}
     >
@@ -67,15 +75,31 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
         {isLoading ? (
           <DialLoader fullWidth={false} className="self-center" />
         ) : (
-          entries.map(([key, value]) => (
-            <DialAnalyticsBar
-              key={key}
-              title={key}
-              value={value}
-              maxValue={maxValue}
-              colorMap={colorMap}
-            />
-          ))
+          entries.map(([key, value]) =>
+            onBarClick ? (
+              <button
+                key={key}
+                type="button"
+                onClick={() => onBarClick(key, value)}
+                className="cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+              >
+                <DialAnalyticsBar
+                  title={key}
+                  value={value}
+                  maxValue={maxValue}
+                  colorMap={colorMap}
+                />
+              </button>
+            ) : (
+              <DialAnalyticsBar
+                key={key}
+                title={key}
+                value={value}
+                maxValue={maxValue}
+                colorMap={colorMap}
+              />
+            ),
+          )
         )}
       </div>
     </DialAccordion>

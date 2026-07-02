@@ -16,6 +16,11 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
   },
   argTypes: {
     title: { control: 'text', description: 'Accordion header title.' },
+    description: {
+      control: 'text',
+      description:
+        'Accordion header description. Defaults to the number of entries.',
+    },
     data: { control: 'object', description: 'Map of metric name to value.' },
     maxValue: {
       control: 'number',
@@ -28,6 +33,11 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
     isLoading: {
       control: 'boolean',
       description: 'Renders a loader in place of the bars while data loads.',
+    },
+    onBarClick: {
+      action: 'barClick',
+      description:
+        'Invoked with the entry key and value when a bar is clicked.',
     },
     className: { control: 'text' },
   },
@@ -67,6 +77,34 @@ export const Loading: Story = {
     title: 'Relevance',
     data: { accuracy: 0.82, recall: 0.64, precision: 0.91 },
     isLoading: true,
+    className: 'w-[420px]',
+  },
+};
+
+export const CustomDescription: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91 },
+    className: 'w-[420px]',
+  },
+  render: (args) => (
+    <DialAnalyticsBarGroup
+      {...args}
+      description={
+        <span className="flex items-center gap-1">
+          <span className="size-2 rounded-full bg-accent-primary" />
+          Updated just now
+        </span>
+      }
+    />
+  ),
+};
+
+export const Clickable: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    onBarClick: (key, value) => alert(`${key}: ${value}`),
     className: 'w-[420px]',
   },
 };

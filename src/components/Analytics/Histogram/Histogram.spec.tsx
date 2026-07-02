@@ -9,11 +9,16 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(screen.getByText('Distribution')).toBeInTheDocument();
   });
 
-  test('renders the zero bucket plus one column per color-map band', () => {
-    render(<DialAnalyticsHistogram title="Distribution" values={[0.5]} />);
-    expect(screen.getAllByRole('img')).toHaveLength(
+  test('renders an interval label per band, but only populated columns as images', () => {
+    const { container } = render(
+      <DialAnalyticsHistogram title="Distribution" values={[0.5]} />,
+    );
+    // every band (zero bucket + color-map bands) renders an interval label
+    expect(container.querySelectorAll('.dial-caption-text')).toHaveLength(
       DEFAULT_ANALYTICS_BAR_COLOR_MAP.length + 1,
     );
+    // only the single populated band is exposed as an image with a tooltip
+    expect(screen.getAllByRole('img')).toHaveLength(1);
   });
 
   test('renders an interval legend under each column', () => {
@@ -49,11 +54,11 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
       name: '2 out of 2 responses',
     });
     expect(populated).toHaveTextContent('2');
-    // empty columns do not render a count
-    const empty = screen.getAllByRole('img', {
-      name: '0 out of 2 responses',
-    })[0];
-    expect(empty).toHaveTextContent('');
+    // empty columns render no img/tooltip and therefore no count
+    expect(
+      screen.queryByRole('img', { name: '0 out of 2 responses' }),
+    ).toBeNull();
+    expect(screen.getAllByRole('img')).toHaveLength(1);
   });
 
   test('does not show counts by default', () => {
@@ -70,8 +75,8 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     ).toHaveTextContent('');
   });
 
-  test('fills populated columns with the band color and outlines empty ones', () => {
-    render(
+  test('fills populated columns with the band color and renders no border or tooltip for empty ones', () => {
+    const { container } = render(
       <DialAnalyticsHistogram
         title="Distribution"
         values={[0.05, 0.06]}
@@ -86,13 +91,15 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(populated.style.height).toBe('100%');
     expect(populated.className).toMatch(/border-transparent/);
 
-    // index 0 is the zero bucket (border-secondary); index 1 is the first empty band
-    const empty = screen.getAllByRole('img', {
-      name: '0 out of 2 responses',
-    })[1];
-    expect(empty.style.backgroundColor).toBe('');
-    expect(empty.style.height).toBe('0%');
-    expect(empty.className).toMatch(/border-primary/);
+    // empty bands are not exposed as images and carry no border or tooltip
+    expect(
+      screen.queryByRole('img', { name: '0 out of 2 responses' }),
+    ).toBeNull();
+    expect(screen.getAllByRole('img')).toHaveLength(1);
+    // they still occupy a slot rendered as an aria-hidden spacer
+    expect(container.querySelectorAll('[aria-hidden="true"]').length).toBe(
+      DEFAULT_ANALYTICS_BAR_COLOR_MAP.length,
+    );
   });
 
   test('exposes the share of the total as the column label/tooltip', () => {
@@ -115,5 +122,21 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(
       screen.getByRole('img', { name: '1 out of 1 values' }),
     ).toBeInTheDocument();
+  });
+
+  describe('loading state', () => {
+    test('renders a loader instead of the columns', () => {
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          isLoading
+        />,
+      );
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByRole('img', { name: /out of/ })).toBeNull();
+      expect(screen.getByText('Distribution')).toBeInTheDocument();
+    });
   });
 });

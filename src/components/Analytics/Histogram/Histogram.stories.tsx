@@ -30,6 +30,11 @@ const meta: Meta<typeof DialAnalyticsHistogram> = {
       control: 'boolean',
       description: "Renders each column's count inside its bar.",
     },
+    isLoading: {
+      control: 'boolean',
+      description:
+        'Renders a loader in place of the histogram while data loads.',
+    },
     className: { control: 'text' },
   },
 };
@@ -91,6 +96,16 @@ export const Empty: Story = {
     title: 'Score distribution',
     values: [],
     valueTitle: 'responses',
+    className: 'w-[480px]',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    title: 'Score distribution',
+    values: [],
+    valueTitle: 'responses',
+    isLoading: true,
     className: 'w-[480px]',
   },
 };
