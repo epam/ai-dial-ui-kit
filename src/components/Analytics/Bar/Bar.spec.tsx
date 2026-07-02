@@ -85,4 +85,27 @@ describe('Dial UI Kit :: DialAnalyticsBar', () => {
       expect(screen.getByText('Error')).toBeInTheDocument();
     });
   });
+
+  describe('loading state', () => {
+    test('shows a loader instead of the value and an empty track', () => {
+      const { container } = render(
+        <DialAnalyticsBar title="Score" value={0.5} isLoading />,
+      );
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByText('0.5')).toBeNull();
+
+      const bar = screen.getByRole('progressbar');
+      expect(bar).not.toHaveAttribute('aria-valuenow');
+      // no colored fill element is rendered
+      expect(container.querySelector('[style]')).toBeNull();
+    });
+
+    test('prioritizes the error state over the loading state', () => {
+      render(<DialAnalyticsBar title="Score" isLoading error />);
+
+      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.queryByRole('status')).toBeNull();
+    });
+  });
 });

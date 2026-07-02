@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { DialAnalyticsErrorTag } from '@/components/Analytics/ErrorTag/ErrorTag';
+import { DialLoader } from '@/components/Loader/Loader';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
@@ -19,6 +20,11 @@ export interface DialAnalyticsBarProps {
    * replaces the value label.
    */
   error?: boolean;
+  /**
+   * Renders the loading state: a loader replaces the value label and the bar shows
+   * an empty track while the value is being fetched.
+   */
+  isLoading?: boolean;
   /** Optional label rendered above the bar, on the left. */
   title?: ReactNode;
   /**
@@ -64,6 +70,7 @@ export interface DialAnalyticsBarProps {
  * @param [value] - Current value used to size and color the bar. Omit it when `error` is set.
  * @param [maxValue=1] - Upper bound of the scale.
  * @param [error] - Renders the error state (error-colored bar + error tag).
+ * @param [isLoading] - Renders the loading state (loader + empty track).
  * @param [title] - Optional label rendered above the bar, on the left.
  * @param [valueLabel] - Text rendered above the bar, on the right. Defaults to `value`.
  * @param [colorMap=DEFAULT_ANALYTICS_BAR_COLOR_MAP] - Color bands keyed by ratio.
@@ -74,6 +81,7 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
   value,
   maxValue = 1,
   error,
+  isLoading,
   title,
   valueLabel,
   colorMap = DEFAULT_ANALYTICS_BAR_COLOR_MAP,
@@ -92,6 +100,8 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
         <span className="dial-small-text text-primary">{title}</span>
         {error ? (
           <DialAnalyticsErrorTag />
+        ) : isLoading ? (
+          <DialLoader fullWidth={false} />
         ) : (
           <span className="dial-small-semi-text text-primary">
             {displayValue}
@@ -100,7 +110,7 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
       </div>
       <div
         role="progressbar"
-        aria-valuenow={error ? undefined : value}
+        aria-valuenow={error || isLoading ? undefined : value}
         aria-valuemin={0}
         aria-valuemax={maxValue}
         aria-label={resolvedAriaLabel}
@@ -109,7 +119,7 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
           error ? 'bg-error' : 'bg-layer-1',
         )}
       >
-        {!error && (
+        {!error && !isLoading && (
           <div
             className="h-full rounded-sm transition-[width] duration-300"
             style={{ width: `${ratio * 100}%`, backgroundColor: color }}

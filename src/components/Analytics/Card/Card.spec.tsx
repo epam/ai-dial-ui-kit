@@ -124,4 +124,51 @@ describe('Dial UI Kit :: DialAnalyticsCard', () => {
       expect(screen.queryByText('+10%')).toBeNull();
     });
   });
+
+  describe('loading state', () => {
+    test('renders a loader in place of the value', () => {
+      render(
+        <DialAnalyticsCard title="Total requests" value="12,480" isLoading />,
+      );
+
+      expect(screen.getByText('Total requests')).toBeInTheDocument();
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByText('12,480')).toBeNull();
+    });
+
+    test('hides the description while loading', () => {
+      render(
+        <DialAnalyticsCard
+          title="Revenue"
+          value="$48.2K"
+          description="+10%"
+          isLoading
+        />,
+      );
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByText('+10%')).toBeNull();
+    });
+
+    test('renders the loader in the compact variant', () => {
+      render(
+        <DialAnalyticsCard
+          title="Avg. latency"
+          value="248ms"
+          variant={AnalyticsCardVariant.Compact}
+          isLoading
+        />,
+      );
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByText('248ms')).toBeNull();
+    });
+
+    test('prioritizes the error state over the loading state', () => {
+      render(<DialAnalyticsCard title="Errors" isLoading error />);
+
+      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.queryByRole('status')).toBeNull();
+    });
+  });
 });

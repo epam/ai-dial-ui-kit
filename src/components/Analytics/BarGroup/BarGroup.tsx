@@ -2,6 +2,7 @@ import type { FC, ReactNode } from 'react';
 
 import { DialAccordion } from '@/components/Accordion/Accordion';
 import { DialAnalyticsBar } from '@/components/Analytics/Bar/Bar';
+import { DialLoader } from '@/components/Loader/Loader';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 
 export interface DialAnalyticsBarGroupProps {
@@ -15,6 +16,8 @@ export interface DialAnalyticsBarGroupProps {
   colorMap?: AnalyticsBarColorStop[];
   /** Whether the accordion is expanded initially. Defaults to `true`. */
   defaultExpanded?: boolean;
+  /** Renders a loader in place of the bars while the data is being fetched. */
+  isLoading?: boolean;
   /** Additional CSS classes for the accordion container. */
   className?: string;
 }
@@ -39,6 +42,7 @@ export interface DialAnalyticsBarGroupProps {
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
+ * @param [isLoading] - Renders a loader in place of the bars while the data is being fetched.
  * @param [className] - Additional CSS classes for the accordion container.
  */
 export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
@@ -47,6 +51,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   maxValue,
   colorMap,
   defaultExpanded = true,
+  isLoading,
   className,
 }) => {
   const entries = Object.entries(data);
@@ -59,15 +64,19 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
       className={className}
     >
       <div className="flex flex-col gap-3">
-        {entries.map(([key, value]) => (
-          <DialAnalyticsBar
-            key={key}
-            title={key}
-            value={value}
-            maxValue={maxValue}
-            colorMap={colorMap}
-          />
-        ))}
+        {isLoading ? (
+          <DialLoader fullWidth={false} className="self-center" />
+        ) : (
+          entries.map(([key, value]) => (
+            <DialAnalyticsBar
+              key={key}
+              title={key}
+              value={value}
+              maxValue={maxValue}
+              colorMap={colorMap}
+            />
+          ))
+        )}
       </div>
     </DialAccordion>
   );

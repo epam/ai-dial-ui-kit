@@ -39,6 +39,11 @@ const meta: Meta<typeof DialAnalyticsCard> = {
       control: 'boolean',
       description: 'Renders an error tag in place of the value.',
     },
+    isLoading: {
+      control: 'boolean',
+      description:
+        'Renders a loader in place of the value while it is being fetched.',
+    },
     className: {
       control: 'text',
       description: 'Additional CSS classes for the card container.',
@@ -94,6 +99,26 @@ export const Error: Story = {
     title: 'Avg. latency',
     variant: AnalyticsCardVariant.Compact,
     error: true,
+    className: 'w-[200px]',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    title: 'Total requests',
+    value: '12,480',
+    description: '+12% vs last week',
+    isLoading: true,
+    className: 'w-[240px]',
+  },
+};
+
+export const LoadingCompact: Story = {
+  args: {
+    title: 'Avg. latency',
+    value: '248ms',
+    variant: AnalyticsCardVariant.Compact,
+    isLoading: true,
     className: 'w-[200px]',
   },
 };

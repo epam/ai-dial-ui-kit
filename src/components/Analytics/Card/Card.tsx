@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { DialAnalyticsErrorTag } from '@/components/Analytics/ErrorTag/ErrorTag';
+import { DialLoader } from '@/components/Loader/Loader';
 import { AnalyticsCardVariant } from '@/types/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -11,6 +12,8 @@ export interface DialAnalyticsCardProps {
   variant?: AnalyticsCardVariant;
   /** Renders an error tag in place of the value when the value is unavailable. */
   error?: boolean;
+  /** Renders a loader in place of the value while the value is being fetched. */
+  isLoading?: boolean;
   className?: string;
 }
 
@@ -75,6 +78,7 @@ const variantStyles: Record<
  * @param [variant=AnalyticsCardVariant.Default] - Visual style of the card. Uses the
  *   {@link AnalyticsCardVariant} enum.
  * @param [error] - Renders an error tag in place of the value when the value is unavailable.
+ * @param [isLoading] - Renders a loader in place of the value while the value is being fetched.
  * @param [className] - Additional CSS classes for the card container.
  */
 export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
@@ -83,6 +87,7 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
   description,
   variant = AnalyticsCardVariant.Default,
   error,
+  isLoading,
   className,
 }) => {
   const styles = variantStyles[variant];
@@ -91,7 +96,7 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
     <div
       className={mergeClasses(
         'flex flex-col rounded-lg border border-secondary p-4',
-        error ? 'gap-2' : 'gap-1',
+        error || isLoading ? 'gap-2' : 'gap-1',
         styles.container,
         className,
       )}
@@ -99,10 +104,13 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
       <span className={styles.title}>{title}</span>
       {error ? (
         <DialAnalyticsErrorTag className="self-start" />
+      ) : isLoading ? (
+        <DialLoader fullWidth={false} className="self-start" />
       ) : (
         <span className={styles.value}>{value}</span>
       )}
       {!error &&
+        !isLoading &&
         styles.showDescription &&
         description != null &&
         description !== false && (

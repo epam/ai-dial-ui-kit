@@ -67,4 +67,14 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
     expect(screen.getByText('0 numeric results')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).toBeNull();
   });
+
+  describe('loading state', () => {
+    test('renders a loader instead of the bars', () => {
+      render(<DialAnalyticsBarGroup title="Relevance" data={data} isLoading />);
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByRole('progressbar')).toBeNull();
+      expect(screen.queryByText('accuracy')).toBeNull();
+    });
+  });
 });
