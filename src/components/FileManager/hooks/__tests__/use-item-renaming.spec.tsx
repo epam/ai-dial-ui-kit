@@ -567,6 +567,7 @@ describe('useItemRenaming hook', () => {
             emptyName: 'Custom empty error',
             duplicateName: 'Custom duplicate error',
             hiddenItemWarning: 'Custom hidden item warning',
+            consecutiveDotsError: 'Custom consecutive dots error',
           },
         }),
       );
@@ -586,6 +587,46 @@ describe('useItemRenaming hook', () => {
         items[0].items![0],
       );
       expect(hiddenError).toBe('Custom hidden item warning');
+
+      const consecutiveDotsError = result.current.renameValidateHandler(
+        '...',
+        items[0].items![0],
+      );
+      expect(consecutiveDotsError).toBe('Custom consecutive dots error');
+    });
+
+    it('returns error for names with consecutive dots', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0];
+
+      expect(result.current.renameValidateHandler('...', folderA)).toBe(
+        'Name cannot contain consecutive dots',
+      );
+      expect(result.current.renameValidateHandler('a..b', folderA)).toBe(
+        'Name cannot contain consecutive dots',
+      );
+      expect(result.current.renameValidateHandler('name..', folderA)).toBe(
+        'Name cannot contain consecutive dots',
+      );
+    });
+
+    it('takes precedence over the leading-dot hidden warning', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0];
+      const error = result.current.renameValidateHandler('..hidden', folderA);
+      expect(error).toBe('Name cannot contain consecutive dots');
+    });
+
+    it('still allows a single leading dot without consecutive dots', () => {
+      const { result } = renderHook(() => useItemRenaming({ items }));
+
+      const folderA = items[0].items![0];
+      const error = result.current.renameValidateHandler('.hidden', folderA);
+      expect(error).toBe(
+        'warning__A dot at the start of the name will make the item hidden',
+      );
     });
 
     it('delegates to onRenameValidate and returns its result', () => {

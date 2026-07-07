@@ -3,18 +3,23 @@ import type { DialCopiedItem } from '@/models/file-manager';
 import { useCallback, useState, useMemo } from 'react';
 import { findNodeByPath } from '@/components/FileManager/utils';
 import { DialFileNodeType } from '@/models/file';
-import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
+import {
+  DEFAULT_ERRORS,
+  DEFAULT_WARNINGS,
+} from '@/components/FileManager/errors';
 
 export interface RenameValidationMessages {
   emptyName?: string;
   duplicateName?: string;
   hiddenItemWarning?: string;
+  consecutiveDotsError?: string;
 }
 
 const DEFAULT_VALIDATION_MESSAGES: Required<RenameValidationMessages> = {
   emptyName: 'Name cannot be empty',
   duplicateName: 'An item with this name already exists',
   hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
+  consecutiveDotsError: DEFAULT_ERRORS.consecutiveDotsError,
 };
 
 function trimTrailingSlashes(path: string): string {
@@ -143,6 +148,10 @@ export const useItemRenaming = ({
 
       if (!trimmedName) {
         return messages.emptyName;
+      }
+
+      if (trimmedName.includes('..')) {
+        return messages.consecutiveDotsError;
       }
 
       if (trimmedName.startsWith('.')) {
