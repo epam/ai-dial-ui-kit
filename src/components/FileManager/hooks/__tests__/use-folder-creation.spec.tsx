@@ -270,6 +270,48 @@ describe('Dial UI Kit :: useFolderCreation', () => {
       );
       expect(result.current.validateFolderName('Valid Name')).toBeNull();
     });
+
+    test('returns error for names with consecutive dots', () => {
+      const { result } = renderHook(() =>
+        useFolderCreation({
+          currentFolder: mockCurrentFolder,
+        }),
+      );
+
+      expect(result.current.validateFolderName('...')).toBe(
+        'Name cannot contain consecutive dots',
+      );
+      expect(result.current.validateFolderName('a..b')).toBe(
+        'Name cannot contain consecutive dots',
+      );
+      expect(result.current.validateFolderName('name..')).toBe(
+        'Name cannot contain consecutive dots',
+      );
+    });
+
+    test('consecutive dots error takes precedence over the leading-dot hidden warning', () => {
+      const { result } = renderHook(() =>
+        useFolderCreation({
+          currentFolder: mockCurrentFolder,
+        }),
+      );
+
+      const error = result.current.validateFolderName('..hidden');
+      expect(error).toBe('Name cannot contain consecutive dots');
+    });
+
+    test('still allows a single leading dot without consecutive dots', () => {
+      const { result } = renderHook(() =>
+        useFolderCreation({
+          currentFolder: mockCurrentFolder,
+        }),
+      );
+
+      const error = result.current.validateFolderName('.hidden');
+      expect(error).toBe(
+        'warning__A dot at the start of the name will make the item hidden',
+      );
+    });
   });
 
   describe('saveFolderCreation', () => {
