@@ -140,7 +140,7 @@ export const DialPopup: FC<DialPopupProps> = ({
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
-        className={classNames(overlayBaseClassName, overlayClassName, 'mx-4')}
+        className={classNames(overlayBaseClassName, overlayClassName)}
       >
         <FloatingFocusManager
           context={context}
