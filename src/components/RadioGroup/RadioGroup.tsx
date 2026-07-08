@@ -18,6 +18,7 @@ export interface DialRadioGroupProps {
   radioButtons: RadioButtonWithContent[];
   activeRadioButton: string;
   orientation: RadioGroupOrientation;
+  labelDescription?: string;
   onChange: (radioId: string) => void;
   // Optional CSS class names
   radioClassName?: string;
@@ -67,6 +68,7 @@ export interface DialRadioGroupProps {
  * @param [selectedLabelClassName] - Additional classes applied to the selected option's label
  * @param [radioGroupClassName] - Additional classes applied to the radio group container
  * @param [disabled] - Disables all child radios when set
+ * @param [labelDescription] - Optional description rendered by `DialFormItem`
  * @param radioButtons - Array of options with ids, labels, and optional content
  * @param activeRadioButton - The id of the currently selected radio
  * @param orientation - Layout direction of radios: row or column
@@ -89,6 +91,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
   radioButtons,
   activeRadioButton,
   orientation,
+  labelDescription,
   onChange,
 }) => {
   return (
@@ -98,6 +101,7 @@ export const DialRadioGroup: FC<DialRadioGroupProps> = ({
       labelClassName={
         groupLabelClassName ? groupLabelClassName : labelClassName
       }
+      description={labelDescription}
       className={containerClassName}
       childrenClassName={formItemChildrenClassName}
     >

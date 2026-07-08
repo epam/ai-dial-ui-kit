@@ -3,7 +3,10 @@ import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import type { DialUploadFileItem } from '@/models/file-manager';
 import { FOLDER_PLACEHOLDER_FILE_NAME } from '@/components/FileManager/constants';
-import { DEFAULT_WARNINGS } from '@/components/FileManager/errors';
+import {
+  DEFAULT_ERRORS,
+  DEFAULT_WARNINGS,
+} from '@/components/FileManager/errors';
 import { FileManagerCreateFolderType } from '@/types/file-manager';
 import { findFolderForPath } from '../utils';
 import { getNextFolderName } from '@/components/FileManager/utils';
@@ -12,6 +15,7 @@ export interface FolderCreationValidationMessages {
   emptyName?: string;
   duplicateName?: string;
   hiddenItemWarning?: string;
+  consecutiveDotsError?: string;
 }
 
 export interface UseFolderCreationProps {
@@ -49,6 +53,7 @@ const DEFAULT_VALIDATION_MESSAGES: Required<FolderCreationValidationMessages> =
     emptyName: 'Folder name cannot be empty',
     duplicateName: 'A folder with this name already exists',
     hiddenItemWarning: DEFAULT_WARNINGS.hiddenItemWarning,
+    consecutiveDotsError: DEFAULT_ERRORS.consecutiveDotsError,
   };
 
 export const useFolderCreation = ({
@@ -220,6 +225,10 @@ export const useFolderCreation = ({
 
       if (!trimmedName) {
         return messages.emptyName;
+      }
+
+      if (trimmedName.includes('..')) {
+        return messages.consecutiveDotsError;
       }
 
       if (trimmedName.startsWith('.') && trimmedName.length > 1) {

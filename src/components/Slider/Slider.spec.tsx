@@ -167,4 +167,34 @@ describe('Dial UI Kit :: DialSlider', () => {
     );
     expect(screen.getByRole('slider')).toHaveTextContent('50');
   });
+
+  test('renders label when labelProps is provided', () => {
+    render(
+      <DialSlider
+        value={0.5}
+        labelProps={{ label: 'Temperature' }}
+        onChange={() => undefined}
+      />,
+    );
+    expect(screen.getByText('Temperature')).toBeInTheDocument();
+  });
+
+  test('does not render label when labelProps is omitted', () => {
+    render(<DialSlider value={0.5} onChange={() => undefined} />);
+    expect(screen.queryByRole('label')).not.toBeInTheDocument();
+  });
+
+  test('label caption is rendered when provided', () => {
+    render(
+      <DialSlider
+        value={0.5}
+        labelProps={{
+          label: 'Temperature',
+          caption: 'Controls response creativity',
+        }}
+        onChange={() => undefined}
+      />,
+    );
+    expect(screen.getByText('Temperature')).toBeInTheDocument();
+  });
 });

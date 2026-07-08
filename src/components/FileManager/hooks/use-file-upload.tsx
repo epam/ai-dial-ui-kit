@@ -65,6 +65,7 @@ export interface UseFileUploadOptions {
     name: string,
     destinationFolder: string,
   ) => void;
+  prepareUploadFileName?: (name: string) => string;
   currentFolder?: DialFile;
 }
 
@@ -81,6 +82,7 @@ export const useFileUpload = ({
   allowedFileTypes,
   validationMessages = {},
   onUploadArchive,
+  prepareUploadFileName,
   uploadEnabled = true,
   currentFolder,
 }: UseFileUploadOptions = {}) => {
@@ -260,7 +262,14 @@ export const useFileUpload = ({
       setUploadError(undefined);
       existingFilesRef.current = existingFiles;
 
-      const oversizedFiles = checkFileSize(files);
+      const preparedFiles = prepareUploadFileName
+        ? files.map((file) => ({
+            ...file,
+            name: prepareUploadFileName(file.name),
+          }))
+        : files;
+
+      const oversizedFiles = checkFileSize(preparedFiles);
       if (oversizedFiles.length > 0) {
         const sizeMB = maxFileSize
           ? (maxFileSize / (1024 * 1024)).toFixed(2)
@@ -275,7 +284,7 @@ export const useFileUpload = ({
       if (onValidateUpload) {
         try {
           const validationResult = await onValidateUpload(
-            files,
+            preparedFiles,
             existingFiles,
             destinationFolder,
           );
@@ -295,10 +304,13 @@ export const useFileUpload = ({
         }
       }
 
-      const filesMap = new Map(files.map((f) => [f.name, f]));
+      const filesMap = new Map(preparedFiles.map((f) => [f.name, f]));
       setPendingUploadFiles(filesMap);
 
-      const dialFiles = convertUploadItemsToDialFiles(files, destinationFolder);
+      const dialFiles = convertUploadItemsToDialFiles(
+        preparedFiles,
+        destinationFolder,
+      );
 
       setUploadMetadata({ destinationFolder });
 
@@ -310,7 +322,7 @@ export const useFileUpload = ({
         return false;
       }
 
-      onUploadFiles?.(files, destinationFolder);
+      onUploadFiles?.(preparedFiles, destinationFolder);
       clearUploadState();
       return true;
     },
@@ -318,6 +330,7 @@ export const useFileUpload = ({
       uploadEnabled,
       onUploadFiles,
       onValidateUpload,
+      prepareUploadFileName,
       checkFileSize,
       maxFileSize,
       validationMessages,
@@ -487,31 +500,19 @@ export const useFileUpload = ({
     ],
   );
 
+  const handleChangeRef = useRef<() => void | Promise<void>>(() => {});
+
   useEffect(() => {
-    let input = fileInputRef.current;
+    handleChangeRef.current = async () => {
+      const input = fileInputRef.current;
+      if (!input) return;
 
-    if (!input) {
-      input = document.createElement('input');
-      input.type = 'file';
-      input.multiple = true;
-      input.style.display = 'none';
-      document.body.appendChild(input);
-      fileInputRef.current = input;
-    }
-
-    if (allowedFileTypes && allowedFileTypes.length > 0) {
-      input.accept = allowedFileTypes.join(',');
-    } else {
-      input.removeAttribute('accept');
-    }
-
-    const handleChange = async () => {
       if (!uploadEnabled || !hasWriteAccess) {
-        if (input) input.value = '';
+        input.value = '';
         return;
       }
 
-      if (!input?.files?.length) return;
+      if (!input.files?.length) return;
 
       const files = Array.from(input.files);
       const uploadItems: DialUploadFileItem[] = files.map((file) => ({
@@ -530,35 +531,56 @@ export const useFileUpload = ({
         return;
       }
 
-      await handleUpload(
-        acceptedItems,
-        destinationFolderRef.current,
-        existingFilesRef.current,
-      );
-
-      input.value = '';
+      try {
+        await handleUpload(
+          acceptedItems,
+          destinationFolderRef.current,
+          existingFilesRef.current,
+        );
+      } catch {
+        setUploadError(validationMessages.validationError || 'Upload failed');
+      } finally {
+        input.value = '';
+      }
     };
+  }, [
+    uploadEnabled,
+    hasWriteAccess,
+    filterAcceptedFiles,
+    handleUpload,
+    validationMessages,
+  ]);
 
-    input.addEventListener('change', handleChange);
+  useEffect(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.style.display = 'none';
+    document.body.appendChild(input);
+    fileInputRef.current = input;
+
+    const listener = () => handleChangeRef.current?.();
+    input.addEventListener('change', listener);
 
     return () => {
-      if (!input) return;
-
-      input.removeEventListener('change', handleChange);
-
+      input.removeEventListener('change', listener);
       if (fileInputRef.current === input) {
         document.body.removeChild(input);
         fileInputRef.current = null;
       }
     };
-  }, [
-    uploadEnabled,
-    allowedFileTypes,
-    filterAcceptedFiles,
-    handleUpload,
-    validationMessages,
-    hasWriteAccess,
-  ]);
+  }, []);
+
+  useEffect(() => {
+    const input = fileInputRef.current;
+    if (!input) return;
+
+    if (allowedFileTypes && allowedFileTypes.length > 0) {
+      input.accept = allowedFileTypes.join(',');
+    } else {
+      input.removeAttribute('accept');
+    }
+  }, [allowedFileTypes]);
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
@@ -592,7 +614,10 @@ export const useFileUpload = ({
           return;
         }
 
-        const archiveName = file.name.replace(/\.zip$/i, '');
+        const rawArchiveName = file.name.replace(/\.zip$/i, '');
+        const archiveName = prepareUploadFileName
+          ? prepareUploadFileName(rawArchiveName)
+          : rawArchiveName;
 
         const dialFile: DialFile = {
           id: archiveName,
@@ -631,7 +656,13 @@ export const useFileUpload = ({
       document.body.appendChild(input);
       input.click();
     },
-    [onUploadArchive, uploadEnabled, hasWriteAccess, startConflictResolution],
+    [
+      onUploadArchive,
+      uploadEnabled,
+      hasWriteAccess,
+      startConflictResolution,
+      prepareUploadFileName,
+    ],
   );
 
   const clearError = useCallback(() => {

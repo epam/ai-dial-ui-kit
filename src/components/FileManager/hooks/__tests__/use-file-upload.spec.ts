@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useFileUpload } from '@/components/FileManager/hooks/use-file-upload';
+import type { DialFileAcceptType } from '@/models/file-manager';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import { DialFilePermission } from '@/models/file';
@@ -485,6 +486,79 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         const callArgs = onUploadFiles.mock.calls[0];
         expect(callArgs[0][0].name).toMatch(/existing \(\d+\)\.txt/);
         expect(result.current.uploadConflictResolutionOpen).toBe(false);
+      });
+    });
+  });
+
+  describe('prepareUploadFileName', () => {
+    it('applies the mapper to names passed to onUploadFiles when no conflict', async () => {
+      const onUploadFiles = vi.fn();
+      const prepareUploadFileName = vi.fn((name: string) =>
+        name.replace(/:/g, ''),
+      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        prepareUploadFileName,
+      });
+
+      const files = [createMockFile('inva:lid.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(prepareUploadFileName).toHaveBeenCalledWith('inva:lid.txt');
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [{ fileContent: files[0], name: 'invalid.txt' }],
+        '/folder',
+      );
+    });
+
+    it('detects conflicts against the mapped name (rename before conflict check)', async () => {
+      const onUploadFiles = vi.fn();
+      // Maps "existing:.txt" -> "existing.txt" which collides with an existing file.
+      const prepareUploadFileName = vi.fn((name: string) =>
+        name.replace(/:/g, ''),
+      );
+      const { result } = renderUseFileUpload({
+        onUploadFiles,
+        prepareUploadFileName,
+      });
+
+      const files = [createMockFile('existing:.txt', 1024)];
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          files,
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(
+          mockEvent,
+          '/folder',
+          mockExistingFiles,
+        );
+      });
+
+      await waitFor(() => {
+        expect(result.current.uploadConflictResolutionOpen).toBe(true);
+        expect(result.current.uploadConflictingFiles[0]?.name).toBe(
+          'existing.txt',
+        );
+        expect(onUploadFiles).not.toHaveBeenCalled();
       });
     });
   });
@@ -1295,6 +1369,89 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         'dragover',
         expect.any(Function),
       );
+    });
+  });
+
+  describe('hidden file input lifecycle', () => {
+    const getHiddenFileInputs = () =>
+      Array.from(
+        document.body.querySelectorAll<HTMLInputElement>('input[type="file"]'),
+      ).filter((input) => input.accept !== '.zip,application/zip');
+
+    const renderWithTypes = (types?: DialFileAcceptType[]) =>
+      renderHook(
+        ({ allowedFileTypes }: { allowedFileTypes?: DialFileAcceptType[] }) =>
+          useFileUpload({ currentFolder: writableFolder, allowedFileTypes }),
+        { initialProps: { allowedFileTypes: types } },
+      );
+
+    it('appends exactly one hidden file input on mount', () => {
+      renderUseFileUpload();
+
+      expect(getHiddenFileInputs()).toHaveLength(1);
+    });
+
+    it('removes the hidden file input on unmount', () => {
+      const { unmount } = renderUseFileUpload();
+
+      const input = getHiddenFileInputs()[0];
+      expect(input).toBeDefined();
+      expect(document.body.contains(input)).toBe(true);
+
+      unmount();
+
+      expect(document.body.contains(input)).toBe(false);
+      expect(getHiddenFileInputs()).toHaveLength(0);
+    });
+
+    it('does not create duplicate inputs when dependencies change', () => {
+      const { rerender } = renderWithTypes(['application/pdf']);
+
+      expect(getHiddenFileInputs()).toHaveLength(1);
+
+      rerender({ allowedFileTypes: ['image/*'] });
+      rerender({ allowedFileTypes: ['text/plain', '.pdf'] });
+
+      expect(getHiddenFileInputs()).toHaveLength(1);
+    });
+
+    it("updates the input's accept attribute when allowedFileTypes changes", () => {
+      const { rerender } = renderWithTypes(['application/pdf']);
+
+      expect(getHiddenFileInputs()[0]?.accept).toBe('application/pdf');
+
+      rerender({ allowedFileTypes: ['image/*', 'text/plain'] });
+      expect(getHiddenFileInputs()[0]?.accept).toBe('image/*,text/plain');
+
+      rerender({ allowedFileTypes: [] });
+      expect(getHiddenFileInputs()[0]?.hasAttribute('accept')).toBe(false);
+    });
+
+    it('surfaces an error and resets input value when the upload throws', async () => {
+      const onUploadFiles = vi.fn(() => {
+        throw new Error('boom');
+      });
+      const { result } = renderUseFileUpload({ onUploadFiles });
+
+      const input = getHiddenFileInputs()[0];
+      expect(input).toBeDefined();
+
+      const file = createMockFile('file1.txt', 1024);
+      Object.defineProperty(input, 'files', {
+        value: [file],
+        configurable: true,
+      });
+
+      await act(async () => {
+        input.dispatchEvent(new Event('change'));
+        await Promise.resolve();
+      });
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalled();
+        expect(result.current.uploadError).toBe('Upload failed');
+      });
+      expect(input.value).toBe('');
     });
   });
 });

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DialTabs, type DialTabsProps } from './Tabs';
-import { TabOrientation } from '@/types/tab';
+import { TabOrientation, TabView } from '@/types/tab';
 import type { TabModel } from '@/models/tab';
 
 const sampleTabs: TabModel[] = [
@@ -63,6 +63,12 @@ const meta: Meta<typeof DialTabs> = {
       control: 'select',
       options: Object.values(TabOrientation),
       description: 'Orientation of the tabs (horizontal or vertical).',
+    },
+    view: {
+      control: 'select',
+      options: Object.values(TabView),
+      description:
+        'Visual style of the tabs. `inline` renders a compact segmented control with a check icon on the active tab.',
     },
     onClick: {
       action: 'tabClicked',
@@ -154,6 +160,27 @@ export const StyledDesktopTabs: Story = {
   },
 };
 
+export const InlineView: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: sampleTabs,
+    activeTab: 'overview',
+    view: TabView.Inline,
+  },
+};
+
+export const InlineViewWithDisabledTab: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: sampleTabs.map((tab) => ({
+      ...tab,
+      disabled: tab.id === 'settings',
+    })),
+    activeTab: 'overview',
+    view: TabView.Inline,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-10 text-primary">
@@ -184,6 +211,15 @@ export const AllVariants: Story = {
             tabs={manySampleTabs}
             activeTab="details"
             orientation={TabOrientation.Horizontal}
+            onClick={() => null}
+          />
+        </div>
+        <div>
+          <h3 className="dial-h3 font-semibold mb-2">Inline</h3>
+          <InteractiveTabs
+            tabs={sampleTabs}
+            activeTab="overview"
+            view={TabView.Inline}
             onClick={() => null}
           />
         </div>

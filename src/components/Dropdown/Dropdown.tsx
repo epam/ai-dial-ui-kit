@@ -64,6 +64,8 @@ export interface DialDropdownProps {
   closable?: boolean;
   onClose?: (e: MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  overlayContentClassName?: string;
+  separatorClassName?: string;
   listClassName?: string;
   outsidePressIgnoreRef?: RefObject<HTMLElement | null>;
   outsideClosable?: boolean;
@@ -115,6 +117,8 @@ export interface DialDropdownProps {
  * @param [closable=false] - Whether the overlay shows an internal close button
  * @param [onClose] - Fired when the close button inside the overlay is clicked
  * @param [className] - Additional CSS classes applied to the trigger wrapper
+ * @param [overlayContentClassName] - Additional CSS classes applied to the overlay content
+ * @param [separatorClassName] - Additional CSS classes applied to the separators between items
  * @param [listClassName] - Additional CSS classes applied to the floating overlay
  * @param [outsidePressIgnoreRef] - Ref to an element that should not trigger outside press behavior
  * @param [outsideClosable=true] - Whether clicks outside the overlay should close it
@@ -146,6 +150,8 @@ export const DialDropdown: FC<DialDropdownProps> = ({
   closable = false,
   onClose,
   className,
+  overlayContentClassName,
+  separatorClassName,
   listClassName,
   outsidePressIgnoreRef,
   outsideClosable = true,
@@ -327,14 +333,21 @@ export const DialDropdown: FC<DialDropdownProps> = ({
           <>{typeof menuHeader === 'function' ? menuHeader() : menuHeader}</>
         )}
 
-        <div role="none" className="py-1" aria-label="dropdown">
+        <div
+          role="none"
+          className={mergeClasses('py-1', overlayContentClassName)}
+          aria-label="dropdown"
+        >
           {items.map((it) => {
             if (it.type === DropdownItemType.Divider) {
               return (
                 <div
                   key={it.key}
                   role="separator"
-                  className={dropdownDividerClassName}
+                  className={mergeClasses(
+                    dropdownDividerClassName,
+                    separatorClassName,
+                  )}
                 />
               );
             }
@@ -405,7 +418,16 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         )}
       </>
     );
-  }, [handleItemClick, items, menuFooter, menuHeader, renderOverlay, setOpen]);
+  }, [
+    handleItemClick,
+    items,
+    menuFooter,
+    menuHeader,
+    renderOverlay,
+    setOpen,
+    overlayContentClassName,
+    separatorClassName,
+  ]);
 
   const referenceProps = getReferenceProps({
     onContextMenu,
