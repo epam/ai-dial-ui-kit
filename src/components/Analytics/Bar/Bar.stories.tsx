@@ -38,7 +38,14 @@ const meta: Meta<typeof DialAnalyticsBar> = {
       description:
         'Renders the loading state: a loader instead of the value and an empty track.',
     },
+    inline: {
+      control: 'boolean',
+      description:
+        'Renders the title and bar on a single row (50% title, 50% bar + value).',
+    },
     className: { control: 'text' },
+    titleClassName: { control: 'text' },
+    valueClassName: { control: 'text' },
     ariaLabel: { control: 'text' },
   },
 };
@@ -112,4 +119,26 @@ export const ColorScale: Story = {
       ))}
     </div>
   ),
+};
+
+export const Inline: Story = {
+  args: {
+    title: 'Relevance',
+    value: 0.82,
+    valueLabel: '82%',
+    inline: true,
+    className: 'w-[420px]',
+  },
+};
+
+export const InlineCustomClasses: Story = {
+  args: {
+    title: 'Relevance',
+    value: 0.82,
+    valueLabel: '82%',
+    inline: true,
+    titleClassName: 'dial-small-semi-text text-secondary',
+    valueClassName: 'text-accent-primary',
+    className: 'w-[420px]',
+  },
 };

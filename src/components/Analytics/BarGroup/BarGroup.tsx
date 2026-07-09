@@ -4,6 +4,7 @@ import { DialAccordion } from '@/components/Accordion/Accordion';
 import { DialAnalyticsBar } from '@/components/Analytics/Bar/Bar';
 import { DialLoader } from '@/components/Loader/Loader';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialAnalyticsBarGroupProps {
   /** Title passed to the accordion header. */
@@ -18,10 +19,21 @@ export interface DialAnalyticsBarGroupProps {
   colorMap?: AnalyticsBarColorStop[];
   /** Whether the accordion is expanded initially. Defaults to `true`. */
   defaultExpanded?: boolean;
+  /**
+   * Renders the group permanently expanded: the content is always visible and
+   * the accordion header has no toggle or chevron icon.
+   */
+  nonCollapsible?: boolean;
   /** Renders a loader in place of the bars while the data is being fetched. */
   isLoading?: boolean;
   /** Invoked with the entry key and value when a bar is clicked. When set, each bar becomes an interactive button. */
   onBarClick?: (key: string, value: number) => void;
+  /** Renders every bar on a single row (50% title, 50% bar + value). */
+  inline?: boolean;
+  /** Additional CSS classes for each bar's title label. */
+  barTitleClassName?: string;
+  /** Additional CSS classes for each bar's value label. */
+  barValueClassName?: string;
   /** Additional CSS classes for the accordion container. */
   className?: string;
 }
@@ -47,8 +59,12 @@ export interface DialAnalyticsBarGroupProps {
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
+ * @param [nonCollapsible] - Renders the group permanently expanded without a toggle or chevron.
  * @param [isLoading] - Renders a loader in place of the bars while the data is being fetched.
  * @param [onBarClick] - Invoked with the entry key and value when a bar is clicked.
+ * @param [inline] - Renders every bar on a single row (50% title, 50% bar + value).
+ * @param [barTitleClassName] - Additional CSS classes for each bar's title label.
+ * @param [barValueClassName] - Additional CSS classes for each bar's value label.
  * @param [className] - Additional CSS classes for the accordion container.
  */
 export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
@@ -58,8 +74,12 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   maxValue,
   colorMap,
   defaultExpanded = true,
+  nonCollapsible,
   isLoading,
   onBarClick,
+  inline,
+  barTitleClassName,
+  barValueClassName,
   className,
 }) => {
   const entries = Object.entries(data);
@@ -67,11 +87,14 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   return (
     <DialAccordion
       title={title}
-      description={description ?? `${entries.length} numeric results`}
+      description={description}
       defaultExpanded={defaultExpanded}
+      nonCollapsible={nonCollapsible}
       className={className}
     >
-      <div className="flex flex-col gap-3">
+      <div
+        className={mergeClasses('flex flex-col', inline ? 'gap-2' : 'gap-3')}
+      >
         {isLoading ? (
           <DialLoader fullWidth={false} className="self-center" />
         ) : (
@@ -88,6 +111,9 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                   value={value}
                   maxValue={maxValue}
                   colorMap={colorMap}
+                  inline={inline}
+                  titleClassName={barTitleClassName}
+                  valueClassName={barValueClassName}
                 />
               </button>
             ) : (
@@ -97,6 +123,9 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                 value={value}
                 maxValue={maxValue}
                 colorMap={colorMap}
+                inline={inline}
+                titleClassName={barTitleClassName}
+                valueClassName={barValueClassName}
               />
             ),
           )

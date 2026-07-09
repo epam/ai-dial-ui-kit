@@ -334,3 +334,61 @@ export const WithSubMenuOptions: Story = {
     </div>
   ),
 };
+
+/**
+ * Splits a dotted label into a secondary-colored namespace part (everything up
+ * to and including the last dot) and a primary-colored name part (everything
+ * after the last dot). This mimics styling being computed by the consumer.
+ */
+const renderDottedLabel = (label: string) => {
+  const lastDot = label.lastIndexOf('.');
+  if (lastDot === -1) {
+    return <span className="text-primary">{label}</span>;
+  }
+
+  const namespace = label.slice(0, lastDot + 1);
+  const name = label.slice(lastDot + 1);
+
+  return (
+    <span className="truncate">
+      <span className="text-secondary">{namespace}</span>
+      <span className="text-primary">{name}</span>
+    </span>
+  );
+};
+
+const dottedLabels = [
+  'someValue.withOption',
+  'secondValue.specificOption',
+  'lastValue.strongText',
+];
+
+const dottedOptions: SelectOption[] = dottedLabels.map((label) => ({
+  value: label,
+  label,
+  labelNode: renderDottedLabel(label),
+}));
+
+export const CustomLabelNode: Story = {
+  name: 'Custom label node',
+  args: {
+    options: dottedOptions,
+    placeholder: 'Select value…',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Options can render a custom `labelNode` while keeping a plain-text `label` ' +
+          'for filtering and accessibility. Here the part before the last dot ' +
+          '(including the dot) is muted (`text-secondary`) and the part after it is ' +
+          'emphasized (`text-primary`). Styling and labels are computed by the consumer.',
+      },
+    },
+  },
+  render: (args) => (
+    <div className="w-[320px]">
+      <DialSelect {...args} />
+    </div>
+  ),
+};
