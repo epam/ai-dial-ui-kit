@@ -5,7 +5,7 @@ export const actionsBaseClassName =
   'flex justify-end gap-2 px-6 py-4 border-t border-tertiary';
 
 export const descriptionBaseClassName =
-  'text-secondary dial-small-150 px-6 pb-4';
+  'text-secondary dial-small-text px-6 pb-4';
 
 export const defaultCancelLabel = 'Cancel';
 

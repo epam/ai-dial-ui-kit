@@ -82,21 +82,6 @@ const TypographyShowcase = () => (
       <TypographyRow className="dial-caption-text" label="dial-caption-text" />
       <TypographyRow className="dial-code-text" label="dial-code-text" />
     </Section>
-
-    <Section title="Legacy classes (dial-h*, dial-body, dial-small*, dial-tiny*, dial-caption)">
-      <TypographyRow className="dial-h1" label="dial-h1" />
-      <TypographyRow className="dial-h2" label="dial-h2" />
-      <TypographyRow className="dial-h3" label="dial-h3" />
-      <TypographyRow className="dial-body" label="dial-body" />
-      <TypographyRow className="dial-small" label="dial-small" />
-      <TypographyRow className="dial-small-semi" label="dial-small-semi" />
-      <TypographyRow className="dial-small-medium" label="dial-small-medium" />
-      <TypographyRow className="dial-small-150" label="dial-small-150" />
-      <TypographyRow className="dial-tiny" label="dial-tiny" />
-      <TypographyRow className="dial-tiny-150" label="dial-tiny-150" />
-      <TypographyRow className="dial-tiny-semi" label="dial-tiny-semi" />
-      <TypographyRow className="dial-caption" label="dial-caption" />
-    </Section>
   </div>
 );
 
