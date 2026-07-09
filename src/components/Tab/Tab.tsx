@@ -72,7 +72,7 @@ export const DialTab: FC<DialTabProps> = ({
 
   const inlineClassName = mergeClasses(
     'flex flex-row gap-1 h-6 items-center py-1 px-2 rounded cursor-pointer hover:bg-accent-primary-alpha',
-    active ? 'dial-small-semi' : 'dial-small',
+    active ? 'dial-small-semi-text' : 'dial-small-text',
     {
       'text-secondary pointer-events-none': tab.disabled,
       'bg-accent-primary-alpha text-primary': active && !tab.disabled,

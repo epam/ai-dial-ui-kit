@@ -356,7 +356,7 @@ export const DialDropdown: FC<DialDropdownProps> = ({
                 <div
                   key={it.key}
                   className={mergeClasses(
-                    'px-3 py-2 text-secondary dial-caption',
+                    'px-3 py-2 text-secondary dial-caption-text',
                     it.className,
                   )}
                 >

@@ -131,7 +131,7 @@ export const WithoutDescription: Story = {
       description={undefined}
       children={
         <div className="px-6 py-4">
-          <p className="text-secondary dial-small-150">
+          <p className="text-secondary dial-small-text">
             Replace description with <strong>custom content</strong>.
           </p>
         </div>
@@ -165,7 +165,7 @@ export const CustomFooter: Story = {
   args: {
     footer: (
       <div className="flex justify-between items-center px-6 py-3">
-        <span className="text-secondary dial-small-150">Custom footer</span>
+        <span className="text-secondary dial-small-text">Custom footer</span>
         <DialPrimaryButton
           label="Action"
           onClick={() => alert('Custom action')}

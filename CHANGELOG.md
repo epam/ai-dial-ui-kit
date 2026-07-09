@@ -13,6 +13,15 @@ _No unreleased changes yet._
 
 ---
 
+## [0.12.0]
+
+### Breaking Changes
+
+- **Legacy typography classes removed** — `dial-h1`, `dial-h2`, `dial-h3`, `dial-body`, `dial-small`, `dial-small-semi`, `dial-small-medium`, `dial-small-150`, `dial-tiny`, `dial-tiny-150`, `dial-tiny-semi`, and `dial-caption` have been removed in favor of the `dial-*-text` typography scale (e.g. `dial-h1-text`, `dial-small-text`, `dial-caption-text`). This consolidates typography onto a single naming convention.
+  See [migration guide](migration-guides/0.12.0/legacy-typography-classes-removal.md).
+
+---
+
 ## [0.11.0]
 
 ### Breaking Changes
