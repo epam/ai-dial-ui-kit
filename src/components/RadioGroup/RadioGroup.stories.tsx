@@ -404,8 +404,8 @@ const AllClassNamesExample = (
         activeRadioButton={activeRadioButton}
         selectedLabelClassName={
           activeRadioButton === 'premium'
-            ? 'dial-h1 text-warning'
-            : 'dial-h1 text-accent-tertiary'
+            ? 'dial-h1-text text-warning'
+            : 'dial-h1-text text-accent-tertiary'
         }
         selectedInputContainerClassName={
           activeRadioButton === 'premium' ? 'flex-1' : undefined
@@ -439,7 +439,7 @@ export const AllClassNames: Story = {
     containerClassName:
       'p-2 bg-layer-2 border-2 border-dashed border-accent-primary rounded-lg h-full',
     labelClassName: 'dial-small-text text-accent-tertiary',
-    groupLabelClassName: 'dial-h1 text-accent-secondary',
+    groupLabelClassName: 'dial-h1-text text-accent-secondary',
     formItemChildrenClassName: 'h-full',
     radioGroupClassName:
       'flex flex-col h-full bg-layer-1 p-4 rounded-md shadow border border-primary',

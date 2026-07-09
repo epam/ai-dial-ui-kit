@@ -62,7 +62,7 @@ describe('Dial UI Kit :: DialRadioGroup', () => {
     );
     const group = screen.getByRole('radiogroup');
     expect(group).toHaveClass('flex-row');
-    expect(group).toHaveClass('gap-x-6');
+    expect(group).toHaveClass('gap-x-4');
 
     rerender(
       <DialRadioGroup
@@ -74,7 +74,7 @@ describe('Dial UI Kit :: DialRadioGroup', () => {
       />,
     );
     expect(group).toHaveClass('flex-col');
-    expect(group).toHaveClass('gap-y-3');
+    expect(group).toHaveClass('gap-y-2');
   });
 
   test('shows content only for active radio', () => {
