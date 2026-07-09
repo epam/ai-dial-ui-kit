@@ -168,7 +168,7 @@ export const DialSlider: FC<DialSliderProps> = ({
   return (
     <div
       className={mergeClasses(
-        'flex flex-col gap-2',
+        'flex flex-col',
         disabled && 'pointer-events-none opacity-50',
         className,
       )}
