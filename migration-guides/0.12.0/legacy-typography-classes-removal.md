@@ -6,20 +6,20 @@ The library carried two parallel typography scales: the original `dial-h1`, `dia
 
 ## What changed
 
-| Before (removed)    | After (`dial-*-text` scale) | Notes                                             |
-| -------------------- | ---------------------------- | -------------------------------------------------- |
-| `dial-h1`            | `dial-h1-text`                | size/line-height updated (20/24 → 22/32)          |
-| `dial-h2`            | `dial-h2-text`                | now `font-semibold` (was `font-normal`)           |
-| `dial-h3`            | `dial-h3-text`                | size/line-height updated (16/18 → 18/26)          |
-| `dial-body`          | `dial-body-text` or `dial-body-paragraph-text` | use `-paragraph-` variant for looser line-height (26px) |
-| `dial-small`         | `dial-small-text`             | line-height updated (16 → 20)                     |
-| `dial-small-semi`    | `dial-small-semi-text`        | line-height updated (16 → 20)                     |
-| `dial-small-medium`  | `dial-small-text`             | consolidated — both were `font-normal` at 14px    |
-| `dial-small-150`     | `dial-small-text`             | consolidated                                       |
-| `dial-tiny`          | `dial-tiny-text`               | line-height updated (14 → 16)                     |
-| `dial-tiny-150`      | `dial-tiny-text`               | consolidated                                       |
-| `dial-tiny-semi`     | `dial-tiny-semi-text`          | line-height updated (14 → 16)                     |
-| `dial-caption`       | `dial-caption-text`            | no visual change                                   |
+| Before (removed)    | After (`dial-*-text` scale)                    | Notes                                                   |
+| ------------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| `dial-h1`           | `dial-h1-text`                                 | size/line-height updated (20/24 → 22/32)                |
+| `dial-h2`           | `dial-h2-text`                                 | now `font-semibold` (was `font-normal`)                 |
+| `dial-h3`           | `dial-h3-text`                                 | size/line-height updated (16/18 → 18/26)                |
+| `dial-body`         | `dial-body-text` or `dial-body-paragraph-text` | use `-paragraph-` variant for looser line-height (26px) |
+| `dial-small`        | `dial-small-text`                              | line-height updated (16 → 20)                           |
+| `dial-small-semi`   | `dial-small-semi-text`                         | line-height updated (16 → 20)                           |
+| `dial-small-medium` | `dial-small-text`                              | consolidated — both were `font-normal` at 14px          |
+| `dial-small-150`    | `dial-small-text`                              | consolidated                                            |
+| `dial-tiny`         | `dial-tiny-text`                               | line-height updated (14 → 16)                           |
+| `dial-tiny-150`     | `dial-tiny-text`                               | consolidated                                            |
+| `dial-tiny-semi`    | `dial-tiny-semi-text`                          | line-height updated (14 → 16)                           |
+| `dial-caption`      | `dial-caption-text`                            | no visual change                                        |
 
 ## Step-by-step migration
 
