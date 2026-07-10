@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { EditorThemes } from '@/types/editor';
 
 export enum SchemaRendererVariant {
   Sections = 'sections',
@@ -122,6 +123,11 @@ export interface DialSchemaRendererProps {
    * with a field. When `false` (default), all unfilled required fields are highlighted immediately.
    */
   skipUntouched?: boolean;
+  /**
+   * Theme applied to the JSON editor shown for value keys that are not declared in the
+   * schema's `properties`. Defaults to `EditorThemes.dark`.
+   */
+  jsonEditorTheme?: EditorThemes;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;
   onDefaultValues?: (value: Record<string, unknown>) => void;

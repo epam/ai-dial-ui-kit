@@ -290,4 +290,51 @@ describe('DialSchemaRenderer', () => {
     );
     expect(screen.getByTestId('custom-name-field')).toBeInTheDocument();
   });
+
+  it('renders a JSON editor section titled with the key for values absent from the schema', async () => {
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi', extra: { foo: 'bar' } }}
+      />,
+    );
+
+    expect(screen.getByText('Extra')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('textbox', { name: 'JSON Editor' }),
+    ).toBeInTheDocument();
+  });
+
+  it('does not render a JSON editor when every key is in the schema', () => {
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi', count: 5, enabled: true }}
+      />,
+    );
+
+    expect(
+      screen.queryByRole('textbox', { name: 'JSON Editor' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('propagates edits to an unknown key through onChange', async () => {
+    const onChange = vi.fn();
+    render(
+      <DialSchemaRenderer
+        schema={simpleSchema}
+        defaultValue={{ name: 'hi', extra: 'old' }}
+        onChange={onChange}
+      />,
+    );
+
+    const textarea = await screen.findByLabelText('JSON content');
+    fireEvent.change(textarea, {
+      target: { value: '"new"' },
+    });
+
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'hi', extra: 'new' }),
+    );
+  });
 });

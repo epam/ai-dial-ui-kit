@@ -34,11 +34,18 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
       control: 'boolean',
       description: 'Renders a loader in place of the bars while data loads.',
     },
+    inline: {
+      control: 'boolean',
+      description:
+        'Renders every bar on a single row (50% title, 50% bar + value).',
+    },
     onBarClick: {
       action: 'barClick',
       description:
         'Invoked with the entry key and value when a bar is clicked.',
     },
+    barTitleClassName: { control: 'text' },
+    barValueClassName: { control: 'text' },
     className: { control: 'text' },
   },
 };
@@ -107,4 +114,62 @@ export const Clickable: Story = {
     onBarClick: (key, value) => alert(`${key}: ${value}`),
     className: 'w-[420px]',
   },
+};
+
+export const Inline: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    inline: true,
+    className: 'w-[420px]',
+  },
+};
+
+export const InlineCustomClasses: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    inline: true,
+    barTitleClassName: 'dial-small-semi-text text-secondary',
+    barValueClassName: 'text-accent-primary',
+    className: 'w-[420px]',
+  },
+};
+
+export const TwoGroupsSideBySide: Story = {
+  name: 'Two groups side by side',
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row gap-4">
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82, recall: 0.64, precision: 0.91 }}
+          className="w-[320px]"
+          nonCollapsible
+        />
+        <DialAnalyticsBarGroup
+          title="Latency"
+          data={{ p50: 0.45, p95: 0.78 }}
+          className="w-[320px]"
+          nonCollapsible
+        />
+      </div>
+      <div className="flex flex-row gap-4">
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82, recall: 0.64, precision: 0.91 }}
+          className="w-[320px]"
+          nonCollapsible
+          inline
+        />
+        <DialAnalyticsBarGroup
+          title="Latency"
+          data={{ p50: 0.45, p95: 0.78 }}
+          className="w-[320px]"
+          nonCollapsible
+          inline
+        />
+      </div>
+    </div>
+  ),
 };

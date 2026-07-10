@@ -20,6 +20,11 @@ export interface DialAccordionProps {
   defaultExpanded?: boolean;
   /** Disables toggling. */
   disabled?: boolean;
+  /**
+   * Renders the panel permanently expanded: the content is always visible, the
+   * chevron icon is hidden and the header is no longer interactive.
+   */
+  nonCollapsible?: boolean;
   /** Fired when the header is clicked. Receives the next expanded state. */
   onToggle?: (expanded: boolean) => void;
   /** Additional CSS classes for the outer container. */
@@ -51,6 +56,7 @@ export interface DialAccordionProps {
  * @param [expanded] - Controlled expanded state.
  * @param [defaultExpanded=false] - Initial expanded state when uncontrolled.
  * @param [disabled] - Disables toggling.
+ * @param [nonCollapsible] - Renders the panel permanently expanded without a chevron or toggle.
  * @param [onToggle] - Fired when the header is clicked. Receives the next expanded state.
  * @param [className] - Additional CSS classes for the outer container.
  * @param [headerClassName] - Additional CSS classes for the header button.
@@ -63,6 +69,7 @@ export const DialAccordion: FC<DialAccordionProps> = ({
   expanded,
   defaultExpanded = false,
   disabled,
+  nonCollapsible,
   onToggle,
   className,
   headerClassName,
@@ -70,7 +77,11 @@ export const DialAccordion: FC<DialAccordionProps> = ({
 }) => {
   const isControlled = expanded !== undefined;
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-  const isExpanded = isControlled ? expanded : internalExpanded;
+  const isExpanded = nonCollapsible
+    ? true
+    : isControlled
+      ? expanded
+      : internalExpanded;
   const contentId = useId();
 
   const handleToggle = () => {
@@ -88,21 +99,24 @@ export const DialAccordion: FC<DialAccordionProps> = ({
         type="button"
         aria-expanded={isExpanded}
         aria-controls={contentId}
-        disabled={disabled}
+        disabled={disabled || nonCollapsible}
         onClick={handleToggle}
         className={mergeClasses(
           'flex w-full items-center gap-2 p-4 text-left',
           disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+          nonCollapsible && 'cursor-default',
           headerClassName,
         )}
       >
-        <DialIcon
-          className={classNames(
-            'text-secondary transition-transform',
-            isExpanded && 'rotate-90',
-          )}
-          icon={<IconChevronRight size={DIAL_ICON_SIZE.SM} />}
-        />
+        {!nonCollapsible && (
+          <DialIcon
+            className={classNames(
+              'text-secondary transition-transform',
+              isExpanded && 'rotate-90',
+            )}
+            icon={<IconChevronRight size={DIAL_ICON_SIZE.SM} />}
+          />
+        )}
         <span className="dial-body-text text-primary">{title}</span>
         {description != null && description !== false && (
           <span className="dial-tiny-text text-secondary">{description}</span>

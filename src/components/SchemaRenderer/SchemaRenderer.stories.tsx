@@ -331,6 +331,18 @@ export const OneOfDiscriminator: Story = {
   args: { schema: oneOfSchema },
 };
 
+export const AdditionalProperties: Story = {
+  args: {
+    schema: simpleSchema,
+    defaultValue: {
+      name: 'My Config',
+      count: 10,
+      metadata: { owner: 'team-ai', tags: ['prod', 'eu'] },
+      customFlag: true,
+    },
+  },
+};
+
 export const ArrayWithDiscriminator: Story = {
   args: {
     schema: arraySchema,

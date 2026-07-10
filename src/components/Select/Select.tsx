@@ -396,9 +396,10 @@ export const DialSelect: FC<DialSelectProps> = ({
           )}
           <DialEllipsisTooltip
             text={
-              prefix
+              singleSelectedOption.labelNode ??
+              (prefix
                 ? `${prefix} ${singleSelectedOption.label}`
-                : singleSelectedOption.label
+                : singleSelectedOption.label)
             }
           />
           {singleSelectedOption?.description && (
@@ -553,7 +554,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                           label={
                             <span className="flex w-full flex-1 pl-2 min-w-0 items-center gap-2 text-primary">
                               {opt.icon && <DialIcon icon={opt.icon} />}
-                              <span className="truncate">{opt.label}</span>
+                              <span className="truncate">
+                                {opt.labelNode ?? opt.label}
+                              </span>
                             </span>
                           }
                           checked={selected}
@@ -601,7 +604,9 @@ export const DialSelect: FC<DialSelectProps> = ({
                     >
                       <div className="flex items-center gap-2 w-full">
                         {opt.icon && <DialIcon icon={opt.icon} />}
-                        <DialEllipsisTooltip text={opt.label} />
+                        <DialEllipsisTooltip
+                          text={opt.labelNode ?? opt.label}
+                        />
 
                         {opt.description && (
                           <div className="text-secondary dial-small-text">

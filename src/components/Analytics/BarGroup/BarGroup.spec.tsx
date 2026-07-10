@@ -5,11 +5,11 @@ import { DialAnalyticsBarGroup } from './BarGroup';
 const data = { accuracy: 0.82, recall: 0.64, precision: 0.91 };
 
 describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
-  test('renders the title and an entry count description', () => {
+  test('renders the title without a default description', () => {
     render(<DialAnalyticsBarGroup title="Relevance" data={data} />);
 
     expect(screen.getByText('Relevance')).toBeInTheDocument();
-    expect(screen.getByText('3 numeric results')).toBeInTheDocument();
+    expect(screen.queryByText('3 numeric results')).toBeNull();
   });
 
   test('renders a bar per entry, expanded by default', () => {
@@ -64,7 +64,6 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
   test('handles an empty data object', () => {
     render(<DialAnalyticsBarGroup title="Empty" data={{}} />);
 
-    expect(screen.getByText('0 numeric results')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).toBeNull();
   });
 

@@ -58,7 +58,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
       >
         <div className="flex items-center gap-2 w-full min-w-0">
           {opt.icon && <DialIcon icon={opt.icon} />}
-          <DialEllipsisTooltip text={opt.label} />
+          <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
         </div>
         <IconChevronRight size={14} className="shrink-0" />
       </button>
@@ -91,7 +91,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
               >
                 <div className="flex items-center gap-2 w-full">
                   {child.icon && <DialIcon icon={child.icon} />}
-                  <DialEllipsisTooltip text={child.label} />
+                  <DialEllipsisTooltip text={child.labelNode ?? child.label} />
                 </div>
               </button>
             );

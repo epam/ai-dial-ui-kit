@@ -16,6 +16,7 @@ import {
 import { SchemaSection } from '@/components/SchemaRenderer/components/SchemaSection';
 import { SchemaFieldContent } from '@/components/SchemaRenderer/components/SchemaFieldContent';
 import { SchemaField } from '@/components/SchemaRenderer/components/SchemaField';
+import { SchemaAdditionalPropertiesEditor } from '@/components/SchemaRenderer/components/SchemaAdditionalPropertiesEditor';
 
 /**
  * Renders a JSON Schema as a form UI with collapsible sections, validation, and default values.
@@ -41,6 +42,7 @@ import { SchemaField } from '@/components/SchemaRenderer/components/SchemaField'
  * @param [onChange] - Called with the full form value on every change
  * @param [onPropertyChange] - Called with `(path, value)` for each individual property change
  * @param [onDefaultValues] - Called once on mount with the resolved default values
+ * @param [jsonEditorTheme] - Theme for the JSON editor shown for value keys absent from the schema
  */
 export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   schema,
@@ -56,6 +58,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   onDefaultValues,
   renderField,
   skipUntouched = false,
+  jsonEditorTheme,
 }) => {
   const mergedTexts = useMemo(
     () => ({ ...DEFAULT_SCHEMA_TEXTS, ...texts }),
@@ -91,6 +94,13 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
     onChange?.(updated);
     onPropertyChange?.(key, newVal);
   };
+
+  const schemaPropertyKeys = new Set(Object.keys(schema.properties ?? {}));
+
+  // keys present in the value but absent from the schema's declared properties
+  const additionalPropertyKeys = Object.keys(value).filter(
+    (key) => !schemaPropertyKeys.has(key),
+  );
 
   const topLevelProperties = Object.entries(schema.properties ?? {}).filter(
     ([, propSchema]) => !resolveRef(propSchema, schema).isHidden,
@@ -183,6 +193,36 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
                 required={isRequired}
               />
             </SchemaSection>
+          );
+        })}
+        {additionalPropertyKeys.map((key) => {
+          const propLabel = toFieldLabel(key);
+          const editor = (
+            <SchemaAdditionalPropertiesEditor
+              value={value[key]}
+              onChange={(v) => handlePropertyChange(key, v)}
+              theme={jsonEditorTheme}
+            />
+          );
+
+          if (variant === SchemaRendererVariant.Sections) {
+            return (
+              <SchemaSection
+                key={key}
+                title={propLabel}
+                level={0}
+                defaultExpanded={defaultExpanded}
+              >
+                {editor}
+              </SchemaSection>
+            );
+          }
+
+          return (
+            <div key={key} className="flex flex-col gap-3">
+              <h2 className="dial-small-semi-text text-primary">{propLabel}</h2>
+              {editor}
+            </div>
           );
         })}
       </div>
