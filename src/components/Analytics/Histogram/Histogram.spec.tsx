@@ -31,12 +31,12 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(screen.getByText('1')).toBeInTheDocument();
   });
 
-  test('renders the zero bucket with no color and a secondary border', () => {
+  test('renders the zero bucket with no color and a primary border', () => {
     render(<DialAnalyticsHistogram title="Distribution" values={[0, 0]} />);
 
     const zero = screen.getByRole('img', { name: '2 out of 2 values' });
     expect(zero.style.backgroundColor).toBe('');
-    expect(zero.className).toMatch(/border-secondary/);
+    expect(zero.className).toMatch(/border-primary/);
     expect(zero.style.height).toBe('100%');
   });
 

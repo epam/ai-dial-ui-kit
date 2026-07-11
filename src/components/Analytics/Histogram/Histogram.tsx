@@ -115,7 +115,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
                     className={mergeClasses(
                       'flex min-h-2 w-full items-center justify-center rounded-sm border',
                       column.isZeroBucket
-                        ? 'border-secondary'
+                        ? 'border-primary'
                         : colored
                           ? 'border-transparent'
                           : 'border-primary',
