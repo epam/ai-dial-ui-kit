@@ -138,6 +138,7 @@ export type {
   BulkActionsToolbarOptions,
 } from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
+export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree.tsx';
 
 // Types
 export { NotificationVariant } from './types/notification.ts';
