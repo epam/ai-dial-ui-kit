@@ -287,7 +287,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(rootLi.className).toMatch(/min-w-0/);
     expect(rootLi.className).not.toMatch(/max-w-\[30%\]/);
 
-    const currentText = screen.getByText('Some very long current sub-folder name');
+    const currentText = screen.getByText(
+      'Some very long current sub-folder name',
+    );
     const currentLi = currentText.closest('li') as HTMLElement;
     expect(currentLi.className).toMatch(/shrink/);
     expect(currentLi.className).toMatch(/max-w-\[40%\]/);
@@ -311,7 +313,9 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
       />,
     );
 
-    const penultimateLi = screen.getByText(penultimate).closest('li') as HTMLElement;
+    const penultimateLi = screen
+      .getByText(penultimate)
+      .closest('li') as HTMLElement;
     const lastLi = screen.getByText(last).closest('li') as HTMLElement;
 
     // Both segments must stay in the DOM (visible), not be pushed out by shrink-0 siblings.
