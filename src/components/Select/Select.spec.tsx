@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DialSelect, type DialSelectProps } from './Select';
+import { ElementSize } from '@/types/size';
 
 const baseOptions = [
   { value: 'opt-1', label: 'Option 1' },
@@ -107,6 +108,15 @@ describe('Dial UI Kit :: DialSelect', () => {
     expect(
       screen.queryByRole('option', { name: 'Disabled option' }),
     ).not.toBeInTheDocument();
+  });
+
+  test('searchable with searchSize Small applies compact search input sizing', () => {
+    renderSelect({ searchable: true, searchSize: ElementSize.Small });
+
+    openSelect();
+    const search = screen.getByRole('textbox');
+
+    expect(search.closest('.h-\\[24px\\]')).toBeInTheDocument();
   });
 
   test('closable overlay shows button and calls onClose', () => {

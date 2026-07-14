@@ -20,10 +20,12 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
 import { DialSearch } from '@/components/Search/Search';
+import { SIZE_CONFIG } from '@/components/Search/constants';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialMultiSelectTags } from './MultiSelectTags';
 import type { SelectOption } from '@/models/select';
 import { SelectSize, SelectVariant } from '@/types/select';
+import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import {
   selectTriggerBaseClassName,
@@ -50,6 +52,7 @@ export interface DialSelectProps {
   defaultValue?: string | string[];
   placeholder?: string;
   searchable?: boolean;
+  searchSize?: ElementSize;
   searchPlaceholder?: string;
   selectAll?: boolean;
   selectAllLabel?: string;
@@ -116,6 +119,7 @@ export interface DialSelectProps {
  * @param [defaultValue] - Uncontrolled initial selected value(s).
  * @param [placeholder="Select..."] - Placeholder text when no selection is made.
  * @param [searchable=false] - Show a search field in the overlay header.
+ * @param [searchSize=ElementSize.Standard] - Size of the overlay search input when `searchable` is enabled.
  * @param [searchPlaceholder] - Placeholder for the search input (overlay/inline).
  * @param [selectAll=false] - Show a "Select All" checkbox in multiple mode.
  * @param [selectAllLabel="Select all"] - Label for the "Select All" checkbox.
@@ -150,6 +154,7 @@ export const DialSelect: FC<DialSelectProps> = ({
   customSelectedValue,
   placeholder = 'Select...',
   searchable = false,
+  searchSize = ElementSize.Standard,
   searchPlaceholder,
   selectAll = false,
   invalid,
@@ -475,11 +480,15 @@ export const DialSelect: FC<DialSelectProps> = ({
             <div className="flex items-center gap-2 px-2 pt-2">
               {searchable && (
                 <DialSearch
+                  size={searchSize}
                   placeholder={searchPlaceholder}
                   onChange={setQuery}
                   value={query}
                   id={`search-${elementId || listId}`}
-                  containerClassName="w-full"
+                  containerClassName={mergeClasses(
+                    SIZE_CONFIG[searchSize].containerClassName,
+                    'w-full',
+                  )}
                 />
               )}
               {closable && (
