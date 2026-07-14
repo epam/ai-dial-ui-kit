@@ -7,10 +7,16 @@ export const breadcrumbListClassName =
   'flex flex-nowrap items-center gap-2 min-w-0 px-0 py-0 whitespace-nowrap';
 
 export const breadcrumbItemBaseClassName =
-  'flex items-center gap-2 min-w-0 dial-small-text';
+  'flex items-center gap-2 min-w-0 shrink dial-small-text';
 
-export const breadcrumbItemVisibleClassName = 'shrink-0 max-w-[30%]';
-export const breadcrumbItemLastClassName = 'flex-1 min-w-0';
+export const breadcrumbItemWidthClassName: Record<
+  'first' | 'middle' | 'last',
+  string
+> = {
+  first: '',
+  middle: 'max-w-[30%]',
+  last: 'max-w-[40%]',
+};
 
 export const breadcrumbLinkBaseClassName =
   'flex flex-1 items-center gap-1 min-w-0 transition-colors';
