@@ -270,4 +270,62 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
 
     expect(onBeforeNavigate).toHaveBeenCalled();
   });
+
+  test('root and current items can both shrink/truncate, current item is capped at 40%', () => {
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'Organization', href: '#org' },
+          { label: 'Some very long current sub-folder name' },
+        ]}
+      />,
+    );
+
+    const rootLink = screen.getByRole('link', { name: 'Organization' });
+    const rootLi = rootLink.closest('li') as HTMLElement;
+    expect(rootLi.className).toMatch(/shrink/);
+    expect(rootLi.className).toMatch(/min-w-0/);
+    expect(rootLi.className).not.toMatch(/max-w-\[30%\]/);
+
+    const currentText = screen.getByText(
+      'Some very long current sub-folder name',
+    );
+    const currentLi = currentText.closest('li') as HTMLElement;
+    expect(currentLi.className).toMatch(/shrink/);
+    expect(currentLi.className).toMatch(/max-w-\[40%\]/);
+  });
+
+  test('deep path with long consecutive folder names: penultimate and last folder are both rendered and can shrink to fit', () => {
+    const penultimate =
+      'Project_Regression_Testing_Artifacts_For_Shared_File_Manager_Workflows_Part_One';
+    const last =
+      'Project_Regression_Testing_Artifacts_For_Shared_File_Manager_Workflows_Part_Two';
+
+    render(
+      <DialBreadcrumb
+        pathItems={[
+          { label: 'My Files', href: '#root' },
+          { label: 'A folder', href: '#a' },
+          { label: 'Nested folder', href: '#b' },
+          { label: penultimate, href: '#c' },
+          { label: last },
+        ]}
+      />,
+    );
+
+    const penultimateLi = screen
+      .getByText(penultimate)
+      .closest('li') as HTMLElement;
+    const lastLi = screen.getByText(last).closest('li') as HTMLElement;
+
+    // Both segments must stay in the DOM (visible), not be pushed out by shrink-0 siblings.
+    expect(penultimateLi).toBeInTheDocument();
+    expect(lastLi).toBeInTheDocument();
+
+    // Neither is shrink-0 anymore - both must be able to shrink to fit the available width.
+    expect(penultimateLi.className).not.toMatch(/shrink-0/);
+    expect(lastLi.className).not.toMatch(/shrink-0/);
+    expect(penultimateLi.className).toMatch(/min-w-0/);
+    expect(lastLi.className).toMatch(/min-w-0/);
+  });
 });
