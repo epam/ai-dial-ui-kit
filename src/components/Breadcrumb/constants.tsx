@@ -7,15 +7,20 @@ export const breadcrumbListClassName =
   'flex flex-nowrap items-center gap-2 min-w-0 px-0 py-0 whitespace-nowrap';
 
 export const breadcrumbItemBaseClassName =
-  'flex items-center gap-2 mах-w-0 shrink dial-small-text';
+  'flex items-center gap-2 dial-small-text';
 
+/**
+ * Only middle/last items shrink and get a max-width cap. The root (first)
+ * is `shrink-0` with no cap so it never truncates; middle items collapse
+ * first, and the last item (current page) gets the largest remaining share.
+ */
 export const breadcrumbItemWidthClassName: Record<
   'first' | 'middle' | 'last',
   string
 > = {
-  first: '',
-  middle: 'max-w-[30%]',
-  last: 'max-w-[51%]',
+  first: 'shrink-0',
+  middle: 'shrink min-w-0 max-w-[30%]',
+  last: 'shrink min-w-0 max-w-[51%]',
 };
 
 export const breadcrumbLinkBaseClassName =
