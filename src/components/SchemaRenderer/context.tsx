@@ -5,6 +5,7 @@ import type {
   JsonSchemaDef,
   SchemaRendererTexts,
 } from '@/components/SchemaRenderer/types';
+import type { EditorThemes } from '@/types/editor';
 
 interface SchemaRendererContextValue {
   rootSchema: JsonSchema;
@@ -12,6 +13,7 @@ interface SchemaRendererContextValue {
   readonly?: boolean;
   defaultExpanded?: boolean;
   inputClassName?: string;
+  jsonEditorTheme?: EditorThemes;
   renderField?: (
     path: string[],
     schema: JsonSchemaDef,

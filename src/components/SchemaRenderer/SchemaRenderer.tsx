@@ -115,6 +115,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
         readonly,
         defaultExpanded,
         inputClassName,
+        jsonEditorTheme,
         renderField,
         touchedPaths,
         markTouched,
