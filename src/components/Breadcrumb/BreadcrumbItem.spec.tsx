@@ -253,7 +253,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     const text = screen.getByText('Current');
     const li = text.closest('li') as HTMLElement;
     expect(li.className).toMatch(/shrink/);
-    expect(li.className).toMatch(/max-w-\[40%\]/);
+    expect(li.className).toMatch(/max-w-\[51%\]/);
   });
 
   test('navigation guard prevents default when returning false', async () => {
