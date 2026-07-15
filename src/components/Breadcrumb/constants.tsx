@@ -7,7 +7,7 @@ export const breadcrumbListClassName =
   'flex flex-nowrap items-center gap-2 min-w-0 px-0 py-0 whitespace-nowrap';
 
 export const breadcrumbItemBaseClassName =
-  'flex items-center gap-2 min-w-0 shrink dial-small-text';
+  'flex items-center gap-2 max-w-0 shrink dial-small-text';
 
 export const breadcrumbItemWidthClassName: Record<
   'first' | 'middle' | 'last',
@@ -15,7 +15,7 @@ export const breadcrumbItemWidthClassName: Record<
 > = {
   first: '',
   middle: 'max-w-[30%]',
-  last: 'max-w-[40%]',
+  last: 'max-w-[51%]',
 };
 
 export const breadcrumbLinkBaseClassName =
