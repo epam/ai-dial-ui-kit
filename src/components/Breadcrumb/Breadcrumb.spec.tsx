@@ -271,7 +271,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     expect(onBeforeNavigate).toHaveBeenCalled();
   });
 
-  test('root and current items can both shrink/truncate, current item is capped at 40%', () => {
+  test('root never truncates (shrink-0), current item can shrink and is capped at 51%', () => {
     render(
       <DialBreadcrumb
         pathItems={[
@@ -283,8 +283,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
 
     const rootLink = screen.getByRole('link', { name: 'Organization' });
     const rootLi = rootLink.closest('li') as HTMLElement;
-    expect(rootLi.className).toMatch(/shrink/);
-    expect(rootLi.className).toMatch(/min-w-0/);
+    expect(rootLi.className).toMatch(/shrink-0/);
     expect(rootLi.className).not.toMatch(/max-w-\[30%\]/);
 
     const currentText = screen.getByText(
@@ -292,7 +291,7 @@ describe('Dial UI Kit :: DialBreadcrumb (final)', () => {
     );
     const currentLi = currentText.closest('li') as HTMLElement;
     expect(currentLi.className).toMatch(/shrink/);
-    expect(currentLi.className).toMatch(/max-w-\[40%\]/);
+    expect(currentLi.className).toMatch(/max-w-\[51%\]/);
   });
 
   test('deep path with long consecutive folder names: penultimate and last folder are both rendered and can shrink to fit', () => {

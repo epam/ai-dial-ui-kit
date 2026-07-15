@@ -231,7 +231,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  test('isFirst renders as a shrinkable item without a fixed max-width cap', () => {
+  test('isFirst renders as shrink-0 so the root never truncates', () => {
     render(
       <ul>
         <DialBreadcrumbItem label="Root" href="#root" isFirst />
@@ -239,8 +239,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     );
     const link = screen.getByRole('link', { name: 'Root' });
     const li = link.closest('li') as HTMLElement;
-    expect(li.className).toMatch(/shrink/);
-    expect(li.className).toMatch(/min-w-0/);
+    expect(li.className).toMatch(/shrink-0/);
     expect(li.className).not.toMatch(/max-w-\[30%\]/);
   });
 
@@ -253,7 +252,7 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     const text = screen.getByText('Current');
     const li = text.closest('li') as HTMLElement;
     expect(li.className).toMatch(/shrink/);
-    expect(li.className).toMatch(/max-w-\[40%\]/);
+    expect(li.className).toMatch(/max-w-\[51%\]/);
   });
 
   test('navigation guard prevents default when returning false', async () => {
