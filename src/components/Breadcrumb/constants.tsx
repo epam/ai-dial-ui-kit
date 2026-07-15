@@ -9,11 +9,6 @@ export const breadcrumbListClassName =
 export const breadcrumbItemBaseClassName =
   'flex items-center gap-2 dial-small-text';
 
-/**
- * Only middle/last items shrink and get a max-width cap. The root (first)
- * is `shrink-0` with no cap so it never truncates; middle items collapse
- * first, and the last item (current page) gets the largest remaining share.
- */
 export const breadcrumbItemWidthClassName: Record<
   'first' | 'middle' | 'last',
   string
