@@ -14,6 +14,7 @@ interface SchemaRendererContextValue {
   defaultExpanded?: boolean;
   inputClassName?: string;
   jsonEditorTheme?: EditorThemes;
+  acceptableResourceTypes?: Record<string, unknown>;
   renderField?: (
     path: string[],
     schema: JsonSchemaDef,

@@ -52,6 +52,7 @@ export interface JsonSchemaDef {
   };
   'dial:meta'?: Record<string, unknown>;
   'dial:resource'?: boolean;
+  acceptableResourceTypes?: string[];
   [key: string]: unknown;
 }
 
@@ -128,6 +129,13 @@ export interface DialSchemaRendererProps {
    * schema's `properties`. Defaults to `EditorThemes.dark`.
    */
   jsonEditorTheme?: EditorThemes;
+  /**
+   * Live resource options for schema properties flagged with `dial:resource: true`.
+   * Keyed by the resource type name referenced in a property's `acceptableResourceTypes`
+   * array; each value provides the selectable entries for that resource type (a string
+   * array for string-typed properties).
+   */
+  acceptableResourceTypes?: Record<string, unknown>;
   onChange?: (value: Record<string, unknown>) => void;
   onPropertyChange?: (path: string, value: unknown) => void;
   onDefaultValues?: (value: Record<string, unknown>) => void;

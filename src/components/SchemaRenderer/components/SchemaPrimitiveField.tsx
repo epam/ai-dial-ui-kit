@@ -49,9 +49,48 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
   invalid,
 }) => {
   const switchId = useId();
-  const { texts, readonly = false, inputClassName } = useSchemaContext();
+  const {
+    texts,
+    readonly = false,
+    inputClassName,
+    acceptableResourceTypes,
+  } = useSchemaContext();
   const isConst = schema.const !== undefined;
   const hasEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
+
+  const isResourceField =
+    schema['dial:resource'] === true &&
+    Array.isArray(schema.acceptableResourceTypes) &&
+    schema.acceptableResourceTypes.length > 0;
+
+  if (
+    isResourceField &&
+    (schema.type === JsonSchemaType.String || schema.type === undefined)
+  ) {
+    const resourceOptions = (schema.acceptableResourceTypes ?? []).flatMap(
+      (resourceType) => {
+        const entries = acceptableResourceTypes?.[resourceType];
+        return Array.isArray(entries)
+          ? entries.map((entry) => {
+              const strVal = String(entry);
+              return { value: strVal, label: strVal };
+            })
+          : [];
+      },
+    );
+
+    return (
+      <DialSelect
+        options={resourceOptions}
+        value={value != null ? String(value) : undefined}
+        invalid={invalid}
+        disabled={readonly}
+        onChange={(next) => onChange(typeof next === 'string' ? next : next[0])}
+        placeholder={texts.enumSelectPlaceholder}
+        className={inputClassName}
+      />
+    );
+  }
 
   if (isConst) {
     return (
