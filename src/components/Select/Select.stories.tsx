@@ -3,6 +3,7 @@ import { IconAbc, IconEqual, IconDashboardOff } from '@tabler/icons-react';
 import { DialSelect, type DialSelectProps } from './Select';
 import type { SelectOption } from '@/models/select';
 import { SelectSize, SelectVariant } from '@/types/select';
+import { ElementSize } from '@/types/size';
 import { DialPrimaryButton } from '@/components/Button/ButtonWrappers';
 import { useState, useRef } from 'react';
 
@@ -71,6 +72,10 @@ const meta = {
     defaultValue: { control: { type: 'object' } },
     placeholder: { control: { type: 'text' } },
     searchable: { control: { type: 'boolean' } },
+    searchSize: {
+      control: { type: 'select' },
+      options: [ElementSize.Standard, ElementSize.Small],
+    },
     selectAll: { control: { type: 'boolean' } },
     selectAllLabel: { control: { type: 'text' } },
     emptyStateTitle: { control: { type: 'text' } },
@@ -210,6 +215,14 @@ export const Searchable: Story = {
   args: {
     prefix: 'Filter:',
     searchable: true,
+  },
+};
+
+export const SearchableSmall: Story = {
+  name: 'Searchable (small search)',
+  args: {
+    searchable: true,
+    searchSize: ElementSize.Small,
   },
 };
 
