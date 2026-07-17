@@ -14,6 +14,7 @@ import { SchemaOneOfEditor } from './SchemaOneOfEditor';
 import { SchemaAnyOfEditor } from './SchemaAnyOfEditor';
 import { SchemaKeyValueEditor } from './SchemaKeyValueEditor';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
+import { SchemaAdditionalPropertiesEditor } from './SchemaAdditionalPropertiesEditor';
 
 /**
  * Routes a resolved schema to the appropriate editor component.
@@ -52,6 +53,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
     markTouched = () => {},
     touchedPaths = new Set<string>(),
     skipUntouched = false,
+    jsonEditorTheme,
   } = useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
 
@@ -97,6 +99,14 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
           schema={resolved}
           value={value}
           onChange={handleChange}
+        />
+      );
+    } else if (hasNoFixedProps && resolved.additionalProperties !== false) {
+      defaultElement = (
+        <SchemaAdditionalPropertiesEditor
+          value={value}
+          onChange={handleChange}
+          theme={jsonEditorTheme}
         />
       );
     } else {

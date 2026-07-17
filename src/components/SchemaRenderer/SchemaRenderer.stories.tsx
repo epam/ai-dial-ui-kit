@@ -37,6 +37,25 @@ const simpleSchema: JsonSchema = {
   required: ['name'],
 };
 
+const resourceSchema: JsonSchema = {
+  properties: {
+    name: {
+      title: 'Name',
+      type: 'string',
+      description: 'The name of the connection.',
+    },
+    external_service: {
+      title: 'External Service',
+      type: 'string',
+      description:
+        "Name of an entry in this application's external_services registry to source live auth credentials from",
+      'dial:resource': true,
+      acceptableResourceTypes: ['external_services'],
+    },
+  },
+  required: ['external_service'],
+};
+
 const oneOfSchema: JsonSchema = {
   $defs: {
     EmailNotification: {
@@ -590,6 +609,16 @@ export const HiddenFields: Story = {
 
 export const FlatWithGroups: Story = {
   args: { schema: flatMixedSchema, variant: SchemaRendererVariant.Flat },
+};
+
+export const ResourceField: Story = {
+  args: {
+    schema: resourceSchema,
+    variant: SchemaRendererVariant.Flat,
+    acceptableResourceTypes: {
+      external_services: ['openai-prod', 'anthropic-prod', 'azure-staging'],
+    },
+  },
 };
 
 export const CustomFieldRenderer: Story = {

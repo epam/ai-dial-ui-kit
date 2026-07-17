@@ -11,8 +11,7 @@ import type {
 import {
   breadcrumbCurrentClassName,
   breadcrumbItemBaseClassName,
-  breadcrumbItemLastClassName,
-  breadcrumbItemVisibleClassName,
+  breadcrumbItemWidthClassName,
   breadcrumbLinkBaseClassName,
   breadcrumbLinkInteractiveClassName,
   breadcrumbSeparatorClassName,
@@ -30,6 +29,7 @@ export interface DialBreadcrumbItemProps extends Omit<
   iconBefore?: ReactNode;
   labelClassName?: string;
   isLast?: boolean;
+  isFirst?: boolean;
   separator?: ReactNode;
   onBeforeNavigate?: NavigationGuard;
 }
@@ -40,6 +40,7 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   onClick,
   disabled,
   isLast,
+  isFirst,
   separator = defaultSeparator,
   className,
   iconBefore,
@@ -62,9 +63,15 @@ export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
       onClick(e);
     }
   };
+  const widthClassName = isLast
+    ? breadcrumbItemWidthClassName.last
+    : isFirst
+      ? breadcrumbItemWidthClassName.first
+      : breadcrumbItemWidthClassName.middle;
+
   const containerClassName = mergeClasses(
     breadcrumbItemBaseClassName,
-    isLast ? breadcrumbItemLastClassName : breadcrumbItemVisibleClassName,
+    widthClassName,
     className,
   );
   const interactive = (!!href || !!onClick) && !isLast && !disabled;

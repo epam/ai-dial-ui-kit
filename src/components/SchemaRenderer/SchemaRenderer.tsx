@@ -59,6 +59,7 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
   renderField,
   skipUntouched = false,
   jsonEditorTheme,
+  acceptableResourceTypes,
 }) => {
   const mergedTexts = useMemo(
     () => ({ ...DEFAULT_SCHEMA_TEXTS, ...texts }),
@@ -115,6 +116,8 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
         readonly,
         defaultExpanded,
         inputClassName,
+        jsonEditorTheme,
+        acceptableResourceTypes,
         renderField,
         touchedPaths,
         markTouched,

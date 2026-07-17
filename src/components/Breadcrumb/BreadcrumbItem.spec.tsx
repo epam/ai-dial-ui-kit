@@ -231,6 +231,30 @@ describe('Dial UI Kit :: DialBreadcrumbItem (final)', () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  test('isFirst renders as shrink-0 so the root never truncates', () => {
+    render(
+      <ul>
+        <DialBreadcrumbItem label="Root" href="#root" isFirst />
+      </ul>,
+    );
+    const link = screen.getByRole('link', { name: 'Root' });
+    const li = link.closest('li') as HTMLElement;
+    expect(li.className).toMatch(/shrink-0/);
+    expect(li.className).not.toMatch(/max-w-\[30%\]/);
+  });
+
+  test('isLast caps width so the current item never displaces the root', () => {
+    render(
+      <ul>
+        <DialBreadcrumbItem label="Current" isLast />
+      </ul>,
+    );
+    const text = screen.getByText('Current');
+    const li = text.closest('li') as HTMLElement;
+    expect(li.className).toMatch(/shrink/);
+    expect(li.className).toMatch(/max-w-\[51%\]/);
+  });
+
   test('navigation guard prevents default when returning false', async () => {
     const onBeforeNavigate = vi.fn().mockReturnValue(false);
 

@@ -134,6 +134,7 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
         <DialBreadcrumbItem
           {...item}
           key={`item-${index}`}
+          isFirst={index === 0 && items.length > 1}
           isLast={index === items.length - 1}
           separator={separator}
           labelClassName={labelClassName}
@@ -160,12 +161,13 @@ export const DialBreadcrumb: FC<DialBreadcrumbProps> = ({
         <DialBreadcrumbItem
           {...first}
           key="item-0"
+          isFirst
           separator={separator}
           labelClassName={labelClassName}
           onBeforeNavigate={onBeforeNavigate}
         />
 
-        <li className={mergeClasses(breadcrumbItemBaseClassName)}>
+        <li className={mergeClasses(breadcrumbItemBaseClassName, 'shrink-0')}>
           <DialDropdown
             items={dropdownItems}
             onItemClick={handleDropdownItemClick}
