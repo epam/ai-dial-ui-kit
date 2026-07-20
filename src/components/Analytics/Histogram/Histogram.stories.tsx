@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DialAnalyticsHistogram } from './Histogram';
 
+const compareValues = [
+  0.05, 0.08, 0.1, 0.15, 0.2, 0.3, 0.35, 0.38, 0.42, 0.47, 0.5, 0.55, 0.58,
+  0.62, 0.67, 0.71, 0.75, 0.8, 0.83, 0.86, 0.89, 0.92, 0.96, 0.98, 1,
+];
+
 const sampleValues = [
   0.02, 0.05, 0.07, 0.12, 0.18, 0.22, 0.25, 0.28, 0.31, 0.34, 0.41, 0.43, 0.44,
   0.48, 0.52, 0.55, 0.61, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91, 0.95, 1, 1,
@@ -34,6 +39,21 @@ const meta: Meta<typeof DialAnalyticsHistogram> = {
       control: 'boolean',
       description:
         'Renders a loader in place of the histogram while data loads.',
+    },
+    compareValues: {
+      control: false,
+      description:
+        'Second set of values; enables compare mode with paired striped columns.',
+    },
+    valueSetLabel: {
+      control: 'text',
+      description:
+        'Label for the primary values set, shown on the first tooltip line in compare mode.',
+    },
+    compareValueSetLabel: {
+      control: 'text',
+      description:
+        'Label for the compare values set, shown on the first tooltip line in compare mode.',
     },
     className: { control: 'text' },
   },
@@ -106,6 +126,44 @@ export const Loading: Story = {
     values: [],
     valueTitle: 'responses',
     isLoading: true,
+    className: 'w-[480px]',
+  },
+};
+
+export const CompareMode: Story = {
+  args: {
+    title: 'Score distribution',
+    values: sampleValues,
+    compareValues,
+    valueTitle: 'responses',
+    valueSetLabel: 'This week',
+    compareValueSetLabel: 'Last week',
+    className: 'w-[480px]',
+  },
+};
+
+export const CompareModeWithCounts: Story = {
+  args: {
+    title: 'Score distribution',
+    values: sampleValues,
+    compareValues,
+    valueTitle: 'responses',
+    valueSetLabel: 'This week',
+    compareValueSetLabel: 'Last week',
+    showCount: true,
+    className: 'w-[480px]',
+  },
+};
+
+export const CompareModeWithZeroBucket: Story = {
+  args: {
+    title: 'Score distribution',
+    values: [0, 0, ...sampleValues],
+    compareValues: [0, 0, 0, ...compareValues],
+    valueTitle: 'responses',
+    valueSetLabel: 'This week',
+    compareValueSetLabel: 'Last week',
+    showCount: true,
     className: 'w-[480px]',
   },
 };

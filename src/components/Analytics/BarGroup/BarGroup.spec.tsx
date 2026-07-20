@@ -120,6 +120,114 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
     });
   });
 
+  describe('inline mode', () => {
+    test('applies text-secondary to bar titles by default', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: 0.5 }}
+          inline
+        />,
+      );
+
+      expect(screen.getByText('score').className).toMatch(/text-secondary/);
+    });
+  });
+
+  describe('compare mode', () => {
+    test('renders two progressbars per entry', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82, recall: 0.64 }}
+          compareData={{ accuracy: 0.64, recall: 0.82 }}
+        />,
+      );
+
+      expect(screen.getAllByRole('progressbar')).toHaveLength(4);
+    });
+
+    test('renders the entry title', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+        />,
+      );
+
+      expect(screen.getByText('accuracy')).toBeInTheDocument();
+    });
+
+    test('renders a positive delta badge with success styles', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: 0.82 }}
+          compareData={{ score: 0.64 }}
+        />,
+      );
+
+      const badge = screen.getByText('+0.18');
+      expect(badge.className).toMatch(/bg-success/);
+      expect(badge.className).toMatch(/text-success/);
+    });
+
+    test('renders a negative delta badge with error styles', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: 0.64 }}
+          compareData={{ score: 0.82 }}
+        />,
+      );
+
+      const badge = screen.getByText('-0.18');
+      expect(badge.className).toMatch(/bg-error/);
+      expect(badge.className).toMatch(/text-error/);
+    });
+
+    test('renders a zero delta with a + prefix and success styles', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: 0.5 }}
+          compareData={{ score: 0.5 }}
+        />,
+      );
+
+      const badge = screen.getByText('+0');
+      expect(badge.className).toMatch(/bg-success/);
+    });
+
+    test('renders compareLabels as bar titles', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: 0.82 }}
+          compareData={{ score: 0.64 }}
+          compareLabels={['This week', 'Last week']}
+        />,
+      );
+
+      expect(screen.getByText('This week')).toBeInTheDocument();
+      expect(screen.getByText('Last week')).toBeInTheDocument();
+    });
+
+    test('skips entries whose key is absent from compareData', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82, extra: 0.5 }}
+          compareData={{ accuracy: 0.64 }}
+        />,
+      );
+
+      expect(screen.getAllByRole('progressbar')).toHaveLength(2);
+      expect(screen.queryByText('extra')).toBeNull();
+    });
+  });
+
   describe('loading state', () => {
     test('renders a loader instead of the bars', () => {
       render(<DialAnalyticsBarGroup title="Relevance" data={data} isLoading />);

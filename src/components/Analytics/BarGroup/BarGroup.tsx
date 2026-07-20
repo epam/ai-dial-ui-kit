@@ -1,18 +1,33 @@
-import type { FC, ReactNode } from 'react';
+import { Fragment, type FC, type ReactNode } from 'react';
 
 import { DialAccordion } from '@/components/Accordion/Accordion';
 import { DialAnalyticsBar } from '@/components/Analytics/Bar/Bar';
 import { DialLoader } from '@/components/Loader/Loader';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialAnalyticsBarGroupProps {
   /** Title passed to the accordion header. */
   title: ReactNode;
+  /** Tooltip shown when hovering the accordion header title. */
+  titleTooltip?: ReactNode;
   /** Description passed to the accordion header. Defaults to the number of entries. */
   description?: ReactNode;
   /** Map of metric name to numeric value. Each entry renders one bar. */
   data: Record<string, number>;
+  /**
+   * When provided, enables compare mode: each entry renders a delta badge (computed
+   * as `data[key] - compareData[key]`) and two bars — one for `data` and one for
+   * `compareData`. `onBarClick` is ignored in compare mode.
+   */
+  compareData?: Record<string, number>;
+  /**
+   * Labels shown next to each of the two bars in compare mode.
+   * The first label is for `data`, the second for `compareData`.
+   * Has no effect when `compareData` is not set.
+   */
+  compareLabels?: [ReactNode, ReactNode];
   /** Upper bound passed to every bar. Defaults to the bar's own default (`1`). */
   maxValue?: number;
   /** Color map passed to every bar. */
@@ -34,6 +49,13 @@ export interface DialAnalyticsBarGroupProps {
   barTitleClassName?: string;
   /** Additional CSS classes for each bar's value label. */
   barValueClassName?: string;
+  /** Additional CSS classes for each bar's outer container (e.g. for custom hover effects). */
+  barClassName?: string;
+  /**
+   * Map of bar key to tooltip content. When provided, hovering each bar shows its description.
+   * Not applied in compare mode.
+   */
+  barDescriptions?: Record<string, ReactNode>;
   /** Additional CSS classes for the accordion container. */
   className?: string;
 }
@@ -54,8 +76,11 @@ export interface DialAnalyticsBarGroupProps {
  * ```
  *
  * @param title - Title passed to the accordion header.
+ * @param [titleTooltip] - Tooltip shown when hovering the accordion header title.
  * @param [description] - Description passed to the accordion header. Defaults to the number of entries.
  * @param data - Map of metric name to numeric value. Each entry renders one bar.
+ * @param [compareData] - Enables compare mode: each entry shows a delta badge and two bars.
+ * @param [compareLabels] - Labels for the two bars in compare mode: first for `data`, second for `compareData`.
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
@@ -65,12 +90,17 @@ export interface DialAnalyticsBarGroupProps {
  * @param [inline] - Renders every bar on a single row (50% title, 50% bar + value).
  * @param [barTitleClassName] - Additional CSS classes for each bar's title label.
  * @param [barValueClassName] - Additional CSS classes for each bar's value label.
+ * @param [barClassName] - Additional CSS classes for each bar's outer container.
+ * @param [barDescriptions] - Map of bar key to tooltip content. Hovering each bar shows its description. Not applied in compare mode.
  * @param [className] - Additional CSS classes for the accordion container.
  */
 export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   title,
+  titleTooltip,
   description,
   data,
+  compareData,
+  compareLabels,
   maxValue,
   colorMap,
   defaultExpanded = true,
@@ -80,55 +110,129 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   inline,
   barTitleClassName,
   barValueClassName,
+  barClassName,
+  barDescriptions,
   className,
 }) => {
   const entries = Object.entries(data);
+  const effectiveTitleClass = inline
+    ? mergeClasses('text-secondary', barTitleClassName)
+    : barTitleClassName;
+  const compareLabelClass = compareLabels
+    ? 'dial-tiny-text text-secondary'
+    : undefined;
+  const titleContent = titleTooltip ? (
+    <DialTooltip tooltip={titleTooltip}>{title}</DialTooltip>
+  ) : (
+    title
+  );
 
   return (
     <DialAccordion
-      title={title}
+      title={titleContent}
       description={description}
       defaultExpanded={defaultExpanded}
       nonCollapsible={nonCollapsible}
       className={className}
     >
       <div
-        className={mergeClasses('flex flex-col', inline ? 'gap-2' : 'gap-3')}
+        className={mergeClasses(
+          'flex flex-col',
+          compareData ? 'gap-4' : inline ? 'gap-2' : 'gap-3',
+        )}
       >
         {isLoading ? (
           <DialLoader fullWidth={false} className="self-center" />
+        ) : compareData ? (
+          entries.map(([key, value]) => {
+            if (!(key in compareData)) return null;
+            const compareValue = compareData[key];
+            const delta = parseFloat((value - compareValue).toFixed(2));
+            const isPositive = delta >= 0;
+            const deltaLabel = isPositive ? `+${delta}` : String(delta);
+            return (
+              <div key={key} className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="dial-small-text text-primary">{key}</span>
+                  <span
+                    className={mergeClasses(
+                      'dial-tiny-semi-text rounded-[120px] border border-transparent px-2',
+                      isPositive
+                        ? 'bg-success text-success'
+                        : 'bg-error text-error',
+                    )}
+                  >
+                    {deltaLabel}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1.5 pl-2">
+                  <DialAnalyticsBar
+                    title={compareLabels?.[0]}
+                    value={value}
+                    maxValue={maxValue}
+                    colorMap={colorMap}
+                    inline={inline}
+                    titleClassName={compareLabelClass}
+                    className={barClassName}
+                    ariaLabel={key}
+                  />
+                  <DialAnalyticsBar
+                    title={compareLabels?.[1]}
+                    value={compareValue}
+                    maxValue={maxValue}
+                    colorMap={colorMap}
+                    inline={inline}
+                    titleClassName={compareLabelClass}
+                    className={barClassName}
+                    ariaLabel={`${key} compare`}
+                  />
+                </div>
+              </div>
+            );
+          })
         ) : (
-          entries.map(([key, value]) =>
-            onBarClick ? (
-              <button
-                key={key}
-                type="button"
-                onClick={() => onBarClick(key, value)}
-                className="cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
-              >
-                <DialAnalyticsBar
-                  title={key}
-                  value={value}
-                  maxValue={maxValue}
-                  colorMap={colorMap}
-                  inline={inline}
-                  titleClassName={barTitleClassName}
-                  valueClassName={barValueClassName}
-                />
-              </button>
-            ) : (
+          entries.map(([key, value]) => {
+            const bar = (
               <DialAnalyticsBar
-                key={key}
                 title={key}
                 value={value}
                 maxValue={maxValue}
                 colorMap={colorMap}
                 inline={inline}
-                titleClassName={barTitleClassName}
+                titleClassName={effectiveTitleClass}
                 valueClassName={barValueClassName}
+                className={barClassName}
               />
-            ),
-          )
+            );
+
+            const inner = onBarClick ? (
+              <button
+                type="button"
+                onClick={() => onBarClick(key, value)}
+                className="cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+              >
+                {bar}
+              </button>
+            ) : (
+              bar
+            );
+
+            const barTooltip = barDescriptions?.[key];
+
+            if (!barTooltip) {
+              return <Fragment key={key}>{inner}</Fragment>;
+            }
+
+            return (
+              <DialTooltip
+                key={key}
+                tooltip={barTooltip}
+                triggerClassName="flex flex-col"
+              >
+                {inner}
+              </DialTooltip>
+            );
+          })
         )}
       </div>
     </DialAccordion>

@@ -31,12 +31,12 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(screen.getByText('1')).toBeInTheDocument();
   });
 
-  test('renders the zero bucket with no color and a primary border', () => {
+  test('renders the zero bucket with #FF4E50 color and a transparent border', () => {
     render(<DialAnalyticsHistogram title="Distribution" values={[0, 0]} />);
 
     const zero = screen.getByRole('img', { name: '2 out of 2 values' });
-    expect(zero.style.backgroundColor).toBe('');
-    expect(zero.className).toMatch(/border-primary/);
+    expect(zero.style.backgroundColor).toBe('rgb(255, 78, 80)');
+    expect(zero.className).toMatch(/border-transparent/);
     expect(zero.style.height).toBe('100%');
   });
 
@@ -122,6 +122,98 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     expect(
       screen.getByRole('img', { name: '1 out of 1 values' }),
     ).toBeInTheDocument();
+  });
+
+  describe('compare mode', () => {
+    test('renders one img per populated primary band and one per populated compare band', () => {
+      // primary: 0.5 → "0.4-0.5" (1 band)   compare: 0.5, 0.3 → "0.4-0.5" + "0.2-0.3" (2 bands)
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.5, 0.3]}
+        />,
+      );
+
+      expect(screen.getAllByRole('img')).toHaveLength(3);
+    });
+
+    test('compare bars use a striped backgroundImage instead of a solid backgroundColor', () => {
+      // primary total=1, compare total=2 → different aria-labels for disambiguation
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.5, 0.3]}
+          valueTitle="results"
+        />,
+      );
+
+      // compare bars (aria-label "… out of 2 results")
+      const compareBars = screen.getAllByRole('img', {
+        name: '1 out of 2 results',
+      });
+      compareBars.forEach((bar) => {
+        expect(bar.style.backgroundImage).toMatch(/repeating-linear-gradient/);
+        expect(bar.style.backgroundColor).toBe('');
+      });
+
+      // primary bar has a solid color and no stripe
+      const primaryBar = screen.getByRole('img', {
+        name: '1 out of 1 results',
+      });
+      expect(primaryBar.style.backgroundColor).not.toBe('');
+      expect(primaryBar.style.backgroundImage).toBe('');
+    });
+
+    test('normalizes both datasets against the global max', () => {
+      // primary: 1 value in "0.4-0.5";  compare: 2 values in "0.4-0.5" → globalMax=2
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.5, 0.49]}
+        />,
+      );
+
+      const primary = screen.getByRole('img', { name: '1 out of 1 values' });
+      const compare = screen.getByRole('img', { name: '2 out of 2 values' });
+
+      expect(primary.style.height).toBe('50%');
+      expect(compare.style.height).toBe('100%');
+    });
+
+    test('a zero-count compare column renders as an aria-hidden spacer', () => {
+      // primary: 0.5 → "0.4-0.5";  compare: 0.3 → "0.2-0.3"
+      // Each pair has at most one populated bar, so exactly 2 imgs total (not 4)
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.3]}
+          valueTitle="items"
+        />,
+      );
+
+      expect(screen.getAllByRole('img')).toHaveLength(2);
+    });
+
+    test('uses the compare dataset length as the total in compare bar aria-labels', () => {
+      render(
+        <DialAnalyticsHistogram
+          title="Distribution"
+          values={[0.5, 0.51]}
+          compareValues={[0.5]}
+          valueTitle="responses"
+        />,
+      );
+
+      // primary total=2 → but 0.5 and 0.51 are in different bands
+      // compare total=1 → band "0.4-0.5" gets 1 of 1
+      expect(
+        screen.getByRole('img', { name: '1 out of 1 responses' }),
+      ).toBeInTheDocument();
+    });
   });
 
   describe('loading state', () => {

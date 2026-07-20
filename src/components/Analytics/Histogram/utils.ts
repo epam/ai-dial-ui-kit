@@ -1,5 +1,8 @@
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 
+/** Fill color for the zero-bucket column (values of exactly `0`). */
+export const ZERO_BUCKET_COLOR = '#FF4E50';
+
 export interface AnalyticsHistogramColumn {
   /** Lower bound of the column's interval. */
   from: number;
@@ -64,7 +67,7 @@ export const buildHistogramColumns = (
   const zeroColumn: AnalyticsHistogramColumn = {
     from: 0,
     to: 0,
-    color: undefined,
+    color: ZERO_BUCKET_COLOR,
     count: zeroCount,
     ratio: toRatio(zeroCount),
     isZeroBucket: true,

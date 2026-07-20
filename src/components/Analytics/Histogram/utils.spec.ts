@@ -39,7 +39,7 @@ describe('Dial UI Kit :: DialAnalyticsHistogram utils', () => {
       expect(columns[0]).toMatchObject({
         from: 0,
         to: 0,
-        color: undefined,
+        color: '#FF4E50',
         isZeroBucket: true,
       });
     });

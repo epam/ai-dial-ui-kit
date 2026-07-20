@@ -131,6 +131,17 @@ export const Inline: Story = {
   },
 };
 
+export const InlineError: Story = {
+  render: () => (
+    <div className="flex w-[420px] flex-row items-center gap-2">
+      <div className="w-1/2 min-w-0">
+        <span className="dial-small-text text-primary">Relevance</span>
+      </div>
+      <span className="dial-small-text text-error">Error</span>
+    </div>
+  ),
+};
+
 export const InlineCustomClasses: Story = {
   args: {
     title: 'Relevance',
