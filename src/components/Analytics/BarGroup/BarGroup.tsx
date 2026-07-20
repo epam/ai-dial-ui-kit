@@ -13,6 +13,18 @@ export interface DialAnalyticsBarGroupProps {
   description?: ReactNode;
   /** Map of metric name to numeric value. Each entry renders one bar. */
   data: Record<string, number>;
+  /**
+   * When provided, enables compare mode: each entry renders a delta badge (computed
+   * as `data[key] - compareData[key]`) and two bars — one for `data` and one for
+   * `compareData`. `onBarClick` is ignored in compare mode.
+   */
+  compareData?: Record<string, number>;
+  /**
+   * Labels shown next to each of the two bars in compare mode.
+   * The first label is for `data`, the second for `compareData`.
+   * Has no effect when `compareData` is not set.
+   */
+  compareLabels?: [ReactNode, ReactNode];
   /** Upper bound passed to every bar. Defaults to the bar's own default (`1`). */
   maxValue?: number;
   /** Color map passed to every bar. */
@@ -56,6 +68,8 @@ export interface DialAnalyticsBarGroupProps {
  * @param title - Title passed to the accordion header.
  * @param [description] - Description passed to the accordion header. Defaults to the number of entries.
  * @param data - Map of metric name to numeric value. Each entry renders one bar.
+ * @param [compareData] - Enables compare mode: each entry shows a delta badge and two bars.
+ * @param [compareLabels] - Labels for the two bars in compare mode: first for `data`, second for `compareData`.
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
@@ -71,6 +85,8 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   title,
   description,
   data,
+  compareData,
+  compareLabels,
   maxValue,
   colorMap,
   defaultExpanded = true,
@@ -83,6 +99,12 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   className,
 }) => {
   const entries = Object.entries(data);
+  const effectiveTitleClass = inline
+    ? mergeClasses('text-secondary', barTitleClassName)
+    : barTitleClassName;
+  const compareLabelClass = compareLabels
+    ? 'dial-tiny-text text-secondary'
+    : undefined;
 
   return (
     <DialAccordion
@@ -93,10 +115,58 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
       className={className}
     >
       <div
-        className={mergeClasses('flex flex-col', inline ? 'gap-2' : 'gap-3')}
+        className={mergeClasses(
+          'flex flex-col',
+          compareData ? 'gap-4' : inline ? 'gap-2' : 'gap-3',
+        )}
       >
         {isLoading ? (
           <DialLoader fullWidth={false} className="self-center" />
+        ) : compareData ? (
+          entries.map(([key, value]) => {
+            if (!(key in compareData)) return null;
+            const compareValue = compareData[key];
+            const delta = parseFloat((value - compareValue).toFixed(2));
+            const isPositive = delta >= 0;
+            const deltaLabel = isPositive ? `+${delta}` : String(delta);
+            return (
+              <div key={key} className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="dial-small-text text-primary">{key}</span>
+                  <span
+                    className={mergeClasses(
+                      'dial-tiny-semi-text rounded-[120px] border border-transparent px-2',
+                      isPositive
+                        ? 'bg-success text-success'
+                        : 'bg-error text-error',
+                    )}
+                  >
+                    {deltaLabel}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1.5 pl-2">
+                  <DialAnalyticsBar
+                    title={compareLabels?.[0]}
+                    value={value}
+                    maxValue={maxValue}
+                    colorMap={colorMap}
+                    inline={inline}
+                    titleClassName={compareLabelClass}
+                    ariaLabel={key}
+                  />
+                  <DialAnalyticsBar
+                    title={compareLabels?.[1]}
+                    value={compareValue}
+                    maxValue={maxValue}
+                    colorMap={colorMap}
+                    inline={inline}
+                    titleClassName={compareLabelClass}
+                    ariaLabel={`${key} compare`}
+                  />
+                </div>
+              </div>
+            );
+          })
         ) : (
           entries.map(([key, value]) =>
             onBarClick ? (
@@ -112,7 +182,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                   maxValue={maxValue}
                   colorMap={colorMap}
                   inline={inline}
-                  titleClassName={barTitleClassName}
+                  titleClassName={effectiveTitleClass}
                   valueClassName={barValueClassName}
                 />
               </button>
@@ -124,7 +194,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                 maxValue={maxValue}
                 colorMap={colorMap}
                 inline={inline}
-                titleClassName={barTitleClassName}
+                titleClassName={effectiveTitleClass}
                 valueClassName={barValueClassName}
               />
             ),

@@ -48,6 +48,21 @@ const meta: Meta<typeof DialAnalyticsCard> = {
       control: 'text',
       description: 'Additional CSS classes for the card container.',
     },
+    delta: {
+      control: { type: 'number' },
+      description:
+        'Numeric change shown as a badge next to the title. Values ≥0 use success styles; negative values use error styles. Override with `deltaPositive`.',
+    },
+    deltaPositive: {
+      control: 'boolean',
+      description:
+        'Overrides the sign-based badge style. Use when a positive delta is bad (e.g. response time up) or a negative delta is good (e.g. error rate down).',
+    },
+    compareValues: {
+      control: false,
+      description:
+        'Enables compare mode: value area is split 50/50 with a vertical divider, each side with its own sub-title and value.',
+    },
   },
 };
 export default meta;
@@ -59,6 +74,19 @@ export const Default: Story = {
     title: 'Total requests',
     value: '12,480',
     description: '+12% vs last week',
+    className: 'w-[240px]',
+  },
+};
+
+export const WithCustomValueNode: Story = {
+  args: {
+    title: 'Completed tasks',
+    value: (
+      <>
+        <span className="dial-display2-text text-primary">10</span>
+        <span className="dial-body-text text-secondary">/14</span>
+      </>
+    ),
     className: 'w-[240px]',
   },
 };
@@ -140,6 +168,59 @@ export const Variants: Story = {
       />
     </div>
   ),
+};
+
+export const CompareDefault: Story = {
+  args: {
+    title: 'Response time',
+    delta: 12,
+    deltaPositive: false,
+    compareValues: [
+      { title: 'This week', value: '248ms' },
+      { title: 'Last week', value: '220ms' },
+    ],
+    description: '+12% slower than last week',
+    className: 'w-[240px]',
+  },
+};
+
+export const CompareDefaultNegativeDelta: Story = {
+  args: {
+    title: 'Error rate',
+    delta: -3,
+    compareValues: [
+      { title: 'This week', value: '0.4%' },
+      { title: 'Last week', value: '0.7%' },
+    ],
+    description: '−3% fewer errors',
+    className: 'w-[240px]',
+  },
+};
+
+export const CompareCompact: Story = {
+  args: {
+    title: 'Avg. latency',
+    delta: 5,
+    compareValues: [
+      { title: 'Current', value: '248ms' },
+      { title: 'Previous', value: '236ms' },
+    ],
+    variant: AnalyticsCardVariant.Compact,
+    className: 'w-[200px]',
+  },
+};
+
+export const CompareCompactNegativeDelta: Story = {
+  args: {
+    title: 'Avg. latency',
+    delta: -8,
+    compareValues: [
+      { title: 'Current', value: '220ms' },
+      { title: 'Previous', value: '240ms' },
+    ],
+    variant: AnalyticsCardVariant.Compact,
+    className: 'w-[200px]',
+  },
 };
 
 export const Grid: Story = {

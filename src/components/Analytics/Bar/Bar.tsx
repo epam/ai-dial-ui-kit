@@ -116,7 +116,9 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
   ) : (
     <span
       className={mergeClasses(
-        'dial-small-semi-text text-primary',
+        inline
+          ? 'dial-small-text text-primary'
+          : 'dial-small-semi-text text-primary',
         valueClassName,
       )}
     >

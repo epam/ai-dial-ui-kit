@@ -2,6 +2,7 @@ import type { FC, ReactNode } from 'react';
 
 import { DialAnalyticsErrorTag } from '@/components/Analytics/ErrorTag/ErrorTag';
 import { DialLoader } from '@/components/Loader/Loader';
+import type { AnalyticsCardCompareItem } from '@/models/analytics';
 import { AnalyticsCardVariant } from '@/types/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -14,7 +15,27 @@ export interface DialAnalyticsCardProps {
   error?: boolean;
   /** Renders a loader in place of the value while the value is being fetched. */
   isLoading?: boolean;
+  /** Additional CSS classes for the outer container. */
   className?: string;
+  /**
+   * When provided, shows a delta badge next to the title.
+   * Values ≥ 0 use `bg-success text-success`; negative values use error styles.
+   * Positive values are prefixed with `+`.
+   */
+  delta?: number;
+  /**
+   * Overrides the automatic sign-based style of the delta badge.
+   * Use when a positive delta is semantically bad (e.g. response time went up)
+   * or a negative delta is semantically good (e.g. error rate went down).
+   * When omitted, `delta ≥ 0` → success, `delta < 0` → error.
+   */
+  deltaPositive?: boolean;
+  /**
+   * When provided, enables compare mode: the value area is split 50/50 with a
+   * vertical divider and each side shows its own sub-title and value.
+   * `value` is ignored when `compareValues` is set.
+   */
+  compareValues?: [AnalyticsCardCompareItem, AnalyticsCardCompareItem];
 }
 
 const variantStyles: Record<
@@ -45,13 +66,14 @@ const variantStyles: Record<
  * a prominent value, and an optional description.
  * aliases: MetricCard|StatCard|KpiCard
  *
- * Building block for the analytics component family — composite analytics
- * components (charts, dashboards) can reuse it to present headline figures.
- *
  * Two visual variants are available via the {@link AnalyticsCardVariant} enum:
  * - `Default` — `bg-layer-3`, large `dial-display2-text` value, supports a description.
  * - `Compact` — denser `bg-layer-2` card with a `dial-body-semi-text` value and no
  *   description (the `description` prop is ignored in this variant).
+ *
+ * **Compare mode** — pass `compareValues` to split the value area 50/50 between two
+ * metrics, each with its own sub-title. Pair with `delta` to show a change badge next
+ * to the card title.
  *
  * @example
  * ```tsx
@@ -65,21 +87,24 @@ const variantStyles: Record<
  * @example
  * ```tsx
  * <DialAnalyticsCard
- *   title="Active users"
- *   value="3,201"
- *   variant={AnalyticsCardVariant.Compact}
+ *   title="Response time"
+ *   delta={12}
+ *   compareValues={[
+ *     { title: 'This week', value: '248ms' },
+ *     { title: 'Last week', value: '220ms' },
+ *   ]}
  * />
  * ```
  *
  * @param title - Short label describing the metric, rendered above the value.
- * @param [value] - The primary metric value, displayed prominently. Omit it when `error` is set.
- * @param [description] - Optional supporting text. Accepts a string or any ReactNode.
- *   Ignored when `variant` is `Compact`.
- * @param [variant=AnalyticsCardVariant.Default] - Visual style of the card. Uses the
- *   {@link AnalyticsCardVariant} enum.
- * @param [error] - Renders an error tag in place of the value when the value is unavailable.
- * @param [isLoading] - Renders a loader in place of the value while the value is being fetched.
+ * @param [value] - The primary metric value. Ignored when `compareValues` is set.
+ * @param [description] - Optional supporting text. Ignored when `variant` is `Compact`.
+ * @param [variant=AnalyticsCardVariant.Default] - Visual style of the card.
+ * @param [error] - Renders an error tag in place of the value.
+ * @param [isLoading] - Renders a loader in place of the value.
  * @param [className] - Additional CSS classes for the card container.
+ * @param [delta] - Numeric change shown as a badge next to the title. ≥0 = success, <0 = error.
+ * @param [compareValues] - Enables compare mode with two side-by-side metrics.
  */
 export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
   title,
@@ -89,8 +114,13 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
   error,
   isLoading,
   className,
+  delta,
+  deltaPositive,
+  compareValues,
 }) => {
   const styles = variantStyles[variant];
+  const isDeltaPositive =
+    deltaPositive !== undefined ? deltaPositive : (delta ?? 0) >= 0;
 
   return (
     <div
@@ -101,14 +131,48 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
         className,
       )}
     >
-      <span className={styles.title}>{title}</span>
+      {delta !== undefined ? (
+        <div className="flex items-center gap-2">
+          <span className={styles.title}>{title}</span>
+          <span
+            className={mergeClasses(
+              'dial-tiny-semi-text rounded-[120px] border border-transparent px-2',
+              isDeltaPositive
+                ? 'bg-success text-success'
+                : 'bg-error text-error',
+            )}
+          >
+            {delta >= 0 ? `+${delta}` : String(delta)}
+          </span>
+        </div>
+      ) : (
+        <span className={styles.title}>{title}</span>
+      )}
+
       {error ? (
         <DialAnalyticsErrorTag className="self-start" />
       ) : isLoading ? (
         <DialLoader fullWidth={false} className="self-start" />
+      ) : compareValues ? (
+        <div className="flex items-center gap-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="dial-tiny-text text-secondary">
+              {compareValues[0].title}
+            </span>
+            <span className={styles.value}>{compareValues[0].value}</span>
+          </div>
+          <div className="h-4 w-px flex-shrink-0 bg-controls-disable-accent" />
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="dial-tiny-text text-secondary">
+              {compareValues[1].title}
+            </span>
+            <span className={styles.value}>{compareValues[1].value}</span>
+          </div>
+        </div>
       ) : (
         <span className={styles.value}>{value}</span>
       )}
+
       {!error &&
         !isLoading &&
         styles.showDescription &&

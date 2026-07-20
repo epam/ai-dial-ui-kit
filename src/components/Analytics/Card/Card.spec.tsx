@@ -125,6 +125,121 @@ describe('Dial UI Kit :: DialAnalyticsCard', () => {
     });
   });
 
+  describe('compare mode', () => {
+    test('renders both values and their sub-titles', () => {
+      render(
+        <DialAnalyticsCard
+          title="Response time"
+          compareValues={[
+            { title: 'This week', value: '248ms' },
+            { title: 'Last week', value: '220ms' },
+          ]}
+        />,
+      );
+
+      expect(screen.getByText('248ms')).toBeInTheDocument();
+      expect(screen.getByText('220ms')).toBeInTheDocument();
+      expect(screen.getByText('This week')).toBeInTheDocument();
+      expect(screen.getByText('Last week')).toBeInTheDocument();
+    });
+
+    test('applies the variant value style to each compare value', () => {
+      render(
+        <DialAnalyticsCard
+          title="Score"
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      expect(screen.getByText('90').className).toMatch(
+        /dial-display2-text.*text-primary/,
+      );
+      expect(screen.getByText('85').className).toMatch(
+        /dial-display2-text.*text-primary/,
+      );
+    });
+
+    test('applies compact value style in compact variant', () => {
+      render(
+        <DialAnalyticsCard
+          title="Score"
+          variant={AnalyticsCardVariant.Compact}
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      expect(screen.getByText('90').className).toMatch(
+        /dial-body-semi-text.*text-primary/,
+      );
+    });
+
+    test('renders a positive delta badge with success styles and + prefix', () => {
+      render(<DialAnalyticsCard title="Revenue" delta={12} value="$10K" />);
+
+      const badge = screen.getByText('+12');
+      expect(badge.className).toMatch(/bg-success/);
+      expect(badge.className).toMatch(/text-success/);
+    });
+
+    test('renders a zero delta badge with success styles', () => {
+      render(<DialAnalyticsCard title="Revenue" delta={0} value="$10K" />);
+
+      const badge = screen.getByText('+0');
+      expect(badge.className).toMatch(/bg-success/);
+    });
+
+    test('renders a negative delta badge with error styles', () => {
+      render(<DialAnalyticsCard title="Revenue" delta={-5} value="$10K" />);
+
+      const badge = screen.getByText('-5');
+      expect(badge.className).toMatch(/bg-error/);
+      expect(badge.className).toMatch(/text-error/);
+    });
+
+    test('deltaPositive=false overrides a positive delta to error styles', () => {
+      render(
+        <DialAnalyticsCard
+          title="Response time"
+          delta={12}
+          deltaPositive={false}
+          value="248ms"
+        />,
+      );
+
+      const badge = screen.getByText('+12');
+      expect(badge.className).toMatch(/bg-error/);
+      expect(badge.className).toMatch(/text-error/);
+    });
+
+    test('deltaPositive=true overrides a negative delta to success styles', () => {
+      render(
+        <DialAnalyticsCard
+          title="Error rate"
+          delta={-3}
+          deltaPositive={true}
+          value="0.4%"
+        />,
+      );
+
+      const badge = screen.getByText('-3');
+      expect(badge.className).toMatch(/bg-success/);
+      expect(badge.className).toMatch(/text-success/);
+    });
+
+    test('renders the delta badge alongside the title', () => {
+      render(<DialAnalyticsCard title="Revenue" delta={3} value="$10K" />);
+
+      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      expect(screen.getByText('+3')).toBeInTheDocument();
+    });
+  });
+
   describe('loading state', () => {
     test('renders a loader in place of the value', () => {
       render(

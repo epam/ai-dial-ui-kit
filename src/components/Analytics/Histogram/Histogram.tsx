@@ -5,6 +5,7 @@ import { DialLoader } from '@/components/Loader/Loader';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
+import type { AnalyticsHistogramColumn } from './utils';
 import { buildHistogramColumns, formatHistogramColumnLabel } from './utils';
 
 const HISTOGRAM_HEIGHT_PX = 128;
@@ -27,7 +28,34 @@ export interface DialAnalyticsHistogramProps {
   isLoading?: boolean;
   /** Additional CSS classes for the outer container. */
   className?: string;
+  /** Second set of values to overlay in compare mode. Each column renders as a paired striped bar. */
+  compareValues?: number[];
+  /** Label for the primary values set, shown on the first tooltip line in compare mode. */
+  valueSetLabel?: string;
+  /** Label for the compare values set, shown on the first tooltip line in compare mode. */
+  compareValueSetLabel?: string;
 }
+
+const formatScoredBetween = (from: number, to: number): string => {
+  const interval = formatHistogramColumnLabel(from, to);
+  return from === to ? `scored ${interval}` : `scored between ${interval}`;
+};
+
+const buildCompareTooltip = (
+  setLabel: string | undefined,
+  count: number,
+  total: number,
+  valueTitle: string,
+  column: AnalyticsHistogramColumn,
+): ReactNode => (
+  <div className="flex flex-col gap-0.5">
+    {setLabel && <strong>{setLabel}</strong>}
+    <span>
+      {count} out of {total} {valueTitle}
+    </span>
+    <span>{formatScoredBetween(column.from, column.to)}</span>
+  </div>
+);
 
 /**
  * A histogram that distributes `values` across the bands of a color map and draws a
@@ -53,6 +81,9 @@ export interface DialAnalyticsHistogramProps {
  * @param [showCount] - When `true`, renders each column's count inside its bar.
  * @param [isLoading] - Renders a loader in place of the histogram while the data is being fetched.
  * @param [className] - Additional CSS classes for the outer container.
+ * @param [compareValues] - Second set of values; enables compare mode with paired striped columns.
+ * @param [valueSetLabel] - Label for the primary values set (compare mode tooltip).
+ * @param [compareValueSetLabel] - Label for the compare values set (compare mode tooltip).
  */
 export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
   title,
@@ -62,9 +93,85 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
   showCount,
   isLoading,
   className,
+  compareValues,
+  valueSetLabel,
+  compareValueSetLabel,
 }) => {
-  const columns = buildHistogramColumns(values, colorMap);
+  const rawPrimaryColumns = buildHistogramColumns(values, colorMap);
+  const rawCompareColumns = compareValues
+    ? buildHistogramColumns(compareValues, colorMap)
+    : undefined;
+
+  const globalMax = rawCompareColumns
+    ? Math.max(
+        0,
+        ...[...rawPrimaryColumns, ...rawCompareColumns].map((c) => c.count),
+      )
+    : undefined;
+
+  const normalize = (
+    cols: AnalyticsHistogramColumn[],
+  ): AnalyticsHistogramColumn[] =>
+    globalMax !== undefined
+      ? cols.map((col) => ({
+          ...col,
+          ratio: globalMax > 0 ? col.count / globalMax : 0,
+        }))
+      : cols;
+
+  const columns = normalize(rawPrimaryColumns);
+  const compareColumns = rawCompareColumns
+    ? normalize(rawCompareColumns)
+    : undefined;
+
   const total = values.length;
+  const compareTotal = compareValues?.length ?? 0;
+
+  const renderBar = (
+    column: AnalyticsHistogramColumn,
+    tooltip: ReactNode,
+    ariaLabel: string,
+    striped: boolean,
+  ) => {
+    if (column.count === 0) {
+      return (
+        <div className="flex h-full flex-1 items-end" aria-hidden="true">
+          <div
+            className="min-h-2 w-full rounded-sm"
+            style={{ height: `${column.ratio * 100}%` }}
+          />
+        </div>
+      );
+    }
+
+    const stripeStyle = striped
+      ? {
+          backgroundImage: `repeating-linear-gradient(135deg, ${column.color} 0px, ${column.color} 1px, transparent 1px, transparent 4px)`,
+          borderColor: column.color,
+        }
+      : { backgroundColor: column.color };
+
+    return (
+      <DialTooltip
+        placement="bottom"
+        tooltip={tooltip}
+        triggerClassName="flex h-full flex-1 items-end"
+      >
+        <div
+          role="img"
+          aria-label={ariaLabel}
+          className="flex min-h-2 w-full items-center justify-center rounded-sm border border-transparent"
+          style={{ height: `${column.ratio * 100}%`, ...stripeStyle }}
+        >
+          {showCount && (
+            <span className="dial-tiny-semi-text text-primary">
+              {column.count}
+            </span>
+          )}
+        </div>
+      </DialTooltip>
+    );
+  };
 
   return (
     <div className={mergeClasses('flex flex-col gap-2', className)}>
@@ -83,57 +190,86 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
             className="flex items-end gap-1 border-b border-primary"
             style={{ height: HISTOGRAM_HEIGHT_PX }}
           >
-            {columns.map((column, index) => {
-              const colored = !column.isZeroBucket && column.count > 0;
-              const label = `${column.count} out of ${total} ${valueTitle}`;
+            {compareColumns
+              ? columns.map((column, index) => {
+                  const compareCol = compareColumns[index];
+                  const primaryLabel = `${column.count} out of ${total} ${valueTitle}`;
+                  const compareLabel = `${compareCol.count} out of ${compareTotal} ${valueTitle}`;
+                  return (
+                    <div key={index} className="flex h-full flex-1 items-end">
+                      {renderBar(
+                        column,
+                        buildCompareTooltip(
+                          valueSetLabel,
+                          column.count,
+                          total,
+                          valueTitle,
+                          column,
+                        ),
+                        primaryLabel,
+                        false,
+                      )}
+                      {renderBar(
+                        compareCol,
+                        buildCompareTooltip(
+                          compareValueSetLabel,
+                          compareCol.count,
+                          compareTotal,
+                          valueTitle,
+                          compareCol,
+                        ),
+                        compareLabel,
+                        true,
+                      )}
+                    </div>
+                  );
+                })
+              : columns.map((column, index) => {
+                  const label = `${column.count} out of ${total} ${valueTitle}`;
 
-              if (column.count === 0) {
-                return (
-                  <div
-                    key={index}
-                    className="flex h-full flex-1 items-end"
-                    aria-hidden="true"
-                  >
-                    <div
-                      className="min-h-2 w-full rounded-sm"
-                      style={{ height: `${column.ratio * 100}%` }}
-                    />
-                  </div>
-                );
-              }
+                  if (column.count === 0) {
+                    return (
+                      <div
+                        key={index}
+                        className="flex h-full flex-1 items-end"
+                        aria-hidden="true"
+                      >
+                        <div
+                          className="min-h-2 w-full rounded-sm"
+                          style={{ height: `${column.ratio * 100}%` }}
+                        />
+                      </div>
+                    );
+                  }
 
-              return (
-                <DialTooltip
-                  key={index}
-                  placement="bottom"
-                  tooltip={label}
-                  triggerClassName="flex h-full flex-1 items-end"
-                >
-                  <div
-                    role="img"
-                    aria-label={label}
-                    className={mergeClasses(
-                      'flex min-h-2 w-full items-center justify-center rounded-sm border',
-                      column.isZeroBucket
-                        ? 'border-primary'
-                        : colored
-                          ? 'border-transparent'
-                          : 'border-primary',
-                    )}
-                    style={{
-                      height: `${column.ratio * 100}%`,
-                      backgroundColor: colored ? column.color : undefined,
-                    }}
-                  >
-                    {showCount && column.count > 0 && (
-                      <span className="dial-tiny-semi-text text-primary">
-                        {column.count}
-                      </span>
-                    )}
-                  </div>
-                </DialTooltip>
-              );
-            })}
+                  return (
+                    <DialTooltip
+                      key={index}
+                      placement="bottom"
+                      tooltip={label}
+                      triggerClassName="flex h-full flex-1 items-end"
+                    >
+                      <div
+                        role="img"
+                        aria-label={label}
+                        className={mergeClasses(
+                          'flex min-h-2 w-full items-center justify-center rounded-sm border',
+                          'border-transparent',
+                        )}
+                        style={{
+                          height: `${column.ratio * 100}%`,
+                          backgroundColor: column.color,
+                        }}
+                      >
+                        {showCount && column.count > 0 && (
+                          <span className="dial-tiny-semi-text text-primary">
+                            {column.count}
+                          </span>
+                        )}
+                      </div>
+                    </DialTooltip>
+                  );
+                })}
           </div>
 
           <div className="flex gap-1">

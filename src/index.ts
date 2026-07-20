@@ -8,7 +8,10 @@ export { AnalyticsCardVariant } from './types/analytics';
 export { DialAnalyticsBar } from './components/Analytics';
 export type { DialAnalyticsBarProps } from './components/Analytics';
 export { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from './components/Analytics';
-export type { AnalyticsBarColorStop } from './models/analytics';
+export type {
+  AnalyticsBarColorStop,
+  AnalyticsCardCompareItem,
+} from './models/analytics';
 export { DialAnalyticsErrorTag } from './components/Analytics';
 export type { DialAnalyticsErrorTagProps } from './components/Analytics';
 export { DialAnalyticsBarGroup } from './components/Analytics';

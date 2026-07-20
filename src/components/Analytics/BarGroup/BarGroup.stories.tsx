@@ -44,6 +44,16 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
       description:
         'Invoked with the entry key and value when a bar is clicked.',
     },
+    compareData: {
+      control: false,
+      description:
+        'Enables compare mode: each entry shows a delta badge and two bars — one for `data` and one for `compareData`.',
+    },
+    compareLabels: {
+      control: false,
+      description:
+        'Labels shown next to each bar in compare mode. First label for `data`, second for `compareData`.',
+    },
     barTitleClassName: { control: 'text' },
     barValueClassName: { control: 'text' },
     className: { control: 'text' },
@@ -132,6 +142,37 @@ export const InlineCustomClasses: Story = {
     inline: true,
     barTitleClassName: 'dial-small-semi-text text-secondary',
     barValueClassName: 'text-accent-primary',
+    className: 'w-[420px]',
+  },
+};
+
+export const CompareDefault: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
+    compareLabels: ['This week', 'Last week'],
+    className: 'w-[420px]',
+  },
+};
+
+export const CompareInline: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
+    compareLabels: ['This week', 'Last week'],
+    inline: true,
+    className: 'w-[420px]',
+  },
+};
+
+export const CompareWithCustomMaxValue: Story = {
+  args: {
+    title: 'Token usage',
+    data: { prompt: 420, completion: 180, total: 600 },
+    compareData: { prompt: 380, completion: 210, total: 590 },
+    maxValue: 1000,
     className: 'w-[420px]',
   },
 };
