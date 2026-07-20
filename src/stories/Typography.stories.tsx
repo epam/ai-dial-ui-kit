@@ -74,12 +74,24 @@ const TypographyShowcase = () => (
         className="dial-small-semi-text"
         label="dial-small-semi-text"
       />
+      <TypographyRow
+        className="dial-small-paragraph-text"
+        label="dial-small-paragraph-text"
+      />
+      <TypographyRow
+        className="dial-small-paragraph-semi-text"
+        label="dial-small-paragraph-semi-text"
+      />
       <TypographyRow className="dial-tiny-text" label="dial-tiny-text" />
       <TypographyRow
         className="dial-tiny-semi-text"
         label="dial-tiny-semi-text"
       />
       <TypographyRow className="dial-caption-text" label="dial-caption-text" />
+      <TypographyRow
+        className="dial-caption-semi-text"
+        label="dial-caption-semi-text"
+      />
       <TypographyRow className="dial-code-text" label="dial-code-text" />
     </Section>
   </div>

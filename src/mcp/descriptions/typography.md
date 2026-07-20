@@ -17,9 +17,12 @@ Use these by default. They follow the design system type scale.
 | `.dial-body-paragraph-semi-text` | semibold | 16px / 26px             |
 | `.dial-small-text`               | normal   | 14px / 20px             |
 | `.dial-small-semi-text`          | semibold | 14px / 20px             |
+| `.dial-small-paragraph-text`     | normal   | 14px / 24px             |
+| `.dial-small-paragraph-semi-text`| semibold | 14px / 24px             |
 | `.dial-tiny-text`                | normal   | 12px / 16px             |
 | `.dial-tiny-semi-text`           | semibold | 12px / 16px             |
 | `.dial-caption-text`             | normal   | 10px / 12px             |
+| `.dial-caption-semi-text`        | semibold | 10px / 12px             |
 | `.dial-code-text`                | normal   | 14px / 20px (monospace) |
 
 ## Legacy classes (avoid in new code)
