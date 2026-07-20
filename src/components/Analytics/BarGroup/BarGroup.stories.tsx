@@ -54,8 +54,11 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
       description:
         'Labels shown next to each bar in compare mode. First label for `data`, second for `compareData`.',
     },
+    titleTooltip: { control: 'text' },
     barTitleClassName: { control: 'text' },
     barValueClassName: { control: 'text' },
+    barClassName: { control: 'text' },
+    barDescriptions: { control: false },
     className: { control: 'text' },
   },
 };
@@ -174,6 +177,56 @@ export const CompareWithCustomMaxValue: Story = {
     compareData: { prompt: 380, completion: 210, total: 590 },
     maxValue: 1000,
     className: 'w-[420px]',
+  },
+};
+
+export const WithTitleTooltip: Story = {
+  args: {
+    title: 'Relevance',
+    titleTooltip: 'Hover this title to see a tooltip',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    className: 'w-[420px]',
+  },
+};
+
+export const WithBarDescriptions: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    barDescriptions: {
+      accuracy: 'Proportion of correct predictions out of all predictions',
+      recall: 'Proportion of actual positives correctly identified',
+      precision:
+        'Proportion of positive predictions that are actually positive',
+      f1: 'Harmonic mean of precision and recall',
+    },
+    className: 'w-[420px]',
+  },
+};
+
+export const WithBarClassName: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    barClassName: 'rounded p-1 -mx-1 hover:bg-layer-4 transition-colors',
+    className: 'w-[420px]',
+  },
+};
+
+export const WithBarDescriptionsAndBarClassName: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    barDescriptions: {
+      accuracy: 'Proportion of correct predictions out of all predictions',
+      recall: 'Proportion of actual positives correctly identified',
+      precision:
+        'Proportion of positive predictions that are actually positive',
+      f1: 'Harmonic mean of precision and recall',
+    },
+    barClassName: 'rounded p-1 -mx-1 hover:bg-layer-4 transition-colors',
+    className: 'w-[420px]',
+    inline: true,
   },
 };
 
