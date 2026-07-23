@@ -148,6 +148,21 @@ export const Caption: Story = {
   },
 };
 
+export const CaptionOnRight: Story = {
+  args: {
+    label: 'Basic plan',
+    caption: '$0 / month',
+    oneLineCaption: true,
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-[320px]">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 export const GroupControlled: Story = {
   render: () => <ControlledGroup />,
 };
