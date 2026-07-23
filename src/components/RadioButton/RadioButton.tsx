@@ -14,6 +14,8 @@ export interface DialRadioButtonProps {
   disabled?: boolean;
   onChange?: (value: string) => void;
   descriptionClassName?: string;
+  containerClassName?: string;
+  oneLineCaption?: boolean;
 }
 
 /**
@@ -48,6 +50,8 @@ export interface DialRadioButtonProps {
  * @param [disabled] - Disabled state of the control
  * @param [onChange] - Callback fired with `value` when the radio is changed
  * @param [descriptionClassName] - Additional classes applied to the description block
+ * @param [containerClassName] - Additional classes applied to the container div
+ * @param [oneLineCaption=false] - When true, the caption is shown on the same line to the right of the label instead of underneath it
  */
 export const DialRadioButton: FC<DialRadioButtonProps> = ({
   name,
@@ -61,7 +65,9 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   disabled,
   onChange,
   descriptionClassName,
+  containerClassName,
   caption,
+  oneLineCaption = false,
 }) => {
   const descId = `${inputId}-desc`;
 
@@ -79,10 +85,11 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
     disabled && '!cursor-not-allowed',
   );
 
-  const containerClassName = classNames(
+  const allContainerClassName = classNames(
     'flex flex-col',
     !!description && 'mb-2',
     disabled && 'cursor-not-allowed',
+    containerClassName,
   );
 
   const allDescriptionClassName = classNames(
@@ -97,8 +104,13 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
   };
 
   return (
-    <div className={containerClassName}>
-      <div className={classNames('flex flex-row', !caption && 'items-center')}>
+    <div className={allContainerClassName}>
+      <div
+        className={classNames(
+          'flex flex-row',
+          (!caption || oneLineCaption) && 'items-center',
+        )}
+      >
         <input
           type="radio"
           id={inputId}
@@ -111,7 +123,14 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
           onChange={handleChange}
         />
         {(label || caption) && (
-          <div className="flex flex-col gap-1">
+          <div
+            className={classNames(
+              'flex',
+              oneLineCaption
+                ? 'flex-1 flex-row items-center gap-2'
+                : 'flex-col gap-1',
+            )}
+          >
             {label && (
               <label
                 className={allLabelClassName}
@@ -122,7 +141,13 @@ export const DialRadioButton: FC<DialRadioButtonProps> = ({
               </label>
             )}
             {caption && (
-              <span id="caption" className="dial-tiny-text text-secondary">
+              <span
+                id="caption"
+                className={classNames(
+                  'dial-tiny-text text-secondary',
+                  oneLineCaption && 'ml-auto',
+                )}
+              >
                 {caption}
               </span>
             )}

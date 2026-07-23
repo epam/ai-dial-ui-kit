@@ -167,4 +167,20 @@ describe('Dial UI Kit :: DialRadioButton', () => {
     const caption = screen.getByText('caption');
     expect(caption).toBeInTheDocument();
   });
+
+  test('renders caption inline on the right when oneLineCaption is true', () => {
+    render(
+      <DialRadioButton
+        name="group1"
+        value="opt-r"
+        inputId="radio-r"
+        label="Option R"
+        caption="right caption"
+        oneLineCaption
+      />,
+    );
+    const caption = screen.getByText('right caption');
+    expect(caption).toBeInTheDocument();
+    expect(caption).toHaveClass('ml-auto');
+  });
 });
