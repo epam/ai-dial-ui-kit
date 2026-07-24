@@ -63,27 +63,27 @@ export const LoadingToastNotification = NotificationVariantCreator(
   NotificationType.Toast,
 );
 
-export const ErrorSectionMessageNotification = NotificationTypeCreator(
+export const ErrorMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Error,
 );
 
-export const InfoSectionMessageNotification = NotificationTypeCreator(
+export const InfoMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Info,
 );
 
-export const SuccessSectionMessageNotification = NotificationTypeCreator(
+export const SuccessMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Success,
 );
 
-export const WarningSectionMessageNotification = NotificationTypeCreator(
+export const WarningMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Warning,
 );
 
-export const LoadingSectionMessageNotification = NotificationTypeCreator(
+export const LoadingMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Loading,
 );

@@ -2,15 +2,15 @@ import { NotificationVariant } from '@/types/notification';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Notification, type NotificationProps } from './Notification';
 import {
-  ErrorSectionMessageNotification,
+  ErrorMessageNotification,
   ErrorToastNotification,
-  InfoSectionMessageNotification,
+  InfoMessageNotification,
   InfoToastNotification,
-  LoadingSectionMessageNotification,
+  LoadingMessageNotification,
   LoadingToastNotification,
-  SuccessSectionMessageNotification,
+  SuccessMessageNotification,
   SuccessToastNotification,
-  WarningSectionMessageNotification,
+  WarningMessageNotification,
   WarningToastNotification,
 } from './NotificationWrapper';
 
@@ -111,48 +111,48 @@ export const AllVariants: Story = {
       <div className="flex flex-col gap-4">
         <p className="dial-small-semi-text">Section message</p>
 
-        <InfoSectionMessageNotification
+        <InfoMessageNotification
           title="Info"
           message="This is an info section message notification"
         />
-        <InfoSectionMessageNotification
+        <InfoMessageNotification
           title="Info"
           message="This is a long info section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />
-        <WarningSectionMessageNotification
+        <WarningMessageNotification
           title="Warning"
           message="This is a warning section message notification"
         />
 
-        <WarningSectionMessageNotification
+        <WarningMessageNotification
           title="Warning"
           message="This is a long warning section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />
-        <SuccessSectionMessageNotification
+        <SuccessMessageNotification
           title="Success"
           message="This is a success section message notification"
         />
 
-        <SuccessSectionMessageNotification
+        <SuccessMessageNotification
           title="Success"
           message="This is a long success section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />
 
-        <ErrorSectionMessageNotification
+        <ErrorMessageNotification
           title="Error"
           message="This is an error section message notification"
         />
 
-        <ErrorSectionMessageNotification
+        <ErrorMessageNotification
           title="Error"
           message="This is a long error section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />
 
-        <LoadingSectionMessageNotification
+        <LoadingMessageNotification
           title="Loading"
           message="This is a loading section message notification"
         />
-        <LoadingSectionMessageNotification
+        <LoadingMessageNotification
           title="Loading"
           message="This is a long loading section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />

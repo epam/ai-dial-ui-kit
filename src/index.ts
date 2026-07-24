@@ -255,3 +255,15 @@ export const LazyDialMarkdownEditor = () =>
 // new Components
 export { NotificationVariant, NotificationType } from './types/notification.ts';
 export { Notification } from './components/New/Notification/Notification';
+export {
+  ErrorMessageNotification,
+  ErrorToastNotification,
+  InfoMessageNotification,
+  InfoToastNotification,
+  LoadingMessageNotification,
+  LoadingToastNotification,
+  SuccessMessageNotification,
+  SuccessToastNotification,
+  WarningMessageNotification,
+  WarningToastNotification,
+} from './components/New/Notification/NotificationWrapper';
