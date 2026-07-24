@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState, type FC } from 'react';
 import { NotificationVariant } from '@/types/notification';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Notification, type NotificationProps } from './Notification';
 import {
   ErrorSectionMessageNotification,

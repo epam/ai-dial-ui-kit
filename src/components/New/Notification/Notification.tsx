@@ -109,7 +109,8 @@ export const Notification: FC<NotificationProps> = ({
       className={mergeClasses(
         alertBaseClassName,
         notificationVariantClassNameMap[variant],
-        type === NotificationType.Toast && 'min-w-[200px] max-w-[600px]',
+        type === NotificationType.Toast &&
+          'min-w-[200px] max-w-[600px] shadow-lg',
         className,
       )}
     >
