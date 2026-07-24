@@ -12,12 +12,12 @@ const NotificationVariantCreator = (
   variant: NotificationVariant,
   defaultType: NotificationType,
 ): FC<NotificationVariantProps> => {
-  const ButtonWrapper: FC<NotificationVariantProps> = ({ type, ...props }) => {
+  const Wrapper: FC<NotificationVariantProps> = ({ type, ...props }) => {
     return (
       <Notification {...props} variant={variant} type={type || defaultType} />
     );
   };
-  return ButtonWrapper;
+  return Wrapper;
 };
 
 type NotificationTypeProps = Omit<NotificationProps, 'type'>;
@@ -26,10 +26,7 @@ const NotificationTypeCreator = (
   type: NotificationType,
   defaultVariant: NotificationVariant,
 ): FC<NotificationTypeProps> => {
-  const NotificationWrapper: FC<NotificationTypeProps> = ({
-    variant,
-    ...props
-  }) => {
+  const Wrapper: FC<NotificationTypeProps> = ({ variant, ...props }) => {
     return (
       <Notification
         {...props}
@@ -38,7 +35,7 @@ const NotificationTypeCreator = (
       />
     );
   };
-  return NotificationWrapper;
+  return Wrapper;
 };
 
 export const ErrorToastNotification = NotificationVariantCreator(
