@@ -144,7 +144,6 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree.tsx';
 
 // Types
-export { NotificationVariant } from './types/notification.ts';
 export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
@@ -252,3 +251,7 @@ export const LazyDialJsonEditor = () =>
 // Markdown Editor - lazy loader to avoid loading in SSR
 export const LazyDialMarkdownEditor = () =>
   import('./components/MarkdownEditor/MarkdownEditor');
+
+// new Components
+export { NotificationVariant, NotificationType } from './types/notification.ts';
+export { Notification } from './components/New/Notification/Notification';
