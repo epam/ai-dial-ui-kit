@@ -11,8 +11,7 @@ const preview: Preview = {
 
     backgrounds: {
       options: {
-        dark: { name: 'Dark', value: 'var(--bg-layer-1, #0C101D)' },
-        light: { name: 'Light', value: '#fff' },
+        light: { name: 'Light', value: '#F5F7FA' },
       },
     },
     a11y: {
