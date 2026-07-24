@@ -51,7 +51,7 @@ describe('Dial UI Kit :: Notification', () => {
     const message = screen.getByText('Alert message');
     expect(title).toBeInTheDocument();
     expect(message).toBeInTheDocument();
-    expect(title).toHaveClass('dial-small-semi-text');
+    expect(title).toHaveClass('dial-small-paragraph-semi-text');
     expect(title.compareDocumentPosition(message)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
