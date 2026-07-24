@@ -42,7 +42,7 @@ export const DialSwitch: FC<DialSwitchProps> = ({
   caption,
 }) => {
   const switchClassName = classNames(
-    'flex w-[36px] h-[18px] cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
+    'flex shrink-0 w-[36px] h-[18px] cursor-pointer items-center gap-1 rounded-full p-0.5 transition-all duration-200',
     isOn ? 'flex-row-reverse' : 'flex-row',
     disabled ? 'pointer-events-none' : '',
     disabled
