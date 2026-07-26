@@ -118,7 +118,10 @@ export const Notification: FC<NotificationProps> = ({
         <DialIcon icon={icon} />
         {title ? (
           <div
-            className={mergeClasses('flex text-primary', resolvedTextClassName)}
+            className={mergeClasses(
+              'flex text-primary break-all',
+              resolvedTextClassName,
+            )}
           >
             <div className="dial-small-paragraph-semi-text">{title}</div>
             <div className="dial-small-paragraph-text">{message}</div>
