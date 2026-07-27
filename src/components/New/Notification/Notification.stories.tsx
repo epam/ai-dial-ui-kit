@@ -15,7 +15,7 @@ import {
 } from './NotificationWrapper';
 
 const meta = {
-  title: 'Components/Notification',
+  title: 'Components_2.0/Notification',
   component: Notification,
   parameters: {
     layout: 'padded',
