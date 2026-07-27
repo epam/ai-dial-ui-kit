@@ -43,7 +43,7 @@ const meta: Meta<typeof DialAnalyticsHistogram> = {
     compareValues: {
       control: false,
       description:
-        'Second set of values; enables compare mode with paired striped columns.',
+        'Second set of values; enables compare mode (primary striped, compare solid).',
     },
     valueSetLabel: {
       control: 'text',
