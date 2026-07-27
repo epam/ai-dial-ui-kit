@@ -22,7 +22,7 @@ export const CardShell: FC<CardShellProps> = ({
   <article
     {...props}
     className={mergeClasses(
-      'relative flex flex-col gap-[14px] rounded-[20px] border-2 border-transparent p-[22px]',
+      'relative flex flex-col gap-3 rounded-[20px] border-2 border-transparent p-5',
       'bg-layer-0 shadow-md transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[3px] hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0',
       className,
     )}
