@@ -138,7 +138,7 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
       expect(screen.getAllByRole('img')).toHaveLength(3);
     });
 
-    test('compare bars use a striped backgroundImage instead of a solid backgroundColor', () => {
+    test('primary bars use a striped backgroundImage; compare bars use a solid backgroundColor', () => {
       // primary total=1, compare total=2 → different aria-labels for disambiguation
       render(
         <DialAnalyticsHistogram
@@ -149,21 +149,23 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
         />,
       );
 
-      // compare bars (aria-label "… out of 2 results")
+      // primary bar has stripes and no solid fill
+      const primaryBar = screen.getByRole('img', {
+        name: '1 out of 1 results',
+      });
+      expect(primaryBar.style.backgroundImage).toMatch(
+        /repeating-linear-gradient/,
+      );
+      expect(primaryBar.style.backgroundColor).toBe('');
+
+      // compare bars (aria-label "… out of 2 results") have a solid color and no stripe
       const compareBars = screen.getAllByRole('img', {
         name: '1 out of 2 results',
       });
       compareBars.forEach((bar) => {
-        expect(bar.style.backgroundImage).toMatch(/repeating-linear-gradient/);
-        expect(bar.style.backgroundColor).toBe('');
+        expect(bar.style.backgroundColor).not.toBe('');
+        expect(bar.style.backgroundImage).toBe('');
       });
-
-      // primary bar has a solid color and no stripe
-      const primaryBar = screen.getByRole('img', {
-        name: '1 out of 1 results',
-      });
-      expect(primaryBar.style.backgroundColor).not.toBe('');
-      expect(primaryBar.style.backgroundImage).toBe('');
     });
 
     test('normalizes both datasets against the global max', () => {

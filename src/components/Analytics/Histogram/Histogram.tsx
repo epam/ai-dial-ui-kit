@@ -28,7 +28,7 @@ export interface DialAnalyticsHistogramProps {
   isLoading?: boolean;
   /** Additional CSS classes for the outer container. */
   className?: string;
-  /** Second set of values to overlay in compare mode. Each column renders as a paired striped bar. */
+  /** Second set of values to overlay in compare mode. Primary bars are striped; compare bars are solid. */
   compareValues?: number[];
   /** Label for the primary values set, shown on the first tooltip line in compare mode. */
   valueSetLabel?: string;
@@ -81,7 +81,7 @@ const buildCompareTooltip = (
  * @param [showCount] - When `true`, renders each column's count inside its bar.
  * @param [isLoading] - Renders a loader in place of the histogram while the data is being fetched.
  * @param [className] - Additional CSS classes for the outer container.
- * @param [compareValues] - Second set of values; enables compare mode with paired striped columns.
+ * @param [compareValues] - Second set of values; enables compare mode (primary striped, compare solid).
  * @param [valueSetLabel] - Label for the primary values set (compare mode tooltip).
  * @param [compareValueSetLabel] - Label for the compare values set (compare mode tooltip).
  */
@@ -207,7 +207,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
                           column,
                         ),
                         primaryLabel,
-                        false,
+                        true,
                       )}
                       {renderBar(
                         compareCol,
@@ -219,7 +219,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
                           compareCol,
                         ),
                         compareLabel,
-                        true,
+                        false,
                       )}
                     </div>
                   );
