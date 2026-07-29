@@ -11,6 +11,18 @@ describe('Dial UI Kit :: DialTab', () => {
     expect(screen.getByText('Tab 1')).toBeInTheDocument();
   });
 
+  test('exposes the active state through aria-selected', () => {
+    const { rerender } = render(
+      <DialTab tab={baseTab} active onClick={vi.fn()} />,
+    );
+
+    expect(screen.getByRole('tab')).toHaveAttribute('aria-selected', 'true');
+
+    rerender(<DialTab tab={baseTab} active={false} onClick={vi.fn()} />);
+
+    expect(screen.getByRole('tab')).toHaveAttribute('aria-selected', 'false');
+  });
+
   test('calls onClick with tab id', () => {
     const onClick = vi.fn();
     render(<DialTab tab={baseTab} active={false} onClick={onClick} />);
