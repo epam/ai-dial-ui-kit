@@ -37,7 +37,7 @@ export const calendarDayTodayClassName = 'text-accent font-semibold';
 
 export const calendarDayOutsideClassName = 'text-secondary opacity-50';
 
-export const calendarFieldIconClassName = 'text-[#6B7280]';
+export const calendarFieldIconClassName = 'text-secondary';
 
 export const calendarIcon = (
   <IconCalendar
