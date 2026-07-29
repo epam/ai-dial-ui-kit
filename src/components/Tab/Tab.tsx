@@ -88,6 +88,7 @@ export const DialTab: FC<DialTabProps> = ({
   return (
     <button
       role="tab"
+      aria-selected={active}
       className={tabClassName}
       onClick={() => onClick(tab.id)}
       disabled={tab.disabled}
