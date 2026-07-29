@@ -36,7 +36,11 @@ describe('Dial UI Kit :: Highlight', () => {
 
   test('Should apply custom markClassName to the highlighted segment', () => {
     render(
-      <Highlight text="Hello world" query="world" markClassName="custom-mark" />,
+      <Highlight
+        text="Hello world"
+        query="world"
+        markClassName="custom-mark"
+      />,
     );
     expect(document.querySelector('mark')).toHaveClass('custom-mark');
   });
