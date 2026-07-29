@@ -255,6 +255,7 @@ export const LazyDialMarkdownEditor = () =>
 // new Components
 export { NotificationVariant, NotificationType } from './types/notification.ts';
 export { Notification } from './components/New/Notification/Notification';
+export { Highlight } from './components/New/Highlight/Highlight';
 export { CardShell } from './components/New/CardShell/CardShell';
 export type { CardShellProps } from './components/New/CardShell/CardShell';
 export {
