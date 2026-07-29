@@ -270,3 +270,9 @@ export {
   WarningMessageNotification,
   WarningToastNotification,
 } from './components/New/Notification/NotificationWrapper';
+export { CalendarMode } from './types/calendar.ts';
+export { Calendar } from './components/New/Calendar/Calendar';
+export type {
+  CalendarProps,
+  CalendarValue,
+} from './components/New/Calendar/Calendar';
