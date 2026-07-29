@@ -276,3 +276,5 @@ export type {
   CalendarProps,
   CalendarValue,
 } from './components/New/Calendar/Calendar';
+export { FolderPath } from './components/New/FolderPath/FolderPath';
+export type { FolderPathProps } from './components/New/FolderPath/FolderPath';
