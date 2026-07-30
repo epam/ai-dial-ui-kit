@@ -35,7 +35,7 @@ describe('Dial UI Kit :: DialFabButton', () => {
 
   test('Should always have dial-fab-button class', () => {
     render(<FabButton icon={<div>icon</div>} />);
-    expect(screen.getByRole('button')).toHaveClass('dial-fab-button');
+    expect(screen.getByRole('button')).toHaveClass('dial-kit-fab-button');
   });
 
   test('Should render tooltip when tooltipProps provided', () => {

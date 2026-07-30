@@ -73,9 +73,7 @@ export {
   DialPrimaryButton,
   DialGhostButton,
   DialLinkButton,
-  DialRoundedButton,
 } from './components/Button/ButtonWrappers';
-export type { DialRoundedButtonProps } from './components/Button/ButtonWrappers';
 export {
   DialDangerIconButton,
   DialGhostIconButton,

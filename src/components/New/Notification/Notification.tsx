@@ -111,6 +111,9 @@ export const Notification: FC<NotificationProps> = ({
         notificationVariantClassNameMap[variant],
         type === NotificationType.Toast &&
           'min-w-[200px] max-w-[600px] shadow-lg',
+        type === NotificationType.SectionMessage &&
+          variant === NotificationVariant.Loading &&
+          'border-secondary',
         className,
       )}
     >

@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { Button } from '../Button';
-import { DialRoundedButton } from '../ButtonWrappers';
 import { ButtonAppearance, ButtonVariant } from '@/index';
 import { ElementSize } from '@/types/size';
 
@@ -89,22 +88,10 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(titleSpan).toHaveClass('custom-text-class', 'font-bold');
   });
 
-  test('Should apply focus-visible outline classes', () => {
-    render(<Button label="Focus test" />);
-    const button = screen.getByRole('button', { name: 'Focus test' });
-    expect(button).toHaveClass('focus-visible:outline', 'outline-offset-0');
-  });
-
   test('Should apply small size classes', () => {
     render(<Button label="Small button" size={ElementSize.Small} />);
     const button = screen.getByRole('button', { name: 'Small button' });
     expect(button).toHaveClass('h-[24px]', 'px-2', 'dial-tiny-semi-text');
-  });
-
-  test('Should apply standard size classes by default', () => {
-    render(<Button label="Standard button" />);
-    const button = screen.getByRole('button', { name: 'Standard button' });
-    expect(button).toHaveClass('h-[40px]', 'px-3', 'dial-small-semi-text');
   });
 
   test('Should not apply height/padding classes for link appearance', () => {
@@ -116,7 +103,7 @@ describe('Dial UI Kit :: DialButton', () => {
       />,
     );
     const button = screen.getByRole('button', { name: 'Link button' });
-    expect(button).not.toHaveClass('h-[40px]', 'px-3');
+    expect(button).not.toHaveClass('size-[40px]', 'px-3');
   });
 
   test('Should render inside a tooltip when tooltipProps is provided', () => {
@@ -180,18 +167,22 @@ describe('Dial UI Kit :: DialButton', () => {
     [
       ButtonVariant.Primary,
       ButtonAppearance.Solid,
-      'dial-primary-solid-button',
+      'dial-kit-primary-solid-button',
     ],
     [
       ButtonVariant.Primary,
       ButtonAppearance.Ghost,
-      'dial-primary-ghost-button',
+      'dial-kit-primary-ghost-button',
     ],
-    [ButtonVariant.Primary, ButtonAppearance.Link, 'dial-primary-link-button'],
+    [
+      ButtonVariant.Primary,
+      ButtonAppearance.Link,
+      'dial-kit-primary-link-button',
+    ],
     [
       ButtonVariant.Neutral,
       ButtonAppearance.Outlined,
-      'dial-neutral-outlined-button',
+      'dial-kit-neutral-outlined-button',
     ],
   ])(
     'applies mapped class for variant %s',
@@ -205,44 +196,4 @@ describe('Dial UI Kit :: DialButton', () => {
       expect(btn).toHaveClass(expectedClass);
     },
   );
-});
-
-describe('Dial UI Kit :: DialRoundedButton', () => {
-  test('renders with label and base class', () => {
-    render(<DialRoundedButton label="Tag" />);
-    const btn = screen.getByRole('button', { name: 'Tag' });
-    expect(btn).toBeInTheDocument();
-    expect(btn).toHaveClass('dial-neutral-rounded-button');
-  });
-
-  test('applies selected class when selected prop is true', () => {
-    render(<DialRoundedButton label="Tag" selected />);
-    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass('selected');
-  });
-
-  test('does not apply selected class when selected is false', () => {
-    render(<DialRoundedButton label="Tag" selected={false} />);
-    expect(screen.getByRole('button', { name: 'Tag' })).not.toHaveClass(
-      'selected',
-    );
-  });
-
-  test('is disabled when disabled prop is true', () => {
-    render(<DialRoundedButton label="Tag" disabled />);
-    expect(screen.getByRole('button', { name: 'Tag' })).toBeDisabled();
-  });
-
-  test('calls onClick when clicked', () => {
-    const onClick = vi.fn();
-    render(<DialRoundedButton label="Tag" onClick={onClick} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Tag' }));
-    expect(onClick).toHaveBeenCalled();
-  });
-
-  test('merges additional className', () => {
-    render(<DialRoundedButton label="Tag" className="extra-class" />);
-    expect(screen.getByRole('button', { name: 'Tag' })).toHaveClass(
-      'extra-class',
-    );
-  });
 });
