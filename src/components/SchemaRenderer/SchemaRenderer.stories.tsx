@@ -247,6 +247,35 @@ const hiddenFieldsSchema: JsonSchema = {
   required: ['name', 'internalId'],
 };
 
+const allOfDefaultsSchema: JsonSchema = {
+  $defs: {
+    DeIdentificationConfig: {
+      additionalProperties: true,
+      properties: {
+        info_types: {
+          default: ['PHONE_NUMBER', 'FIRST_NAME', 'LAST_NAME'],
+          items: { type: 'string' },
+          title: 'Info Types',
+          type: 'array',
+        },
+      },
+      title: 'DeIdentificationConfig',
+      type: 'object',
+    },
+  },
+  additionalProperties: true,
+  properties: {
+    deidentification_config: {
+      allOf: [{ $ref: '#/$defs/DeIdentificationConfig' }],
+      default: {
+        info_types: ['PHONE_NUMBER', 'FIRST_NAME', 'LAST_NAME'],
+      },
+    },
+  },
+  title: 'GoogleDLPAnonymizerConfig',
+  type: 'object',
+};
+
 const SchemaRendererWithPreview = (props: DialSchemaRendererProps) => {
   const [formValue, setFormValue] = useState<Record<string, unknown>>({});
 
@@ -617,6 +646,22 @@ export const ResourceField: Story = {
     variant: SchemaRendererVariant.Flat,
     acceptableResourceTypes: {
       external_services: ['openai-prod', 'anthropic-prod', 'azure-staging'],
+    },
+  },
+};
+
+export const AllOfWithDefaults: Story = {
+  args: {
+    schema: allOfDefaultsSchema,
+    defaultValue: {
+      deidentification_config: {
+        info_types: [
+          'PHONE_NUMBER',
+          'FIRST_NAME',
+          'LAST_NAME',
+          'DATE_OF_BIRTH',
+        ],
+      },
     },
   },
 };

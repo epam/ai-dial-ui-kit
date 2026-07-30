@@ -1,25 +1,54 @@
 import { JsonSchemaType } from './types';
 import type { JsonSchema, JsonSchemaDef, ValidationError } from './types';
 
+function mergeSchemas(a: JsonSchemaDef, b: JsonSchemaDef): JsonSchemaDef {
+  const merged: JsonSchemaDef = { ...a, ...b };
+  if (a.properties || b.properties) {
+    merged.properties = { ...a.properties, ...b.properties };
+  }
+  if (a.required || b.required) {
+    merged.required = Array.from(
+      new Set([...(a.required ?? []), ...(b.required ?? [])]),
+    );
+  }
+  return merged;
+}
+
 export function resolveRef(
   schema: JsonSchemaDef,
   rootSchema: JsonSchema,
   depth = 0,
 ): JsonSchemaDef {
-  if (!schema.$ref || depth > 10) return schema;
-  const parts = schema.$ref.replace(/^#\//, '').split('/');
-  let resolved: unknown = rootSchema;
-  for (const part of parts) {
-    resolved = (resolved as Record<string, unknown>)?.[part];
+  if (depth > 10) return schema;
+
+  let result = schema;
+
+  if (result.$ref) {
+    const parts = result.$ref.replace(/^#\//, '').split('/');
+    let resolved: unknown = rootSchema;
+    for (const part of parts) {
+      resolved = (resolved as Record<string, unknown>)?.[part];
+    }
+    if (!resolved || typeof resolved !== 'object') return schema;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { $ref: _ref, ...siblings } = result;
+    const resolvedDef = resolved as JsonSchemaDef;
+    const fullyResolved = resolvedDef.$ref
+      ? resolveRef(resolvedDef, rootSchema, depth + 1)
+      : resolvedDef;
+    result = { ...fullyResolved, ...siblings };
   }
-  if (!resolved || typeof resolved !== 'object') return schema;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { $ref: _ref, ...siblings } = schema;
-  const resolvedDef = resolved as JsonSchemaDef;
-  const fullyResolved = resolvedDef.$ref
-    ? resolveRef(resolvedDef, rootSchema, depth + 1)
-    : resolvedDef;
-  return { ...fullyResolved, ...siblings };
+
+  if (result.allOf && result.allOf.length > 0) {
+    const { allOf, ...rest } = result;
+    let merged: JsonSchemaDef = {};
+    for (const sub of allOf) {
+      merged = mergeSchemas(merged, resolveRef(sub, rootSchema, depth + 1));
+    }
+    result = mergeSchemas(merged, rest);
+  }
+
+  return result;
 }
 
 export function isMissingRequiredValue(value: unknown): boolean {
