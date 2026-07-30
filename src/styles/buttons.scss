@@ -61,6 +61,20 @@
   }
 }
 
+.dial-kit-static-solid-button {
+  @apply dial-kit-base-button text-control-disable bg-transparent;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-neutral-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-neutral-active;
+  }
+}
+
 /* Outlined buttons */
 .dial-kit-neutral-outlined-button {
   @apply dial-kit-base-button text-primary bg-transparent;
@@ -95,8 +109,10 @@
 .dial-kit-primary-solid-button:disabled,
 .dial-kit-neutral-solid-button:disabled,
 .dial-kit-danger-solid-button:disabled,
+.dial-kit-static-solid-button:disabled,
 .dial-kit-neutral-outlined-button:disabled,
-.dial-kit-danger-outlined-button:disabled {
+.dial-kit-danger-outlined-button:disabled,
+.dial-kit-fab-button:disabled {
   @apply dial-kit-solid-button-disable;
 }
 
@@ -136,7 +152,7 @@
 
 /* Link buttons */
 .dial-kit-primary-link-button {
-  @apply dial-kit-base-button bg-transparent text-accent px-2;
+  @apply dial-kit-base-button bg-transparent text-accent;
 
   @media (hover: hover) {
     &:hover {
@@ -150,6 +166,25 @@
 
   &:disabled {
     @apply text-control-disable;
+  }
+}
+
+.dial-kit-fab-button {
+  @apply flex items-center justify-center rounded-full;
+  @apply bg-control-neutral shadow-sm text-primary;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      @apply bg-control-neutral-hover;
+    }
+  }
+
+  &:active:not(:disabled) {
+    @apply bg-control-neutral-active;
+  }
+
+  &:focus-visible {
+    @apply outline-none border-focus;
   }
 }
 
@@ -347,31 +382,6 @@
 .dial-primary-solid-button:disabled,
 .dial-danger-solid-button:disabled {
   @apply dial-button-solid-disable;
-}
-
-.dial-fab-button {
-  @apply flex items-center justify-center rounded-full;
-  @apply h-[40px] w-[40px];
-  @apply border border-solid border-tertiary;
-  @apply bg-layer-3 text-primary;
-
-  @media (hover: hover) {
-    &:hover:not(:disabled) {
-      @apply bg-controls-neutral-hover;
-    }
-  }
-
-  &:active:not(:disabled) {
-    @apply bg-controls-neutral-active;
-  }
-
-  &:focus-visible {
-    @apply outline-none border-focus;
-  }
-
-  &:disabled {
-    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
-  }
 }
 
 .dial-neutral-rounded-button {

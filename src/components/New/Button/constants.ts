@@ -17,7 +17,9 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
     [ButtonAppearance.Ghost]: 'dial-kit-danger-ghost-button',
     [ButtonAppearance.Outlined]: 'dial-kit-danger-outlined-button',
   },
-  [ButtonVariant.Static]: {},
+  [ButtonVariant.Static]: {
+    [ButtonAppearance.Solid]: 'dial-kit-static-solid-button',
+  },
 
   // TODO: remove these once we have a design for the icon button variants
   [ButtonVariant.Success]: {},

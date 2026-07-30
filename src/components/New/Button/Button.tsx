@@ -82,11 +82,9 @@ export const Button: FC<ButtonProps> = ({
     size === ElementSize.Small
       ? 'dial-tiny-semi-text'
       : 'dial-small-paragraph-semi-text',
-
+    size === ElementSize.Small ? 'h-[24px] gap-1' : 'h-[40px] gap-2',
     appearance !== ButtonAppearance.Link &&
-      (size === ElementSize.Small
-        ? 'h-[24px] px-2 gap-1'
-        : 'h-[40px] px-4 gap-2'),
+      (size === ElementSize.Small ? 'px-2' : 'px-4'),
     className,
   );
 

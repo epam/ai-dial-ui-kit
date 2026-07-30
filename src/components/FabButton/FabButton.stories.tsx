@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialFabButton, type DialFabButtonProps } from './FabButton';
+import { FabButton, type FabButtonProps } from './FabButton';
 
 const meta = {
-  title: 'Dial/Elements/Buttons/FabButton',
-  component: DialFabButton,
+  title: 'Components_2.0/FabButton',
+  component: FabButton,
   parameters: {
     layout: 'centered',
     docs: {
@@ -23,7 +23,7 @@ const meta = {
     disabled: false,
     'aria-label': 'Scroll to bottom',
   },
-} satisfies Meta<DialFabButtonProps>;
+} satisfies Meta<FabButtonProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -68,7 +68,7 @@ export const AllStates: Story = {
           <span className="w-14 text-right text-sm text-secondary">
             {label}
           </span>
-          <DialFabButton id={id} aria-label={label} disabled={disabled} />
+          <FabButton id={id} aria-label={label} disabled={disabled} />
         </div>
       ))}
     </div>

@@ -14,7 +14,7 @@ import { IconArrowNarrowDown } from '@tabler/icons-react';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
-export interface DialFabButtonProps extends DetailedHTMLProps<
+export interface FabButtonProps extends DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > {
@@ -28,7 +28,7 @@ export interface DialFabButtonProps extends DetailedHTMLProps<
  *
  * @example
  * ```tsx
- * <DialFabButton
+ * <FabButton
  *   icon={<IconArrowNarrowDown size={24} stroke={1.5} />}
  *   onClick={handleClick}
  *   aria-label="Scroll to bottom"
@@ -40,7 +40,7 @@ export interface DialFabButtonProps extends DetailedHTMLProps<
  * @param icon - Icon to display inside the button
  * @param [tooltipProps] - Optional tooltip configuration
  */
-export const DialFabButton: FC<DialFabButtonProps> = ({
+export const FabButton: FC<FabButtonProps> = ({
   className,
   icon,
   tooltipProps,
@@ -48,7 +48,8 @@ export const DialFabButton: FC<DialFabButtonProps> = ({
   ...props
 }) => {
   const btnClassName = mergeClasses(
-    'dial-fab-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0 disabled:text-controls-secondary-disable',
+    'flex items-center justify-center rounded-full size-[40px]',
+    'dial-kit-fab-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
 

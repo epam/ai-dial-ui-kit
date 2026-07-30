@@ -1,36 +1,31 @@
-import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { Fragment, type ReactNode } from 'react';
-import { Button, type ButtonProps } from './Button';
-import {
-  DangerButton,
-  GhostButton,
-  LinkButton,
-  NeutralButton,
-  OutlinedButton,
-  PrimaryButton,
-} from './ButtonWrappers';
+import { IconRepeat, IconSettings } from '@tabler/icons-react';
+import type { ReactNode } from 'react';
+
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { IconButton, type IconButtonProps } from './IconButton';
+import {
+  DangerIconButton,
+  GhostIconButton,
+  NeutralIconButton,
+  PrimaryIconButton,
+} from './IconButtonWrappers';
 
 const meta = {
-  title: 'Components_2.0/Button',
-  component: Button,
+  title: 'Components_2.0/IconButton',
+  component: IconButton,
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component:
-          'A button component. Has all properties from the standard `ButtonHTMLAttributes<HTMLButtonElement>` extended with additional ones for variant, icons, and text styling.',
+          'An icon-only button component. Has all properties from the standard `ButtonHTMLAttributes<HTMLButtonElement>` extended with additional ones for variant, appearance, and size.',
       },
     },
   },
   argTypes: {
-    label: {
-      control: { type: 'text' },
-      description: 'Button label content',
-    },
     variant: {
       control: { type: 'select' },
       options: Object.values(ButtonVariant),
@@ -38,12 +33,9 @@ const meta = {
     },
     appearance: {
       control: { type: 'select' },
-      options: [
-        ButtonAppearance.Ghost,
-        ButtonAppearance.Link,
-        ButtonAppearance.Solid,
-        ButtonAppearance.Outlined,
-      ],
+      options: Object.values(ButtonAppearance).filter(
+        (appearance) => appearance !== ButtonAppearance.Link,
+      ),
       description: 'Button appearance',
     },
     size: {
@@ -51,98 +43,115 @@ const meta = {
       options: [ElementSize.Standard, ElementSize.Small],
       description: 'Button size',
     },
-    textClassName: {
-      control: { type: 'text' },
-      description:
-        'Additional CSS classes to apply specifically to the button text',
-    },
-    iconBefore: {
+    icon: {
       control: false,
-      description: 'Icon or element to display before the button text',
+      description: 'Icon to display inside the button',
     },
-    iconAfter: {
+    tooltipProps: {
       control: false,
-      description: 'Icon or element to display after the button text',
+      description: 'Props forwarded to the tooltip wrapping the button',
     },
   },
   args: {
-    label: 'Button',
     variant: ButtonVariant.Primary,
     appearance: ButtonAppearance.Solid,
     size: ElementSize.Standard,
     disabled: false,
+    icon: <IconRepeat size={DIAL_ICON_SIZE.MD} />,
+    'aria-label': 'Settings',
   },
-} satisfies Meta<ButtonProps>;
+} satisfies Meta<IconButtonProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Default: Story = {};
+
+export const Hover: Story = {
+  parameters: { pseudo: { hover: true } },
+};
+
+export const Active: Story = {
+  parameters: { pseudo: { active: true } },
+};
+
+export const Focus: Story = {
+  parameters: { pseudo: { focusVisible: true } },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true },
+};
+
+export const Small: Story = {
+  args: {
+    size: ElementSize.Small,
+    icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+  },
+};
+
+export const WithTooltip: Story = {
+  args: {
+    tooltipProps: { tooltip: 'Settings' },
+  },
+};
+
 const STATE_ROWS = [
   {
     label: 'Default',
-    stateClassName: undefined,
     disabled: false,
-    sizes: [ElementSize.Standard, ElementSize.Small],
   },
   {
     label: 'Disable',
-    stateClassName: undefined,
     disabled: true,
-    sizes: [ElementSize.Standard, ElementSize.Small],
   },
-] satisfies {
-  label: string;
-  stateClassName: string | undefined;
-  disabled: boolean;
-  sizes: ElementSize[];
-}[];
+] satisfies { label: string; disabled: boolean }[];
 
 export const AllVariants: Story = {
   render: () => {
     const columns: {
       title: string;
-      render: (p: ButtonProps) => ReactNode;
+      render: (p: IconButtonProps) => ReactNode;
     }[] = [
       {
         title: 'Primary · Solid',
         render: (p) => (
-          <PrimaryButton {...p} appearance={ButtonAppearance.Solid} />
+          <PrimaryIconButton {...p} appearance={ButtonAppearance.Solid} />
         ),
       },
       {
         title: 'Neutral · Solid',
-        render: (p) => <NeutralButton {...p} />,
-      },
-      {
-        title: 'Danger · Solid',
-        render: (p) => (
-          <DangerButton {...p} appearance={ButtonAppearance.Solid} />
-        ),
+        render: (p) => <NeutralIconButton {...p} />,
       },
       {
         title: 'Primary · Ghost',
-        render: (p) => <GhostButton {...p} />,
+        render: (p) => <GhostIconButton {...p} />,
       },
-
       {
         title: 'Danger · Ghost',
         render: (p) => (
-          <DangerButton {...p} appearance={ButtonAppearance.Ghost} />
+          <DangerIconButton {...p} appearance={ButtonAppearance.Ghost} />
         ),
       },
       {
         title: 'Neutral · Outlined',
-        render: (p) => <OutlinedButton {...p} />,
-      },
-      {
-        title: 'Danger · Outlined',
         render: (p) => (
-          <DangerButton {...p} appearance={ButtonAppearance.Outlined} />
+          <IconButton
+            {...p}
+            variant={ButtonVariant.Neutral}
+            appearance={ButtonAppearance.Outlined}
+          />
         ),
       },
       {
-        title: 'Primary · Link',
-        render: (p) => <LinkButton {...p} />,
+        title: 'Static · Solid',
+        render: (p) => (
+          <IconButton
+            {...p}
+            variant={ButtonVariant.Static}
+            appearance={ButtonAppearance.Solid}
+          />
+        ),
       },
     ];
 
@@ -159,7 +168,7 @@ export const AllVariants: Story = {
             </div>
           ))}
         </div>
-        {STATE_ROWS.map(({ label, stateClassName, disabled, sizes }) => (
+        {STATE_ROWS.map(({ label, disabled }) => (
           <div key={label} className="flex items-center gap-x-8">
             <div className="flex w-28 shrink-0 items-center justify-start text-sm text-secondary">
               {label}
@@ -169,23 +178,21 @@ export const AllVariants: Story = {
                 key={`${label}-${title}`}
                 className="flex flex-1 basis-0 items-center justify-center gap-x-2"
               >
-                {sizes.map((size) => {
+                {[ElementSize.Standard, ElementSize.Small].map((size) => {
                   const iconSize =
                     size === ElementSize.Small
                       ? DIAL_ICON_SIZE.SM
                       : DIAL_ICON_SIZE.MD;
 
                   return (
-                    <Fragment key={size}>
+                    <div key={size}>
                       {render({
-                        label: 'Button',
-                        iconAfter: <IconArrowRight size={iconSize} />,
-                        iconBefore: <IconArrowLeft size={iconSize} />,
-                        className: stateClassName,
+                        icon: <IconSettings size={iconSize} />,
+                        'aria-label': 'Settings',
                         disabled,
                         size,
                       })}
-                    </Fragment>
+                    </div>
                   );
                 })}
               </div>
@@ -199,7 +206,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          'Matrix of primary/neutral/danger variants with solid, ghost, link, and outlined appearances, shown across default, hover, active, and disabled states.',
+          'Matrix of primary/neutral/danger variants with solid, ghost, and outlined appearances, shown across standard/small sizes and default/disabled states.',
       },
     },
   },

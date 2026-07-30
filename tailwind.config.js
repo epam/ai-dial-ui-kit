@@ -67,7 +67,7 @@ const controlsBgColors = {
   'control-error-alpha-active':
     'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
 
-  'control-disable': 'var(--bg-control-disable, ##C7CBD4)', // grey-700
+  'control-disable': 'var(--bg-control-disable, #C7CBD4)', // grey-700
 
   // REMOVED: old names, need to remove
   'controls-accent-primary': 'var(--controls-bg-accent-primary, #124ACE)',
