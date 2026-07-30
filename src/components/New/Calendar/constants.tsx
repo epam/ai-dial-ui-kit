@@ -16,26 +16,26 @@ export const calendarModeDefaultPlaceholder: Record<CalendarMode, string> = {
   [CalendarMode.Weekday]: 'Select day',
 };
 
-export const calendarFieldBaseClassName =
+export const calendarFieldBaseClassName = // TODO: check after design review for input
   'flex w-full items-center justify-between gap-2 rounded-xl border border-secondary bg-layer-0 px-4 py-3 dial-small-text text-primary outline-none transition-colors hover:border-accent-primary focus-within:border-accent-primary';
 
-export const calendarFieldDisabledClassName =
+export const calendarFieldDisabledClassName = // TODO: check after design review for input
   '!cursor-not-allowed !border-transparent bg-controls-disable text-controls-primary-disable hover:!border-transparent';
 
-export const calendarFieldInvalidClassName = '!border-error';
+export const calendarFieldInvalidClassName = '!border-error'; // TODO: check after design review for input
 
 export const calendarPopoverClassName =
-  'z-[53] flex w-[248px] flex-col gap-4 rounded-lg bg-layer-0 px-3 py-4 shadow-md';
+  'z-[53] flex w-[248px] flex-col gap-4 rounded-lg bg-layer-raised px-3 py-4 shadow-md';
 
 export const calendarDayButtonBaseClassName =
-  'flex size-8 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha focus:outline-none focus-visible:outline';
+  'flex size-8 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-none focus-visible:outline';
 
 export const calendarDaySelectedClassName =
-  'bg-control-accent text-controls-permanent hover:bg-control-accent';
+  'bg-control-accent text-control-permanent';
 
-export const calendarDayTodayClassName = 'text-accent font-semibold';
+export const calendarDayTodayClassName = 'text-accent dial-small-semi-text';
 
-export const calendarDayOutsideClassName = 'text-secondary opacity-50';
+export const calendarDayOutsideClassName = 'text-control-disable';
 
 export const calendarFieldIconClassName = 'text-secondary';
 

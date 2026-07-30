@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { DialButton, type DialButtonProps } from './Button';
+import { Button, type ButtonProps } from './Button';
 
-type ButtonVariantProps = Omit<DialButtonProps, 'variant'>;
+type ButtonVariantProps = Omit<ButtonProps, 'variant'>;
 
 const ButtonVariantCreator = (
   variant: ButtonVariant,
@@ -11,7 +11,7 @@ const ButtonVariantCreator = (
 ): FC<ButtonVariantProps> => {
   const ButtonWrapper: FC<ButtonVariantProps> = ({ appearance, ...props }) => {
     return (
-      <DialButton
+      <Button
         {...props}
         variant={variant}
         appearance={appearance || defaultAppearance}
@@ -21,7 +21,7 @@ const ButtonVariantCreator = (
   return ButtonWrapper;
 };
 
-type ButtonAppearanceProps = Omit<DialButtonProps, 'appearance'>;
+type ButtonAppearanceProps = Omit<ButtonProps, 'appearance'>;
 
 const ButtonAppearanceCreator = (
   appearance: ButtonAppearance,
@@ -29,7 +29,7 @@ const ButtonAppearanceCreator = (
 ): FC<ButtonAppearanceProps> => {
   const ButtonWrapper: FC<ButtonAppearanceProps> = ({ variant, ...props }) => {
     return (
-      <DialButton
+      <Button
         {...props}
         variant={variant || defaultVariant}
         appearance={appearance}
@@ -42,16 +42,16 @@ const ButtonAppearanceCreator = (
  * A Primary Button component with predefined primary variant
  * @example
  * ```tsx
- * <DialPrimaryButton
+ * <PrimaryButton
  *  label="Click me"
- * onClick={handleClick}
- * className="custom-button"
+ *  onClick={handleClick}
+ *  className="custom-button"
  * />
  * ```
  *
- * Inherits all properties from the `DialButtonProps`
+ * Inherits all properties from the `ButtonProps`
  */
-export const DialPrimaryButton = ButtonVariantCreator(
+export const PrimaryButton = ButtonVariantCreator(
   ButtonVariant.Primary,
   ButtonAppearance.Solid,
 );
@@ -59,65 +59,81 @@ export const DialPrimaryButton = ButtonVariantCreator(
 /** A Neutral Button component with predefined neutral variant
  * @example
  * ```tsx
- * <DialNeutralButton
+ * <NeutralButton
  *  label="Click me"
  *  onClick={handleClick}
  *  className="custom-button"
  * />
  * ```
  *
- * Inherits all properties from the `DialButtonProps`
+ * Inherits all properties from the `ButtonProps`
  */
-export const DialNeutralButton = ButtonVariantCreator(
+export const NeutralButton = ButtonVariantCreator(
   ButtonVariant.Neutral,
-  ButtonAppearance.Outlined,
+  ButtonAppearance.Solid,
 );
 
 /** A Danger Button component with predefined danger variant
  * @example
  * ```tsx
- * <DialDangerButton
+ * <DangerButton
  * label="Click me"
  * onClick={handleClick}
  * className="custom-button"
  * />
  * ```
  *
- * Inherits all properties from the `DialButtonProps`
+ * Inherits all properties from the `ButtonProps`
  */
-export const DialDangerButton = ButtonVariantCreator(
+export const DangerButton = ButtonVariantCreator(
   ButtonVariant.Danger,
-  ButtonAppearance.Outlined,
+  ButtonAppearance.Solid,
 );
 /** A Link Button component with predefined link appearance
  * @example
  * ```tsx
- * <DialLinkButton
+ * <LinkButton
  *  label="Click me"
  *  onClick={handleClick}
  *  className="custom-button"
  * />
  * ```
  *
- * Inherits all properties from the `DialButtonProps`
+ * Inherits all properties from the `ButtonProps`
  */
-export const DialLinkButton = ButtonAppearanceCreator(
+export const LinkButton = ButtonAppearanceCreator(
   ButtonAppearance.Link,
   ButtonVariant.Primary,
 );
 /** A Ghost Button component with predefined ghost appearance
  * @example
  * ```tsx
- * <DialGhostButton
+ * <GhostButton
  *  label="Click me"
  *  onClick={handleClick}
  *  className="custom-button"
  * />
  * ```
  *
- * Inherits all properties from the `DialButtonProps`
+ * Inherits all properties from the `ButtonProps`
  */
-export const DialGhostButton = ButtonAppearanceCreator(
+export const GhostButton = ButtonAppearanceCreator(
   ButtonAppearance.Ghost,
   ButtonVariant.Primary,
+);
+
+/** An Outlined Button component with predefined outlined appearance
+ * @example
+ * ```tsx
+ * <OutlinedButton
+ * label="Click me"
+ * onClick={handleClick}
+ * className="custom-button"
+ * />
+ * ```
+ *  Inherits all properties from the `ButtonProps`
+ */
+export const OutlinedButton = ButtonAppearanceCreator(
+  ButtonAppearance.Outlined,
+  ButtonVariant.Neutral,
 );

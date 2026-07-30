@@ -87,9 +87,7 @@ export {
   DialPrimaryButton,
   DialGhostButton,
   DialLinkButton,
-  DialRoundedButton,
 } from './components/Button/ButtonWrappers';
-export type { DialRoundedButtonProps } from './components/Button/ButtonWrappers';
 export {
   DialDangerIconButton,
   DialGhostIconButton,
@@ -101,8 +99,6 @@ export {
 } from './components/IconButton/IconButtonWrappers';
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
-export { DialFabButton } from './components/FabButton/FabButton';
-export type { DialFabButtonProps } from './components/FabButton/FabButton';
 
 // Textareas
 export { DialTextarea } from './components/Textarea/Textarea';
@@ -161,7 +157,7 @@ export type {
   BulkActionsToolbarOptions,
 } from './components/FileManager/FileManager';
 export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
-export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree.tsx';
+export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree';
 
 // Types
 export { ButtonVariant, ButtonAppearance } from './types/button';
@@ -303,3 +299,23 @@ export type {
 } from './components/New/Calendar/Calendar';
 export { FolderPath } from './components/New/FolderPath/FolderPath';
 export type { FolderPathProps } from './components/New/FolderPath/FolderPath';
+export {
+  DangerButton,
+  GhostButton,
+  LinkButton,
+  NeutralButton,
+  OutlinedButton,
+  PrimaryButton,
+} from './components/New/Button/ButtonWrappers';
+export {
+  DangerIconButton,
+  GhostIconButton,
+  NeutralIconButton,
+  PrimaryIconButton,
+} from './components/New/IconButton/IconButtonWrappers';
+export { Button } from './components/New/Button/Button';
+export { IconButton } from './components/New/IconButton/IconButton';
+export type { ButtonProps } from './components/New/Button/Button';
+export type { IconButtonProps } from './components/New/IconButton/IconButton';
+export { FabButton as DialFabButton } from './components/FabButton/FabButton';
+export type { FabButtonProps as DialFabButtonProps } from './components/FabButton/FabButton';

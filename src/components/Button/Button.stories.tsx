@@ -9,8 +9,6 @@ import {
   DialLinkButton,
   DialNeutralButton,
   DialPrimaryButton,
-  DialRoundedButton,
-  type DialRoundedButtonProps,
 } from './ButtonWrappers';
 import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -322,34 +320,6 @@ export const SubmitTypeButton: Story = {
       description: {
         story:
           'Demonstrates using the native `type` prop (`submit`, `button`, `reset`).',
-      },
-    },
-  },
-};
-
-export const RoundedAllStates: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      {(
-        [
-          { label: 'Default' },
-          { label: 'Selected', selected: true },
-          { label: 'Disabled', disabled: true },
-          {
-            label: 'With icons',
-            iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} />,
-            iconAfter: <IconArrowRight size={DIAL_ICON_SIZE.MD} />,
-          },
-        ] as DialRoundedButtonProps[]
-      ).map((props) => (
-        <DialRoundedButton key={props.label as string} {...props} />
-      ))}
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'All visual states of the rounded button.',
       },
     },
   },
