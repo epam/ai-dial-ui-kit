@@ -1,8 +1,9 @@
 export enum ButtonVariant {
-  // Common
+  // 2.0 variants
   Primary = 'primary',
   Neutral = 'neutral',
   Danger = 'danger',
+  Static = 'static',
 
   // icon button specific
   Success = 'success',

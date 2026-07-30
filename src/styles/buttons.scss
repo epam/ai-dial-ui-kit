@@ -1,3 +1,159 @@
+@media (hover: hover) {
+  .dial-base-button:focus-visible {
+    @apply border-focus;
+  }
+}
+
+/* 2.0 button styles */
+
+.dial-kit-base-button {
+  @apply flex flex-row items-center justify-center;
+  @apply rounded-full border border-solid border-transparent;
+  @apply disabled:cursor-not-allowed focus-visible:outline outline-offset-0;
+}
+
+.dial-kit-solid-button-disable {
+  @apply text-control-disable bg-none bg-control-disable border-transparent;
+}
+
+/* Solid buttons */
+.dial-kit-primary-solid-button {
+  @apply dial-kit-base-button text-control-permanent;
+  background: linear-gradient(99.78deg, #1d4ed8 8.59%, #885df2 98.14%);
+
+  @media (hover: hover) {
+    &:hover {
+      background: linear-gradient(99.78deg, #6785fb 8.59%, #885df2 98.14%);
+    }
+  }
+
+  &:active {
+    background: linear-gradient(99.78deg, #1d4ed8 8.59%, #7c3aed 98.14%);
+  }
+}
+
+.dial-kit-neutral-solid-button {
+  @apply dial-kit-base-button text-accent bg-control-accent-alpha;
+  @apply border-accent-alpha;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-accent-alpha-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-accent-alpha-active;
+  }
+}
+
+.dial-kit-danger-solid-button {
+  @apply dial-kit-base-button text-control-permanent bg-control-error;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-error-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-error-active;
+  }
+}
+
+/* Outlined buttons */
+.dial-kit-neutral-outlined-button {
+  @apply dial-kit-base-button text-primary bg-transparent;
+  @apply border-primary;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-neutral-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-neutral-active;
+  }
+}
+
+.dial-kit-danger-outlined-button {
+  @apply dial-kit-base-button text-error bg-transparent;
+  @apply border-error;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-error-alpha-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-error-alpha-active;
+  }
+}
+
+.dial-kit-primary-solid-button:disabled,
+.dial-kit-neutral-solid-button:disabled,
+.dial-kit-danger-solid-button:disabled,
+.dial-kit-neutral-outlined-button:disabled,
+.dial-kit-danger-outlined-button:disabled {
+  @apply dial-kit-solid-button-disable;
+}
+
+/* Ghost buttons */
+.dial-kit-primary-ghost-button {
+  @apply dial-kit-base-button text-accent bg-transparent;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-accent-alpha-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-accent-alpha-active;
+  }
+}
+
+.dial-kit-danger-ghost-button {
+  @apply dial-kit-base-button text-error bg-transparent;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply bg-control-error-alpha-hover;
+    }
+  }
+
+  &:active {
+    @apply bg-control-error-alpha-active;
+  }
+}
+
+.dial-kit-primary-ghost-button:disabled,
+.dial-kit-danger-ghost-button:disabled {
+  @apply text-control-disable bg-transparent;
+}
+
+/* Link buttons */
+.dial-kit-primary-link-button {
+  @apply dial-kit-base-button bg-transparent text-accent px-2;
+
+  @media (hover: hover) {
+    &:hover {
+      @apply text-control-blue-hover;
+    }
+  }
+
+  &:active {
+    @apply text-control-blue-active;
+  }
+
+  &:disabled {
+    @apply text-control-disable;
+  }
+}
+
+/* Legacy button styles */
 .dial-base-button {
   @apply flex flex-row items-center gap-x-2 justify-center;
   @apply rounded border border-solid border-transparent;
@@ -5,12 +161,6 @@
 
 .dial-button-disable {
   @apply cursor-not-allowed;
-}
-
-@media (hover: hover) {
-  .dial-base-button:focus-visible {
-    @apply border-focus;
-  }
 }
 
 .dial-button-solid-disable {
