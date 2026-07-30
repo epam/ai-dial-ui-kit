@@ -219,6 +219,14 @@ export default {
       opacity: {
         15: '15%',
       },
+      backgroundImage: {
+        'control-accent-gradient':
+          'linear-gradient(99.78deg, var(--bg-control-accent-gradient-from, #1D4ED8) 8.59%, var(--bg-control-accent-gradient-to, #885DF2) 98.14%)',
+        'control-accent-gradient-hover':
+          'linear-gradient(99.78deg, var(--bg-control-accent-gradient-hover-from, #6785FB) 8.59%, var(--bg-control-accent-gradient-to, #885DF2) 98.14%)',
+        'control-accent-gradient-active':
+          'linear-gradient(99.78deg, var(--bg-control-accent-gradient-from, #1D4ED8) 8.59%, var(--bg-control-accent-gradient-active-to, #7C3AED) 98.14%)',
+      },
       colors: {
         transparent: 'transparent',
       },

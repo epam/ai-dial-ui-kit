@@ -18,17 +18,16 @@
 
 /* Solid buttons */
 .dial-kit-primary-solid-button {
-  @apply dial-kit-base-button text-control-permanent;
-  background: linear-gradient(99.78deg, #1d4ed8 8.59%, #885df2 98.14%);
+  @apply dial-kit-base-button text-control-permanent bg-control-accent-gradient;
 
   @media (hover: hover) {
     &:hover {
-      background: linear-gradient(99.78deg, #6785fb 8.59%, #885df2 98.14%);
+      @apply bg-control-accent-gradient-hover;
     }
   }
 
   &:active {
-    background: linear-gradient(99.78deg, #1d4ed8 8.59%, #7c3aed 98.14%);
+    @apply bg-control-accent-gradient-active;
   }
 }
 
