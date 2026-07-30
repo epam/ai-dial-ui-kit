@@ -317,5 +317,5 @@ export { Button } from './components/New/Button/Button';
 export { IconButton } from './components/New/IconButton/IconButton';
 export type { ButtonProps } from './components/New/Button/Button';
 export type { IconButtonProps } from './components/New/IconButton/IconButton';
-export { FabButton as DialFabButton } from './components/FabButton/FabButton';
-export type { FabButtonProps as DialFabButtonProps } from './components/FabButton/FabButton';
+export { FabButton } from './components/FabButton/FabButton';
+export type { FabButtonProps } from './components/FabButton/FabButton';
