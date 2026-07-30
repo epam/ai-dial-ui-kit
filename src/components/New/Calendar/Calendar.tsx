@@ -14,9 +14,9 @@ import {
 import { IconChevronDown } from '@tabler/icons-react';
 import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { DIAL_ICON_SIZE } from '@/constants/icon';
-import { DialGhostIconButton } from '@/components/IconButton/IconButtonWrappers';
 import { DialLabel } from '@/components/Label/Label';
+import { StaticIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -28,8 +28,8 @@ import {
   calendarDayTodayClassName,
   calendarFieldBaseClassName,
   calendarFieldDisabledClassName,
-  calendarFieldInvalidClassName,
   calendarFieldIconClassName,
+  calendarFieldInvalidClassName,
   calendarIcon,
   calendarModeDefaultPlaceholder,
   calendarNavIcons,
@@ -396,7 +396,7 @@ export const Calendar: FC<CalendarProps> = ({
         panel={(close) => (
           <>
             <div className="flex items-center justify-between">
-              <DialGhostIconButton
+              <StaticIconButton
                 aria-label="Previous month"
                 icon={calendarNavIcons.prev}
                 size={ElementSize.Small}
@@ -408,7 +408,7 @@ export const Calendar: FC<CalendarProps> = ({
               >
                 {formatMonthLabel(visibleMonth, locale)}
               </div>
-              <DialGhostIconButton
+              <StaticIconButton
                 aria-label="Next month"
                 icon={calendarNavIcons.next}
                 size={ElementSize.Small}
@@ -420,7 +420,7 @@ export const Calendar: FC<CalendarProps> = ({
               {weekdayShortLabels.map((weekday) => (
                 <div
                   key={weekday}
-                  className="dial-caption-text py-1 text-secondary"
+                  className="dial-tiny-text py-1 text-secondary"
                 >
                   {weekday}
                 </div>
