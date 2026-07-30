@@ -23,6 +23,7 @@ export { DialAccordion } from './components/Accordion/Accordion';
 export type { DialAccordionProps } from './components/Accordion/Accordion';
 export { DialIcon } from './components/Icon/Icon';
 export { DialNotification } from './components/Notification/Notification.tsx';
+export type { DialNotificationProps } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
 export { DialSpinner } from './components/Spinner/Spinner';
 export type { DialSpinnerProps } from './components/Spinner/Spinner';
@@ -47,6 +48,7 @@ export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { DialDraggableItem } from './components/DraggableItem/DraggableItem';
 export { DialFileIcon } from './components/FileIcon/FileIcon';
+export type { DialFileIconProps } from './components/FileIcon/FileIcon';
 export { DialFormItem } from './components/FormItem/FormItem';
 export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
 export { DialFileName } from './components/FileName/FileName';
@@ -57,10 +59,22 @@ export { DialSkeleton } from './components/Skeleton/Skeleton';
 
 // Grid
 export { DialGrid } from './components/Grid/Grid';
+export type { DialGridProps } from './components/Grid/Grid';
+export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
+export type {
+  DateValue as DialGridDateValue,
+  DialDateCellRendererProps,
+} from './components/Grid/renderers/DateCellRenderer';
+export {
+  DEFAULT_DATE_FORMAT_OPTIONS as DEFAULT_GRID_DATE_FORMAT_OPTIONS,
+  DEFAULT_LOCALE as DEFAULT_GRID_DATE_LOCALE,
+} from './components/Grid/renderers/constants';
+export { convertToDate as convertGridDateToDate } from './components/Grid/renderers/utils';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
 export { DialBreadcrumb } from './components/Breadcrumb/Breadcrumb';
+export type { DialBreadcrumbProps } from './components/Breadcrumb/Breadcrumb';
 export { DialBreadcrumbItem } from './components/Breadcrumb/BreadcrumbItem';
 
 // Buttons
@@ -95,6 +109,11 @@ export { DialTextarea } from './components/Textarea/Textarea';
 
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
+export type { DialTooltipProps } from './components/Tooltip/Tooltip';
+export { DialTooltipContainer } from './components/Tooltip/TooltipContainer';
+export { DialTooltipContent } from './components/Tooltip/TooltipContent';
+export { DialTooltipTrigger } from './components/Tooltip/TooltipTrigger';
+export type { DialTooltipContainerOptions } from './components/Tooltip/TooltipContext';
 
 // Switch
 export { DialSwitch } from './components/Switch/Switch';
@@ -118,6 +137,7 @@ export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 
 // Selects and related components
 export { DialSearch } from './components/Search/Search';
+export type { DialSearchProps } from './components/Search/Search';
 export { DialInputPopup } from './components/InputPopup/InputPopup';
 export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
 export { DialTagInput } from './components/TagInput/TagInput';
@@ -154,7 +174,7 @@ export {
   DropdownItemType,
 } from './types/dropdown';
 export { ElementSize } from './types/size';
-export { TabOrientation, TabView } from './types/tab';
+export { ScreenResolution, TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { SelectSize, SelectVariant } from './types/select';
@@ -174,7 +194,12 @@ export {
 
 // Hooks
 export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
-export { useEditableItem } from './hooks/use-editable-item';
+export {
+  EDITABLE_CONTAINER_ATTRIBUTE,
+  editableContainerProps,
+  useEditableItem,
+} from './hooks/use-editable-item';
+export type { UseEditableItemOptions } from './hooks/use-editable-item';
 
 // Context and Provider
 export { FileManagerProvider } from './components/FileManager/FileManagerProvider';
