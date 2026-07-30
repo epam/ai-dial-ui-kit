@@ -68,6 +68,42 @@ describe('resolveRef', () => {
     // Should not throw; returns something (schema or partial)
     expect(() => resolveRef(schema, circular)).not.toThrow();
   });
+
+  test('unwraps a single-$ref allOf while keeping sibling default', () => {
+    const schema: JsonSchemaDef = {
+      allOf: [{ $ref: '#/$defs/Foo' }],
+      default: { x: 'hello' },
+    };
+    const result = resolveRef(schema, rootSchema);
+    expect(result.type).toBe('object');
+    expect(result.properties?.x).toEqual({ type: 'string' });
+    expect(result.default).toEqual({ x: 'hello' });
+    expect(result.allOf).toBeUndefined();
+  });
+
+  test('merges properties and required from multiple allOf entries', () => {
+    const root: JsonSchema = {
+      $defs: {
+        A: {
+          type: 'object',
+          properties: { a: { type: 'string' } },
+          required: ['a'],
+        },
+        B: {
+          type: 'object',
+          properties: { b: { type: 'number' } },
+          required: ['b'],
+        },
+      },
+    };
+    const schema: JsonSchemaDef = {
+      allOf: [{ $ref: '#/$defs/A' }, { $ref: '#/$defs/B' }],
+    };
+    const result = resolveRef(schema, root);
+    expect(result.properties?.a).toEqual({ type: 'string' });
+    expect(result.properties?.b).toEqual({ type: 'number' });
+    expect(result.required).toEqual(['a', 'b']);
+  });
 });
 
 // ---------------------------------------------------------------------------

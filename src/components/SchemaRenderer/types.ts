@@ -46,6 +46,7 @@ export interface JsonSchemaDef {
   items?: JsonSchemaDef;
   oneOf?: JsonSchemaDef[];
   anyOf?: JsonSchemaDef[];
+  allOf?: JsonSchemaDef[];
   discriminator?: {
     propertyName: string;
     mapping: Record<string, string>;
