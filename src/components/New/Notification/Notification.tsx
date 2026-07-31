@@ -126,8 +126,10 @@ export const Notification: FC<NotificationProps> = ({
               resolvedTextClassName,
             )}
           >
-            <div className="dial-small-paragraph-semi-text">{title}</div>
-            <div className="dial-small-paragraph-text">{message}</div>
+            <div className="dial-small-paragraph-semi-text break-all">
+              {title}
+            </div>
+            <div className="dial-small-paragraph-text break-all">{message}</div>
           </div>
         ) : (
           <div className="dial-small-paragraph-text text-primary break-all">

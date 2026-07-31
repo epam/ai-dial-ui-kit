@@ -312,6 +312,7 @@ export {
   GhostIconButton,
   NeutralIconButton,
   PrimaryIconButton,
+  StaticIconButton,
 } from './components/New/IconButton/IconButtonWrappers';
 export { Button } from './components/New/Button/Button';
 export { IconButton } from './components/New/IconButton/IconButton';
