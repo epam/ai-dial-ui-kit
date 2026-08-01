@@ -78,6 +78,7 @@ export const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   const btnClassName = mergeClasses(
+    'dial-kit-base-button',
     variant && getButtonClassNames(variant, appearance),
     size === ElementSize.Small
       ? 'dial-tiny-semi-text'

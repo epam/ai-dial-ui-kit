@@ -67,9 +67,9 @@ export const IconButton: FC<IconButtonProps> = ({
   ...props
 }) => {
   const btnClassName = mergeClasses(
+    'dial-kit-base-button',
     variant && getButtonClassNames(variant, appearance),
     size === ElementSize.Small ? 'size-[24px]' : 'size-[40px]',
-    'dial-kit-icon-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
     className,
   );
 
