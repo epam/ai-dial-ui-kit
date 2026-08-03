@@ -119,6 +119,14 @@
 .dial-kit-primary-ghost-button {
   @apply dial-kit-base-button text-accent bg-transparent;
 
+  &.dial-kit-base-icon-button {
+    @apply text-secondary;
+    @media (hover: hover) {
+      &:hover {
+        @apply enabled:text-accent;
+      }
+    }
+  }
   @media (hover: hover) {
     &:hover {
       @apply bg-control-accent-alpha-hover;
