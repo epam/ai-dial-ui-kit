@@ -414,6 +414,8 @@ export interface DialFileManagerProps {
  * File Manager layout with a collapsible folders tree, breadcrumb/search header, and a data grid.
  * aliases: FileExplorer|FileBrowser
  *
+ * @deprecated Import `DialFileManager` from `@epam/ai-dial-react-file-manager` instead.
+ *
  * Features:
  * - Global `path` drives both the breadcrumb trail and the visible folder in the grid.
  * - The grid shows children of the current folder. When a search query is present, it scans all nested descendants.

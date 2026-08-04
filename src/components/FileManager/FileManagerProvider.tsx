@@ -66,6 +66,7 @@ export interface FileManagerProviderProps extends Omit<
  * - computed grid rows
  * - new actions
  *
+ * @deprecated Import `FileManagerProvider` from `@epam/ai-dial-react-file-manager` instead.
  */
 export const FileManagerProvider: FC<FileManagerProviderProps> = ({
   managerLabel,
