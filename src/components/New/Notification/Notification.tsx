@@ -122,17 +122,19 @@ export const Notification: FC<NotificationProps> = ({
         {title ? (
           <div
             className={mergeClasses(
-              'flex text-primary break-all',
+              'flex min-w-0 text-primary break-words',
               resolvedTextClassName,
             )}
           >
-            <div className="dial-small-paragraph-semi-text break-all">
+            <div className="dial-small-paragraph-semi-text min-w-0 break-words">
               {title}
             </div>
-            <div className="dial-small-paragraph-text break-all">{message}</div>
+            <div className="dial-small-paragraph-text min-w-0 break-words">
+              {message}
+            </div>
           </div>
         ) : (
-          <div className="dial-small-paragraph-text text-primary break-all">
+          <div className="dial-small-paragraph-text min-w-0 text-primary break-words">
             {message}
           </div>
         )}

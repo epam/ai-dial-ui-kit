@@ -1,7 +1,7 @@
 import {
   AllCommunityModule,
   type ColDef,
-  colorSchemeDark,
+  colorSchemeLight,
   type GridApi,
   type GridOptions,
   type GridReadyEvent,
@@ -27,9 +27,18 @@ import {
 } from 'react';
 
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
-import { DropdownTrigger } from '@/types/dropdown';
-import type { DropdownItem } from '@/models/dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import {
+  CHECKBOX_COL_DEF,
+  RADIO_BUTTON_COL_DEF,
+} from '@/components/Grid/renderers/constants.ts';
+import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
+import { DialRadioButton } from '@/components/RadioButton/RadioButton.tsx';
+import type { DropdownItem } from '@/models/dropdown';
+import { GridSelectionMode } from '@/models/selection-mode';
+import { DropdownTrigger } from '@/types/dropdown';
+import { IconZoomCancel } from '@tabler/icons-react';
+import { baseColumnComparator } from './comparators/base-column-comparator';
 import {
   checkboxClass,
   GRID_THEME_COLORS,
@@ -37,20 +46,11 @@ import {
   ROW_HEIGHT,
   SelectionEventSourceType,
 } from './constants';
-import { baseColumnComparator } from './comparators/base-column-comparator';
-import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
-import { IconZoomCancel } from '@tabler/icons-react';
-import { GridSelectionMode } from '@/models/selection-mode';
-import { DialRadioButton } from '@/components/RadioButton/RadioButton.tsx';
-import {
-  CHECKBOX_COL_DEF,
-  RADIO_BUTTON_COL_DEF,
-} from '@/components/Grid/renderers/constants.ts';
 
-import { debounceFn } from '@/utils/debounce.ts';
 import { ariaDescription } from '@/components/Checkbox/constants';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
+import { debounceFn } from '@/utils/debounce.ts';
 
 setupAgTestIds({ testIdAttribute: 'dataQA' });
 
@@ -607,7 +607,7 @@ export const DialGrid = <T extends object>({
       aria-busy={loading}
     >
       <div
-        className="ag-theme-balham-dark h-full overflow-x-auto"
+        className="h-full overflow-x-auto"
         role="table"
         aria-describedby={a11yId}
       >
@@ -617,7 +617,7 @@ export const DialGrid = <T extends object>({
           rowHeight={ROW_HEIGHT}
           cellSelection={false}
           theme={themeBalham
-            .withPart(colorSchemeDark)
+            .withPart(colorSchemeLight)
             .withParams({ ...themeParams })}
           autoSizeStrategy={{ type: 'fitGridWidth' }}
           columnDefs={computedColumnDefs}
