@@ -2,6 +2,9 @@ import type { TabModel } from '@/models/tab';
 import { DialFileManagerTabs } from '@/types/file-manager';
 import { useMemo, useState } from 'react';
 
+/**
+ * @deprecated Import `useDialFileManagerTabs` from `@epam/ai-dial-react-file-manager` instead.
+ */
 export const useDialFileManagerTabs = (
   tabLabels?: Record<DialFileManagerTabs, string>,
   initialTab: DialFileManagerTabs = DialFileManagerTabs.MyFiles,
