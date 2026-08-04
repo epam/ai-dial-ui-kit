@@ -14,7 +14,7 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     render(<ButtonDropdown title="Settings" items={items} />);
     const button = screen.getByRole('button', { name: 'Settings' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('dial-primary-solid-button');
+    expect(button).toHaveClass('dial-kit-primary-solid-button');
   });
 
   test('Should display chevron down icon initially', () => {
@@ -28,7 +28,7 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     );
     const button = screen.getByRole('button', { name: 'Menu' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('dial-neutral-outlined-button');
+    expect(button).toHaveClass('dial-kit-neutral-outlined-button');
   });
 
   test('Should toggle dropdown on button click', () => {
@@ -81,6 +81,6 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
       />,
     );
     const button = screen.getByRole('button', { name: 'Button Variant Test' });
-    expect(button).toHaveClass('dial-neutral-outlined-button');
+    expect(button).toHaveClass('dial-kit-neutral-outlined-button');
   });
 });
