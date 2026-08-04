@@ -320,3 +320,5 @@ export type { ButtonProps } from './components/New/Button/Button';
 export type { IconButtonProps } from './components/New/IconButton/IconButton';
 export { FabButton } from './components/FabButton/FabButton';
 export type { FabButtonProps } from './components/FabButton/FabButton';
+export { ButtonDropdown } from './components/New/ButtonDropdown/ButtonDropdown';
+export type { ButtonDropdownProps } from './components/New/ButtonDropdown/ButtonDropdown';
