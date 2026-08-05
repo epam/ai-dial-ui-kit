@@ -19,10 +19,7 @@ describe('Dial UI Kit :: DialInlineSelectTrigger', () => {
 
   test('Should have aria-haspopup="menu"', () => {
     render(<InlineSelectTrigger label="Option A" />);
-    expect(screen.getByRole('button')).toHaveAttribute(
-      'aria-haspopup',
-      'menu',
-    );
+    expect(screen.getByRole('button')).toHaveAttribute('aria-haspopup', 'menu');
   });
 
   test('Should call onClick when clicked', () => {
@@ -99,9 +96,7 @@ describe('Dial UI Kit :: DialInlineSelect', () => {
 
   test('Should respect controlled selectedKey and not update internally', () => {
     const onSelect = vi.fn();
-    render(
-      <InlineSelect items={items} selectedKey="a" onSelect={onSelect} />,
-    );
+    render(<InlineSelect items={items} selectedKey="a" onSelect={onSelect} />);
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByRole('menuitem', { name: 'Option B' }));
 
