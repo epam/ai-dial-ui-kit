@@ -313,6 +313,62 @@ describe('extractDefaults', () => {
     expect(result.type).toBe('custom');
     expect(result.variables).toEqual({});
   });
+
+  test('recursively resolves nested discriminator fields to their first variant', () => {
+    const root: JsonSchema = {
+      $defs: {
+        ChunkIndexConfig: {
+          type: 'object',
+          properties: {
+            type: { const: 'chunk', default: 'chunk', type: 'string' },
+            display_name: { type: 'string', title: 'Display Name' },
+            indexer: {
+              discriminator: {
+                propertyName: 'type',
+                mapping: {
+                  text_embeddings: '#/$defs/TextEmbeddingsIndexerConfig',
+                  bm25: '#/$defs/Bm25IndexerConfig',
+                },
+              },
+              oneOf: [
+                { $ref: '#/$defs/TextEmbeddingsIndexerConfig' },
+                { $ref: '#/$defs/Bm25IndexerConfig' },
+              ],
+            },
+          },
+        },
+        TextEmbeddingsIndexerConfig: {
+          type: 'object',
+          properties: {
+            type: {
+              const: 'text_embeddings',
+              default: 'text_embeddings',
+              type: 'string',
+            },
+            model: { type: 'string', default: 'text-embedding-3-small' },
+          },
+        },
+        Bm25IndexerConfig: {
+          type: 'object',
+          properties: {
+            type: { const: 'bm25', default: 'bm25', type: 'string' },
+          },
+        },
+      },
+    };
+
+    const result = extractDefaults(
+      { $ref: '#/$defs/ChunkIndexConfig' },
+      root,
+    ) as Record<string, unknown>;
+
+    expect(result.type).toBe('chunk');
+    expect(result.indexer).toEqual({
+      type: 'text_embeddings',
+      model: 'text-embedding-3-small',
+    });
+    expect(result.display_name).toBeUndefined();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -444,6 +500,39 @@ describe('validateRequired', () => {
     const errors = validateRequired({}, schema, {}, '');
     expect(errors).toHaveLength(1);
     expect(errors[0].path).toBe('visible');
+  });
+
+  test('recursively validates additionalProperties map entries', () => {
+    const schema: JsonSchemaDef = {
+      type: 'object',
+      additionalProperties: {
+        type: 'object',
+        required: ['display_name'],
+        properties: { display_name: { type: 'string', title: 'Display Name' } },
+      },
+    };
+    const errors = validateRequired(
+      { primary: {}, secondary: { display_name: 'Secondary' } },
+      schema,
+      {},
+      'indexes',
+    );
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('indexes.primary.display_name');
+  });
+
+  test('ignores additionalProperties when it is a boolean or missing', () => {
+    expect(
+      validateRequired({ a: 'x' }, { type: 'object' }, {}, ''),
+    ).toHaveLength(0);
+    expect(
+      validateRequired(
+        { a: 'x' },
+        { type: 'object', additionalProperties: true },
+        {},
+        '',
+      ),
+    ).toHaveLength(0);
   });
 });
 

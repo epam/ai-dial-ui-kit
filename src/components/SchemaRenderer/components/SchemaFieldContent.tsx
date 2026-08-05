@@ -99,6 +99,8 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
           schema={resolved}
           value={value}
           onChange={handleChange}
+          path={path}
+          level={level}
         />
       );
     } else if (hasNoFixedProps && resolved.additionalProperties !== false) {
