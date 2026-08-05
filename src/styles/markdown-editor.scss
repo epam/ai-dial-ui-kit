@@ -1,0 +1,41 @@
+/* 2.0 MarkdownEditor toolbar restyle, scoped over @uiw/react-md-editor's default CSS */
+
+.dial-kit-markdown-editor {
+  .w-md-editor-toolbar {
+    @apply gap-1 border-b border-primary bg-layer-0 px-3 py-2;
+  }
+
+  .w-md-editor-toolbar li > button {
+    @apply flex size-7 items-center justify-center rounded-md text-secondary transition-colors;
+  }
+
+  .w-md-editor-toolbar li > button:hover,
+  .w-md-editor-toolbar li > button:focus {
+    @apply bg-control-neutral-hover text-primary;
+  }
+
+  .w-md-editor-toolbar li > button:active {
+    @apply bg-control-neutral-active text-primary;
+  }
+
+  .w-md-editor-toolbar li.active > button {
+    @apply bg-accent-primary-alpha text-accent;
+  }
+
+  .w-md-editor-toolbar li > button:disabled,
+  .w-md-editor-toolbar li > button:disabled:hover {
+    @apply cursor-not-allowed bg-transparent text-control-disable;
+  }
+
+  .w-md-editor-toolbar-divider {
+    @apply bg-layer-1;
+  }
+
+  .w-md-editor-toolbar-child {
+    @apply rounded-md border border-primary bg-layer-0 shadow-md;
+  }
+
+  .w-md-editor-toolbar-child .w-md-editor-toolbar li > button {
+    @apply size-auto justify-start rounded-md px-2 py-1.5 text-left;
+  }
+}
