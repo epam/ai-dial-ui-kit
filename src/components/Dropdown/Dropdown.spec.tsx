@@ -765,6 +765,72 @@ describe('Dial UI Kit :: Dropdown', () => {
     );
   });
 
+  test.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('submenu opens with %s', async (_keyName, key) => {
+    const user = userEvent.setup();
+    render(
+      <DialDropdown
+        items={[
+          {
+            key: 'sub',
+            label: 'More',
+            children: [{ key: 'sub-1', label: 'Sub One' }],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+
+    const subTrigger = screen.getByRole('menuitem', { name: /more/i });
+    subTrigger.focus();
+    await user.keyboard(key);
+
+    expect(
+      await screen.findByRole('menuitem', { name: 'Sub One' }),
+    ).toBeInTheDocument();
+    expect(subTrigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Escape closes only submenu and returns focus to its trigger', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DialDropdown
+        items={[
+          {
+            key: 'sub',
+            label: 'More',
+            children: [{ key: 'sub-1', label: 'Sub One' }],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </DialDropdown>,
+    );
+    openByClick();
+
+    const rootTrigger = container.querySelector('[aria-haspopup="menu"]')!;
+    const subTrigger = screen.getByRole('menuitem', { name: /more/i });
+    subTrigger.focus();
+    await user.keyboard('{Enter}');
+    const child = await screen.findByRole('menuitem', { name: 'Sub One' });
+    child.focus();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('menuitem', { name: 'Sub One' }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(rootTrigger).toHaveAttribute('aria-expanded', 'true');
+    expect(subTrigger).toHaveAttribute('aria-expanded', 'false');
+    expect(subTrigger).toHaveFocus();
+  });
+
   test('disabled submenu trigger does not open submenu', async () => {
     const user = userEvent.setup();
     const itemsWithSub: DropdownItem[] = [
