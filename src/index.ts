@@ -322,3 +322,11 @@ export { FabButton } from './components/FabButton/FabButton';
 export type { FabButtonProps } from './components/FabButton/FabButton';
 export { ButtonDropdown } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { ButtonDropdownProps } from './components/New/ButtonDropdown/ButtonDropdown';
+export {
+  InlineSelect,
+  InlineSelectTrigger,
+} from './components/New/InlineSelect/InlineSelect';
+export type {
+  InlineSelectProps,
+  InlineSelectTriggerProps,
+} from './components/New/InlineSelect/InlineSelect';
