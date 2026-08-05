@@ -105,6 +105,25 @@ export function extractDefaults(
     return resolved.default;
   }
 
+  if (resolved.discriminator && resolved.oneOf) {
+    const firstType = Object.keys(resolved.discriminator.mapping)[0];
+    if (firstType) {
+      const variantSchema = resolveRef(
+        { $ref: resolved.discriminator.mapping[firstType] },
+        rootSchema,
+      );
+      const variantDefaults =
+        (extractDefaults(variantSchema, rootSchema, depth + 1) as Record<
+          string,
+          unknown
+        >) ?? {};
+      return {
+        ...variantDefaults,
+        [resolved.discriminator.propertyName]: firstType,
+      };
+    }
+  }
+
   if (isObjectType(resolved)) {
     if (resolved.properties) {
       const obj: Record<string, unknown> = {};
@@ -234,6 +253,26 @@ export function validateRequired(
         );
         errors.push(...childErrors);
       }
+    }
+  }
+
+  if (
+    obj &&
+    resolved.additionalProperties != null &&
+    resolved.additionalProperties !== false &&
+    typeof resolved.additionalProperties === 'object'
+  ) {
+    const entrySchema = resolved.additionalProperties as JsonSchemaDef;
+    for (const [key, entryValue] of Object.entries(obj)) {
+      const fieldPath = path ? `${path}.${key}` : key;
+      const childErrors = validateRequired(
+        entryValue,
+        entrySchema,
+        rootSchema,
+        fieldPath,
+        depth + 1,
+      );
+      errors.push(...childErrors);
     }
   }
 
