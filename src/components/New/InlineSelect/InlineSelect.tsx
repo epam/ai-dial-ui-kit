@@ -36,7 +36,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       type="button"
       aria-haspopup="menu"
       className={mergeClasses(
-        'dial-small-paragraph-text focus-visible:outline-focus focus-visible:outline- focus-visible:outline-1',
+        'dial-small-paragraph-text focus-visible:outline focus-visible:outline-focus',
         'flex items-center gap-1 rounded-full text-primary disabled:text-controls-disable',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,

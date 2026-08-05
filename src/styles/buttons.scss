@@ -9,7 +9,8 @@
 .dial-kit-base-button {
   @apply flex flex-row items-center justify-center;
   @apply rounded-full border border-solid border-transparent;
-  @apply disabled:cursor-not-allowed focus-visible:outline outline-offset-0;
+  @apply disabled:cursor-not-allowed outline-offset-0;
+  @apply focus-visible:outline focus-visible:outline-focus;
 }
 
 .dial-kit-solid-button-disable {
@@ -191,7 +192,7 @@
   }
 
   &:focus-visible {
-    @apply outline-none border-focus;
+    @apply outline outline-focus outline-offset-0;
   }
 }
 

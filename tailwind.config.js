@@ -198,6 +198,10 @@ export default {
     gradientColorStops: backgroundsColors,
 
     extend: {
+      // `outline` utility emits a 1px solid ring, `outline-focus` paints it
+      // with the focus token — see the focus-visible states in buttons.scss
+      outlineWidth: { DEFAULT: '1px' },
+      outlineColor: { ...borderColors, ...controlsBorderColors },
       screens: {
         mobile: { max: '768px' },
         desktop: { min: '769px' },

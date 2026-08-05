@@ -90,7 +90,11 @@ describe('Dial UI Kit :: DialButton', () => {
   test('Should apply focus-visible outline classes', () => {
     render(<DialButton label="Focus test" />);
     const button = screen.getByRole('button', { name: 'Focus test' });
-    expect(button).toHaveClass('focus-visible:outline', 'outline-offset-0');
+    expect(button).toHaveClass(
+      'focus-visible:outline',
+      'focus-visible:outline-focus',
+      'outline-offset-0',
+    );
   });
 
   test('Should hide label on mobile when hideTitleOnMobile is true', () => {
