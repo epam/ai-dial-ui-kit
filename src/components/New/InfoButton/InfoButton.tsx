@@ -1,14 +1,15 @@
 import { IconInfoCircle } from '@tabler/icons-react';
 import type { FC } from 'react';
 
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { ElementSize } from '@/types/size';
+import { mergeClasses } from '@/utils/merge-classes';
 import { IconButton } from '../IconButton/IconButton';
-import { mergeClasses } from '../../../utils/merge-classes';
 
 export interface InfoButtonProps {
   caption?: string;
   onClick?: () => void;
+  'aria-label'?: string;
 }
 /**
  * An Info button component with a customizable icon and accessible label.
@@ -20,31 +21,37 @@ export interface InfoButtonProps {
  * />
  * ```
  *
- * @param [caption] - Text to display inside the info button
+ * The button is icon-only, so it needs an accessible name. `caption` is used as
+ * the name because a tooltip alone never reaches assistive tech — pass a short
+ * `aria-label` when the caption is a long sentence.
+ *
+ * @param [caption] - Text shown in the tooltip, and the fallback accessible name
  * @param [onClick] - Click handler for the info button
+ * @param [aria-label] - Accessible name; takes precedence over `caption`
  */
-export const InfoButton: FC<InfoButtonProps> = ({ caption, onClick }) => {
+export const InfoButton: FC<InfoButtonProps> = ({
+  caption,
+  onClick,
+  'aria-label': ariaLabel,
+}) => {
   if (!caption) return null;
+
   const infoButtonClassName = mergeClasses(
-    'size-[20px] flex items-center justify-center text-secondary hover:text-control-blue-hover active:text-control-blue-active',
+    'text-secondary hover:text-control-blue-hover active:text-control-blue-active',
     'focus-visible:outline focus-visible:outline-focus-black',
   );
-  const button = (
+
+  return (
     <IconButton
-      aria-label={caption}
+      aria-label={ariaLabel}
       className={infoButtonClassName}
-      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SM} />}
+      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
       onClick={onClick}
+      size={ElementSize.Small}
+      tooltipProps={{
+        tooltip: caption,
+        triggerClassName: 'flex justify-center items-center',
+      }}
     />
-  );
-  return caption ? (
-    <DialTooltip
-      tooltip={caption}
-      triggerClassName="flex justify-center items-center"
-    >
-      {button}
-    </DialTooltip>
-  ) : (
-    button
   );
 };

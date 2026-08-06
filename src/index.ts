@@ -330,3 +330,7 @@ export type {
   InlineSelectProps,
   InlineSelectTriggerProps,
 } from './components/New/InlineSelect/InlineSelect';
+export { InfoButton } from './components/New/InfoButton/InfoButton';
+export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
+export type { LabelProps } from './components/New/Label/Label';
+export { Label } from './components/New/Label/Label';

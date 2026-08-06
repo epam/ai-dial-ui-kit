@@ -85,31 +85,21 @@ const backgroundsColorsToRemove = {
   'layer-2': 'var(--bg-layer-2, #EEF1F7)',
   'layer-3': 'var(--bg-layer-3, #FCFCFC)',
   'layer-4': 'var(--bg-layer-4, #D1DBEA)',
-  'layer-5': 'var(--bg-layer-5, #F5F7FA)',
-  'layer-6': 'var(--bg-layer-6, #F8FAFC)',
-  'layer-7': 'var(--bg-layer-7, #00000006)',
-  'layer-8': 'var(--bg-layer-8, #f0f2f5)',
   blackout: 'var(--bg-blackout, #0C101D4D)',
-  overlay: 'var(--bg-overlay, #FCFCFC80)',
   error: 'var(--bg-error, #F3D6D8)',
   warning: 'var(--bg-warning, #FAF0CF)',
   info: 'var(--bg-info, #D6E2F9)',
   success: 'var(--bg-success, #D9F0F1)',
   neutral: 'var(--bg-neutral, #FCFCFC)',
-  inverted: 'var(--bg-inverted, #161B2D)',
   'accent-primary-alpha': 'var(--bg-accent-primary-alpha, #7DA4FF26)',
   'accent-secondary-alpha': 'var(--bg-accent-secondary-alpha, #37BABC2E)',
   'accent-tertiary-alpha': 'var(--bg-accent-tertiary-alpha, #A972FF2E)',
   'accent-primary': 'var(--bg-accent-primary, #5C8DEA)',
   'accent-secondary': 'var(--bg-accent-secondary, #37BABC)',
-  'accent-tertiary': 'var(--bg-accent-tertiary, #A972FF)',
   'red-400': 'var(--bg-red-400, #F76464)',
-  'orange-400': 'var(--bg-orange-400, #D97C27)',
-  'orange-800': 'var(--bg-orange-800, #B25500)',
 
   // controls
 
-  // REMOVED: old names, need to remove
   'controls-accent-primary': 'var(--controls-bg-accent-primary, #124ACE)',
   'controls-accent-primary-hover':
     'var(--controls-bg-accent-primary-hover, #2656D9)',
@@ -127,7 +117,6 @@ const backgroundsColorsToRemove = {
   'controls-error': 'var(--controls-bg-error, #AE2F2F)',
   'controls-error-hover': 'var(--controls-bg-error-hover, #BF3939)',
   'controls-error-active': 'var(--controls-bg-error-active, #CC4545)',
-  'controls-error-alpha-hover': 'var(--controls-bg-alpha-hover, #F764642E)',
   'controls-error-alpha-active':
     'var(--controls-bg-error-alpha-active, #F764645C)',
 
@@ -141,25 +130,13 @@ const backgroundsColorsToRemove = {
     'var(--controls-bg-accent-success-alpha-hover, #37BABC2E)',
   'controls-accent-success-alpha-active':
     'var(--controls-bg-accent-success-alpha-active, #37BABC5C)',
-  'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
-  'controls-accent-hover': 'var(--controls-bg-accent-hover, #4878D2)',
-  'controls-accent-alpha': 'var(--controls-bg-accent-alpha, #5C8DEA2B)',
   'controls-enable-primary': 'var(--controls-enable-primary, #FCFCFC)',
-};
-
-const controlsBorderColors = {
-  'controls-focus': 'var(--controls-stroke-focus, #EEF1F7)',
 };
 
 const borderColorsToRemove = {
   'accent-primary': 'var(--stroke-accent-primary, #124ACE)',
-  'accent-primary-hover': 'var(--stroke-accent-primary-hover, #7DA4FF)',
   'accent-secondary': 'var(--stroke-accent-secondary, #007274)',
-  'accent-tertiary': 'var(--stroke-accent-tertiary, #7E39EC)',
-  'hover-tint': 'var(--stroke-hover-tint, #0000001f)',
-  hairline: 'var(--stroke-hairline, #0000000d)',
   'controls-accent': 'var(--controls-bg-accent, #5C8DEA)',
-  'accent-primary-hover': 'var(--stroke-accent-primary-hover, #4878d2)',
   hover: 'var(--stroke-hover, #EEF1F7)',
   'red-900': 'var(--red-900, #402027)',
 };
@@ -168,7 +145,6 @@ const textColorsToRemove = {
   'accent-primary': 'var(--text-accent-primary, #7DA4FF)',
   'accent-secondary': 'var(--text-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--text-accent-tertiary, #A972FF)',
-  'controls-disable': 'var(--controls-text-disable, #0C101D)',
   // Controls
   'controls-permanent': 'var(--controls-text-permanent, #FCFCFC)',
   'controls-accent-disable': 'var(--controls-text-accent-disable, #D1DBEA)',
@@ -180,8 +156,6 @@ const textColorsToRemove = {
     'var(--controls-text-accent-primary-hover, #3664E2)',
   'controls-accent-primary-active':
     'var(--controls-text-accent-primary-active, #7DA4FF)',
-  'controls-primary': 'var(--controls-primary, #FCFCFC)',
-  'controls-disable': 'var(--controls-text-disable, #575F73)',
 };
 
 /** @type {import('tailwindcss').Config} */
@@ -196,17 +170,14 @@ export default {
     borderColor: {
       ...borderColors,
       ...borderColorsToRemove,
-      ...controlsBorderColors,
     },
     stroke: {
       ...borderColors,
       ...borderColorsToRemove,
-      ...controlsBorderColors,
     },
     divideColor: {
       ...borderColors,
       ...borderColorsToRemove,
-      ...controlsBorderColors,
     },
     placeholderColor: placeholderColor,
     textColor: { ...textColors, ...textColorsToRemove, ...controlsTextColors },
@@ -219,7 +190,6 @@ export default {
       outlineColor: {
         ...borderColors,
         ...borderColorsToRemove,
-        ...controlsBorderColors,
       },
       screens: {
         mobile: { max: '768px' },

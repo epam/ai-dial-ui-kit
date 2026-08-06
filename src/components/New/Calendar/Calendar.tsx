@@ -21,7 +21,7 @@ import {
   useState,
 } from 'react';
 
-import { DialLabel } from '@/components/Label/Label';
+import { Label } from '@/components/New/Label/Label';
 import { StaticIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
@@ -335,7 +335,7 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <DialLabel id={labelId} label={label} htmlFor={fieldId} />}
+        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
         <TimeField
           id={fieldId}
           value={timeValue}
@@ -354,7 +354,7 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <DialLabel id={labelId} label={label} htmlFor={fieldId} />}
+        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
         <CalendarPopoverField
           id={fieldId}
           disabled={disabled}
@@ -412,7 +412,7 @@ export const Calendar: FC<CalendarProps> = ({
 
   return (
     <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-      {label && <DialLabel id={labelId} label={label} htmlFor={fieldId} />}
+      {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
       <CalendarPopoverField
         id={fieldId}
         disabled={disabled}

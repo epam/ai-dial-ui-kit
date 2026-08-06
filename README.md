@@ -183,6 +183,9 @@ explicit accessible name. Pass `aria-label`; if you pass only a string
 alone to convey the name — a tooltip's `aria-describedby` lands on a wrapper element
 rather than on the control, and tooltips are suppressed entirely on mobile.
 
+`InfoButton` names itself from `caption` for the same reason. Pass a short
+`aria-label` when the caption is a full sentence, so the name stays scannable.
+
 ### Target size (WCAG 2.5.5, Level AAA)
 
 Standard-size buttons render at 40×40 but expose a **44×44 pointer target** via the
@@ -199,7 +202,7 @@ not AAA:
 | `ElementSize.Small` variants | 24×24 | A 44px target overhangs 10px per side and would overlap adjacent controls in dense toolbars |
 | `ButtonAppearance.Link` | content | Exempt under the 2.5.5 *Inline* exception; expanding it would overlap surrounding copy |
 | `DialCloseButton` | icon-sized | Renders `h-auto w-auto`, so its target follows the caller's icon size |
-| `DialInfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
+| `DialInfoButton`, `InfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach
 AAA in a specific layout, or use the standard size instead.
