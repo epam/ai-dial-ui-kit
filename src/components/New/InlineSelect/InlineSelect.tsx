@@ -31,8 +31,8 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
 }) => {
   const className =
     size === ElementSize.Small
-      ? 'h-[24px] px-2'
-      : 'h-[40px] px-3 dial-kit-enhanced-target';
+      ? 'h-[32px]'
+      : 'h-[40px] dial-kit-enhanced-target';
 
   return (
     <button
@@ -43,7 +43,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       // so the selected value has to be folded in or it stops being announced.
       aria-label={ariaLabel ? `${ariaLabel} ${label}` : undefined}
       className={mergeClasses(
-        'dial-small-paragraph-text focus-visible:outline focus-visible:outline-focus-black',
+        'dial-small-paragraph-text px-3 focus-visible:outline focus-visible:outline-focus-black',
         'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-beta',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,

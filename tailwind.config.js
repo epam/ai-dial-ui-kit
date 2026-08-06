@@ -117,6 +117,7 @@ const borderColors = {
   info: 'var(--stroke-info, #124ACE)', // blue-500
   success: 'var(--stroke-success, #007274)', // green-800
   // controls
+  'hover-alpha': 'var(--stroke-hover-alpha, #2764D933)', // blue-500 alpha-20
   'focus-black': 'var(--stroke-focus-black, #161B2D)', // grey-1000
   'focus-blue': 'var(--stroke-focus-blue, #6785FB)', // blue-200
   'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
