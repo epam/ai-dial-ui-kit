@@ -6,7 +6,7 @@ import { Notification } from './Notification';
 describe('Dial UI Kit :: Notification', () => {
   test('Should render with message text', () => {
     render(<Notification message="Hello notification" />);
-    expect(screen.getByRole('alert', { name: '' })).toBeInTheDocument();
+    expect(screen.getByRole('status', { name: '' })).toBeInTheDocument();
     expect(screen.getByText('Hello notification')).toBeInTheDocument();
   });
 
@@ -27,13 +27,31 @@ describe('Dial UI Kit :: Notification', () => {
 
   test('Should apply custom className', () => {
     render(<Notification message="Styled" className="custom-alert-class" />);
-    const alert = screen.getByRole('alert');
+    const alert = screen.getByRole('status');
     expect(alert).toHaveClass('custom-alert-class');
   });
 
-  test('Should render role="alert" for accessibility', () => {
-    render(<Notification message="Accessible" />);
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+  test.each([
+    [NotificationVariant.Error, 'alert'],
+    [NotificationVariant.Warning, 'alert'],
+    [NotificationVariant.Info, 'status'],
+    [NotificationVariant.Success, 'status'],
+    [NotificationVariant.Loading, 'status'],
+  ])(
+    'Should expose the %s variant as a %s live region',
+    (variant, expectedRole) => {
+      render(<Notification variant={variant} message="Accessible" />);
+
+      expect(screen.getByRole(expectedRole)).toBeInTheDocument();
+    },
+  );
+
+  test('Should let the caller override the live-region role', () => {
+    // Static page content should not announce itself as an update.
+    render(<Notification message="Static" role="note" />);
+
+    expect(screen.getByRole('note')).toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
   test('Should pass mouse event to onClose handler', () => {
@@ -58,9 +76,20 @@ describe('Dial UI Kit :: Notification', () => {
   });
 
   test('Should render spinner for Loading variant', () => {
+    const { container } = render(
+      <Notification variant={NotificationVariant.Loading} message="Loading…" />,
+    );
+
+    expect(container.querySelector('.animate-spin-steps')).toBeInTheDocument();
+  });
+
+  test('Should not nest the spinner live region inside the notification', () => {
     render(
       <Notification variant={NotificationVariant.Loading} message="Loading…" />,
     );
-    expect(screen.getByRole('status')).toBeInTheDocument();
+
+    // DialSpinner brings its own role="status"; nested live regions announce
+    // their content twice.
+    expect(screen.getAllByRole('status')).toHaveLength(1);
   });
 });

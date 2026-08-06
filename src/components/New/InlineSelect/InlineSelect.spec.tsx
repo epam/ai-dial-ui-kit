@@ -111,4 +111,33 @@ describe('Dial UI Kit :: DialInlineSelect', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(screen.queryAllByRole('menuitem')).toHaveLength(0);
   });
+
+  test('Should reflect the open state on the trigger', () => {
+    render(<InlineSelect items={items} />);
+    const trigger = screen.getByRole('button');
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Should announce the field name alongside the selected value', () => {
+    render(<InlineSelect items={items} ariaLabel="Sort by" />);
+
+    // An aria-label replaces the button content, so the value has to be folded
+    // in or the control announces only "Sort by".
+    expect(screen.getByRole('button')).toHaveAccessibleName(
+      `Sort by ${String(items[0].label)}`,
+    );
+  });
+
+  test('Should fall back to the selected value when no field name is given', () => {
+    render(<InlineSelect items={items} />);
+
+    expect(screen.getByRole('button')).toHaveAccessibleName(
+      String(items[0].label),
+    );
+  });
 });

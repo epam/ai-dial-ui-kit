@@ -25,19 +25,26 @@ export interface InlineSelectTriggerProps extends ButtonHTMLAttributes<HTMLButto
 export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
   label,
   size,
-  isOpen,
+  isOpen = false,
+  'aria-label': ariaLabel,
   ...rest
 }) => {
   const className =
-    size === ElementSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3';
+    size === ElementSize.Small
+      ? 'h-[24px] px-2'
+      : 'h-[40px] px-3 dial-kit-enhanced-target';
 
   return (
     <button
       type="button"
       aria-haspopup="menu"
+      aria-expanded={isOpen}
+      // An `aria-label` replaces the button's content rather than adding to it,
+      // so the selected value has to be folded in or it stops being announced.
+      aria-label={ariaLabel ? `${ariaLabel} ${label}` : undefined}
       className={mergeClasses(
-        'dial-small-paragraph-text focus-visible:outline focus-visible:outline-focus',
-        'flex items-center gap-1 rounded-full text-primary disabled:text-controls-disable',
+        'dial-small-paragraph-text focus-visible:outline focus-visible:outline-focus-black',
+        'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-beta',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,
         rest.className,
@@ -73,6 +80,11 @@ export interface InlineSelectProps {
   matchReferenceWidth?: boolean;
   /** Additional CSS classes applied to the dropdown overlay. */
   listClassName?: string;
+  /**
+   * Accessible name for the trigger. Without it the control announces only its
+   * current value ("Option A"), never what is being selected.
+   */
+  ariaLabel?: string;
 }
 
 /**
@@ -96,6 +108,7 @@ export const InlineSelect: FC<InlineSelectProps> = ({
   placement = 'bottom-end',
   matchReferenceWidth = false,
   listClassName,
+  ariaLabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [uncontrolledSelectedKey, setUncontrolledSelectedKey] = useState(
@@ -134,6 +147,7 @@ export const InlineSelect: FC<InlineSelectProps> = ({
         size={size}
         isOpen={isOpen}
         disabled={disabled}
+        aria-label={ariaLabel}
       />
     </DialDropdown>
   );

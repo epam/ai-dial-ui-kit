@@ -12,6 +12,7 @@ import {
   type DialTooltipProps,
 } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { resolveAccessibleName } from '@/utils/accessible-name';
 import { ElementSize } from '@/types/size';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
@@ -50,6 +51,10 @@ export interface DialIconButtonProps extends DetailedHTMLProps<
  *
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
+ * The button is icon-only, so it needs an accessible name: pass `aria-label`,
+ * or a string `tooltipProps.tooltip`, which is used as the label when no
+ * `aria-label` is given.
+ *
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ElementSize.Standard] - Defines the size of the button
@@ -68,8 +73,10 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
 }) => {
   const btnClassName = mergeClasses(
     variant && getButtonClassNames(variant, appearance),
-    size === ElementSize.Small ? 'h-[24px] w-[24px]' : 'h-[40px] w-[40px]',
-    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0 disabled:text-controls-secondary-disable',
+    size === ElementSize.Small
+      ? 'h-[24px] w-[24px]'
+      : 'h-[40px] w-[40px] dial-kit-enhanced-target',
+    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus-black outline-offset-0 disabled:text-controls-secondary-disable',
     className,
   );
 
@@ -78,7 +85,10 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
       {...props}
       type={type}
       className={btnClassName}
-      aria-label={props['aria-label']}
+      aria-label={resolveAccessibleName(
+        props['aria-label'],
+        tooltipProps?.tooltip,
+      )}
     >
       {icon}
     </button>

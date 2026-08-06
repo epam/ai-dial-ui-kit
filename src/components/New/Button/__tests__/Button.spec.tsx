@@ -142,6 +142,70 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(screen.getByText('React Node Label')).toBeInTheDocument();
   });
 
+  test('Should name an icon-only button from the tooltip text', () => {
+    render(
+      <Button
+        iconBefore={<span>Icon</span>}
+        tooltipProps={{ tooltip: 'Save' }}
+      />,
+    );
+
+    expect(screen.getByRole('button')).toHaveAccessibleName('Save');
+  });
+
+  test('Should prefer aria-label over the tooltip text on an icon-only button', () => {
+    render(
+      <Button
+        iconBefore={<span>Icon</span>}
+        aria-label="Save draft"
+        tooltipProps={{ tooltip: 'Save' }}
+      />,
+    );
+
+    expect(screen.getByRole('button')).toHaveAccessibleName('Save draft');
+  });
+
+  test('Should not let the tooltip override a ReactNode label', () => {
+    render(
+      <Button
+        label={<span>Visible label</span>}
+        tooltipProps={{ tooltip: 'Tooltip text' }}
+      />,
+    );
+
+    const button = screen.getByRole('button');
+    expect(button).not.toHaveAttribute('aria-label');
+    expect(button).toHaveAccessibleName('Visible label');
+  });
+
+  test('Should enhance the pointer target at standard size', () => {
+    render(<Button label="Save" />);
+
+    expect(screen.getByRole('button')).toHaveClass('dial-kit-enhanced-target');
+  });
+
+  test('Should not enhance the pointer target at small size', () => {
+    render(<Button label="Save" size={ElementSize.Small} />);
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-enhanced-target',
+    );
+  });
+
+  test('Should not enhance the pointer target for link appearance', () => {
+    render(
+      <Button
+        label="Save"
+        variant={ButtonVariant.Primary}
+        appearance={ButtonAppearance.Link}
+      />,
+    );
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-enhanced-target',
+    );
+  });
+
   test('Should have correct button type', () => {
     render(<Button label="Type test" />);
     const button = screen.getByRole('button', { name: 'Type test' });

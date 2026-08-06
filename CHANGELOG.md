@@ -9,7 +9,23 @@ Versions match the git tags on the `development` branch.
 
 ## [Unreleased]
 
-_No unreleased changes yet._
+### Breaking Changes
+
+- **`Notification` (2.0) — live-region role now follows the variant** — the container was hardcoded to `role="alert"` for every variant. `role="alert"` is implicitly `aria-live="assertive"` and interrupts the screen reader, which is wrong for routine feedback and for section messages that are static page content. `error` and `warning` keep `role="alert"`; `info`, `success`, and `loading` now use the polite `role="status"`. Pass an explicit `role` to override.
+  Consumers asserting `getByRole('alert')` on a non-error notification must query `status` instead.
+
+### Fixed
+
+- **`Notification` (2.0)** — the variant icon is hidden from assistive tech. The `loading` spinner carries its own `role="status"`, so it previously formed a live region nested inside the notification's, announcing the content twice.
+- **`FolderPath`** — the `<nav>` landmark is named "Folder path" instead of inheriting `DialBreadcrumb`'s "Breadcrumb" default, which misdescribed a path with no navigable segments. Added an `ariaLabel` prop to override. Decorative folder and separator icons are now `aria-hidden`.
+- **`InlineSelect`** — the trigger now exposes `aria-expanded`, so screen readers can tell whether the dropdown is open, and accepts an `ariaLabel` prop naming the control (previously it announced only its current value).
+- **`ButtonDropdown` (2.0)** — the trigger button now carries `aria-haspopup` and `aria-expanded` itself. `DialDropdown` sets them on a non-focusable wrapper `<span>`, so assistive tech never reached them.
+- **`Calendar` (2.0)** — day cells are named with their full date (e.g. "Sunday, 15 March 2026") instead of a bare day number; the popover is a named dialog; and the field `label` is associated with the `div[role="button"]` trigger, which `<label htmlFor>` cannot label.
+- **`FabButton`, `DialIconButton`, `IconButton` (2.0)** — an icon-only button with only `tooltipProps` is now named from the tooltip text. A tooltip's `aria-describedby` lands on a wrapper element and is suppressed on mobile, so it never reached assistive tech.
+
+### Added
+
+- **Enhanced pointer targets** — standard-size buttons expose a 44×44 pointer target (WCAG 2.5.5, Level AAA) via the `dial-kit-enhanced-target` utility, with no change to their rendered size. See the [Accessibility section of the README](README.md#-accessibility) for the documented exceptions.
 
 ---
 

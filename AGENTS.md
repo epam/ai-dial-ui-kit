@@ -26,12 +26,13 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 
 ## When to add or update
 
-| Change                      | Also do                                            |
-| --------------------------- | -------------------------------------------------- |
-| New public component        | Storybook story, spec, entry in `src/index.ts`     |
-| Visual / interaction change | Update stories; adjust or add tests                |
-| Peer dependency surface     | Document in README or story descriptions if needed |
-| **Breaking change**         | CHANGELOG.md entry + migration guide (see below)   |
+| Change                      | Also do                                                                         |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| New public component        | Storybook story, spec, entry in `src/index.ts`                                  |
+| Visual / interaction change | Update stories; adjust or add tests                                             |
+| New interactive control     | Accessible name + target size (see [Accessibility rules](#accessibility-rules)) |
+| Peer dependency surface     | Document in README or story descriptions if needed                              |
+| **Breaking change**         | CHANGELOG.md entry + migration guide (see below)                                |
 
 ## Breaking changes — documentation required
 
@@ -117,6 +118,31 @@ Add a row to the table in `migration-guides/README.md`:
 - Use `mergeClasses` (from `src/utils/merge-classes`) for Tailwind class merging
 - No inline styles or hardcoded values (hex colors, font sizes, etc.)
 - SCSS mixins in `src/styles/` for reusable patterns
+
+## Accessibility rules
+
+Conformance target is **WCAG 2.2 Level AA**, plus **2.5.5 Target Size (Enhanced, AAA)** for interactive controls. See the [Accessibility section of the README](README.md#-accessibility) for the consumer-facing contract and the current exception list.
+
+### Accessible names
+
+- **Icon-only controls must be named.** Resolve the name with `resolveAccessibleName` (`src/utils/accessible-name`), passing candidates in priority order — it returns the first non-empty string. Do not hand-roll the fallback chain.
+- **Never rely on a tooltip alone to name a control.** `DialTooltip` puts its `aria-describedby` on a wrapper `<span>` rather than on the control, and `DialTooltipContent` renders nothing on mobile — so tooltip text never reaches assistive tech. Pass the tooltip to `resolveAccessibleName` as the last candidate.
+- **Only fall back to a tooltip when nothing else names the control.** As an `aria-label` it overrides the element's own content, so a component with a visible label must gate the fallback on that label being absent (see `New/Button`).
+- **Never write `aria-label={props['aria-label']}` after spreading `{...props}`** — the spread already applied it, so the line is a no-op. It has been introduced by copy-paste in four button components; delete it rather than propagating it.
+- **Decorative icons get `aria-hidden="true"`.** Tabler icons render a bare `<svg>` with no `role` and no title, so they need it explicitly.
+
+### Target size
+
+- Add `dial-kit-enhanced-target` to interactive controls that render at **40px or larger**. It grows the pointer target to 44×44 with a transparent pseudo-element and leaves the rendered size untouched, so it is never a visual or breaking change.
+- **Never apply it to `ElementSize.Small` (24px) controls** — the 10px-per-side overhang overlaps adjacent controls in dense toolbars.
+- **Never apply it to `ButtonAppearance.Link`** — exempt under 2.5.5's _Inline_ exception, and it would overlap surrounding copy.
+- A control that cannot conform goes in the README exception table with the reason. Do not silently leave it undocumented.
+
+### Testing a11y
+
+- Assert the **name**, not just the role: `getByRole('button', { name })` or `toHaveAccessibleName(...)`. A bare `getByRole('button')` passes on a button with no accessible name at all, so it cannot catch the defect it looks like it is testing.
+- A test whose assertion still passes with the feature prop removed is not testing that feature — e.g. asserting a button exists proves nothing about its tooltip. Drive the interaction (`user.hover`) and assert the result.
+- jsdom performs no layout, so target-size tests can only assert that `dial-kit-enhanced-target` is applied (and _not_ applied to small/link variants). Verify the geometry by compiling CSS (`npm run build:css`) and reading `dist/index.css`.
 
 ## Development Rules
 

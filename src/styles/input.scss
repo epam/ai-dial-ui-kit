@@ -10,7 +10,7 @@
   &:not(:disabled):focus,
   &:not(:disabled):active,
   &:not(:disabled):focus-within {
-    @apply border-focus;
+    @apply border-focus-black;
   }
 
   &:not(:placeholder-shown) {
