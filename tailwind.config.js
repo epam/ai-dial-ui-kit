@@ -2,7 +2,6 @@
 
 const backgroundsColors = {
   transparent: 'transparent',
-  // COLORS 2.0
   'layer-sunken': 'var(--bg-layer-sunken, #EEF1F7)', // grey-300
   'layer-base': 'var(--bg-layer-base, #F5F7FA)', // grey-200
   'layer-raised': 'var(--bg-layer-raised, #FCFCFC)', // grey-100
@@ -11,12 +10,76 @@ const backgroundsColors = {
   info: 'var(--bg-info, #E1EAF9)', // blue-100
   success: 'var(--bg-success, #DBF1EB)', // green-100
   backdrop: 'var(--bg-backdrop, #161B2D4D)', // grey-1000 with 70% opacity
+};
 
-  // shadow colors
-  'shadow-blue': 'var(--shadow-blue-500, #2764D924)',
-  'shadow-grey': 'var(--shadow-grey-1000, #161B2D08)',
+const controlsBgColors = {
+  'control-accent-alpha': 'var(--bg-control-accent-alpha, #2764D90F)', // blue-500 alpha-6
+  'control-accent-alpha-hover':
+    'var(--bg-control-accent-alpha-hover, #2764D924)', // blue-500 alpha-14
+  'control-accent-alpha-active':
+    'var(--bg-control-accent-alpha-active, #2764D933)', // blue-500 alpha-20
 
-  // REMOVED: old names, need to remove
+  'control-accent': 'var(--bg-control-accent, #124ACE)', // blue-500
+
+  'control-neutral': 'var(--bg-control-neutral, #FCFCFC)', // grey-100
+  'control-neutral-hover': 'var(--bg-control-neutral-hover, #E0E6F0)', // grey-500
+  'control-neutral-active': 'var(--bg-control-neutral-active, #D1DBEA)', // grey-600
+
+  'control-error': 'var(--bg-control-error, #AE2F2F)', // red-800
+  'control-error-hover': 'var(--bg-control-error-hover, #BF3939)', // red-700
+  'control-error-active': 'var(--bg-control-error-active, #CC4545)', // red-600
+  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F764641A)', // red-800 alpha-10
+  'control-error-alpha-active':
+    'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
+
+  'control-disable': 'var(--bg-control-disable, #848E9C)', // grey-700
+};
+
+const borderColors = {
+  transparent: 'transparent',
+  primary: 'var(--stroke-primary, #6B7280)', // grey-800
+  secondary: 'var(--stroke-secondary, #D1DBEA)', // grey-600
+  tertiary: 'var(--stroke-tertiary, #E0E6F0)', // grey-500
+  error: 'var(--stroke-error, #AE2F2F)', // red-800
+  warning: 'var(--stroke-warning, #EEC840)', // yellow-500
+  info: 'var(--stroke-info, #124ACE)', // blue-500
+  success: 'var(--stroke-success, #007274)', // green-800
+  // controls
+  'hover-alpha': 'var(--stroke-hover-alpha, #2764D933)', // blue-500 alpha-20
+  'focus-black': 'var(--stroke-focus-black, #161B2D)', // grey-1000
+  'focus-blue': 'var(--stroke-focus-blue, #6785FB)', // blue-200
+  'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
+  'error-alpha': 'var(--stroke-error-alpha, #AE2F2F73)', // red-800 alpha-45
+};
+
+const textColors = {
+  transparent: 'transparent',
+  primary: 'var(--text-primary, #161B2D)', // grey-1000
+  secondary: 'var(--text-secondary, #57647a)', // grey-800
+  tertiary: 'var(--text-tertiary, #848e9c)', // grey-700
+  accent: 'var(--text-accent, #1D4ED8)', // blue-500
+  error: 'var(--text-error, #AE2F2F)', // red-500
+  warning: 'var(--text-warning, #7F6300)', // yellow-700
+  'warning-icon': 'var(--text-warning-icon, #EEC840)', // yellow-500
+  info: 'var(--text-info, #1D4ED8)', // blue-500
+  success: 'var(--text-success, #007274)', // green-800
+};
+
+const placeholderColor = {
+  primary: 'var(--text-primary, #161B2D)', // grey-1000
+  secondary: 'var(--controls-text-secondary-disable, #575F73)',
+};
+
+const controlsTextColors = {
+  'control-permanent': 'var(--text-control-permanent, #FCFCFC)', // grey-100
+  'control-disable-alpha': 'var(--text-control-disable-alpha, #DCE0E8)', // grey-550
+  'control-disable-beta': 'var(--text-control-disable-beta, #848E9C)', // grey-700
+  'control-blue-hover': 'var(--text-control-blue-hover, #5976E9)', // blue-300
+  'control-blue-active': 'var(--text-control-blue-active, #6785FB)', // blue-200
+};
+
+// TODO: remove colors
+const backgroundsColorsToRemove = {
   'layer-0': 'var(--bg-layer-0, #FCFCFC)',
   'layer-1': 'var(--bg-layer-1, #E0E6F0)',
   'layer-2': 'var(--bg-layer-2, #EEF1F7)',
@@ -43,30 +106,8 @@ const backgroundsColors = {
   'red-400': 'var(--bg-red-400, #F76464)',
   'orange-400': 'var(--bg-orange-400, #D97C27)',
   'orange-800': 'var(--bg-orange-800, #B25500)',
-};
 
-const controlsBgColors = {
-  // COLORS 2.0
-  'control-accent-alpha': 'var(--bg-control-accent-alpha, #2764D90F)', // blue-500 alpha-6
-  'control-accent-alpha-hover':
-    'var(--bg-control-accent-alpha-hover, #2764D924)', // blue-500 alpha-14
-  'control-accent-alpha-active':
-    'var(--bg-control-accent-alpha-active, #2764D933)', // blue-500 alpha-20
-
-  'control-accent': 'var(--bg-control-accent, #124ACE)', // blue-500
-
-  'control-neutral': 'var(--bg-control-neutral, #FCFCFC)', // grey-100
-  'control-neutral-hover': 'var(--bg-control-neutral-hover, #E0E6F0)', // grey-500
-  'control-neutral-active': 'var(--bg-control-neutral-active, #D1DBEA)', // grey-600
-
-  'control-error': 'var(--bg-control-error, #AE2F2F)', // red-800
-  'control-error-hover': 'var(--bg-control-error-hover, #BF3939)', // red-700
-  'control-error-active': 'var(--bg-control-error-active, #CC4545)', // red-600
-  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F764641A)', // red-800 alpha-10
-  'control-error-alpha-active':
-    'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
-
-  'control-disable': 'var(--bg-control-disable, #848E9C)', // grey-700
+  // controls
 
   // REMOVED: old names, need to remove
   'controls-accent-primary': 'var(--controls-bg-accent-primary, #124ACE)',
@@ -106,24 +147,11 @@ const controlsBgColors = {
   'controls-enable-primary': 'var(--controls-enable-primary, #FCFCFC)',
 };
 
-const borderColors = {
-  // COLORS 2.0
-  transparent: 'transparent',
-  primary: 'var(--stroke-primary, #6B7280)', // grey-800
-  secondary: 'var(--stroke-secondary, #D1DBEA)', // grey-600
-  tertiary: 'var(--stroke-tertiary, #E0E6F0)', // grey-500
-  error: 'var(--stroke-error, #AE2F2F)', // red-800
-  warning: 'var(--stroke-warning, #EEC840)', // yellow-500
-  info: 'var(--stroke-info, #124ACE)', // blue-500
-  success: 'var(--stroke-success, #007274)', // green-800
-  // controls
-  'hover-alpha': 'var(--stroke-hover-alpha, #2764D933)', // blue-500 alpha-20
-  'focus-black': 'var(--stroke-focus-black, #161B2D)', // grey-1000
-  'focus-blue': 'var(--stroke-focus-blue, #6785FB)', // blue-200
-  'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
-  'error-alpha': 'var(--stroke-error-alpha, #AE2F2F73)', // red-800 alpha-45
+const controlsBorderColors = {
+  'controls-focus': 'var(--controls-stroke-focus, #EEF1F7)',
+};
 
-  // REMOVED: old names, need to remove
+const borderColorsToRemove = {
   'accent-primary': 'var(--stroke-accent-primary, #124ACE)',
   'accent-primary-hover': 'var(--stroke-accent-primary-hover, #7DA4FF)',
   'accent-secondary': 'var(--stroke-accent-secondary, #007274)',
@@ -136,44 +164,12 @@ const borderColors = {
   'red-900': 'var(--red-900, #402027)',
 };
 
-const controlsBorderColors = {
-  'controls-focus': 'var(--controls-stroke-focus, #EEF1F7)',
-};
-
-const textColors = {
-  // COLORS 2.0
-  transparent: 'transparent',
-  primary: 'var(--text-primary, #161B2D)', // grey-1000
-  secondary: 'var(--text-secondary, #57647a)', // grey-800
-  tertiary: 'var(--text-tertiary, #848e9c)', // grey-700
-  accent: 'var(--text-accent, #1D4ED8)', // blue-500
-  error: 'var(--text-error, #AE2F2F)', // red-500
-  warning: 'var(--text-warning, #7F6300)', // yellow-700
-  'warning-icon': 'var(--text-warning-icon, #EEC840)', // yellow-500
-  info: 'var(--text-info, #1D4ED8)', // blue-500
-  success: 'var(--text-success, #007274)', // green-800
-
-  // REMOVED: old names, need to remove
+const textColorsToRemove = {
   'accent-primary': 'var(--text-accent-primary, #7DA4FF)',
   'accent-secondary': 'var(--text-accent-secondary, #37BABC)',
   'accent-tertiary': 'var(--text-accent-tertiary, #A972FF)',
   'controls-disable': 'var(--controls-text-disable, #0C101D)',
-};
-
-const placeholderColor = {
-  primary: 'var(--text-primary, #161B2D)', // grey-1000
-  secondary: 'var(--controls-text-secondary-disable, #575F73)',
-};
-
-const controlsTextColors = {
-  // COLORS 2.0
-  'control-permanent': 'var(--text-control-permanent, #FCFCFC)', // grey-100
-  'control-disable-alpha': 'var(--text-control-disable-alpha, #DCE0E8)', // grey-550
-  'control-disable-beta': 'var(--text-control-disable-beta, #848E9C)', // grey-700
-  'control-blue-hover': 'var(--text-control-blue-hover, #5976E9)', // blue-300
-  'control-blue-active': 'var(--text-control-blue-active, #6785FB)', // blue-200
-
-  // REMOVED: old names, need to remove
+  // Controls
   'controls-permanent': 'var(--controls-text-permanent, #FCFCFC)',
   'controls-accent-disable': 'var(--controls-text-accent-disable, #D1DBEA)',
   'controls-primary-disable': 'var(--controls-text-primary-disable, #696E7C)',
@@ -192,19 +188,39 @@ const controlsTextColors = {
 export default {
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
   theme: {
-    backgroundColor: { ...backgroundsColors, ...controlsBgColors },
-    borderColor: { ...borderColors, ...controlsBorderColors },
-    stroke: { ...borderColors, ...controlsBorderColors },
-    divideColor: { ...borderColors, ...controlsBorderColors },
+    backgroundColor: {
+      ...backgroundsColors,
+      ...backgroundsColorsToRemove,
+      ...controlsBgColors,
+    },
+    borderColor: {
+      ...borderColors,
+      ...borderColorsToRemove,
+      ...controlsBorderColors,
+    },
+    stroke: {
+      ...borderColors,
+      ...borderColorsToRemove,
+      ...controlsBorderColors,
+    },
+    divideColor: {
+      ...borderColors,
+      ...borderColorsToRemove,
+      ...controlsBorderColors,
+    },
     placeholderColor: placeholderColor,
-    textColor: { ...textColors, ...controlsTextColors },
+    textColor: { ...textColors, ...textColorsToRemove, ...controlsTextColors },
     gradientColorStops: backgroundsColors,
 
     extend: {
       // `outline` utility emits a 1px solid ring, `outline-focus-black` paints it
       // with the focus token — see the focus-visible states in buttons.scss
       outlineWidth: { DEFAULT: '1px' },
-      outlineColor: { ...borderColors, ...controlsBorderColors },
+      outlineColor: {
+        ...borderColors,
+        ...borderColorsToRemove,
+        ...controlsBorderColors,
+      },
       screens: {
         mobile: { max: '768px' },
         desktop: { min: '769px' },
