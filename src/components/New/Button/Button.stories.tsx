@@ -97,6 +97,18 @@ const STATE_ROWS = [
   sizes: ElementSize[];
 }[];
 
+export const Focus: Story = {
+  parameters: {
+    pseudo: { focusVisible: true },
+    docs: {
+      description: {
+        story:
+          'Keyboard focus state — a 1px outline painted with the `--stroke-focus` token.',
+      },
+    },
+  },
+};
+
 export const AllVariants: Story = {
   render: () => {
     const columns: {

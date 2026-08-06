@@ -154,4 +154,61 @@ describe('Dial UI Kit :: SchemaObjectEditor', () => {
     expect(screen.queryByText('Hidden Field')).not.toBeInTheDocument();
     expect(screen.queryByText('Hidden Field 2')).not.toBeInTheDocument();
   });
+
+  test('orders properties by dial:propertyOrder when declared order disagrees', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        a: {
+          type: 'string',
+          title: 'A',
+          'dial:meta': { 'dial:propertyOrder': 1 },
+        },
+        b: {
+          type: 'string',
+          title: 'B',
+          'dial:meta': { 'dial:propertyOrder': 0 },
+        },
+      },
+    };
+    renderWithSchema(
+      <SchemaObjectEditor
+        schema={schema}
+        value={{ a: '', b: '' }}
+        onChange={vi.fn()}
+        path={[]}
+        level={0}
+      />,
+      schema,
+    );
+    const labels = screen.getAllByText(/^[AB]$/);
+    expect(labels.map((el) => el.textContent)).toEqual(['B', 'A']);
+  });
+
+  test('falls back to source order for properties without dial:propertyOrder', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        a: { type: 'string', title: 'A' },
+        b: {
+          type: 'string',
+          title: 'B',
+          'dial:meta': { 'dial:propertyOrder': 0 },
+        },
+        c: { type: 'string', title: 'C' },
+      },
+    };
+    renderWithSchema(
+      <SchemaObjectEditor
+        schema={schema}
+        value={{ a: '', b: '', c: '' }}
+        onChange={vi.fn()}
+        path={[]}
+        level={0}
+      />,
+      schema,
+    );
+    const labels = screen.getAllByText(/^[ABC]$/);
+    expect(labels.map((el) => el.textContent)).toEqual(['B', 'A', 'C']);
+  });
 });

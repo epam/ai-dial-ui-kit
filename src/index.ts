@@ -326,3 +326,11 @@ export type { MarkdownEditorProps } from './components/New/MarkdownEditor/Markdo
 // Markdown Editor (2.0) - lazy loader to avoid loading in SSR
 export const LazyMarkdownEditor = () =>
   import('./components/New/MarkdownEditor/MarkdownEditor');
+export {
+  InlineSelect,
+  InlineSelectTrigger,
+} from './components/New/InlineSelect/InlineSelect';
+export type {
+  InlineSelectProps,
+  InlineSelectTriggerProps,
+} from './components/New/InlineSelect/InlineSelect';

@@ -391,6 +391,112 @@ export const AdditionalProperties: Story = {
   },
 };
 
+const indexesSchema: JsonSchema = {
+  $defs: {
+    TextEmbeddingsIndexerConfig: {
+      title: 'Text Embeddings',
+      type: 'object',
+      properties: {
+        type: {
+          const: 'text_embeddings',
+          default: 'text_embeddings',
+          title: 'Type',
+          type: 'string',
+        },
+        model: {
+          title: 'Model',
+          type: 'string',
+          default: 'text-embedding-3-small',
+        },
+      },
+    },
+    Bm25IndexerConfig: {
+      title: 'BM25',
+      type: 'object',
+      properties: {
+        type: { const: 'bm25', default: 'bm25', title: 'Type', type: 'string' },
+        k1: { title: 'K1', type: 'number', default: 1.2 },
+      },
+    },
+    ChunkIndexConfig: {
+      title: 'Chunk Index',
+      type: 'object',
+      properties: {
+        type: {
+          const: 'chunk',
+          default: 'chunk',
+          title: 'Type',
+          type: 'string',
+        },
+        display_name: { title: 'Display Name', type: 'string' },
+        indexer: {
+          title: 'Indexer',
+          discriminator: {
+            propertyName: 'type',
+            mapping: {
+              text_embeddings: '#/$defs/TextEmbeddingsIndexerConfig',
+              bm25: '#/$defs/Bm25IndexerConfig',
+            },
+          },
+          oneOf: [
+            { $ref: '#/$defs/TextEmbeddingsIndexerConfig' },
+            { $ref: '#/$defs/Bm25IndexerConfig' },
+          ],
+        },
+        default_limit: { title: 'Default Limit', type: 'integer', default: 7 },
+      },
+      required: ['display_name', 'indexer'],
+    },
+  },
+  properties: {
+    indexes: {
+      title: 'Indexes',
+      description: 'Map of index name to its configuration.',
+      type: 'object',
+      additionalProperties: {
+        discriminator: {
+          propertyName: 'type',
+          mapping: { chunk: '#/$defs/ChunkIndexConfig' },
+        },
+        oneOf: [{ $ref: '#/$defs/ChunkIndexConfig' }],
+      },
+    },
+  },
+};
+
+export const AdditionalPropertiesWithDiscriminator: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Map values are discriminated objects with a nested discriminator field (indexer), ' +
+          'mirroring the real `indexes`/`ChunkIndexConfig` schema. Click "Add field" to add a ' +
+          "third entry and see it pre-seeded with the first variant's defaults at both levels " +
+          '(chunk → text_embeddings), rather than starting as a bare type-selector.',
+      },
+    },
+  },
+  args: {
+    schema: indexesSchema,
+    defaultValue: {
+      indexes: {
+        primary: {
+          type: 'chunk',
+          display_name: 'Primary Index',
+          indexer: { type: 'text_embeddings', model: 'text-embedding-3-small' },
+          default_limit: 7,
+        },
+        'keyword-search': {
+          type: 'chunk',
+          display_name: 'Keyword Search Index',
+          indexer: { type: 'bm25', k1: 1.2 },
+          default_limit: 20,
+        },
+      },
+    },
+  },
+};
+
 export const ArrayWithDiscriminator: Story = {
   args: {
     schema: arraySchema,
@@ -662,6 +768,41 @@ export const AllOfWithDefaults: Story = {
           'DATE_OF_BIRTH',
         ],
       },
+    },
+  },
+};
+
+const propertyOrderSchema: JsonSchema = {
+  properties: {
+    a: {
+      title: 'A',
+      type: 'string',
+      'dial:meta': { 'dial:propertyOrder': 2 },
+    },
+    b: {
+      title: 'B',
+      type: 'object',
+      'dial:meta': { 'dial:propertyOrder': 1 },
+      properties: {
+        d: { title: 'D', type: 'string' },
+        e: { title: 'E', type: 'string' },
+      },
+    },
+    c: {
+      title: 'C',
+      type: 'string',
+      'dial:meta': { 'dial:propertyOrder': 0 },
+    },
+  },
+};
+
+export const PropertyOrderHint: Story = {
+  args: {
+    schema: propertyOrderSchema,
+    defaultValue: {
+      a: 'Value A (dial:propertyOrder: 2)',
+      b: { d: 'Value D', e: 'Value E' },
+      c: 'Value C (dial:propertyOrder: 0)',
     },
   },
 };

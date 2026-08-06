@@ -28,7 +28,7 @@ export const calendarPopoverClassName =
   'z-[53] flex w-[248px] flex-col gap-4 rounded-lg bg-layer-raised px-3 py-4 shadow-md';
 
 export const calendarDayButtonBaseClassName =
-  'flex size-8 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-none focus-visible:outline';
+  'flex size-8 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-none focus-visible:outline focus-visible:outline-focus';
 
 export const calendarDaySelectedClassName =
   'bg-control-accent text-control-permanent';

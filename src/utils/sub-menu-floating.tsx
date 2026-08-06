@@ -5,6 +5,7 @@ import {
   flip,
   offset,
   shift,
+  useClick,
   useDismiss,
   useFloating,
   useHover,
@@ -46,11 +47,15 @@ export function useSubMenuFloating(
     move: false,
     delay: { open: 80, close: 80 },
   });
-  const dismiss = useDismiss(context, { bubbles: true });
+  const click = useClick(context, { enabled: !disabled });
+  const dismiss = useDismiss(context, {
+    bubbles: { escapeKey: false, outsidePress: true },
+  });
   const role = useRole(context, { role: ariaRole });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
+    click,
     dismiss,
     role,
   ]);
@@ -98,7 +103,7 @@ export const SubMenuPanel = ({
       context={context}
       modal={false}
       initialFocus={-1}
-      returnFocus={false}
+      returnFocus
     >
       <div
         ref={refs.setFloating}

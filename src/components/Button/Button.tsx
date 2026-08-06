@@ -91,7 +91,7 @@ export const DialButton: FC<DialButtonProps> = ({
     size === ElementSize.Small ? 'dial-tiny-semi-text' : 'dial-small-semi-text',
     appearance !== ButtonAppearance.Link &&
       (size === ElementSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3'),
-    'disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
+    'disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0',
     className,
   );
 

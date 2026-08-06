@@ -49,7 +49,7 @@ export const FabButton: FC<FabButtonProps> = ({
 }) => {
   const btnClassName = mergeClasses(
     'flex items-center justify-center rounded-full size-[40px]',
-    'dial-kit-fab-button disabled:cursor-not-allowed focus-visible:outline outline-offset-0',
+    'dial-kit-fab-button disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0',
     className,
   );
 

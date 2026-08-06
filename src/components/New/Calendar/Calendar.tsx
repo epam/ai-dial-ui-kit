@@ -115,6 +115,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
         tabIndex={disabled ? -1 : 0}
         className={mergeClasses(
           calendarFieldBaseClassName,
+          'focus-visible:outline focus-visible:outline-focus',
           invalid && calendarFieldInvalidClassName,
           disabled && calendarFieldDisabledClassName,
         )}
@@ -356,6 +357,7 @@ export const Calendar: FC<CalendarProps> = ({
                   aria-selected={option.value === weekdayValue}
                   className={mergeClasses(
                     'flex w-full items-center rounded-lg px-3 py-2 text-left dial-small-text text-primary hover:bg-accent-primary-alpha',
+                    'focus-visible:outline focus-visible:outline-focus',
                     option.value === weekdayValue && 'bg-accent-primary-alpha',
                   )}
                   onClick={() => {
