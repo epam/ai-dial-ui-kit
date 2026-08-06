@@ -52,10 +52,6 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
           iconAfter={icon}
           variant={variant || ButtonVariant.Primary}
           appearance={appearance || ButtonAppearance.Solid}
-          // `DialDropdown` puts these on the wrapper `<span>` it renders around
-          // the trigger. That span is neither focusable nor exposed as a
-          // control, so a screen reader on this button would otherwise never
-          // learn that it opens a menu, nor whether the menu is open.
           aria-haspopup="menu"
           aria-expanded={isDropdownOpen}
         />

@@ -1,14 +1,14 @@
 import { mergeClasses } from '@/utils/merge-classes';
 import type { FC } from 'react';
 
-export interface DialSpinnerProps {
+export interface SpinnerProps {
   size?: number;
   className?: string;
   fullWidth?: boolean;
   ariaLabel?: string;
 }
 
-export const DialSpinner: FC<DialSpinnerProps> = ({
+export const Spinner: FC<SpinnerProps> = ({
   size = 40,
   className,
   fullWidth = false,

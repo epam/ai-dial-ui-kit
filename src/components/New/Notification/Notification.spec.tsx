@@ -88,7 +88,7 @@ describe('Dial UI Kit :: Notification', () => {
       <Notification variant={NotificationVariant.Loading} message="Loading…" />,
     );
 
-    // DialSpinner brings its own role="status"; nested live regions announce
+    // Spinner brings its own role="status"; nested live regions announce
     // their content twice.
     expect(screen.getAllByRole('status')).toHaveLength(1);
   });

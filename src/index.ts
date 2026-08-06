@@ -25,8 +25,8 @@ export { DialIcon } from './components/Icon/Icon';
 export { DialNotification } from './components/Notification/Notification.tsx';
 export type { DialNotificationProps } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
-export { DialSpinner } from './components/Spinner/Spinner';
-export type { DialSpinnerProps } from './components/Spinner/Spinner';
+export { Spinner } from './components/Spinner/Spinner';
+export type { SpinnerProps } from './components/Spinner/Spinner';
 export {
   DialProgressBar,
   DialProgressBarSize,

@@ -11,6 +11,10 @@ Versions match the git tags on the `development` branch.
 
 ### Breaking Changes
 
+- **`DialSpinner` → `Spinner`** — the spinner is exported as `Spinner` (and `DialSpinnerProps` as `SpinnerProps`), dropping the `Dial*` prefix in line with the 2.0 component naming. Props and behaviour are unchanged; only the import name moves.
+  See [migration guide](migration-guides/0.13.0/spinner-dial-prefix-removal.md).
+- **Border token `focus` → `focus-black`** — the token behind `border-focus` / `outline-focus` was named for its state rather than its value, which left no room for the sibling `focus-blue` token. It is now `focus-black`, backed by `--stroke-focus-black` instead of `--stroke-focus`. The colour is unchanged (`#161B2D`).
+  See [migration guide](migration-guides/0.13.0/focus-border-token-rename.md).
 - **`Notification` (2.0) — live-region role now follows the variant** — the container was hardcoded to `role="alert"` for every variant. `role="alert"` is implicitly `aria-live="assertive"` and interrupts the screen reader, which is wrong for routine feedback and for section messages that are static page content. `error` and `warning` keep `role="alert"`; `info`, `success`, and `loading` now use the polite `role="status"`. Pass an explicit `role` to override.
   Consumers asserting `getByRole('alert')` on a non-error notification must query `status` instead.
 
