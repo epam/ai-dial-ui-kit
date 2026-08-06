@@ -772,6 +772,41 @@ export const AllOfWithDefaults: Story = {
   },
 };
 
+const propertyOrderSchema: JsonSchema = {
+  properties: {
+    a: {
+      title: 'A',
+      type: 'string',
+      'dial:meta': { 'dial:propertyOrder': 2 },
+    },
+    b: {
+      title: 'B',
+      type: 'object',
+      'dial:meta': { 'dial:propertyOrder': 1 },
+      properties: {
+        d: { title: 'D', type: 'string' },
+        e: { title: 'E', type: 'string' },
+      },
+    },
+    c: {
+      title: 'C',
+      type: 'string',
+      'dial:meta': { 'dial:propertyOrder': 0 },
+    },
+  },
+};
+
+export const PropertyOrderHint: Story = {
+  args: {
+    schema: propertyOrderSchema,
+    defaultValue: {
+      a: 'Value A (dial:propertyOrder: 2)',
+      b: { d: 'Value D', e: 'Value E' },
+      c: 'Value C (dial:propertyOrder: 0)',
+    },
+  },
+};
+
 export const CustomFieldRenderer: Story = {
   args: {
     schema: simpleSchema,
