@@ -48,7 +48,7 @@ describe('Dial UI Kit :: DialInlineSelectTrigger', () => {
 
   test('Should apply small size classes', () => {
     render(<InlineSelectTrigger label="Option A" size={ElementSize.Small} />);
-    expect(screen.getByRole('button')).toHaveClass('h-[24px]');
+    expect(screen.getByRole('button')).toHaveClass('h-[32px]');
   });
 
   test('Should apply default (standard) size classes', () => {

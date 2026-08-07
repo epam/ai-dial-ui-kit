@@ -20,7 +20,7 @@ describe('Dial UI Kit :: DialTextarea', () => {
     const input = res.getByDisplayValue('str');
     expect(input).toBeTruthy();
 
-    const hasError = input.className.includes('dial-input-error');
+    const hasError = input.className.includes('dial-kit-input-error');
     expect(hasError).toBeTruthy();
   });
 
