@@ -7,7 +7,7 @@ import { EditorThemes } from '@/types/editor';
 import { MarkdownEditor, type MarkdownEditorProps } from './MarkdownEditor';
 
 const meta = {
-  title: 'Components_2.0/MarkdownEditor',
+  title: 'Components_2_0/MarkdownEditor',
   component: MarkdownEditor,
   parameters: {
     layout: 'centered',

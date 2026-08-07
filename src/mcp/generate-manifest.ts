@@ -6,11 +6,13 @@ import {
   existsSync,
   readdirSync,
   mkdirSync,
+  statSync,
 } from 'fs';
 import { resolve, join, dirname, relative, extname } from 'path';
 import type {
   Manifest,
   ComponentEntry,
+  ComponentGeneration,
   TypeEntry,
   ExportEntry,
   PropEntry,
@@ -25,6 +27,13 @@ const ROOT = process.cwd();
 const SRC = join(ROOT, 'src');
 const DIST = join(ROOT, 'dist');
 const INDEX_PATH = join(SRC, 'index.ts');
+
+/** Every component below this path belongs to generation 2.0. */
+const GENERATION_2_0_DIR = 'components/New/';
+/** Storybook category that marks a 2.0 component living outside that path. */
+const GENERATION_2_0_CATEGORY = /^components[_ ]?2[._]0/i;
+const COMPONENTS_DIR = 'components/';
+const DIAL_PREFIX = 'Dial';
 
 // ─── AST helpers ──────────────────────────────────────────────────────────────
 
@@ -94,16 +103,33 @@ function extractJsDocInfo(node: ts.Node, sf: ts.SourceFile): JSDocInfo {
 
 // ─── file helpers ─────────────────────────────────────────────────────────────
 
+// Files are parsed repeatedly (barrel resolution, then metadata extraction), so
+// keep the ASTs for the lifetime of this one-shot build.
+const sourceFileCache = new Map<string, ts.SourceFile>();
+
 function readSf(filePath: string): ts.SourceFile {
+  const cached = sourceFileCache.get(filePath);
+  if (cached) return cached;
   const content = readFileSync(filePath, 'utf-8');
-  return ts.createSourceFile(filePath, content, ts.ScriptTarget.ES2022, true);
+  const sf = ts.createSourceFile(
+    filePath,
+    content,
+    ts.ScriptTarget.ES2022,
+    true,
+  );
+  sourceFileCache.set(filePath, sf);
+  return sf;
 }
 
 function resolveModulePath(spec: string, fromDir: string): string | null {
-  const base = resolve(fromDir, spec);
+  // `@/*` maps to `src/*` (tsconfig paths)
+  const base = spec.startsWith('@/')
+    ? resolve(SRC, spec.slice('@/'.length))
+    : resolve(fromDir, spec);
 
-  // Direct hit (spec already has extension)
-  if (existsSync(base)) return base;
+  // Direct hit (spec already has extension). A directory is not a hit — it must
+  // fall through to the `index` lookup below, or reading it throws EISDIR.
+  if (existsSync(base) && !statSync(base).isDirectory()) return base;
 
   // Try common extensions
   for (const ext of ['.tsx', '.ts', '.jsx', '.js']) {
@@ -122,6 +148,72 @@ function resolveModulePath(spec: string, fromDir: string): string | null {
 
 function relSrc(absPath: string): string {
   return relative(SRC, absPath).replace(/\\/g, '/');
+}
+
+/** How many `export { X } from './y'` hops to follow before giving up. */
+const MAX_REEXPORT_DEPTH = 3;
+
+function declaresName(sf: ts.SourceFile, name: string): boolean {
+  let found = false;
+
+  ts.forEachChild(sf, (node) => {
+    if (found) return;
+    if (ts.isVariableStatement(node)) {
+      found = node.declarationList.declarations.some(
+        (d) => ts.isIdentifier(d.name) && d.name.text === name,
+      );
+    } else if (
+      (ts.isFunctionDeclaration(node) ||
+        ts.isClassDeclaration(node) ||
+        ts.isEnumDeclaration(node) ||
+        ts.isInterfaceDeclaration(node) ||
+        ts.isTypeAliasDeclaration(node)) &&
+      node.name &&
+      ts.isIdentifier(node.name)
+    ) {
+      found = node.name.text === name;
+    }
+  });
+
+  return found;
+}
+
+/**
+ * Follow named re-export barrels (`export { X } from './y'`) to the file that
+ * actually declares `X` — `src/index.ts` reaches some components, such as the
+ * Analytics set, only through one. Returns `filePath` unchanged when there is
+ * nothing to follow. `export *` barrels are not traversed; none are on the
+ * public export path today.
+ */
+function resolveDeclaringFile(
+  name: string,
+  filePath: string,
+  depth = 0,
+): string {
+  if (depth >= MAX_REEXPORT_DEPTH) return filePath;
+
+  const sf = readSf(filePath);
+  if (declaresName(sf, name)) return filePath;
+
+  let next: string | null = null;
+  const dir = dirname(filePath);
+
+  ts.forEachChild(sf, (node) => {
+    if (next) return;
+    if (!ts.isExportDeclaration(node)) return;
+    if (!node.moduleSpecifier || !node.exportClause) return;
+    if (!ts.isNamedExports(node.exportClause)) return;
+    const reExports = node.exportClause.elements.some(
+      (el) => el.name.text === name,
+    );
+    if (!reExports) return;
+    next = resolveModulePath(
+      (node.moduleSpecifier as ts.StringLiteral).text,
+      dir,
+    );
+  });
+
+  return next ? resolveDeclaringFile(name, next, depth + 1) : filePath;
 }
 
 // ─── index.ts parsing ─────────────────────────────────────────────────────────
@@ -198,7 +290,14 @@ function parseIndexFile(): IndexExport[] {
       for (const element of node.exportClause.elements) {
         const isTypeOnly = node.isTypeOnly || element.isTypeOnly;
         const name = element.name.text;
-        records.push({ name, isTypeOnly, resolvedPath, section });
+        // `export { Local as Public }` — barrels re-export the local name
+        const localName = element.propertyName?.text ?? name;
+        records.push({
+          name,
+          isTypeOnly,
+          resolvedPath: resolveDeclaringFile(localName, resolvedPath),
+          section,
+        });
       }
       return;
     }
@@ -407,6 +506,50 @@ function appendLazyDescriptionNote(
   return description ? `${description}\n\n${lazyNote}` : lazyNote;
 }
 
+/**
+ * Whether an export from the `component` section of `index.ts` should be
+ * documented as a component. The `Dial` prefix is being dropped as components
+ * move to generation 2.0, so the prefix alone can no longer decide this —
+ * anything that is a PascalCase export out of `src/components/` qualifies.
+ * Enums and types that happen to live there are filtered out downstream, when
+ * `buildComponentEntry` finds no component declaration and returns `null`.
+ */
+function isComponentExport(rec: IndexExport): boolean {
+  if (rec.name.startsWith(DIAL_PREFIX)) return true;
+  if (!relSrc(rec.resolvedPath).startsWith(COMPONENTS_DIR)) return false;
+  return /^[A-Z][A-Za-z0-9]*$/.test(rec.name);
+}
+
+/**
+ * Generation 2.0 components mostly live under `components/New/`, but a few
+ * (`FabButton`, `Spinner`, `Skeleton`) sit next to the 1.0 set and declare
+ * themselves through their Storybook category instead.
+ */
+function resolveGeneration(
+  rec: IndexExport,
+  category: string,
+): ComponentGeneration {
+  if (relSrc(rec.resolvedPath).startsWith(GENERATION_2_0_DIR)) return '2.0';
+  return GENERATION_2_0_CATEGORY.test(category) ? '2.0' : '1.0';
+}
+
+/**
+ * Link each 1.0 component to its 2.0 replacement, matching `DialX` → `X`.
+ * Mutates the entries in place.
+ */
+function linkSupersededComponents(components: ComponentEntry[]): void {
+  const names2_0 = new Set(
+    components.filter((c) => c.generation === '2.0').map((c) => c.name),
+  );
+
+  for (const comp of components) {
+    if (comp.generation !== '1.0') continue;
+    if (!comp.name.startsWith(DIAL_PREFIX)) continue;
+    const replacement = comp.name.slice(DIAL_PREFIX.length);
+    if (names2_0.has(replacement)) comp.supersededBy = replacement;
+  }
+}
+
 function buildComponentEntry(rec: IndexExport): ComponentEntry | null {
   const sf = readSf(rec.resolvedPath);
   let description = '';
@@ -452,6 +595,7 @@ function buildComponentEntry(rec: IndexExport): ComponentEntry | null {
   const entry: ComponentEntry = {
     name: rec.name,
     category,
+    generation: resolveGeneration(rec, category),
     description: finalDescription,
     props,
     examples,
@@ -714,12 +858,16 @@ function buildManifest(): Manifest {
 
     try {
       if (rec.section === 'component' && !rec.isTypeOnly) {
-        // Only Dial* names are components; others (wrappers, providers) go to hooks
-        if (rec.name.startsWith('Dial')) {
-          const entry = buildComponentEntry(rec);
-          if (entry) components.push(entry);
+        const entry = isComponentExport(rec) ? buildComponentEntry(rec) : null;
+        if (entry) {
+          components.push(entry);
         } else {
-          hooks.push(buildExportEntry(rec));
+          // Enums and types are exported from this section too (e.g. the 2.0
+          // `NotificationVariant`); document them as types so components can
+          // reference them. Anything else is a wrapper, provider, or helper.
+          const typeEntry = buildTypeEntry(rec);
+          if (typeEntry) types.push(typeEntry);
+          else hooks.push(buildExportEntry(rec));
         }
       } else if (rec.section === 'types' || rec.section === 'models') {
         const entry = buildTypeEntry(rec);
@@ -739,6 +887,14 @@ function buildManifest(): Manifest {
       console.warn(`Skipping ${rec.name}: ${(e as Error).message}`);
     }
   }
+
+  linkSupersededComponents(components);
+
+  // Emit 2.0 first so anything reading the manifest directly — or taking an
+  // unranked slice of it — sees the current generation before the legacy one.
+  components.sort((a, b) =>
+    a.generation === b.generation ? 0 : a.generation === '2.0' ? -1 : 1,
+  );
 
   // Deduplicate types by name (enums may appear in both 'types' and 'models' sections)
   const seenTypes = new Set<string>();
@@ -780,8 +936,12 @@ function main(): void {
   console.log(
     `Manifest written to ${outPath.replace(ROOT, '.').replace(/\\/g, '/')}`,
   );
+  const count2_0 = manifest.components.filter(
+    (c) => c.generation === '2.0',
+  ).length;
   console.log(
-    `  ${manifest.components.length} components, ${manifest.types.length} types, ` +
+    `  ${manifest.components.length} components (${count2_0} generation 2.0), ` +
+      `${manifest.types.length} types, ` +
       `${manifest.hooks.length} hooks, ${manifest.utils.length} utils, ` +
       `${manifest.constants.length} constants${ext ? '' : ''}`,
   );

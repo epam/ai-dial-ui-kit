@@ -1,16 +1,17 @@
-import { IconChevronRight } from '@tabler/icons-react';
-import classNames from 'classnames';
 import { type FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { type SelectOption } from '@/models/select';
+import { mergeClasses } from '@/utils/merge-classes';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
 
 import {
   selectOptionBaseClassName,
   selectOptionCheckIcon,
   selectOptionDisabledClassName,
+  selectSubMenuCaretIcon,
+  selectSubMenuClassName,
   selectSubMenuGap,
 } from './constants';
 
@@ -49,7 +50,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
         aria-selected={!!parentSelected}
         aria-disabled={!!opt.disabled}
         disabled={opt.disabled}
-        className={classNames(
+        className={mergeClasses(
           selectOptionBaseClassName,
           opt.disabled && selectOptionDisabledClassName,
         )}
@@ -59,7 +60,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
           {opt.icon && <DialIcon icon={opt.icon} />}
           <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
         </div>
-        <IconChevronRight size={14} className="shrink-0" />
+        <span className="shrink-0">{selectSubMenuCaretIcon}</span>
       </button>
 
       {isOpen && (
@@ -69,7 +70,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
           context={context}
           getFloatingProps={getFloatingProps}
           role="listbox"
-          className="w-max py-1"
+          surfaceClassName={selectSubMenuClassName}
         >
           {opt.children!.map((child) => {
             const childSelected = selectedValues.includes(child.value);
@@ -81,7 +82,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
                 aria-selected={childSelected}
                 aria-disabled={!!child.disabled}
                 disabled={child.disabled}
-                className={classNames(
+                className={mergeClasses(
                   selectOptionBaseClassName,
                   child.disabled && selectOptionDisabledClassName,
                 )}

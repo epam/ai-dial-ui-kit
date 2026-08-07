@@ -5,7 +5,7 @@ import { CalendarMode } from '@/types/calendar';
 import { Calendar, type CalendarProps, type CalendarValue } from './Calendar';
 
 const meta = {
-  title: 'Components_2.0/Calendar',
+  title: 'Components_2_0/Calendar',
   component: Calendar,
   parameters: {
     layout: 'padded',

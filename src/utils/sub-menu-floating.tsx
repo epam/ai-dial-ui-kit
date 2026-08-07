@@ -80,10 +80,19 @@ interface SubMenuPanelProps {
   context: ReturnType<typeof useSubMenuFloating>['context'];
   getFloatingProps: ReturnType<typeof useSubMenuFloating>['getFloatingProps'];
   role: 'menu' | 'listbox';
+  /**
+   * Replaces the surface tokens — radius, background, shadow, inset. The 2.0
+   * menus pass their own overlay surface so a submenu is the same object as the
+   * panel that opened it; the 1.0 menus keep the default.
+   */
+  surfaceClassName?: string;
   /** Extra classes appended to the default floating container classes. */
   className?: string;
   children: ReactNode;
 }
+
+/** Surface of the 1.0 submenus, kept as the default for their sake. */
+const subMenuSurfaceClassName = 'rounded bg-layer-0 shadow';
 
 /**
  * Shared floating panel wrapper (FloatingPortal → FloatingFocusManager → container div).
@@ -95,6 +104,7 @@ export const SubMenuPanel = ({
   context,
   getFloatingProps,
   role,
+  surfaceClassName,
   className,
   children,
 }: SubMenuPanelProps) => (
@@ -110,7 +120,8 @@ export const SubMenuPanel = ({
         style={floatingStyles}
         role={role}
         className={classNames(
-          'z-[53] overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-none',
+          'z-[53] overflow-auto text-primary focus-visible:outline-none',
+          surfaceClassName ?? subMenuSurfaceClassName,
           className,
         )}
         {...getFloatingProps()}

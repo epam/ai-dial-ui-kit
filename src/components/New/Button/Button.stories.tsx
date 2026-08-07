@@ -15,7 +15,7 @@ import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 const meta = {
-  title: 'Components_2.0/Button',
+  title: 'Components_2_0/Button',
   component: Button,
   parameters: {
     layout: 'centered',

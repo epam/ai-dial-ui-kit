@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FolderPath, type FolderPathProps } from './FolderPath';
 
 const meta = {
-  title: 'Components_2.0/FolderPath',
+  title: 'Components_2_0/FolderPath',
   component: FolderPath,
   parameters: {
     layout: 'padded',

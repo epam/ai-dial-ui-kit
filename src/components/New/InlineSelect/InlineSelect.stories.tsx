@@ -6,7 +6,7 @@ import {
 } from './InlineSelect';
 
 const meta = {
-  title: 'Components_2.0/InlineSelectTrigger',
+  title: 'Components_2_0/InlineSelectTrigger',
   component: InlineSelectTrigger,
   parameters: {
     layout: 'centered',

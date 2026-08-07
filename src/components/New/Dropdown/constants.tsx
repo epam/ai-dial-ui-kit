@@ -1,27 +1,30 @@
 import { IconChevronRight } from '@tabler/icons-react';
-import classNames from 'classnames';
 
 import {
   overlayGap,
   overlayItemClassName,
   overlayItemDisabledClassName,
+  overlaySubMenuClassName,
   overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { mergeClasses } from '@/utils/merge-classes';
 
-export const dropdownBaseClassName = classNames(
+export const dropdownBaseClassName = mergeClasses(
   'flex items-center gap-2 align-middle',
   'h-auto px-0 bg-transparent border-0',
 );
 
-export const dropdownListBaseClassName = classNames(
+export const dropdownListBaseClassName = mergeClasses(
   'z-[53] focus-visible:outline-none',
   overlaySurfaceClassName,
 );
 
+export const dropdownSubMenuClassName = overlaySubMenuClassName;
+
 export const dropdownItemBaseClassName = overlayItemClassName;
 
-export const dropdownItemDisabledClassName = classNames(
+export const dropdownItemDisabledClassName = mergeClasses(
   overlayItemDisabledClassName,
   '!cursor-not-allowed',
 );

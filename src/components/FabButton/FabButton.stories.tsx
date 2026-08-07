@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FabButton, type FabButtonProps } from './FabButton';
 
 const meta = {
-  title: 'Components_2.0/FabButton',
+  title: 'Components_2_0/FabButton',
   component: FabButton,
   parameters: {
     layout: 'centered',

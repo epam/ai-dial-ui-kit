@@ -1,27 +1,24 @@
 import {
   IconCheck,
+  IconChevronRight,
   IconClipboardX,
   IconSearch,
   IconX,
 } from '@tabler/icons-react';
-
-import classNames from 'classnames';
 
 import {
   overlayGap,
   overlayItemClassName,
   overlayItemDisabledClassName,
   overlayItemSelectedClassName,
-  overlaySurfaceClassName,
+  overlaySubMenuClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { mergeClasses } from '@/utils/merge-classes';
 
-export const selectOverlayBaseClassName = classNames(
-  'w-full flex flex-col',
-  overlaySurfaceClassName,
-);
+export const selectOverlayBaseClassName = mergeClasses('w-full flex flex-col');
 
-export const selectOptionBaseClassName = classNames(
+export const selectOptionBaseClassName = mergeClasses(
   overlayItemClassName,
   // The row ends with a check icon, so label and mark sit at opposite edges.
   'justify-between',
@@ -44,6 +41,12 @@ export const selectListWidthClassName = '!max-w-[var(--reference-width)]';
 export const selectOptionDisabledClassName = overlayItemDisabledClassName;
 export const dropdownMenuMaxHeight = 352;
 export const selectSubMenuGap = overlayGap;
+export const selectSubMenuClassName = overlaySubMenuClassName;
+
+/** Marks an option that opens a nested list. Matches the dropdown's caret. */
+export const selectSubMenuCaretIcon = (
+  <IconChevronRight size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+);
 
 /** Classes for the chevron rendered as the field's trailing icon. */
 export const selectFieldIconClassName = 'text-secondary transition-transform';

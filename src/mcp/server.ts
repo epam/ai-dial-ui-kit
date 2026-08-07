@@ -128,13 +128,37 @@ const ENTITY_HINT = ENTITY_KINDS.join(' | ');
 
 // ─── format helpers ───────────────────────────────────────────────────────────
 
+/** Collapse a value into something safe to put in a markdown table cell. */
+function cell(value: string): string {
+  return value
+    .replace(/\s*\n\s*/g, ' ')
+    .replace(/\\/g, '\\\\')
+    .replace(/\|/g, '\\|')
+    .trim();
+}
+
+const GENERATION_GUIDANCE =
+  'Components come in two generations. Generation 2.0 is the current design system — prefer it. ' +
+  'Reach for a 1.0 component only when it has no 2.0 equivalent (no `supersededBy` on the entry).';
+
 function formatComponent(comp: ComponentEntry): string {
   const lines: string[] = [
     `# ${comp.name}`,
     `**Category:** ${comp.category}`,
+    `**Generation:** ${comp.generation}`,
     `**Source:** \`${comp.sourceFile}\``,
     '',
   ];
+
+  if (comp.supersededBy) {
+    lines.push(
+      `> ⚠️ **Generation 1.0 — superseded by \`${comp.supersededBy}\`.** ` +
+        `Use \`${comp.supersededBy}\` for new code and prefer it when touching existing code; ` +
+        `see getEntityDetails(entity: "component", name: "${comp.supersededBy}"). ` +
+        `Only stay on \`${comp.name}\` if the 2.0 replacement is missing something you need.`,
+      '',
+    );
+  }
 
   if (comp.description) lines.push(comp.description, '');
 
@@ -241,7 +265,15 @@ function collectTypeRefs(comp: ComponentEntry): string[] {
 
 // ─── search ───────────────────────────────────────────────────────────────────
 
+/**
+ * Score bonus that ranks a generation 2.0 component above its 1.0 counterpart.
+ * Applied only to entries that already matched, so it never pulls an unrelated
+ * 2.0 component into the results.
+ */
+const GENERATION_2_0_BONUS = 30;
+
 function searchComponents(query: string): ComponentEntry[] {
+  // The manifest is emitted 2.0-first, so an unranked slice already prefers it.
   if (!query.trim()) return manifest.components.slice(0, 20);
   const q = query.toLowerCase();
   return manifest.components
@@ -255,6 +287,7 @@ function searchComponents(query: string): ComponentEntry[] {
       else if (name.includes(q)) score = 60;
       if (desc.includes(q)) score += 20;
       if (cat.includes(q)) score += 10;
+      if (score > 0 && c.generation === '2.0') score += GENERATION_2_0_BONUS;
       return { c, score };
     })
     .filter((s) => s.score > 0)
@@ -314,7 +347,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'searchEntity',
       description:
-        'Search for UI kit entities (components, hooks, utils, types, constants) by name or description. Returns a summary list of matches. For typography and theming, returns the full reference content regardless of query.\n\nExamples:\n  searchEntity("component", "button") → lists Button-related components\n  searchEntity("hook", "click") → lists hooks with "click" in name/description\n  searchEntity("typography") → returns full typography CSS class reference',
+        'Search for UI kit entities (components, hooks, utils, types, constants) by name or description. Returns a summary list of matches. For typography and theming, returns the full reference content regardless of query.\n\nComponents come in two generations and results are ranked 2.0 first. Generation 2.0 is the current design system (exported without the `Dial` prefix — `Button`, `Input`, `Select`); generation 1.0 is the legacy set (`Dial*`). Default to the 2.0 component. A 1.0 result carries "Use instead" when a 2.0 replacement exists — pick that replacement. Only use a 1.0 component when it has no replacement listed.\n\nExamples:\n  searchEntity("component", "button") → Button (2.0) ranked above DialButton (1.0)\n  searchEntity("hook", "click") → lists hooks with "click" in name/description\n  searchEntity("typography") → returns full typography CSS class reference',
       inputSchema: {
         type: 'object',
         properties: {
@@ -336,7 +369,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'getEntityDetails',
       description:
-        'Get full documentation for a specific UI kit entity by exact name — props table, examples, signatures, type members, etc. For typography and theming, returns the full reference content (name not required).\n\nExamples:\n  getEntityDetails("component", "DialButton") → full props + examples\n  getEntityDetails("type", "ButtonSize") → enum values\n  getEntityDetails("hook", "useClickOutside") → signature + description\n  getEntityDetails("theming") → full CSS variable and token reference',
+        'Get full documentation for a specific UI kit entity by exact name — props table, examples, signatures, type members, etc. For typography and theming, returns the full reference content (name not required).\n\nA component response states its generation. If it reports being superseded by a 2.0 component, look that one up instead of using the 1.0 entry.\n\nExamples:\n  getEntityDetails("component", "Button") → full props + examples for the 2.0 button\n  getEntityDetails("component", "DialButton") → 1.0 button, flagged as superseded by `Button`\n  getEntityDetails("type", "ButtonSize") → enum values\n  getEntityDetails("hook", "useClickOutside") → signature + description\n  getEntityDetails("theming") → full CSS variable and token reference',
       inputSchema: {
         type: 'object',
         properties: {
@@ -416,8 +449,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
       const header = query
-        ? `Found ${results.length} component(s) matching "${query}":`
-        : `First ${results.length} components (pass a query to filter):`;
+        ? `Found ${results.length} component(s) matching "${query}", best match first:`
+        : `First ${results.length} components, generation 2.0 first (pass a query to filter):`;
       return {
         content: [
           {
@@ -425,10 +458,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             text: [
               header,
               '',
-              '| Name | Category | Description |',
-              '|------|----------|-------------|',
+              GENERATION_GUIDANCE,
+              '',
+              '| Name | Gen | Use instead | Category | Description |',
+              '|------|-----|-------------|----------|-------------|',
               ...results.map(
-                (c) => `| \`${c.name}\` | ${c.category} | ${c.description} |`,
+                (c) =>
+                  `| \`${c.name}\` | ${c.generation} | ` +
+                  `${c.supersededBy ? `\`${c.supersededBy}\`` : '—'} | ` +
+                  `${cell(c.category)} | ${cell(c.description)} |`,
               ),
               '',
               'Use getEntityDetails(entity: "component", name: "...") for full props and examples.',
@@ -463,7 +501,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               '| Name | Kind | Description |',
               '|------|------|-------------|',
               ...results.map(
-                (t) => `| \`${t.name}\` | ${t.kind} | ${t.description ?? ''} |`,
+                (t) =>
+                  `| \`${t.name}\` | ${t.kind} | ${cell(t.description ?? '')} |`,
               ),
               '',
               'Use getEntityDetails(entity: "type", name: "...") for members and values.',
@@ -503,7 +542,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             '',
             '| Name | Description |',
             '|------|-------------|',
-            ...results.map((e) => `| \`${e.name}\` | ${e.description ?? ''} |`),
+            ...results.map(
+              (e) => `| \`${e.name}\` | ${cell(e.description ?? '')} |`,
+            ),
             '',
             `Use getEntityDetails(entity: "${entity}", name: "...") for full signature.`,
           ].join('\n'),
@@ -531,8 +572,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (entity === 'component') {
       const comp = manifest.components.find((c) => c.name === entityName);
       if (!comp) {
+        // The `Dial` prefix is dropped in generation 2.0, so a miss is often
+        // just the other generation's spelling of the same component.
+        const alt = manifest.components.find(
+          (c) =>
+            c.name === `Dial${entityName}` ||
+            c.name === entityName.replace(/^Dial/, ''),
+        );
         throw new Error(
-          `Component "${entityName}" not found. Use searchEntity(entity: "component") to browse available components.`,
+          `Component "${entityName}" not found.${
+            alt
+              ? ` Did you mean "${alt.name}" (generation ${alt.generation})?`
+              : ''
+          } Use searchEntity(entity: "component") to browse available components.`,
         );
       }
       return { content: [{ type: 'text', text: formatComponent(comp) }] };

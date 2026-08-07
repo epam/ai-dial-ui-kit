@@ -7,7 +7,6 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import classNames from 'classnames';
 import { type FC, type MouseEvent, type ReactNode, useId, useRef } from 'react';
 
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
@@ -144,7 +143,7 @@ export const Popup: FC<PopupProps> = ({
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
-        className={classNames(popupOverlayBaseClassName, overlayClassName)}
+        className={mergeClasses(popupOverlayBaseClassName, overlayClassName)}
       >
         <FloatingFocusManager
           context={context}

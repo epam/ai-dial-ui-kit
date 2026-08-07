@@ -28,7 +28,7 @@ const longDropdownItems = [
 ];
 
 const meta: Meta<typeof ButtonDropdown> = {
-  title: 'Components_2.0/ButtonDropdown',
+  title: 'Components_2_0/ButtonDropdown',
   component: ButtonDropdown,
   parameters: {
     layout: 'padded',
