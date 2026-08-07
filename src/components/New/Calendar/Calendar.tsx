@@ -73,6 +73,7 @@ export interface CalendarProps {
   maxDate?: Date;
   /** BCP 47 locale tag used to localize month/weekday names and date formatting. */
   locale?: string;
+  fieldClassName?: string;
 }
 
 interface CalendarPopoverFieldProps {
@@ -81,6 +82,7 @@ interface CalendarPopoverFieldProps {
   invalid?: boolean;
   trigger: ReactNode;
   panelClassName?: string;
+  fieldClassName?: string;
   panel: (close: () => void) => ReactNode;
   /**
    * Ids naming the trigger. The trigger is a `div[role="button"]`, which is not
@@ -98,6 +100,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   invalid,
   trigger,
   panelClassName,
+  fieldClassName,
   panel,
   labelledBy,
   panelLabel,
@@ -137,6 +140,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
           'focus-visible:outline focus-visible:outline-focus-black',
           invalid && calendarFieldInvalidClassName,
           disabled && calendarFieldDisabledClassName,
+          fieldClassName,
         )}
         {...getReferenceProps()}
       >
@@ -254,6 +258,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [minDate] - Earliest selectable date (date/datetime modes)
  * @param [maxDate] - Latest selectable date (date/datetime modes)
  * @param [locale="en-GB"] - BCP 47 locale tag used to localize month/weekday names and date formatting
+ * @param [fieldClassName] - Additional classes merged onto the trigger field, overriding conflicting defaults
  */
 export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
@@ -268,6 +273,7 @@ export const Calendar: FC<CalendarProps> = ({
   minDate,
   maxDate,
   locale = DEFAULT_CALENDAR_LOCALE,
+  fieldClassName,
 }) => {
   const resolvedPlaceholder =
     placeholder ?? calendarModeDefaultPlaceholder[mode];
@@ -343,6 +349,7 @@ export const Calendar: FC<CalendarProps> = ({
           disabled={disabled}
           invalid={invalid}
           placeholder={resolvedPlaceholder}
+          className={fieldClassName}
         />
       </div>
     );
@@ -361,6 +368,7 @@ export const Calendar: FC<CalendarProps> = ({
           invalid={invalid}
           labelledBy={triggerLabelledBy}
           panelLabel={label ?? resolvedPlaceholder}
+          fieldClassName={fieldClassName}
           trigger={
             <>
               <span
@@ -419,6 +427,7 @@ export const Calendar: FC<CalendarProps> = ({
         invalid={invalid}
         labelledBy={triggerLabelledBy}
         panelLabel={label ?? resolvedPlaceholder}
+        fieldClassName={fieldClassName}
         trigger={
           <>
             <span

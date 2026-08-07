@@ -230,6 +230,63 @@ describe('Dial UI Kit :: Calendar', () => {
     });
   });
 
+  describe('fieldClassName override', () => {
+    test('Should merge fieldClassName onto the trigger in date mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByRole('button', { name: /select date/i })).toHaveClass(
+        'custom-field',
+      );
+    });
+
+    test('Should merge fieldClassName onto the trigger in datetime mode', () => {
+      render(
+        <Calendar mode={CalendarMode.DateTime} fieldClassName="custom-field" />,
+      );
+      expect(
+        screen.getByRole('button', { name: /select date and time/i }),
+      ).toHaveClass('custom-field');
+    });
+
+    test('Should merge fieldClassName onto the field in time mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Time} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByPlaceholderText('--:--')).toHaveClass('custom-field');
+    });
+
+    test('Should merge fieldClassName onto the trigger in weekday mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Weekday} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByRole('button', { name: /select day/i })).toHaveClass(
+        'custom-field',
+      );
+    });
+
+    test('Should not leak fieldClassName onto the popover panel', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          label="Start date"
+          fieldClassName="custom-field"
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /Start date/ }));
+
+      expect(screen.getByRole('dialog')).not.toHaveClass('custom-field');
+    });
+
+    test('Should override a conflicting default utility rather than duplicate it', () => {
+      render(<Calendar mode={CalendarMode.Date} fieldClassName="rounded" />);
+      const trigger = screen.getByRole('button', { name: /select date/i });
+      expect(trigger).toHaveClass('rounded');
+      expect(trigger).not.toHaveClass('rounded-xl');
+    });
+  });
+
   describe('localization', () => {
     test('Should localize month/weekday names and date formatting via the locale prop', () => {
       render(
