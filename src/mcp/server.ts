@@ -132,6 +132,7 @@ const ENTITY_HINT = ENTITY_KINDS.join(' | ');
 function cell(value: string): string {
   return value
     .replace(/\s*\n\s*/g, ' ')
+    .replace(/\\/g, '\\\\')
     .replace(/\|/g, '\\|')
     .trim();
 }
