@@ -10,6 +10,7 @@ import {
   detectAnyOfVariant,
   getItemTitle,
   getSchemaDefault,
+  sortByPropertyOrder,
 } from '@/components/SchemaRenderer/utils';
 import type {
   JsonSchema,
@@ -137,6 +138,49 @@ describe('isObjectType', () => {
     expect(
       isObjectType({ properties: { x: { type: 'string' } }, anyOf: [] }),
     ).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// sortByPropertyOrder
+// ---------------------------------------------------------------------------
+
+describe('sortByPropertyOrder', () => {
+  test('orders entries by dial:propertyOrder ascending', () => {
+    const entries: [string, JsonSchemaDef][] = [
+      ['a', { 'dial:meta': { 'dial:propertyOrder': 1 } }],
+      ['b', { 'dial:meta': { 'dial:propertyOrder': 0 } }],
+    ];
+    expect(sortByPropertyOrder(entries).map(([key]) => key)).toEqual([
+      'b',
+      'a',
+    ]);
+  });
+
+  test('falls back to source order for entries without the hint', () => {
+    const entries: [string, JsonSchemaDef][] = [
+      ['a', {}],
+      ['b', { 'dial:meta': { 'dial:propertyOrder': 0 } }],
+      ['c', {}],
+    ];
+    expect(sortByPropertyOrder(entries).map(([key]) => key)).toEqual([
+      'b',
+      'a',
+      'c',
+    ]);
+  });
+
+  test('is a no-op when no entries carry the hint', () => {
+    const entries: [string, JsonSchemaDef][] = [
+      ['a', {}],
+      ['b', {}],
+      ['c', {}],
+    ];
+    expect(sortByPropertyOrder(entries).map(([key]) => key)).toEqual([
+      'a',
+      'b',
+      'c',
+    ]);
   });
 });
 

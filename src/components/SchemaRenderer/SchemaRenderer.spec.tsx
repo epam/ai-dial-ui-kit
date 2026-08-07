@@ -337,4 +337,51 @@ describe('DialSchemaRenderer', () => {
       expect.objectContaining({ name: 'hi', extra: 'new' }),
     );
   });
+
+  it('orders top-level properties by dial:propertyOrder when declared order disagrees', () => {
+    const schema: JsonSchema = {
+      properties: {
+        a: {
+          title: 'A',
+          type: 'string',
+          'dial:meta': { 'dial:propertyOrder': 1 },
+        },
+        b: {
+          title: 'B',
+          type: 'string',
+          'dial:meta': { 'dial:propertyOrder': 0 },
+        },
+      },
+    };
+    render(
+      <DialSchemaRenderer
+        schema={schema}
+        variant={SchemaRendererVariant.Flat}
+      />,
+    );
+    const labels = screen.getAllByText(/^[AB]$/);
+    expect(labels.map((el) => el.textContent)).toEqual(['B', 'A']);
+  });
+
+  it('falls back to source order for top-level properties without dial:propertyOrder', () => {
+    const schema: JsonSchema = {
+      properties: {
+        a: { title: 'A', type: 'string' },
+        b: {
+          title: 'B',
+          type: 'string',
+          'dial:meta': { 'dial:propertyOrder': 0 },
+        },
+        c: { title: 'C', type: 'string' },
+      },
+    };
+    render(
+      <DialSchemaRenderer
+        schema={schema}
+        variant={SchemaRendererVariant.Flat}
+      />,
+    );
+    const labels = screen.getAllByText(/^[ABC]$/);
+    expect(labels.map((el) => el.textContent)).toEqual(['B', 'A', 'C']);
+  });
 });

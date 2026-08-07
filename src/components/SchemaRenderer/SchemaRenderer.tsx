@@ -12,6 +12,7 @@ import {
   validateRequired,
   toFieldLabel,
   isMissingRequiredValue,
+  sortByPropertyOrder,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from '@/components/SchemaRenderer/components/SchemaSection';
 import { SchemaFieldContent } from '@/components/SchemaRenderer/components/SchemaFieldContent';
@@ -103,8 +104,10 @@ export const DialSchemaRenderer: FC<DialSchemaRendererProps> = ({
     (key) => !schemaPropertyKeys.has(key),
   );
 
-  const topLevelProperties = Object.entries(schema.properties ?? {}).filter(
-    ([, propSchema]) => !resolveRef(propSchema, schema).isHidden,
+  const topLevelProperties = sortByPropertyOrder(
+    Object.entries(schema.properties ?? {}).filter(
+      ([, propSchema]) => !resolveRef(propSchema, schema).isHidden,
+    ),
   );
   const topLevelRequired = schema.required ?? [];
 
