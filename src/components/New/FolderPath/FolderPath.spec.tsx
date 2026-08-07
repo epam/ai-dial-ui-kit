@@ -51,4 +51,36 @@ describe('Dial UI Kit :: FolderPath', () => {
     );
     expect(screen.getByRole('navigation')).toHaveClass('custom-path');
   });
+
+  test('Should name the landmark as a folder path rather than a breadcrumb', () => {
+    render(<FolderPath segments={['Shared', 'Reports']} />);
+
+    // DialBreadcrumb defaults to "Breadcrumb", which misdescribes a path whose
+    // segments are all disabled and non-navigable.
+    expect(
+      screen.getByRole('navigation', { name: 'Folder path' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should let the caller rename the landmark', () => {
+    render(
+      <FolderPath segments={['Shared', 'Reports']} ariaLabel="Source folder" />,
+    );
+
+    expect(
+      screen.getByRole('navigation', { name: 'Source folder' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should hide decorative icons from assistive tech', () => {
+    const { container } = render(
+      <FolderPath segments={['Shared', 'Team', 'Reports']} />,
+    );
+
+    const icons = container.querySelectorAll('svg');
+    expect(icons.length).toBeGreaterThan(0);
+    icons.forEach((icon) =>
+      expect(icon).toHaveAttribute('aria-hidden', 'true'),
+    );
+  });
 });

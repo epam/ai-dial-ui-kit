@@ -25,8 +25,8 @@ export { DialIcon } from './components/Icon/Icon';
 export { DialNotification } from './components/Notification/Notification.tsx';
 export type { DialNotificationProps } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
-export { DialSpinner } from './components/Spinner/Spinner';
-export type { DialSpinnerProps } from './components/Spinner/Spinner';
+export { Spinner } from './components/Spinner/Spinner';
+export type { SpinnerProps } from './components/Spinner/Spinner';
 export {
   DialProgressBar,
   DialProgressBarSize,
@@ -55,7 +55,7 @@ export { DialFileName } from './components/FileName/FileName';
 export { DialFolderName } from './components/FolderName/FolderName';
 export { DialResizableContainer } from './components/ResizableContainer/ResizableContainer';
 export { DialConditionalResizableContainer } from './components/ResizableContainer/ConditionalResizableContainer';
-export { DialSkeleton } from './components/Skeleton/Skeleton';
+export { Skeleton } from './components/Skeleton/Skeleton';
 
 // Grid
 export { DialGrid } from './components/Grid/Grid';
@@ -160,6 +160,7 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree';
 
 // Types
+export { EditorThemes } from './types/editor';
 export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
@@ -183,9 +184,9 @@ export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
 export { ResizableContainerSide } from './types/resizable-container';
 export {
-  DialSkeletonVariant,
-  DialSkeletonAvatarSize,
-  DialSkeletonAvatarShape,
+  SkeletonVariant,
+  SkeletonAvatarSize,
+  SkeletonAvatarShape,
 } from './types/skeleton';
 
 // Hooks
@@ -334,3 +335,32 @@ export type {
   InlineSelectProps,
   InlineSelectTriggerProps,
 } from './components/New/InlineSelect/InlineSelect';
+export { Select } from './components/New/Select/Select';
+export type { SelectProps } from './components/New/Select/Select';
+export { MultiSelectTags } from './components/New/Select/MultiSelectTags';
+export type { MultiSelectTagsProps } from './components/New/Select/MultiSelectTags';
+export { InfoButton } from './components/New/InfoButton/InfoButton';
+export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
+export type { LabelProps } from './components/New/Label/Label';
+export { Label } from './components/New/Label/Label';
+export { Textarea } from './components/New/Textarea/Textarea';
+export { Input } from './components/New/Input/Input';
+export type { InputProps } from './components/New/Input/Input';
+export { PasswordInput } from './components/New/PasswordInput/PasswordInput';
+export type { PasswordInputProps } from './components/New/PasswordInput/PasswordInput';
+export { NumberInput } from './components/New/NumberInput/NumberInput';
+export type { NumberInputProps } from './components/New/NumberInput/NumberInput';
+export { Popup } from './components/New/Popup/Popup';
+export type { PopupProps } from './components/New/Popup/Popup';
+export { CloseButton } from './components/New/CloseButton/CloseButton';
+export type { CloseButtonProps } from './components/New/CloseButton/CloseButton';
+export { ConfirmationPopup } from './components/New/ConfirmationPopup/ConfirmationPopup';
+export type { ConfirmationPopupProps } from './components/New/ConfirmationPopup/ConfirmationPopup';
+export { Dropdown } from './components/New/Dropdown/Dropdown';
+export type { DropdownProps } from './components/New/Dropdown/Dropdown';
+export type { TextareaProps } from './components/New/Textarea/Textarea';
+export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
+export {
+  CaptionText,
+  ErrorText,
+} from './components/New/CaptionText/CaptionText';

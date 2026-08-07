@@ -91,7 +91,12 @@ export const DialButton: FC<DialButtonProps> = ({
     size === ElementSize.Small ? 'dial-tiny-semi-text' : 'dial-small-semi-text',
     appearance !== ButtonAppearance.Link &&
       (size === ElementSize.Small ? 'h-[24px] px-2' : 'h-[40px] px-3'),
-    'disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0',
+    // A link-appearance button sits inline in text, where WCAG 2.5.5 exempts
+    // it and an expanded target would overlap the surrounding copy.
+    size !== ElementSize.Small &&
+      appearance !== ButtonAppearance.Link &&
+      'dial-kit-enhanced-target',
+    'disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus-black outline-offset-0',
     className,
   );
 

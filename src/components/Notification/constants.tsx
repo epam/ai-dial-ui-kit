@@ -1,4 +1,4 @@
-import { DialSpinner } from '@/components/Spinner/Spinner';
+import { Spinner } from '@/components/Spinner/Spinner';
 import { NotificationVariant } from '@/types/notification';
 import {
   IconAlertCircleFilled,
@@ -16,7 +16,7 @@ export const variantIcons = (props: {
   error: <IconAlertCircleFilled size={props.size} />,
   warning: <IconAlertTriangleFilled size={props.size} />,
   success: <IconCircleCheckFilled size={props.size} />,
-  loading: <DialSpinner size={props.size} />,
+  loading: <Spinner size={props.size} />,
 });
 
 export const notificationVariantClassNameMap: Record<

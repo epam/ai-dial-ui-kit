@@ -28,6 +28,7 @@ const meta = {
     label: { control: { type: 'text' } },
     placeholder: { control: { type: 'text' } },
     locale: { control: { type: 'text' } },
+    fieldClassName: { control: { type: 'text' } },
   },
   args: {
     label: 'Date',
@@ -108,5 +109,13 @@ export const Localized: Story = {
     value: new Date(2026, 2, 11),
     locale: 'de-DE',
     label: 'Datum',
+  },
+};
+
+export const CustomFieldStyle: Story = {
+  name: 'Custom field style',
+  args: {
+    mode: CalendarMode.Date,
+    fieldClassName: 'rounded border-primary h-[40px]',
   },
 };

@@ -1,23 +1,23 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { DialSkeleton } from './Skeleton';
+import { Skeleton } from './Skeleton';
 import {
-  DialSkeletonVariant,
-  DialSkeletonAvatarSize,
-  DialSkeletonAvatarShape,
+  SkeletonVariant,
+  SkeletonAvatarSize,
+  SkeletonAvatarShape,
 } from '@/types/skeleton';
 
-describe('Dial UI Kit :: DialSkeleton', () => {
+describe('Dial UI Kit :: Skeleton', () => {
   it('renders default skeleton', () => {
-    const { container } = render(<DialSkeleton />);
+    const { container } = render(<Skeleton />);
     expect(container.firstChild).toBeInTheDocument();
   });
 
   it('shows children when loading is false', () => {
     render(
-      <DialSkeleton loading={false}>
+      <Skeleton loading={false}>
         <div role="contentinfo">Loaded Content</div>
-      </DialSkeleton>,
+      </Skeleton>,
     );
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
     expect(screen.getByText('Loaded Content')).toBeInTheDocument();
@@ -25,22 +25,22 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('shows skeleton when loading is true', () => {
     render(
-      <DialSkeleton loading={true}>
+      <Skeleton loading={true}>
         <div role="contentinfo">Loaded Content</div>
-      </DialSkeleton>,
+      </Skeleton>,
     );
     expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument();
   });
 
   it('renders with avatar', () => {
-    const { container } = render(<DialSkeleton avatar />);
+    const { container } = render(<Skeleton avatar />);
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toBeInTheDocument();
   });
 
   it('renders with square avatar', () => {
     const { container } = render(
-      <DialSkeleton avatar={{ shape: DialSkeletonAvatarShape.Square }} />,
+      <Skeleton avatar={{ shape: SkeletonAvatarShape.Square }} />,
     );
     const avatarElement = container.querySelector('.rounded');
     expect(avatarElement).toBeInTheDocument();
@@ -48,14 +48,14 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders with circle avatar', () => {
     const { container } = render(
-      <DialSkeleton avatar={{ shape: DialSkeletonAvatarShape.Circle }} />,
+      <Skeleton avatar={{ shape: SkeletonAvatarShape.Circle }} />,
     );
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toBeInTheDocument();
   });
 
   it('renders without title', () => {
-    const { container } = render(<DialSkeleton showTitle={false} />);
+    const { container } = render(<Skeleton showTitle={false} />);
     const mainContainer = container.querySelector('.flex.gap-4');
     expect(mainContainer).toBeInTheDocument();
 
@@ -67,7 +67,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders with custom paragraph rows', () => {
     const { container } = render(
-      <DialSkeleton paragraph={{ rows: 5 }} showTitle={false} />,
+      <Skeleton paragraph={{ rows: 5 }} showTitle={false} />,
     );
     const paragraphContainer = container.querySelector('.flex.flex-col.gap-3');
     const rows = paragraphContainer?.querySelectorAll('.h-4');
@@ -75,24 +75,20 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   });
 
   it('applies animation class when active', () => {
-    const { container } = render(<DialSkeleton active />);
+    const { container } = render(<Skeleton active />);
     const animatedElement = container.querySelector('.animate-pulse');
     expect(animatedElement).toBeInTheDocument();
   });
 
   it('does not apply animation class when not active', () => {
-    const { container } = render(<DialSkeleton active={false} />);
+    const { container } = render(<Skeleton active={false} />);
     const animatedElement = container.querySelector('.animate-pulse');
     expect(animatedElement).not.toBeInTheDocument();
   });
 
   it('renders text variant with custom dimensions', () => {
     const { container } = render(
-      <DialSkeleton
-        variant={DialSkeletonVariant.Text}
-        width="200px"
-        height="20px"
-      />,
+      <Skeleton variant={SkeletonVariant.Text} width="200px" height="20px" />,
     );
     const element = container.firstChild as HTMLElement;
     expect(element.style.width).toBe('200px');
@@ -101,11 +97,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders circular variant', () => {
     const { container } = render(
-      <DialSkeleton
-        variant={DialSkeletonVariant.Circular}
-        width={64}
-        height={64}
-      />,
+      <Skeleton variant={SkeletonVariant.Circular} width={64} height={64} />,
     );
     const element = container.firstChild as HTMLElement;
     expect(element).toHaveClass('rounded-full');
@@ -115,8 +107,8 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders rectangular variant', () => {
     const { container } = render(
-      <DialSkeleton
-        variant={DialSkeletonVariant.Rectangular}
+      <Skeleton
+        variant={SkeletonVariant.Rectangular}
         width="300px"
         height="200px"
       />,
@@ -129,19 +121,19 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders default variant', () => {
     const { container } = render(
-      <DialSkeleton variant={DialSkeletonVariant.Default} />,
+      <Skeleton variant={SkeletonVariant.Default} />,
     );
     expect(container.querySelector('.flex.gap-4')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
-    const { container } = render(<DialSkeleton className="custom-class" />);
+    const { container } = render(<Skeleton className="custom-class" />);
     expect(container.firstChild).toHaveClass('custom-class');
   });
 
   it('renders with large avatar size', () => {
     const { container } = render(
-      <DialSkeleton avatar={{ size: DialSkeletonAvatarSize.Large }} />,
+      <Skeleton avatar={{ size: SkeletonAvatarSize.Large }} />,
     );
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toHaveStyle({ width: '64px', height: '64px' });
@@ -149,7 +141,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders with small avatar size', () => {
     const { container } = render(
-      <DialSkeleton avatar={{ size: DialSkeletonAvatarSize.Small }} />,
+      <Skeleton avatar={{ size: SkeletonAvatarSize.Small }} />,
     );
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toHaveStyle({ width: '32px', height: '32px' });
@@ -157,21 +149,21 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders with default avatar size', () => {
     const { container } = render(
-      <DialSkeleton avatar={{ size: DialSkeletonAvatarSize.Default }} />,
+      <Skeleton avatar={{ size: SkeletonAvatarSize.Default }} />,
     );
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toHaveStyle({ width: '40px', height: '40px' });
   });
 
   it('renders with numeric avatar size', () => {
-    const { container } = render(<DialSkeleton avatar={{ size: 50 }} />);
+    const { container } = render(<Skeleton avatar={{ size: 50 }} />);
     const avatarElement = container.querySelector('.rounded-full');
     expect(avatarElement).toHaveStyle({ width: '50px', height: '50px' });
   });
 
   it('renders with custom title width', () => {
     const { container } = render(
-      <DialSkeleton showTitle={{ width: '50%' }} paragraph={false} />,
+      <Skeleton showTitle={{ width: '50%' }} paragraph={false} />,
     );
     const contentContainer = container.querySelector(
       '.flex-1.flex.flex-col.gap-3',
@@ -182,7 +174,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders with custom paragraph widths array', () => {
     const { container } = render(
-      <DialSkeleton
+      <Skeleton
         paragraph={{ rows: 3, width: ['100%', '80%', '60%'] }}
         showTitle={false}
       />,
@@ -196,7 +188,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   });
 
   it('renders without paragraph', () => {
-    const { container } = render(<DialSkeleton paragraph={false} />);
+    const { container } = render(<Skeleton paragraph={false} />);
     const contentContainer = container.querySelector(
       '.flex-1.flex.flex-col.gap-3',
     );
@@ -208,7 +200,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('forwards HTML attributes', () => {
     const { container } = render(
-      <DialSkeleton role="status" aria-label="Loading..." />,
+      <Skeleton role="status" aria-label="Loading..." />,
     );
     expect(container.firstChild).toHaveAttribute('aria-label', 'Loading...');
     expect(container.firstChild).toHaveAttribute('role', 'status');
@@ -216,7 +208,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('uses default paragraph widths when not specified', () => {
     const { container } = render(
-      <DialSkeleton paragraph={{ rows: 3 }} showTitle={false} />,
+      <Skeleton paragraph={{ rows: 3 }} showTitle={false} />,
     );
     const paragraphContainer = container.querySelector('.flex.flex-col.gap-3');
     const rows = paragraphContainer?.querySelectorAll('.h-4');
@@ -228,8 +220,8 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders overlay centered above a variant skeleton', () => {
     const { container } = render(
-      <DialSkeleton
-        variant={DialSkeletonVariant.Rectangular}
+      <Skeleton
+        variant={SkeletonVariant.Rectangular}
         width={100}
         height={100}
         overlay={<span data-testid="overlay-icon" />}
@@ -246,8 +238,8 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('does not render overlay wrapper when overlay is not provided', () => {
     const { container } = render(
-      <DialSkeleton
-        variant={DialSkeletonVariant.Rectangular}
+      <Skeleton
+        variant={SkeletonVariant.Rectangular}
         width={100}
         height={100}
       />,
@@ -260,7 +252,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders overlay centered above a default variant skeleton', () => {
     const { container } = render(
-      <DialSkeleton overlay={<span data-testid="overlay-icon" />} />,
+      <Skeleton overlay={<span data-testid="overlay-icon" />} />,
     );
     expect(screen.getByTestId('overlay-icon')).toBeInTheDocument();
     const overlayWrapper = container.querySelector(
@@ -271,15 +263,15 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders all skeleton variants', () => {
     const variants = [
-      DialSkeletonVariant.Default,
-      DialSkeletonVariant.Text,
-      DialSkeletonVariant.Circular,
-      DialSkeletonVariant.Rectangular,
+      SkeletonVariant.Default,
+      SkeletonVariant.Text,
+      SkeletonVariant.Circular,
+      SkeletonVariant.Rectangular,
     ];
 
     variants.forEach((variant) => {
       const { container } = render(
-        <DialSkeleton variant={variant} width={100} height={100} />,
+        <Skeleton variant={variant} width={100} height={100} />,
       );
       expect(container.firstChild).toBeInTheDocument();
     });
@@ -287,7 +279,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
 
   it('renders title and paragraph together', () => {
     const { container } = render(
-      <DialSkeleton showTitle paragraph={{ rows: 2 }} />,
+      <Skeleton showTitle paragraph={{ rows: 2 }} />,
     );
     const contentContainer = container.querySelector(
       '.flex-1.flex.flex-col.gap-3',
@@ -298,7 +290,7 @@ describe('Dial UI Kit :: DialSkeleton', () => {
   });
 
   it('renders only title without paragraph', () => {
-    const { container } = render(<DialSkeleton showTitle paragraph={false} />);
+    const { container } = render(<Skeleton showTitle paragraph={false} />);
     const contentContainer = container.querySelector(
       '.flex-1.flex.flex-col.gap-3',
     );

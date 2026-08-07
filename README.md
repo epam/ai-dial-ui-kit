@@ -26,6 +26,9 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
   - [Development Setup](#development-setup)
   - [Project Structure](#project-structure)
 - [🎨 Theming & Customization](#-theming--customization)
+- [♿ Accessibility](#-accessibility)
+  - [Naming icon-only controls](#naming-icon-only-controls)
+  - [Target size (WCAG 2.5.5, Level AAA)](#target-size-wcag-255-level-aaa)
 - [📖 Storybook](#-storybook)
   - [Development Mode](#development-mode)
   - [Production Build](#production-build)
@@ -169,6 +172,41 @@ The library uses CSS custom properties for comprehensive theming. Override these
 ```
 
 Full list of variables is available [here](tailwind.config.js)
+
+## ♿ Accessibility
+
+### Naming icon-only controls
+
+`DialFabButton`, `DialIconButton`, and `IconButton` render no text, so they need an
+explicit accessible name. Pass `aria-label`; if you pass only a string
+`tooltipProps.tooltip`, it is used as the label instead. Do not rely on the tooltip
+alone to convey the name — a tooltip's `aria-describedby` lands on a wrapper element
+rather than on the control, and tooltips are suppressed entirely on mobile.
+
+`InfoButton` names itself from `caption` for the same reason. Pass a short
+`aria-label` when the caption is a full sentence, so the name stays scannable.
+
+### Target size (WCAG 2.5.5, Level AAA)
+
+Standard-size buttons render at 40×40 but expose a **44×44 pointer target** via the
+`dial-kit-enhanced-target` utility, which grows the target with a transparent
+pseudo-element. The visible control is unchanged, so layouts keep their existing
+metrics. WCAG 2.5.5 measures the region that accepts a pointer action, not the
+visible decoration.
+
+These controls are **documented exceptions** and meet Level AA (2.5.8, 24×24) but
+not AAA:
+
+| Control | Size | Why it is excluded |
+| --- | --- | --- |
+| `ElementSize.Small` variants | 24×24 | A 44px target overhangs 10px per side and would overlap adjacent controls in dense toolbars |
+| `ButtonAppearance.Link` | content | Exempt under the 2.5.5 *Inline* exception; expanding it would overlap surrounding copy |
+| `DialCloseButton` | icon-sized | Renders `h-auto w-auto`, so its target follows the caller's icon size |
+| `DialInfoButton`, `InfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
+| Standard 2.0 fields (`Input`, `Select`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice |
+
+Give small-variant controls at least 20px of surrounding space if you need to reach
+AAA in a specific layout, or use the standard size instead.
 
 ## 📖 Storybook
 

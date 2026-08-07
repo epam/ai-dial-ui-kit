@@ -1,17 +1,17 @@
-export enum DialSkeletonVariant {
+export enum SkeletonVariant {
   Default = 'default',
   Text = 'text',
   Circular = 'circular',
   Rectangular = 'rectangular',
 }
 
-export enum DialSkeletonAvatarSize {
+export enum SkeletonAvatarSize {
   Small = 'small',
   Default = 'default',
   Large = 'large',
 }
 
-export enum DialSkeletonAvatarShape {
+export enum SkeletonAvatarShape {
   Circle = 'circle',
   Square = 'square',
 }
