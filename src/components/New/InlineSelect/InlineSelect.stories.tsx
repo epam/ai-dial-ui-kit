@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   InlineSelect,
   InlineSelectTrigger,
-  type InlineSelectProps,
   type InlineSelectTriggerProps,
 } from './InlineSelect';
 
@@ -35,24 +34,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Hover: Story = {
-  parameters: { pseudo: { hover: true } },
-};
-
-export const Active: Story = {
-  parameters: { pseudo: { active: true } },
-};
-
-export const Focus: Story = {
-  parameters: { pseudo: { focusVisible: true } },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-};
-
 export const LongLabel: Story = {
   args: {
     label: 'A very long option label that may overflow',
@@ -76,9 +57,3 @@ export const WithDropdown: Story = {
     },
   },
 };
-
-export const WithDropdownDisabled: Story = {
-  render: () => <InlineSelect items={selectItems} disabled />,
-};
-
-export type { InlineSelectProps };

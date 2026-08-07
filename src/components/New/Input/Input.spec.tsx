@@ -50,6 +50,20 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(container.textContent).toContain('A');
   });
 
+  test('renders the content slot inside the field, before the input', () => {
+    render(
+      <Input id="slot-input" placeholder="With slot">
+        <span>tag</span>
+      </Input>,
+    );
+
+    const field = screen.getByLabelText('input-container');
+    expect(screen.getByText('tag')).toBeInTheDocument();
+    expect(field.firstElementChild).toHaveTextContent('tag');
+    // The slot must not be forwarded to the void `<input>` element.
+    expect(screen.getByPlaceholderText('With slot')).toBeEmptyDOMElement();
+  });
+
   test('calls onChange when input changes', () => {
     const handleChange = vi.fn();
     const { getByPlaceholderText } = render(

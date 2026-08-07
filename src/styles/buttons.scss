@@ -84,7 +84,7 @@
 }
 
 .dial-kit-static-solid-button {
-  @apply dial-kit-base-button text-control-disable-alpha bg-transparent;
+  @apply dial-kit-base-button text-secondary bg-transparent;
 
   @media (hover: hover) {
     &:hover {

@@ -6,25 +6,25 @@ import {
 } from 'react';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
-  DialSkeletonVariant,
-  DialSkeletonAvatarSize,
-  DialSkeletonAvatarShape,
+  SkeletonVariant,
+  SkeletonAvatarSize,
+  SkeletonAvatarShape,
 } from '@/types/skeleton';
 import { getAvatarSize } from './utils';
 
-export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
+export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   active?: boolean;
   paragraph?: boolean | { rows?: number; width?: string | string[] };
   avatar?:
     | boolean
     | {
-        size?: number | DialSkeletonAvatarSize;
-        shape?: DialSkeletonAvatarShape;
+        size?: number | SkeletonAvatarSize;
+        shape?: SkeletonAvatarShape;
       };
   showTitle?: boolean | { width?: string };
   loading?: boolean;
   children?: ReactNode;
-  variant?: DialSkeletonVariant;
+  variant?: SkeletonVariant;
   width?: string | number;
   height?: string | number;
   overlay?: ReactNode;
@@ -32,7 +32,7 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * DialSkeleton
+ * Skeleton
  * aliases: PlaceholderUI|ShimmerLoader
  *
  * A placeholder component to show while content is loading.
@@ -41,16 +41,16 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * @example
  * ```tsx
  * // Simple skeleton
- * <DialSkeleton />
+ * <Skeleton />
  *
  * // Text skeleton with custom size
- * <DialSkeleton variant={DialSkeletonVariant.Text} width="200px" height="20px" />
+ * <Skeleton variant={SkeletonVariant.Text} width="200px" height="20px" />
  *
  * // Circular avatar skeleton
- * <DialSkeleton variant={DialSkeletonVariant.Circular} width={40} height={40} />
+ * <Skeleton variant={SkeletonVariant.Circular} width={40} height={40} />
  *
  * // Complex skeleton with avatar, showTitle and paragraph
- * <DialSkeleton
+ * <Skeleton
  *   avatar
  *   showTitle
  *   paragraph={{ rows: 3 }}
@@ -58,20 +58,20 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * />
  *
  * // Conditional loading
- * <DialSkeleton loading={isLoading}>
+ * <Skeleton loading={isLoading}>
  *   <div>Your content here</div>
- * </DialSkeleton>
+ * </Skeleton>
  *
  * // Custom paragraph widths
- * <DialSkeleton
+ * <Skeleton
  *   paragraph={{ rows: 3, width: ['100%', '80%', '60%'] }}
  * />
  *
  * // Avatar with size and shape
- * <DialSkeleton
+ * <Skeleton
  *   avatar={{
- *     size: DialSkeletonAvatarSize.Large,
- *     shape: DialSkeletonAvatarShape.Square
+ *     size: SkeletonAvatarSize.Large,
+ *     shape: SkeletonAvatarShape.Square
  *   }}
  * />
  * ```
@@ -82,21 +82,21 @@ export interface DialSkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * @param [showTitle=true] - Show title placeholder or configure its appearance
  * @param [loading=true] - Display the skeleton when true
  * @param [children] - Content to be displayed when loading is false
- * @param [variant=DialSkeletonVariant.Default] - Skeleton variant
+ * @param [variant=SkeletonVariant.Default] - Skeleton variant
  * @param [width] - Width of the skeleton
  * @param [height] - Height of the skeleton
  * @param [className] - Additional CSS classes
  * @param [overlay] - Content to overlay on top of the skeleton (e.g., a spinner)
  * @param [color] - Custom background color for the skeleton elements (overrides the default token)
  */
-export const DialSkeleton: FC<DialSkeletonProps> = ({
+export const Skeleton: FC<SkeletonProps> = ({
   active = true,
   paragraph = true,
   avatar = false,
   showTitle = true,
   loading = true,
   children,
-  variant = DialSkeletonVariant.Default,
+  variant = SkeletonVariant.Default,
   width,
   height,
   overlay,
@@ -114,12 +114,12 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
     className,
   );
 
-  if (variant !== DialSkeletonVariant.Default) {
+  if (variant !== SkeletonVariant.Default) {
     const variantClass = mergeClasses(
       baseClass,
-      variant === DialSkeletonVariant.Circular && 'rounded-full',
-      variant === DialSkeletonVariant.Rectangular && 'rounded',
-      variant === DialSkeletonVariant.Text && 'rounded',
+      variant === SkeletonVariant.Circular && 'rounded-full',
+      variant === SkeletonVariant.Rectangular && 'rounded',
+      variant === SkeletonVariant.Text && 'rounded',
       !!overlay && 'relative',
     );
 
@@ -149,7 +149,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
   const paragraphConfig = typeof paragraph === 'object' ? paragraph : {};
 
   const avatarSize = getAvatarSize(avatarConfig.size);
-  const avatarShape = avatarConfig.shape ?? DialSkeletonAvatarShape.Circle;
+  const avatarShape = avatarConfig.shape ?? SkeletonAvatarShape.Circle;
   const titleWidth = titleConfig.width ?? '38%';
   const paragraphRows = paragraphConfig.rows ?? 3;
   const paragraphWidth = paragraphConfig.width;
@@ -174,7 +174,7 @@ export const DialSkeleton: FC<DialSkeletonProps> = ({
         <div
           className={mergeClasses(
             baseClass,
-            avatarShape === DialSkeletonAvatarShape.Circle
+            avatarShape === SkeletonAvatarShape.Circle
               ? 'rounded-full'
               : 'rounded',
             'flex-shrink-0',

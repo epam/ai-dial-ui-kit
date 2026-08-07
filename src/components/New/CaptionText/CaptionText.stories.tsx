@@ -43,20 +43,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const CustomClassName: Story = {
-  args: {
-    text: 'This is an error with custom class',
-    className: 'border border-secondary p-2',
-  },
-};
-
-export const AriaAttributes: Story = {
-  args: {
-    text: 'Error with aria attributes',
-    'aria-label': 'Error message',
-  },
-};
-
 export const Error: Story = {
   args: {
     variant: CaptionType.Error,

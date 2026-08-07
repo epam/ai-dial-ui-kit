@@ -1,15 +1,13 @@
-import { DialSkeletonAvatarSize } from '@/types/skeleton';
+import { SkeletonAvatarSize } from '@/types/skeleton';
 
-export const getAvatarSize = (
-  size?: number | DialSkeletonAvatarSize,
-): number => {
+export const getAvatarSize = (size?: number | SkeletonAvatarSize): number => {
   if (typeof size === 'number') return size;
   switch (size) {
-    case DialSkeletonAvatarSize.Small:
+    case SkeletonAvatarSize.Small:
       return 32;
-    case DialSkeletonAvatarSize.Large:
+    case SkeletonAvatarSize.Large:
       return 64;
-    case DialSkeletonAvatarSize.Default:
+    case SkeletonAvatarSize.Default:
     default:
       return 40;
   }
