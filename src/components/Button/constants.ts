@@ -26,4 +26,5 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
   [ButtonVariant.Tertiary]: {
     [ButtonAppearance.Ghost]: 'dial-tertiary-ghost-button',
   },
+  [ButtonVariant.Static]: {},
 };
