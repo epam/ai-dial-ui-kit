@@ -5,21 +5,45 @@ import {
   IconX,
 } from '@tabler/icons-react';
 
+import classNames from 'classnames';
+
+import {
+  overlayGap,
+  overlayItemClassName,
+  overlayItemDisabledClassName,
+  overlayItemSelectedClassName,
+  overlaySurfaceClassName,
+} from '@/components/New/constants/overlay';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 
-export const selectOverlayBaseClassName = 'w-full rounded flex flex-col';
+export const selectOverlayBaseClassName = classNames(
+  'w-full flex flex-col',
+  overlaySurfaceClassName,
+);
 
-export const selectOptionBaseClassName =
-  'flex w-full items-center justify-between gap-2 px-3 h-[34px] dial-small-text text-primary truncate hover:bg-accent-primary-alpha focus:bg-accent-primary-alpha focus:outline-none';
+export const selectOptionBaseClassName = classNames(
+  overlayItemClassName,
+  // The row ends with a check icon, so label and mark sit at opposite edges.
+  'justify-between',
+);
 
-export const selectOptionSelectedClassName = 'bg-accent-primary-alpha';
+export const selectOptionSelectedClassName = overlayItemSelectedClassName;
 
-export const selectOptionSingleSelectedClassName =
-  'bg-accent-primary-alpha border-l border-accent-primary border-1';
+/**
+ * Holds the option list to the width of the field.
+ *
+ * `Dropdown` only pins the overlay's *min* width to the trigger and lets
+ * `max-width` run to the available viewport width — as an inline style, so a
+ * single long label stretches the list across the screen and only `!important`
+ * can rein it back in. `--reference-width` is the trigger width the dropdown
+ * publishes, and it is set whenever `matchReferenceWidth` is left on (the
+ * default this component relies on).
+ */
+export const selectListWidthClassName = '!max-w-[var(--reference-width)]';
 
-export const selectOptionDisabledClassName = 'opacity-75';
+export const selectOptionDisabledClassName = overlayItemDisabledClassName;
 export const dropdownMenuMaxHeight = 352;
-export const selectSubMenuGap = 4;
+export const selectSubMenuGap = overlayGap;
 
 /** Classes for the chevron rendered as the field's trailing icon. */
 export const selectFieldIconClassName = 'text-secondary transition-transform';

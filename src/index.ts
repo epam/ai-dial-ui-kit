@@ -347,6 +347,12 @@ export { NumberInput } from './components/New/NumberInput/NumberInput';
 export type { NumberInputProps } from './components/New/NumberInput/NumberInput';
 export { Popup } from './components/New/Popup/Popup';
 export type { PopupProps } from './components/New/Popup/Popup';
+export { CloseButton } from './components/New/CloseButton/CloseButton';
+export type { CloseButtonProps } from './components/New/CloseButton/CloseButton';
+export { ConfirmationPopup } from './components/New/ConfirmationPopup/ConfirmationPopup';
+export type { ConfirmationPopupProps } from './components/New/ConfirmationPopup/ConfirmationPopup';
+export { Dropdown } from './components/New/Dropdown/Dropdown';
+export type { DropdownProps } from './components/New/Dropdown/Dropdown';
 export type { TextareaProps } from './components/New/Textarea/Textarea';
 export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
 export {

@@ -65,6 +65,27 @@ describe('Dial UI Kit :: Select', () => {
     expect(getField()).toHaveAttribute('aria-haspopup', 'listbox');
   });
 
+  test('holds the option list to the field width, and lets listClassName win', () => {
+    const { rerender } = renderSelect();
+
+    openSelect();
+    // The list is the dropdown's floating element — the listbox's parent.
+    const list = screen.getByRole('listbox').parentElement!;
+    expect(list).toHaveClass('!max-w-[var(--reference-width)]');
+
+    rerender(
+      <Select
+        options={baseOptions}
+        ariaLabel="Operator"
+        open
+        listClassName="!max-w-[500px]"
+      />,
+    );
+    const widened = screen.getByRole('listbox').parentElement!;
+    expect(widened).toHaveClass('!max-w-[500px]');
+    expect(widened).not.toHaveClass('!max-w-[var(--reference-width)]');
+  });
+
   test('opens on ArrowDown and Enter', () => {
     renderSelect();
     const field = getField();

@@ -7,18 +7,15 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 import { type FC, type MouseEvent, type ReactNode, useId, useRef } from 'react';
 
-import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { PopupSize } from '@/types/popup';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   popupBaseClassName,
-  popupDividerClassName,
   popupHeaderClassName,
   popupOverlayBaseClassName,
   popupSizeClassMap,
@@ -34,9 +31,6 @@ export interface PopupProps {
   overlayClassName?: string;
   titleClassName?: string;
   headerClassName?: string;
-  // TODO: review after implementing common design system
-  dividers?: boolean;
-  dividerFooter?: boolean;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
@@ -52,7 +46,9 @@ export interface PopupProps {
  * aliases: Modal|Dialog
  *
  * Renders in a portal with a scrim overlay, focus management, a header with the
- * title and close control, a scrollable body and an optional footer.
+ * title and close control, a scrollable body and an optional footer. Sections
+ * are separated by spacing rather than rules; add your own through
+ * `headerClassName` or the footer node if a surface needs them.
  *
  * A string `header` names the dialog automatically. A `header` node cannot —
  * pass `ariaLabel` in that case, or the dialog opens unnamed.
@@ -83,8 +79,6 @@ export interface PopupProps {
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
  * @param [titleClassName] - Additional CSS classes applied to the title element
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
- * @param [dividers=true] - Whether to render separators between sections
- * @param [dividerFooter=true] - Whether to render a divider above the footer when `dividers` is true
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
@@ -103,8 +97,6 @@ export const Popup: FC<PopupProps> = ({
   overlayClassName,
   titleClassName,
   headerClassName,
-  dividers = true,
-  dividerFooter = true,
   children,
   footer,
   onClose,
@@ -138,12 +130,12 @@ export const Popup: FC<PopupProps> = ({
     if (!title) return <span /* empty element to balance the close button */ />;
 
     return typeof title === 'string' ? (
-      <h3
+      <h2
         id={headingId}
         className={mergeClasses(popupTitleClassName, titleClassName)}
       >
         <DialTooltip tooltip={title}>{title}</DialTooltip>
-      </h3>
+      </h2>
     ) : (
       title
     );
@@ -168,7 +160,6 @@ export const Popup: FC<PopupProps> = ({
             className={mergeClasses(
               popupBaseClassName,
               popupSizeClassMap[size],
-              dividers && popupDividerClassName,
               className,
             )}
           >
@@ -185,19 +176,15 @@ export const Popup: FC<PopupProps> = ({
             >
               {renderTitle(header)}
               {!hideClose && (
-                <GhostIconButton
-                  aria-label={closeAriaLabel}
-                  icon={<IconX size={DIAL_ICON_SIZE.MD} aria-hidden="true" />}
-                  onClick={(e) => onClose?.(e)}
+                <CloseButton
+                  ariaLabel={closeAriaLabel}
+                  onClose={(e) => onClose?.(e)}
                 />
               )}
             </div>
 
             <div className="grow overflow-auto">{children}</div>
 
-            {dividerFooter && !footer && (
-              <div className={popupDividerClassName} />
-            )}
             {footer}
           </div>
         </FloatingFocusManager>

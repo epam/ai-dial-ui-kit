@@ -15,7 +15,7 @@ import {
 } from 'react';
 
 import { DialCheckbox } from '@/components/Checkbox/Checkbox';
-import { DialDropdown } from '@/components/Dropdown/Dropdown';
+import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialIcon } from '@/components/Icon/Icon';
 import {
@@ -38,11 +38,11 @@ import {
   selectCloseIcon,
   selectEmptyStateIcon,
   selectFieldIconClassName,
+  selectListWidthClassName,
   selectOptionBaseClassName,
   selectOptionCheckIcon,
   selectOptionDisabledClassName,
   selectOptionSelectedClassName,
-  selectOptionSingleSelectedClassName,
   selectOverlayBaseClassName,
   selectSearchIcon,
   selectSearchThreshold,
@@ -577,7 +577,6 @@ export const Select: FC<SelectProps> = ({
                 disabled={opt.disabled}
                 className={classNames(
                   selectOptionBaseClassName,
-                  selected && selectOptionSingleSelectedClassName,
                   opt.disabled && selectOptionDisabledClassName,
                 )}
                 onClick={() => !opt.disabled && handleToggle(opt.value)}
@@ -619,7 +618,7 @@ export const Select: FC<SelectProps> = ({
       {labelProps && <Label {...labelProps} htmlFor={fieldId} />}
 
       <div className="flex flex-col gap-1">
-        <DialDropdown
+        <Dropdown
           open={isOpen}
           onOpenChange={setOpen}
           disabled={disabled}
@@ -628,7 +627,7 @@ export const Select: FC<SelectProps> = ({
           placement="bottom-start"
           allowedPlacements={['bottom-start', 'top-start']}
           maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
-          listClassName={listClassName}
+          listClassName={mergeClasses(selectListWidthClassName, listClassName)}
           className="w-full"
           renderOverlay={renderOptionsList}
         >
@@ -676,7 +675,7 @@ export const Select: FC<SelectProps> = ({
           >
             {fieldContent}
           </Input>
-        </DialDropdown>
+        </Dropdown>
 
         <ErrorText text={error} />
         {!error && <CaptionText text={caption} />}

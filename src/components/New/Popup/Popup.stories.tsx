@@ -19,13 +19,12 @@ const meta = {
     className: { control: { type: 'text' } },
     overlayClassName: { control: { type: 'text' } },
     titleClassName: { control: { type: 'text' } },
-    dividers: { control: { type: 'boolean' } },
+    ariaLabel: { control: { type: 'text' } },
     footer: { control: { type: 'text' } },
     onClose: { action: 'onClose', control: false },
   },
   args: {
     header: 'Title',
-    dividers: true,
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
     footer: (
       <div className="px-6 py-4 flex justify-end gap-2">
@@ -66,11 +65,6 @@ export const Default: Story = { render: StatefulRender };
 export const WithoutFooter: Story = {
   render: StatefulRender,
   args: { footer: undefined },
-};
-
-export const WithoutDividers: Story = {
-  render: StatefulRender,
-  args: { dividers: false },
 };
 
 export const WithoutTitle: Story = {
@@ -128,8 +122,8 @@ export const WithoutHeaderAndDismiss: Story = {
   args: {
     className: '!w-[280px]',
     header: undefined,
+    ariaLabel: 'Moving items',
     footer: undefined,
-    dividers: false,
     headerClassName: 'hidden',
     hideClose: true,
     children: (

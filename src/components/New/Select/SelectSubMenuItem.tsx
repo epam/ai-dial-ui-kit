@@ -11,7 +11,6 @@ import {
   selectOptionBaseClassName,
   selectOptionCheckIcon,
   selectOptionDisabledClassName,
-  selectOptionSingleSelectedClassName,
   selectSubMenuGap,
 } from './constants';
 
@@ -52,7 +51,6 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
         disabled={opt.disabled}
         className={classNames(
           selectOptionBaseClassName,
-          parentSelected && selectOptionSingleSelectedClassName,
           opt.disabled && selectOptionDisabledClassName,
         )}
         {...getReferenceProps()}
@@ -85,7 +83,6 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
                 disabled={child.disabled}
                 className={classNames(
                   selectOptionBaseClassName,
-                  childSelected && selectOptionSingleSelectedClassName,
                   child.disabled && selectOptionDisabledClassName,
                 )}
                 onClick={() => !child.disabled && onSelect(child.value)}
