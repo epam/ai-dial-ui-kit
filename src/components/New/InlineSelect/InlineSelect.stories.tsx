@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   InlineSelect,
   InlineSelectTrigger,
-  type InlineSelectProps,
   type InlineSelectTriggerProps,
 } from './InlineSelect';
 
