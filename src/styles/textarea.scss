@@ -13,3 +13,7 @@
     @apply bg-controls-accent-primary;
   }
 }
+
+.dial-kit-textarea {
+  @apply min-h-[120px] whitespace-normal overflow-auto;
+}

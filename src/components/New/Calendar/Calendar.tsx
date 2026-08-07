@@ -12,9 +12,16 @@ import {
   useRole,
 } from '@floating-ui/react';
 import { IconChevronDown } from '@tabler/icons-react';
-import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+  type FC,
+  type ReactNode,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 
-import { DialLabel } from '@/components/Label/Label';
+import { Label } from '@/components/New/Label/Label';
 import { StaticIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
@@ -37,6 +44,7 @@ import {
 } from './constants';
 import {
   formatDateLabel,
+  formatDayAriaLabel,
   formatMonthLabel,
   formatTimeLabel,
   getMonthGrid,
@@ -74,6 +82,14 @@ interface CalendarPopoverFieldProps {
   trigger: ReactNode;
   panelClassName?: string;
   panel: (close: () => void) => ReactNode;
+  /**
+   * Ids naming the trigger. The trigger is a `div[role="button"]`, which is not
+   * a labelable element, so the `<label htmlFor>` above it is inert — the name
+   * has to be wired up explicitly.
+   */
+  labelledBy?: string;
+  /** Accessible name for the popover, which is exposed as `role="dialog"`. */
+  panelLabel: string;
 }
 
 const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
@@ -83,6 +99,8 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   trigger,
   panelClassName,
   panel,
+  labelledBy,
+  panelLabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -112,10 +130,11 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-disabled={disabled}
+        aria-labelledby={labelledBy}
         tabIndex={disabled ? -1 : 0}
         className={mergeClasses(
           calendarFieldBaseClassName,
-          'focus-visible:outline focus-visible:outline-focus',
+          'focus-visible:outline focus-visible:outline-focus-black',
           invalid && calendarFieldInvalidClassName,
           disabled && calendarFieldDisabledClassName,
         )}
@@ -135,6 +154,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
             <div
               ref={refs.setFloating}
               style={floatingStyles}
+              aria-label={panelLabel}
               className={mergeClasses(calendarPopoverClassName, panelClassName)}
               {...getFloatingProps()}
             >
@@ -252,6 +272,14 @@ export const Calendar: FC<CalendarProps> = ({
   const resolvedPlaceholder =
     placeholder ?? calendarModeDefaultPlaceholder[mode];
   const dateValue = value instanceof Date ? value : null;
+
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+  const labelId = `${fieldId}-label`;
+  // Name the trigger from the label *and* its own content, so the field name
+  // and the current value are both announced. Without the self-reference the
+  // label would replace the value rather than precede it.
+  const triggerLabelledBy = label ? `${labelId} ${fieldId}` : undefined;
   const [visibleMonth, setVisibleMonth] = useState(
     () => dateValue ?? new Date(),
   );
@@ -307,9 +335,9 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <DialLabel label={label} htmlFor={id} />}
+        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
         <TimeField
-          id={id}
+          id={fieldId}
           value={timeValue}
           onChange={(next) => onChange?.(next)}
           disabled={disabled}
@@ -326,11 +354,13 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <DialLabel label={label} htmlFor={id} />}
+        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
         <CalendarPopoverField
-          id={id}
+          id={fieldId}
           disabled={disabled}
           invalid={invalid}
+          labelledBy={triggerLabelledBy}
+          panelLabel={label ?? resolvedPlaceholder}
           trigger={
             <>
               <span
@@ -343,12 +373,17 @@ export const Calendar: FC<CalendarProps> = ({
               </span>
               <IconChevronDown
                 size={DIAL_ICON_SIZE.MD}
+                aria-hidden="true"
                 className={calendarFieldIconClassName}
               />
             </>
           }
           panel={(close) => (
-            <div role="listbox" className="flex flex-col gap-0.5">
+            <div
+              role="listbox"
+              aria-label={label ?? resolvedPlaceholder}
+              className="flex flex-col gap-0.5"
+            >
               {weekdayOptions.map((option) => (
                 <button
                   key={option.value}
@@ -357,7 +392,7 @@ export const Calendar: FC<CalendarProps> = ({
                   aria-selected={option.value === weekdayValue}
                   className={mergeClasses(
                     'flex w-full items-center rounded-lg px-3 py-2 text-left dial-small-text text-primary hover:bg-accent-primary-alpha',
-                    'focus-visible:outline focus-visible:outline-focus',
+                    'focus-visible:outline focus-visible:outline-focus-black',
                     option.value === weekdayValue && 'bg-accent-primary-alpha',
                   )}
                   onClick={() => {
@@ -377,11 +412,13 @@ export const Calendar: FC<CalendarProps> = ({
 
   return (
     <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-      {label && <DialLabel label={label} htmlFor={id} />}
+      {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
       <CalendarPopoverField
-        id={id}
+        id={fieldId}
         disabled={disabled}
         invalid={invalid}
+        labelledBy={triggerLabelledBy}
+        panelLabel={label ?? resolvedPlaceholder}
         trigger={
           <>
             <span
@@ -419,9 +456,15 @@ export const Calendar: FC<CalendarProps> = ({
             </div>
 
             <div className="grid grid-cols-7 gap-y-1 text-center">
+              {/*
+                Abbreviations ("Mo", "Tu") that are not associated with their
+                columns, so they read as loose text. Each day button already
+                announces its own weekday, making these purely visual.
+              */}
               {weekdayShortLabels.map((weekday) => (
                 <div
                   key={weekday}
+                  aria-hidden="true"
                   className="dial-tiny-text py-1 text-secondary"
                 >
                   {weekday}
@@ -439,6 +482,9 @@ export const Calendar: FC<CalendarProps> = ({
                     key={day.toISOString()}
                     type="button"
                     disabled={dayDisabled}
+                    // The visible text is just the day number, which announces
+                    // as a bare "15" with no month, year, or weekday.
+                    aria-label={formatDayAriaLabel(day, locale)}
                     aria-pressed={selected}
                     aria-current={isToday ? 'date' : undefined}
                     className={mergeClasses(

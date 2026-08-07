@@ -11,6 +11,7 @@ export interface FolderPathProps {
   labelClassName?: string;
   leafClassName?: string;
   className?: string;
+  ariaLabel?: string;
 }
 
 /**
@@ -31,16 +32,20 @@ export interface FolderPathProps {
  * @param [className] - Additional CSS classes applied to the breadcrumb's `<nav>` element.
  *  `DialBreadcrumb` scrolls horizontally on overflow, so this must not shrink
  *  the nav to content width (e.g. never `w-auto`).
+ * @param [ariaLabel='Folder path'] - Accessible name for the underlying `<nav>`.
+ *  `DialBreadcrumb` would otherwise name it "Breadcrumb", which misdescribes a
+ *  path with no navigable items; override it when a page shows more than one.
  */
 export const FolderPath: FC<FolderPathProps> = ({
   segments,
   labelClassName = 'dial-small-text',
   leafClassName = 'dial-small-semi-text',
   className,
+  ariaLabel = 'Folder path',
 }) => {
   const folderIcon = (
     <DialIcon
-      icon={<IconFolder size={DIAL_ICON_SIZE.SM} />}
+      icon={<IconFolder size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
       className="text-secondary"
     />
   );
@@ -58,11 +63,13 @@ export const FolderPath: FC<FolderPathProps> = ({
   return (
     <DialBreadcrumb
       className={className}
+      ariaLabel={ariaLabel}
       separator={
         <DialIcon
           icon={
             <IconChevronRight
               size={14}
+              aria-hidden="true"
               // eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value -- keep in sync with the source implementation's RTL mirroring
               className="rtl:scale-x-[-1]"
             />

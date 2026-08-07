@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DialSpinner, type DialSpinnerProps } from './Spinner';
+import { Spinner, type SpinnerProps } from './Spinner';
 
 const meta = {
-  title: 'DIAL/Status/Spinner',
-  component: DialSpinner,
+  title: 'Components_2_0/Spinner',
+  component: Spinner,
   parameters: {
     layout: 'padded',
     docs: {
@@ -33,7 +33,7 @@ const meta = {
     fullWidth: false,
     ariaLabel: 'Loading',
   },
-} satisfies Meta<DialSpinnerProps>;
+} satisfies Meta<SpinnerProps>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -15,6 +15,7 @@ import { DialGhostIconButton } from '../../IconButton/IconButtonWrappers';
 import {
   alertBaseClassName,
   notificationVariantClassNameMap,
+  notificationVariantRoleMap,
   variantIcons,
 } from './constants';
 
@@ -39,6 +40,12 @@ export interface NotificationProps extends Omit<
  *
  * Renders a colored container with an icon, message text, and an optional
  * close button.
+ *
+ * The container is a live region whose politeness follows the variant: `error`
+ * and `warning` use `role="alert"` (assertive, interrupts the screen reader),
+ * every other variant uses `role="status"` (polite, queues). Pass an explicit
+ * `role` to override — including for a notification that is static page content
+ * rather than an update.
  *
  * @example
  * ```tsx
@@ -104,8 +111,10 @@ export const Notification: FC<NotificationProps> = ({
 
   return (
     <div
+      // Before the spread, so a consumer can still override it — a notification
+      // rendered as static page content may want no live region at all.
+      role={notificationVariantRoleMap[variant]}
       {...props}
-      role="alert"
       className={mergeClasses(
         alertBaseClassName,
         notificationVariantClassNameMap[variant],
@@ -118,7 +127,15 @@ export const Notification: FC<NotificationProps> = ({
       )}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
-        <DialIcon icon={icon} />
+        {/*
+          The variant icon restates what the message already says. It also has
+          to stay out of the accessibility tree because the Loading variant's
+          spinner carries its own `role="status"` — a live region nested inside
+          this one causes the content to be announced twice.
+        */}
+        <span aria-hidden="true" className="flex shrink-0">
+          <DialIcon icon={icon} />
+        </span>
         {title ? (
           <div
             className={mergeClasses(

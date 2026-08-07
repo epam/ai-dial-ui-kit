@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialButton } from '../Button';
 import { ButtonAppearance, ButtonVariant } from '@/index';
+import { ElementSize } from '@/types/size';
 
 describe('Dial UI Kit :: DialButton', () => {
   test('Should render with string label and be accessible by role', () => {
@@ -92,7 +93,7 @@ describe('Dial UI Kit :: DialButton', () => {
     const button = screen.getByRole('button', { name: 'Focus test' });
     expect(button).toHaveClass(
       'focus-visible:outline',
-      'focus-visible:outline-focus',
+      'focus-visible:outline-focus-black',
       'outline-offset-0',
     );
   });
@@ -196,4 +197,32 @@ describe('Dial UI Kit :: DialButton', () => {
       expect(btn).toHaveClass(expectedClass);
     },
   );
+
+  test('Should enhance the pointer target at standard size', () => {
+    render(<DialButton label="Save" />);
+
+    expect(screen.getByRole('button')).toHaveClass('dial-kit-enhanced-target');
+  });
+
+  test('Should not enhance the pointer target at small size', () => {
+    render(<DialButton label="Save" size={ElementSize.Small} />);
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-enhanced-target',
+    );
+  });
+
+  test('Should not enhance the pointer target for link appearance', () => {
+    render(
+      <DialButton
+        label="Save"
+        variant={ButtonVariant.Primary}
+        appearance={ButtonAppearance.Link}
+      />,
+    );
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-enhanced-target',
+    );
+  });
 });

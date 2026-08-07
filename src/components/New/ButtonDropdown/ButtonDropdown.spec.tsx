@@ -29,6 +29,21 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     const button = screen.getByRole('button', { name: 'Menu' });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('dial-kit-neutral-outlined-button');
+
+    const icon = button.querySelector('svg');
+    expect(icon).toHaveClass('transition-transform');
+    expect(icon).not.toHaveClass('rotate-180');
+  });
+
+  test('Should rotate the chevron while the dropdown is open', () => {
+    render(<ButtonDropdown title="Menu" items={items} />);
+    const button = screen.getByRole('button', { name: 'Menu' });
+
+    fireEvent.click(button);
+    expect(button.querySelector('svg')).toHaveClass('rotate-180');
+
+    fireEvent.click(button);
+    expect(button.querySelector('svg')).not.toHaveClass('rotate-180');
   });
 
   test('Should toggle dropdown on button click', () => {
@@ -82,5 +97,24 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     );
     const button = screen.getByRole('button', { name: 'Button Variant Test' });
     expect(button).toHaveClass('dial-kit-neutral-outlined-button');
+  });
+
+  test('Should expose the menu popup on the button itself', () => {
+    render(<ButtonDropdown title="Menu" items={items} />);
+
+    // DialDropdown sets these on a wrapper span, which assistive tech never
+    // reaches — they have to be on the focusable button.
+    const button = screen.getByRole('button', { name: 'Menu' });
+    expect(button).toHaveAttribute('aria-haspopup', 'menu');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Should reflect the open state on the button', () => {
+    render(<ButtonDropdown title="Menu" items={items} />);
+    const button = screen.getByRole('button', { name: 'Menu' });
+
+    fireEvent.click(button);
+
+    expect(button).toHaveAttribute('aria-expanded', 'true');
   });
 });

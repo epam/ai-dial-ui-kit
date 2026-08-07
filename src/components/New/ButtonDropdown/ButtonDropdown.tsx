@@ -5,7 +5,7 @@ import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button } from '../Button/Button';
-import { buttonChevronDown, buttonChevronUp } from './constants';
+import { getButtonChevron } from './constants';
 
 export interface ButtonDropdownProps extends Omit<
   DialButtonProps,
@@ -38,7 +38,7 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const icon = useMemo(() => {
-    return isDropdownOpen ? buttonChevronUp : buttonChevronDown;
+    return getButtonChevron(isDropdownOpen);
   }, [isDropdownOpen]);
 
   return (
@@ -52,6 +52,8 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
           iconAfter={icon}
           variant={variant || ButtonVariant.Primary}
           appearance={appearance || ButtonAppearance.Solid}
+          aria-haspopup="menu"
+          aria-expanded={isDropdownOpen}
         />
       </DialDropdown>
     </div>

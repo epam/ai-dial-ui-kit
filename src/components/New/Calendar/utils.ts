@@ -52,6 +52,23 @@ export const formatDateLabel = (date: Date, locale: string): string =>
     year: 'numeric',
   });
 
+/**
+ * Full label for a day cell in the month grid, e.g. `"Wednesday 11 March 2026"`.
+ *
+ * A day button renders only its number, so on its own it announces as "15" with
+ * no month, year, or weekday context — and a cell spilling over from an
+ * adjacent month is indistinguishable from one in the visible month. The
+ * weekday and long month also keep this distinct from `formatDateLabel`, which
+ * names the trigger.
+ */
+export const formatDayAriaLabel = (date: Date, locale: string): string =>
+  date.toLocaleDateString(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
 export const formatTimeLabel = (date: Date): string =>
   `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 

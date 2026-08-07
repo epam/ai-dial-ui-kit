@@ -35,7 +35,9 @@ describe('Dial UI Kit :: Calendar', () => {
       fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
       expect(screen.getByText('March 2026')).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: '15' }));
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Sunday, 15 March 2026' }),
+      );
       expect(onChange).toHaveBeenCalledWith(new Date(2026, 2, 15));
       expect(screen.queryByText('March 2026')).not.toBeInTheDocument();
     });
@@ -163,6 +165,68 @@ describe('Dial UI Kit :: Calendar', () => {
       expect(
         screen.getByRole('button', { name: 'Select day' }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('accessibility', () => {
+    test('Should name each day cell with its full date', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(
+        screen.getByRole('button', { name: 'Sunday, 1 March 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should distinguish days spilling over from an adjacent month', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(
+        screen.getByRole('button', { name: 'Saturday, 28 February 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should name the popover so it is not announced as an unlabelled dialog', () => {
+      render(<Calendar mode={CalendarMode.Date} label="Start date" />);
+
+      fireEvent.click(screen.getByRole('button', { name: /Start date/ }));
+
+      expect(
+        screen.getByRole('dialog', { name: 'Start date' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should name the trigger from both the label and the current value', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          label="Start date"
+          value={new Date(2026, 2, 11)}
+        />,
+      );
+
+      // `<label htmlFor>` is inert on a div[role="button"], so without the
+      // explicit wiring the field name would be missing entirely.
+      expect(
+        screen.getByRole('button', { name: 'Start date 11 Mar 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should hide the decorative weekday header row from assistive tech', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(screen.getByText('Mon')).toHaveAttribute('aria-hidden', 'true');
     });
   });
 

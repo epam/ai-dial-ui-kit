@@ -208,7 +208,7 @@ export const DialSlider: FC<DialSliderProps> = ({
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           className={mergeClasses(
-            'dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+            'dial-small-text absolute -translate-x-1/2 flex size-[38px] cursor-grab select-none items-center justify-center rounded-full bg-layer-3 text-primary shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-black',
             thumbClassName,
           )}
           style={{ left: `${percent}%` }}
