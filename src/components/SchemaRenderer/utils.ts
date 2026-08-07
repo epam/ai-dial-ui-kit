@@ -51,6 +51,22 @@ export function resolveRef(
   return result;
 }
 
+export function sortByPropertyOrder(
+  entries: [string, JsonSchemaDef][],
+): [string, JsonSchemaDef][] {
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => {
+      const orderA =
+        a.entry[1]['dial:meta']?.['dial:propertyOrder'] ?? Infinity;
+      const orderB =
+        b.entry[1]['dial:meta']?.['dial:propertyOrder'] ?? Infinity;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.index - b.index;
+    })
+    .map(({ entry }) => entry);
+}
+
 export function isMissingRequiredValue(value: unknown): boolean {
   return value === undefined || value === null || value === '';
 }

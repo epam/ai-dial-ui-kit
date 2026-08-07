@@ -27,6 +27,11 @@ export enum JsonSchemaType {
   Null = 'null',
 }
 
+export interface DialMeta {
+  'dial:propertyOrder'?: number;
+  [key: string]: unknown;
+}
+
 export interface JsonSchemaDef {
   $ref?: string;
   type?: string | string[];
@@ -51,7 +56,7 @@ export interface JsonSchemaDef {
     propertyName: string;
     mapping: Record<string, string>;
   };
-  'dial:meta'?: Record<string, unknown>;
+  'dial:meta'?: DialMeta;
   'dial:resource'?: boolean;
   acceptableResourceTypes?: string[];
   [key: string]: unknown;
