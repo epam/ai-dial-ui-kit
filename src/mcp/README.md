@@ -7,6 +7,7 @@ An MCP (Model Context Protocol) server that gives AI agents fast, structured acc
 Storybook documents components for humans. The MCP server documents them for AI agents. When an AI assistant needs to build a UI with your components, it can:
 
 - **Discover all available components** — Button, Input, Dropdown, FileManager, Form, etc.
+- **Land on the current generation** — 2.0 components rank first, and legacy 1.0 components point at their replacement
 - **Read exact props and types** — required fields, defaults, enums, component-specific behaviors
 - **Access code examples** — copy-paste usage patterns for common scenarios
 - **Query theming & typography** — available design tokens, CSS classes, color variables
@@ -69,8 +70,18 @@ When implementing or modifying components, forms, or UI built with `@epam/ai-dia
 
 **Always prefer UI kit components over raw HTML elements.** Before reaching for native `<button>`, `<input>`, `<select>`, or other HTML elements:
 
-1. **Look for a UI kit component** — Check if a suitable `Dial*` component exists for your use case
+1. **Look for a UI kit component** — search the MCP server for one that fits the use case
 2. **Use raw elements only as last resort** — If and only if no UI kit component meets the requirements, use native HTML (and document why)
+
+## Generation 2.0 First
+
+The kit ships two generations of components. **Generation 2.0 is the current design system — default to it.**
+
+- 2.0 components are exported **without** the `Dial` prefix: `Button`, `Input`, `Select`, `Popup`.
+- 1.0 components are the legacy `Dial*` set. Most have a 2.0 replacement.
+- `searchEntity("component", …)` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` states the generation and flags a superseded component.
+- Reach for a 1.0 component **only** when it has no 2.0 replacement (nothing in **Use instead**) — e.g. `DialGrid`, `DialFileManager`, `DialTabs`.
+- Do not mix generations for the same control in one screen.
 
 ## MCP Tools
 
@@ -100,7 +111,7 @@ Both tools accept an `entity` enum parameter:
 
 | Value | Content |
 |---|---|
-| `component` | React components (all start with `Dial`) — props, examples, categories |
+| `component` | React components — props, examples, categories, generation. 2.0 components (no `Dial` prefix) rank first; 1.0 components report their 2.0 replacement |
 | `hook` | React hooks and context providers — signatures, descriptions |
 | `util` | Utility functions — signatures, descriptions |
 | `type` | Exported TypeScript types, interfaces, and enums — members, values |
@@ -115,11 +126,12 @@ User: "Build a file upload form with validation and error messages"
 
 Agent:
   1. Calls searchEntity("component", "file upload")
-  2. Finds DialFileInput, DialFormItem, DialButton, DialNotification
+  2. Finds DialFileInput, DialFormItem (1.0, no 2.0 replacement) and Notification (2.0)
   3. Calls getEntityDetails("component", "DialFileInput")  → props, examples
   4. Calls getEntityDetails("component", "DialFormItem")   → how to wire up validation
-  5. Calls getEntityDetails("component", "DialNotification")      → error display
-  6. Generates complete form code with types and error handling
+  5. Calls getEntityDetails("component", "Notification")   → error display
+  6. Calls getEntityDetails("component", "Button")         → the 2.0 submit button
+  7. Generates complete form code with types and error handling
 ```
 
 ## Example: Migrating After a Breaking Change
@@ -147,14 +159,20 @@ The MCP server ships **inside `@epam/ai-dial-ui-kit`**:
 
 The manifest is **generated at build time** by parsing `src/index.ts` (source of truth for public exports):
 
-1. **Parse exports** — enumerate components, types, hooks, utils, constants
+1. **Parse exports** — enumerate components, types, hooks, utils, constants. Named re-export barrels are followed to the declaring file
 2. **Extract metadata** — for each export:
    - Props: from TypeScript interfaces + JSDoc `@param` tags
    - Description: from JSDoc first paragraph
    - Examples: from JSDoc `@example` fenced code blocks
    - Category: from paired `.stories.tsx` file's `title` field
-3. **Build manifest** — write `dist/components-manifest.json`
-4. **Compile server** — bundle `src/mcp/server.ts` → `dist/mcp-server.cjs`
+   - Generation: `2.0` for anything under `src/components/New/`, or whose Storybook category is `Components_2_0` (that covers 2.0 components living outside that folder, e.g. `FabButton`, `Spinner`, `Skeleton`)
+3. **Link generations** — a 1.0 `DialX` gets `supersededBy: "X"` when a 2.0 `X` exists; 2.0 entries are emitted first
+4. **Build manifest** — write `dist/components-manifest.json`
+5. **Compile server** — bundle `src/mcp/server.ts` → `dist/mcp-server.cjs`
+
+### Adding a 2.0 component
+
+Put it under `src/components/New/<Name>/`, export it from `src/index.ts` **without** the `Dial` prefix, and title its story `Components_2_0/<Name>`. Generation, ranking, and the `supersededBy` link on the 1.0 counterpart are then derived automatically — there is no list to maintain.
 
 See [Manifest Schema](#manifest-schema) for details.
 
@@ -183,6 +201,8 @@ interface Manifest {
 interface ComponentEntry {
   name: string;                  // "DialButton"
   category: string;              // from stories title
+  generation: '1.0' | '2.0';     // 2.0 = current design system, prefer it
+  supersededBy?: string;         // on 1.0 only: the 2.0 replacement, e.g. "Button"
   description: string;           // first JSDoc paragraph
   props: {
     name: string;
@@ -236,6 +256,11 @@ interface ExportEntry {
 **Props table is empty for a component**
 - Component must define a `{ComponentName}Props` interface (e.g., `DialButtonProps`)
 - Add JSDoc `@param` tags on the component declaration for descriptions
+
+**Component reports the wrong generation, or an agent keeps picking the 1.0 one**
+- A 2.0 component must either live under `src/components/New/` or carry a `Components_2_0/...` Storybook title — otherwise it is classified as 1.0
+- The `supersededBy` link is derived from names: a 1.0 `DialX` links to a 2.0 `X`. If the 2.0 replacement is named differently, no link is produced
+- Run `npm run build:manifest` and check the summary line — it reports how many components are generation 2.0
 
 **Agents confuse similar components or pick the wrong one**
 - Improve JSDoc descriptions to clearly distinguish purpose and use cases

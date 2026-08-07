@@ -26,10 +26,18 @@ Versions match the git tags on the `development` branch.
 - **`ButtonDropdown` (2.0)** — the trigger button now carries `aria-haspopup` and `aria-expanded` itself. `DialDropdown` sets them on a non-focusable wrapper `<span>`, so assistive tech never reached them.
 - **`Calendar` (2.0)** — day cells are named with their full date (e.g. "Sunday, 15 March 2026") instead of a bare day number; the popover is a named dialog; and the field `label` is associated with the `div[role="button"]` trigger, which `<label htmlFor>` cannot label.
 - **`FabButton`, `DialIconButton`, `IconButton` (2.0)** — an icon-only button with only `tooltipProps` is now named from the tooltip text. A tooltip's `aria-describedby` lands on a wrapper element and is suppressed on mobile, so it never reached assistive tech.
+- **MCP server — 2.0 components were invisible to agents** — the manifest generator treated only `Dial*` exports as components, so every generation 2.0 component (`Button`, `Input`, `Select`, `Popup`, …) was filed as a hook and lost its props table and examples entirely. Components are now identified by where they live rather than by their name prefix, which also restores the un-prefixed 1.0 components (`Spinner`, `Skeleton`, `FabButton`) and documents the 2.0 enums (`NotificationVariant`, `CalendarMode`) as types.
+- **MCP server — components exported through a re-export barrel were dropped** — `src/index.ts` reaches the Analytics set through `components/Analytics/index.ts`, which the generator tried to read as a file and skipped. Named re-exports are now followed to the declaring file, adding all five Analytics components to discovery.
+- **MCP server — multi-line JSDoc descriptions broke the markdown tables** in `searchEntity` results. Cells are collapsed to a single line and `|` is escaped.
 
 ### Added
 
 - **Enhanced pointer targets** — standard-size buttons expose a 44×44 pointer target (WCAG 2.5.5, Level AAA) via the `dial-kit-enhanced-target` utility, with no change to their rendered size. See the [Accessibility section of the README](README.md#-accessibility) for the documented exceptions.
+- **MCP server — generation-aware component discovery** — component entries carry `generation` (`1.0` | `2.0`), and a 1.0 component carries `supersededBy` naming its 2.0 replacement (e.g. `DialButton` → `Button`). `searchEntity` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` flags a superseded component and, on a name miss, suggests the other generation's spelling. Both are derived automatically from component location and Storybook category — there is no list to maintain. See the [MCP Server Guide](src/mcp/README.md).
+
+### Changed
+
+- **Storybook — 2.0 stories are all titled `Components_2_0/…`** — the group was split between `Components_2.0/` and `Components_2_0/`, which showed up as two sidebar sections and two MCP categories for one generation.
 
 ---
 

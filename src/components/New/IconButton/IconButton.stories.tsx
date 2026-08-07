@@ -14,7 +14,7 @@ import {
 } from './IconButtonWrappers';
 
 const meta = {
-  title: 'Components_2.0/IconButton',
+  title: 'Components_2_0/IconButton',
   component: IconButton,
   parameters: {
     layout: 'centered',

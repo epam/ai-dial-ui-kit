@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Highlight, type HighlightProps } from './Highlight';
 
 const meta = {
-  title: 'Components_2.0/Highlight',
+  title: 'Components_2_0/Highlight',
   component: Highlight,
   parameters: {
     layout: 'padded',

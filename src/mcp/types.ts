@@ -13,9 +13,22 @@ export interface LazyComponentEntry {
   nextDynamicExample: string;
 }
 
+/**
+ * Component generation. `2.0` components live under `src/components/New/` and
+ * are exported without the `Dial` prefix; everything else is `1.0`.
+ */
+export type ComponentGeneration = '1.0' | '2.0';
+
 export interface ComponentEntry {
   name: string;
   category: string;
+  /** `2.0` components are the current design system and should be preferred. */
+  generation: ComponentGeneration;
+  /**
+   * Present on `1.0` components that have a `2.0` replacement — the name of
+   * that replacement (e.g. `DialButton` → `Button`).
+   */
+  supersededBy?: string;
   description: string;
   props: PropEntry[];
   examples: string[];

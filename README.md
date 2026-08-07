@@ -312,6 +312,8 @@ import * as UIKit from '@epam/ai-dial-ui-kit';
 
 The AI DIAL UI Kit includes a built-in **MCP (Model Context Protocol) server** that enables AI agents to discover components, types, hooks, and utilities programmatically. This allows AI assistants to generate accurate, type-safe component code without hallucination.
 
+Component results are ranked **generation 2.0 first** — the current design system, exported without the `Dial` prefix — and each legacy `Dial*` component points at its 2.0 replacement, so agents land on the right component by default.
+
 For setup, configuration, and detailed resources, see the [MCP Server Guide](./src/mcp/README.md).
 
 ## 🤝 Contributing

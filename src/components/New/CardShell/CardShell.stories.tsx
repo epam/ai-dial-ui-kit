@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardShell, type CardShellProps } from './CardShell';
 
 const meta = {
-  title: 'Components_2.0/CardShell',
+  title: 'Components_2_0/CardShell',
   component: CardShell,
   parameters: {
     layout: 'padded',
