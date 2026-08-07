@@ -34,14 +34,3 @@ export const Default: Story = {
     caption: 'Info',
   },
 };
-
-/**
- * A long caption still works as a tooltip, but a short `aria-label` keeps the
- * announced name scannable.
- */
-export const ExplicitAccessibleName: Story = {
-  args: {
-    caption: 'Only digits, without spaces or a country prefix',
-    'aria-label': 'Phone number help',
-  },
-};

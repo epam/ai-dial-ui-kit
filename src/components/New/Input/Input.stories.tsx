@@ -67,49 +67,11 @@ export const Filled: Story = {
   },
 };
 
-export const IconBefore: Story = {
-  args: {
-    placeholder: 'Search...',
-    iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
-  },
-};
-
-export const IconAfter: Story = {
-  args: {
-    placeholder: 'Password',
-    type: 'password',
-    iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
-  },
-};
-
-export const BothIcons: Story = {
-  args: {
-    placeholder: 'Search...',
-    iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
-    iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
-  },
-};
-
 export const Small: Story = {
   args: {
     placeholder: 'Search...',
     size: ElementSize.Small,
     iconBefore: <IconSearch size={DIAL_ICON_SIZE.SM} />,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    placeholder: 'Disable input',
-    disabled: true,
-  },
-};
-
-export const Invalid: Story = {
-  args: {
-    placeholder: 'Invalid input',
-    value: 'Invalid value',
-    invalid: true,
   },
 };
 

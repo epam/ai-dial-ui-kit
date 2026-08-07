@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconPhoto, IconUser } from '@tabler/icons-react';
-import { DialSkeleton } from './Skeleton';
+import { Skeleton } from './Skeleton';
 import {
-  DialSkeletonVariant,
-  DialSkeletonAvatarSize,
-  DialSkeletonAvatarShape,
+  SkeletonVariant,
+  SkeletonAvatarSize,
+  SkeletonAvatarShape,
 } from '@/types/skeleton';
 import { useState, useEffect, type FC } from 'react';
 
-const meta: Meta<typeof DialSkeleton> = {
-  title: 'Feedback/Skeleton',
-  component: DialSkeleton,
+const meta: Meta<typeof Skeleton> = {
+  title: 'Components_2_0/Skeleton',
+  component: Skeleton,
   parameters: {
     layout: 'centered',
   },
@@ -26,7 +26,7 @@ const meta: Meta<typeof DialSkeleton> = {
     },
     variant: {
       control: 'select',
-      options: Object.values(DialSkeletonVariant),
+      options: Object.values(SkeletonVariant),
       description: 'Skeleton variant',
     },
     width: {
@@ -54,7 +54,7 @@ export const Default: Story = {
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
@@ -67,7 +67,7 @@ export const WithAvatar: Story = {
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
@@ -76,14 +76,14 @@ export const WithLargeAvatar: Story = {
   args: {
     active: true,
     avatar: {
-      size: DialSkeletonAvatarSize.Large,
-      shape: DialSkeletonAvatarShape.Square,
+      size: SkeletonAvatarSize.Large,
+      shape: SkeletonAvatarShape.Square,
     },
     paragraph: { rows: 3 },
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
@@ -92,14 +92,14 @@ export const WithSmallCircleAvatar: Story = {
   args: {
     active: true,
     avatar: {
-      size: DialSkeletonAvatarSize.Small,
-      shape: DialSkeletonAvatarShape.Circle,
+      size: SkeletonAvatarSize.Small,
+      shape: SkeletonAvatarShape.Circle,
     },
     paragraph: { rows: 2 },
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
@@ -116,14 +116,14 @@ export const CustomParagraphWidths: Story = {
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
 
 export const TextVariant: Story = {
   args: {
-    variant: DialSkeletonVariant.Text,
+    variant: SkeletonVariant.Text,
     width: '200px',
     height: '20px',
     active: true,
@@ -132,7 +132,7 @@ export const TextVariant: Story = {
 
 export const SmallTextVariant: Story = {
   args: {
-    variant: DialSkeletonVariant.Text,
+    variant: SkeletonVariant.Text,
     width: '100px',
     height: '12px',
     active: true,
@@ -141,7 +141,7 @@ export const SmallTextVariant: Story = {
 
 export const CircularVariant: Story = {
   args: {
-    variant: DialSkeletonVariant.Circular,
+    variant: SkeletonVariant.Circular,
     width: 64,
     height: 64,
     active: true,
@@ -150,7 +150,7 @@ export const CircularVariant: Story = {
 
 export const RectangularVariant: Story = {
   args: {
-    variant: DialSkeletonVariant.Rectangular,
+    variant: SkeletonVariant.Rectangular,
     width: '300px',
     height: '200px',
     active: true,
@@ -159,7 +159,7 @@ export const RectangularVariant: Story = {
 
 export const ImageThumbnailLoading: Story = {
   args: {
-    variant: DialSkeletonVariant.Rectangular,
+    variant: SkeletonVariant.Rectangular,
     width: 100,
     height: 100,
     active: true,
@@ -181,7 +181,7 @@ export const ImageThumbnailLoading: Story = {
 
 export const CircularWithOverlay: Story = {
   args: {
-    variant: DialSkeletonVariant.Circular,
+    variant: SkeletonVariant.Circular,
     width: 40,
     height: 40,
     active: true,
@@ -210,7 +210,7 @@ export const WithoutAnimation: Story = {
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
 };
@@ -228,7 +228,7 @@ const LoadingComponent: FC = () => {
 
   return (
     <div className="w-[600px]">
-      <DialSkeleton loading={loading} avatar paragraph={{ rows: 4 }}>
+      <Skeleton loading={loading} avatar paragraph={{ rows: 4 }}>
         <div className="flex gap-4">
           <div className="size-10 rounded-full bg-accent-primary flex items-center justify-center text-white">
             JD
@@ -241,7 +241,7 @@ const LoadingComponent: FC = () => {
             </p>
           </div>
         </div>
-      </DialSkeleton>
+      </Skeleton>
     </div>
   );
 };
@@ -261,9 +261,9 @@ export const ConditionalLoading: Story = {
 export const MultipleSkeletons: Story = {
   render: () => (
     <div className="w-[600px] space-y-6">
-      <DialSkeleton avatar paragraph={{ rows: 2 }} active />
-      <DialSkeleton avatar paragraph={{ rows: 2 }} active />
-      <DialSkeleton avatar paragraph={{ rows: 2 }} active />
+      <Skeleton avatar paragraph={{ rows: 2 }} active />
+      <Skeleton avatar paragraph={{ rows: 2 }} active />
+      <Skeleton avatar paragraph={{ rows: 2 }} active />
     </div>
   ),
 };
@@ -273,21 +273,21 @@ export const ListSkeleton: Story = {
     <div className="w-[400px] space-y-4">
       {Array.from({ length: 5 }).map((_, index) => (
         <div key={index} className="flex items-center gap-3">
-          <DialSkeleton
-            variant={DialSkeletonVariant.Circular}
+          <Skeleton
+            variant={SkeletonVariant.Circular}
             width={40}
             height={40}
             active
           />
           <div className="flex-1 space-y-2">
-            <DialSkeleton
-              variant={DialSkeletonVariant.Text}
+            <Skeleton
+              variant={SkeletonVariant.Text}
               width="60%"
               height={16}
               active
             />
-            <DialSkeleton
-              variant={DialSkeletonVariant.Text}
+            <Skeleton
+              variant={SkeletonVariant.Text}
               width="40%"
               height={12}
               active
@@ -302,33 +302,28 @@ export const ListSkeleton: Story = {
 export const CardSkeleton: Story = {
   render: () => (
     <div className="w-[300px] border border-primary rounded p-4">
-      <DialSkeleton
-        variant={DialSkeletonVariant.Rectangular}
+      <Skeleton
+        variant={SkeletonVariant.Rectangular}
         width="100%"
         height={200}
         active
         className="mb-4"
       />
-      <DialSkeleton
-        variant={DialSkeletonVariant.Text}
+      <Skeleton
+        variant={SkeletonVariant.Text}
         width="80%"
         height={24}
         active
         className="mb-2"
       />
-      <DialSkeleton
-        variant={DialSkeletonVariant.Text}
+      <Skeleton
+        variant={SkeletonVariant.Text}
         width="100%"
         height={16}
         active
         className="mb-2"
       />
-      <DialSkeleton
-        variant={DialSkeletonVariant.Text}
-        width="90%"
-        height={16}
-        active
-      />
+      <Skeleton variant={SkeletonVariant.Text} width="90%" height={16} active />
     </div>
   ),
 };
@@ -342,7 +337,7 @@ export const CustomColor: Story = {
   },
   render: (args) => (
     <div className="w-[600px]">
-      <DialSkeleton {...args} />
+      <Skeleton {...args} />
     </div>
   ),
   parameters: {
@@ -359,7 +354,7 @@ export const CustomColorVariants: Story = {
   render: () => (
     <div className="space-y-6">
       <div className="p-4 rounded" style={{ backgroundColor: '#1e1b4b' }}>
-        <DialSkeleton
+        <Skeleton
           active
           color="rgba(139, 92, 246, 0.4)"
           avatar
@@ -367,7 +362,7 @@ export const CustomColorVariants: Story = {
         />
       </div>
       <div className="p-4 rounded bg-accent-primary">
-        <DialSkeleton
+        <Skeleton
           active
           color="rgba(255,255,255,0.3)"
           paragraph={{ rows: 2 }}
@@ -375,23 +370,23 @@ export const CustomColorVariants: Story = {
       </div>
       <div className="p-4 rounded">
         <div className="flex gap-3 items-center mb-3">
-          <DialSkeleton
-            variant={DialSkeletonVariant.Circular}
+          <Skeleton
+            variant={SkeletonVariant.Circular}
             width={40}
             height={40}
             active
             color="#f97316"
           />
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
+          <Skeleton
+            variant={SkeletonVariant.Text}
             width="50%"
             height={16}
             active
             color="#f97316"
           />
         </div>
-        <DialSkeleton
-          variant={DialSkeletonVariant.Rectangular}
+        <Skeleton
+          variant={SkeletonVariant.Rectangular}
           width="100%"
           height={100}
           active
@@ -413,18 +408,18 @@ export const CustomColorVariants: Story = {
 export const AllAvatarSizes: Story = {
   render: () => (
     <div className="w-[600px] space-y-6">
-      <DialSkeleton
-        avatar={{ size: DialSkeletonAvatarSize.Small }}
+      <Skeleton
+        avatar={{ size: SkeletonAvatarSize.Small }}
         paragraph={{ rows: 2 }}
         active
       />
-      <DialSkeleton
-        avatar={{ size: DialSkeletonAvatarSize.Default }}
+      <Skeleton
+        avatar={{ size: SkeletonAvatarSize.Default }}
         paragraph={{ rows: 2 }}
         active
       />
-      <DialSkeleton
-        avatar={{ size: DialSkeletonAvatarSize.Large }}
+      <Skeleton
+        avatar={{ size: SkeletonAvatarSize.Large }}
         paragraph={{ rows: 2 }}
         active
       />
@@ -443,18 +438,18 @@ export const AllAvatarSizes: Story = {
 export const AllAvatarShapes: Story = {
   render: () => (
     <div className="w-[600px] space-y-6">
-      <DialSkeleton
+      <Skeleton
         avatar={{
-          size: DialSkeletonAvatarSize.Large,
-          shape: DialSkeletonAvatarShape.Circle,
+          size: SkeletonAvatarSize.Large,
+          shape: SkeletonAvatarShape.Circle,
         }}
         paragraph={{ rows: 2 }}
         active
       />
-      <DialSkeleton
+      <Skeleton
         avatar={{
-          size: DialSkeletonAvatarSize.Large,
-          shape: DialSkeletonAvatarShape.Square,
+          size: SkeletonAvatarSize.Large,
+          shape: SkeletonAvatarShape.Square,
         }}
         paragraph={{ rows: 2 }}
         active
@@ -478,35 +473,23 @@ export const FormLoadingState: Story = {
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Full Name</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="100%"
-            height={36}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="100%" height={36} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Email</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="100%"
-            height={36}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="100%" height={36} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Phone</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="70%"
-            height={36}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="70%" height={36} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Bio</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Rectangular}
+          <Skeleton
+            variant={SkeletonVariant.Rectangular}
             width="100%"
             height={120}
           />
@@ -514,13 +497,13 @@ export const FormLoadingState: Story = {
       </div>
 
       <div className="flex gap-3 justify-end">
-        <DialSkeleton
-          variant={DialSkeletonVariant.Rectangular}
+        <Skeleton
+          variant={SkeletonVariant.Rectangular}
           width={80}
           height={36}
         />
-        <DialSkeleton
-          variant={DialSkeletonVariant.Rectangular}
+        <Skeleton
+          variant={SkeletonVariant.Rectangular}
           width={80}
           height={36}
         />
@@ -540,68 +523,44 @@ export const DetailsPanelLoadingState: Story = {
   render: () => (
     <div className="w-[320px] border border-primary rounded p-4 space-y-4">
       <div className="flex items-center gap-3">
-        <DialSkeleton
-          variant={DialSkeletonVariant.Circular}
-          width={48}
-          height={48}
-        />
+        <Skeleton variant={SkeletonVariant.Circular} width={48} height={48} />
         <div className="flex-1 space-y-2">
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="80%"
-            height={18}
-          />
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="60%"
-            height={14}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="80%" height={18} />
+          <Skeleton variant={SkeletonVariant.Text} width="60%" height={14} />
         </div>
       </div>
 
       <div className="border-t border-primary pt-4 space-y-3">
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Status</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="50%"
-            height={16}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="50%" height={16} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Created</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="70%"
-            height={16}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="70%" height={16} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Last Modified</div>
-          <DialSkeleton
-            variant={DialSkeletonVariant.Text}
-            width="70%"
-            height={16}
-          />
+          <Skeleton variant={SkeletonVariant.Text} width="70%" height={16} />
         </div>
 
         <div className="space-y-2">
           <div className="text-secondary dial-small-text">Tags</div>
           <div className="flex gap-2">
-            <DialSkeleton
-              variant={DialSkeletonVariant.Rectangular}
+            <Skeleton
+              variant={SkeletonVariant.Rectangular}
               width={60}
               height={24}
             />
-            <DialSkeleton
-              variant={DialSkeletonVariant.Rectangular}
+            <Skeleton
+              variant={SkeletonVariant.Rectangular}
               width={80}
               height={24}
             />
-            <DialSkeleton
-              variant={DialSkeletonVariant.Rectangular}
+            <Skeleton
+              variant={SkeletonVariant.Rectangular}
               width={70}
               height={24}
             />
