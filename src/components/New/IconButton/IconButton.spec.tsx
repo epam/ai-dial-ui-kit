@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
+import { ElementSize } from '@/types/size';
 import { IconButton } from './IconButton';
 
 describe('Dial UI Kit :: DialIconButton', () => {
@@ -27,5 +28,42 @@ describe('Dial UI Kit :: DialIconButton', () => {
     );
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-button-class');
+  });
+
+  test('Should use the aria-label as the accessible name', () => {
+    render(<IconButton icon={<div>icon</div>} aria-label="Delete" />);
+
+    expect(screen.getByRole('button')).toHaveAccessibleName('Delete');
+  });
+
+  test('Should fall back to the tooltip text as the accessible name', () => {
+    render(
+      <IconButton
+        icon={<div>icon</div>}
+        tooltipProps={{ tooltip: 'Delete' }}
+      />,
+    );
+
+    expect(screen.getByRole('button')).toHaveAccessibleName('Delete');
+  });
+
+  test('Should enhance the pointer target at standard size', () => {
+    render(<IconButton icon={<div>icon</div>} aria-label="Delete" />);
+
+    expect(screen.getByRole('button')).toHaveClass('dial-kit-enhanced-target');
+  });
+
+  test('Should not enhance the pointer target at small size', () => {
+    render(
+      <IconButton
+        icon={<div>icon</div>}
+        aria-label="Delete"
+        size={ElementSize.Small}
+      />,
+    );
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-enhanced-target',
+    );
   });
 });

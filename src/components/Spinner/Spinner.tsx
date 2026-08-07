@@ -1,14 +1,14 @@
 import { mergeClasses } from '@/utils/merge-classes';
 import type { FC } from 'react';
 
-export interface DialSpinnerProps {
+export interface SpinnerProps {
   size?: number;
   className?: string;
   fullWidth?: boolean;
   ariaLabel?: string;
 }
 
-export const DialSpinner: FC<DialSpinnerProps> = ({
+export const Spinner: FC<SpinnerProps> = ({
   size = 40,
   className,
   fullWidth = false,
@@ -27,7 +27,7 @@ export const DialSpinner: FC<DialSpinnerProps> = ({
         role="img"
         aria-label={ariaLabel}
         style={{ width: size, height: size }}
-        className="rounded-full border-2 border-secondary border-t-accent-primary animate-spin-steps shrink-0"
+        className="rounded-full border-2 border-secondary border-t-info animate-spin-steps shrink-0"
       />
     </div>
   );

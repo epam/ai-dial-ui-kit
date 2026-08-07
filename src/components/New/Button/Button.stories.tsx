@@ -103,7 +103,7 @@ export const Focus: Story = {
     docs: {
       description: {
         story:
-          'Keyboard focus state — a 1px outline painted with the `--stroke-focus` token.',
+          'Keyboard focus state — a 1px outline painted with the `--stroke-focus-black` token.',
       },
     },
   },

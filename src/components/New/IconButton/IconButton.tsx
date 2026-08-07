@@ -11,6 +11,7 @@ import {
   type DialTooltipProps,
 } from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
+import { resolveAccessibleName } from '@/utils/accessible-name';
 import { ElementSize } from '@/types/size';
 import { getButtonClassNames } from '../Button/utils';
 
@@ -50,6 +51,10 @@ export interface IconButtonProps extends DetailedHTMLProps<
  *
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
+ * The button is icon-only, so it needs an accessible name: pass `aria-label`,
+ * or a string `tooltipProps.tooltip`, which is used as the label when no
+ * `aria-label` is given.
+ *
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ElementSize.Standard] - Defines the size of the button
@@ -69,7 +74,9 @@ export const IconButton: FC<IconButtonProps> = ({
   const btnClassName = mergeClasses(
     'dial-kit-base-icon-button dial-kit-base-button',
     variant && getButtonClassNames(variant, appearance),
-    size === ElementSize.Small ? 'size-[24px]' : 'size-[40px]',
+    size === ElementSize.Small
+      ? 'size-[24px]'
+      : 'size-[40px] dial-kit-enhanced-target',
     className,
   );
 
@@ -78,7 +85,10 @@ export const IconButton: FC<IconButtonProps> = ({
       {...props}
       type={type}
       className={btnClassName}
-      aria-label={props['aria-label']}
+      aria-label={resolveAccessibleName(
+        props['aria-label'],
+        tooltipProps?.tooltip,
+      )}
     >
       {icon}
     </button>

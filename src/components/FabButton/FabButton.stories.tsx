@@ -52,6 +52,21 @@ export const WithTooltip: Story = {
   },
 };
 
+export const TooltipAsAccessibleName: Story = {
+  args: {
+    'aria-label': undefined,
+    tooltipProps: { tooltip: 'Scroll to bottom' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The button is icon-only, so it needs an accessible name. With no `aria-label`, a string `tooltipProps.tooltip` is used as the label — the tooltip itself is not announced by screen readers and is hidden on mobile.',
+      },
+    },
+  },
+};
+
 export const AllStates: Story = {
   render: () => (
     <div className="flex flex-col gap-4">

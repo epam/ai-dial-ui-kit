@@ -13,6 +13,7 @@ import {
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
+import { resolveAccessibleName } from '@/utils/accessible-name';
 import { getButtonClassNames } from './utils';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
@@ -56,6 +57,11 @@ export interface ButtonProps extends DetailedHTMLProps<
  *
  * inherits all properties from the `ButtonHTMLAttributes<HTMLButtonElement>`
  *
+ * The accessible name is taken from a string `label` first, then `aria-label`,
+ * then — only for a button with no `label` at all — a string
+ * `tooltipProps.tooltip`. Pass `aria-label` when `label` is a ReactNode, since
+ * an icon-only button is otherwise unnamed.
+ *
  * @param [label] - The content of the button. Can be any React node.
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
@@ -86,15 +92,28 @@ export const Button: FC<ButtonProps> = ({
     size === ElementSize.Small ? 'h-[24px] gap-1' : 'h-[40px] gap-2',
     appearance !== ButtonAppearance.Link &&
       (size === ElementSize.Small ? 'px-2' : 'px-4'),
+    // A link-appearance button sits inline in text, where WCAG 2.5.5 exempts
+    // it and an expanded target would overlap the surrounding copy.
+    size !== ElementSize.Small &&
+      appearance !== ButtonAppearance.Link &&
+      'dial-kit-enhanced-target',
     className,
   );
+
+  // A tooltip only names the button when nothing else does: as an `aria-label`
+  // it would otherwise override a visible `label` that is a ReactNode.
+  const tooltipFallback = label ? undefined : tooltipProps?.tooltip;
 
   const button = (
     <button
       {...props}
       type={type}
       className={btnClassName}
-      aria-label={(typeof label === 'string' && label) || props['aria-label']}
+      aria-label={resolveAccessibleName(
+        typeof label === 'string' ? label : undefined,
+        props['aria-label'],
+        tooltipFallback,
+      )}
     >
       <DialIcon icon={iconBefore} />
       {label && <span className={textClassName}>{label}</span>}

@@ -25,8 +25,8 @@ export { DialIcon } from './components/Icon/Icon';
 export { DialNotification } from './components/Notification/Notification.tsx';
 export type { DialNotificationProps } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
-export { DialSpinner } from './components/Spinner/Spinner';
-export type { DialSpinnerProps } from './components/Spinner/Spinner';
+export { Spinner } from './components/Spinner/Spinner';
+export type { SpinnerProps } from './components/Spinner/Spinner';
 export {
   DialProgressBar,
   DialProgressBarSize,
@@ -160,6 +160,7 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree';
 
 // Types
+export { EditorThemes } from './types/editor';
 export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
@@ -334,3 +335,16 @@ export type {
   InlineSelectProps,
   InlineSelectTriggerProps,
 } from './components/New/InlineSelect/InlineSelect';
+export { InfoButton } from './components/New/InfoButton/InfoButton';
+export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
+export type { LabelProps } from './components/New/Label/Label';
+export { Label } from './components/New/Label/Label';
+export { Textarea } from './components/New/Textarea/Textarea';
+export { Input } from './components/New/Input/Input';
+export type { InputProps } from './components/New/Input/Input';
+export type { TextareaProps } from './components/New/Textarea/Textarea';
+export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
+export {
+  CaptionText,
+  ErrorText,
+} from './components/New/CaptionText/CaptionText';

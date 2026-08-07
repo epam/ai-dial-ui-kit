@@ -97,7 +97,7 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
         className={mergeClasses(
           'group flex items-center justify-center rounded border border-transparent bg-layer-4 text-primary',
           'enabled:hover:bg-accent-primary-alpha enabled:active:bg-controls-accent-primary-alpha-active',
-          'focus-visible:border-focus focus-visible:outline-none disabled:cursor-not-allowed disabled:text-controls-secondary-disable disabled:opacity-75',
+          'focus-visible:border-focus-black focus-visible:outline-none disabled:cursor-not-allowed disabled:text-controls-secondary-disable disabled:opacity-75',
           isSmall ? 'h-8 px-2' : 'h-10 px-2',
           !showCaret ? squareSizeClass : undefined,
           buttonClassName,

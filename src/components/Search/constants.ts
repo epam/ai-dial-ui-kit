@@ -24,4 +24,11 @@ export const SIZE_CONFIG: Record<
     iconSize: 20,
     iconStroke: 1.5,
   },
+  [ElementSize.Large]: {
+    className: '',
+    wrapperClassName: '',
+    containerClassName: '',
+    iconSize: 0,
+    iconStroke: 0,
+  },
 };

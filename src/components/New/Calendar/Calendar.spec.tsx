@@ -35,7 +35,9 @@ describe('Dial UI Kit :: Calendar', () => {
       fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
       expect(screen.getByText('March 2026')).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole('button', { name: '15' }));
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Sunday, 15 March 2026' }),
+      );
       expect(onChange).toHaveBeenCalledWith(new Date(2026, 2, 15));
       expect(screen.queryByText('March 2026')).not.toBeInTheDocument();
     });
@@ -163,6 +165,125 @@ describe('Dial UI Kit :: Calendar', () => {
       expect(
         screen.getByRole('button', { name: 'Select day' }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('accessibility', () => {
+    test('Should name each day cell with its full date', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(
+        screen.getByRole('button', { name: 'Sunday, 1 March 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should distinguish days spilling over from an adjacent month', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(
+        screen.getByRole('button', { name: 'Saturday, 28 February 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should name the popover so it is not announced as an unlabelled dialog', () => {
+      render(<Calendar mode={CalendarMode.Date} label="Start date" />);
+
+      fireEvent.click(screen.getByRole('button', { name: /Start date/ }));
+
+      expect(
+        screen.getByRole('dialog', { name: 'Start date' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should name the trigger from both the label and the current value', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          label="Start date"
+          value={new Date(2026, 2, 11)}
+        />,
+      );
+
+      // `<label htmlFor>` is inert on a div[role="button"], so without the
+      // explicit wiring the field name would be missing entirely.
+      expect(
+        screen.getByRole('button', { name: 'Start date 11 Mar 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should hide the decorative weekday header row from assistive tech', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
+
+      expect(screen.getByText('Mon')).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  describe('fieldClassName override', () => {
+    test('Should merge fieldClassName onto the trigger in date mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Date} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByRole('button', { name: /select date/i })).toHaveClass(
+        'custom-field',
+      );
+    });
+
+    test('Should merge fieldClassName onto the trigger in datetime mode', () => {
+      render(
+        <Calendar mode={CalendarMode.DateTime} fieldClassName="custom-field" />,
+      );
+      expect(
+        screen.getByRole('button', { name: /select date and time/i }),
+      ).toHaveClass('custom-field');
+    });
+
+    test('Should merge fieldClassName onto the field in time mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Time} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByPlaceholderText('--:--')).toHaveClass('custom-field');
+    });
+
+    test('Should merge fieldClassName onto the trigger in weekday mode', () => {
+      render(
+        <Calendar mode={CalendarMode.Weekday} fieldClassName="custom-field" />,
+      );
+      expect(screen.getByRole('button', { name: /select day/i })).toHaveClass(
+        'custom-field',
+      );
+    });
+
+    test('Should not leak fieldClassName onto the popover panel', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          label="Start date"
+          fieldClassName="custom-field"
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /Start date/ }));
+
+      expect(screen.getByRole('dialog')).not.toHaveClass('custom-field');
+    });
+
+    test('Should override a conflicting default utility rather than duplicate it', () => {
+      render(<Calendar mode={CalendarMode.Date} fieldClassName="rounded" />);
+      const trigger = screen.getByRole('button', { name: /select date/i });
+      expect(trigger).toHaveClass('rounded');
+      expect(trigger).not.toHaveClass('rounded-xl');
     });
   });
 
