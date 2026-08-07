@@ -334,3 +334,12 @@ export { InfoButton } from './components/New/InfoButton/InfoButton';
 export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
 export { Label } from './components/New/Label/Label';
+export { Textarea } from './components/New/Textarea/Textarea';
+export { Input } from './components/New/Input/Input';
+export type { InputProps } from './components/New/Input/Input';
+export type { TextareaProps } from './components/New/Textarea/Textarea';
+export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
+export {
+  CaptionText,
+  ErrorText,
+} from './components/New/CaptionText/CaptionText';
