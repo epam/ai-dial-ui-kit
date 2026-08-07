@@ -1,8 +1,8 @@
-import classNames from 'classnames';
 import { useCallback, type FC, type MouseEvent } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
 import { type DropdownItem } from '@/models/dropdown';
+import { mergeClasses } from '@/utils/merge-classes';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
 
 import {
@@ -10,6 +10,7 @@ import {
   dropdownItemBaseClassName,
   dropdownItemDangerClassName,
   dropdownItemDisabledClassName,
+  dropdownSubMenuClassName,
   submenuCaretIcon,
 } from './constants';
 
@@ -51,7 +52,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         aria-expanded={isOpen}
         aria-disabled={!!item.disabled}
         disabled={item.disabled}
-        className={classNames(
+        className={mergeClasses(
           dropdownItemBaseClassName,
           item.disabled && dropdownItemDisabledClassName,
           item.className,
@@ -59,12 +60,12 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         {...getReferenceProps()}
       >
         {item.icon && (
-          <span className={classNames(item.disabled && 'text-secondary')}>
+          <span className={mergeClasses(item.disabled && 'text-secondary')}>
             <DialIcon icon={item.icon} />
           </span>
         )}
         <span
-          className={classNames(
+          className={mergeClasses(
             'flex-1 truncate text-start',
             item.disabled && 'text-secondary',
           )}
@@ -72,7 +73,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           {item.label}
         </span>
         <span
-          className={classNames(
+          className={mergeClasses(
             'ml-auto shrink-0',
             item.disabled && 'text-secondary',
           )}
@@ -88,46 +89,44 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           context={context}
           getFloatingProps={getFloatingProps}
           role="menu"
-          className="w-max"
+          surfaceClassName={dropdownSubMenuClassName}
         >
-          <div role="none" className="py-1">
-            {item.children!.map((child) => (
-              <button
-                key={child.key}
-                role="menuitem"
-                type="button"
-                aria-disabled={!!child.disabled}
-                disabled={child.disabled}
-                className={classNames(
-                  dropdownItemBaseClassName,
-                  child.disabled && dropdownItemDisabledClassName,
-                  child.danger && dropdownItemDangerClassName,
-                  child.className,
-                )}
-                onClick={handleChildClick(child)}
-              >
-                {child.icon && (
-                  <span
-                    className={classNames(
-                      child.danger && 'text-error',
-                      child.disabled && 'text-secondary',
-                    )}
-                  >
-                    <DialIcon icon={child.icon} />
-                  </span>
-                )}
+          {item.children!.map((child) => (
+            <button
+              key={child.key}
+              role="menuitem"
+              type="button"
+              aria-disabled={!!child.disabled}
+              disabled={child.disabled}
+              className={mergeClasses(
+                dropdownItemBaseClassName,
+                child.disabled && dropdownItemDisabledClassName,
+                child.danger && dropdownItemDangerClassName,
+                child.className,
+              )}
+              onClick={handleChildClick(child)}
+            >
+              {child.icon && (
                 <span
-                  className={classNames(
-                    'flex-1 truncate text-start',
+                  className={mergeClasses(
                     child.danger && 'text-error',
                     child.disabled && 'text-secondary',
                   )}
                 >
-                  {child.label}
+                  <DialIcon icon={child.icon} />
                 </span>
-              </button>
-            ))}
-          </div>
+              )}
+              <span
+                className={mergeClasses(
+                  'flex-1 truncate text-start',
+                  child.danger && 'text-error',
+                  child.disabled && 'text-secondary',
+                )}
+              >
+                {child.label}
+              </span>
+            </button>
+          ))}
         </SubMenuPanel>
       )}
     </>

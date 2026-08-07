@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import type { FC, ReactNode } from 'react';
 
 import { ElementSize } from '@/types/size';
+import { mergeClasses } from '@/utils/merge-classes';
 import { IconButton } from '../../IconButton/IconButton';
 import { inputButtonClassName } from './constants';
 
@@ -36,13 +36,13 @@ export const InputButton: FC<InputButtonProps> = ({
 }) => {
   return (
     <div
-      className={classNames(
+      className={mergeClasses(
         'border-l border-tertiary',
         size === ElementSize.Standard ? 'size-[40px]' : 'size-[24px]',
       )}
     >
       <IconButton
-        className={classNames(
+        className={mergeClasses(
           inputButtonClassName,
           size === ElementSize.Small && 'p-1',
           className,

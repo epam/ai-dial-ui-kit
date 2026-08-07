@@ -15,7 +15,6 @@ import {
   useRole,
 } from '@floating-ui/react';
 import type { Placement, ReferenceElement } from '@floating-ui/react';
-import classNames from 'classnames';
 import {
   useCallback,
   useEffect,
@@ -379,7 +378,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 role="menuitem"
                 type="button"
                 aria-disabled={!!it.disabled}
-                className={classNames(
+                className={mergeClasses(
                   dropdownItemBaseClassName,
                   it.disabled && dropdownItemDisabledClassName,
                   it.danger && dropdownItemDangerClassName,
@@ -390,7 +389,7 @@ export const Dropdown: FC<DropdownProps> = ({
               >
                 {it.icon && (
                   <span
-                    className={classNames(
+                    className={mergeClasses(
                       it.danger && 'text-error',
                       it.disabled && 'text-secondary',
                     )}
@@ -399,7 +398,7 @@ export const Dropdown: FC<DropdownProps> = ({
                   </span>
                 )}
                 <span
-                  className={classNames(
+                  className={mergeClasses(
                     'flex-1 truncate text-start',
                     it.danger && 'text-error',
                     it.disabled && 'text-secondary',
@@ -463,7 +462,7 @@ export const Dropdown: FC<DropdownProps> = ({
     <>
       <span
         ref={refs.setReference}
-        className={classNames(
+        className={mergeClasses(
           dropdownBaseClassName,
           disabled && '!cursor-not-allowed opacity-75',
           className,
@@ -488,7 +487,7 @@ export const Dropdown: FC<DropdownProps> = ({
               id={listId}
               ref={refs.setFloating}
               style={floatingStyles}
-              className={classNames(
+              className={mergeClasses(
                 dropdownListBaseClassName,
                 !matchReferenceWidth && 'w-max',
                 listClassName,

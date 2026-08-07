@@ -1,5 +1,4 @@
 import { IconChevronDown } from '@tabler/icons-react';
-import classNames from 'classnames';
 import {
   type FC,
   type KeyboardEvent,
@@ -492,7 +491,7 @@ export const Select: FC<SelectProps> = ({
         )}
 
       {multiple && selectAll && selectableFiltered.length > 0 && (
-        <div className={classNames(selectOptionBaseClassName, 'mt-2')}>
+        <div className={mergeClasses(selectOptionBaseClassName, 'mt-2')}>
           <DialCheckbox
             id={`${fieldId}-selectAll`}
             label={selectAllLabel}
@@ -524,7 +523,7 @@ export const Select: FC<SelectProps> = ({
                   role="option"
                   aria-selected={selected}
                   aria-disabled={!!opt.disabled}
-                  className={classNames(
+                  className={mergeClasses(
                     selectOptionBaseClassName,
                     selected && selectOptionSelectedClassName,
                     opt.disabled && selectOptionDisabledClassName,
@@ -575,7 +574,7 @@ export const Select: FC<SelectProps> = ({
                 aria-selected={selected}
                 aria-disabled={!!opt.disabled}
                 disabled={opt.disabled}
-                className={classNames(
+                className={mergeClasses(
                   selectOptionBaseClassName,
                   opt.disabled && selectOptionDisabledClassName,
                 )}
@@ -644,7 +643,7 @@ export const Select: FC<SelectProps> = ({
               <IconChevronDown
                 size={isSmall ? DIAL_ICON_SIZE.SM : DIAL_ICON_SIZE.MD}
                 aria-hidden="true"
-                className={classNames(
+                className={mergeClasses(
                   selectFieldIconClassName,
                   isOpen && 'rotate-180',
                 )}
@@ -660,11 +659,10 @@ export const Select: FC<SelectProps> = ({
             wrapperClassName={mergeClasses(
               !disabled && 'cursor-pointer',
               multiple &&
-                hasSelection &&
-                classNames(
+                hasSelection && [
                   '!h-auto flex-wrap py-1.5',
                   isSmall ? 'min-h-[24px]' : 'min-h-[40px]',
-                ),
+                ],
               fieldClassName,
             )}
             className={mergeClasses(
