@@ -12,7 +12,6 @@ import {
   overlayItemDisabledClassName,
   overlayItemSelectedClassName,
   overlaySubMenuClassName,
-  overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
