@@ -1,0 +1,98 @@
+/* 2.0 MarkdownEditor: card chrome + toolbar restyle, scoped over @uiw/react-md-editor's default CSS.
+   Colors go through the Tailwind token utilities from tailwind.config.js. The one
+   raw var() below is a stroke token used as a background-color, which has no
+   matching `bg-*` utility (see the toolbar-divider note).
+   Light is the primary theme for now; dark-theme parity is a follow-up. */
+
+.dial-kit-markdown-editor {
+  .w-md-editor {
+    @apply gap-3 rounded-lg border px-4 py-3 border-tertiary !bg-layer-raised;
+
+    box-shadow: none !important;
+    --md-editor-font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+      monospace;
+  }
+
+  .w-md-editor-toolbar {
+    @apply gap-1 bg-transparent p-0;
+    /* the base library sets its own `border-bottom` on this same selector;
+       equal specificity means import order decides the winner without
+       !important, so force it explicitly instead of relying on `border-0`. */
+    border: none !important;
+  }
+
+  /* only the top-level bar: the heading dropdown's own toolbar-child list
+     must stay a vertical stack (see the `ul > li { display: block }` rule
+     the base library applies inside `.w-md-editor-toolbar-child`). */
+  .w-md-editor > .w-md-editor-toolbar > ul {
+    @apply flex items-center;
+  }
+
+  .w-md-editor-text,
+  .w-md-editor-preview {
+    @apply p-0;
+  }
+
+  .w-md-editor-text-pre > code,
+  .w-md-editor-text-input {
+    line-height: 20px !important;
+  }
+
+  .w-md-editor-text-input::placeholder {
+    @apply text-secondary;
+    opacity: 1;
+  }
+
+  .w-md-editor-toolbar li > button {
+    @apply size-[24px] flex flex-row items-center justify-center;
+    @apply rounded-full border border-solid border-transparent;
+    @apply disabled:cursor-not-allowed outline-offset-0;
+    @apply focus-visible:outline focus-visible:outline-focus-black;
+  }
+
+  .w-md-editor-toolbar li > button > svg {
+    @apply size-[16px] text-primary;
+  }
+
+  .w-md-editor-toolbar li > button:focus {
+    @apply enabled:text-accent;
+  }
+
+  .w-md-editor-toolbar li > button:active {
+    @apply bg-control-accent-alpha-active;
+  }
+
+  .w-md-editor-toolbar li.active > button {
+    @apply bg-control-accent-alpha-hover text-accent;
+  }
+
+  .w-md-editor-toolbar li.active > button > svg {
+    @apply text-accent;
+  }
+
+  .w-md-editor-toolbar li > button:disabled,
+  .w-md-editor-toolbar li > button:disabled:hover {
+    @apply cursor-not-allowed bg-transparent;
+    @apply !text-control-disable-beta;
+  }
+
+  .w-md-editor-toolbar-divider {
+    /* a hairline divider is a stroke, not a fill — borrow the border token.
+       the base library sets the same properties on this same selector, so
+       !important is needed here too (see the `.w-md-editor-toolbar` note above). */
+    background-color: var(--stroke-tertiary, #e0e6f0) !important;
+    width: 1px !important;
+    height: 12px !important;
+    margin: 0 12px !important;
+  }
+
+  .w-md-editor-toolbar-child {
+    @apply rounded-md border border-primary bg-layer-raised shadow-md;
+    box-shadow: none !important;
+  }
+
+  .w-md-editor-toolbar-child .w-md-editor-toolbar li > button {
+    @apply size-auto justify-start rounded-md px-2 py-1.5 text-left;
+  }
+}

@@ -323,6 +323,10 @@ export { FabButton } from './components/FabButton/FabButton';
 export type { FabButtonProps } from './components/FabButton/FabButton';
 export { ButtonDropdown } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { ButtonDropdownProps } from './components/New/ButtonDropdown/ButtonDropdown';
+export type { MarkdownEditorProps } from './components/New/MarkdownEditor/MarkdownEditor';
+// Markdown Editor (2.0) - lazy loader to avoid loading in SSR
+export const LazyMarkdownEditor = () =>
+  import('./components/New/MarkdownEditor/MarkdownEditor');
 export {
   InlineSelect,
   InlineSelectTrigger,
