@@ -160,6 +160,7 @@ export { DialDestinationFolderPopup } from './components/FileManager/components/
 export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree';
 
 // Types
+export { EditorThemes } from './types/editor';
 export { ButtonVariant, ButtonAppearance } from './types/button';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
