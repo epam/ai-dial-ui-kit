@@ -1,17 +1,13 @@
 /* 2.0 MarkdownEditor: card chrome + toolbar restyle, scoped over @uiw/react-md-editor's default CSS.
-   Colors reference the upcoming design-system tokens directly (var() with the
-   same names/fallbacks as tailwind.config.js) rather than Tailwind's color
-   utilities, since some of those utilities are being retired in that system.
+   Colors go through the Tailwind token utilities from tailwind.config.js. The one
+   raw var() below is a stroke token used as a background-color, which has no
+   matching `bg-*` utility (see the toolbar-divider note).
    Light is the primary theme for now; dark-theme parity is a follow-up. */
 
 .dial-kit-markdown-editor {
   .w-md-editor {
-    @apply gap-3 rounded-lg border px-4 py-3;
-    border-color: var(--stroke-tertiary, #e0e6f0);
-    background-color: var(--bg-layer-raised, #fcfcfc) !important;
-    /* the base library fakes a border via box-shadow — both this rule and
-       theirs share the same selector, so !important guarantees ours wins
-       regardless of stylesheet import order in the consuming app. */
+    @apply gap-3 rounded-lg border px-4 py-3 border-tertiary !bg-layer-raised;
+
     box-shadow: none !important;
     --md-editor-font-family:
       ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
@@ -44,35 +40,41 @@
   }
 
   .w-md-editor-text-input::placeholder {
-    color: var(--text-secondary, #6b7280);
+    @apply text-secondary;
     opacity: 1;
   }
 
   .w-md-editor-toolbar li > button {
-    @apply flex size-7 items-center justify-center rounded-md transition-colors;
-    color: var(--text-secondary, #6b7280);
+    @apply size-[24px] flex flex-row items-center justify-center;
+    @apply rounded-full border border-solid border-transparent;
+    @apply disabled:cursor-not-allowed outline-offset-0;
+    @apply focus-visible:outline focus-visible:outline-focus-black;
   }
 
-  .w-md-editor-toolbar li > button:hover,
+  .w-md-editor-toolbar li > button > svg {
+    @apply size-[16px] text-primary;
+  }
+
   .w-md-editor-toolbar li > button:focus {
-    background-color: var(--bg-control-neutral-hover, #e0e6f0);
-    color: var(--text-primary, #161b2d);
+    @apply enabled:text-accent;
   }
 
   .w-md-editor-toolbar li > button:active {
-    background-color: var(--bg-control-neutral-active, #d1dbea);
-    color: var(--text-primary, #161b2d);
+    @apply bg-control-accent-alpha-active;
   }
 
   .w-md-editor-toolbar li.active > button {
-    background-color: var(--bg-control-accent-alpha-hover, #2764d924);
-    color: var(--text-accent, #1d4ed8);
+    @apply bg-control-accent-alpha-hover text-accent;
+  }
+
+  .w-md-editor-toolbar li.active > button > svg {
+    @apply text-accent;
   }
 
   .w-md-editor-toolbar li > button:disabled,
   .w-md-editor-toolbar li > button:disabled:hover {
     @apply cursor-not-allowed bg-transparent;
-    color: var(--text-control-disable, #6b7280);
+    @apply !text-control-disable-beta;
   }
 
   .w-md-editor-toolbar-divider {
@@ -86,9 +88,7 @@
   }
 
   .w-md-editor-toolbar-child {
-    @apply rounded-md border shadow-md;
-    border-color: var(--stroke-primary, #6b7280);
-    background-color: var(--bg-layer-raised, #fcfcfc);
+    @apply rounded-md border border-primary bg-layer-raised shadow-md;
     box-shadow: none !important;
   }
 
