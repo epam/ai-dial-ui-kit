@@ -203,6 +203,7 @@ not AAA:
 | `ButtonAppearance.Link` | content | Exempt under the 2.5.5 *Inline* exception; expanding it would overlap surrounding copy |
 | `DialCloseButton` | icon-sized | Renders `h-auto w-auto`, so its target follows the caller's icon size |
 | `DialInfoButton`, `InfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
+| Standard 2.0 fields (`Input`, `Select`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach
 AAA in a specific layout, or use the standard size instead.

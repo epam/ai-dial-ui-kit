@@ -2,8 +2,8 @@ import { DialPopup } from '@/components/Popup/Popup';
 import { PopupSize } from '@/types/popup';
 import { type FC, type ReactNode } from 'react';
 import type { DialFile } from '@/models/file';
-import { DialSkeleton } from '@/components/Skeleton/Skeleton';
-import { DialSkeletonVariant } from '@/types/skeleton';
+import { Skeleton } from '@/components/Skeleton/Skeleton';
+import { SkeletonVariant } from '@/types/skeleton';
 import { formatBytes, formatDate } from '@/components/FileManager/utils';
 import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import {
@@ -93,40 +93,40 @@ export const FileMetadataPopup: FC<FileMetadataPopupProps> = ({
           {loading ? (
             <>
               <div className={LABEL_CLASS}>{nameLabel}</div>
-              <DialSkeleton
-                variant={DialSkeletonVariant.Text}
+              <Skeleton
+                variant={SkeletonVariant.Text}
                 width="100%"
                 height={SKELETON_HEIGHT}
                 className={SKELETON_CLASS}
               />
 
               <div className={LABEL_CLASS}>{modifiedDateLabel}</div>
-              <DialSkeleton
-                variant={DialSkeletonVariant.Text}
+              <Skeleton
+                variant={SkeletonVariant.Text}
                 width="90%"
                 height={SKELETON_HEIGHT}
                 className={SKELETON_CLASS}
               />
 
               <div className={LABEL_CLASS}>{sizeLabel}</div>
-              <DialSkeleton
-                variant={DialSkeletonVariant.Text}
+              <Skeleton
+                variant={SkeletonVariant.Text}
                 width="60%"
                 height={SKELETON_HEIGHT}
                 className={SKELETON_CLASS}
               />
 
               <div className={LABEL_CLASS}>{authorLabel}</div>
-              <DialSkeleton
-                variant={DialSkeletonVariant.Text}
+              <Skeleton
+                variant={SkeletonVariant.Text}
                 width="80%"
                 height={SKELETON_HEIGHT}
                 className={SKELETON_CLASS}
               />
 
               <div className={LABEL_CLASS}>{pathLabel}</div>
-              <DialSkeleton
-                variant={DialSkeletonVariant.Text}
+              <Skeleton
+                variant={SkeletonVariant.Text}
                 width="70%"
                 height={SKELETON_HEIGHT}
                 className={SKELETON_CLASS}

@@ -40,6 +40,15 @@ export interface InputProps extends Omit<
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
 
+  /**
+   * Content rendered inside the field, between `iconBefore` and the input, for
+   * values a plain `<input>` cannot hold — the tags of a multi-select, a value
+   * with its own markup. When the slot stands in for the value, give the input
+   * itself a zero width through `className` so it keeps taking focus without
+   * competing for space.
+   */
+  children?: ReactNode;
+
   prefix?: string;
   postfix?: string;
 
@@ -70,6 +79,7 @@ export interface InputProps extends Omit<
  * @param [invalid] - Whether the input has validation errors (applies error styling)
  * @param [iconAfter] - Icon or element to display after the input
  * @param [iconBefore] - Icon or element to display before the input
+ * @param [children] - Content rendered inside the field before the input, for values a plain `<input>` cannot hold (e.g. multi-select tags)
  * @param [textBeforeInput] - Text to display before the input
  * @param [suffix] - Text to display inside the input on the right
  * @param [containerClassName] - Additional CSS classes to apply to the container div
@@ -119,6 +129,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   prefix,
   className,
   postfix,
+  children,
   iconBefore,
   iconAfter,
   wrapperClassName,
@@ -213,6 +224,8 @@ const InputWrapper: FC<InputWrapperProps> = ({
         )}
 
         <DialIcon icon={iconBefore} />
+
+        {children}
 
         <input
           ref={ref}
