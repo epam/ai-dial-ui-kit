@@ -101,6 +101,23 @@ describe('Dial UI Kit :: Select', () => {
     expect(getField()).toHaveValue('Filter: Option 1');
   });
 
+  test('marks the selected option with a check icon', () => {
+    renderSelect({ defaultValue: 'opt-1' });
+
+    openSelect();
+
+    const selected = screen.getByRole('option', { name: 'Option 1' });
+    expect(selected).toHaveAttribute('aria-selected', 'true');
+    // The icon is decorative, so it is queried structurally rather than by role.
+    expect(selected.querySelector('.tabler-icon-check')).toBeInTheDocument();
+
+    expect(
+      screen
+        .getByRole('option', { name: 'Option 2' })
+        .querySelector('.tabler-icon-check'),
+    ).not.toBeInTheDocument();
+  });
+
   test('disabled option is not selectable in single mode', () => {
     const onChange = vi.fn();
     renderSelect({ onChange });
@@ -412,6 +429,38 @@ describe('Dial UI Kit :: Select', () => {
       openSelect();
       const parentTrigger = screen.getByText('Group').closest('button')!;
       expect(parentTrigger).toHaveAttribute('aria-selected', 'true');
+    });
+
+    test('selected child is marked with a check icon', async () => {
+      const user = userEvent.setup();
+      renderSelect({
+        defaultValue: 'g1',
+        options: [
+          {
+            value: 'grp',
+            label: 'Group',
+            children: [
+              { value: 'g1', label: 'G One' },
+              { value: 'g2', label: 'G Two' },
+            ],
+          },
+        ],
+      });
+      openSelect();
+      await user.hover(screen.getByText('Group').closest('button')!);
+
+      const selectedChild = (await screen.findByText('G One')).closest(
+        'button',
+      )!;
+      expect(
+        selectedChild.querySelector('.tabler-icon-check'),
+      ).toBeInTheDocument();
+      expect(
+        screen
+          .getByText('G Two')
+          .closest('button')!
+          .querySelector('.tabler-icon-check'),
+      ).not.toBeInTheDocument();
     });
 
     test('disabled submenu trigger does not open submenu on hover', async () => {

@@ -341,6 +341,12 @@ export { Label } from './components/New/Label/Label';
 export { Textarea } from './components/New/Textarea/Textarea';
 export { Input } from './components/New/Input/Input';
 export type { InputProps } from './components/New/Input/Input';
+export { PasswordInput } from './components/New/PasswordInput/PasswordInput';
+export type { PasswordInputProps } from './components/New/PasswordInput/PasswordInput';
+export { NumberInput } from './components/New/NumberInput/NumberInput';
+export type { NumberInputProps } from './components/New/NumberInput/NumberInput';
+export { Popup } from './components/New/Popup/Popup';
+export type { PopupProps } from './components/New/Popup/Popup';
 export type { TextareaProps } from './components/New/Textarea/Textarea';
 export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
 export {
