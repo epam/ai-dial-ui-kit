@@ -66,6 +66,7 @@ export interface InputProps extends Omit<
  * />
  * ```
  *
+ * @param [size=ElementSize.Standard] - The size of the input, which can be 'small', 'standard', or 'large'.
  * @param [invalid] - Whether the input has validation errors (applies error styling)
  * @param [iconAfter] - Icon or element to display after the input
  * @param [iconBefore] - Icon or element to display before the input

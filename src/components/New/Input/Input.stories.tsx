@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Input, type InputProps } from './Input';
 import { inputBaseArgTypes } from '@/constants/storybook/input';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { ElementSize } from '@/types/size';
 
 const InteractiveInput = (args: InputProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -33,6 +34,11 @@ const meta = {
   },
   argTypes: {
     ...inputBaseArgTypes,
+    size: {
+      control: { type: 'inline-radio' },
+      options: [ElementSize.Standard, ElementSize.Small],
+      description: 'Field height: standard is 40px, small is 24px',
+    },
   },
   args: {
     id: 'story-input',
@@ -40,6 +46,7 @@ const meta = {
     placeholder: 'Placeholder',
     disabled: false,
     invalid: false,
+    size: ElementSize.Standard,
   },
   render: InteractiveInput,
 } satisfies Meta<InputProps>;
@@ -83,6 +90,14 @@ export const BothIcons: Story = {
   },
 };
 
+export const Small: Story = {
+  args: {
+    placeholder: 'Search...',
+    size: ElementSize.Small,
+    iconBefore: <IconSearch size={DIAL_ICON_SIZE.SM} />,
+  },
+};
+
 export const Disabled: Story = {
   args: {
     placeholder: 'Disable input',
@@ -95,6 +110,72 @@ export const Invalid: Story = {
     placeholder: 'Invalid input',
     value: 'Invalid value',
     invalid: true,
+  },
+};
+
+export const Sizes: Story = {
+  render: () => {
+    const sizes = [
+      { size: ElementSize.Standard, label: 'Standard (40px)' },
+      { size: ElementSize.Small, label: 'Small (24px)' },
+    ];
+
+    return (
+      <div className="flex flex-col size-full items-center">
+        <h2 className="text-primary font-semibold mb-8">Input sizes</h2>
+
+        <div className="flex flex-col gap-y-8">
+          {sizes.map(({ size, label }) => {
+            const iconSize =
+              size === ElementSize.Small
+                ? DIAL_ICON_SIZE.SM
+                : DIAL_ICON_SIZE.MD;
+
+            return (
+              <div key={size} className="flex flex-col gap-y-3">
+                <div className="text-primary font-semibold">{label}</div>
+
+                <div className="flex flex-row items-start gap-x-6">
+                  <InteractiveInput
+                    id={`${size}-plain`}
+                    size={size}
+                    placeholder="Placeholder"
+                  />
+
+                  <InteractiveInput
+                    id={`${size}-icons`}
+                    size={size}
+                    placeholder="Search..."
+                    iconBefore={<IconSearch size={iconSize} />}
+                    iconAfter={<IconEye size={iconSize} />}
+                  />
+
+                  <InteractiveInput
+                    id={`${size}-max`}
+                    size={size}
+                    value="Text"
+                    prefix="prefix"
+                    postfix="postfix"
+                    caption="Caption text"
+                    inputButtonProps={{
+                      icon: <IconSearch size={iconSize} />,
+                      onClick: () => alert('Input button clicked'),
+                    }}
+                  />
+
+                  <InteractiveInput
+                    id={`${size}-disabled`}
+                    size={size}
+                    value="Text"
+                    disabled
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   },
 };
 

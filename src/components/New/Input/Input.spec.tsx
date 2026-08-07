@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, test, vi } from 'vitest';
+import { ElementSize } from '@/types/size';
 import { Input } from './Input';
 
 describe('Dial UI Kit :: DialInput', () => {
@@ -222,6 +223,89 @@ describe('Dial UI Kit :: DialInput', () => {
 
     await user.type(input, '1');
     expect(input.value).toBe('100');
+  });
+
+  describe('size', () => {
+    // jsdom does no layout, so the height itself is not observable here — the
+    // variant classes are. `npm run build:css` compiles them to 40px/24px.
+    const getField = () => screen.getByLabelText('input-container');
+
+    test('renders the standard height by default', () => {
+      render(<Input id="default-size" placeholder="Placeholder" />);
+
+      // The 40px height comes from `.dial-kit-input` itself
+      expect(getField()).toHaveClass('dial-kit-input', 'gap-x-2', 'pl-3');
+      expect(getField()).not.toHaveClass('dial-kit-input-small');
+    });
+
+    test('renders the small variant when size is small', () => {
+      render(
+        <Input
+          id="small-size"
+          placeholder="Placeholder"
+          size={ElementSize.Small}
+        />,
+      );
+
+      expect(getField()).toHaveClass('dial-kit-input-small', 'gap-x-1', 'pl-2');
+      expect(getField()).not.toHaveClass('py-2');
+    });
+
+    test('passes the size down to the prefix field', () => {
+      render(
+        <Input
+          id="small-prefix"
+          placeholder="domain"
+          prefix="https://"
+          size={ElementSize.Small}
+        />,
+      );
+
+      const fields = screen.getAllByLabelText('input-container');
+      expect(fields).toHaveLength(2);
+      fields.forEach((field) =>
+        expect(field).toHaveClass('dial-kit-input-small'),
+      );
+    });
+
+    test('passes the size down to the input button, and lets it opt out', () => {
+      const { rerender } = render(
+        <Input
+          id="small-button"
+          placeholder="Placeholder"
+          size={ElementSize.Small}
+          inputButtonProps={{ icon: <span>i</span> }}
+        />,
+      );
+      expect(screen.getByRole('button')).toHaveClass('size-[24px]');
+
+      rerender(
+        <Input
+          id="small-button"
+          placeholder="Placeholder"
+          size={ElementSize.Small}
+          inputButtonProps={{
+            icon: <span>i</span>,
+            size: ElementSize.Standard,
+          }}
+        />,
+      );
+      expect(screen.getByRole('button')).toHaveClass('size-[40px]');
+    });
+
+    test('does not forward size to the native input as an attribute', () => {
+      render(
+        <Input
+          id="no-native-size"
+          placeholder="Placeholder"
+          size={ElementSize.Small}
+        />,
+      );
+
+      expect(screen.getByPlaceholderText('Placeholder')).not.toHaveAttribute(
+        'size',
+      );
+    });
   });
 
   test('uses cursor position to build newValue; blocks when inserted digit violates range', async () => {
