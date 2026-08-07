@@ -1,38 +1,95 @@
-/* 2.0 MarkdownEditor toolbar restyle, scoped over @uiw/react-md-editor's default CSS */
+/* 2.0 MarkdownEditor: card chrome + toolbar restyle, scoped over @uiw/react-md-editor's default CSS.
+   Colors reference the upcoming design-system tokens directly (var() with the
+   same names/fallbacks as tailwind.config.js) rather than Tailwind's color
+   utilities, since some of those utilities are being retired in that system.
+   Light is the primary theme for now; dark-theme parity is a follow-up. */
 
 .dial-kit-markdown-editor {
+  .w-md-editor {
+    @apply gap-3 rounded-lg border px-4 py-3;
+    border-color: var(--stroke-tertiary, #e0e6f0);
+    background-color: var(--bg-layer-raised, #fcfcfc) !important;
+    /* the base library fakes a border via box-shadow — both this rule and
+       theirs share the same selector, so !important guarantees ours wins
+       regardless of stylesheet import order in the consuming app. */
+    box-shadow: none !important;
+    --md-editor-font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+      monospace;
+  }
+
   .w-md-editor-toolbar {
-    @apply gap-1 border-b border-primary bg-layer-0 px-3 py-2;
+    @apply gap-1 bg-transparent p-0;
+    /* the base library sets its own `border-bottom` on this same selector;
+       equal specificity means import order decides the winner without
+       !important, so force it explicitly instead of relying on `border-0`. */
+    border: none !important;
+  }
+
+  /* only the top-level bar: the heading dropdown's own toolbar-child list
+     must stay a vertical stack (see the `ul > li { display: block }` rule
+     the base library applies inside `.w-md-editor-toolbar-child`). */
+  .w-md-editor > .w-md-editor-toolbar > ul {
+    @apply flex items-center;
+  }
+
+  .w-md-editor-text,
+  .w-md-editor-preview {
+    @apply p-0;
+  }
+
+  .w-md-editor-text-pre > code,
+  .w-md-editor-text-input {
+    line-height: 20px !important;
+  }
+
+  .w-md-editor-text-input::placeholder {
+    color: var(--text-secondary, #6b7280);
+    opacity: 1;
   }
 
   .w-md-editor-toolbar li > button {
-    @apply flex size-7 items-center justify-center rounded-md text-secondary transition-colors;
+    @apply flex size-7 items-center justify-center rounded-md transition-colors;
+    color: var(--text-secondary, #6b7280);
   }
 
   .w-md-editor-toolbar li > button:hover,
   .w-md-editor-toolbar li > button:focus {
-    @apply bg-control-neutral-hover text-primary;
+    background-color: var(--bg-control-neutral-hover, #e0e6f0);
+    color: var(--text-primary, #161b2d);
   }
 
   .w-md-editor-toolbar li > button:active {
-    @apply bg-control-neutral-active text-primary;
+    background-color: var(--bg-control-neutral-active, #d1dbea);
+    color: var(--text-primary, #161b2d);
   }
 
   .w-md-editor-toolbar li.active > button {
-    @apply bg-accent-primary-alpha text-accent;
+    background-color: var(--bg-control-accent-alpha-hover, #2764d924);
+    color: var(--text-accent, #1d4ed8);
   }
 
   .w-md-editor-toolbar li > button:disabled,
   .w-md-editor-toolbar li > button:disabled:hover {
-    @apply cursor-not-allowed bg-transparent text-control-disable;
+    @apply cursor-not-allowed bg-transparent;
+    color: var(--text-control-disable, #6b7280);
   }
 
   .w-md-editor-toolbar-divider {
-    @apply bg-layer-1;
+    /* a hairline divider is a stroke, not a fill — borrow the border token.
+       the base library sets the same properties on this same selector, so
+       !important is needed here too (see the `.w-md-editor-toolbar` note above). */
+    background-color: var(--stroke-tertiary, #e0e6f0) !important;
+    width: 1px !important;
+    height: 12px !important;
+    margin: 0 12px !important;
   }
 
   .w-md-editor-toolbar-child {
-    @apply rounded-md border border-primary bg-layer-0 shadow-md;
+    @apply rounded-md border shadow-md;
+    border-color: var(--stroke-primary, #6b7280);
+    background-color: var(--bg-layer-raised, #fcfcfc);
+    box-shadow: none !important;
   }
 
   .w-md-editor-toolbar-child .w-md-editor-toolbar li > button {

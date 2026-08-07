@@ -42,14 +42,14 @@ const meta = {
       description: 'Callback fired when the editor content changes',
     },
     placeholder: {
-      control: false,
-      description: 'Content to display when the editor value is empty',
+      control: { type: 'text' },
+      description: 'Placeholder text shown when the editor is empty',
     },
   },
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor.',
     height: 300,
-    theme: EditorThemes.dark,
+    theme: EditorThemes.light,
   },
 } satisfies Meta<MarkdownEditorProps>;
 
@@ -79,14 +79,6 @@ export const Default: Story = {
   render: renderWithContainer,
 };
 
-export const LightTheme: Story = {
-  args: {
-    value: '# Hello World\n\nThis is a **markdown** editor with light theme.',
-    theme: EditorThemes.light,
-  },
-  render: renderWithContainer,
-};
-
 export const LivePreview: Story = {
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor with live preview.',
@@ -106,9 +98,7 @@ export const PreviewOnly: Story = {
 export const WithPlaceholder: Story = {
   args: {
     value: '',
-    placeholder: (
-      <span className="italic">Start typing your markdown here…</span>
-    ),
+    placeholder: 'Write instructions',
   },
   render: renderWithContainer,
 };

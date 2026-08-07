@@ -23,13 +23,15 @@ import {
   IconBold,
   IconCode,
   IconColumns2,
+  IconEye,
   IconItalic,
+  IconLayoutColumns,
   IconLink,
   IconList,
   IconListNumbers,
   IconMaximize,
+  IconPencil,
   IconQuote,
-  IconSpacingHorizontal,
   IconStrikethrough,
   IconTextSize,
 } from '@tabler/icons-react';
@@ -80,23 +82,14 @@ export const getMarkdownFormattingCommands = (): ICommand[] => [
 ];
 
 /**
- * Right-hand toolbar: the built-in edit/live/preview mode switcher (all
- * three reuse the same icon in the design; only the active one is
- * highlighted via `.w-md-editor-toolbar li.active`) followed by fullscreen.
+ * Right-hand toolbar: the built-in edit/live/preview mode switcher, each
+ * with a distinct icon so the three states stay distinguishable even before
+ * the active one is highlighted, followed by fullscreen.
  */
 export const getMarkdownExtraCommands = (): ICommand[] => [
-  withIcon(
-    codeEdit,
-    <IconSpacingHorizontal size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
-  withIcon(
-    codeLive,
-    <IconSpacingHorizontal size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
-  withIcon(
-    codePreview,
-    <IconSpacingHorizontal size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
+  withIcon(codeEdit, <IconPencil size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(codeLive, <IconLayoutColumns size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(codePreview, <IconEye size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
   divider,
   withIcon(fullscreen, <IconMaximize size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
 ];

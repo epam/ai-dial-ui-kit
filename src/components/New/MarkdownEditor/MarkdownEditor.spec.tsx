@@ -32,23 +32,12 @@ describe('Dial UI Kit :: MarkdownEditor', () => {
     expect(container).toHaveAttribute('data-color-mode', 'light');
   });
 
-  test('Should render placeholder when value is empty', () => {
-    render(
-      <MarkdownEditor value="" placeholder={<span>Start typing here…</span>} />,
-    );
+  test('Should render placeholder text on the underlying textarea', () => {
+    render(<MarkdownEditor value="" placeholder="Start typing here…" />);
 
-    expect(screen.getByText('Start typing here…')).toBeInTheDocument();
-  });
-
-  test('Should not render placeholder when value is provided', () => {
-    render(
-      <MarkdownEditor
-        value="# Hello"
-        placeholder={<span>Start typing here…</span>}
-      />,
-    );
-
-    expect(screen.queryByText('Start typing here…')).not.toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Start typing here…'),
+    ).toBeInTheDocument();
   });
 
   test('Should render the formatting toolbar buttons', () => {
