@@ -2,19 +2,19 @@
 
 ## Why this changed
 
-The border token was named `focus` — after the *state* it is used in rather than the *value* it holds. That naming left nowhere to put a second focus colour, so when the blue focus ring arrived it had to be `focus-blue`, an odd sibling to a token whose name implied it covered all focus styling.
+The border token was named `focus` — after the _state_ it is used in rather than the _value_ it holds. That naming left nowhere to put a second focus colour, so when the blue focus ring arrived it had to be `focus-blue`, an odd sibling to a token whose name implied it covered all focus styling.
 
 Both tokens are now named for their colour: `focus-black` and `focus-blue`. The rendered colour of `focus-black` is identical to the old `focus` (`#161B2D`, grey-1000) — this is a naming change, not a visual one.
 
 ## What changed
 
-| Before                       | After                              |
-| ---------------------------- | ---------------------------------- |
-| CSS variable `--stroke-focus` | `--stroke-focus-black`             |
-| `border-focus`               | `border-focus-black`               |
-| `outline-focus`              | `outline-focus-black`              |
-| `divide-focus`               | `divide-focus-black`               |
-| `stroke-focus` (SVG)         | `stroke-focus-black`               |
+| Before                        | After                  |
+| ----------------------------- | ---------------------- |
+| CSS variable `--stroke-focus` | `--stroke-focus-black` |
+| `border-focus`                | `border-focus-black`   |
+| `outline-focus`               | `outline-focus-black`  |
+| `divide-focus`                | `divide-focus-black`   |
+| `stroke-focus` (SVG)          | `stroke-focus-black`   |
 
 The token feeds Tailwind's `borderColor`, `outlineColor`, `divideColor`, and `stroke` scales, so every utility built on it moves together.
 

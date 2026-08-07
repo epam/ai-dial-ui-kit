@@ -102,7 +102,13 @@ describe('Dial UI Kit :: Label', () => {
   });
 
   test('Should name the caption info button', () => {
-    render(<Label label="Phone Number" htmlFor="phone-input" caption="Digits only" />);
+    render(
+      <Label
+        label="Phone Number"
+        htmlFor="phone-input"
+        caption="Digits only"
+      />,
+    );
 
     expect(screen.getByRole('button')).toHaveAccessibleName('Digits only');
   });
@@ -116,7 +122,11 @@ describe('Dial UI Kit :: Label', () => {
   test('Should keep the info button outside the label element', () => {
     render(
       <>
-        <Label label="Phone Number" htmlFor="phone-input" caption="Digits only" />
+        <Label
+          label="Phone Number"
+          htmlFor="phone-input"
+          caption="Digits only"
+        />
         <input id="phone-input" type="text" />
       </>,
     );
