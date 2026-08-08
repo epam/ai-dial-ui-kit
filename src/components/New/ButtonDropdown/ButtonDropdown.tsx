@@ -1,10 +1,10 @@
 import { useMemo, useState, type FC } from 'react';
 
 import { type DialButtonProps } from '@/components/Button/Button';
-import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button } from '../Button/Button';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { getButtonChevron } from './constants';
 
 export interface ButtonDropdownProps extends Omit<
@@ -43,10 +43,7 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
 
   return (
     <div>
-      <DialDropdown
-        items={items}
-        onOpenChange={(open) => setIsDropdownOpen(open)}
-      >
+      <Dropdown items={items} onOpenChange={(open) => setIsDropdownOpen(open)}>
         <Button
           {...props}
           iconAfter={icon}
@@ -55,7 +52,7 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
           aria-haspopup="menu"
           aria-expanded={isDropdownOpen}
         />
-      </DialDropdown>
+      </Dropdown>
     </div>
   );
 };

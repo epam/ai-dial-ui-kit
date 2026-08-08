@@ -1,9 +1,9 @@
 import { useMemo, useState, type FC } from 'react';
 
 import { DialButton, type DialButtonProps } from '@/components/Button/Button';
+import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { Dropdown } from '../New/Dropdown/Dropdown';
 import { buttonChevronDown, buttonChevronUp } from './constants';
 
 export interface DialButtonDropdownProps extends Omit<
@@ -41,13 +41,18 @@ export const DialButtonDropdown: FC<DialButtonDropdownProps> = ({
   }, [isDropdownOpen]);
 
   return (
-    <Dropdown items={items} onOpenChange={(open) => setIsDropdownOpen(open)}>
-      <DialButton
-        {...props}
-        iconAfter={icon}
-        variant={variant || ButtonVariant.Primary}
-        appearance={appearance || ButtonAppearance.Solid}
-      />
-    </Dropdown>
+    <div>
+      <DialDropdown
+        items={items}
+        onOpenChange={(open) => setIsDropdownOpen(open)}
+      >
+        <DialButton
+          {...props}
+          iconAfter={icon}
+          variant={variant || ButtonVariant.Primary}
+          appearance={appearance || ButtonAppearance.Solid}
+        />
+      </DialDropdown>
+    </div>
   );
 };
