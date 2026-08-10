@@ -74,7 +74,7 @@
   .w-md-editor-toolbar li > button:disabled,
   .w-md-editor-toolbar li > button:disabled:hover {
     @apply cursor-not-allowed bg-transparent;
-    @apply !text-control-disable-beta;
+    @apply !text-control-disable-alpha;
   }
 
   .w-md-editor-toolbar-divider {

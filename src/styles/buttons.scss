@@ -151,7 +151,7 @@
     }
 
     &:disabled {
-      @apply !text-control-disable-beta;
+      @apply !text-control-disable-alpha;
     }
   }
 
@@ -181,7 +181,7 @@
 
   &.dial-kit-base-icon-button {
     &:disabled {
-      @apply !text-control-disable-beta;
+      @apply !text-control-disable-alpha;
     }
   }
 }

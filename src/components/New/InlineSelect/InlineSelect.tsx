@@ -44,7 +44,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       aria-label={ariaLabel ? `${ariaLabel} ${label}` : undefined}
       className={mergeClasses(
         'dial-small-paragraph-text px-3 focus-visible:outline focus-visible:outline-focus-black',
-        'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-beta',
+        'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-alpha',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,
         rest.className,
