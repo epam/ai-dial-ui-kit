@@ -130,9 +130,9 @@ describe('Dial UI Kit :: Accordion', () => {
       </Accordion>,
     );
 
-    expect(screen.getByRole('button', { name: 'Settings' })).not.toHaveAttribute(
-      'aria-controls',
-    );
+    expect(
+      screen.getByRole('button', { name: 'Settings' }),
+    ).not.toHaveAttribute('aria-controls');
   });
 
   test('nonCollapsible renders a static header and keeps the content visible', () => {
@@ -149,10 +149,7 @@ describe('Dial UI Kit :: Accordion', () => {
 
   test('ariaLabel names a header whose title carries no text', () => {
     render(
-      <Accordion
-        title={<span aria-hidden="true">⚙</span>}
-        ariaLabel="Settings"
-      >
+      <Accordion title={<span aria-hidden="true">⚙</span>} ariaLabel="Settings">
         <p>Content</p>
       </Accordion>,
     );
