@@ -59,14 +59,21 @@ export const handleKeyDown = (
     return;
   }
 
-  // Check if the resulting value would be within range
-  if (min !== undefined || max !== undefined) {
+  // Check if the resulting value would be within range. Native `type="number"`
+  // inputs never expose selectionStart/selectionEnd (always null), so the
+  // replaced-text range can't be computed reliably there — skip the
+  // pre-check and let onChange validate the final value instead.
+  if (
+    (min !== undefined || max !== undefined) &&
+    e.currentTarget.selectionStart !== null
+  ) {
     const currentValue = e.currentTarget.value;
-    const cursorPosition = e.currentTarget.selectionStart || 0;
+    const selectionStart = e.currentTarget.selectionStart;
+    const selectionEnd = e.currentTarget.selectionEnd ?? selectionStart;
     const newValue =
-      currentValue.slice(0, cursorPosition) +
+      currentValue.slice(0, selectionStart) +
       e.key +
-      currentValue.slice(cursorPosition);
+      currentValue.slice(selectionEnd);
     const numericValue = parseFloat(newValue);
 
     if (!isNaN(numericValue)) {
