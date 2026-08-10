@@ -20,6 +20,7 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **`DialGrid` — the legacy-token fallback inverted the raised/sunken relationship** — when a host defines the legacy DIAL layers but not `--bg-layer-raised`, the row surface fell back to `--bg-layer-0`, the _deepest_ layer in that palette (`#000000` in the DIAL dark theme), while odd rows fell back to the lighter `--bg-layer-2`. A grid whose base surface sits below its own sunken rows reads as inside-out, and pure black matches no other surface in the theme. The fallback is now `--bg-layer-3`, the elevated layer, which is what consumers already use for their own grid surfaces. The light default when no theme is present is unchanged (`#FCFCFC`).
 - **`Notification` (2.0)** — the variant icon is hidden from assistive tech. The `loading` spinner carries its own `role="status"`, so it previously formed a live region nested inside the notification's, announcing the content twice.
 - **`FolderPath`** — the `<nav>` landmark is named "Folder path" instead of inheriting `DialBreadcrumb`'s "Breadcrumb" default, which misdescribed a path with no navigable segments. Added an `ariaLabel` prop to override. Decorative folder and separator icons are now `aria-hidden`.
 - **`InlineSelect`** — the trigger now exposes `aria-expanded`, so screen readers can tell whether the dropdown is open, and accepts an `ariaLabel` prop naming the control (previously it announced only its current value).

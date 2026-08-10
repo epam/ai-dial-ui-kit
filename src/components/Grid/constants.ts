@@ -3,7 +3,7 @@ export const checkboxClass = '.ag-checkbox-input';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--bg-control-accent, var(--bg-accent-primary, #5C8DEA))',
-  backgroundColor: 'var(--bg-layer-raised, var(--bg-layer-0, #FCFCFC))',
+  backgroundColor: 'var(--bg-layer-raised, var(--bg-layer-3, #FCFCFC))',
   oddRowBackgroundColor: 'var(--bg-layer-sunken, var(--bg-layer-2, #EEF1F7))',
   selectedRowBackgroundColor:
     'var(--controls-bg-accent-primary-alpha-active, var(--bg-accent-primary-alpha, #7DA4FF26))',
