@@ -364,3 +364,5 @@ export {
   CaptionText,
   ErrorText,
 } from './components/New/CaptionText/CaptionText';
+export { Accordion } from './components/New/Accordion/Accordion';
+export type { AccordionProps } from './components/New/Accordion/Accordion';

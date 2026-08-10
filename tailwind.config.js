@@ -32,7 +32,7 @@ const controlsBgColors = {
   'control-error-alpha-active':
     'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
 
-  'control-disable': 'var(--bg-control-disable, #848E9C)', // grey-700
+  'control-disable': 'var(--bg-control-disable, #DCE0E8)', // grey-550
 };
 
 const borderColors = {
@@ -72,8 +72,8 @@ const placeholderColor = {
 
 const controlsTextColors = {
   'control-permanent': 'var(--text-control-permanent, #FCFCFC)', // grey-100
-  'control-disable-alpha': 'var(--text-control-disable-alpha, #DCE0E8)', // grey-550
-  'control-disable-beta': 'var(--text-control-disable-beta, #848E9C)', // grey-700
+  'control-disable-alpha': 'var(--text-control-disable-alpha, #848E9C)', // grey-700
+  'control-disable-beta': 'var(--text-control-disable-beta, #DCE0E8)', // grey-550
   'control-blue-hover': 'var(--text-control-blue-hover, #5976E9)', // blue-300
   'control-blue-active': 'var(--text-control-blue-active, #6785FB)', // blue-200
 };
