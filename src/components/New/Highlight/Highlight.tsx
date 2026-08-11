@@ -57,7 +57,7 @@ export const Highlight: FC<HighlightProps> = ({
         {text.slice(0, idx)}
         <mark
           className={mergeClasses(
-            'text-accent-primary bg-accent-primary-alpha',
+            'text-accent bg-control-accent-alpha-hover',
             markClassName,
           )}
         >

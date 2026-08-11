@@ -1,2 +1,2 @@
 export const inputButtonClassName =
-  'bg-layer-4 flex items-center justify-center enabled:text-secondary enabled:hover:text-accent-primary enabled:active:bg-controls-accent-primary-alpha-active enabled:hover:bg-accent-primary-alpha enabled:active:text-accent-primary';
+  'bg-control-neutral-active flex items-center justify-center enabled:text-secondary enabled:hover:text-control-blue-hover enabled:active:bg-control-accent-alpha-active enabled:hover:bg-control-accent-alpha-hover enabled:active:text-control-blue-active';

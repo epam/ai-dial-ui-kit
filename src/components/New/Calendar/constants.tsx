@@ -17,10 +17,10 @@ export const calendarModeDefaultPlaceholder: Record<CalendarMode, string> = {
 };
 
 export const calendarFieldBaseClassName = // TODO: check after design review for input
-  'flex w-full items-center justify-between gap-2 rounded-xl border border-secondary bg-layer-0 px-4 py-3 dial-small-text text-primary outline-none transition-colors hover:border-accent-primary focus-within:border-accent-primary';
+  'flex w-full items-center justify-between gap-2 rounded-xl border border-secondary bg-layer-raised px-4 py-3 dial-small-text text-primary outline-none transition-colors hover:border-hover-alpha focus-within:border-focus-blue';
 
 export const calendarFieldDisabledClassName = // TODO: check after design review for input
-  '!cursor-not-allowed !border-transparent bg-controls-disable text-controls-primary-disable hover:!border-transparent';
+  '!cursor-not-allowed !border-transparent bg-layer-sunken text-control-disable-alpha hover:!border-transparent';
 
 export const calendarFieldInvalidClassName = '!border-error'; // TODO: check after design review for input
 

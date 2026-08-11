@@ -28,12 +28,12 @@ export const overlaySubMenuClassName = mergeClasses(
 export const overlayItemClassName = mergeClasses(
   'flex w-full cursor-pointer items-center gap-2 px-3 h-[40px] rounded-lg',
   'dial-small-text text-primary truncate',
-  'hover:bg-accent-primary-alpha',
+  'hover:bg-control-accent-alpha-hover',
   'focus-visible:outline focus-visible:outline-focus-black',
 );
 
 /** Tint marking the row that is currently selected. */
-export const overlayItemSelectedClassName = 'bg-accent-primary-alpha';
+export const overlayItemSelectedClassName = 'bg-control-accent-alpha-hover';
 
 export const overlayItemDisabledClassName = 'opacity-75';
 

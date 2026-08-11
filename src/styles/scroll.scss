@@ -7,7 +7,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply cursor-pointer rounded bg-layer-4;
+    @apply cursor-pointer rounded;
+    background-color: var(
+      --bg-control-neutral-active,
+      var(--bg-layer-4, #d1dbea)
+    );
   }
 
   ::-webkit-scrollbar {
@@ -20,7 +24,11 @@
   }
 
   :hover {
-    scrollbar-color: var(--bg-layer-4, #242c42) transparent;
+    scrollbar-color: var(
+        --bg-control-neutral-active,
+        var(--bg-layer-4, #d1dbea)
+      )
+      transparent;
   }
 
   .divide-y > :empty ~ :not([hidden]) {

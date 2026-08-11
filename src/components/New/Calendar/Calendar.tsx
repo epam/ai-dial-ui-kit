@@ -399,9 +399,10 @@ export const Calendar: FC<CalendarProps> = ({
                   role="option"
                   aria-selected={option.value === weekdayValue}
                   className={mergeClasses(
-                    'flex w-full items-center rounded-lg px-3 py-2 text-left dial-small-text text-primary hover:bg-accent-primary-alpha',
+                    'flex w-full items-center rounded-lg px-3 py-2 text-left dial-small-text text-primary hover:bg-control-accent-alpha-hover',
                     'focus-visible:outline focus-visible:outline-focus-black',
-                    option.value === weekdayValue && 'bg-accent-primary-alpha',
+                    option.value === weekdayValue &&
+                      'bg-control-accent-alpha-hover',
                   )}
                   onClick={() => {
                     onChange?.(option.value);

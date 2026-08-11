@@ -171,7 +171,7 @@ export const CustomFooter: Story = {
 export const CustomClasses: Story = {
   render: StatefulRender,
   args: {
-    className: 'ring-2 ring-offset-2 ring-sky-400 !bg-accent-secondary',
+    className: 'ring-2 ring-offset-2 ring-sky-400 !bg-success',
     onClose: () => null,
     onConfirm: () => null,
   },

@@ -402,7 +402,7 @@ export const DropdownDynamicButtons: Story = {
       string | null
     >('subsection1');
     const [showSubsection, setShowSubsection] = useState(false);
-    const borderCss = 'border-l-2 border-accent-primary pl-2 rounded-l-none';
+    const borderCss = 'border-l-2 border-info pl-2 rounded-l-none';
 
     const baseItems: DropdownItem[] = [
       {
