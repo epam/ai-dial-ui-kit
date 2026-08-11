@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { Button } from '../Button';
+import { LinkButton } from '../ButtonWrappers';
 import { ButtonAppearance, ButtonVariant } from '@/index';
 import { ElementSize } from '@/types/size';
 
@@ -225,6 +226,124 @@ describe('Dial UI Kit :: DialButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Event test' }));
     expect(onClick).toHaveBeenCalledWith(expect.any(Object));
     expect(onClick.mock.calls[0][0]).toHaveProperty('type', 'click');
+  });
+
+  describe('href', () => {
+    test('Should render a link, not a button, when href is given', () => {
+      render(<LinkButton label="Read the docs" href="/docs" />);
+
+      const link = screen.getByRole('link', { name: 'Read the docs' });
+      expect(link).toHaveAttribute('href', '/docs');
+      expect(link.tagName).toBe('A');
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    test('Should keep the link appearance classes on the anchor', () => {
+      render(<LinkButton label="Read the docs" href="/docs" />);
+
+      const link = screen.getByRole('link', { name: 'Read the docs' });
+      expect(link).toHaveClass('dial-kit-primary-link-button');
+      // Exempt from 2.5.5 under the Inline exception, same as the button form.
+      expect(link).not.toHaveClass('dial-kit-enhanced-target');
+    });
+
+    test('Should stay a button when href is absent', () => {
+      render(<LinkButton label="Act" onClick={() => undefined} />);
+
+      expect(screen.getByRole('button', { name: 'Act' })).toBeInTheDocument();
+      expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    });
+
+    test('Should not put button-only attributes on the anchor', () => {
+      render(<LinkButton label="Read the docs" href="/docs" />);
+
+      const link = screen.getByRole('link', { name: 'Read the docs' });
+      expect(link).not.toHaveAttribute('type');
+      expect(link).not.toHaveAttribute('disabled');
+    });
+
+    test('Should sever the opener for target="_blank"', () => {
+      render(
+        <LinkButton
+          label="External"
+          href="https://example.com"
+          target="_blank"
+        />,
+      );
+
+      const link = screen.getByRole('link', { name: 'External' });
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    });
+
+    test('Should let an explicit rel win over the _blank default', () => {
+      render(
+        <LinkButton
+          label="External"
+          href="https://example.com"
+          target="_blank"
+          rel="nofollow"
+        />,
+      );
+
+      expect(screen.getByRole('link', { name: 'External' })).toHaveAttribute(
+        'rel',
+        'nofollow',
+      );
+    });
+
+    test('Should not set rel when there is no _blank target', () => {
+      render(<LinkButton label="Internal" href="/docs" />);
+
+      expect(
+        screen.getByRole('link', { name: 'Internal' }),
+      ).not.toHaveAttribute('rel');
+    });
+
+    test('Should make a disabled link unreachable and unfollowable', () => {
+      const onClick = vi.fn();
+      render(
+        <LinkButton
+          label="Unavailable"
+          href="/docs"
+          disabled
+          onClick={onClick}
+        />,
+      );
+
+      // An anchor has no disabled state, so `getByRole('link')` no longer
+      // matches once the href is gone — query the element directly.
+      const link = screen.getByText('Unavailable').closest('a');
+      expect(link).not.toBeNull();
+      expect(link).not.toHaveAttribute('href');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('tabindex', '-1');
+
+      fireEvent.click(link as HTMLAnchorElement);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    test('Should not mark an enabled link aria-disabled', () => {
+      render(<LinkButton label="Available" href="/docs" />);
+
+      expect(
+        screen.getByRole('link', { name: 'Available' }),
+      ).not.toHaveAttribute('aria-disabled');
+    });
+
+    test('Should name an icon-only link from aria-label', () => {
+      render(
+        <LinkButton
+          href="/docs"
+          iconBefore={<span aria-hidden="true">→</span>}
+          aria-label="Read the docs"
+        />,
+      );
+
+      expect(
+        screen.getByRole('link', { name: 'Read the docs' }),
+      ).toBeInTheDocument();
+    });
   });
 
   test.each([

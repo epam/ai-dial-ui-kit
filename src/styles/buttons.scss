@@ -13,6 +13,19 @@
   @apply focus-visible:outline focus-visible:outline-focus-black;
 }
 
+/*
+ * A `Button` given an `href` renders an `<a>`, which has no disabled state and
+ * so never matches `:disabled`. It carries `aria-disabled` instead.
+ *
+ * This must stay a separate top-level rule rather than nesting inside
+ * `.dial-kit-base-button`: every variant class pulls that one in with
+ * `@apply`, and `@apply` cannot inline a rule that contains nested CSS.
+ * Both classes are always on the element, so the selector still matches.
+ */
+.dial-kit-base-button[aria-disabled='true'] {
+  @apply cursor-not-allowed;
+}
+
 .dial-kit-solid-button-disable {
   @apply text-control-disable-alpha bg-none bg-control-disable border-transparent;
 }
@@ -193,7 +206,8 @@
 
 /* Link buttons */
 .dial-kit-primary-link-button {
-  @apply dial-kit-base-button bg-transparent text-accent;
+  /* `no-underline` is explicit because this variant also renders as an `<a>`. */
+  @apply dial-kit-base-button bg-transparent text-accent no-underline;
 
   @media (hover: hover) {
     &:hover {
@@ -205,7 +219,9 @@
     @apply text-control-blue-active;
   }
 
-  &:disabled {
+  /* Must stay last: same specificity as the hover/active rules above. */
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply text-control-disable-alpha;
   }
 }

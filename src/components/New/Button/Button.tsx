@@ -1,7 +1,9 @@
 import type {
+  AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   FC,
+  HTMLAttributeAnchorTarget,
   ReactNode,
 } from 'react';
 
@@ -30,6 +32,9 @@ export interface ButtonProps extends DetailedHTMLProps<
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
   tooltipProps?: TooltipProps;
+  href?: string;
+  target?: HTMLAttributeAnchorTarget;
+  rel?: string;
 }
 
 /**
@@ -69,6 +74,13 @@ export interface ButtonProps extends DetailedHTMLProps<
  * @param [textClassName] - Additional CSS classes to apply specifically to the button text
  * @param [iconAfter] - Icon or element to display after the button text
  * @param [iconBefore] - Icon or element to display before the button text
+ * @param [href] - Destination to navigate to. Renders an `<a>` instead of a
+ * `<button>`, so the control keeps the link role, middle-click, and
+ * "open in new tab". Pair it with `ButtonAppearance.Link` (or `LinkButton`)
+ * unless a button-shaped link is intended.
+ * @param [target] - Anchor target, only meaningful alongside `href`
+ * @param [rel] - Anchor `rel`. Defaults to `noopener noreferrer` when
+ * `target="_blank"`.
  */
 export const Button: FC<ButtonProps> = ({
   label,
@@ -81,6 +93,10 @@ export const Button: FC<ButtonProps> = ({
   iconBefore,
   type = 'button',
   tooltipProps,
+  href,
+  target,
+  rel,
+  disabled,
   ...props
 }) => {
   const btnClassName = mergeClasses(
@@ -104,22 +120,57 @@ export const Button: FC<ButtonProps> = ({
   // it would otherwise override a visible `label` that is a ReactNode.
   const tooltipFallback = label ? undefined : tooltipProps?.tooltip;
 
-  const button = (
-    <button
-      {...props}
-      type={type}
-      className={btnClassName}
-      aria-label={resolveAccessibleName(
-        typeof label === 'string' ? label : undefined,
-        props['aria-label'],
-        tooltipFallback,
-      )}
-    >
+  const accessibleName = resolveAccessibleName(
+    typeof label === 'string' ? label : undefined,
+    props['aria-label'],
+    tooltipFallback,
+  );
+
+  const content = (
+    <>
       <DialIcon icon={iconBefore} />
       {label && <span className={textClassName}>{label}</span>}
       <DialIcon icon={iconAfter} />
-    </button>
+    </>
   );
+
+  // `ButtonProps` is typed against `<button>`, so the anchor branch has to
+  // re-point the shared prop bag — handlers, `ref`, `tabIndex` — at `<a>`.
+  const anchorProps =
+    props as unknown as AnchorHTMLAttributes<HTMLAnchorElement>;
+
+  // An anchor has no disabled state and never matches `:disabled`, so a
+  // disabled link drops its `href` (nothing to follow), suppresses its click
+  // handler, leaves the tab order, and is marked `aria-disabled` — which is
+  // also what the `[aria-disabled='true']` rules in buttons.scss style against.
+  const button =
+    href !== undefined ? (
+      <a
+        {...anchorProps}
+        href={disabled ? undefined : href}
+        target={target}
+        // A `_blank` target hands the opened page a reference back to this one
+        // until the opener is severed.
+        rel={rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined)}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : anchorProps.tabIndex}
+        onClick={disabled ? undefined : anchorProps.onClick}
+        className={btnClassName}
+        aria-label={accessibleName}
+      >
+        {content}
+      </a>
+    ) : (
+      <button
+        {...props}
+        type={type}
+        disabled={disabled}
+        className={btnClassName}
+        aria-label={accessibleName}
+      >
+        {content}
+      </button>
+    );
 
   return tooltipProps ? (
     <DialTooltip {...tooltipProps}>{button}</DialTooltip>

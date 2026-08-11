@@ -216,3 +216,26 @@ export const AllVariants: Story = {
     },
   },
 };
+
+export const AsLink: Story = {
+  render: () => (
+    <div className="flex flex-col items-start gap-y-3">
+      <LinkButton label="Same tab" href="#same-tab" />
+      <LinkButton
+        label="New tab"
+        href="https://epam.github.io/ai-dial/"
+        target="_blank"
+      />
+      <LinkButton label="Disabled link" href="#unreachable" disabled />
+      <LinkButton label="No href — stays a button" onClick={() => undefined} />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Passing `href` renders a real `<a>`, so the control keeps the link role, middle-click, and "open in new tab". `target="_blank"` gets `rel="noopener noreferrer"` unless `rel` is set explicitly. A disabled link drops its `href` and leaves the tab order, and is marked `aria-disabled` since an anchor has no disabled state.',
+      },
+    },
+  },
+};

@@ -99,6 +99,16 @@ export const DangerButton = ButtonVariantCreator(
  * />
  * ```
  *
+ * Pass `href` to navigate: the control then renders a real `<a>`, so it keeps
+ * the link role, middle-click, and "open in new tab". Without `href` it stays a
+ * `<button>` and needs an `onClick`.
+ *
+ * @example
+ * ```tsx
+ * <LinkButton label="Read the docs" href="/docs" />
+ * <LinkButton label="Open dashboard" href="https://example.com" target="_blank" />
+ * ```
+ *
  * Inherits all properties from the `ButtonProps`
  */
 export const LinkButton = ButtonAppearanceCreator(
