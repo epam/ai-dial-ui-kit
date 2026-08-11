@@ -172,9 +172,13 @@ export function useEditableItem({
 
   /**
    * Commits the edit when focus leaves the input (outside click / blur).
-   * Always exits edit mode: a valid value is saved as-is, while an invalid
-   * value falls back to the default name (`initialValue`) and is committed,
-   * instead of trapping the user inside the field.
+   * Always exits edit mode: a valid value is saved as-is. When renaming an
+   * existing item, an invalid value falls back to the current name
+   * (`initialValue`) and is committed, instead of trapping the user inside
+   * the field. When creating a new item, `initialValue` is only a
+   * placeholder (e.g. "New folder") — an invalid value cancels the creation
+   * instead, since silently committing the placeholder would create an item
+   * the user never asked for.
    */
   const saveOnBlur = useCallback(() => {
     if (committedRef.current) return;
@@ -185,14 +189,22 @@ export function useEditableItem({
       return;
     }
 
-    if (validate(initialValue)) {
+    if (!isCreating && validate(initialValue)) {
       setValue(initialValue);
       resetValidationState();
       commit(initialValue);
     } else {
       cancel();
     }
-  }, [validate, value, initialValue, commit, cancel, resetValidationState]);
+  }, [
+    validate,
+    value,
+    initialValue,
+    commit,
+    cancel,
+    resetValidationState,
+    isCreating,
+  ]);
 
   useEffect(() => {
     if (!isEditing && !isCreating) return;

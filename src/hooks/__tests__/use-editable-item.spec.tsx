@@ -74,15 +74,19 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
     expect(onSave).toHaveBeenCalledWith('original');
   });
 
-  it('reverts to the default folder name and creates it on blur when invalid (creation)', () => {
+  it('cancels the creation on blur when invalid, instead of committing the default placeholder name', () => {
     const onCreateFolderSave = vi.fn();
+    const onCreateFolderCancel = vi.fn();
     render(
       <Harness
         value="New folder"
         isEditing={false}
         isCreating
         onCreateFolderSave={onCreateFolderSave}
-        // names containing % are invalid here, the default "New folder" is valid
+        onCreateFolderCancel={onCreateFolderCancel}
+        // names containing % are invalid here; the placeholder "New folder"
+        // would itself be valid, but creation must not silently substitute
+        // it for what the user actually typed (see ai-dial-chat #7968).
         onValidate={(v) => (/%/.test(v) ? 'forbidden symbol' : null)}
       />,
     );
@@ -96,7 +100,8 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
       fireEvent.blur(input);
     });
 
-    expect(onCreateFolderSave).toHaveBeenCalledWith('New folder');
+    expect(onCreateFolderSave).not.toHaveBeenCalled();
+    expect(onCreateFolderCancel).toHaveBeenCalledTimes(1);
   });
 
   it('cancels on blur when both the value and the default are invalid', () => {
