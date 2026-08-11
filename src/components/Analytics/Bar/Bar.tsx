@@ -11,8 +11,11 @@ import {
 } from './utils';
 
 export interface DialAnalyticsBarProps {
-  /** Current value used to size and color the bar. Omit it when `error` is set. */
-  value?: number;
+  /**
+   * Current value used to size and color the bar. Pass `null` when there is no
+   * data (em dash, no progress bar). Omit it when `error` is set.
+   */
+  value?: number | null;
   /** Upper bound of the scale. Defaults to `1`. */
   maxValue?: number;
   /**
@@ -28,8 +31,8 @@ export interface DialAnalyticsBarProps {
   /** Optional label rendered above the bar, on the left. */
   title?: ReactNode;
   /**
-   * Text rendered above the bar, on the right. Defaults to `value`.
-   * Pass a formatted node (e.g. `"85%"`) to override.
+   * Text rendered above the bar, on the right. Defaults to `value`, or an em dash
+   * (`—`) when `value` is `null`. Pass a formatted node (e.g. `"85%"`) to override.
    */
   valueLabel?: ReactNode;
   /**
@@ -59,7 +62,8 @@ export interface DialAnalyticsBarProps {
  *
  * The fill color is resolved from `colorMap` based on the normalized ratio
  * (`value / maxValue`), so the bar shifts hue as the value grows. An empty bar
- * (value `0`) shows only the `bg-layer-1` track.
+ * (value `0`) shows only the `bg-layer-1` track. A missing value (`null`) shows
+ * an em dash and no progress bar.
  *
  * @example
  * ```tsx
@@ -76,12 +80,12 @@ export interface DialAnalyticsBarProps {
  * />
  * ```
  *
- * @param [value] - Current value used to size and color the bar. Omit it when `error` is set.
+ * @param [value] - Current value used to size and color the bar. Pass `null` for no data (em dash, no bar). Omit when `error` is set.
  * @param [maxValue=1] - Upper bound of the scale.
  * @param [error] - Renders the error state (error-colored bar + error tag).
  * @param [isLoading] - Renders the loading state (loader + empty track).
  * @param [title] - Optional label rendered above the bar, on the left.
- * @param [valueLabel] - Text rendered above the bar, on the right. Defaults to `value`.
+ * @param [valueLabel] - Text rendered above the bar, on the right. Defaults to `value` or `—` when null.
  * @param [colorMap=DEFAULT_ANALYTICS_BAR_COLOR_MAP] - Color bands keyed by ratio.
  * @param [className] - Additional CSS classes for the outer container.
  * @param [titleClassName] - Additional CSS classes for the title label.
@@ -103,11 +107,14 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
   inline,
   ariaLabel,
 }) => {
-  const ratio = getAnalyticsBarRatio(value ?? 0, maxValue);
+  const hasNoValue = value == null;
+  const showBar = Boolean(error || isLoading || !hasNoValue);
+  const ratio = getAnalyticsBarRatio(hasNoValue ? 0 : value, maxValue);
   const color = getAnalyticsBarColor(ratio, colorMap);
-  const displayValue = valueLabel ?? value;
+  const displayValue = valueLabel ?? (hasNoValue ? '—' : value);
   const resolvedAriaLabel =
     ariaLabel ?? (typeof title === 'string' ? title : undefined);
+  const hideFill = error || isLoading;
 
   const valueSlot = error ? (
     <DialAnalyticsErrorTag />
@@ -116,8 +123,9 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
   ) : (
     <span
       className={mergeClasses(
+        'shrink-0 tabular-nums text-end',
         inline
-          ? 'dial-small-text text-primary'
+          ? 'dial-small-text min-w-[5ch] text-primary'
           : 'dial-small-semi-text text-primary',
         valueClassName,
       )}
@@ -126,10 +134,12 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
     </span>
   );
 
-  const barTrack = (
+  const barTrack = showBar ? (
     <div
       role="progressbar"
-      aria-valuenow={error || isLoading ? undefined : value}
+      aria-valuenow={
+        error || isLoading || typeof value !== 'number' ? undefined : value
+      }
       aria-valuemin={0}
       aria-valuemax={maxValue}
       aria-label={resolvedAriaLabel}
@@ -139,14 +149,14 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
         error ? 'bg-error' : 'bg-layer-1',
       )}
     >
-      {!error && !isLoading && (
+      {!hideFill && (
         <div
           className="h-full rounded-sm transition-[width] duration-300"
           style={{ width: `${ratio * 100}%`, backgroundColor: color }}
         />
       )}
     </div>
-  );
+  ) : null;
 
   const titleSlot = (
     <span

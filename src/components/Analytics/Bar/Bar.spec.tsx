@@ -46,6 +46,35 @@ describe('Dial UI Kit :: DialAnalyticsBar', () => {
     expect(fill.style.backgroundColor).toBe('');
   });
 
+  test('shows an em dash and no progress bar when value is null', () => {
+    render(<DialAnalyticsBar title="Score" value={null} />);
+
+    expect(screen.getByText('—')).toBeInTheDocument();
+    expect(screen.queryByText('0')).toBeNull();
+    expect(screen.queryByRole('progressbar')).toBeNull();
+  });
+
+  test('prefers an explicit valueLabel over the em dash when value is null', () => {
+    render(<DialAnalyticsBar title="Score" value={null} valueLabel="n/a" />);
+
+    expect(screen.getByText('n/a')).toBeInTheDocument();
+    expect(screen.queryByText('—')).toBeNull();
+    expect(screen.queryByRole('progressbar')).toBeNull();
+  });
+
+  test('reserves a fixed value column width in inline mode so tracks stay aligned', () => {
+    render(
+      <>
+        <DialAnalyticsBar title="A" value={0.82} inline />
+        <DialAnalyticsBar title="B" value={null} inline />
+      </>,
+    );
+
+    expect(screen.getByText('0.82').className).toMatch(/min-w-\[5ch]/);
+    expect(screen.getByText('—').className).toMatch(/min-w-\[5ch]/);
+    expect(screen.getAllByRole('progressbar')).toHaveLength(1);
+  });
+
   test('clamps values above maxValue and uses the full color', () => {
     const { container } = render(
       <DialAnalyticsBar title="Score" value={5} maxValue={1} />,

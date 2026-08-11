@@ -180,6 +180,27 @@ export const CompareWithCustomMaxValue: Story = {
   },
 };
 
+export const CompareWithMissingValues: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, onlyCurrent: 0.55 },
+    compareData: { accuracy: 0.64, recall: 0.82, onlyPrevious: 0.71 },
+    compareLabels: ['This week', 'Last week'],
+    className: 'w-[420px]',
+  },
+};
+
+export const CompareInlineWithMissingValues: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, onlyCurrent: 0.55 },
+    compareData: { accuracy: 0.64, recall: 0.82, onlyPrevious: 0.71 },
+    compareLabels: ['This week', 'Last week'],
+    inline: true,
+    className: 'w-[420px]',
+  },
+};
+
 export const WithTitleTooltip: Story = {
   args: {
     title: 'Relevance',

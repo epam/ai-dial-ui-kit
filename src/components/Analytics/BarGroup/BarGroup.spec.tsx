@@ -214,17 +214,36 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       expect(screen.getByText('Last week')).toBeInTheDocument();
     });
 
-    test('skips entries whose key is absent from compareData', () => {
+    test('shows missing keys with an em dash and no delta badge', () => {
       render(
         <DialAnalyticsBarGroup
           title="Relevance"
-          data={{ accuracy: 0.82, extra: 0.5 }}
-          compareData={{ accuracy: 0.64 }}
+          data={{ accuracy: 0.82, onlyCurrent: 0.5 }}
+          compareData={{ accuracy: 0.64, onlyPrevious: 0.7 }}
         />,
       );
 
+      expect(screen.getByText('onlyCurrent')).toBeInTheDocument();
+      expect(screen.getByText('onlyPrevious')).toBeInTheDocument();
+      // accuracy×2 + onlyCurrent + onlyPrevious — missing sides have no progressbar
+      expect(screen.getAllByRole('progressbar')).toHaveLength(4);
+      expect(screen.getAllByText('—')).toHaveLength(2);
+      expect(screen.getByText('+0.18')).toBeInTheDocument();
+      expect(screen.queryByText('NaN')).toBeNull();
+    });
+
+    test('hides the delta badge when either side is explicitly null', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ score: null, other: 0.5 }}
+          compareData={{ score: 0.64, other: null }}
+        />,
+      );
+
+      expect(screen.getAllByText('—')).toHaveLength(2);
+      expect(screen.queryByText(/^[+-]\d/)).toBeNull();
       expect(screen.getAllByRole('progressbar')).toHaveLength(2);
-      expect(screen.queryByText('extra')).toBeNull();
     });
   });
 

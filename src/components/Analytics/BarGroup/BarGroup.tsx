@@ -14,14 +14,19 @@ export interface DialAnalyticsBarGroupProps {
   titleTooltip?: ReactNode;
   /** Description passed to the accordion header. Defaults to the number of entries. */
   description?: ReactNode;
-  /** Map of metric name to numeric value. Each entry renders one bar. */
-  data: Record<string, number>;
   /**
-   * When provided, enables compare mode: each entry renders a delta badge (computed
-   * as `data[key] - compareData[key]`) and two bars — one for `data` and one for
-   * `compareData`. `onBarClick` is ignored in compare mode.
+   * Map of metric name to numeric value. Each entry renders one bar.
+   * Pass `null` for a key when there is no data (em dash, no progress bar).
    */
-  compareData?: Record<string, number>;
+  data: Record<string, number | null>;
+  /**
+   * When provided, enables compare mode: keys are the union of `data` and
+   * `compareData`. Each entry renders two bars and, when both sides are numeric,
+   * a delta badge (`data[key] - compareData[key]`). A missing key (or explicit
+   * `null`) on either side shows an em dash with no progress bar and no delta.
+   * `onBarClick` is ignored in compare mode.
+   */
+  compareData?: Record<string, number | null>;
   /**
    * Labels shown next to each of the two bars in compare mode.
    * The first label is for `data`, the second for `compareData`.
@@ -42,7 +47,7 @@ export interface DialAnalyticsBarGroupProps {
   /** Renders a loader in place of the bars while the data is being fetched. */
   isLoading?: boolean;
   /** Invoked with the entry key and value when a bar is clicked. When set, each bar becomes an interactive button. */
-  onBarClick?: (key: string, value: number) => void;
+  onBarClick?: (key: string, value: number | null) => void;
   /** Renders every bar on a single row (50% title, 50% bar + value). */
   inline?: boolean;
   /** Additional CSS classes for each bar's title label. */
@@ -78,8 +83,8 @@ export interface DialAnalyticsBarGroupProps {
  * @param title - Title passed to the accordion header.
  * @param [titleTooltip] - Tooltip shown when hovering the accordion header title.
  * @param [description] - Description passed to the accordion header. Defaults to the number of entries.
- * @param data - Map of metric name to numeric value. Each entry renders one bar.
- * @param [compareData] - Enables compare mode: each entry shows a delta badge and two bars.
+ * @param data - Map of metric name to numeric value (or `null` when missing). Each entry renders one bar.
+ * @param [compareData] - Enables compare mode: union of keys, delta badge when both sides are numeric, em dash (no bar) when a side is missing.
  * @param [compareLabels] - Labels for the two bars in compare mode: first for `data`, second for `compareData`.
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
@@ -126,6 +131,9 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   ) : (
     title
   );
+  const compareKeys = compareData
+    ? [...new Set([...Object.keys(data), ...Object.keys(compareData)])]
+    : [];
 
   return (
     <DialAccordion
@@ -144,26 +152,33 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
         {isLoading ? (
           <DialLoader fullWidth={false} className="self-center" />
         ) : compareData ? (
-          entries.map(([key, value]) => {
-            if (!(key in compareData)) return null;
-            const compareValue = compareData[key];
-            const delta = parseFloat((value - compareValue).toFixed(2));
-            const isPositive = delta >= 0;
-            const deltaLabel = isPositive ? `+${delta}` : String(delta);
+          compareKeys.map((key) => {
+            const value = key in data ? data[key] : null;
+            const compareValue = key in compareData ? compareData[key] : null;
+            const canComputeDelta =
+              typeof value === 'number' && typeof compareValue === 'number';
+            const delta = canComputeDelta
+              ? parseFloat((value - compareValue).toFixed(2))
+              : null;
+            const isPositive = delta != null && delta >= 0;
+            const deltaLabel =
+              delta == null ? null : isPositive ? `+${delta}` : String(delta);
             return (
               <div key={key} className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-2">
                   <span className="dial-small-text text-primary">{key}</span>
-                  <span
-                    className={mergeClasses(
-                      'dial-tiny-semi-text rounded-[120px] border border-transparent px-2',
-                      isPositive
-                        ? 'bg-success text-success'
-                        : 'bg-error text-error',
-                    )}
-                  >
-                    {deltaLabel}
-                  </span>
+                  {deltaLabel != null && (
+                    <span
+                      className={mergeClasses(
+                        'dial-tiny-semi-text rounded-[120px] border border-transparent px-2',
+                        isPositive
+                          ? 'bg-success text-success'
+                          : 'bg-error text-error',
+                      )}
+                    >
+                      {deltaLabel}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5 pl-2">
                   <DialAnalyticsBar
