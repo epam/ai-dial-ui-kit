@@ -30,6 +30,8 @@ export interface PopupProps {
   overlayClassName?: string;
   titleClassName?: string;
   headerClassName?: string;
+  /** Additional CSS classes applied to the scrollable body wrapper around `children`. */
+  bodyClassName?: string;
   children?: ReactNode;
   footer?: ReactNode;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
@@ -78,6 +80,7 @@ export interface PopupProps {
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
  * @param [titleClassName] - Additional CSS classes applied to the title element
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
+ * @param [bodyClassName] - Additional CSS classes applied to the scrollable body wrapper around `children`
  * @param [children] - Body content
  * @param [footer] - Footer area for actions
  * @param [onClose] - Callback fired when the popup requests to close
@@ -96,6 +99,7 @@ export const Popup: FC<PopupProps> = ({
   overlayClassName,
   titleClassName,
   headerClassName,
+  bodyClassName,
   children,
   footer,
   onClose,
@@ -182,7 +186,9 @@ export const Popup: FC<PopupProps> = ({
               )}
             </div>
 
-            <div className="grow overflow-auto">{children}</div>
+            <div className={mergeClasses('grow overflow-auto', bodyClassName)}>
+              {children}
+            </div>
 
             {footer}
           </div>

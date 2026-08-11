@@ -149,6 +149,17 @@ describe('Dial UI Kit :: Popup', () => {
     expect(header).toHaveClass('custom-header-class');
   });
 
+  test('applies bodyClassName to the scrollable body wrapper', () => {
+    render(
+      <Popup open header="Body class test" bodyClassName="custom-body-class">
+        <div>Body</div>
+      </Popup>,
+    );
+
+    const body = screen.getByText('Body').parentElement;
+    expect(body).toHaveClass('custom-body-class');
+  });
+
   test('does not close on outside click when closeOnOutsideClick is false', () => {
     const onClose = vi.fn();
 
