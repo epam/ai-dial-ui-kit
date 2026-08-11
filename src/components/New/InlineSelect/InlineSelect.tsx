@@ -7,7 +7,7 @@ import {
   type ButtonHTMLAttributes,
   type FC,
 } from 'react';
-import { DialDropdown } from '../../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import type { DropdownItem } from '../../../models/dropdown';
 import { DIAL_ICON_SIZE } from '../../../constants/icon';
 import { mergeClasses } from '../../../utils/merge-classes';
@@ -88,7 +88,7 @@ export interface InlineSelectProps {
 }
 
 /**
- * An inline select control combining `InlineSelectTrigger` with `DialDropdown`.
+ * An inline select control combining `InlineSelectTrigger` with `Dropdown`.
  *
  * @example
  * ```tsx
@@ -133,7 +133,7 @@ export const InlineSelect: FC<InlineSelectProps> = ({
   );
 
   return (
-    <DialDropdown
+    <Dropdown
       items={items}
       placement={placement}
       matchReferenceWidth={matchReferenceWidth}
@@ -149,6 +149,6 @@ export const InlineSelect: FC<InlineSelectProps> = ({
         disabled={disabled}
         aria-label={ariaLabel}
       />
-    </DialDropdown>
+    </Dropdown>
   );
 };

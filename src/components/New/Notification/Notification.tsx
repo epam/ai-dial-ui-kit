@@ -1,4 +1,3 @@
-import { IconX } from '@tabler/icons-react';
 import {
   type FC,
   type HTMLAttributes,
@@ -8,10 +7,9 @@ import {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { NotificationType, NotificationVariant } from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
-import { DialGhostIconButton } from '../../IconButton/IconButtonWrappers';
+import { CloseButton } from '../CloseButton/CloseButton';
 import {
   alertBaseClassName,
   notificationVariantClassNameMap,
@@ -160,11 +158,10 @@ export const Notification: FC<NotificationProps> = ({
       {children}
       {closable && (
         <div className="relative size-[40px]">
-          <DialGhostIconButton
+          <CloseButton
             className="absolute top-[-2px] right-0 size-auto hover:bg-transparent "
-            aria-label="Close notification"
-            icon={<IconX size={DIAL_ICON_SIZE.SM} />}
-            onClick={onClose}
+            ariaLabel="Close notification"
+            onClose={(e) => onClose?.(e)}
           />
         </div>
       )}

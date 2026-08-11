@@ -1,21 +1,17 @@
 import { useMemo, useState, type FC } from 'react';
 
-import { type DialButtonProps } from '@/components/Button/Button';
 import type { DropdownItem } from '@/models/dropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { Button } from '../Button/Button';
+import { Button, type ButtonProps } from '../Button/Button';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { getButtonChevron } from './constants';
 
-export interface ButtonDropdownProps extends Omit<
-  DialButtonProps,
-  'iconAfter'
-> {
+export interface ButtonDropdownProps extends Omit<ButtonProps, 'iconAfter'> {
   items: DropdownItem[];
 }
 
 /**
- * A Button dropdown component based on DialDropdown component
+ * A Button dropdown component based on the Dropdown component
  * aliases: SplitButton|MenuButton
  *
  * @example
@@ -27,7 +23,7 @@ export interface ButtonDropdownProps extends Omit<
  * />
  * ```
  *
- * Inherits all props from DialButton.
+ * Inherits all props from Button.
  * @param [items] - DropdownItems with actions
  */
 export const ButtonDropdown: FC<ButtonDropdownProps> = ({

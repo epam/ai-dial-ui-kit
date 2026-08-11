@@ -4,16 +4,15 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 
-import { type DialLabelProps } from '@/components/Label/Label';
 import { mergeClasses } from '@/utils/merge-classes';
 import { CaptionText, ErrorText } from '../CaptionText/CaptionText';
-import { Label } from '../Label/Label';
+import { Label, type LabelProps } from '../Label/Label';
 
 export interface TextareaProps extends DetailedHTMLProps<
   Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
   HTMLTextAreaElement
 > {
-  labelProps?: DialLabelProps;
+  labelProps?: LabelProps;
   invalid?: boolean;
   containerClassName?: string;
   resize?: boolean;

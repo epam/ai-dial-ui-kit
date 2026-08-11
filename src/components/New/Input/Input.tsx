@@ -12,12 +12,11 @@ import {
 import { useMergeRefs } from '@floating-ui/react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { type DialLabelProps } from '@/components/Label/Label';
 import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { CaptionText, ErrorText } from '../CaptionText/CaptionText';
-import { Label } from '../Label/Label';
+import { Label, type LabelProps } from '../Label/Label';
 import { InputButton, type InputButtonProps } from './Button/InputButton';
 import { handleKeyDown } from './utils';
 
@@ -27,7 +26,7 @@ export interface InputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'onChange' | 'size'
 > {
-  labelProps?: DialLabelProps;
+  labelProps?: LabelProps;
   inputButtonProps?: InputButtonProps;
 
   size?: ElementSize;
