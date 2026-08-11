@@ -88,13 +88,7 @@ export const Switch: FC<SwitchProps> = ({
             className={mergeClasses(
               'flex h-[18px] w-[36px] shrink-0 items-center rounded-full p-0.5 transition-colors duration-200',
               isOn ? 'justify-end' : 'justify-start',
-              disabled
-                ? isOn
-                  ? 'bg-controls-disable'
-                  : 'bg-layer-4'
-                : isOn
-                  ? 'bg-controls-accent-primary'
-                  : 'bg-layer-4',
+              isOn && !disabled ? 'bg-control-accent' : 'bg-control-disable',
             )}
           >
             <span
