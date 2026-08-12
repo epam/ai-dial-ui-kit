@@ -372,4 +372,8 @@ export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
 export type { FileDropzoneProps } from './components/New/FileDropzone/FileDropzone';
+export { Tag } from './components/New/Tag/Tag';
+export type { TagProps } from './components/New/Tag/Tag';
+export { TagInput } from './components/New/TagInput/TagInput';
+export type { TagInputProps } from './components/New/TagInput/TagInput';
 export { matchesAccept } from './utils/file-accept';
