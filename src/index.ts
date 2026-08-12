@@ -368,3 +368,5 @@ export { Accordion } from './components/New/Accordion/Accordion';
 export type { AccordionProps } from './components/New/Accordion/Accordion';
 export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
+export { Tabs } from './components/New/Tabs/Tabs';
+export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
