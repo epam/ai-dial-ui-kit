@@ -20,6 +20,7 @@ migration-guides/
 | 0.13.0 | [focus-border-token-rename](0.13.0/focus-border-token-rename.md) | Border token `focus` renamed to `focus-black` (`--stroke-focus` → `--stroke-focus-black`) |
 | 0.13.0 | [typography-heading-scale-shift](0.13.0/typography-heading-scale-shift.md) | `dial-display3-text` added at 22px; `dial-h1`/`h2`/`h3-text` shifted one step down to 20/18/16px |
 | 0.13.0 | [caption-semi-text-lead-rename](0.13.0/caption-semi-text-lead-rename.md) | `dial-caption-semi-text` renamed to `dial-caption-lead-semi-text` and now uppercases |
+| 0.13.0 | [progress-bar-2-0-rewrite](0.13.0/progress-bar-2-0-rewrite.md) | `DialProgressBar` rebuilt on 2.0 tokens as `ProgressBar`; `DialProgressBarSize` → `ElementSize`, `ariaLabel` → `aria-label` |
 
 ---
 
