@@ -71,6 +71,14 @@ export const Empty: Story = {
   },
 };
 
+export const NoValue: Story = {
+  args: {
+    title: 'Relevance',
+    value: null,
+    className: 'w-[280px]',
+  },
+};
+
 export const Full: Story = {
   args: {
     title: 'Relevance',
