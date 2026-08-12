@@ -15,6 +15,10 @@ Versions match the git tags on the `development` branch.
   See [migration guide](migration-guides/0.13.0/spinner-dial-prefix-removal.md).
 - **Border token `focus` → `focus-black`** — the token behind `border-focus` / `outline-focus` was named for its state rather than its value, which left no room for the sibling `focus-blue` token. It is now `focus-black`, backed by `--stroke-focus-black` instead of `--stroke-focus`. The colour is unchanged (`#161B2D`).
   See [migration guide](migration-guides/0.13.0/focus-border-token-rename.md).
+- **Typography — heading classes shifted one step down the scale** — the design scale has three display sizes, but the kit had only two, so its 22px step was shipping as `dial-h1-text` and every heading class sat one step above the size design assigned it. `dial-display3-text` now carries 22px/32px, and `dial-h1-text` → 20px/28px, `dial-h2-text` → 18px/26px, `dial-h3-text` → 16px/24px. Bare `h1`/`h2`/`h3` elements shrink with them, as does the 1.0 `DialPopup` title (18px → 16px). To keep a rendered size, move the class name up one step (`dial-h1-text` → `dial-display3-text`, and so on).
+  See [migration guide](migration-guides/0.13.0/typography-heading-scale-shift.md).
+- **`dial-caption-semi-text` → `dial-caption-lead-semi-text`** — the design scale's only 10px semibold style is Caption Lead (Semi Bold): uppercase with `+0.06em` tracking. The class already had the tracking but neither the uppercase nor "lead" in its name. It now applies `text-transform: uppercase`, and the rename keeps that from changing existing text silently.
+  See [migration guide](migration-guides/0.13.0/caption-semi-text-lead-rename.md).
 - **`Notification` (2.0) — live-region role now follows the variant** — the container was hardcoded to `role="alert"` for every variant. `role="alert"` is implicitly `aria-live="assertive"` and interrupts the screen reader, which is wrong for routine feedback and for section messages that are static page content. `error` and `warning` keep `role="alert"`; `info`, `success`, and `loading` now use the polite `role="status"`. Pass an explicit `role` to override.
   Consumers asserting `getByRole('alert')` on a non-error notification must query `status` instead.
 
@@ -34,6 +38,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **Typography — `dial-display3-text` and `dial-tiny-lead-semi-text`** — the two steps the design scale defined but the kit never shipped: Display 3 (22px/32px semibold) and Tiny Text Lead (Semi Bold) (12px/16px semibold, `+0.03em`, uppercase). The `dial-*-text` scale now covers every row of the design table.
+- **Typography — `dial-code-text` names a monospace face** — it previously inherited the body font despite being the Code style. It resolves through `var(--theme-font-mono, var(--font-fira-code, 'Fira Code'))` before the system monospace stack, mirroring the existing `--theme-font` / `--font-inter` hook. The kit ships no font file; hosts that want Fira Code load it themselves.
 - **Enhanced pointer targets** — standard-size buttons expose a 44×44 pointer target (WCAG 2.5.5, Level AAA) via the `dial-kit-enhanced-target` utility, with no change to their rendered size. See the [Accessibility section of the README](README.md#-accessibility) for the documented exceptions.
 - **MCP server — generation-aware component discovery** — component entries carry `generation` (`1.0` | `2.0`), and a 1.0 component carries `supersededBy` naming its 2.0 replacement (e.g. `DialButton` → `Button`). `searchEntity` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` flags a superseded component and, on a name miss, suggests the other generation's spelling. Both are derived automatically from component location and Storybook category — there is no list to maintain. See the [MCP Server Guide](src/mcp/README.md).
 

@@ -224,6 +224,15 @@ export default {
       },
       fontFamily: {
         DEFAULT: ['var(--theme-font, var(--font-inter))'],
+        // The kit ships no font file: the host supplies the face and we only
+        // name it, mirroring the `--theme-font` / `--font-inter` hook above.
+        mono: [
+          "var(--theme-font-mono, var(--font-fira-code, 'Fira Code'))",
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'monospace',
+        ],
       },
       fontSize: {
         xxs: '10px',

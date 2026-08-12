@@ -53,6 +53,10 @@ const TypographyShowcase = () => (
         className="dial-display2-text"
         label="dial-display2-text"
       />
+      <TypographyRow
+        className="dial-display3-text"
+        label="dial-display3-text"
+      />
       <TypographyRow className="dial-h1-text" label="dial-h1-text" />
       <TypographyRow className="dial-h2-text" label="dial-h2-text" />
       <TypographyRow className="dial-h3-text" label="dial-h3-text" />
@@ -91,10 +95,14 @@ const TypographyShowcase = () => (
         className="dial-tiny-semi-text"
         label="dial-tiny-semi-text"
       />
+      <TypographyRow
+        className="dial-tiny-lead-semi-text"
+        label="dial-tiny-lead-semi-text"
+      />
       <TypographyRow className="dial-caption-text" label="dial-caption-text" />
       <TypographyRow
-        className="dial-caption-semi-text"
-        label="dial-caption-semi-text"
+        className="dial-caption-lead-semi-text"
+        label="dial-caption-lead-semi-text"
       />
       <TypographyRow className="dial-code-text" label="dial-code-text" />
     </Section>

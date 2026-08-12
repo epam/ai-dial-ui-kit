@@ -18,6 +18,8 @@ migration-guides/
 | 0.12.0 | [legacy-typography-classes-removal](0.12.0/legacy-typography-classes-removal.md) | Legacy `dial-h*`, `dial-body`, `dial-small*`, `dial-tiny*`, `dial-caption` classes removed in favor of the `dial-*-text` scale |
 | 0.13.0 | [spinner-dial-prefix-removal](0.13.0/spinner-dial-prefix-removal.md) | `DialSpinner`/`DialSpinnerProps` renamed to `Spinner`/`SpinnerProps` |
 | 0.13.0 | [focus-border-token-rename](0.13.0/focus-border-token-rename.md) | Border token `focus` renamed to `focus-black` (`--stroke-focus` → `--stroke-focus-black`) |
+| 0.13.0 | [typography-heading-scale-shift](0.13.0/typography-heading-scale-shift.md) | `dial-display3-text` added at 22px; `dial-h1`/`h2`/`h3-text` shifted one step down to 20/18/16px |
+| 0.13.0 | [caption-semi-text-lead-rename](0.13.0/caption-semi-text-lead-rename.md) | `dial-caption-semi-text` renamed to `dial-caption-lead-semi-text` and now uppercases |
 
 ---
 

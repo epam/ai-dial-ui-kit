@@ -10,7 +10,7 @@ export const popupHeaderClassName =
   'flex flex-row items-center justify-between px-6 py-4';
 
 export const popupTitleClassName =
-  'flex-1 min-w-0 mr-3 truncate dial-h2-text text-primary';
+  'flex-1 min-w-0 mr-3 truncate dial-h1-text text-primary';
 
 /**
  * Max widths per size. Full width below the `md` breakpoint, where the popup
