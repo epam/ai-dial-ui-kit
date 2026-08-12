@@ -64,6 +64,7 @@ const buildCompareTooltip = (
  * separates the columns from the interval labels, and hovering a column reveals a
  * tooltip with its share of the total.
  * aliases: Distribution|ColumnChart|FrequencyChart
+ * Design system 1.0
  *
  * @example
  * ```tsx

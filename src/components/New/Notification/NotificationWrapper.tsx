@@ -1,3 +1,7 @@
+/**
+ * Notification wrappers that preset a variant or a type.
+ * Design system 2.0
+ */
 import type { FC } from 'react';
 
 import {

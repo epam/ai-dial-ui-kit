@@ -26,6 +26,7 @@ export interface DialLoadFileAreaFieldProps extends DialLoadFileAreaProps {
 /**
  * A composite file upload field that combines a label, file list management,
  * aliases: UploadField|FileListField
+ * Design system 1.0
  *
  * and a drag-and-drop upload area. Allows users to add, remove, and validate files
  * with customizable restrictions on file types and count.

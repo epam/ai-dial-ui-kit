@@ -36,6 +36,7 @@ export interface NumberInputProps extends Omit<
 /**
  * A number field, built on {@link Input}.
  * aliases: NumericField|NumberField
+ * Design system 2.0
  *
  * `type` is owned by this component; every other {@link Input} prop is passed
  * through, so it shares the 2.0 field styling, sizes, label, caption and error

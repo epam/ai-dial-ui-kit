@@ -31,6 +31,7 @@ export interface IconButtonProps extends DetailedHTMLProps<
 /**
  * A Icon Button component with flexible icon and text positioning
  * aliases: IconicButton|SymbolButton
+ * Design system 2.0
  *
  * @example
  * ```tsx

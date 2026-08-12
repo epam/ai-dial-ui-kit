@@ -19,6 +19,7 @@ export interface PasswordInputProps extends Omit<
 /**
  * A password field with a reveal toggle, built on {@link Input}.
  * aliases: SecureInput|ToggleablePassword
+ * Design system 2.0
  *
  * The toggle is a real `<button>`, so it is reachable by keyboard and announces
  * both its purpose and its state. `type` and `iconAfter` are owned by this

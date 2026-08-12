@@ -12,6 +12,7 @@ export interface DialStepsProps {
 /**
  * Props for the DialSteps component, which renders a multi-step navigation UI.
  * aliases: StepWizard|ProgressSteps
+ * Design system 1.0
  *
  * @example
  * ```tsx

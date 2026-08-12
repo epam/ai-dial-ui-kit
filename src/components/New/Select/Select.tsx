@@ -97,6 +97,7 @@ export interface SelectProps {
 /**
  * A versatile select supporting single and multiple selections.
  * aliases: OptionPicker|ChoiceSelector
+ * Design system 2.0
  *
  * The field is an {@link Input}, so it carries the 2.0 field styling, sizes,
  * label, caption and error states, and it exposes the control as a `combobox`

@@ -14,6 +14,9 @@ export interface DialPaginationProps {
   className?: string;
 }
 
+/**
+ * Design system 1.0
+ */
 export const DialPagination: FC<DialPaginationProps> = ({
   page,
   totalPages,

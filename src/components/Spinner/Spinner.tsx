@@ -8,6 +8,9 @@ export interface SpinnerProps {
   ariaLabel?: string;
 }
 
+/**
+ * Design system 2.0
+ */
 export const Spinner: FC<SpinnerProps> = ({
   size = 40,
   className,

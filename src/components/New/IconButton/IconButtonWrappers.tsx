@@ -40,6 +40,7 @@ const IconButtonAppearanceCreator = (
 };
 /**
  * A Primary Icon Button component with predefined primary variant
+ * Design system 2.0
  * @example
  * ```tsx
  * <PrimaryIconButton

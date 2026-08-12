@@ -30,6 +30,7 @@ export interface DialTagProps {
 
 /**
  * A compact label element used for selections, filters, or categories.
+ * Design system 1.0
  */
 export const DialTag: FC<DialTagProps> = ({
   label,

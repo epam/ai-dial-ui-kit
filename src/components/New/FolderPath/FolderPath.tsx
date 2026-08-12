@@ -17,6 +17,7 @@ export interface FolderPathProps {
 /**
  * A read-only, non-clickable folder/location path built on top of `DialBreadcrumb`.
  * aliases: FolderBreadcrumb|LocationPath
+ * Design system 2.0
  *
  * Every segment is disabled (no navigation); the first segment gets a leading
  * folder icon and the last segment is styled as the current/leaf item.

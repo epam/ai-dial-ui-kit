@@ -71,6 +71,7 @@ export interface DialAnalyticsBarGroupProps {
  * is shown as the header description, and each entry renders a {@link DialAnalyticsBar}
  * with the key as its title and the value as its value.
  * aliases: MetricBarGroup|BarList|NumericResults
+ * Design system 1.0
  *
  * @example
  * ```tsx

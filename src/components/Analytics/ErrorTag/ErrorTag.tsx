@@ -12,6 +12,7 @@ export interface DialAnalyticsErrorTagProps {
 
 /**
  * A non-interactive error tag used across analytics components to indicate that a
+ * Design system 1.0
  * metric value could not be provided. Renders a {@link DialTag} styled with the
  * error palette (`bg-error`, `text-error`, `border-error`).
  *

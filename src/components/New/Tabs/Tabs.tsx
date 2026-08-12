@@ -36,6 +36,7 @@ const NAVIGATION_KEYS = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
 /**
  * A horizontal row of tabs, underlining the active one and showing optional count badges.
  * aliases: TabRow|TabNavigation|TabBar
+ * Design system 2.0
  *
  * Follows the ARIA tabs pattern with automatic activation: only the active tab is
  * in the tab order, and the arrow keys move both focus and selection. `Home` and

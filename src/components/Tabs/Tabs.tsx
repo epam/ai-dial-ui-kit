@@ -41,6 +41,7 @@ export interface DialTabsProps {
 /**
  * A responsive and overflow-aware tabs component that automatically adapts its layout
  * aliases: TabNavigation|TabBar
+ * Design system 1.0
  *
  * between a scrollable tab bar and a dropdown menu on smaller screens.
  *

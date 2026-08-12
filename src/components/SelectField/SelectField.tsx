@@ -21,6 +21,7 @@ export interface DialSelectFieldProps
 /**
  * A Select field wrapper that composes `DialFormItem` and `DialSelect`.
  * aliases: SelectInput|ComboField
+ * Design system 1.0
  *
  * Provides unified label, description, error rendering and a readonly view that shows
  * the selected option labels (comma-separated in single mode, list in multiple).

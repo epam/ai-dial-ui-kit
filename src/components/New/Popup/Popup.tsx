@@ -45,6 +45,7 @@ export interface PopupProps {
 /**
  * An accessible modal dialog using Floating UI.
  * aliases: Modal|Dialog
+ * Design system 2.0
  *
  * Renders in a portal with a scrim overlay, focus management, a header with the
  * title and close control, a scrollable body and an optional footer. Sections

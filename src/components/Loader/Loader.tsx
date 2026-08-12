@@ -16,6 +16,7 @@ export interface DialLoaderProps {
 /**
  * A simple loading spinner component.
  * aliases: LoadingSpinner|ProgressSpinner
+ * Design system 1.0
  *
  * Renders a spinning SVG with optional full-width container.
  *

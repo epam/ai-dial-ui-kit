@@ -54,6 +54,7 @@ export interface DialInputProps extends Omit<
 /**
  * A flexible input component with icon support and various styling options
  * aliases: TextField|FormInput
+ * Design system 1.0
  *
  * @example
  * ```tsx

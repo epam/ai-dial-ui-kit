@@ -14,6 +14,7 @@ export interface Props extends HTMLProps<HTMLDivElement> {
 }
 /**
  * The content area of a tooltip that displays the tooltip information
+ * Design system 1.0
  *
  * @param children - The content to display inside the tooltip
  * @param [style] - Additional inline styles for the tooltip content

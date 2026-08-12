@@ -11,6 +11,7 @@ interface Props {
 
 /**
  * The container component that provides tooltip context and state management
+ * Design system 1.0
  *
  *
  * @param children - The tooltip trigger and content components

@@ -23,6 +23,7 @@ export interface DialSegmentedControlProps<T extends string> {
  * A single-select control for switching between a small set of mutually exclusive,
  * equally-sized options (e.g. view switchers).
  * aliases: SegmentedButton|ViewSwitcher
+ * Design system 1.0
  *
  * Renders a horizontal group of segments where every option is always visible and
  * equally sized. Supports 2 or more segments, optional per-option icons, and

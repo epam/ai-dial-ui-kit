@@ -19,6 +19,7 @@ export interface LabelProps extends NativeLabelProps {
 /**
  * A label component
  * aliases: FormLabel|RequiredIndicator
+ * Design system 2.0
  *
  * @example
  * ```tsx

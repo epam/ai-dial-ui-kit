@@ -13,6 +13,7 @@ export interface ButtonDropdownProps extends Omit<ButtonProps, 'iconAfter'> {
 /**
  * A Button dropdown component based on the Dropdown component
  * aliases: SplitButton|MenuButton
+ * Design system 2.0
  *
  * @example
  * ```tsx

@@ -21,6 +21,7 @@ export interface MarkdownEditorProps {
 
 /**
  * The 2.0 Markdown editor: a formatting toolbar (bold/italic/strikethrough,
+ * Design system 2.0
  * text style, lists, quote/link/code, table) plus an edit/live/preview mode
  * switcher and fullscreen, built on top of `@uiw/react-md-editor`.
  *

@@ -37,6 +37,7 @@ export interface DialTagInputProps extends DialLabelProps {
 /**
  * A tag input field that allows users to add multiple tags using the Enter or comma key.
  * aliases: MultiTag|TagField
+ * Design system 1.0
  *
  * Supports removing tags, displaying field labels, optional indicators, validation states,
  * and dynamic layout adjustment when tags wrap to multiple lines.

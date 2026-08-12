@@ -17,6 +17,7 @@ export interface DialTooltipProps extends DialTooltipContainerOptions {
 /**
  * A Tooltip component that displays information on hover
  * aliases: HoverPopover|InfoPopover
+ * Design system 1.0
  *
  * @example
  * ```tsx

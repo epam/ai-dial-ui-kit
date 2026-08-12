@@ -84,6 +84,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 /**
  * DialGrid — A feature-rich data grid wrapper built on ag-Grid with dark theme support.
  * aliases: DataTable|TableGrid
+ * Design system 1.0
  *
  * Provides a pre-configured grid with:
  * - Dark theme styling with CSS variable integration

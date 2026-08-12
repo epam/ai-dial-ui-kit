@@ -17,6 +17,7 @@ type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
 
 /**
  * The trigger element for a tooltip that can be clicked or hovered
+ * Design system 1.0
  *
  * @param children - The element that will trigger the tooltip
  * @param [asChild=false] - Whether to render as a child element instead of wrapping in a span

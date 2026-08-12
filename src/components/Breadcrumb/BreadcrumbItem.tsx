@@ -34,6 +34,9 @@ export interface DialBreadcrumbItemProps extends Omit<
   onBeforeNavigate?: NavigationGuard;
 }
 
+/**
+ * Design system 1.0
+ */
 export const DialBreadcrumbItem: FC<DialBreadcrumbItemProps> = ({
   label,
   href,

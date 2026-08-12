@@ -14,6 +14,7 @@ export interface DialLabelledTextProps {
 /**
  * A label component for form fields with optional tooltip, content, and custom elements.
  * aliases: LabelValue|DisplayText
+ * Design system 1.0
  *
  * @example
  * ```tsx

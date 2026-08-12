@@ -27,6 +27,7 @@ export interface DialDropdownIconProps extends Omit<
 /**
  * A compact icon trigger with a dropdown menu.
  * aliases: ModelPicker|IconMenu|AvatarDropdown
+ * Design system 1.0
  *
  * @example
  * ```tsx

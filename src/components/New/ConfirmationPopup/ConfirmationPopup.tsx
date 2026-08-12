@@ -33,6 +33,7 @@ export interface ConfirmationPopupProps extends PopupProps {
 /**
  * A confirmation dialog built from {@link Popup} and the 2.0 {@link Button}.
  * aliases: ConfirmDialog|WarningDialog
+ * Design system 2.0
  *
  * Provides an accessible modal with a title, optional description or custom content,
  * and a footer with Cancel / Confirm actions.

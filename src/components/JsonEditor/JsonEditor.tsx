@@ -16,6 +16,7 @@ export interface DialJsonEditorProps {
 
 /**
  * A JSON editor component built on top of Monaco Editor.
+ * Design system 1.0
  * Provides syntax highlighting, validation, and theme support for JSON editing.
  *
  * @param currentTheme - The theme to apply to the editor

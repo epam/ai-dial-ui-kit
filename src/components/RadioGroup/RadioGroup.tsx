@@ -36,6 +36,7 @@ export interface DialRadioGroupProps {
 /**
  * Groups multiple `DialRadio` options and renders custom content for the active option.
  * aliases: SelectionGroup|OptionGroup
+ * Design system 1.0
  *
  * Uses `DialField` as the field label and a container with `role="radiogroup"`.
  * Content provided in `radioButtons[].content` is shown under the currently active radio.

@@ -85,6 +85,7 @@ const getRefWidth = (el: ReferenceElement): number => {
  *
  * Renders the given trigger (`children`) and a floating contextual menu overlay.
  * aliases: ContextMenu|PopupMenu
+ * Design system 2.0
  *
  * Supports click/hover/contextMenu triggers, controlled/uncontrolled open, and an optional
  * close button inside the overlay. Placement is taken directly from Floating UI; when

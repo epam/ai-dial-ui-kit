@@ -62,6 +62,7 @@ export interface InputProps extends Omit<
 /**
  * A flexible input component with icon support and various styling options
  * aliases: TextField|FormInput
+ * Design system 2.0
  *
  * @example
  * ```tsx

@@ -35,6 +35,7 @@ export interface NotificationProps extends Omit<
 /**
  * A contextual feedback component for displaying important messages.
  * aliases: Notification
+ * Design system 2.0
  *
  * Renders a colored container with an icon, message text, and an optional
  * close button.

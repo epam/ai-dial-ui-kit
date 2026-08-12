@@ -20,6 +20,7 @@ export interface SwitchProps extends NativeInputProps {
 /**
  * A switch (toggle) control from the 2.0 design system.
  * aliases: ToggleSwitch|BinaryToggle|Switcher
+ * Design system 2.0
  *
  * @example
  * ```tsx

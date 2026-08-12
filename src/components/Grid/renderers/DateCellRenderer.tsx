@@ -25,6 +25,7 @@ export interface DialDateCellRendererProps extends Partial<
 
 /**
  * Minimal date cell renderer (ag-Grid compatible).
+ * Design system 1.0
  *
  * Renders the value in the **"MMM dd, yyyy"** format (e.g., "Jul 20, 2025"),
  * wrapped in `DialEllipsisTooltip` (tooltip only appears if truncated).

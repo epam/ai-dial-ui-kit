@@ -89,6 +89,7 @@ export interface InlineSelectProps {
 
 /**
  * An inline select control combining `InlineSelectTrigger` with `Dropdown`.
+ * Design system 2.0
  *
  * @example
  * ```tsx

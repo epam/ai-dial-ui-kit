@@ -370,3 +370,6 @@ export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
 export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
+export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
+export type { FileDropzoneProps } from './components/New/FileDropzone/FileDropzone';
+export { matchesAccept } from './utils/file-accept';

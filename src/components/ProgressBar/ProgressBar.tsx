@@ -19,6 +19,9 @@ const sizeClasses: Record<DialProgressBarSize, string> = {
   [DialProgressBarSize.Medium]: 'h-2',
 };
 
+/**
+ * Design system 1.0
+ */
 export const DialProgressBar: FC<DialProgressBarProps> = ({
   value,
   max = 100,
