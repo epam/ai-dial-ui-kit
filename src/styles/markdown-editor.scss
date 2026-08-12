@@ -22,11 +22,21 @@
     border: none !important;
   }
 
-  /* only the top-level bar: the heading dropdown's own toolbar-child list
-     must stay a vertical stack (see the `ul > li { display: block }` rule
-     the base library applies inside `.w-md-editor-toolbar-child`). */
+  /* only the top-level bar — the heading dropdown nests another
+     `.w-md-editor-toolbar` inside `.w-md-editor-toolbar-child`, which must keep
+     its own padding and stay a vertical stack (see the `ul > li { display:
+     block }` rule the base library applies there). */
+  .w-md-editor > .w-md-editor-toolbar {
+    /* the card already pays the horizontal inset (`px-4`), and each 24px round
+       button pads another 4px around its 16px icon — so left unchecked the
+       first and last glyphs sit 5px further in than the editor text below them.
+       Pull the bar back out by exactly that button padding so the icons align
+       to the same edge as the content. */
+    @apply -mx-1;
+  }
+
   .w-md-editor > .w-md-editor-toolbar > ul {
-    @apply flex items-center;
+    @apply flex items-center gap-0.5;
   }
 
   .w-md-editor-text,
@@ -45,8 +55,11 @@
   }
 
   .w-md-editor-toolbar li > button {
-    @apply size-[24px] flex flex-row items-center justify-center;
-    @apply rounded-full border border-solid border-transparent;
+    @apply size-[28px] flex flex-row items-center justify-center;
+    /* the base library ships `margin: 0 1px`; drop it so the `gap` on the
+       list is the only thing spacing the buttons and the edge offset above
+       stays exact. */
+    @apply m-0 rounded-full border border-solid border-transparent;
     @apply disabled:cursor-not-allowed outline-offset-0;
     @apply focus-visible:outline focus-visible:outline-focus-black;
   }
@@ -84,7 +97,6 @@
     background-color: var(--stroke-tertiary, #e0e6f0) !important;
     width: 1px !important;
     height: 12px !important;
-    margin: 0 12px !important;
   }
 
   .w-md-editor-toolbar-child {

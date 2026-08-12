@@ -22,7 +22,6 @@ import {
 import {
   IconBold,
   IconCode,
-  IconColumns2,
   IconEye,
   IconItalic,
   IconLayoutColumns,
@@ -33,12 +32,18 @@ import {
   IconPencil,
   IconQuote,
   IconStrikethrough,
+  IconTable,
   IconTextSize,
 } from '@tabler/icons-react';
 
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 
-export const MARKDOWN_TOOLBAR_ICON_SIZE = DIAL_ICON_SIZE.MD;
+/** 16px inside the 24px round toolbar buttons, matching the other 2.0
+ *  components that pair `ElementSize.Small` controls with `DIAL_ICON_SIZE.SM`.
+ *  Keep this in sync with the `svg { size-[16px] }` rule in
+ *  `src/styles/markdown-editor.scss`, which wins over these width/height
+ *  attributes. */
+export const MARKDOWN_TOOLBAR_ICON_SIZE = DIAL_ICON_SIZE.SM;
 
 const withIcon = (command: ICommand, icon: ICommand['icon']): ICommand => ({
   ...command,
@@ -78,7 +83,7 @@ export const getMarkdownFormattingCommands = (): ICommand[] => [
   withIcon(link, <IconLink size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
   withIcon(code, <IconCode size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
   divider,
-  withIcon(table, <IconColumns2 size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(table, <IconTable size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
 ];
 
 /**

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialPopup } from './Popup';
 import { PopupSize } from '@/types/popup';
@@ -121,5 +121,37 @@ describe('Dial UI Kit :: DialPopup', () => {
     expect(
       screen.queryByRole('button', { name: 'Close dialog' }),
     ).not.toBeInTheDocument();
+  });
+
+  test('moves initial focus to the dialog itself, not the close button', async () => {
+    render(
+      <DialPopup open header="Edit prompt">
+        <input aria-label="Name" />
+      </DialPopup>,
+    );
+
+    const dialog = screen.getByRole('dialog');
+
+    // The focus manager focuses inside a microtask queued from a layout effect.
+    await waitFor(() => expect(dialog).toHaveFocus());
+    expect(
+      screen.getByRole('button', { name: 'Close dialog' }),
+    ).not.toHaveFocus();
+  });
+
+  test('focuses the guard instead of the dialog when preventKeyboardOnOpen is set', async () => {
+    render(
+      <DialPopup open header="Edit prompt" preventKeyboardOnOpen>
+        <input aria-label="Name" />
+      </DialPopup>,
+    );
+
+    const dialog = screen.getByRole('dialog');
+    await waitFor(() => expect(dialog).not.toHaveFocus());
+
+    expect(
+      screen.getByRole('button', { name: 'Close dialog' }),
+    ).not.toHaveFocus();
+    expect(screen.getByLabelText('Name')).not.toHaveFocus();
   });
 });
