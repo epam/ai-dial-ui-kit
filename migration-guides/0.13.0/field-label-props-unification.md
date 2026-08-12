@@ -10,12 +10,12 @@ All three now take `labelProps`, so every 2.0 control names itself the same way.
 
 ## What changed
 
-| Component     | Before                       | After                                            |
-| ------------- | ---------------------------- | ------------------------------------------------ |
-| `Calendar`    | `label?: string`             | `labelProps?: LabelProps`                        |
-| `Switch`      | `label?: ReactNode`          | `labelProps?: LabelProps`                        |
-| `ProgressBar` | `label?: ReactNode`          | `labelProps?: LabelProps`                        |
-| `FileDropzone`| —                            | `labelProps?: LabelProps` (new, additive)        |
+| Component      | Before              | After                                     |
+| -------------- | ------------------- | ----------------------------------------- |
+| `Calendar`     | `label?: string`    | `labelProps?: LabelProps`                 |
+| `Switch`       | `label?: ReactNode` | `labelProps?: LabelProps`                 |
+| `ProgressBar`  | `label?: ReactNode` | `labelProps?: LabelProps`                 |
+| `FileDropzone` | —                   | `labelProps?: LabelProps` (new, additive) |
 
 `LabelProps` is already exported from the package:
 
