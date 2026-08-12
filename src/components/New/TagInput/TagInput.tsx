@@ -23,6 +23,18 @@ const COLLAPSED_INPUT_RESERVE_PX = 24;
 const px = (value: string) => parseFloat(value) || 0;
 
 /**
+ * Drops the delimiters a pasted value ends with.
+ *
+ * Scanned rather than matched with `/,+$/`: that pattern backtracks from every
+ * position in the string, so a paste of nothing but commas costs quadratic time.
+ */
+const stripTrailingCommas = (value: string) => {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === ',') end--;
+  return value.slice(0, end);
+};
+
+/**
  * The measured copies of the tags render their remove button so they match the
  * real ones in width, but clicking one is impossible — they are `invisible`.
  */
@@ -210,7 +222,7 @@ export const TagInput: FC<TagInputProps> = ({
   );
 
   const addTag = (raw: string) => {
-    const trimmed = raw.trim().replace(/,+$/, '').trim();
+    const trimmed = stripTrailingCommas(raw.trim()).trim();
     if (!trimmed || tags.includes(trimmed)) return;
     setTags([...tags, trimmed]);
   };
