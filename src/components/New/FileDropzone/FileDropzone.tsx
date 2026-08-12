@@ -11,12 +11,20 @@ import {
 } from 'react';
 
 import { ErrorText } from '@/components/New/CaptionText/CaptionText';
+import { Label, type LabelProps } from '@/components/New/Label/Label';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { matchesAccept } from '@/utils/file-accept';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface FileDropzoneProps {
+  /**
+   * Props of the {@link Label} rendered above the area — the name of the field
+   * this dropzone fills, e.g. `{ label: 'Attachments', required: true }`. The
+   * copy inside the area is `label`, which says how to use the control rather
+   * than what it is for.
+   */
+  labelProps?: LabelProps;
   /** Primary line of copy, e.g. `'Drag and drop it or click here to upload'`. */
   label: ReactNode;
   /** Secondary line of copy, e.g. `'File formats .md, .zip and .skill'`. */
@@ -74,6 +82,7 @@ export interface FileDropzoneProps {
  * />
  * ```
  *
+ * @param [labelProps] - Props of the {@link Label} naming the field, rendered above the area.
  * @param label - Primary line of copy.
  * @param [description] - Secondary line of copy.
  * @param onChange - Fired with the accepted files.
@@ -88,6 +97,7 @@ export interface FileDropzoneProps {
  * @param [className] - Additional CSS classes for the drop area.
  */
 export const FileDropzone: FC<FileDropzoneProps> = ({
+  labelProps,
   label,
   description,
   onChange,
@@ -178,6 +188,9 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
+      {/* Both labels point at the input, so its accessible name reads as the
+          field name followed by the in-area copy. */}
+      {labelProps && <Label {...labelProps} htmlFor={inputId} />}
       {/* Kept a sibling of the label rather than a child: `peer-*` variants only
           reach following siblings, and the focus ring belongs on the area. */}
       <input

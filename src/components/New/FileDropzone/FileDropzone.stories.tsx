@@ -54,6 +54,11 @@ const meta = {
     },
   },
   argTypes: {
+    labelProps: {
+      control: 'object',
+      description:
+        'Props of the `Label` naming the field, rendered above the area',
+    },
     label: {
       control: 'text',
       description: 'Primary line of copy',
@@ -112,6 +117,23 @@ export const Default: Story = {
   render: InteractiveFileDropzone,
   args: {
     ...UPLOAD_COPY,
+    onChange: noop,
+  },
+};
+
+/**
+ * `labelProps` names the field the dropzone fills, above the area. The copy
+ * inside the area says how to use the control; the label says what it is for.
+ */
+export const WithFieldLabel: Story = {
+  render: InteractiveFileDropzone,
+  args: {
+    ...UPLOAD_COPY,
+    labelProps: {
+      label: 'Attachments',
+      required: true,
+      caption: 'Up to 10 MB per file',
+    },
     onChange: noop,
   },
 };

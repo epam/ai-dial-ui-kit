@@ -25,9 +25,9 @@ const meta = {
       control: 'text',
       description: 'The id of the underlying checkbox input',
     },
-    label: {
-      control: 'text',
-      description: 'Visible label rendered next to the control',
+    labelProps: {
+      control: 'object',
+      description: 'Props of the `Label` rendered next to the control',
     },
     isOn: {
       control: 'boolean',
@@ -56,7 +56,7 @@ export const Default: Story = {
   render: InteractiveSwitch,
   args: {
     id: 'default-switch',
-    label: 'Active',
+    labelProps: { label: 'Active' },
   },
 };
 
@@ -64,7 +64,7 @@ export const On: Story = {
   render: InteractiveSwitch,
   args: {
     id: 'on-switch',
-    label: 'Active',
+    labelProps: { label: 'Active' },
     isOn: true,
   },
 };
@@ -73,7 +73,7 @@ export const Disabled: Story = {
   render: InteractiveSwitch,
   args: {
     id: 'disabled-off-switch',
-    label: 'Active',
+    labelProps: { label: 'Active' },
     isOn: false,
     disabled: true,
   },
@@ -83,7 +83,7 @@ export const DisabledOn: Story = {
   render: InteractiveSwitch,
   args: {
     id: 'disabled-on-switch',
-    label: 'Active',
+    labelProps: { label: 'Active' },
     isOn: true,
     disabled: true,
   },
@@ -93,7 +93,7 @@ export const WithCaption: Story = {
   render: InteractiveSwitch,
   args: {
     id: 'caption-switch',
-    label: 'Active',
+    labelProps: { label: 'Active' },
     isOn: true,
     caption: 'Some caption text',
   },
@@ -105,23 +105,32 @@ export const AllVariants: Story = {
     <div className="flex min-w-[400px] flex-col gap-y-6 p-8">
       <div>
         <div className="text-primary dial-small-semi-text mb-2">Off</div>
-        <InteractiveSwitch id="all-off" label="Active" />
+        <InteractiveSwitch id="all-off" labelProps={{ label: 'Active' }} />
       </div>
       <div>
         <div className="text-primary dial-small-semi-text mb-2">On</div>
-        <InteractiveSwitch id="all-on" label="Active" isOn />
+        <InteractiveSwitch id="all-on" labelProps={{ label: 'Active' }} isOn />
       </div>
       <div>
         <div className="text-primary dial-small-semi-text mb-2">
           Disabled off
         </div>
-        <InteractiveSwitch id="all-disabled-off" label="Active" disabled />
+        <InteractiveSwitch
+          id="all-disabled-off"
+          labelProps={{ label: 'Active' }}
+          disabled
+        />
       </div>
       <div>
         <div className="text-primary dial-small-semi-text mb-2">
           Disabled on
         </div>
-        <InteractiveSwitch id="all-disabled-on" label="Active" isOn disabled />
+        <InteractiveSwitch
+          id="all-disabled-on"
+          labelProps={{ label: 'Active' }}
+          isOn
+          disabled
+        />
       </div>
       <div>
         <div className="text-primary dial-small-semi-text mb-2">
@@ -129,7 +138,7 @@ export const AllVariants: Story = {
         </div>
         <InteractiveSwitch
           id="all-caption"
-          label="Active"
+          labelProps={{ label: 'Active' }}
           isOn
           caption="Some caption text"
         />

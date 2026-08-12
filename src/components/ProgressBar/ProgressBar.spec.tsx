@@ -25,7 +25,7 @@ describe('Dial UI Kit :: ProgressBar', () => {
   });
 
   test('names itself from the visible label', () => {
-    render(<ProgressBar value={50} label="Uploading" />);
+    render(<ProgressBar value={50} labelProps={{ label: 'Uploading' }} />);
 
     expect(
       screen.getByRole('progressbar', { name: 'Uploading' }),
@@ -42,11 +42,65 @@ describe('Dial UI Kit :: ProgressBar', () => {
   });
 
   test('prefers the visible label over the generic fallback', () => {
-    render(<ProgressBar value={50} label="Uploading" />);
+    render(<ProgressBar value={50} labelProps={{ label: 'Uploading' }} />);
 
     expect(
       screen.queryByRole('progressbar', { name: 'Progress' }),
     ).not.toBeInTheDocument();
+  });
+
+  test('exposes the label caption through its info button', () => {
+    render(
+      <ProgressBar
+        value={50}
+        labelProps={{ label: 'Uploading', caption: 'Large files take longer' }}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Large files take longer' }),
+    ).toBeInTheDocument();
+  });
+
+  test('renders the value readout beside the label', () => {
+    render(
+      <ProgressBar
+        value={3.313182}
+        max={500}
+        labelProps={{ label: 'Cost per month' }}
+        valueLabel="3.31 / 500"
+      />,
+    );
+
+    expect(screen.getByText('3.31 / 500')).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: 'Cost per month' }),
+    ).toBeInTheDocument();
+  });
+
+  test('renders the value readout without a label', () => {
+    render(<ProgressBar value={40} valueLabel="40 / 100" />);
+
+    expect(screen.getByText('40 / 100')).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: 'Progress' }),
+    ).toBeInTheDocument();
+  });
+
+  test('keeps the value readout out of the accessible name', () => {
+    render(
+      <ProgressBar
+        value={40}
+        labelProps={{ label: 'Cost per month' }}
+        valueLabel="40 / 100"
+      />,
+    );
+
+    // The readout is announced through `aria-valuetext` when the caller wants
+    // it; folding it into the name would repeat it on every value change.
+    expect(screen.getByRole('progressbar')).toHaveAccessibleName(
+      'Cost per month',
+    );
   });
 
   test('passes aria-valuetext through for non-percentage announcements', () => {

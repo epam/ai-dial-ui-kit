@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A horizontal bar indicating progress toward a goal. Names itself from `label`, falling back to `aria-label`.',
+          'A horizontal bar indicating progress toward a goal. Names itself from `labelProps.label`, falling back to `aria-label`.',
       },
     },
   },
@@ -29,9 +29,14 @@ const meta = {
       options: [ElementSize.Small, ElementSize.Standard],
       description: 'Bar height: standard is 8px, small is 4px',
     },
-    label: {
+    labelProps: {
+      control: 'object',
+      description:
+        'Props of the `Label` rendered above the bar, which also names it',
+    },
+    valueLabel: {
       control: 'text',
-      description: 'Visible label rendered above the bar; also names it',
+      description: 'Readout rendered at the end of the label row',
     },
     className: {
       control: 'text',
@@ -51,7 +56,29 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithLabel: Story = {
-  args: { label: 'Uploading' },
+  args: { labelProps: { label: 'Uploading' } },
+};
+
+/**
+ * `valueLabel` sits at the end of the label row. Formatting stays with the
+ * caller — round the raw number there rather than showing `3.313182`.
+ */
+export const WithValueReadout: Story = {
+  args: {
+    value: 3.313182,
+    max: 500,
+    labelProps: { label: 'Cost per month' },
+    valueLabel: '3.31 / 500',
+    'aria-valuetext': '3.31 of 500',
+  },
+};
+
+export const ValueReadoutWithoutLabel: Story = {
+  args: {
+    value: 40,
+    valueLabel: '40 / 100',
+    'aria-label': 'Quota used',
+  },
 };
 
 export const Small: Story = {
@@ -74,7 +101,7 @@ export const CustomMax: Story = {
   args: {
     value: 3,
     max: 10,
-    label: 'Uploading files',
+    labelProps: { label: 'Uploading files' },
     'aria-valuetext': '3 of 10 files',
   },
 };

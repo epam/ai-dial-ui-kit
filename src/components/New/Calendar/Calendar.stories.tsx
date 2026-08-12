@@ -25,13 +25,13 @@ const meta = {
     onChange: { control: false },
     disabled: { control: { type: 'boolean' } },
     invalid: { control: { type: 'boolean' } },
-    label: { control: { type: 'text' } },
+    labelProps: { control: { type: 'object' } },
     placeholder: { control: { type: 'text' } },
     locale: { control: { type: 'text' } },
     fieldClassName: { control: { type: 'text' } },
   },
   args: {
-    label: 'Date',
+    labelProps: { label: 'Date' },
     placeholder: 'Select date',
     disabled: false,
     invalid: false,
@@ -59,7 +59,7 @@ export const Date_: Story = {
 export const DateTime: Story = {
   args: {
     mode: CalendarMode.DateTime,
-    label: 'Start date',
+    labelProps: { label: 'Start date' },
     placeholder: 'Select date and time',
   },
 };
@@ -67,7 +67,7 @@ export const DateTime: Story = {
 export const Time: Story = {
   args: {
     mode: CalendarMode.Time,
-    label: 'Time',
+    labelProps: { label: 'Time' },
     placeholder: undefined,
   },
 };
@@ -75,7 +75,7 @@ export const Time: Story = {
 export const Weekday: Story = {
   args: {
     mode: CalendarMode.Weekday,
-    label: 'Day',
+    labelProps: { label: 'Day' },
     placeholder: 'Select day',
   },
 };
@@ -108,7 +108,7 @@ export const Localized: Story = {
     mode: CalendarMode.Date,
     value: new Date(2026, 2, 11),
     locale: 'de-DE',
-    label: 'Datum',
+    labelProps: { label: 'Datum' },
   },
 };
 
