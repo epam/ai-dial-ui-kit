@@ -194,7 +194,12 @@ describe('Dial UI Kit :: Calendar', () => {
     });
 
     test('Should name the popover so it is not announced as an unlabelled dialog', () => {
-      render(<Calendar mode={CalendarMode.Date} label="Start date" />);
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          labelProps={{ label: 'Start date' }}
+        />,
+      );
 
       fireEvent.click(screen.getByRole('button', { name: /Start date/ }));
 
@@ -207,7 +212,7 @@ describe('Dial UI Kit :: Calendar', () => {
       render(
         <Calendar
           mode={CalendarMode.Date}
-          label="Start date"
+          labelProps={{ label: 'Start date' }}
           value={new Date(2026, 2, 11)}
         />,
       );
@@ -216,6 +221,32 @@ describe('Dial UI Kit :: Calendar', () => {
       // explicit wiring the field name would be missing entirely.
       expect(
         screen.getByRole('button', { name: 'Start date 11 Mar 2026' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should announce a required field through the label', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          labelProps={{ label: 'Start date', required: true }}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: /Start date \(required\)/ }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should expose the label caption through its info button', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          labelProps={{ label: 'Start date', caption: 'Pick the first day' }}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Pick the first day' }),
       ).toBeInTheDocument();
     });
 
@@ -269,7 +300,7 @@ describe('Dial UI Kit :: Calendar', () => {
       render(
         <Calendar
           mode={CalendarMode.Date}
-          label="Start date"
+          labelProps={{ label: 'Start date' }}
           fieldClassName="custom-field"
         />,
       );

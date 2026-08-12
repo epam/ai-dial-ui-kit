@@ -89,7 +89,7 @@ export interface PopupProps {
  * @param [hideClose=false] - Whether the close button is hidden in the header
  * @param [closeAriaLabel="Close dialog"] - Accessible name of the close button
  * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside
- * @param [preventKeyboardOnOpen=false] - When true, initial focus goes to a non-input guard to avoid opening the virtual keyboard on mobile
+ * @param [preventKeyboardOnOpen=false] - When true, initial focus goes to a non-input guard to avoid opening the virtual keyboard on mobile. Redundant since the default focuses the dialog container, which never raises the keyboard; kept for compatibility
  */
 export const Popup: FC<PopupProps> = ({
   open = false,
@@ -152,7 +152,14 @@ export const Popup: FC<PopupProps> = ({
       >
         <FloatingFocusManager
           context={context}
-          initialFocus={preventKeyboardOnOpen ? focusGuardRef : undefined}
+          /* The manager's default (`0`) focuses the first tabbable descendant,
+             which in this markup is the close button — the title above it is a
+             heading, not a control. Enter then activated it and dismissed the
+             dialog before the user reached a single field. Focus the dialog
+             container instead: the focus manager gives it `tabindex="-1"`, so
+             it takes focus without becoming a tab stop, screen readers announce
+             the dialog on open, and Tab still lands on the first real control. */
+          initialFocus={preventKeyboardOnOpen ? focusGuardRef : refs.floating}
         >
           <div
             ref={refs.setFloating}

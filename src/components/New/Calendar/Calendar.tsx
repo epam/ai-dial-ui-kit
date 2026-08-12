@@ -21,7 +21,7 @@ import {
   useState,
 } from 'react';
 
-import { Label } from '@/components/New/Label/Label';
+import { Label, type LabelProps } from '@/components/New/Label/Label';
 import { StaticIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
@@ -63,7 +63,7 @@ export interface CalendarProps {
   mode?: CalendarMode;
   value?: CalendarValue;
   onChange?: (value: CalendarValue) => void;
-  label?: string;
+  labelProps?: LabelProps;
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
@@ -245,12 +245,13 @@ const TimeField: FC<TimeFieldProps> = ({
  * <Calendar mode={CalendarMode.Time} value={time} onChange={setTime} />
  * <Calendar mode={CalendarMode.Weekday} value={weekday} onChange={setWeekday} />
  * <Calendar mode={CalendarMode.Date} value={date} onChange={setDate} locale="de-DE" />
+ * <Calendar labelProps={{ label: 'Start date', required: true }} value={date} onChange={setDate} />
  * ```
  *
  * @param [mode=CalendarMode.Date] - Selection mode: date, datetime, time or weekday
  * @param [value] - Controlled value: a `Date` for date/datetime, an `"HH:mm"` string for time, an ISO weekday number (`"1"`=Monday…`"7"`=Sunday) for weekday
  * @param [onChange] - Callback fired with the next value when the selection changes
- * @param [label] - Optional label rendered above the control
+ * @param [labelProps] - Props of the {@link Label} rendered above the control, including `label`, `required` and `caption`
  * @param [placeholder] - Placeholder shown when there is no value; defaults to a mode-appropriate string ("Select date", "Select date and time", "--:--" or "Select day")
  * @param [disabled=false] - Disables the control
  * @param [invalid=false] - Applies error styling
@@ -265,7 +266,7 @@ export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
   value,
   onChange,
-  label,
+  labelProps,
   placeholder,
   disabled = false,
   invalid = false,
@@ -282,11 +283,19 @@ export const Calendar: FC<CalendarProps> = ({
 
   const generatedId = useId();
   const fieldId = id ?? generatedId;
-  const labelId = `${fieldId}-label`;
+  const labelId = labelProps?.id ?? `${fieldId}-label`;
+  const hasLabel = Boolean(labelProps?.label);
+  // The popover and the weekday listbox need a plain string; a node label has
+  // no text to borrow, so those fall back to the placeholder.
+  const labelText =
+    typeof labelProps?.label === 'string' ? labelProps.label : undefined;
   // Name the trigger from the label *and* its own content, so the field name
   // and the current value are both announced. Without the self-reference the
   // label would replace the value rather than precede it.
-  const triggerLabelledBy = label ? `${labelId} ${fieldId}` : undefined;
+  const triggerLabelledBy = hasLabel ? `${labelId} ${fieldId}` : undefined;
+  const fieldLabel = labelProps ? (
+    <Label {...labelProps} id={labelId} htmlFor={fieldId} />
+  ) : null;
   const [visibleMonth, setVisibleMonth] = useState(
     () => dateValue ?? new Date(),
   );
@@ -342,7 +351,7 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
+        {fieldLabel}
         <TimeField
           id={fieldId}
           value={timeValue}
@@ -362,13 +371,13 @@ export const Calendar: FC<CalendarProps> = ({
 
     return (
       <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-        {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
+        {fieldLabel}
         <CalendarPopoverField
           id={fieldId}
           disabled={disabled}
           invalid={invalid}
           labelledBy={triggerLabelledBy}
-          panelLabel={label ?? resolvedPlaceholder}
+          panelLabel={labelText ?? resolvedPlaceholder}
           fieldClassName={fieldClassName}
           trigger={
             <>
@@ -390,7 +399,7 @@ export const Calendar: FC<CalendarProps> = ({
           panel={(close) => (
             <div
               role="listbox"
-              aria-label={label ?? resolvedPlaceholder}
+              aria-label={labelText ?? resolvedPlaceholder}
               className="flex flex-col gap-0.5"
             >
               {weekdayOptions.map((option) => (
@@ -422,13 +431,13 @@ export const Calendar: FC<CalendarProps> = ({
 
   return (
     <div className={mergeClasses('flex flex-col gap-y-3', className)}>
-      {label && <Label id={labelId} label={label} htmlFor={fieldId} />}
+      {fieldLabel}
       <CalendarPopoverField
         id={fieldId}
         disabled={disabled}
         invalid={invalid}
         labelledBy={triggerLabelledBy}
-        panelLabel={label ?? resolvedPlaceholder}
+        panelLabel={labelText ?? resolvedPlaceholder}
         fieldClassName={fieldClassName}
         trigger={
           <>

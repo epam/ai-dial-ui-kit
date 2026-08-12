@@ -36,6 +36,28 @@ describe('Dial UI Kit :: FileDropzone', () => {
     );
   });
 
+  test('prefixes the accessible name with the field label', () => {
+    renderDropzone({
+      labelProps: { label: 'Attachments', required: true },
+    });
+
+    // Both labels point at the input, so the field name is announced before the
+    // in-area copy telling the user how to use it.
+    expect(getInput()).toHaveAccessibleName(
+      `Attachments (required) ${LABEL} File formats .md, .zip and .skill`,
+    );
+  });
+
+  test('exposes the field label caption through its info button', () => {
+    renderDropzone({
+      labelProps: { label: 'Attachments', caption: 'Up to 10 MB per file' },
+    });
+
+    expect(
+      screen.getByRole('button', { name: 'Up to 10 MB per file' }),
+    ).toBeInTheDocument();
+  });
+
   test('falls back to ariaLabel when the label carries no text', () => {
     render(
       <FileDropzone

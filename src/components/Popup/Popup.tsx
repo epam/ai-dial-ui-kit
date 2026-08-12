@@ -83,7 +83,7 @@ export interface DialPopupProps {
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
  * @param [hideClose=false] Whether the close button is hidden in the header (default: false)
  * @param [closeOnOutsideClick=true] - Whether the popup closes when clicking outside (default: true)
- * @param [preventKeyboardOnOpen=false] - When true, initial focus goes to a non-input guard to avoid opening the virtual keyboard on mobile
+ * @param [preventKeyboardOnOpen=false] - When true, initial focus goes to a non-input guard to avoid opening the virtual keyboard on mobile. Redundant since the default focuses the dialog container, which never raises the keyboard; kept for compatibility
  */
 export const DialPopup: FC<DialPopupProps> = ({
   open = false,
@@ -145,7 +145,14 @@ export const DialPopup: FC<DialPopupProps> = ({
       >
         <FloatingFocusManager
           context={context}
-          initialFocus={preventKeyboardOnOpen ? focusGuardRef : undefined}
+          /* The manager's default (`0`) focuses the first tabbable descendant,
+             which in this markup is the close button — the title above it is a
+             heading, not a control. Enter then activated it and dismissed the
+             dialog before the user reached a single field. Focus the dialog
+             container instead: the focus manager gives it `tabindex="-1"`, so
+             it takes focus without becoming a tab stop, screen readers announce
+             the dialog on open, and Tab still lands on the first real control. */
+          initialFocus={preventKeyboardOnOpen ? focusGuardRef : refs.floating}
         >
           <div
             ref={refs.setFloating}

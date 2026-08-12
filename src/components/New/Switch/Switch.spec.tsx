@@ -5,7 +5,7 @@ import { Switch } from './Switch';
 
 describe('Dial UI Kit :: Switch', () => {
   test('renders with an accessible name from its label', () => {
-    render(<Switch id="switch" label="Notifications" />);
+    render(<Switch id="switch" labelProps={{ label: 'Notifications' }} />);
     expect(
       screen.getByRole('switch', { name: 'Notifications' }),
     ).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe('Dial UI Kit :: Switch', () => {
   });
 
   test('reflects isOn through aria-checked', () => {
-    render(<Switch id="switch" label="Notifications" isOn />);
+    render(<Switch id="switch" labelProps={{ label: 'Notifications' }} isOn />);
     expect(
       screen.getByRole('switch', { name: 'Notifications' }),
     ).toHaveAttribute('aria-checked', 'true');
@@ -31,7 +31,7 @@ describe('Dial UI Kit :: Switch', () => {
     render(
       <Switch
         id="switch"
-        label="Notifications"
+        labelProps={{ label: 'Notifications' }}
         isOn={false}
         onChange={onChange}
       />,
@@ -48,7 +48,7 @@ describe('Dial UI Kit :: Switch', () => {
     render(
       <Switch
         id="switch"
-        label="Notifications"
+        labelProps={{ label: 'Notifications' }}
         isOn={false}
         onChange={onChange}
       />,
@@ -59,15 +59,49 @@ describe('Dial UI Kit :: Switch', () => {
     expect(onChange).toHaveBeenCalledWith(true);
   });
 
+  test('announces a required switch through its label', () => {
+    render(
+      <Switch
+        id="switch"
+        labelProps={{ label: 'Notifications', required: true }}
+      />,
+    );
+
+    expect(
+      screen.getByRole('switch', { name: 'Notifications (required)' }),
+    ).toBeInTheDocument();
+  });
+
+  test('exposes the label caption through its info button', () => {
+    render(
+      <Switch
+        id="switch"
+        labelProps={{ label: 'Notifications', caption: 'Sent by email' }}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Sent by email' }),
+    ).toBeInTheDocument();
+  });
+
   test('is disabled when disabled prop is true', () => {
-    render(<Switch id="switch" label="Notifications" disabled />);
+    render(
+      <Switch id="switch" labelProps={{ label: 'Notifications' }} disabled />,
+    );
     expect(
       screen.getByRole('switch', { name: 'Notifications' }),
     ).toBeDisabled();
   });
 
   test('renders caption text and links it to the switch', () => {
-    render(<Switch id="switch" label="Notifications" caption="Some caption" />);
+    render(
+      <Switch
+        id="switch"
+        labelProps={{ label: 'Notifications' }}
+        caption="Some caption"
+      />,
+    );
     const caption = screen.getByText('Some caption');
     const control = screen.getByRole('switch', { name: 'Notifications' });
 

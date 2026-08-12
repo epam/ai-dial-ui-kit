@@ -27,11 +27,8 @@ export type { DialNotificationProps } from './components/Notification/Notificati
 export { DialLoader } from './components/Loader/Loader';
 export { Spinner } from './components/Spinner/Spinner';
 export type { SpinnerProps } from './components/Spinner/Spinner';
-export {
-  DialProgressBar,
-  DialProgressBarSize,
-} from './components/ProgressBar/ProgressBar';
-export type { DialProgressBarProps } from './components/ProgressBar/ProgressBar';
+export { ProgressBar } from './components/ProgressBar/ProgressBar';
+export type { ProgressBarProps } from './components/ProgressBar/ProgressBar';
 export { DialPagination } from './components/Pagination/Pagination';
 export type { DialPaginationProps } from './components/Pagination/Pagination';
 export { DialCheckbox } from './components/Checkbox/Checkbox';

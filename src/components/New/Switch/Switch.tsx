@@ -1,8 +1,10 @@
-import type { ChangeEvent, FC, InputHTMLAttributes, ReactNode } from 'react';
+import type { ChangeEvent, FC, InputHTMLAttributes } from 'react';
 import { useCallback, useId } from 'react';
 
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
+import { Label, type LabelProps } from '../Label/Label';
 
 type NativeInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -10,7 +12,7 @@ type NativeInputProps = Omit<
 >;
 
 export interface SwitchProps extends NativeInputProps {
-  label?: ReactNode;
+  labelProps?: LabelProps;
   isOn?: boolean;
   disabled?: boolean;
   onChange?: (value: boolean) => void;
@@ -26,21 +28,26 @@ export interface SwitchProps extends NativeInputProps {
  * ```tsx
  * <Switch
  *   id="notifications"
- *   label="Active"
+ *   labelProps={{ label: 'Active' }}
  *   isOn={isActive}
  *   onChange={setIsActive}
  * />
  * ```
  *
- * @param [label] - Visible label rendered next to the control
+ * The track and the label text are two sibling `<label for>` elements rather
+ * than one wrapper, so the {@link Label} keeps its own `required` marker and
+ * `caption` info button — a button nested in a label forwards its clicks to the
+ * labelled control. Clicking either one still toggles the switch.
+ *
+ * @param [labelProps] - Props of the {@link Label} rendered next to the control
  * @param [isOn=false] - The current value of the switch
  * @param [disabled=false] - Whether the switch is disabled
  * @param [onChange] - Callback fired with the new value when toggled
- * @param [caption] - Caption text rendered below the label
+ * @param [caption] - Caption text rendered below the label, and described by the switch
  */
 export const Switch: FC<SwitchProps> = ({
   id,
-  label,
+  labelProps,
   isOn = false,
   disabled,
   onChange,
@@ -61,7 +68,7 @@ export const Switch: FC<SwitchProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center">
+      <div className={mergeClasses('flex items-center gap-2', className)}>
         <input
           {...props}
           type="checkbox"
@@ -72,7 +79,9 @@ export const Switch: FC<SwitchProps> = ({
           disabled={disabled}
           onChange={onToggle}
           aria-label={resolveAccessibleName(
-            typeof label !== 'string' ? props['aria-label'] : undefined,
+            typeof labelProps?.label !== 'string'
+              ? props['aria-label']
+              : undefined,
           )}
           aria-describedby={captionId}
           className="peer sr-only"
@@ -80,36 +89,36 @@ export const Switch: FC<SwitchProps> = ({
         <label
           htmlFor={switchId}
           className={mergeClasses(
-            'flex items-center gap-2 rounded-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus-black',
+            'flex h-[18px] w-[36px] shrink-0 items-center rounded-full p-0.5 transition-colors duration-200',
+            'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus-black',
+            isOn ? 'justify-end' : 'justify-start',
+            isOn && !disabled ? 'bg-control-accent' : 'bg-control-disable',
             disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-            className,
           )}
         >
           <span
             className={mergeClasses(
-              'flex h-[18px] w-[36px] shrink-0 items-center rounded-full p-0.5 transition-colors duration-200',
-              isOn ? 'justify-end' : 'justify-start',
-              isOn && !disabled ? 'bg-control-accent' : 'bg-control-disable',
+              'size-3.5 shrink-0 rounded-full',
+              disabled ? 'bg-controls-disable-accent' : 'bg-control-neutral',
             )}
-          >
-            <span
-              className={mergeClasses(
-                'size-3.5 shrink-0 rounded-full',
-                disabled ? 'bg-controls-disable-accent' : 'bg-control-neutral',
-              )}
-            />
-          </span>
-          {label && (
-            <span
-              className={mergeClasses(
-                'dial-small-text py-[1px]',
-                disabled ? 'text-secondary' : 'text-primary',
-              )}
-            >
-              {label}
-            </span>
-          )}
+          />
         </label>
+        {labelProps && (
+          <Label
+            size={ElementSize.Standard}
+            {...labelProps}
+            htmlFor={switchId}
+            className={mergeClasses(
+              // `Label` defaults to the secondary colour; the switch's own label
+              // has always been primary while the control is usable.
+              'py-[1px]',
+              disabled
+                ? 'cursor-not-allowed text-secondary'
+                : 'cursor-pointer text-primary',
+              labelProps.className,
+            )}
+          />
+        )}
       </div>
       {caption && (
         <span
