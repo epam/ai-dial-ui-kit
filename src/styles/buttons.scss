@@ -52,6 +52,24 @@
   }
 }
 
+/*
+ * The same mechanism at WCAG 2.5.8 Target Size (Minimum, AA): 24x24 CSS px.
+ * For controls that are too small for `dial-kit-enhanced-target` to reach AAA
+ * without overlapping their neighbours — the remove button inside a `Tag` is
+ * 16px, so the AAA pseudo-element would overhang 14px per side and swallow the
+ * adjacent tags, while this one overhangs 4px and stays inside the tag's own
+ * padding.
+ */
+.dial-kit-minimum-target {
+  @apply relative;
+
+  &::after {
+    content: '';
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+    @apply h-full w-full min-h-[24px] min-w-[24px];
+  }
+}
+
 /* Solid buttons */
 .dial-kit-primary-solid-button {
   @apply dial-kit-base-button text-control-permanent bg-control-accent-gradient;

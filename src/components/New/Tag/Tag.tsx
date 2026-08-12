@@ -127,7 +127,9 @@ export const Tag: FC<TagProps> = ({
 
       {showRemove && (
         <GhostIconButton
-          className="size-[16px] shrink-0"
+          // 16px keeps the button inside the tag; `dial-kit-minimum-target`
+          // grows only its pointer target to the 24x24 WCAG 2.5.8 minimum.
+          className="size-[16px] shrink-0 dial-kit-minimum-target"
           size={ElementSize.Small}
           aria-label={removeLabel ?? `Remove ${label}`}
           icon={<IconX size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}

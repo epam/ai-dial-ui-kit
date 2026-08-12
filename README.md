@@ -194,6 +194,10 @@ pseudo-element. The visible control is unchanged, so layouts keep their existing
 metrics. WCAG 2.5.5 measures the region that accepts a pointer action, not the
 visible decoration.
 
+A control too small for a 44px target to clear its neighbours uses
+`dial-kit-minimum-target` instead, which applies the same pseudo-element at the
+Level AA minimum of 24×24 (WCAG 2.5.8).
+
 These controls are **documented exceptions** and meet Level AA (2.5.8, 24×24) but
 not AAA:
 
@@ -204,6 +208,7 @@ not AAA:
 | `DialCloseButton` | icon-sized | Renders `h-auto w-auto`, so its target follows the caller's icon size |
 | `DialInfoButton`, `InfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
 | Standard 2.0 fields (`Input`, `Select`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice |
+| `Tag` remove button | 16×16 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 14px per side and swallow the neighbouring tags of a `TagInput` row |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach
 AAA in a specific layout, or use the standard size instead.

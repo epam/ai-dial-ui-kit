@@ -109,11 +109,16 @@ describe('Dial UI Kit :: Tag', () => {
     expect(screen.getByText(label)).toHaveAttribute('title', label);
   });
 
-  test('does not apply the enhanced pointer target to the remove button', () => {
+  test('grows the remove button to the minimum pointer target, not the enhanced one', () => {
+    // jsdom performs no layout, so this can only assert which utility is
+    // applied — the 44px enhanced target would overhang a 16px control by 14px
+    // per side and swallow the neighbouring tags.
     render(<Tag label="TypeScript" closable onRemove={vi.fn()} />);
-    expect(
-      screen.getByRole('button', { name: 'Remove TypeScript' }),
-    ).not.toHaveClass('dial-kit-enhanced-target');
+
+    const remove = screen.getByRole('button', { name: 'Remove TypeScript' });
+
+    expect(remove).toHaveClass('dial-kit-minimum-target');
+    expect(remove).not.toHaveClass('dial-kit-enhanced-target');
   });
 
   test('renders the small variant at 20px', () => {
