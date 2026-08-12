@@ -5,7 +5,9 @@ import { ElementSize } from '@/types/size';
 import { TagInput, type TagInputProps } from './TagInput';
 
 const InteractiveTagInput = (args: TagInputProps) => {
-  const [tags, setTags] = useState<string[]>(args.value ?? args.defaultValue ?? []);
+  const [tags, setTags] = useState<string[]>(
+    args.value ?? args.defaultValue ?? [],
+  );
 
   return (
     <div className="w-[420px]">
@@ -63,7 +65,8 @@ const meta = {
     onChange: {
       action: 'changed',
       control: false,
-      description: 'Called with the new list whenever a tag is added or removed',
+      description:
+        'Called with the new list whenever a tag is added or removed',
     },
   },
 } satisfies Meta<typeof TagInput>;

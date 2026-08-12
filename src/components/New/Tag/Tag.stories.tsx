@@ -139,7 +139,13 @@ export const AllVariants: Story = {
               label="With icon"
               icon={<IconTag size={DIAL_ICON_SIZE.SM} />}
             />
-            <Tag size={size} label="Disabled" closable disabled onRemove={() => {}} />
+            <Tag
+              size={size}
+              label="Disabled"
+              closable
+              disabled
+              onRemove={() => {}}
+            />
           </div>
         </div>
       ))}

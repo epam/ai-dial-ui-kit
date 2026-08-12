@@ -190,9 +190,7 @@ describe('Dial UI Kit :: TagInput', () => {
   });
 
   test('renders no remove buttons when readOnly', () => {
-    render(
-      <TagInput id="skills" defaultValue={['React']} readOnly />,
-    );
+    render(<TagInput id="skills" defaultValue={['React']} readOnly />);
     expect(
       screen.queryByRole('button', { name: 'Remove React' }),
     ).not.toBeInTheDocument();
