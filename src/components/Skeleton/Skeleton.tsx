@@ -110,7 +110,7 @@ export const Skeleton: FC<SkeletonProps> = ({
   }
 
   const baseClass = mergeClasses(
-    'bg-layer-3',
+    'bg-layer-raised',
     active && 'animate-pulse',
     className,
   );

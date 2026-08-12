@@ -95,9 +95,7 @@ export const Switch: FC<SwitchProps> = ({
             <span
               className={mergeClasses(
                 'size-3.5 shrink-0 rounded-full',
-                disabled
-                  ? 'bg-controls-disable-accent'
-                  : 'bg-controls-enable-primary',
+                disabled ? 'bg-controls-disable-accent' : 'bg-control-neutral',
               )}
             />
           </span>
