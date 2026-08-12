@@ -17,6 +17,7 @@ export interface DialRemoveButtonProps extends Omit<
 /**
  * A specialized button component for removal or delete actions.
  * aliases: DeleteButton|TrashButton
+ * Design system 1.0
  *
  * Renders a `DialDangerButton` with a predefined trash icon (`IconTrashX`) as the leading icon.
  * Additional props are passed directly to the underlying `DialDangerButton`.

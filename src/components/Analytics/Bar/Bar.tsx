@@ -59,6 +59,7 @@ export interface DialAnalyticsBarProps {
  * A compact analytics meter: a horizontal bar whose fill width and color reflect a
  * value relative to `maxValue`, with an optional title on the left and value on the right.
  * aliases: MetricBar|Meter|ScoreBar
+ * Design system 1.0
  *
  * The fill color is resolved from `colorMap` based on the normalized ratio
  * (`value / maxValue`), so the bar shifts hue as the value grows. An empty bar

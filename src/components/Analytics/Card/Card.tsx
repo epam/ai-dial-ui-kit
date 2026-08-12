@@ -65,6 +65,7 @@ const variantStyles: Record<
  * A simple analytics summary card that displays a single metric as a title,
  * a prominent value, and an optional description.
  * aliases: MetricCard|StatCard|KpiCard
+ * Design system 1.0
  *
  * Two visual variants are available via the {@link AnalyticsCardVariant} enum:
  * - `Default` — `bg-layer-3`, large `dial-display2-text` value, supports a description.

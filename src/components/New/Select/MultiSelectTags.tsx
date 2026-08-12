@@ -15,6 +15,7 @@ export interface MultiSelectTagsProps {
 
 /**
  * The selected values of a multi-select, rendered as removable tags inside the
+ * Design system 2.0
  * field.
  *
  * @param options - All available options, used to resolve labels and icons

@@ -13,6 +13,7 @@ export interface InfoButtonProps {
 }
 /**
  * An Info button component with a customizable icon and accessible label.
+ * Design system 2.0
  *
  * @example
  * ```tsx

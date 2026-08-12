@@ -40,6 +40,7 @@ export interface ButtonProps extends DetailedHTMLProps<
 /**
  * A Button component with flexible icon and text positioning
  * aliases: ActionButton|CallToAction
+ * Design system 2.0
  *
  * @example
  * ```tsx

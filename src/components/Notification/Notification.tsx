@@ -35,6 +35,7 @@ export interface DialNotificationProps extends Omit<
 /**
  * A contextual feedback component for displaying important messages.
  * aliases: Notification|StatusBanner
+ * Design system 1.0
  *
  * Renders a colored container with an icon, message text, and an optional
  * close button.

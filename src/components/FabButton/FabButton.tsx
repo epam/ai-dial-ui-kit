@@ -26,6 +26,7 @@ export interface FabButtonProps extends DetailedHTMLProps<
 /**
  * A Floating Action Button (FAB) component — circular icon button for primary actions.
  * aliases: FloatingActionButton|FabButton|CircularButton
+ * Design system 2.0
  *
  * @example
  * ```tsx

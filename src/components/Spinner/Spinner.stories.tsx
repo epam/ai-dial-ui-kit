@@ -52,6 +52,6 @@ export const WithCustomClass: Story = {
   args: {
     size: 32,
     fullWidth: false,
-    className: 'bg-layer-3 p-4',
+    className: 'bg-layer-raised p-4',
   },
 };

@@ -12,6 +12,7 @@ export interface DialAutocompleteInputValueProps {
 /**
  * A component that displays a list of selected items in a customizable, styled list. Each item is
  * aliases: SelectedList|ItemDisplay
+ * Design system 1.0
  *
  * rendered as a tag wrapped in a tooltip, allowing for truncation and additional context when
  * hovered. The component is flexible and supports custom CSS classes for styling the list and

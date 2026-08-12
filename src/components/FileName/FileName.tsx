@@ -23,6 +23,7 @@ export interface DialFileNameProps {
 /**
  * Component to display a file name with a file icon and shared indicator.
  * aliases: FileDisplay|NameDisplay
+ * Design system 1.0
  *
  * Handles long names with ellipsis and tooltip.
  *

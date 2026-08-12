@@ -40,6 +40,7 @@ const getPrecision = (step: number): number =>
 /**
  * A range slider with a custom thumb showing the current value and optional labels.
  * aliases: RangeInput|TemperatureSlider
+ * Design system 1.0
  *
  * @example
  * ```tsx

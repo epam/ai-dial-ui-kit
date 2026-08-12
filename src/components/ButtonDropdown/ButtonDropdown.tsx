@@ -16,6 +16,7 @@ export interface DialButtonDropdownProps extends Omit<
 /**
  * A Button dropdown component based on DialDropdown component
  * aliases: SplitButton|MenuButton
+ * Design system 1.0
  *
  * @example
  * ```tsx

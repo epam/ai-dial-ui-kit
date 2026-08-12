@@ -54,6 +54,7 @@ export interface DialFoldersTreeProps {
 
 /**
  * DialFoldersTree — A hierarchical folder tree component with nested expand/collapse support, selection highlighting,
+ * Design system 1.0
  * and optional file display.
  *
  * @deprecated Import `DialFoldersTree` from `@epam/ai-dial-react-file-manager` instead.

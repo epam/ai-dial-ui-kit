@@ -32,6 +32,7 @@ export interface DialInputPopupProps {
 /**
  * An input field that opens a popup when clicked, displaying a selected value or a list of values.
  * aliases: PopupInput|ReadonlyInput
+ * Design system 1.0
  *
  * It supports read-only mode, error states, and disabled state, with customizable styling.
  * The modal content is rendered using a portal for seamless integration.

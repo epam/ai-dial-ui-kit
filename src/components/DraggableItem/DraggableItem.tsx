@@ -22,6 +22,7 @@ export interface DialDraggableItemProps {
 /**
  * A lightweight wrapper that makes its children sortable via drag-and-drop.
  * aliases: SortableItem|DragHandle
+ * Design system 1.0
  *
  * Renders a row with a grab handle (left) and the provided content (right).
  * Integrates with `react-dnd` using a simple "column" drag type and delegates

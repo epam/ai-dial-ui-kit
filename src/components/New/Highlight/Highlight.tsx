@@ -29,7 +29,10 @@ const getClampClassName = (maxLines: number): string =>
     ? '!truncate !whitespace-nowrap'
     : `${LINE_CLAMP_CLASS_NAMES[maxLines] ?? LINE_CLAMP_CLASS_NAMES[2]} !whitespace-normal`;
 
-/** Renders text with the first occurrence of `query` wrapped in a highlight mark, with ellipsis truncation and a tooltip when overflowing. */
+/**
+ * Renders text with the first occurrence of `query` wrapped in a highlight mark, with ellipsis truncation and a tooltip when overflowing.
+ * Design system 2.0
+ */
 export const Highlight: FC<HighlightProps> = ({
   text,
   query,

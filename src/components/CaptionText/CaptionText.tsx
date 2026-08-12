@@ -10,6 +10,7 @@ export interface DialCaptionTextProps extends HTMLAttributes<HTMLSpanElement> {
 /**
  * A component for displaying error messages with consistent styling
  * aliases: HelperText|ValidationText
+ * Design system 1.0
  *
  * @example
  * ```tsx

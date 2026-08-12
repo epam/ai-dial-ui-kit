@@ -45,6 +45,7 @@ export interface DialPopupProps {
 /**
  * An accessible modal dialog component using Floating UI.
  * aliases: Modal|Dialog
+ * Design system 1.0
  *
  * Renders in a portal with a scrim overlay, focus management, header with a title,
  * content area, optional footer and a close control.

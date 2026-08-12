@@ -53,6 +53,13 @@ export interface InputProps extends Omit<
 
   inputRef?: Ref<HTMLInputElement>;
 
+  /**
+   * Ref to the field wrapper — the bordered box holding the icons, the content
+   * slot and the input. Use it to measure the space `children` has to fit into;
+   * the input itself only ever reports its own share of the row.
+   */
+  wrapperRef?: Ref<HTMLDivElement>;
+
   onChange?: (value?: string) => void;
 
   containerClassName?: string;
@@ -62,6 +69,7 @@ export interface InputProps extends Omit<
 /**
  * A flexible input component with icon support and various styling options
  * aliases: TextField|FormInput
+ * Design system 2.0
  *
  * @example
  * ```tsx
@@ -140,6 +148,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   onChange,
   max,
   inputButtonProps,
+  wrapperRef,
   size = ElementSize.Standard,
   ...props
 }) => {
@@ -198,6 +207,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   const input = () => {
     return (
       <div
+        ref={wrapperRef}
         className={mergeClasses(
           'dial-kit-input flex flex-row items-center justify-between',
           isSmall ? 'dial-kit-input-small gap-x-1' : 'gap-x-2 py-2',

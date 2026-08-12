@@ -26,6 +26,7 @@ export interface DialSearchProps extends Omit<
 /**
  * A search input component with a customizable placeholder, icons, flexible props, and the ability
  * aliases: SearchField|QueryInput
+ * Design system 1.0
  *
  * to clear the input value via a clear button. Supports multiple sizes for flexible layouts.
  *

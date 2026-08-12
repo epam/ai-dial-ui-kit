@@ -231,6 +231,7 @@ const TimeField: FC<TimeFieldProps> = ({
 /**
  * A date/time picker supporting four selection modes.
  * aliases: DatePicker|DateTimePicker
+ * Design system 2.0
  *
  * Renders a text-field trigger that opens a rounded month-grid popover for
  * the `date`/`datetime` modes, a masked `"HH:mm"` text field for `time`, and

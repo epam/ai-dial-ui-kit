@@ -16,6 +16,7 @@ export interface DialMarkdownEditorProps {
 
 /**
  * A Markdown editor component built on top of @uiw/react-md-editor.
+ * Design system 1.0
  * Provides markdown editing with preview capabilities and theme support.
  *
  * @example

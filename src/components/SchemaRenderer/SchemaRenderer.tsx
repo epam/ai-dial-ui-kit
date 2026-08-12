@@ -22,6 +22,7 @@ import { SchemaAdditionalPropertiesEditor } from '@/components/SchemaRenderer/co
 /**
  * Renders a JSON Schema as a form UI with collapsible sections, validation, and default values.
  * aliases: SchemaRenderer|JsonSchemaForm
+ * Design system 1.0
  *
  * @example
  * ```tsx

@@ -6,6 +6,7 @@ export type CardShellProps = HTMLAttributes<HTMLElement>;
 
 /**
  * A shared elevated card shell used as the base wrapper for browse-grid cards.
+ * Design system 2.0
  *
  * Renders an `<article>` with rounded corners, padding, a resting shadow, and
  * a hover lift with a stronger shadow. Respects `prefers-reduced-motion` by

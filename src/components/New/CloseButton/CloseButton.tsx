@@ -16,6 +16,7 @@ export interface CloseButtonProps {
 /**
  * A close button: a ghost {@link IconButton} carrying an X icon.
  * aliases: DismissButton|ExitButton
+ * Design system 2.0
  *
  * Sized through {@link ElementSize} like every other 2.0 control. It defaults to
  * the small 24px box that headers and toasts want; pass `ElementSize.Standard`

@@ -40,6 +40,7 @@ const ButtonAppearanceCreator = (
 };
 /**
  * A Primary Button component with predefined primary variant
+ * Design system 2.0
  * @example
  * ```tsx
  * <PrimaryButton

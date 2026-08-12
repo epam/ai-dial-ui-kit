@@ -15,6 +15,7 @@ export interface DialNumberInputProps extends Omit<DialInputProps, 'onChange'> {
 /**
  * A number input field component
  * aliases: NumericField|NumberField
+ * Design system 1.0
  *
  * @example
  * ```tsx

@@ -13,6 +13,7 @@ export interface DialSwitchProps {
 /**
  * A Switch component with various styling options
  * aliases: ToggleSwitch|BinaryToggle
+ * Design system 1.0
  *
  * @example
  * ```tsx

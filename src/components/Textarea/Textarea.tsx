@@ -27,6 +27,7 @@ export interface DialTextareaProps extends DetailedHTMLProps<
 /**
  * A flexible textarea component with validation support and consistent styling
  * aliases: MultilineInput|TextBox
+ * Design system 1.0
  *
  * @example
  * ```tsx

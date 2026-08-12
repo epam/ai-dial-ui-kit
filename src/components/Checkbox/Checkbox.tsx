@@ -28,6 +28,7 @@ export interface DialCheckboxProps extends Omit<
 /**
  * A Checkbox component with styling options
  * aliases: ToggleCheckbox|MultiSelectOption
+ * Design system 1.0
  *
  * @example
  * ```tsx

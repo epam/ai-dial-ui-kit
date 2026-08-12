@@ -413,6 +413,7 @@ export interface DialFileManagerProps {
 /**
  * File Manager layout with a collapsible folders tree, breadcrumb/search header, and a data grid.
  * aliases: FileExplorer|FileBrowser
+ * Design system 1.0
  *
  * @deprecated Import `DialFileManager` from `@epam/ai-dial-react-file-manager` instead.
  *

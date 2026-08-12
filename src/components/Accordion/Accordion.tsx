@@ -38,6 +38,7 @@ export interface DialAccordionProps {
 /**
  * A collapsible panel that toggles its content when the header is clicked.
  * aliases: Collapse|Disclosure|ExpandablePanel
+ * Design system 1.0
  *
  * Works as a controlled component when `expanded` is provided, otherwise it manages
  * its own state from `defaultExpanded`. The header shows a chevron that rotates when

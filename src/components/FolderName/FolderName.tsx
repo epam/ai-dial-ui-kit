@@ -24,6 +24,7 @@ export interface DialFolderNameProps {
 /**
  * Component to display a folder name with a folder icon and shared indicator.
  * aliases: FolderDisplay|DirectoryName
+ * Design system 1.0
  *
  * Handles long names with ellipsis and tooltip.
  *

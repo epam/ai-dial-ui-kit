@@ -34,6 +34,7 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Skeleton
  * aliases: PlaceholderUI|ShimmerLoader
+ * Design system 2.0
  *
  * A placeholder component to show while content is loading.
  * Provides various skeleton shapes and configurations.
@@ -109,7 +110,7 @@ export const Skeleton: FC<SkeletonProps> = ({
   }
 
   const baseClass = mergeClasses(
-    'bg-layer-3',
+    'bg-layer-raised',
     active && 'animate-pulse',
     className,
   );

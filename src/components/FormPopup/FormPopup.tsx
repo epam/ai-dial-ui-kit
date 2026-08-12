@@ -28,6 +28,7 @@ export interface DialFormPopupProps extends DialPopupProps {
 /**
  * A form-oriented popup dialog.
  * aliases: FormDialog|FormModal
+ * Design system 1.0
  *
  * Provides an accessible popup with a title, custom body,
  * and a footer with "Cancel" and "Submit" actions.

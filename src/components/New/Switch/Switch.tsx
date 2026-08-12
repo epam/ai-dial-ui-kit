@@ -20,6 +20,7 @@ export interface SwitchProps extends NativeInputProps {
 /**
  * A switch (toggle) control from the 2.0 design system.
  * aliases: ToggleSwitch|BinaryToggle|Switcher
+ * Design system 2.0
  *
  * @example
  * ```tsx
@@ -94,9 +95,7 @@ export const Switch: FC<SwitchProps> = ({
             <span
               className={mergeClasses(
                 'size-3.5 shrink-0 rounded-full',
-                disabled
-                  ? 'bg-controls-disable-accent'
-                  : 'bg-controls-enable-primary',
+                disabled ? 'bg-controls-disable-accent' : 'bg-control-neutral',
               )}
             />
           </span>

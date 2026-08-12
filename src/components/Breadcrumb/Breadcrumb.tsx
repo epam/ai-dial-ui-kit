@@ -35,6 +35,7 @@ export interface DialBreadcrumbProps {
 /**
  * Breadcrumb navigation component with horizontal scroll on overflow.
  * aliases: NavigationPath|BreadcrumbTrail
+ * Design system 1.0
  *
  * Use either the `pathItems` prop or compose with `<DialBreadcrumbItem/>` as children.
  * The last item is treated as the current page.

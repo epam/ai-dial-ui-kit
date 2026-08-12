@@ -58,6 +58,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
 /**
  * DestinationFolderPopup
  * aliases: FolderSelector|PathChooser
+ * Design system 1.0
  *
  * @deprecated Import `DialDestinationFolderPopup` from `@epam/ai-dial-react-file-manager` instead.
  *

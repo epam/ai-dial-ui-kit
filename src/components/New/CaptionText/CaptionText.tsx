@@ -10,6 +10,7 @@ export interface CaptionTextProps extends HTMLAttributes<HTMLSpanElement> {
 /**
  * A component for displaying caption text with consistent styling
  * aliases: HelperText|ValidationText
+ * Design system 2.0
  *
  * @example
  * ```tsx

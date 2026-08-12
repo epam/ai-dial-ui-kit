@@ -17,6 +17,7 @@ export interface DialLabelProps extends NativeLabelProps {
 /**
  * A label component
  * aliases: FormLabel|RequiredIndicator
+ * Design system 1.0
  *
  * @example
  * ```tsx
