@@ -560,24 +560,22 @@ const collectionItems: CollectionItem[] = [
   },
 ];
 
-const badgedCollectionItems: CollectionItem[] = collectionItems.map(
-  (item) => ({
-    ...item,
-    renderItem: () => (
-      <>
-        {item.icon}
-        <span className="flex-1 truncate text-start">
-          <span className="block truncate">{item.label}</span>
-          {item.description && (
-            <span className="block truncate dial-caption-text text-secondary">
-              {item.description}
-            </span>
-          )}
-        </span>
-      </>
-    ),
-  }),
-);
+const badgedCollectionItems: CollectionItem[] = collectionItems.map((item) => ({
+  ...item,
+  renderItem: () => (
+    <>
+      {item.icon}
+      <span className="flex-1 truncate text-start">
+        <span className="block truncate">{item.label}</span>
+        {item.description && (
+          <span className="block truncate dial-caption-text text-secondary">
+            {item.description}
+          </span>
+        )}
+      </span>
+    </>
+  ),
+}));
 
 export const WithCustomItemRender: Story = {
   name: 'Custom item render (renderItem)',

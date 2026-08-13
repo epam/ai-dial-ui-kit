@@ -64,9 +64,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         ) : (
           <>
             {item.icon && (
-              <span
-                className={mergeClasses(item.disabled && 'text-secondary')}
-              >
+              <span className={mergeClasses(item.disabled && 'text-secondary')}>
                 <DialIcon icon={item.icon} />
               </span>
             )}
