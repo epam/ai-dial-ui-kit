@@ -867,4 +867,158 @@ describe('Dial UI Kit :: Dropdown', () => {
     fireEvent.click(child);
     expect(onChild).not.toHaveBeenCalled();
   });
+
+  test('submenu renders item.menuHeader above its children', async () => {
+    const user = userEvent.setup();
+    const headerText = 'Sub Header';
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        menuHeader: () => <div>{headerText}</div>,
+        children: [{ key: 'sub-1', label: 'Sub One' }],
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+
+    const subOne = await screen.findByRole('menuitem', { name: 'Sub One' });
+    const headerEl = screen.getByText(headerText);
+
+    expect(
+      headerEl.compareDocumentPosition(subOne) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  test('submenu renders item.menuFooter below its children', async () => {
+    const user = userEvent.setup();
+    const footerText = 'Sub Footer';
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        children: [{ key: 'sub-1', label: 'Sub One' }],
+        menuFooter: <div>{footerText}</div>,
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+
+    const subOne = await screen.findByRole('menuitem', { name: 'Sub One' });
+    const footerEl = screen.getByText(footerText);
+
+    expect(
+      subOne.compareDocumentPosition(footerEl) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  test('item.renderSubMenu fully replaces children/header/footer', async () => {
+    const user = userEvent.setup();
+    const onRenderSubMenu = vi.fn(() => (
+      <div role="none">Custom submenu content</div>
+    ));
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        menuHeader: <div>Should not render</div>,
+        menuFooter: <div>Should not render either</div>,
+        children: [{ key: 'sub-1', label: 'Sub One' }],
+        renderSubMenu: onRenderSubMenu,
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+
+    expect(
+      await screen.findByText('Custom submenu content'),
+    ).toBeInTheDocument();
+    expect(onRenderSubMenu).toHaveBeenCalled();
+    expect(
+      screen.queryByRole('menuitem', { name: 'Sub One' }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Should not render')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Should not render either'),
+    ).not.toBeInTheDocument();
+  });
+
+  test('item.renderItem customizes a top-level item while keeping its click handler', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const itemsWithRenderItem: DropdownItem[] = [
+      {
+        key: 'storage',
+        label: 'Storage',
+        onClick,
+        renderItem: (it) => <span>Custom: {it.label}</span>,
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithRenderItem}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const menuItem = screen.getByRole('menuitem', { name: 'Custom: Storage' });
+    expect(menuItem).toBeInTheDocument();
+    expect(screen.queryByText('Storage', { exact: true })).toBeNull();
+
+    await user.click(menuItem);
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  test('item.renderItem customizes a submenu trigger and its children', async () => {
+    const user = userEvent.setup();
+    const onChildClick = vi.fn();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        renderItem: (it) => <span>Trigger: {it.label}</span>,
+        children: [
+          {
+            key: 'sub-1',
+            label: 'Sub One',
+            onClick: onChildClick,
+            renderItem: (it) => <span>Child: {it.label}</span>,
+          },
+        ],
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const trigger = screen.getByRole('menuitem', { name: 'Trigger: More' });
+    await user.hover(trigger);
+
+    const child = await screen.findByRole('menuitem', {
+      name: 'Child: Sub One',
+    });
+
+    await user.click(child);
+    expect(onChildClick).toHaveBeenCalled();
+  });
 });

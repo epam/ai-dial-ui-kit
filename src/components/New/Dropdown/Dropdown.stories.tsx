@@ -1,27 +1,36 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useRef, useState, type ReactNode } from 'react';
 import type { Placement } from '@floating-ui/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
-  IconUser,
-  IconSettings,
-  IconLogout,
   IconChevronDown,
-  IconRowRemove,
-  IconStack,
-  IconExternalLink,
   IconCopy,
-  IconTrash,
   IconDots,
+  IconExternalLink,
+  IconFileText,
+  IconLogout,
+  IconRowRemove,
+  IconSettings,
+  IconStack,
+  IconTrash,
+  IconUser,
 } from '@tabler/icons-react';
+import { useRef, useState, type ReactNode } from 'react';
 
-import { Dropdown, type DropdownProps } from './Dropdown';
-import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import {
   NeutralButton,
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
-import { type DropdownItem } from '@/models/dropdown';
+import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { type DropdownItem } from '@/models/dropdown';
+import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
+import { ElementSize } from '@/types/size';
+import { mergeClasses } from '@/utils/merge-classes';
+import {
+  dropdownDividerClassName,
+  dropdownItemBaseClassName,
+} from './constants';
+import { Dropdown, type DropdownProps } from './Dropdown';
 
 const items: DropdownItem[] = [
   {
@@ -530,6 +539,221 @@ export const WithSubMenu: Story = {
       ]}
     >
       <TriggerBtn label="Sub-menu" />
+    </Dropdown>
+  ),
+};
+
+type CollectionItem = DropdownItem & { description?: string };
+
+const collectionItems: CollectionItem[] = [
+  {
+    key: 'roadmap',
+    label: 'Product Roadmap',
+    icon: <IconFileText size={DIAL_ICON_SIZE.SM} />,
+    description: 'Q3 planning document with feature timelines',
+  },
+  {
+    key: 'notes',
+    label: 'Meeting Notes',
+    icon: <IconFileText size={DIAL_ICON_SIZE.SM} />,
+    description: 'Notes from the last product sync',
+  },
+];
+
+const badgedCollectionItems: CollectionItem[] = collectionItems.map((item) => ({
+  ...item,
+  renderItem: () => (
+    <>
+      {item.icon}
+      <span className="flex-1 truncate text-start">
+        <span className="block truncate">{item.label}</span>
+        {item.description && (
+          <span className="block truncate dial-caption-text text-secondary">
+            {item.description}
+          </span>
+        )}
+      </span>
+    </>
+  ),
+}));
+
+export const WithCustomItemRender: Story = {
+  name: 'Custom item render (renderItem)',
+  render: (args) => (
+    <Dropdown
+      {...args}
+      placement="bottom-start"
+      items={[
+        {
+          key: 'storage',
+          label: 'Storage',
+          icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+          renderItem: (it) => (
+            <>
+              {it.icon}
+              <span className="flex-1 truncate text-start">{it.label}</span>
+              <span className="dial-caption-text text-secondary">82%</span>
+            </>
+          ),
+        },
+        {
+          key: 'collection',
+          label: 'My collection',
+          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          children: badgedCollectionItems,
+        },
+        {
+          key: 'logout',
+          label: 'Logout',
+          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+        },
+      ]}
+    >
+      <TriggerBtn label="Custom item render" />
+    </Dropdown>
+  ),
+};
+
+export const WithSubMenuCustomContent: Story = {
+  name: 'Sub-menu with fully custom content',
+  // Storybook's dynamic "Show code" snippet re-walks the rendered element tree
+  // at runtime; combined with the portaled submenu panel it blows the stack
+  // (RangeError: Invalid string length) rather than throwing an app error.
+  // Static source avoids that runtime tree walk.
+  parameters: { docs: { source: { type: 'code' } } },
+  render: (args) => (
+    <Dropdown
+      {...args}
+      placement="bottom-start"
+      items={[
+        {
+          key: 'profile',
+          label: 'Profile',
+          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+        },
+        {
+          key: 'collection',
+          label: 'My collection',
+          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          children: collectionItems,
+          renderSubMenu: () => (
+            <>
+              <div className="px-3 py-2">
+                <span className="dial-small-text font-medium text-secondary">
+                  My collection
+                </span>
+              </div>
+
+              <div role="none" className="py-1">
+                {collectionItems.map((collectionItem) => (
+                  <div
+                    key={collectionItem.key}
+                    className={mergeClasses(
+                      dropdownItemBaseClassName,
+                      'justify-between pr-1',
+                    )}
+                  >
+                    <DialTooltip
+                      tooltip={collectionItem.description}
+                      hideTooltip={!collectionItem.description}
+                      placement="right"
+                      triggerClassName="flex-1"
+                    >
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="flex w-full items-center gap-2 truncate text-start"
+                      >
+                        {collectionItem.icon}
+                        <span className="flex-1 truncate">
+                          {collectionItem.label}
+                        </span>
+                      </button>
+                    </DialTooltip>
+                    <DangerIconButton
+                      aria-label={`Delete ${collectionItem.label}`}
+                      icon={<IconTrash size={DIAL_ICON_SIZE.SM} />}
+                      size={ElementSize.Small}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.alert(`Deleted "${collectionItem.label}"`);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div role="separator" className={dropdownDividerClassName} />
+
+              <div className="px-2 pb-2 pt-1">
+                <PrimaryButton
+                  label="Explore"
+                  className="w-full"
+                  onClick={() => window.alert('Explore clicked')}
+                />
+              </div>
+            </>
+          ),
+        },
+        {
+          key: 'logout',
+          label: 'Logout',
+          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+        },
+      ]}
+    >
+      <TriggerBtn label="Sub-menu footer" />
+    </Dropdown>
+  ),
+};
+
+export const WithSubMenuHeaderAndFooter: Story = {
+  name: 'Sub-menu with header and footer',
+  // See the comment on WithSubMenuCustomContent above.
+  parameters: { docs: { source: { type: 'code' } } },
+  render: (args) => (
+    <Dropdown
+      {...args}
+      placement="bottom-start"
+      items={[
+        {
+          key: 'profile',
+          label: 'Profile',
+          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+        },
+        {
+          key: 'collection',
+          label: 'My collection',
+          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          children: collectionItems,
+          menuHeader: (
+            <div className="px-3 py-2">
+              <span className="dial-small-text font-medium text-secondary">
+                My collection
+              </span>
+            </div>
+          ),
+          menuFooter: (
+            <>
+              <div role="separator" className={dropdownDividerClassName} />
+              <div className="px-2 pb-2 pt-1">
+                <PrimaryButton
+                  label="Explore"
+                  className="w-full"
+                  onClick={() => window.alert('Explore clicked')}
+                />
+              </div>
+            </>
+          ),
+        },
+        {
+          key: 'logout',
+          label: 'Logout',
+          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+        },
+      ]}
+    >
+      <TriggerBtn label="Sub-menu header/footer" />
     </Dropdown>
   ),
 };

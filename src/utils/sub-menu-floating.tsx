@@ -19,6 +19,11 @@ import { useState, type ReactNode } from 'react';
 // Hook
 // ---------------------------------------------------------------------------
 
+export interface SubMenuHoverOptions {
+  delay?: number | { open?: number; close?: number };
+  move?: boolean;
+}
+
 /**
  * Shared floating state for right-side submenus.
  * Handles open state, Floating UI positioning and hover/dismiss/role interactions.
@@ -27,6 +32,7 @@ export function useSubMenuFloating(
   gap: number,
   ariaRole: 'menu' | 'listbox' = 'menu',
   disabled = false,
+  hoverOptions?: SubMenuHoverOptions,
 ) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,8 +50,8 @@ export function useSubMenuFloating(
 
   const hover = useHover(context, {
     enabled: !disabled,
-    move: false,
-    delay: { open: 80, close: 80 },
+    move: hoverOptions?.move ?? false,
+    delay: hoverOptions?.delay ?? { open: 80, close: 80 },
   });
   const click = useClick(context, { enabled: !disabled });
   const dismiss = useDismiss(context, {
