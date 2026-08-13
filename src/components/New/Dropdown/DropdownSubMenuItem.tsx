@@ -91,42 +91,58 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           role="menu"
           surfaceClassName={dropdownSubMenuClassName}
         >
-          {item.children!.map((child) => (
-            <button
-              key={child.key}
-              role="menuitem"
-              type="button"
-              aria-disabled={!!child.disabled}
-              disabled={child.disabled}
-              className={mergeClasses(
-                dropdownItemBaseClassName,
-                child.disabled && dropdownItemDisabledClassName,
-                child.danger && dropdownItemDangerClassName,
-                child.className,
-              )}
-              onClick={handleChildClick(child)}
-            >
-              {child.icon && (
-                <span
+          {item.renderSubMenu ? (
+            item.renderSubMenu()
+          ) : (
+            <>
+              {item.menuHeader &&
+                (typeof item.menuHeader === 'function'
+                  ? item.menuHeader()
+                  : item.menuHeader)}
+
+              {item.children!.map((child) => (
+                <button
+                  key={child.key}
+                  role="menuitem"
+                  type="button"
+                  aria-disabled={!!child.disabled}
+                  disabled={child.disabled}
                   className={mergeClasses(
-                    child.danger && 'text-error',
-                    child.disabled && 'text-secondary',
+                    dropdownItemBaseClassName,
+                    child.disabled && dropdownItemDisabledClassName,
+                    child.danger && dropdownItemDangerClassName,
+                    child.className,
                   )}
+                  onClick={handleChildClick(child)}
                 >
-                  <DialIcon icon={child.icon} />
-                </span>
-              )}
-              <span
-                className={mergeClasses(
-                  'flex-1 truncate text-start',
-                  child.danger && 'text-error',
-                  child.disabled && 'text-secondary',
-                )}
-              >
-                {child.label}
-              </span>
-            </button>
-          ))}
+                  {child.icon && (
+                    <span
+                      className={mergeClasses(
+                        child.danger && 'text-error',
+                        child.disabled && 'text-secondary',
+                      )}
+                    >
+                      <DialIcon icon={child.icon} />
+                    </span>
+                  )}
+                  <span
+                    className={mergeClasses(
+                      'flex-1 truncate text-start',
+                      child.danger && 'text-error',
+                      child.disabled && 'text-secondary',
+                    )}
+                  >
+                    {child.label}
+                  </span>
+                </button>
+              ))}
+
+              {item.menuFooter &&
+                (typeof item.menuFooter === 'function'
+                  ? item.menuFooter()
+                  : item.menuFooter)}
+            </>
+          )}
         </SubMenuPanel>
       )}
     </>
