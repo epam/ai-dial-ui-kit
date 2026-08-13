@@ -5,6 +5,13 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { IconButton } from '../../IconButton/IconButton';
 import { inputButtonClassName } from './constants';
 
+/** Matches the field heights in `input.scss`, so the button fills its end. */
+const BOX_SIZE_CLASS: Record<ElementSize, string> = {
+  [ElementSize.Small]: 'size-[24px]',
+  [ElementSize.Standard]: 'size-[40px]',
+  [ElementSize.Large]: 'size-[48px]',
+};
+
 export interface InputButtonProps {
   icon: ReactNode;
   disabled?: boolean;
@@ -36,10 +43,7 @@ export const InputButton: FC<InputButtonProps> = ({
 }) => {
   return (
     <div
-      className={mergeClasses(
-        'border-l border-tertiary',
-        size === ElementSize.Standard ? 'size-[40px]' : 'size-[24px]',
-      )}
+      className={mergeClasses('border-l border-tertiary', BOX_SIZE_CLASS[size])}
     >
       <IconButton
         className={mergeClasses(

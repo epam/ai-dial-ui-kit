@@ -20,6 +20,47 @@ import { Label, type LabelProps } from '../Label/Label';
 import { InputButton, type InputButtonProps } from './Button/InputButton';
 import { handleKeyDown } from './utils';
 
+/**
+ * Per-size metrics for the field. Height and typography are not here: they live
+ * in `input.scss`, because a utility class would lose the cascade to the
+ * unlayered `.dial-kit-input` — see the comment on `.dial-kit-input-small`.
+ */
+const SIZE_CLASSES: Record<
+  ElementSize,
+  {
+    /** Gap between the field's slots, plus the height/typography modifier. */
+    field: string;
+    /** Inline padding, used only when no prefix / input button occupies the edge. */
+    paddingStart: string;
+    paddingEnd: string;
+    /** Gap between the label, the field and the caption. */
+    stackGap: string;
+    postfixText: string;
+  }
+> = {
+  [ElementSize.Small]: {
+    field: 'dial-kit-input-small gap-x-1',
+    paddingStart: 'pl-2',
+    paddingEnd: 'pr-2',
+    stackGap: 'gap-1',
+    postfixText: 'dial-tiny-text',
+  },
+  [ElementSize.Standard]: {
+    field: 'gap-x-2 py-2',
+    paddingStart: 'pl-3',
+    paddingEnd: 'pr-3',
+    stackGap: 'gap-2',
+    postfixText: 'dial-small-text',
+  },
+  [ElementSize.Large]: {
+    field: 'dial-kit-input-large gap-x-2 py-3',
+    paddingStart: 'pl-4',
+    paddingEnd: 'pr-4',
+    stackGap: 'gap-2',
+    postfixText: 'dial-body-text',
+  },
+};
+
 // `size` shadows the native input attribute (a character-width number) on
 // purpose: every 2.0 control sizes itself through the ElementSize enum.
 export interface InputProps extends Omit<
@@ -110,7 +151,7 @@ export const Input: FC<InputProps> = ({
     <div
       className={mergeClasses(
         'flex flex-col',
-        size === ElementSize.Small ? 'gap-1' : 'gap-2',
+        SIZE_CLASSES[size].stackGap,
         containerClassName,
       )}
     >
@@ -152,7 +193,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   size = ElementSize.Standard,
   ...props
 }) => {
-  const isSmall = size === ElementSize.Small;
+  const sizeClasses = SIZE_CLASSES[size];
   const innerRef = useRef<HTMLInputElement | null>(null);
   const ref = useMergeRefs([inputRef, innerRef]);
 
@@ -210,11 +251,11 @@ const InputWrapper: FC<InputWrapperProps> = ({
         ref={wrapperRef}
         className={mergeClasses(
           'dial-kit-input flex flex-row items-center justify-between',
-          isSmall ? 'dial-kit-input-small gap-x-1' : 'gap-x-2 py-2',
+          sizeClasses.field,
           invalid && 'dial-kit-input-error',
           disabled && 'dial-kit-input-disable',
-          !prefix && (isSmall ? 'pl-2' : 'pl-3'),
-          !inputButtonProps && (isSmall ? 'pr-2' : 'pr-3'),
+          !prefix && sizeClasses.paddingStart,
+          !inputButtonProps && sizeClasses.paddingEnd,
           wrapperClassName,
         )}
         aria-label="input-container"
@@ -256,10 +297,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
 
         {postfix && (
           <p
-            className={mergeClasses(
-              'text-secondary',
-              isSmall ? 'dial-tiny-text' : 'dial-small-text',
-            )}
+            className={mergeClasses('text-secondary', sizeClasses.postfixText)}
           >
             {' '}
             {postfix}

@@ -34,6 +34,26 @@
   @apply h-[24px] dial-tiny-text;
 }
 
+/* Same cascade constraint as the small variant above. */
+.dial-kit-input-large {
+  @apply h-[48px] dial-body-paragraph-text;
+}
+
+/*
+ * For fields that sit flush in a toolbar or panel header. Same cascade reason as
+ * `.dial-kit-input-small` above: a `border-transparent` utility would lose to
+ * `.dial-kit-input`, so the modifier has to be a component class and has to stay
+ * after the base rule. The border is kept at full width and made transparent
+ * rather than removed, so toggling it never shifts the layout.
+ */
+.dial-kit-input-borderless {
+  @apply border-transparent bg-transparent;
+
+  &:not(:disabled):hover {
+    @apply border-transparent;
+  }
+}
+
 .dial-kit-input-disable,
 .dial-kit-input-disable:not(:placeholder-shown) {
   @apply cursor-not-allowed bg-layer-sunken text-control-disable-alpha;

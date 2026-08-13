@@ -36,8 +36,9 @@ const meta = {
     ...inputBaseArgTypes,
     size: {
       control: { type: 'inline-radio' },
-      options: [ElementSize.Standard, ElementSize.Small],
-      description: 'Field height: standard is 40px, small is 24px',
+      options: [ElementSize.Standard, ElementSize.Small, ElementSize.Large],
+      description:
+        'Field height: standard is 40px, small is 24px, large is 48px',
     },
   },
   args: {
@@ -78,6 +79,7 @@ export const Small: Story = {
 export const Sizes: Story = {
   render: () => {
     const sizes = [
+      { size: ElementSize.Large, label: 'Large (48px)' },
       { size: ElementSize.Standard, label: 'Standard (40px)' },
       { size: ElementSize.Small, label: 'Small (24px)' },
     ];
@@ -88,10 +90,11 @@ export const Sizes: Story = {
 
         <div className="flex flex-col gap-y-8">
           {sizes.map(({ size, label }) => {
-            const iconSize =
-              size === ElementSize.Small
-                ? DIAL_ICON_SIZE.SM
-                : DIAL_ICON_SIZE.MD;
+            const iconSize = {
+              [ElementSize.Small]: DIAL_ICON_SIZE.SM,
+              [ElementSize.Standard]: DIAL_ICON_SIZE.MD,
+              [ElementSize.Large]: DIAL_ICON_SIZE.LG,
+            }[size];
 
             return (
               <div key={size} className="flex flex-col gap-y-3">
