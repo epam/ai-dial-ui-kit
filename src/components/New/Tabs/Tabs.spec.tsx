@@ -96,6 +96,116 @@ describe('Dial UI Kit :: Tabs', () => {
     expect(screen.getByRole('tab', { name: 'All 0' })).toBeInTheDocument();
   });
 
+  test('gives only the selected tab the gradient underline', () => {
+    render(<Tabs tabs={tabs} activeTabId="shared" onTabChange={vi.fn()} />);
+
+    expect(screen.getByRole('tab', { name: 'Shared' })).toHaveClass(
+      'dial-kit-tab-selected-underline',
+    );
+    expect(screen.getByRole('tab', { name: 'All' })).not.toHaveClass(
+      'dial-kit-tab-selected-underline',
+    );
+  });
+
+  describe('disabled tabs', () => {
+    const withDisabled = [
+      { id: 'all', label: 'All' },
+      { id: 'shared', label: 'Shared', disabled: true },
+      { id: 'published', label: 'Published' },
+    ];
+
+    test('disables the tab and paints it with the disabled tokens', () => {
+      render(
+        <Tabs tabs={withDisabled} activeTabId="all" onTabChange={vi.fn()} />,
+      );
+
+      const disabled = screen.getByRole('tab', { name: 'Shared' });
+
+      expect(disabled).toBeDisabled();
+      expect(disabled).toHaveClass('text-control-disable-alpha');
+      expect(disabled).toHaveClass('border-control-disable-alpha');
+    });
+
+    test('a disabled tab keeps the flat underline even while selected', () => {
+      render(
+        <Tabs tabs={withDisabled} activeTabId="shared" onTabChange={vi.fn()} />,
+      );
+
+      const disabled = screen.getByRole('tab', { name: 'Shared' });
+
+      expect(disabled).toHaveClass('border-control-disable-alpha');
+      expect(disabled).not.toHaveClass('dial-kit-tab-selected-underline');
+    });
+
+    test('does not call onTabChange when a disabled tab is clicked', async () => {
+      const user = userEvent.setup();
+      const onTabChange = vi.fn();
+      render(
+        <Tabs
+          tabs={withDisabled}
+          activeTabId="all"
+          onTabChange={onTabChange}
+        />,
+      );
+
+      await user.click(screen.getByRole('tab', { name: 'Shared' }));
+
+      expect(onTabChange).not.toHaveBeenCalled();
+    });
+
+    test('the arrow keys skip over a disabled tab', async () => {
+      const user = userEvent.setup();
+      const onTabChange = vi.fn();
+      render(
+        <Tabs
+          tabs={withDisabled}
+          activeTabId="all"
+          onTabChange={onTabChange}
+        />,
+      );
+
+      screen.getByRole('tab', { name: 'All' }).focus();
+      await user.keyboard('{ArrowRight}');
+
+      expect(onTabChange).toHaveBeenCalledWith('published');
+    });
+
+    test('End lands on the last enabled tab', async () => {
+      const user = userEvent.setup();
+      const onTabChange = vi.fn();
+      render(
+        <Tabs
+          tabs={[
+            { id: 'all', label: 'All' },
+            { id: 'published', label: 'Published', disabled: true },
+          ]}
+          activeTabId="all"
+          onTabChange={onTabChange}
+        />,
+      );
+
+      screen.getByRole('tab', { name: 'All' }).focus();
+      await user.keyboard('{End}');
+
+      expect(onTabChange).not.toHaveBeenCalled();
+    });
+
+    test('moves the tab stop to the first enabled tab when the active tab is disabled', () => {
+      render(
+        <Tabs tabs={withDisabled} activeTabId="shared" onTabChange={vi.fn()} />,
+      );
+
+      expect(screen.getByRole('tab', { name: 'Shared' })).toHaveAttribute(
+        'tabindex',
+        '-1',
+      );
+      expect(screen.getByRole('tab', { name: 'All' })).toHaveAttribute(
+        'tabindex',
+        '0',
+      );
+    });
+  });
+
   describe('keyboard navigation', () => {
     test('the arrow keys move selection and focus', async () => {
       const user = userEvent.setup();

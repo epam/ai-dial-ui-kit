@@ -10,6 +10,8 @@ export interface TabItem {
   label: string;
   /** Optional numeric badge rendered after the label. */
   count?: number;
+  /** Renders the tab greyed out and unselectable, and skips it during keyboard navigation. */
+  disabled?: boolean;
 }
 
 export interface TabsProps {
@@ -41,6 +43,8 @@ const NAVIGATION_KEYS = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
  * Follows the ARIA tabs pattern with automatic activation: only the active tab is
  * in the tab order, and the arrow keys move both focus and selection. `Home` and
  * `End` jump to the first and last tab, and the arrows wrap around the ends.
+ * Tabs marked `disabled` are greyed out, cannot be clicked, and are skipped by
+ * keyboard navigation.
  *
  * The component renders the tabs only; the panels stay with the consumer.
  *
@@ -74,16 +78,29 @@ export const Tabs: FC<TabsProps> = ({
 }) => {
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
+  // Roving tabindex: the row is a single tab stop. A disabled tab cannot hold it,
+  // so an `activeTabId` pointing at one falls back to the first enabled tab —
+  // otherwise the row would drop out of the tab order entirely.
+  const activeTab = tabs.find((tab) => tab.id === activeTabId);
+  const tabStopId =
+    activeTab && !activeTab.disabled
+      ? activeTab.id
+      : tabs.find((tab) => !tab.disabled)?.id;
+
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
       if (!NAVIGATION_KEYS.includes(event.key) || tabs.length === 0) return;
 
+      // Disabled tabs are not selectable, so they are not navigation targets either.
+      const selectable = tabs.filter((tab) => !tab.disabled);
+      if (selectable.length === 0) return;
+
       // An `activeTabId` that matches nothing still has to have somewhere to go.
       const activeIndex = Math.max(
-        tabs.findIndex((tab) => tab.id === activeTabId),
+        selectable.findIndex((tab) => tab.id === activeTabId),
         0,
       );
-      const lastIndex = tabs.length - 1;
+      const lastIndex = selectable.length - 1;
 
       let nextIndex = activeIndex;
       switch (event.key) {
@@ -104,7 +121,7 @@ export const Tabs: FC<TabsProps> = ({
       // Arrow keys would otherwise scroll the page along with moving selection.
       event.preventDefault();
 
-      const nextTab = tabs[nextIndex];
+      const nextTab = selectable[nextIndex];
       tabRefs.current[nextTab.id]?.focus();
       if (nextTab.id !== activeTabId) {
         onTabChange(nextTab.id);
@@ -118,13 +135,11 @@ export const Tabs: FC<TabsProps> = ({
       role="tablist"
       aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
-      className={mergeClasses(
-        'flex justify-start gap-1 border-b border-tertiary',
-        className,
-      )}
+      className={mergeClasses('flex justify-start gap-1', className)}
     >
       {tabs.map((tab) => {
         const isActive = activeTabId === tab.id;
+        const isDisabled = !!tab.disabled;
 
         return (
           <button
@@ -135,19 +150,20 @@ export const Tabs: FC<TabsProps> = ({
             type="button"
             role="tab"
             aria-selected={isActive}
-            // Roving tabindex: the tab list is a single tab stop, and the arrow
-            // keys move within it.
-            tabIndex={isActive ? 0 : -1}
+            disabled={isDisabled}
+            tabIndex={tab.id === tabStopId ? 0 : -1}
             onClick={() => onTabChange(tab.id)}
             className={mergeClasses(
-              'dial-small-semi-text dial-kit-enhanced-target',
-              // Pulled a pixel down so the tab's own border sits on top of the row's.
-              '-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-start',
+              'dial-small-paragraph-semi-text dial-kit-enhanced-target',
+              'border-b-2 border-transparent flex items-center gap-2 px-3 py-2 text-start',
               'transition-colors motion-reduce:transition-none',
               'focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus-black',
-              isActive
-                ? 'border-info text-primary'
-                : 'border-transparent text-secondary hover:text-primary',
+              isDisabled &&
+                'cursor-not-allowed border-control-disable-alpha text-control-disable-alpha',
+              !isDisabled &&
+                (isActive
+                  ? 'dial-kit-tab-selected-underline text-primary'
+                  : 'border-transparent text-secondary'),
               tabClassName,
             )}
           >
@@ -156,9 +172,11 @@ export const Tabs: FC<TabsProps> = ({
               <span
                 className={mergeClasses(
                   'dial-tiny-semi-text rounded-full px-1.5 py-0.5',
-                  isActive
-                    ? 'bg-control-accent-alpha-hover text-accent'
-                    : 'bg-layer-sunken text-secondary',
+                  isDisabled && 'bg-layer-sunken text-control-disable-alpha',
+                  !isDisabled &&
+                    (isActive
+                      ? 'bg-info text-accent'
+                      : 'bg-layer-sunken text-secondary'),
                 )}
               >
                 {tab.count}
