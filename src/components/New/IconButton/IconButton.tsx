@@ -17,6 +17,13 @@ import { getButtonClassNames } from '../Button/utils';
 
 type TooltipProps = Omit<DialTooltipProps, 'children'>;
 
+/** Square footprint per size, matching the field heights in `input.scss`. */
+const SIZE_CLASS: Record<ElementSize, string> = {
+  [ElementSize.Small]: 'size-[24px]',
+  [ElementSize.Standard]: 'size-[40px] dial-kit-enhanced-target',
+  [ElementSize.Large]: 'size-[48px] dial-kit-enhanced-target',
+};
+
 export interface IconButtonProps extends DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
@@ -75,9 +82,9 @@ export const IconButton: FC<IconButtonProps> = ({
   const btnClassName = mergeClasses(
     'dial-kit-base-icon-button dial-kit-base-button',
     variant && getButtonClassNames(variant, appearance),
-    size === ElementSize.Small
-      ? 'size-[24px]'
-      : 'size-[40px] dial-kit-enhanced-target',
+    // 24px is below the AAA target size, so only the larger tiers get the
+    // enhanced pointer target — see the accessibility rules in AGENTS.md.
+    SIZE_CLASS[size],
     className,
   );
 

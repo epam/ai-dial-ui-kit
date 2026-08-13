@@ -373,4 +373,6 @@ export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagInput } from './components/New/TagInput/TagInput';
 export type { TagInputProps } from './components/New/TagInput/TagInput';
+export { Search } from './components/New/Search/Search';
+export type { SearchProps } from './components/New/Search/Search';
 export { matchesAccept } from './utils/file-accept';

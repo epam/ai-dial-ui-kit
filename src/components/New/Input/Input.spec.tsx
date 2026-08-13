@@ -265,6 +265,32 @@ describe('Dial UI Kit :: DialInput', () => {
       expect(getField()).not.toHaveClass('py-2');
     });
 
+    test('renders the large variant when size is large', () => {
+      render(
+        <Input
+          id="large-size"
+          placeholder="Placeholder"
+          size={ElementSize.Large}
+        />,
+      );
+
+      expect(getField()).toHaveClass('dial-kit-input-large', 'gap-x-2', 'pl-4');
+      expect(getField()).not.toHaveClass('dial-kit-input-small');
+    });
+
+    test('scales the input button with the large field', () => {
+      render(
+        <Input
+          id="large-with-button"
+          placeholder="Placeholder"
+          size={ElementSize.Large}
+          inputButtonProps={{ icon: <span>x</span> }}
+        />,
+      );
+
+      expect(screen.getByRole('button')).toHaveClass('size-[48px]');
+    });
+
     test('passes the size down to the prefix field', () => {
       render(
         <Input
