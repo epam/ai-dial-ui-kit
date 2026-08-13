@@ -13,7 +13,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 const SEARCH_ICON_SIZE: Record<ElementSize, DIAL_ICON_SIZE> = {
   [ElementSize.Small]: DIAL_ICON_SIZE.SM,
   [ElementSize.Standard]: DIAL_ICON_SIZE.MD,
-  [ElementSize.Large]: DIAL_ICON_SIZE.LG,
+  [ElementSize.Large]: DIAL_ICON_SIZE.MD,
 };
 
 export interface SearchProps extends Omit<

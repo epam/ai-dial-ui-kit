@@ -53,7 +53,7 @@ const SIZE_CLASSES: Record<
     postfixText: 'dial-small-text',
   },
   [ElementSize.Large]: {
-    field: 'dial-kit-input-large gap-x-2 py-3',
+    field: 'gap-x-2 py-3',
     paddingStart: 'pl-4',
     paddingEnd: 'pr-4',
     stackGap: 'gap-2',

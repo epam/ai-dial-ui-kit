@@ -120,7 +120,7 @@ describe('Dial UI Kit :: Search', () => {
     // jsdom does no layout, so only the variant class is observable here.
     test.each([
       [ElementSize.Small, 'dial-kit-input-small'],
-      [ElementSize.Large, 'dial-kit-input-large'],
+      [ElementSize.Large, 'dial-kit-input'],
     ])('passes %s down to the field', (size, expected) => {
       render(<Search id="search" placeholder="Search" size={size} />);
 
@@ -140,7 +140,7 @@ describe('Dial UI Kit :: Search', () => {
         <Search id="search" placeholder="Search" size={ElementSize.Large} />,
       );
 
-      expect(magnifier()).toHaveAttribute('width', '24');
+      expect(magnifier()).toHaveAttribute('width', '20');
     });
   });
 

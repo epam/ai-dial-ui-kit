@@ -274,7 +274,7 @@ describe('Dial UI Kit :: DialInput', () => {
         />,
       );
 
-      expect(getField()).toHaveClass('dial-kit-input-large', 'gap-x-2', 'pl-4');
+      expect(getField()).toHaveClass('dial-kit-input', 'gap-x-2', 'pl-4');
       expect(getField()).not.toHaveClass('dial-kit-input-small');
     });
 
