@@ -66,6 +66,12 @@ const tabsWithCounts = [
   { id: 'published', label: 'Published', count: 0 },
 ];
 
+const tabsWithDisabled = [
+  { id: 'all', label: 'All', count: 12 },
+  { id: 'shared', label: 'Shared with me', disabled: true },
+  { id: 'published', label: 'Published', count: 4, disabled: true },
+];
+
 const noop = () => undefined;
 
 export const Default: Story = {
@@ -85,6 +91,24 @@ export const WithCounts: Story = {
     activeTabId: 'all',
     onTabChange: noop,
     ariaLabel: 'Conversation views',
+  },
+};
+
+export const WithDisabledTabs: Story = {
+  render: InteractiveTabs,
+  args: {
+    tabs: tabsWithDisabled,
+    activeTabId: 'all',
+    onTabChange: noop,
+    ariaLabel: 'Conversation views',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Disabled tabs are greyed out, cannot be clicked, and the arrow keys skip over them.',
+      },
+    },
   },
 };
 
@@ -110,6 +134,17 @@ export const AllVariants: Story = {
           activeTabId="shared"
           onTabChange={() => undefined}
           ariaLabel="Tabs with counts"
+        />
+      </div>
+      <div>
+        <div className="dial-small-semi-text mb-2 text-primary">
+          With disabled tabs
+        </div>
+        <InteractiveTabs
+          tabs={tabsWithDisabled}
+          activeTabId="all"
+          onTabChange={() => undefined}
+          ariaLabel="Tabs with disabled entries"
         />
       </div>
       <div>
