@@ -59,19 +59,27 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         )}
         {...getReferenceProps()}
       >
-        {item.icon && (
-          <span className={mergeClasses(item.disabled && 'text-secondary')}>
-            <DialIcon icon={item.icon} />
-          </span>
+        {item.renderItem ? (
+          item.renderItem(item)
+        ) : (
+          <>
+            {item.icon && (
+              <span
+                className={mergeClasses(item.disabled && 'text-secondary')}
+              >
+                <DialIcon icon={item.icon} />
+              </span>
+            )}
+            <span
+              className={mergeClasses(
+                'flex-1 truncate text-start',
+                item.disabled && 'text-secondary',
+              )}
+            >
+              {item.label}
+            </span>
+          </>
         )}
-        <span
-          className={mergeClasses(
-            'flex-1 truncate text-start',
-            item.disabled && 'text-secondary',
-          )}
-        >
-          {item.label}
-        </span>
         <span
           className={mergeClasses(
             'ml-auto shrink-0',
@@ -115,25 +123,31 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
                   )}
                   onClick={handleChildClick(child)}
                 >
-                  {child.icon && (
-                    <span
-                      className={mergeClasses(
-                        child.danger && 'text-error',
-                        child.disabled && 'text-secondary',
+                  {child.renderItem ? (
+                    child.renderItem(child)
+                  ) : (
+                    <>
+                      {child.icon && (
+                        <span
+                          className={mergeClasses(
+                            child.danger && 'text-error',
+                            child.disabled && 'text-secondary',
+                          )}
+                        >
+                          <DialIcon icon={child.icon} />
+                        </span>
                       )}
-                    >
-                      <DialIcon icon={child.icon} />
-                    </span>
+                      <span
+                        className={mergeClasses(
+                          'flex-1 truncate text-start',
+                          child.danger && 'text-error',
+                          child.disabled && 'text-secondary',
+                        )}
+                      >
+                        {child.label}
+                      </span>
+                    </>
                   )}
-                  <span
-                    className={mergeClasses(
-                      'flex-1 truncate text-start',
-                      child.danger && 'text-error',
-                      child.disabled && 'text-secondary',
-                    )}
-                  >
-                    {child.label}
-                  </span>
                 </button>
               ))}
 

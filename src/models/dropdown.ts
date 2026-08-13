@@ -27,6 +27,13 @@ export interface DropdownItem {
    * Use this to show a custom popup — e.g. a preview or a picker — instead of a plain item list.
    */
   renderSubMenu?: () => ReactNode;
+  /**
+   * Replaces this item's icon + label content while keeping its button element, click
+   * handling, and (for a submenu trigger) the caret intact. Use this for lighter-weight
+   * customization — e.g. a badge or avatar next to the label — without giving up the
+   * default row/list wiring the way `renderSubMenu` does.
+   */
+  renderItem?: (item: DropdownItem) => ReactNode;
   /** Overrides the default hover-open behavior of this item's submenu. */
   subMenuHoverOptions?: DropdownSubMenuHoverOptions;
 }

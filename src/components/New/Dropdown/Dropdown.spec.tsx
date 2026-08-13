@@ -959,4 +959,66 @@ describe('Dial UI Kit :: Dropdown', () => {
       screen.queryByText('Should not render either'),
     ).not.toBeInTheDocument();
   });
+
+  test('item.renderItem customizes a top-level item while keeping its click handler', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const itemsWithRenderItem: DropdownItem[] = [
+      {
+        key: 'storage',
+        label: 'Storage',
+        onClick,
+        renderItem: (it) => <span>Custom: {it.label}</span>,
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithRenderItem}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const menuItem = screen.getByRole('menuitem', { name: 'Custom: Storage' });
+    expect(menuItem).toBeInTheDocument();
+    expect(screen.queryByText('Storage', { exact: true })).toBeNull();
+
+    await user.click(menuItem);
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  test('item.renderItem customizes a submenu trigger and its children', async () => {
+    const user = userEvent.setup();
+    const onChildClick = vi.fn();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        renderItem: (it) => <span>Trigger: {it.label}</span>,
+        children: [
+          {
+            key: 'sub-1',
+            label: 'Sub One',
+            onClick: onChildClick,
+            renderItem: (it) => <span>Child: {it.label}</span>,
+          },
+        ],
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const trigger = screen.getByRole('menuitem', { name: 'Trigger: More' });
+    await user.hover(trigger);
+
+    const child = await screen.findByRole('menuitem', {
+      name: 'Child: Sub One',
+    });
+
+    await user.click(child);
+    expect(onChildClick).toHaveBeenCalled();
+  });
 });

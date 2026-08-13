@@ -560,6 +560,62 @@ const collectionItems: CollectionItem[] = [
   },
 ];
 
+const badgedCollectionItems: CollectionItem[] = collectionItems.map(
+  (item) => ({
+    ...item,
+    renderItem: () => (
+      <>
+        {item.icon}
+        <span className="flex-1 truncate text-start">
+          <span className="block truncate">{item.label}</span>
+          {item.description && (
+            <span className="block truncate dial-caption-text text-secondary">
+              {item.description}
+            </span>
+          )}
+        </span>
+      </>
+    ),
+  }),
+);
+
+export const WithCustomItemRender: Story = {
+  name: 'Custom item render (renderItem)',
+  render: (args) => (
+    <Dropdown
+      {...args}
+      placement="bottom-start"
+      items={[
+        {
+          key: 'storage',
+          label: 'Storage',
+          icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+          renderItem: (it) => (
+            <>
+              {it.icon}
+              <span className="flex-1 truncate text-start">{it.label}</span>
+              <span className="dial-caption-text text-secondary">82%</span>
+            </>
+          ),
+        },
+        {
+          key: 'collection',
+          label: 'My collection',
+          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          children: badgedCollectionItems,
+        },
+        {
+          key: 'logout',
+          label: 'Logout',
+          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+        },
+      ]}
+    >
+      <TriggerBtn label="Custom item render" />
+    </Dropdown>
+  ),
+};
+
 export const WithSubMenuCustomContent: Story = {
   name: 'Sub-menu with fully custom content',
   // Storybook's dynamic "Show code" snippet re-walks the rendered element tree

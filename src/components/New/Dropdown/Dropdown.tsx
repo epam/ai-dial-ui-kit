@@ -388,25 +388,31 @@ export const Dropdown: FC<DropdownProps> = ({
                 disabled={it.disabled}
                 onClick={handleItemClick(it)}
               >
-                {it.icon && (
-                  <span
-                    className={mergeClasses(
-                      it.danger && 'text-error',
-                      it.disabled && 'text-secondary',
+                {it.renderItem ? (
+                  it.renderItem(it)
+                ) : (
+                  <>
+                    {it.icon && (
+                      <span
+                        className={mergeClasses(
+                          it.danger && 'text-error',
+                          it.disabled && 'text-secondary',
+                        )}
+                      >
+                        <DialIcon icon={it.icon} />
+                      </span>
                     )}
-                  >
-                    <DialIcon icon={it.icon} />
-                  </span>
+                    <span
+                      className={mergeClasses(
+                        'flex-1 truncate text-start',
+                        it.danger && 'text-error',
+                        it.disabled && 'text-secondary',
+                      )}
+                    >
+                      {it.label}
+                    </span>
+                  </>
                 )}
-                <span
-                  className={mergeClasses(
-                    'flex-1 truncate text-start',
-                    it.danger && 'text-error',
-                    it.disabled && 'text-secondary',
-                  )}
-                >
-                  {it.label}
-                </span>
               </button>
             );
           })}
