@@ -47,7 +47,7 @@ const meta: Meta<typeof DialAnalyticsBarGroup> = {
     compareData: {
       control: false,
       description:
-        'Enables compare mode: each entry shows a delta badge and two bars — one for `data` and one for `compareData`.',
+        'Enables compare mode: each entry shows a delta badge (`compareData − data`) and two bars — first for `data`, second for `compareData`.',
     },
     compareLabels: {
       control: false,
@@ -154,7 +154,28 @@ export const CompareDefault: Story = {
     title: 'Relevance',
     data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
     compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
-    compareLabels: ['This week', 'Last week'],
+    compareLabels: ['Last week', 'This week'],
+    className: 'w-[420px]',
+  },
+};
+
+/** Admin compare repro: baseline 0.917 vs compared 1.00 — badge should be +0.083. */
+export const CompareScoreIncrease: Story = {
+  args: {
+    title: 'DeepEval: Answer Relevancy',
+    data: { score: 0.917 },
+    compareData: { score: 1 },
+    compareLabels: ['Run #849', 'Run #1051'],
+    className: 'w-[420px]',
+  },
+};
+
+export const CompareEqualValues: Story = {
+  args: {
+    title: 'Relevance',
+    data: { score: 0.75 },
+    compareData: { score: 0.75 },
+    compareLabels: ['Last week', 'This week'],
     className: 'w-[420px]',
   },
 };
@@ -164,7 +185,7 @@ export const CompareInline: Story = {
     title: 'Relevance',
     data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
     compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
-    compareLabels: ['This week', 'Last week'],
+    compareLabels: ['Last week', 'This week'],
     inline: true,
     className: 'w-[420px]',
   },
@@ -185,7 +206,7 @@ export const CompareWithMissingValues: Story = {
     title: 'Relevance',
     data: { accuracy: 0.82, recall: 0.64, onlyCurrent: 0.55 },
     compareData: { accuracy: 0.64, recall: 0.82, onlyPrevious: 0.71 },
-    compareLabels: ['This week', 'Last week'],
+    compareLabels: ['Last week', 'This week'],
     className: 'w-[420px]',
   },
 };
@@ -195,7 +216,7 @@ export const CompareInlineWithMissingValues: Story = {
     title: 'Relevance',
     data: { accuracy: 0.82, recall: 0.64, onlyCurrent: 0.55 },
     compareData: { accuracy: 0.64, recall: 0.82, onlyPrevious: 0.71 },
-    compareLabels: ['This week', 'Last week'],
+    compareLabels: ['Last week', 'This week'],
     inline: true,
     className: 'w-[420px]',
   },

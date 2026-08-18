@@ -238,6 +238,38 @@ describe('Dial UI Kit :: DialAnalyticsCard', () => {
       expect(screen.getByText('Revenue')).toBeInTheDocument();
       expect(screen.getByText('+3')).toBeInTheDocument();
     });
+
+    test('appends deltaUnit to a positive time delta with inverted error styles', () => {
+      render(
+        <DialAnalyticsCard
+          title="Response time"
+          delta={9}
+          deltaUnit="s"
+          deltaPositive={false}
+          value="248ms"
+        />,
+      );
+
+      const badge = screen.getByText('+9s');
+      expect(badge.className).toMatch(/bg-error/);
+      expect(badge.className).toMatch(/text-error/);
+    });
+
+    test('appends deltaUnit to a negative time delta with inverted success styles', () => {
+      render(
+        <DialAnalyticsCard
+          title="Response time"
+          delta={-19}
+          deltaUnit="s"
+          deltaPositive={true}
+          value="201ms"
+        />,
+      );
+
+      const badge = screen.getByText('-19s');
+      expect(badge.className).toMatch(/bg-success/);
+      expect(badge.className).toMatch(/text-success/);
+    });
   });
 
   describe('loading state', () => {
