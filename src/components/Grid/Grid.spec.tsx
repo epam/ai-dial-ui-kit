@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialGrid } from './Grid';
-import { type ColDef } from 'ag-grid-community';
+import { type ColDef, type GridApi } from 'ag-grid-community';
 
 interface TestRow {
   id: string;
@@ -21,6 +21,78 @@ const testColumns: ColDef<TestRow>[] = [
 ];
 
 describe('Dial UI Kit :: DialGrid', () => {
+  const mixedCaseRows: TestRow[] = [
+    { id: '1', name: 'appdata', age: 1 },
+    { id: '2', name: 'Banana', age: 2 },
+    { id: '3', name: 'code app', age: 3 },
+    { id: '4', name: 'Zebra', age: 4 },
+  ];
+
+  const getSortedNames = (api: GridApi<TestRow>): string[] => {
+    const names: string[] = [];
+    api.forEachNodeAfterFilterAndSort((node) => {
+      if (node.data) {
+        names.push(node.data.name);
+      }
+    });
+    return names;
+  };
+
+  test('sorts names case-insensitively', async () => {
+    let api: GridApi<TestRow> | undefined;
+
+    render(
+      <DialGrid<TestRow>
+        columnDefs={testColumns}
+        rowData={mixedCaseRows}
+        onGridApiChange={(gridApi) => {
+          api = gridApi;
+        }}
+      />,
+    );
+
+    await screen.findByText('appdata');
+
+    api!.applyColumnState({
+      state: [{ colId: 'name', sort: 'asc' }],
+    });
+
+    expect(getSortedNames(api!)).toEqual([
+      'appdata',
+      'Banana',
+      'code app',
+      'Zebra',
+    ]);
+  });
+
+  test('keeps case-insensitive sorting when a defaultColDef is supplied', async () => {
+    let api: GridApi<TestRow> | undefined;
+
+    render(
+      <DialGrid<TestRow>
+        columnDefs={testColumns}
+        rowData={mixedCaseRows}
+        additionalGridOptions={{ defaultColDef: { floatingFilter: false } }}
+        onGridApiChange={(gridApi) => {
+          api = gridApi;
+        }}
+      />,
+    );
+
+    await screen.findByText('appdata');
+
+    api!.applyColumnState({
+      state: [{ colId: 'name', sort: 'asc' }],
+    });
+
+    expect(getSortedNames(api!)).toEqual([
+      'appdata',
+      'Banana',
+      'code app',
+      'Zebra',
+    ]);
+  });
+
   test('calls onGridReady when grid is initialized', async () => {
     const onGridReady = vi.fn();
     render(

@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
   baseColumnComparator,
   checkColDefsChanges,
+  omitUndefined,
 } from './base-column-comparator';
 import type { ColDef } from 'ag-grid-community';
 
@@ -16,6 +17,54 @@ describe('Dial UI Kit :: baseColumnComparator', () => {
     expect(baseColumnComparator('Apple', 'apple')).toBe(0);
     expect(baseColumnComparator('BANANA', 'banana')).toBe(0);
     expect(baseColumnComparator('aaa', 'AAA')).toBe(0);
+  });
+
+  test('orders mixed-case names alphabetically, ignoring case', () => {
+    const names = [
+      'New folder 1',
+      'Uno-Rules.pdf',
+      'appdata',
+      'code app 1',
+      'Zebra',
+      'apple',
+      'Banana',
+    ];
+
+    expect([...names].sort((a, b) => baseColumnComparator(a, b))).toEqual([
+      'appdata',
+      'apple',
+      'Banana',
+      'code app 1',
+      'New folder 1',
+      'Uno-Rules.pdf',
+      'Zebra',
+    ]);
+  });
+
+  test('does not group uppercase names ahead of lowercase ones', () => {
+    expect(baseColumnComparator('appdata', 'Banana')).toBe(-1);
+    expect(baseColumnComparator('Banana', 'appdata')).toBe(1);
+    expect(baseColumnComparator('zebra', 'Apple')).toBe(1);
+  });
+
+  test('sorts embedded numbers naturally', () => {
+    const names = ['New folder 10', 'New folder 2', 'New folder 1'];
+
+    expect([...names].sort((a, b) => baseColumnComparator(a, b))).toEqual([
+      'New folder 1',
+      'New folder 2',
+      'New folder 10',
+    ]);
+  });
+
+  test('sorts accented names next to their base letter', () => {
+    const names = ['Zebra', 'Émile', 'apple'];
+
+    expect([...names].sort((a, b) => baseColumnComparator(a, b))).toEqual([
+      'apple',
+      'Émile',
+      'Zebra',
+    ]);
   });
 
   test('handles undefined values correctly', () => {
@@ -44,6 +93,13 @@ describe('Dial UI Kit :: baseColumnComparator', () => {
     expect(baseColumnComparator(5, 10)).toBe(-1);
     expect(baseColumnComparator(10, 5)).toBe(1);
     expect(baseColumnComparator(-5, 5)).toBe(-1);
+  });
+
+  test('keeps empty names last in both sort directions', () => {
+    expect(baseColumnComparator('', 'apple')).toBe(1);
+    expect(baseColumnComparator('', 'apple', undefined, undefined, true)).toBe(
+      -1,
+    );
   });
 
   test('respects isInverted parameter', () => {
@@ -119,5 +175,27 @@ describe('Dial UI Kit :: checkColDefsChanges', () => {
 
   test('handles empty arrays', () => {
     expect(checkColDefsChanges([], [])).toBe(false);
+  });
+});
+
+describe('Dial UI Kit :: omitUndefined', () => {
+  test('drops keys whose value is undefined', () => {
+    expect(omitUndefined({ a: 1, b: undefined, c: false })).toEqual({
+      a: 1,
+      c: false,
+    });
+  });
+
+  test('keeps falsy values that are not undefined', () => {
+    expect(omitUndefined({ a: 0, b: '', c: null, d: false })).toEqual({
+      a: 0,
+      b: '',
+      c: null,
+      d: false,
+    });
+  });
+
+  test('returns an empty object for undefined input', () => {
+    expect(omitUndefined(undefined)).toEqual({});
   });
 });

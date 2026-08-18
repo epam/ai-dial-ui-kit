@@ -38,7 +38,10 @@ import type { DropdownItem } from '@/models/dropdown';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
 import { IconZoomCancel } from '@tabler/icons-react';
-import { baseColumnComparator } from './comparators/base-column-comparator';
+import {
+  baseColumnComparator,
+  omitUndefined,
+} from './comparators/base-column-comparator';
 import {
   checkboxClass,
   GRID_THEME_COLORS,
@@ -461,6 +464,9 @@ export const DialGrid = <T extends object>({
     ],
   );
 
+  const { defaultColDef: consumerDefaultColDef, ...restAdditionalGridOptions } =
+    additionalGridOptions ?? {};
+
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
       minWidth: 150,
@@ -472,9 +478,10 @@ export const DialGrid = <T extends object>({
         filterPlaceholder: filterPlaceholder,
         buttons: ['reset'],
       },
-      comparator: baseColumnComparator.bind(this),
+      comparator: baseColumnComparator,
+      ...omitUndefined(consumerDefaultColDef),
     }),
-    [filterPlaceholder],
+    [filterPlaceholder, consumerDefaultColDef],
   );
 
   const onGridReady = (e: GridReadyEvent) => {
@@ -637,7 +644,7 @@ export const DialGrid = <T extends object>({
           onRowDataUpdated={setAria}
           onBodyScroll={setAria}
           onFirstDataRendered={setAria}
-          {...additionalGridOptions}
+          {...restAdditionalGridOptions}
         />
       </div>
     </div>
