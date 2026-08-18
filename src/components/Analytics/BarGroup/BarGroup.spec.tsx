@@ -118,6 +118,53 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       // Only the accordion header is a button.
       expect(screen.getAllByRole('button')).toHaveLength(1);
     });
+
+    test('in compare mode wraps the whole entry and forwards key and value on click', () => {
+      const onBarClick = vi.fn();
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+          onBarClick={onBarClick}
+        />,
+      );
+
+      const entryButton = screen.getByRole('button', { name: /accuracy/i });
+      fireEvent.click(entryButton);
+
+      expect(onBarClick).toHaveBeenCalledTimes(1);
+      expect(onBarClick).toHaveBeenCalledWith('accuracy', 0.82);
+    });
+
+    test('in compare mode forwards null when the data key is missing', () => {
+      const onBarClick = vi.fn();
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ other: 0.5 }}
+          compareData={{ accuracy: 0.64 }}
+          onBarClick={onBarClick}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /accuracy/i }));
+
+      expect(onBarClick).toHaveBeenCalledTimes(1);
+      expect(onBarClick).toHaveBeenCalledWith('accuracy', null);
+    });
+
+    test('in compare mode does not wrap entries when onBarClick is omitted', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+        />,
+      );
+
+      expect(screen.getAllByRole('button')).toHaveLength(1);
+    });
   });
 
   describe('inline mode', () => {
