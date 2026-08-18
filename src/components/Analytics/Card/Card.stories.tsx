@@ -51,12 +51,17 @@ const meta: Meta<typeof DialAnalyticsCard> = {
     delta: {
       control: { type: 'number' },
       description:
-        'Numeric change shown as a badge next to the title. Values ≥0 use success styles; negative values use error styles. Override with `deltaPositive`.',
+        'Numeric change shown as a badge next to the title. Values ≥0 use success styles; negative values use error styles. Override with `deltaPositive`. Append a unit with `deltaUnit`.',
     },
     deltaPositive: {
       control: 'boolean',
       description:
         'Overrides the sign-based badge style. Use when a positive delta is bad (e.g. response time up) or a negative delta is good (e.g. error rate down).',
+    },
+    deltaUnit: {
+      control: 'text',
+      description:
+        'Suffix appended to the formatted delta with no space (e.g. `"s"` → `+9s`, `-19s`).',
     },
     compareValues: {
       control: false,
@@ -173,13 +178,29 @@ export const Variants: Story = {
 export const CompareDefault: Story = {
   args: {
     title: 'Response time',
-    delta: 12,
+    delta: 9,
+    deltaUnit: 's',
     deltaPositive: false,
     compareValues: [
       { title: 'This week', value: '248ms' },
       { title: 'Last week', value: '220ms' },
     ],
-    description: '+12% slower than last week',
+    description: '+9s slower than last week',
+    className: 'w-[240px]',
+  },
+};
+
+export const CompareTimeDecrease: Story = {
+  args: {
+    title: 'Response time',
+    delta: -19,
+    deltaUnit: 's',
+    deltaPositive: true,
+    compareValues: [
+      { title: 'This week', value: '201ms' },
+      { title: 'Last week', value: '220ms' },
+    ],
+    description: '−19s faster than last week',
     className: 'w-[240px]',
   },
 };
@@ -201,6 +222,8 @@ export const CompareCompact: Story = {
   args: {
     title: 'Avg. latency',
     delta: 5,
+    deltaUnit: 'ms',
+    deltaPositive: false,
     compareValues: [
       { title: 'Current', value: '248ms' },
       { title: 'Previous', value: '236ms' },
@@ -214,6 +237,8 @@ export const CompareCompactNegativeDelta: Story = {
   args: {
     title: 'Avg. latency',
     delta: -8,
+    deltaUnit: 'ms',
+    deltaPositive: true,
     compareValues: [
       { title: 'Current', value: '220ms' },
       { title: 'Previous', value: '240ms' },

@@ -163,8 +163,8 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       render(
         <DialAnalyticsBarGroup
           title="Relevance"
-          data={{ score: 0.82 }}
-          compareData={{ score: 0.64 }}
+          data={{ score: 0.64 }}
+          compareData={{ score: 0.82 }}
         />,
       );
 
@@ -177,8 +177,8 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       render(
         <DialAnalyticsBarGroup
           title="Relevance"
-          data={{ score: 0.64 }}
-          compareData={{ score: 0.82 }}
+          data={{ score: 0.82 }}
+          compareData={{ score: 0.64 }}
         />,
       );
 
@@ -187,7 +187,20 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       expect(badge.className).toMatch(/text-error/);
     });
 
-    test('renders a zero delta with a + prefix and success styles', () => {
+    test('rounds the compare-mode delta to 3 decimal places', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="DeepEval: Answer Relevancy"
+          data={{ score: 0.917 }}
+          compareData={{ score: 1 }}
+        />,
+      );
+
+      const badge = screen.getByText('+0.083');
+      expect(badge.className).toMatch(/bg-success/);
+    });
+
+    test('hides the delta badge when the rounded delta is zero', () => {
       render(
         <DialAnalyticsBarGroup
           title="Relevance"
@@ -196,8 +209,8 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
         />,
       );
 
-      const badge = screen.getByText('+0');
-      expect(badge.className).toMatch(/bg-success/);
+      expect(screen.queryByText('+0')).toBeNull();
+      expect(screen.queryByText(/^[-+]/)).toBeNull();
     });
 
     test('renders compareLabels as bar titles', () => {
@@ -228,7 +241,7 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
       // accuracy×2 + onlyCurrent + onlyPrevious — missing sides have no progressbar
       expect(screen.getAllByRole('progressbar')).toHaveLength(4);
       expect(screen.getAllByText('—')).toHaveLength(2);
-      expect(screen.getByText('+0.18')).toBeInTheDocument();
+      expect(screen.getByText('-0.18')).toBeInTheDocument();
       expect(screen.queryByText('NaN')).toBeNull();
     });
 

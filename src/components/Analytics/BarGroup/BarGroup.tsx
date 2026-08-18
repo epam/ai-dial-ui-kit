@@ -22,9 +22,10 @@ export interface DialAnalyticsBarGroupProps {
   /**
    * When provided, enables compare mode: keys are the union of `data` and
    * `compareData`. Each entry renders two bars and, when both sides are numeric,
-   * a delta badge (`data[key] - compareData[key]`). A missing key (or explicit
-   * `null`) on either side shows an em dash with no progress bar and no delta.
-   * `onBarClick` is ignored in compare mode.
+   * a delta badge (`compareData[key] - data[key]`, three decimal places). A
+   * missing key (or explicit `null`) on either side shows an em dash with no
+   * progress bar and no delta. A rounded delta of `0` is omitted. `onBarClick`
+   * is ignored in compare mode.
    */
   compareData?: Record<string, number | null>;
   /**
@@ -85,7 +86,7 @@ export interface DialAnalyticsBarGroupProps {
  * @param [titleTooltip] - Tooltip shown when hovering the accordion header title.
  * @param [description] - Description passed to the accordion header. Defaults to the number of entries.
  * @param data - Map of metric name to numeric value (or `null` when missing). Each entry renders one bar.
- * @param [compareData] - Enables compare mode: union of keys, delta badge when both sides are numeric, em dash (no bar) when a side is missing.
+ * @param [compareData] - Enables compare mode: union of keys, delta badge (`compareData − data`) when both sides are numeric and the rounded delta is non-zero, em dash (no bar) when a side is missing.
  * @param [compareLabels] - Labels for the two bars in compare mode: first for `data`, second for `compareData`.
  * @param [maxValue] - Upper bound passed to every bar.
  * @param [colorMap] - Color map passed to every bar.
@@ -159,11 +160,15 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
             const canComputeDelta =
               typeof value === 'number' && typeof compareValue === 'number';
             const delta = canComputeDelta
-              ? parseFloat((value - compareValue).toFixed(2))
+              ? parseFloat((compareValue - value).toFixed(3))
               : null;
-            const isPositive = delta != null && delta >= 0;
-            const deltaLabel =
-              delta == null ? null : isPositive ? `+${delta}` : String(delta);
+            const showDelta = delta != null && delta !== 0;
+            const isPositive = showDelta && delta > 0;
+            const deltaLabel = !showDelta
+              ? null
+              : isPositive
+                ? `+${delta}`
+                : String(delta);
             return (
               <div key={key} className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-2">

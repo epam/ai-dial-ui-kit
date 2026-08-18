@@ -31,6 +31,11 @@ export interface DialAnalyticsCardProps {
    */
   deltaPositive?: boolean;
   /**
+   * Suffix appended to the formatted delta with no space (e.g. `"s"` → `+9s`,
+   * `-19s`). Any string is valid (`s`, `ms`, `%`).
+   */
+  deltaUnit?: string;
+  /**
    * When provided, enables compare mode: the value area is split 50/50 with a
    * vertical divider and each side shows its own sub-title and value.
    * `value` is ignored when `compareValues` is set.
@@ -74,7 +79,7 @@ const variantStyles: Record<
  *
  * **Compare mode** — pass `compareValues` to split the value area 50/50 between two
  * metrics, each with its own sub-title. Pair with `delta` to show a change badge next
- * to the card title.
+ * to the card title, and `deltaUnit` for a suffix such as `"s"`.
  *
  * @example
  * ```tsx
@@ -89,7 +94,9 @@ const variantStyles: Record<
  * ```tsx
  * <DialAnalyticsCard
  *   title="Response time"
- *   delta={12}
+ *   delta={9}
+ *   deltaUnit="s"
+ *   deltaPositive={false}
  *   compareValues={[
  *     { title: 'This week', value: '248ms' },
  *     { title: 'Last week', value: '220ms' },
@@ -105,6 +112,8 @@ const variantStyles: Record<
  * @param [isLoading] - Renders a loader in place of the value.
  * @param [className] - Additional CSS classes for the card container.
  * @param [delta] - Numeric change shown as a badge next to the title. ≥0 = success, <0 = error.
+ * @param [deltaPositive] - Overrides sign-based badge colour. Use for lower-is-better metrics.
+ * @param [deltaUnit] - Suffix appended to the formatted delta (e.g. `"s"` → `+9s`).
  * @param [compareValues] - Enables compare mode with two side-by-side metrics.
  */
 export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
@@ -117,11 +126,16 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
   className,
   delta,
   deltaPositive,
+  deltaUnit,
   compareValues,
 }) => {
   const styles = variantStyles[variant];
   const isDeltaPositive =
     deltaPositive !== undefined ? deltaPositive : (delta ?? 0) >= 0;
+  const deltaLabel =
+    delta === undefined
+      ? null
+      : `${delta >= 0 ? `+${delta}` : String(delta)}${deltaUnit ?? ''}`;
 
   return (
     <div
@@ -143,7 +157,7 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
                 : 'bg-error text-error',
             )}
           >
-            {delta >= 0 ? `+${delta}` : String(delta)}
+            {deltaLabel}
           </span>
         </div>
       ) : (

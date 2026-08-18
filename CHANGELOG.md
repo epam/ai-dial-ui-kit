@@ -52,6 +52,7 @@ Versions match the git tags on the `development` branch.
 - **Typography — `dial-code-text` names a monospace face** — it previously inherited the body font despite being the Code style. It resolves through `var(--theme-font-mono, var(--font-fira-code, 'Fira Code'))` before the system monospace stack, mirroring the existing `--theme-font` / `--font-inter` hook. The kit ships no font file; hosts that want Fira Code load it themselves.
 - **Enhanced pointer targets** — standard-size buttons expose a 44×44 pointer target (WCAG 2.5.5, Level AAA) via the `dial-kit-enhanced-target` utility, with no change to their rendered size. See the [Accessibility section of the README](README.md#-accessibility) for the documented exceptions.
 - **MCP server — generation-aware component discovery** — component entries carry `generation` (`1.0` | `2.0`), and a 1.0 component carries `supersededBy` naming its 2.0 replacement (e.g. `DialButton` → `Button`). `searchEntity` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` flags a superseded component and, on a name miss, suggests the other generation's spelling. Both are derived automatically from component location and Storybook category — there is no list to maintain. See the [MCP Server Guide](src/mcp/README.md).
+- **`DialAnalyticsCard` — `deltaUnit`** — optional suffix appended to the delta badge with no space (`delta={9} deltaUnit="s"` → `+9s`).
 
 ### Changed
 
