@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { DialAnalyticsErrorTag } from '@/components/Analytics/ErrorTag/ErrorTag';
+import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
 import { DialLoader } from '@/components/Loader/Loader';
 import type { AnalyticsCardCompareItem } from '@/models/analytics';
 import { AnalyticsCardVariant } from '@/types/analytics';
@@ -78,7 +79,8 @@ const variantStyles: Record<
  *   description (the `description` prop is ignored in this variant).
  *
  * **Compare mode** — pass `compareValues` to split the value area 50/50 between two
- * metrics, each with its own sub-title. Pair with `delta` to show a change badge next
+ * metrics, each with its own sub-title. Long sub-titles truncate to a single line and
+ * show the full text in a tooltip. Pair with `delta` to show a change badge next
  * to the card title, and `deltaUnit` for a suffix such as `"s"`.
  *
  * @example
@@ -171,16 +173,18 @@ export const DialAnalyticsCard: FC<DialAnalyticsCardProps> = ({
       ) : compareValues ? (
         <div className="flex items-center gap-3">
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <span className="dial-tiny-text text-secondary">
-              {compareValues[0].title}
-            </span>
+            <DialEllipsisTooltip
+              text={compareValues[0].title}
+              className="dial-tiny-text text-secondary"
+            />
             <span className={styles.value}>{compareValues[0].value}</span>
           </div>
           <div className="h-4 w-px flex-shrink-0 bg-controls-disable-accent" />
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <span className="dial-tiny-text text-secondary">
-              {compareValues[1].title}
-            </span>
+            <DialEllipsisTooltip
+              text={compareValues[1].title}
+              className="dial-tiny-text text-secondary"
+            />
             <span className={styles.value}>{compareValues[1].value}</span>
           </div>
         </div>

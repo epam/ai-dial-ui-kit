@@ -85,6 +85,24 @@ export const buildHistogramColumns = (
   return [zeroColumn, ...bandColumns];
 };
 
+/**
+ * Top of the Y-axis for a dataset of `total` values (the "out of N" in the
+ * tooltip). Rounds odd totals up so the midpoint tick is an integer
+ * (Figma: 0, 24, 48). Empty data still gets a 0–2 scale so the axis is visible.
+ */
+export const getHistogramYMax = (total: number): number => {
+  if (total <= 0) return 2;
+  return total % 2 === 0 ? total : total + 1;
+};
+
+/**
+ * Three Y-axis ticks from top to bottom: `yMax`, `yMax / 2`, `0`.
+ */
+export const getHistogramYTicks = (total: number): number[] => {
+  const yMax = getHistogramYMax(total);
+  return [yMax, yMax / 2, 0];
+};
+
 /** Formats a column's interval bound for the axis label (trims float noise). */
 export const formatHistogramInterval = (value: number): string =>
   `${Math.round(value * 100) / 100}`;

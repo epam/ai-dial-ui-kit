@@ -22,13 +22,44 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
   });
 
   test('renders an interval legend under each column', () => {
-    render(<DialAnalyticsHistogram title="Distribution" values={[0.5]} />);
+    const { container } = render(
+      <DialAnalyticsHistogram title="Distribution" values={[0.5]} />,
+    );
+    const xAxis = container.querySelector('[data-histogram-x-axis]');
+    expect(xAxis).not.toBeNull();
     // leading zero bucket, range bands, then the exact full band -> "1"
-    expect(screen.getByText('0')).toBeInTheDocument();
-    expect(screen.getByText('0-0.1')).toBeInTheDocument();
-    expect(screen.getByText('0.1-0.2')).toBeInTheDocument();
-    expect(screen.getByText('0.9-1')).toBeInTheDocument();
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(xAxis).toHaveTextContent('0');
+    expect(xAxis).toHaveTextContent('0-0.1');
+    expect(xAxis).toHaveTextContent('0.1-0.2');
+    expect(xAxis).toHaveTextContent('0.9-1');
+    expect(xAxis).toHaveTextContent('1');
+  });
+
+  test('renders a Y-axis scaled to the dataset total, not the tallest bin', () => {
+    const values = [
+      0.02, 0.05, 0.07, 0.12, 0.18, 0.22, 0.25, 0.28, 0.31, 0.34, 0.41, 0.43,
+      0.44, 0.48, 0.52, 0.55, 0.61, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91, 0.95, 1,
+      1,
+    ];
+    const { container } = render(
+      <DialAnalyticsHistogram title="Distribution" values={values} />,
+    );
+
+    const ticks = [
+      ...(container.querySelectorAll('[data-histogram-y-axis] span') ?? []),
+    ].map((el) => el.textContent);
+    expect(ticks).toEqual(['26', '13', '0']);
+    expect(container.querySelectorAll('[data-histogram-grid]')).toHaveLength(3);
+
+    const populated = screen.getByRole('img', { name: '4 out of 26 values' });
+    expect(populated.style.height).toBe(`${(4 / 26) * 100}%`);
+  });
+
+  test('scales bars to the even Y-axis max when the dataset size is odd', () => {
+    render(<DialAnalyticsHistogram title="Distribution" values={[0, 0, 0]} />);
+
+    const zero = screen.getByRole('img', { name: '3 out of 3 values' });
+    expect(zero.style.height).toBe('75%');
   });
 
   test('renders the zero bucket with #FF4E50 color and a transparent border', () => {
@@ -97,9 +128,11 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
     ).toBeNull();
     expect(screen.getAllByRole('img')).toHaveLength(1);
     // they still occupy a slot rendered as an aria-hidden spacer
-    expect(container.querySelectorAll('[aria-hidden="true"]').length).toBe(
-      DEFAULT_ANALYTICS_BAR_COLOR_MAP.length,
-    );
+    expect(
+      container.querySelectorAll(
+        '[aria-hidden="true"]:not([data-histogram-y-axis])',
+      ).length,
+    ).toBe(DEFAULT_ANALYTICS_BAR_COLOR_MAP.length);
   });
 
   test('exposes the share of the total as the column label/tooltip', () => {
@@ -220,7 +253,7 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
 
   describe('loading state', () => {
     test('renders a loader instead of the columns', () => {
-      render(
+      const { container } = render(
         <DialAnalyticsHistogram
           title="Distribution"
           values={[0.5]}
@@ -231,6 +264,7 @@ describe('Dial UI Kit :: DialAnalyticsHistogram', () => {
       expect(screen.getByRole('status')).toBeInTheDocument();
       expect(screen.queryByRole('img', { name: /out of/ })).toBeNull();
       expect(screen.getByText('Distribution')).toBeInTheDocument();
+      expect(container.querySelector('[data-histogram-y-axis]')).toBeNull();
     });
   });
 });
