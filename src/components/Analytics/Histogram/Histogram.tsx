@@ -6,7 +6,12 @@ import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 import type { AnalyticsHistogramColumn } from './utils';
-import { buildHistogramColumns, formatHistogramColumnLabel } from './utils';
+import {
+  buildHistogramColumns,
+  formatHistogramColumnLabel,
+  getHistogramYMax,
+  getHistogramYTicks,
+} from './utils';
 
 const HISTOGRAM_HEIGHT_PX = 128;
 
@@ -59,10 +64,12 @@ const buildCompareTooltip = (
 
 /**
  * A histogram that distributes `values` across the bands of a color map and draws a
- * column per band. Each column's height is relative to the most populated band; empty
- * columns are outlined, populated columns are filled with their band color. A baseline
- * separates the columns from the interval labels, and hovering a column reveals a
- * tooltip with its share of the total.
+ * column per band. Each column's height is relative to the Y-axis max (an even
+ * ceiling of the dataset size — the "out of N" in the tooltip). Empty columns
+ * are outlined, populated columns are filled with their band color. A left
+ * Y-axis (count) and horizontal grid lines provide scale; interval labels run
+ * along the bottom. Hovering a column reveals a tooltip with its share of the
+ * total.
  * aliases: Distribution|ColumnChart|FrequencyChart
  * Design system 1.0
  *
@@ -103,30 +110,24 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
     ? buildHistogramColumns(compareValues, colorMap)
     : undefined;
 
-  const globalMax = rawCompareColumns
-    ? Math.max(
-        0,
-        ...[...rawPrimaryColumns, ...rawCompareColumns].map((c) => c.count),
-      )
-    : undefined;
-
-  const normalize = (
-    cols: AnalyticsHistogramColumn[],
-  ): AnalyticsHistogramColumn[] =>
-    globalMax !== undefined
-      ? cols.map((col) => ({
-          ...col,
-          ratio: globalMax > 0 ? col.count / globalMax : 0,
-        }))
-      : cols;
-
-  const columns = normalize(rawPrimaryColumns);
-  const compareColumns = rawCompareColumns
-    ? normalize(rawCompareColumns)
-    : undefined;
-
   const total = values.length;
   const compareTotal = compareValues?.length ?? 0;
+  const scaleTotal = Math.max(total, compareTotal);
+  const yMax = getHistogramYMax(scaleTotal);
+  const yTicks = getHistogramYTicks(scaleTotal);
+
+  const scaleToYMax = (
+    cols: AnalyticsHistogramColumn[],
+  ): AnalyticsHistogramColumn[] =>
+    cols.map((col) => ({
+      ...col,
+      ratio: yMax > 0 ? col.count / yMax : 0,
+    }));
+
+  const columns = scaleToYMax(rawPrimaryColumns);
+  const compareColumns = rawCompareColumns
+    ? scaleToYMax(rawCompareColumns)
+    : undefined;
 
   const renderBar = (
     column: AnalyticsHistogramColumn,
@@ -186,94 +187,125 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
           <DialLoader fullWidth={false} />
         </div>
       ) : (
-        <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-2 gap-y-1">
           <div
-            className="flex items-end gap-1 border-b border-primary"
+            data-histogram-y-axis
+            aria-hidden="true"
+            className="relative"
             style={{ height: HISTOGRAM_HEIGHT_PX }}
           >
-            {compareColumns
-              ? columns.map((column, index) => {
-                  const compareCol = compareColumns[index];
-                  const primaryLabel = `${column.count} out of ${total} ${valueTitle}`;
-                  const compareLabel = `${compareCol.count} out of ${compareTotal} ${valueTitle}`;
-                  return (
-                    <div key={index} className="flex h-full flex-1 items-end">
-                      {renderBar(
-                        column,
-                        buildCompareTooltip(
-                          valueSetLabel,
-                          column.count,
-                          total,
-                          valueTitle,
-                          column,
-                        ),
-                        primaryLabel,
-                        true,
-                      )}
-                      {renderBar(
-                        compareCol,
-                        buildCompareTooltip(
-                          compareValueSetLabel,
-                          compareCol.count,
-                          compareTotal,
-                          valueTitle,
-                          compareCol,
-                        ),
-                        compareLabel,
-                        false,
-                      )}
-                    </div>
-                  );
-                })
-              : columns.map((column, index) => {
-                  const label = `${column.count} out of ${total} ${valueTitle}`;
-
-                  if (column.count === 0) {
-                    return (
-                      <div
-                        key={index}
-                        className="flex h-full flex-1 items-end"
-                        aria-hidden="true"
-                      >
-                        <div
-                          className="min-h-2 w-full rounded-sm"
-                          style={{ height: `${column.ratio * 100}%` }}
-                        />
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <DialTooltip
-                      key={index}
-                      placement="bottom"
-                      tooltip={label}
-                      triggerClassName="flex h-full flex-1 items-end"
-                    >
-                      <div
-                        role="img"
-                        aria-label={label}
-                        className={mergeClasses(
-                          'flex min-h-2 w-full items-center justify-center rounded-sm border',
-                          'border-transparent',
-                        )}
-                        style={{
-                          height: `${column.ratio * 100}%`,
-                          backgroundColor: column.color,
-                        }}
-                      >
-                        {showCount && column.count > 0 && (
-                          <span className="dial-tiny-semi-text text-primary">
-                            {column.count}
-                          </span>
-                        )}
-                      </div>
-                    </DialTooltip>
-                  );
-                })}
+            {yTicks.map((tick, index) => (
+              <span
+                key={tick}
+                className="dial-tiny-text absolute right-0 whitespace-nowrap text-secondary"
+                style={{
+                  top: `${(index / (yTicks.length - 1)) * 100}%`,
+                  transform: 'translateY(-50%)',
+                }}
+              >
+                {tick}
+              </span>
+            ))}
           </div>
 
-          <div className="flex gap-1">
+          <div className="relative min-w-0">
+            {yTicks.map((tick, index) => (
+              <div
+                key={tick}
+                data-histogram-grid
+                className="pointer-events-none absolute inset-x-0 border-t border-primary"
+                style={{ top: `${(index / (yTicks.length - 1)) * 100}%` }}
+              />
+            ))}
+            <div
+              className="relative flex items-end gap-1"
+              style={{ height: HISTOGRAM_HEIGHT_PX }}
+            >
+              {compareColumns
+                ? columns.map((column, index) => {
+                    const compareCol = compareColumns[index];
+                    const primaryLabel = `${column.count} out of ${total} ${valueTitle}`;
+                    const compareLabel = `${compareCol.count} out of ${compareTotal} ${valueTitle}`;
+                    return (
+                      <div key={index} className="flex h-full flex-1 items-end">
+                        {renderBar(
+                          column,
+                          buildCompareTooltip(
+                            valueSetLabel,
+                            column.count,
+                            total,
+                            valueTitle,
+                            column,
+                          ),
+                          primaryLabel,
+                          true,
+                        )}
+                        {renderBar(
+                          compareCol,
+                          buildCompareTooltip(
+                            compareValueSetLabel,
+                            compareCol.count,
+                            compareTotal,
+                            valueTitle,
+                            compareCol,
+                          ),
+                          compareLabel,
+                          false,
+                        )}
+                      </div>
+                    );
+                  })
+                : columns.map((column, index) => {
+                    const label = `${column.count} out of ${total} ${valueTitle}`;
+
+                    if (column.count === 0) {
+                      return (
+                        <div
+                          key={index}
+                          className="flex h-full flex-1 items-end"
+                          aria-hidden="true"
+                        >
+                          <div
+                            className="min-h-2 w-full rounded-sm"
+                            style={{ height: `${column.ratio * 100}%` }}
+                          />
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <DialTooltip
+                        key={index}
+                        placement="bottom"
+                        tooltip={label}
+                        triggerClassName="flex h-full flex-1 items-end"
+                      >
+                        <div
+                          role="img"
+                          aria-label={label}
+                          className={mergeClasses(
+                            'flex min-h-2 w-full items-center justify-center rounded-sm border',
+                            'border-transparent',
+                          )}
+                          style={{
+                            height: `${column.ratio * 100}%`,
+                            backgroundColor: column.color,
+                          }}
+                        >
+                          {showCount && column.count > 0 && (
+                            <span className="dial-tiny-semi-text text-primary">
+                              {column.count}
+                            </span>
+                          )}
+                        </div>
+                      </DialTooltip>
+                    );
+                  })}
+            </div>
+          </div>
+
+          <div />
+          <div data-histogram-x-axis className="flex gap-1">
             {columns.map((column, index) => (
               <span
                 key={index}

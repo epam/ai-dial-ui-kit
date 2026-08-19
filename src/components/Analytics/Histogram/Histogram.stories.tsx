@@ -20,7 +20,7 @@ const meta: Meta<typeof DialAnalyticsHistogram> = {
     docs: {
       description: {
         component:
-          'A histogram that distributes values across the bands of a color map and draws one column per band. Column heights are relative to the most populated band; empty columns are outlined, populated ones are filled with their band color. Hovering a column reveals its share of the total.',
+          'A histogram that distributes values across the bands of a color map and draws one column per band. Column heights are relative to the Y-axis max (an even ceiling of the dataset size). A left Y-axis shows count ticks with horizontal grid lines; hovering a column reveals its share of the total.',
       },
     },
   },

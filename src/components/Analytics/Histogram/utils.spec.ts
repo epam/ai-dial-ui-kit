@@ -4,6 +4,8 @@ import {
   formatHistogramColumnLabel,
   formatHistogramInterval,
   getHistogramColumnIndex,
+  getHistogramYMax,
+  getHistogramYTicks,
 } from './utils';
 import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/Analytics/Bar/utils';
 
@@ -73,6 +75,29 @@ describe('Dial UI Kit :: DialAnalyticsHistogram utils', () => {
     test('carries band color and bounds', () => {
       const columns = buildHistogramColumns([0.05], map);
       expect(columns[1]).toMatchObject({ from: 0, to: 0.1, color: '#F26B5B' });
+    });
+  });
+
+  describe('getHistogramYMax', () => {
+    test('uses an even ceiling so the midpoint tick is an integer', () => {
+      expect(getHistogramYMax(48)).toBe(48);
+      expect(getHistogramYMax(26)).toBe(26);
+      expect(getHistogramYMax(4)).toBe(4);
+      expect(getHistogramYMax(3)).toBe(4);
+      expect(getHistogramYMax(1)).toBe(2);
+    });
+
+    test('keeps a 0–2 scale when there is no data', () => {
+      expect(getHistogramYMax(0)).toBe(2);
+    });
+  });
+
+  describe('getHistogramYTicks', () => {
+    test('returns top, middle, and baseline ticks', () => {
+      expect(getHistogramYTicks(48)).toEqual([48, 24, 0]);
+      expect(getHistogramYTicks(26)).toEqual([26, 13, 0]);
+      expect(getHistogramYTicks(4)).toEqual([4, 2, 0]);
+      expect(getHistogramYTicks(0)).toEqual([2, 1, 0]);
     });
   });
 
