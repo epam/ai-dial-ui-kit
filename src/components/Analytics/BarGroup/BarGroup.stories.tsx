@@ -159,6 +159,17 @@ export const CompareDefault: Story = {
   },
 };
 
+export const CompareClickable: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
+    compareLabels: ['Last week', 'This week'],
+    onBarClick: (key, value) => alert(`${key}: ${value}`),
+    className: 'w-[420px]',
+  },
+};
+
 /** Admin compare repro: baseline 0.917 vs compared 1.00 — badge should be +0.083. */
 export const CompareScoreIncrease: Story = {
   args: {
@@ -219,6 +230,22 @@ export const CompareInlineWithMissingValues: Story = {
     compareLabels: ['Last week', 'This week'],
     inline: true,
     className: 'w-[420px]',
+  },
+};
+
+export const CompareWithBarDescriptions: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
+    compareLabels: ['Last week', 'This week'],
+    barDescriptions: {
+      accuracy: 'Proportion of correct predictions out of all predictions',
+      recall: 'Proportion of actual positives correctly identified',
+      precision:
+        'Proportion of positive predictions that are actually positive',
+      f1: 'Harmonic mean of precision and recall',
+    },
   },
 };
 

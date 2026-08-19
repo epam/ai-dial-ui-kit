@@ -24,8 +24,7 @@ export interface DialAnalyticsBarGroupProps {
    * `compareData`. Each entry renders two bars and, when both sides are numeric,
    * a delta badge (`compareData[key] - data[key]`, three decimal places). A
    * missing key (or explicit `null`) on either side shows an em dash with no
-   * progress bar and no delta. A rounded delta of `0` is omitted. `onBarClick`
-   * is ignored in compare mode.
+   * progress bar and no delta. A rounded delta of `0` is omitted.
    */
   compareData?: Record<string, number | null>;
   /**
@@ -47,7 +46,11 @@ export interface DialAnalyticsBarGroupProps {
   nonCollapsible?: boolean;
   /** Renders a loader in place of the bars while the data is being fetched. */
   isLoading?: boolean;
-  /** Invoked with the entry key and value when a bar is clicked. When set, each bar becomes an interactive button. */
+  /**
+   * Invoked with the entry key and value when a bar is clicked. When set, each
+   * bar becomes an interactive button. In compare mode the whole entry (label,
+   * delta, both bars) is the click target.
+   */
   onBarClick?: (key: string, value: number | null) => void;
   /** Renders every bar on a single row (50% title, 50% bar + value). */
   inline?: boolean;
@@ -57,10 +60,7 @@ export interface DialAnalyticsBarGroupProps {
   barValueClassName?: string;
   /** Additional CSS classes for each bar's outer container (e.g. for custom hover effects). */
   barClassName?: string;
-  /**
-   * Map of bar key to tooltip content. When provided, hovering each bar shows its description.
-   * Not applied in compare mode.
-   */
+  /** Map of bar key to tooltip content. When provided, hovering each bar shows its description. */
   barDescriptions?: Record<string, ReactNode>;
   /** Additional CSS classes for the accordion container. */
   className?: string;
@@ -93,12 +93,12 @@ export interface DialAnalyticsBarGroupProps {
  * @param [defaultExpanded=true] - Whether the accordion is expanded initially.
  * @param [nonCollapsible] - Renders the group permanently expanded without a toggle or chevron.
  * @param [isLoading] - Renders a loader in place of the bars while the data is being fetched.
- * @param [onBarClick] - Invoked with the entry key and value when a bar is clicked.
+ * @param [onBarClick] - Invoked with the entry key and value when a bar (or, in compare mode, the whole entry) is clicked.
  * @param [inline] - Renders every bar on a single row (50% title, 50% bar + value).
  * @param [barTitleClassName] - Additional CSS classes for each bar's title label.
  * @param [barValueClassName] - Additional CSS classes for each bar's value label.
  * @param [barClassName] - Additional CSS classes for each bar's outer container.
- * @param [barDescriptions] - Map of bar key to tooltip content. Hovering each bar shows its description. Not applied in compare mode.
+ * @param [barDescriptions] - Map of bar key to tooltip content. Hovering each bar shows its description.
  * @param [className] - Additional CSS classes for the accordion container.
  */
 export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
@@ -136,6 +136,8 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
   const compareKeys = compareData
     ? [...new Set([...Object.keys(data), ...Object.keys(compareData)])]
     : [];
+  const barClickClassName =
+    'cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary';
 
   return (
     <DialAccordion
@@ -169,10 +171,22 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
               : isPositive
                 ? `+${delta}`
                 : String(delta);
-            return (
-              <div key={key} className="flex flex-col gap-1.5">
+
+            const barDescription = barDescriptions?.[key];
+            const barLabel = (
+              <span className="dial-small-text text-secondary">{key}</span>
+            );
+
+            const entryContent = (
+              <>
                 <div className="flex items-center gap-2">
-                  <span className="dial-small-text text-primary">{key}</span>
+                  {barDescription ? (
+                    <DialTooltip tooltip={barDescription}>
+                      {barLabel}
+                    </DialTooltip>
+                  ) : (
+                    barLabel
+                  )}
                   {deltaLabel != null && (
                     <span
                       className={mergeClasses(
@@ -208,6 +222,28 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                     ariaLabel={`${key} compare`}
                   />
                 </div>
+              </>
+            );
+
+            if (onBarClick) {
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => onBarClick(key, value)}
+                  className={mergeClasses(
+                    'flex flex-col gap-1.5',
+                    barClickClassName,
+                  )}
+                >
+                  {entryContent}
+                </button>
+              );
+            }
+
+            return (
+              <div key={key} className="flex flex-col gap-1.5">
+                {entryContent}
               </div>
             );
           })
@@ -230,7 +266,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
               <button
                 type="button"
                 onClick={() => onBarClick(key, value)}
-                className="cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+                className={barClickClassName}
               >
                 {bar}
               </button>
