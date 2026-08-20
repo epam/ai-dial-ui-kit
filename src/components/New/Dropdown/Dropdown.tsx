@@ -497,6 +497,7 @@ export const Dropdown: FC<DropdownProps> = ({
               className={mergeClasses(
                 dropdownListBaseClassName,
                 !matchReferenceWidth && 'w-max',
+                'overflow-auto',
                 listClassName,
               )}
               {...getFloatingProps()}

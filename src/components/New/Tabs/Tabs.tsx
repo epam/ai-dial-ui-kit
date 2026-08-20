@@ -157,9 +157,9 @@ export const Tabs: FC<TabsProps> = ({
               'dial-small-paragraph-semi-text dial-kit-enhanced-target',
               'border-b-2 border-transparent flex items-center gap-2 px-3 py-2 text-start',
               'transition-colors motion-reduce:transition-none',
-              'focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus-black',
+              'focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus',
               isDisabled &&
-                'cursor-not-allowed border-control-disable-alpha text-control-disable-alpha',
+                'cursor-not-allowed border-control-disable-alpha text-control-disable-primary',
               !isDisabled &&
                 (isActive
                   ? 'dial-kit-tab-selected-underline text-primary'
@@ -172,7 +172,7 @@ export const Tabs: FC<TabsProps> = ({
               <span
                 className={mergeClasses(
                   'dial-tiny-semi-text rounded-full px-1.5 py-0.5',
-                  isDisabled && 'bg-layer-sunken text-control-disable-alpha',
+                  isDisabled && 'bg-layer-sunken text-control-disable-primary',
                   !isDisabled &&
                     (isActive
                       ? 'bg-info text-accent'

@@ -90,9 +90,11 @@ export const Switch: FC<SwitchProps> = ({
           htmlFor={switchId}
           className={mergeClasses(
             'flex h-[18px] w-[36px] shrink-0 items-center rounded-full p-0.5 transition-colors duration-200',
-            'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus-black',
+            'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus',
             isOn ? 'justify-end' : 'justify-start',
-            isOn && !disabled ? 'bg-control-accent' : 'bg-control-disable',
+            isOn && !disabled
+              ? 'bg-control-accent'
+              : 'bg-control-disable-primary',
             disabled ? 'cursor-not-allowed' : 'cursor-pointer',
           )}
         >

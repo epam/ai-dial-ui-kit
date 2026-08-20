@@ -216,7 +216,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
         className={mergeClasses(
           'flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-6 py-10 text-center',
           'transition-colors motion-reduce:transition-none',
-          'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus-black',
+          'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus',
           disabled
             ? 'cursor-not-allowed border-secondary bg-layer-sunken'
             : 'cursor-pointer bg-layer-base',
@@ -233,7 +233,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
             size={DIAL_ICON_SIZE.LG}
             aria-hidden="true"
             className={
-              disabled ? 'text-control-disable-alpha' : 'text-secondary'
+              disabled ? 'text-control-disable-primary' : 'text-secondary'
             }
           />
         )}
@@ -241,7 +241,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
           <span
             className={mergeClasses(
               'dial-small-text',
-              disabled ? 'text-control-disable-alpha' : 'text-primary',
+              disabled ? 'text-control-disable-primary' : 'text-primary',
             )}
           >
             {label}
@@ -250,7 +250,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
             <span
               className={mergeClasses(
                 'dial-tiny-text',
-                disabled ? 'text-control-disable-alpha' : 'text-secondary',
+                disabled ? 'text-control-disable-primary' : 'text-secondary',
               )}
             >
               {description}

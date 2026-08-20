@@ -1,6 +1,6 @@
 @media (hover: hover) {
   .dial-base-button:focus-visible {
-    @apply border-focus-black;
+    @apply border-focus;
   }
 }
 
@@ -10,7 +10,7 @@
   @apply flex flex-row items-center justify-center;
   @apply rounded-full border border-solid border-transparent;
   @apply disabled:cursor-not-allowed outline-offset-0;
-  @apply focus-visible:outline focus-visible:outline-focus-black;
+  @apply focus-visible:outline focus-visible:outline-focus;
 }
 
 /*
@@ -27,7 +27,7 @@
 }
 
 .dial-kit-solid-button-disable {
-  @apply text-control-disable-alpha bg-none bg-control-disable border-transparent;
+  @apply text-control-disable-primary bg-none bg-control-disable-primary border-transparent;
 }
 
 /*
@@ -119,7 +119,7 @@
 
   @media (hover: hover) {
     &:hover {
-      @apply bg-control-neutral-hover;
+      @apply bg-control-neutral-hover-muted;
     }
   }
 
@@ -135,7 +135,7 @@
 
   @media (hover: hover) {
     &:hover {
-      @apply bg-control-neutral-hover;
+      @apply bg-control-neutral-hover-muted;
     }
   }
 
@@ -182,7 +182,7 @@
     }
 
     &:disabled {
-      @apply !text-control-disable-alpha;
+      @apply !text-control-disable-primary;
     }
   }
 
@@ -212,14 +212,14 @@
 
   &.dial-kit-base-icon-button {
     &:disabled {
-      @apply !text-control-disable-alpha;
+      @apply !text-control-disable-primary;
     }
   }
 }
 
 .dial-kit-primary-ghost-button:disabled,
 .dial-kit-danger-ghost-button:disabled {
-  @apply text-control-disable-alpha bg-transparent;
+  @apply text-control-disable-primary bg-transparent;
 }
 
 /* Link buttons */
@@ -229,18 +229,18 @@
 
   @media (hover: hover) {
     &:hover {
-      @apply text-control-blue-hover;
+      @apply text-control-accent-hover;
     }
   }
 
   &:active {
-    @apply text-control-blue-active;
+    @apply text-control-accent-active;
   }
 
   /* Must stay last: same specificity as the hover/active rules above. */
   &:disabled,
   &[aria-disabled='true'] {
-    @apply text-control-disable-alpha;
+    @apply text-control-disable-primary;
   }
 }
 
@@ -250,7 +250,7 @@
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      @apply bg-control-neutral-hover;
+      @apply bg-control-neutral-hover-muted;
     }
   }
 
@@ -259,7 +259,7 @@
   }
 
   &:focus-visible {
-    @apply outline outline-focus-black outline-offset-0;
+    @apply outline outline-focus outline-offset-0;
   }
 }
 

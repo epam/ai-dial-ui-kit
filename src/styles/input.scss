@@ -1,5 +1,5 @@
 .dial-kit-input {
-  @apply border border-tertiary rounded-lg h-[40px];
+  @apply border border-secondary rounded-lg h-[40px];
   @apply bg-layer-raised truncate dial-small-paragraph-text;
   @apply w-full;
 
@@ -9,7 +9,7 @@
 
   &:focus-within,
   &:active:not(:has(> input:disabled)) {
-    @apply outline outline-focus-blue outline-offset-0;
+    @apply outline outline-accent-focus outline-offset-0;
   }
 
   &:not(:placeholder-shown) {
@@ -56,7 +56,7 @@
 
 .dial-kit-input-disable,
 .dial-kit-input-disable:not(:placeholder-shown) {
-  @apply cursor-not-allowed bg-layer-sunken text-control-disable-alpha;
+  @apply cursor-not-allowed bg-layer-sunken text-control-disable-primary;
 }
 
 .dial-kit-input-error {
@@ -75,7 +75,7 @@
   &:not(:disabled):focus,
   &:not(:disabled):active,
   &:not(:disabled):focus-within {
-    @apply border-focus-black;
+    @apply border-focus;
   }
 
   &:not(:placeholder-shown) {

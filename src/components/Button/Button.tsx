@@ -97,7 +97,7 @@ export const DialButton: FC<DialButtonProps> = ({
     size !== ElementSize.Small &&
       appearance !== ButtonAppearance.Link &&
       'dial-kit-enhanced-target',
-    'disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus-black outline-offset-0',
+    'disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0',
     className,
   );
 

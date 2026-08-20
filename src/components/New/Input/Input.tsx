@@ -261,7 +261,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
         aria-label="input-container"
       >
         {prefix && (
-          <div className="border-r border-tertiary">
+          <div className="border-r border-secondary">
             <InputWrapper
               wrapperClassName="!rounded-r-none"
               className="truncate"

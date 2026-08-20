@@ -6,7 +6,7 @@
 
 .dial-kit-markdown-editor {
   .w-md-editor {
-    @apply gap-3 rounded-lg border px-4 py-3 border-tertiary !bg-layer-raised;
+    @apply gap-3 rounded-lg border px-4 py-3 border-secondary !bg-layer-raised;
 
     box-shadow: none !important;
     --md-editor-font-family:
@@ -61,7 +61,7 @@
        stays exact. */
     @apply m-0 rounded-full border border-solid border-transparent;
     @apply disabled:cursor-not-allowed outline-offset-0;
-    @apply focus-visible:outline focus-visible:outline-focus-black;
+    @apply focus-visible:outline focus-visible:outline-focus;
   }
 
   .w-md-editor-toolbar li > button > svg {
@@ -87,7 +87,7 @@
   .w-md-editor-toolbar li > button:disabled,
   .w-md-editor-toolbar li > button:disabled:hover {
     @apply cursor-not-allowed bg-transparent;
-    @apply !text-control-disable-alpha;
+    @apply !text-control-disable-primary;
   }
 
   .w-md-editor-toolbar-divider {

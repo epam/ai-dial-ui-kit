@@ -29,13 +29,13 @@ export const overlayItemClassName = mergeClasses(
   'flex w-full cursor-pointer items-center gap-2 px-3 h-[40px] rounded-lg',
   'dial-small-text text-primary truncate',
   'hover:bg-control-accent-alpha-hover',
-  'focus-visible:outline focus-visible:outline-focus-black',
+  'focus-visible:outline focus-visible:outline-focus',
 );
 
 /** Tint marking the row that is currently selected. */
 export const overlayItemSelectedClassName = 'bg-control-accent-alpha-hover';
 
-export const overlayItemDisabledClassName = 'opacity-75';
+export const overlayItemDisabledClassName = 'text-secondary';
 
 /** Distance between the trigger and its panel, and between nested panels. */
 export const overlayGap = 4;

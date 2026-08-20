@@ -122,7 +122,7 @@ describe('Dial UI Kit :: Tabs', () => {
       const disabled = screen.getByRole('tab', { name: 'Shared' });
 
       expect(disabled).toBeDisabled();
-      expect(disabled).toHaveClass('text-control-disable-alpha');
+      expect(disabled).toHaveClass('text-control-disable-primary');
       expect(disabled).toHaveClass('border-control-disable-alpha');
     });
 

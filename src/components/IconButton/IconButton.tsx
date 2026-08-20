@@ -77,7 +77,7 @@ export const DialIconButton: FC<DialIconButtonProps> = ({
     size === ElementSize.Small
       ? 'h-[24px] w-[24px]'
       : 'h-[40px] w-[40px] dial-kit-enhanced-target',
-    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus-black outline-offset-0 disabled:text-controls-secondary-disable',
+    'dial-icon-button disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-focus outline-offset-0 disabled:text-controls-secondary-disable',
     className,
   );
 

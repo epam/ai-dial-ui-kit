@@ -94,7 +94,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         hasLabel ? undefined : 'Progress',
       )}
       className={mergeClasses(
-        'w-full overflow-hidden rounded-full bg-control-disable',
+        'w-full overflow-hidden rounded-full bg-control-disable-primary',
         size === ElementSize.Small ? 'h-1' : 'h-2',
         className,
       )}
