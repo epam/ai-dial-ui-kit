@@ -3,6 +3,7 @@ import { NotificationVariant } from '@/types/notification';
 import {
   IconAlertCircleFilled,
   IconAlertTriangleFilled,
+  IconCheck,
   IconCircleCheckFilled,
   IconInfoCircleFilled,
   type ReactNode,
@@ -17,6 +18,7 @@ export const variantIcons = (props: {
   warning: <IconAlertTriangleFilled size={props.size} />,
   success: <IconCircleCheckFilled size={props.size} />,
   loading: <Spinner size={props.size} />,
+  general: <IconCheck size={props.size} stroke={props.stroke} />,
 });
 
 export const notificationVariantClassNameMap: Record<
@@ -28,6 +30,7 @@ export const notificationVariantClassNameMap: Record<
   [NotificationVariant.Warning]: 'bg-warning text-warning',
   [NotificationVariant.Error]: 'bg-error text-error',
   [NotificationVariant.Loading]: 'bg-layer-raised text-info',
+  [NotificationVariant.General]: 'bg-layer-sunken text-primary',
 };
 
 /**
@@ -49,6 +52,7 @@ export const notificationVariantRoleMap: Record<
   [NotificationVariant.Warning]: 'alert',
   [NotificationVariant.Error]: 'alert',
   [NotificationVariant.Loading]: 'status',
+  [NotificationVariant.General]: 'status',
 };
 
 export const alertBaseClassName =

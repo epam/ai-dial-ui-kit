@@ -280,6 +280,8 @@ export type { CardShellProps } from './components/New/CardShell/CardShell';
 export {
   ErrorMessageNotification,
   ErrorToastNotification,
+  GeneralMessageNotification,
+  GeneralToastNotification,
   InfoMessageNotification,
   InfoToastNotification,
   LoadingMessageNotification,

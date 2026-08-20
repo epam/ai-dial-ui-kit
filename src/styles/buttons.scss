@@ -131,7 +131,7 @@
 /* Outlined buttons */
 .dial-kit-neutral-outlined-button {
   @apply dial-kit-base-button text-primary bg-transparent;
-  @apply border-primary;
+  @apply border-default;
 
   @media (hover: hover) {
     &:hover {
@@ -337,7 +337,7 @@
 
 .dial-neutral-outlined-button {
   @apply dial-base-button bg-transparent text-controls-neutral;
-  @apply border-primary;
+  @apply border-default;
 
   @media (hover: hover) {
     &:hover {
@@ -461,7 +461,7 @@
 
 .dial-neutral-rounded-button {
   @apply dial-base-button bg-transparent text-controls-neutral;
-  @apply border-primary rounded-full;
+  @apply border-default rounded-full;
 
   @media (hover: hover) {
     &:hover {

@@ -67,6 +67,11 @@ export const LoadingToastNotification = NotificationVariantCreator(
   NotificationType.Toast,
 );
 
+export const GeneralToastNotification = NotificationVariantCreator(
+  NotificationVariant.General,
+  NotificationType.Toast,
+);
+
 export const ErrorMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Error,
@@ -90,4 +95,9 @@ export const WarningMessageNotification = NotificationTypeCreator(
 export const LoadingMessageNotification = NotificationTypeCreator(
   NotificationType.SectionMessage,
   NotificationVariant.Loading,
+);
+
+export const GeneralMessageNotification = NotificationTypeCreator(
+  NotificationType.SectionMessage,
+  NotificationVariant.General,
 );

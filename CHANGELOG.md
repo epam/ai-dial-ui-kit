@@ -7,7 +7,30 @@ Versions match the git tags on the `development` branch.
 
 ---
 
-## [Unreleased]
+## [0.14.0]
+
+### Breaking Changes
+
+- **Control colour tokens renamed** — the disabled, neutral-hover and accent-hover control tokens were named after their opacity or their literal hue (`-alpha`, `-beta`, `blue`), which said nothing about their role and left no room for a second step in each pair. They are now numbered by role: `control-disable-alpha`/`-beta` → `control-disable-primary`/`-secondary`, `text-control-blue-hover`/`-active` → `text-control-accent-hover`/`-active`, `bg-control-disable` → `bg-control-disable-primary`, and `bg-control-neutral-hover` → `bg-control-neutral-hover-muted` (the new `-strong` step is its darker sibling). The rendered colours are unchanged.
+  See [migration guide](migration-guides/0.14.0/control-color-token-rename.md).
+- **Border token `hover-alpha` removed** — it held the same value as `accent-alpha` (`#2764D933`, blue-500 alpha-20) behind a second variable, so the accent border tint had two names and a theme had to set both to stay consistent. The three hover borders that used it (`Input`, `Tag`, `Calendar`) now use `border-accent-alpha`. Replace `border-hover-alpha` with `border-accent-alpha`; if your theme sets `--stroke-hover-alpha`, move that value to `--stroke-accent-alpha`.
+  See [migration guide](migration-guides/0.14.0/control-color-token-rename.md).
+- **Border tokens `focus-black` → `focus`, `focus-blue` → `accent-focus`** — 0.13.0 renamed `focus` to `focus-black` to name the token after its value; the focus tokens are now named after their role instead, matching `accent` / `accent-alpha` elsewhere in the border scale. `border-focus` / `outline-focus` / `divide-focus` / `stroke-focus` are back to the names they had in 0.12.x, and `focus-blue` becomes `accent-focus`. Both keep their variables (`--stroke-focus-black`, with `--stroke-focus` still in the fallback chain, and `--stroke-focus-blue`) and their colours.
+  See [migration guide](migration-guides/0.14.0/focus-border-token-role-naming.md).
+
+### Changed
+
+- **The accent gradient is themed through `--bg-gradient-*` / `--stroke-gradient-*`** — the gradient stops were addressed by their position in one specific gradient (`--bg-control-accent-gradient-hover-from`), so the same colour had a different variable name in every gradient that used it. Each stop is now a numbered token (`--bg-gradient-1`, `--bg-gradient-2-hover`, `--stroke-gradient-1`, …). The `--bg-control-accent-gradient-*` names stay in the fallback chain; the `--stroke-control-accent-gradient-*` names behind the selected tab's underline do **not**, so a theme that sets those must rename them (see the migration guide).
+- **Renamed control variables keep their old names as fallbacks** — every token renamed in this release resolves through its 0.13.0 variable before reaching the light default (e.g. `var(--text-control-disable-primary, var(--text-control-disable-alpha, #848E9C))`). Only the Tailwind class names are breaking; a host themed by the DIAL themes service needs no theme change to keep its colours.
+
+### Fixed
+
+- **`--stroke-primary` and `--stroke-info` light defaults matched their comments, not their tokens** — `--stroke-primary` fell back to `#6B7280`, Tailwind's own `gray-500`, while every other grey-800 token in the kit is `#57647A`; `--stroke-info` fell back to `#124ACE` where blue-500 is `#1D4ED8`. Both now match the palette. Hosts that define the variables are unaffected.
+- **The selected tab's hover underline ended on a violet no other control used** — the hover gradient's second stop was `#956CFA`, while the button hover gradient ends on `#885DF2`. Both now end on `#885DF2`, so a tab and a primary button lit by the same hover read as the same gradient.
+
+---
+
+## [0.13.0]
 
 ### Breaking Changes
 

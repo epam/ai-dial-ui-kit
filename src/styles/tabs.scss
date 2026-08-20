@@ -6,7 +6,7 @@
  * across that edge.
  *
  * Applied only to the selected, enabled tab: a disabled tab keeps the flat
- * `border-control-disable-alpha` underline. `border-image-source` is not
+ * `border-control-disable-primary` underline. `border-image-source` is not
  * interpolable, so the hover swap is instant rather than transitioned.
  */
 .dial-kit-tab-selected-underline {
@@ -14,15 +14,15 @@
   border-image-slice: 1;
   border-image-source: linear-gradient(
     90deg,
-    var(--stroke-control-accent-gradient-from, #5976e9) 0%,
-    var(--stroke-control-accent-gradient-to, #885df2) 100%
+    var(--stroke-gradient-1, #5976e9) 0%,
+    var(--stroke-gradient-2, #885df2) 100%
   );
 
   &:hover:not(:disabled) {
     border-image-source: linear-gradient(
       90deg,
-      var(--stroke-control-accent-gradient-hover-from, #6785fb) 0%,
-      var(--stroke-control-accent-gradient-hover-to, #956cfa) 100%
+      var(--bg-gradient-1-hover, #6785fb) 0%,
+      var(--bg-gradient-2-hover, #885df2) 100%
     );
   }
 }

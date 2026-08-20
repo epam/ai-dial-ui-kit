@@ -4,7 +4,7 @@
   @apply w-full;
 
   &:not(:disabled):hover {
-    @apply border-hover-alpha;
+    @apply border-accent-alpha;
   }
 
   &:focus-within,

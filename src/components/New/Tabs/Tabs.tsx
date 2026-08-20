@@ -159,7 +159,7 @@ export const Tabs: FC<TabsProps> = ({
               'transition-colors motion-reduce:transition-none',
               'focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus',
               isDisabled &&
-                'cursor-not-allowed border-control-disable-alpha text-control-disable-primary',
+                'cursor-not-allowed border-control-disable-primary text-control-disable-primary',
               !isDisabled &&
                 (isActive
                   ? 'dial-kit-tab-selected-underline text-primary'

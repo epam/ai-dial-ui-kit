@@ -110,7 +110,7 @@ export const Tag: FC<TagProps> = ({
           'focus-visible:outline focus-visible:outline-focus',
           selected
             ? 'hover:bg-control-accent-alpha-hover active:bg-control-accent-alpha-active'
-            : 'hover:border-hover-alpha',
+            : 'hover:border-accent-alpha',
         ],
         className,
       )}
