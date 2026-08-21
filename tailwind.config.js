@@ -212,6 +212,14 @@ export default {
       ...borderColors,
       ...borderColorsToRemove,
     },
+    // SVG fills paint surfaces (a tooltip arrow, a chart area), so the fill scale
+    // follows the background tokens the way `stroke` follows the border ones.
+    fill: {
+      none: 'none',
+      current: 'currentColor',
+      ...backgroundsColors,
+      ...backgroundsColorsToRemove,
+    },
     divideColor: {
       ...borderColors,
       ...borderColorsToRemove,

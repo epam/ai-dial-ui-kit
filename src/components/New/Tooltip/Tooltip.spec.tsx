@@ -121,6 +121,21 @@ describe('Dial UI Kit :: Tooltip', () => {
     );
   });
 
+  test('Should paint the arrow with the tooltip background', () => {
+    render(
+      <Tooltip tooltip="Tooltip text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    // The arrow is an SVG outside the bubble, so it cannot inherit the
+    // background; jsdom does no styling, so the class is all there is to check
+    // here — the compiled rule is verified in dist/index.css.
+    expect(screen.getByRole('tooltip').querySelector('svg')).toHaveClass(
+      'fill-control-inverted',
+    );
+  });
+
   test('Should apply the trigger and content class names', () => {
     render(
       <Tooltip

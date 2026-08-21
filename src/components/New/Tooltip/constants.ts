@@ -17,10 +17,11 @@ export const HOVER_OPEN_DELAY = 500;
 
 /**
  * The arrow is an SVG outside the tooltip box, so it cannot inherit the box's
- * background. There is no design-token `fill-*` utility, so the token is read
- * directly — keep it in sync with `bg-control-inverted` in `tooltipClassName`.
+ * background — keep this in sync with `bg-control-inverted` in
+ * `tooltipClassName`. A CSS fill beats the `fill` presentation attribute
+ * `FloatingArrow` puts on the `<svg>`, and the filled `<path>` inherits it.
  */
-export const ARROW_FILL = 'var(--bg-control-inverted, #57647A)';
+export const arrowClassName = 'fill-control-inverted';
 
 /**
  * Tooltips sit above popups, dropdowns and the calendar (all `z-[53]`), since

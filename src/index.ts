@@ -386,3 +386,5 @@ export type { TooltipContentProps } from './components/New/Tooltip/TooltipConten
 export { TooltipTrigger } from './components/New/Tooltip/TooltipTrigger';
 export type { TooltipContainerOptions } from './components/New/Tooltip/TooltipContext';
 export { TooltipPlacement } from './types/tooltip.ts';
+export { EllipsisTooltip } from './components/New/EllipsisTooltip/EllipsisTooltip';
+export type { EllipsisTooltipProps } from './components/New/EllipsisTooltip/EllipsisTooltip';

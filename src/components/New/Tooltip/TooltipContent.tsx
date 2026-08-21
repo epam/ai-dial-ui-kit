@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
-import { ARROW_FILL, tooltipClassName } from './constants';
+import { arrowClassName, tooltipClassName } from './constants';
 import { useTooltipContext } from './TooltipContext';
 
 export interface TooltipContentProps extends HTMLProps<HTMLDivElement> {
@@ -60,7 +60,7 @@ export const TooltipContent: FC<TooltipContentProps> = ({
         <FloatingArrow
           ref={context.arrowRef}
           context={context.context}
-          fill={ARROW_FILL}
+          className={arrowClassName}
         />
       </div>
     </FloatingPortal>
