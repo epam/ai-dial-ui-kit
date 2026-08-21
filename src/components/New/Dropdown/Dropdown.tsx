@@ -14,7 +14,11 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import type { Placement, ReferenceElement } from '@floating-ui/react';
+import type {
+  OpenChangeReason,
+  Placement,
+  ReferenceElement,
+} from '@floating-ui/react';
 import {
   useCallback,
   useEffect,
@@ -23,6 +27,7 @@ import {
   useRef,
   useState,
   type FC,
+  type KeyboardEvent,
   type MouseEvent,
   type ReactNode,
   type RefObject,
@@ -72,6 +77,37 @@ export interface DropdownProps {
   matchReferenceWidth?: boolean;
   maxDropdownHeight?: number | null;
 }
+
+/**
+ * Options the overlay's arrow keys walk through. Both roles are arrow-navigated
+ * per ARIA: `menuitem` covers this component's own item list, `option` covers a
+ * listbox rendered through `renderOverlay` (`Select` builds on this component).
+ */
+const OVERLAY_OPTION_SELECTOR = '[role="menuitem"], [role="option"]';
+
+const isEnabledOption = (el: HTMLElement): boolean =>
+  !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true';
+
+/** Keys that move focus between overlay options. */
+const OVERLAY_NAV_KEYS = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+
+/**
+ * Index the given key moves to. Arrow keys wrap around, and starting from
+ * outside the option list (`currentIndex` of -1, e.g. focus still on a search
+ * field) enters it from the end the key points at.
+ */
+const nextOptionIndex = (
+  key: string,
+  currentIndex: number,
+  length: number,
+): number => {
+  if (key === 'Home') return 0;
+  if (key === 'End') return length - 1;
+
+  const step = key === 'ArrowDown' ? 1 : -1;
+  if (currentIndex === -1) return step === 1 ? 0 : length - 1;
+  return (currentIndex + step + length) % length;
+};
 
 const getRefWidth = (el: ReferenceElement): number => {
   if ('clientWidth' in el) return (el as Element).clientWidth;
@@ -165,8 +201,20 @@ export const Dropdown: FC<DropdownProps> = ({
   const isOpen = isControlled ? !!open : uncontrolledOpen;
   const pointedElementRef = useRef<Element | null>(null);
 
+  /*
+   * A hover-opened menu must not pull focus: the pointer is elsewhere and the
+   * user may well be typing. Every other way in — a click, Enter/Space on the
+   * trigger, the context menu, a controlled `open` flip — is deliberate, so the
+   * overlay claims focus and a keyboard user lands on its first control instead
+   * of being left on a trigger whose menu they cannot reach.
+   */
+  const [shouldFocusOverlay, setShouldFocusOverlay] = useState(true);
+
   const setOpen = useCallback(
-    (next: boolean) => {
+    (next: boolean, _event?: Event, reason?: OpenChangeReason) => {
+      if (next) {
+        setShouldFocusOverlay(reason !== 'hover' && reason !== 'safe-polygon');
+      }
       if (!isControlled) setUncontrolledOpen(next);
       onOpenChange?.(next);
     },
@@ -312,6 +360,38 @@ export const Dropdown: FC<DropdownProps> = ({
   useEffect(() => {
     if (disabled && isOpen) setOpen(false);
   }, [disabled, isOpen, setOpen]);
+
+  /*
+   * Arrow-key movement between the overlay's options, with Home/End for the
+   * ends. A `menu` is expected to be arrow-navigated, and neither the item list
+   * below nor a `renderOverlay` listbox wires that up on its own — Tab alone
+   * leaves the overlay after the last option instead of cycling.
+   *
+   * Bails out on an already-handled key so an overlay that navigates itself
+   * (its handler runs first, in the capture phase, and calls `preventDefault`)
+   * is not moved a second time.
+   */
+  const handleFloatingKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.defaultPrevented) return;
+      if (!OVERLAY_NAV_KEYS.includes(event.key)) return;
+
+      const options = Array.from(
+        event.currentTarget.querySelectorAll<HTMLElement>(
+          OVERLAY_OPTION_SELECTOR,
+        ),
+      ).filter(isEnabledOption);
+      if (options.length === 0) return;
+
+      event.preventDefault();
+      const focused = event.currentTarget.ownerDocument.activeElement;
+      const currentIndex = options.findIndex((el) => el === focused);
+      options[
+        nextOptionIndex(event.key, currentIndex, options.length)
+      ]?.focus();
+    },
+    [],
+  );
 
   const handleItemClick = useCallback(
     (item: DropdownItem) => (e: MouseEvent) => {
@@ -487,7 +567,10 @@ export const Dropdown: FC<DropdownProps> = ({
           <FloatingFocusManager
             context={context}
             modal={false}
-            initialFocus={-1}
+            /* 0 puts focus on the overlay's first control, falling back to the
+               overlay itself when it holds none; -1 leaves focus where it is,
+               which is only right for a menu the pointer opened on hover. */
+            initialFocus={shouldFocusOverlay ? 0 : -1}
             returnFocus
           >
             <div
@@ -499,7 +582,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 !matchReferenceWidth && 'w-max',
                 listClassName,
               )}
-              {...getFloatingProps()}
+              {...getFloatingProps({ onKeyDown: handleFloatingKeyDown })}
             >
               {closable && (
                 <div className="flex items-center justify-between px-2 pt-2">

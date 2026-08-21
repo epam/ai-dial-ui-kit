@@ -1022,3 +1022,127 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(onChildClick).toHaveBeenCalled();
   });
 });
+
+describe('Dial UI Kit :: Dropdown — overlay keyboard focus', () => {
+  test('moves focus to the first item when opened by click', async () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    await waitFor(() => {
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+    });
+  });
+
+  test('moves focus to the first control of a custom overlay', async () => {
+    render(
+      <Dropdown
+        renderOverlay={() => (
+          <div>
+            <span>Not focusable</span>
+            <button type="button">Copy link</button>
+          </div>
+        )}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Copy link' })).toHaveFocus();
+    });
+  });
+
+  test('leaves focus alone when the menu is opened by hover', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Dropdown trigger={[DropdownTrigger.Hover]} items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    await user.hover(container.querySelector('[aria-haspopup="menu"]')!);
+    expect(await screen.findByRole('menu')).toBeInTheDocument();
+
+    expect(screen.getByRole('menuitem', { name: 'Profile' })).not.toHaveFocus();
+  });
+
+  test('walks the items with the arrow keys, wrapping at both ends', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    await waitFor(() => {
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+    });
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveFocus();
+
+    /* Past the divider, which is not an option and must not take a turn. */
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Error' })).toHaveFocus();
+
+    await user.keyboard('{ArrowUp}');
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveFocus();
+
+    await user.keyboard('{ArrowUp}{ArrowUp}');
+    expect(screen.getByRole('menuitem', { name: 'Logout' })).toHaveFocus();
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+  });
+
+  test('jumps to the last and first item with End and Home', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    await waitFor(() => {
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+    });
+
+    await user.keyboard('{End}');
+    expect(screen.getByRole('menuitem', { name: 'Logout' })).toHaveFocus();
+
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+  });
+
+  test('skips a disabled item while navigating', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        items={[
+          { key: 'a', label: 'A' },
+          { key: 'b', label: 'B', disabled: true },
+          { key: 'c', label: 'C' },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    await waitFor(() => {
+      expect(screen.getByRole('menuitem', { name: 'A' })).toHaveFocus();
+    });
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'C' })).toHaveFocus();
+  });
+});
