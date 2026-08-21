@@ -239,11 +239,13 @@ export default {
         'spin-steps': 'spin 0.75s steps(8, end) infinite',
       },
       boxShadow: {
-        DEFAULT: '0 0 4px 0 var(--shadow-default, rgba(0, 0, 0, 0.30))',
-        xs: '0 1px 4px 0 var(--shadow-grey-1000, #161B2D08), 0 1px 2px 0 var(--shadow-blue-500, #2764D924)',
-        sm: '0 2px 12px 0 var(--shadow-grey-1000, #161B2D08), 0 2px 6px 0 var(--shadow-blue-500, #2764D924)',
-        md: '0 6px 24px 0 var(--shadow-grey-1000, #161B2D08), 0 6px 16px 0 var(--shadow-blue-500, #2764D924)',
-        lg: '0 10px 36px 0 var(--shadow-grey-1000, #161B2D08), 0 10px 24px 0 var(--shadow-blue-500, #2764D924)',
+        // xs — Button-Pressed; sm — Button-Default, Side Panel
+        xs: '0 1px 4px 0 var(--shadow-grey-1000, #161B2D08), 0 1px 2px 0 var(--shadow-blue-500-alpha-20, var(--shadow-blue-500, #2764D933))',
+        sm: '0 2px 12px 0 var(--shadow-grey-1000, #161B2D08), 0 2px 6px 0 var(--shadow-blue-500-alpha-20, var(--shadow-blue-500, #2764D933))',
+        // md — Button-Hover, Card-Default, Input; lg — Card-Hover. Both are a
+        // single wide blue layer: the grey layer would only muddy it at this size.
+        md: '0 8px 24px 0 var(--shadow-blue-500-alpha-4, #2764D90A)',
+        lg: '0 8px 44px 0 var(--shadow-blue-500-alpha-8, #2764D914)',
       },
       borderRadius: {
         DEFAULT: '4px',

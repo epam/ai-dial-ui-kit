@@ -72,16 +72,16 @@
 
 /* Solid buttons */
 .dial-kit-primary-solid-button {
-  @apply dial-kit-base-button text-control-permanent bg-control-accent-gradient;
+  @apply shadow-sm dial-kit-base-button text-control-permanent bg-control-accent-gradient;
 
   @media (hover: hover) {
     &:hover {
-      @apply bg-control-accent-gradient-hover;
+      @apply shadow-md bg-control-accent-gradient-hover;
     }
   }
 
   &:active {
-    @apply bg-control-accent-gradient-active;
+    @apply shadow-xs bg-control-accent-gradient-active;
   }
 }
 
