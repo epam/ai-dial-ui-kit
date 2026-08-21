@@ -121,6 +121,33 @@ describe('Dial UI Kit :: Tooltip', () => {
     );
   });
 
+  test('Should keep the child classes when asChild is set', () => {
+    render(
+      <Tooltip tooltip="Tooltip text" asChild>
+        <button className="custom-trigger">Trigger</button>
+      </Tooltip>,
+    );
+
+    // The trigger used to spread its own undefined `className` over the child,
+    // silently stripping every class the child owned.
+    expect(screen.getByRole('button', { name: 'Trigger' })).toHaveClass(
+      'custom-trigger',
+    );
+  });
+
+  test('Should merge triggerClassName into the child classes', () => {
+    render(
+      <Tooltip tooltip="Tooltip text" asChild triggerClassName="from-trigger">
+        <button className="custom-trigger">Trigger</button>
+      </Tooltip>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Trigger' })).toHaveClass(
+      'custom-trigger',
+      'from-trigger',
+    );
+  });
+
   test('Should paint the arrow with the tooltip background', () => {
     render(
       <Tooltip tooltip="Tooltip text" initialOpen>

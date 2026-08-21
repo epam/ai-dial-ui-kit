@@ -8,6 +8,7 @@ import {
   isValidElement,
 } from 'react';
 
+import { mergeClasses } from '@/utils/merge-classes';
 import { useTooltipContext } from './TooltipContext';
 
 interface TooltipTriggerProps extends HTMLProps<HTMLElement> {
@@ -48,11 +49,21 @@ export const TooltipTrigger: FC<TooltipTriggerProps> = ({
 
   // `asChild` allows the user to pass any element as the anchor
   if (asValidChild) {
+    const childProps = children.props as HTMLProps<Element>;
+
     return cloneElement(
       children,
       context.getReferenceProps({
-        ...(children.props as HTMLProps<Element>),
+        ...childProps,
         ...props,
+        /*
+          `Tooltip` always forwards `triggerClassName`, so `className` is a
+          present-but-undefined key here even when the caller passes nothing —
+          spreading it over the child would wipe every class the child owns.
+          Merge the two instead of letting the trigger replace the child.
+        */
+        className:
+          mergeClasses(childProps.className, props.className) || undefined,
         ref,
       }),
     );
