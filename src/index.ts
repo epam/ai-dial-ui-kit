@@ -369,6 +369,8 @@ export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
 export { Radio } from './components/New/Radio/Radio';
 export type { RadioProps } from './components/New/Radio/Radio';
+export { Checkbox } from './components/New/Checkbox/Checkbox';
+export type { CheckboxProps } from './components/New/Checkbox/Checkbox';
 export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
