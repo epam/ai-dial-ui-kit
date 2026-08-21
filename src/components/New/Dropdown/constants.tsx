@@ -31,7 +31,7 @@ export const dropdownItemDisabledClassName = mergeClasses(
 
 export const dropdownItemDangerClassName = 'text-error';
 
-export const dropdownDividerClassName = 'my-1 border-t border-secondary';
+export const dropdownDividerClassName = 'my-1 border-t border-tertiary';
 
 export const dropdownGap = overlayGap;
 

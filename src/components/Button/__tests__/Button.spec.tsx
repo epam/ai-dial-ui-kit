@@ -93,7 +93,7 @@ describe('Dial UI Kit :: DialButton', () => {
     const button = screen.getByRole('button', { name: 'Focus test' });
     expect(button).toHaveClass(
       'focus-visible:outline',
-      'focus-visible:outline-focus-black',
+      'focus-visible:outline-focus',
       'outline-offset-0',
     );
   });

@@ -169,7 +169,7 @@ export const Accordion: FC<AccordionProps> = ({
             disabled
               ? 'cursor-not-allowed opacity-75'
               : // Applied only to a header that can actually be operated.
-                'cursor-pointer hover:bg-control-accent-alpha-hover focus-visible:outline focus-visible:outline-focus-black',
+                'cursor-pointer hover:bg-control-accent-alpha-hover focus-visible:outline focus-visible:outline-focus',
             headerClassName,
           )}
         >

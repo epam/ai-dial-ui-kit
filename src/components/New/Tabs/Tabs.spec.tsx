@@ -122,8 +122,8 @@ describe('Dial UI Kit :: Tabs', () => {
       const disabled = screen.getByRole('tab', { name: 'Shared' });
 
       expect(disabled).toBeDisabled();
-      expect(disabled).toHaveClass('text-control-disable-alpha');
-      expect(disabled).toHaveClass('border-control-disable-alpha');
+      expect(disabled).toHaveClass('text-control-disable-primary');
+      expect(disabled).toHaveClass('border-control-disable-primary');
     });
 
     test('a disabled tab keeps the flat underline even while selected', () => {
@@ -133,7 +133,7 @@ describe('Dial UI Kit :: Tabs', () => {
 
       const disabled = screen.getByRole('tab', { name: 'Shared' });
 
-      expect(disabled).toHaveClass('border-control-disable-alpha');
+      expect(disabled).toHaveClass('border-control-disable-primary');
       expect(disabled).not.toHaveClass('dial-kit-tab-selected-underline');
     });
 

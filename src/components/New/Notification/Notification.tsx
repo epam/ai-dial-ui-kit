@@ -71,6 +71,13 @@ export interface NotificationProps extends Omit<
  *   title="Processing"
  *   message="Please wait..."
  * />
+ *
+ * <Notification
+ *   variant={NotificationVariant.General}
+ *   type={NotificationType.SectionMessage}
+ *   title="Title"
+ *   message="Description text example"
+ * />
  * ```
  *
  * @param [variant=NotificationVariant.Info] - Defines the visual style and icon of the alert

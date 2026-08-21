@@ -43,8 +43,8 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       // so the selected value has to be folded in or it stops being announced.
       aria-label={ariaLabel ? `${ariaLabel} ${label}` : undefined}
       className={mergeClasses(
-        'dial-small-paragraph-text px-3 focus-visible:outline focus-visible:outline-focus-black',
-        'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-alpha',
+        'dial-small-paragraph-text px-3 focus-visible:outline focus-visible:outline-focus',
+        'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-primary',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,
         rest.className,

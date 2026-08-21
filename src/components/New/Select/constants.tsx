@@ -67,11 +67,7 @@ export const selectCloseIcon = (
 
 /** Marks the selected option in single mode, alongside its tinted row. */
 export const selectOptionCheckIcon = (
-  <IconCheck
-    size={DIAL_ICON_SIZE.SM}
-    className="shrink-0 text-accent"
-    aria-hidden
-  />
+  <IconCheck size={DIAL_ICON_SIZE.SM} className="shrink-0" aria-hidden />
 );
 
 export const selectEmptyStateIcon = (

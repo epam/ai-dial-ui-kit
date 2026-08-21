@@ -280,6 +280,8 @@ export type { CardShellProps } from './components/New/CardShell/CardShell';
 export {
   ErrorMessageNotification,
   ErrorToastNotification,
+  GeneralMessageNotification,
+  GeneralToastNotification,
   InfoMessageNotification,
   InfoToastNotification,
   LoadingMessageNotification,
@@ -365,6 +367,17 @@ export { Accordion } from './components/New/Accordion/Accordion';
 export type { AccordionProps } from './components/New/Accordion/Accordion';
 export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
+export { Radio } from './components/New/Radio/Radio';
+export type { RadioProps } from './components/New/Radio/Radio';
+export { Checkbox } from './components/New/Checkbox/Checkbox';
+export type { CheckboxProps } from './components/New/Checkbox/Checkbox';
+export { ToggleIconButton } from './components/New/ToggleIconButton/ToggleIconButton';
+export type { ToggleIconButtonProps } from './components/New/ToggleIconButton/ToggleIconButton';
+export { SegmentedControl } from './components/New/SegmentedControl/SegmentedControl';
+export type {
+  SegmentedControlProps,
+  SegmentedControlItem,
+} from './components/New/SegmentedControl/SegmentedControl';
 export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
@@ -376,3 +389,13 @@ export type { TagInputProps } from './components/New/TagInput/TagInput';
 export { Search } from './components/New/Search/Search';
 export type { SearchProps } from './components/New/Search/Search';
 export { matchesAccept } from './utils/file-accept';
+export { Tooltip } from './components/New/Tooltip/Tooltip';
+export type { TooltipProps } from './components/New/Tooltip/Tooltip';
+export { TooltipContainer } from './components/New/Tooltip/TooltipContainer';
+export { TooltipContent } from './components/New/Tooltip/TooltipContent';
+export type { TooltipContentProps } from './components/New/Tooltip/TooltipContent';
+export { TooltipTrigger } from './components/New/Tooltip/TooltipTrigger';
+export type { TooltipContainerOptions } from './components/New/Tooltip/TooltipContext';
+export { TooltipPlacement } from './types/tooltip.ts';
+export { EllipsisTooltip } from './components/New/EllipsisTooltip/EllipsisTooltip';
+export type { EllipsisTooltipProps } from './components/New/EllipsisTooltip/EllipsisTooltip';

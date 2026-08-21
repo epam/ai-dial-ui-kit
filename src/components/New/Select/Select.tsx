@@ -504,100 +504,98 @@ export const Select: FC<SelectProps> = ({
         </div>
       )}
 
-      <div className="overflow-y-auto max-h-[352px] py-1">
-        {filtered.length === 0 ? (
-          <div className="px-2 py-3">
-            <DialNoDataContent
-              icon={emptyStateIcon ?? selectEmptyStateIcon}
-              title={emptyStateTitle}
-              description={emptyStateDescription}
-            />
-          </div>
-        ) : (
-          filtered.map((opt) => {
-            const selected = selectedValues.includes(opt.value);
+      {filtered.length === 0 ? (
+        <div className="px-2 py-3">
+          <DialNoDataContent
+            icon={emptyStateIcon ?? selectEmptyStateIcon}
+            title={emptyStateTitle}
+            description={emptyStateDescription}
+          />
+        </div>
+      ) : (
+        filtered.map((opt) => {
+          const selected = selectedValues.includes(opt.value);
 
-            if (multiple) {
-              return (
-                <div
-                  key={opt.value}
-                  role="option"
-                  aria-selected={selected}
-                  aria-disabled={!!opt.disabled}
-                  className={mergeClasses(
-                    selectOptionBaseClassName,
-                    selected && selectOptionSelectedClassName,
-                    opt.disabled && selectOptionDisabledClassName,
-                    'w-full',
-                  )}
-                >
-                  <DialCheckbox
-                    id={`${fieldId}-${opt.value}`}
-                    label={
-                      <span className="flex w-full flex-1 pl-2 min-w-0 items-center gap-2 text-primary">
-                        {opt.icon && <DialIcon icon={opt.icon} />}
-                        <span className="truncate">
-                          {opt.labelNode ?? opt.label}
-                        </span>
-                      </span>
-                    }
-                    checked={selected}
-                    disabled={opt.disabled}
-                    onChange={() => !opt.disabled && handleToggle(opt.value)}
-                    ariaLabel={opt.label}
-                  />
-
-                  {opt.description && (
-                    <div className="text-secondary dial-small-text">
-                      {opt.description}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
-            if (opt.children?.length) {
-              return (
-                <SelectSubMenuItem
-                  key={opt.value}
-                  opt={opt}
-                  selectedValues={selectedValues}
-                  onSelect={handleToggle}
-                />
-              );
-            }
-
+          if (multiple) {
             return (
-              <button
+              <div
                 key={opt.value}
                 role="option"
-                type="button"
                 aria-selected={selected}
                 aria-disabled={!!opt.disabled}
-                disabled={opt.disabled}
                 className={mergeClasses(
                   selectOptionBaseClassName,
+                  selected && selectOptionSelectedClassName,
                   opt.disabled && selectOptionDisabledClassName,
+                  'w-full',
                 )}
-                onClick={() => !opt.disabled && handleToggle(opt.value)}
               >
-                <div className="flex items-center gap-2 w-full min-w-0">
-                  {opt.icon && <DialIcon icon={opt.icon} />}
-                  <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
+                <DialCheckbox
+                  id={`${fieldId}-${opt.value}`}
+                  label={
+                    <span className="flex w-full flex-1 pl-2 min-w-0 items-center gap-2 text-primary">
+                      {opt.icon && <DialIcon icon={opt.icon} />}
+                      <span className="truncate">
+                        {opt.labelNode ?? opt.label}
+                      </span>
+                    </span>
+                  }
+                  checked={selected}
+                  disabled={opt.disabled}
+                  onChange={() => !opt.disabled && handleToggle(opt.value)}
+                  ariaLabel={opt.label}
+                />
 
-                  {opt.description && (
-                    <div className="text-secondary dial-small-text">
-                      {opt.description}
-                    </div>
-                  )}
-                </div>
-
-                {selected && selectOptionCheckIcon}
-              </button>
+                {opt.description && (
+                  <div className="text-secondary dial-small-text">
+                    {opt.description}
+                  </div>
+                )}
+              </div>
             );
-          })
-        )}
-      </div>
+          }
+
+          if (opt.children?.length) {
+            return (
+              <SelectSubMenuItem
+                key={opt.value}
+                opt={opt}
+                selectedValues={selectedValues}
+                onSelect={handleToggle}
+              />
+            );
+          }
+
+          return (
+            <button
+              key={opt.value}
+              role="option"
+              type="button"
+              aria-selected={selected}
+              aria-disabled={!!opt.disabled}
+              disabled={opt.disabled}
+              className={mergeClasses(
+                selectOptionBaseClassName,
+                opt.disabled && selectOptionDisabledClassName,
+              )}
+              onClick={() => !opt.disabled && handleToggle(opt.value)}
+            >
+              <div className="flex items-center gap-2 w-full min-w-0">
+                {opt.icon && <DialIcon icon={opt.icon} />}
+                <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
+
+                {opt.description && (
+                  <div className="text-secondary dial-small-text">
+                    {opt.description}
+                  </div>
+                )}
+              </div>
+
+              {selected && selectOptionCheckIcon}
+            </button>
+          );
+        })
+      )}
       {footer && (
         <div
           onClick={(e) => {

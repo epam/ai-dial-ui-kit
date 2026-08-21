@@ -4,6 +4,8 @@ import { Notification, type NotificationProps } from './Notification';
 import {
   ErrorMessageNotification,
   ErrorToastNotification,
+  GeneralMessageNotification,
+  GeneralToastNotification,
   InfoMessageNotification,
   InfoToastNotification,
   LoadingMessageNotification,
@@ -35,6 +37,7 @@ const meta = {
         NotificationVariant.Warning,
         NotificationVariant.Error,
         NotificationVariant.Loading,
+        NotificationVariant.General,
       ],
       description: 'Defines the visual style and icon of the alert',
     },
@@ -107,6 +110,11 @@ export const AllVariants: Story = {
           message="This is a loading toast notification"
           closable
         />
+        <GeneralToastNotification
+          title="General"
+          message="This is a general toast notification"
+          closable
+        />
       </div>
       <div className="flex flex-col gap-4">
         <p className="dial-small-semi-text">Section message</p>
@@ -156,6 +164,14 @@ export const AllVariants: Story = {
           title="Loading"
           message="This is a long loading section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
         />
+        <GeneralMessageNotification
+          title="General"
+          message="This is a general section message notification"
+        />
+        <GeneralMessageNotification
+          title="General"
+          message="This is a long general section message notification that should wrap onto multiple lines to demonstrate the alert's behavior with longer text content. Please pay attention to how the layout adjusts accordingly."
+        />
       </div>
     </div>
   ),
@@ -164,6 +180,31 @@ export const AllVariants: Story = {
       description: {
         story:
           'A comprehensive showcase of all alert variants including the Loading variant and title+message layout.',
+      },
+    },
+  },
+};
+
+export const General: Story = {
+  render: () => (
+    <div className="p-6 grid gap-4 md:grid-cols-2">
+      <GeneralMessageNotification
+        title="Title"
+        message="Description text example"
+      />
+      {/* Same variant with the message stacked under the title instead of inline. */}
+      <GeneralMessageNotification
+        title="Title"
+        message="Description text example"
+        textClassName="flex-col"
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The neutral `general` variant, shown with the message inline with the title (default for a section message) and stacked under it via `textClassName`.',
       },
     },
   },

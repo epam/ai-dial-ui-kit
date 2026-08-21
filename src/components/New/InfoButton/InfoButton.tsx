@@ -38,8 +38,8 @@ export const InfoButton: FC<InfoButtonProps> = ({
   if (!caption) return null;
 
   const infoButtonClassName = mergeClasses(
-    'text-secondary hover:text-control-blue-hover active:text-control-blue-active',
-    'focus-visible:outline focus-visible:outline-focus-black',
+    'text-secondary hover:text-control-accent-hover active:text-control-accent-active',
+    'focus-visible:outline focus-visible:outline-focus',
   );
 
   return (

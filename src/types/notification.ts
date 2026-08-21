@@ -4,6 +4,7 @@ export enum NotificationVariant {
   Warning = 'warning',
   Error = 'error',
   Loading = 'loading',
+  General = 'general',
 }
 
 export enum NotificationType {

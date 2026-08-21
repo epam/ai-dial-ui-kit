@@ -22,6 +22,8 @@ migration-guides/
 | 0.13.0 | [caption-semi-text-lead-rename](0.13.0/caption-semi-text-lead-rename.md) | `dial-caption-semi-text` renamed to `dial-caption-lead-semi-text` and now uppercases |
 | 0.13.0 | [progress-bar-2-0-rewrite](0.13.0/progress-bar-2-0-rewrite.md) | `DialProgressBar` rebuilt on 2.0 tokens as `ProgressBar`; `DialProgressBarSize` → `ElementSize`, `ariaLabel` → `aria-label` |
 | 0.13.0 | [field-label-props-unification](0.13.0/field-label-props-unification.md) | `Calendar`, `Switch` and `ProgressBar` take `labelProps` instead of `label`, so every 2.0 field names itself through `Label` |
+| 0.14.0 | [control-color-token-rename](0.14.0/control-color-token-rename.md) | Control tokens renamed by role: `control-disable-alpha`/`-beta` → `-primary`/`-secondary`, `text-control-blue-*` → `text-control-accent-*`, `bg-control-disable` → `bg-control-disable-primary`, `bg-control-neutral-hover` → `-hover-muted` |
+| 0.14.0 | [focus-border-token-role-naming](0.14.0/focus-border-token-role-naming.md) | Border tokens `focus-black` → `focus` and `focus-blue` → `accent-focus`, reversing the 0.13.0 value-based naming |
 
 ---
 

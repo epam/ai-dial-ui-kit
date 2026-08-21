@@ -100,17 +100,17 @@ export const Tag: FC<TagProps> = ({
           ? 'h-[20px] gap-0.5 rounded-md px-1.5'
           : 'h-[24px] gap-1 rounded-lg px-2',
         disabled && 'cursor-not-allowed border-tertiary bg-layer-sunken',
-        disabled && 'text-control-disable-alpha',
+        disabled && 'text-control-disable-primary',
         !disabled &&
           (selected
             ? 'border-accent-alpha bg-control-accent-alpha text-primary'
             : 'border-tertiary bg-layer-raised text-primary'),
         clickable && [
           'cursor-pointer outline-offset-0',
-          'focus-visible:outline focus-visible:outline-focus-black',
+          'focus-visible:outline focus-visible:outline-focus',
           selected
             ? 'hover:bg-control-accent-alpha-hover active:bg-control-accent-alpha-active'
-            : 'hover:border-hover-alpha',
+            : 'hover:border-accent-alpha',
         ],
         className,
       )}

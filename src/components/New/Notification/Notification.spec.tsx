@@ -37,6 +37,7 @@ describe('Dial UI Kit :: Notification', () => {
     [NotificationVariant.Info, 'status'],
     [NotificationVariant.Success, 'status'],
     [NotificationVariant.Loading, 'status'],
+    [NotificationVariant.General, 'status'],
   ])(
     'Should expose the %s variant as a %s live region',
     (variant, expectedRole) => {
@@ -81,6 +82,20 @@ describe('Dial UI Kit :: Notification', () => {
     );
 
     expect(container.querySelector('.animate-spin-steps')).toBeInTheDocument();
+  });
+
+  test('Should render the General variant as a neutral notification', () => {
+    render(
+      <Notification
+        variant={NotificationVariant.General}
+        title="Title"
+        message="Description text example"
+      />,
+    );
+
+    const notification = screen.getByRole('status');
+    expect(notification).toHaveClass('bg-layer-sunken', 'text-primary');
+    expect(screen.getByText('Description text example')).toBeInTheDocument();
   });
 
   test('Should not nest the spinner live region inside the notification', () => {
