@@ -92,16 +92,20 @@ export const Switch: FC<SwitchProps> = ({
             'flex h-[18px] w-[36px] shrink-0 items-center rounded-full p-0.5 transition-colors duration-200',
             'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus',
             isOn ? 'justify-end' : 'justify-start',
-            isOn && !disabled
-              ? 'bg-control-accent'
-              : 'bg-control-disable-primary',
-            disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+            disabled
+              ? 'cursor-not-allowed bg-control-disable-primary'
+              : mergeClasses(
+                  'cursor-pointer',
+                  isOn
+                    ? 'bg-control-accent hover:bg-control-accent-hover'
+                    : 'bg-control-neutral-default hover:bg-control-neutral-hover-strong',
+                ),
           )}
         >
           <span
             className={mergeClasses(
               'size-3.5 shrink-0 rounded-full',
-              disabled ? 'bg-controls-disable-accent' : 'bg-control-neutral',
+              disabled ? 'bg-control-disable-secondary' : 'bg-control-neutral',
             )}
           />
         </label>
@@ -115,7 +119,7 @@ export const Switch: FC<SwitchProps> = ({
               // has always been primary while the control is usable.
               'py-[1px]',
               disabled
-                ? 'cursor-not-allowed text-secondary'
+                ? 'cursor-not-allowed text-control-disable-primary'
                 : 'cursor-pointer text-primary',
               labelProps.className,
             )}
