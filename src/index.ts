@@ -371,6 +371,13 @@ export { Radio } from './components/New/Radio/Radio';
 export type { RadioProps } from './components/New/Radio/Radio';
 export { Checkbox } from './components/New/Checkbox/Checkbox';
 export type { CheckboxProps } from './components/New/Checkbox/Checkbox';
+export { ToggleIconButton } from './components/New/ToggleIconButton/ToggleIconButton';
+export type { ToggleIconButtonProps } from './components/New/ToggleIconButton/ToggleIconButton';
+export { SegmentedControl } from './components/New/SegmentedControl/SegmentedControl';
+export type {
+  SegmentedControlProps,
+  SegmentedControlItem,
+} from './components/New/SegmentedControl/SegmentedControl';
 export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
