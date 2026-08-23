@@ -207,7 +207,7 @@ not AAA:
 | `ButtonAppearance.Link` | content | Exempt under the 2.5.5 *Inline* exception; expanding it would overlap surrounding copy |
 | `DialCloseButton` | icon-sized | Renders `h-auto w-auto`, so its target follows the caller's icon size |
 | `DialInfoButton`, `InfoButton` | 24×24 | Fixed small affordance, same overlap constraint as small variants |
-| Standard 2.0 fields (`Input`, `Select`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice |
+| Standard 2.0 fields (`Input`, `Select`, `RadioGroupPopupField`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice. `.dial-kit-input` clips its overflow, so the pseudo-element cannot grow the target either |
 | `Tag` remove button | 16×16 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 14px per side and swallow the neighbouring tags of a `TagInput` row |
 | `Radio` circle | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label selects the radio, so the practical target is wider |
 | `Checkbox` box | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label toggles the checkbox, so the practical target is wider |
