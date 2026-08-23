@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { Popup } from './Popup';
 import { PopupSize } from '@/types/popup';
@@ -234,5 +235,26 @@ describe('Dial UI Kit :: Popup', () => {
       screen.getByRole('button', { name: 'Close dialog' }),
     ).not.toHaveFocus();
     expect(screen.getByLabelText('Name')).not.toHaveFocus();
+  });
+
+  test('reveals a clipped title in the 2.0 tooltip on hover', async () => {
+    const user = userEvent.setup();
+    render(<Popup open header="A title too long for its header" />);
+
+    await user.hover(screen.getByText('A title too long for its header'));
+
+    await waitFor(() =>
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'A title too long for its header',
+      ),
+    );
+  });
+
+  test('keeps the title clipping itself, since the trigger has its own box', () => {
+    render(<Popup open header="A title too long for its header" />);
+
+    expect(screen.getByText('A title too long for its header')).toHaveClass(
+      'truncate',
+    );
   });
 });

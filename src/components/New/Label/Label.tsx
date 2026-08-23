@@ -14,6 +14,7 @@ export interface LabelProps extends NativeLabelProps {
   required?: boolean;
   caption?: string;
   size?: ElementSize;
+  containerClassName?: string;
 }
 
 /**
@@ -37,11 +38,16 @@ export interface LabelProps extends NativeLabelProps {
  * plus visually hidden text so the requirement is announced too.
  * @param [caption] - Explanatory text, exposed through an info button next to the label
  * @param [size] - The size of the label, which can be 'small', 'medium', or 'large'.
+ * @param [containerClassName] - Additional classes for the wrapper holding the
+ * `<label>` and its info button. Needed when the label is a flex item that has
+ * to shrink: a wrapper left at `min-width: auto` cannot, so its text overflows
+ * instead of truncating.
  */
 export const Label: FC<LabelProps> = ({
   label,
   required,
   className,
+  containerClassName,
   caption,
   size = ElementSize.Small,
   ...props
@@ -49,7 +55,9 @@ export const Label: FC<LabelProps> = ({
   if (!label) return null;
 
   return (
-    <span className="flex items-center gap-0.5">
+    <span
+      className={mergeClasses('flex items-center gap-0.5', containerClassName)}
+    >
       <label
         {...props}
         className={mergeClasses(

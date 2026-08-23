@@ -12,7 +12,7 @@ import {
 import { useMergeRefs } from '@floating-ui/react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { CaptionText, ErrorText } from '../CaptionText/CaptionText';
@@ -314,7 +314,7 @@ const InputWrapper: FC<InputWrapperProps> = ({
   };
 
   return disabled && type !== 'password' ? (
-    <DialTooltip tooltip={tooltipText || value}>{input()}</DialTooltip>
+    <Tooltip tooltip={tooltipText || value}>{input()}</Tooltip>
   ) : (
     input()
   );

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { mergeClasses } from '../../../utils/merge-classes';
-import { DialEllipsisTooltip } from '../../EllipsisTooltip/EllipsisTooltip';
+import { EllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
 
 /** Props for `Highlight`. */
 export interface HighlightProps {
@@ -10,7 +10,7 @@ export interface HighlightProps {
   query: string;
   /** Optional class name for the highlighted segment. */
   markClassName?: string;
-  /** Optional class name forwarded to the `DialEllipsisTooltip` container. */
+  /** Optional class name forwarded to the `EllipsisTooltip` container. */
   className?: string;
   /** Maximum number of lines to display before truncating. Use `1` for single-line ellipsis truncation (e.g. list rows). Defaults to `2`. */
   maxLines?: number;
@@ -44,7 +44,7 @@ export const Highlight: FC<HighlightProps> = ({
 
   if (!query.trim()) {
     return (
-      <DialEllipsisTooltip
+      <EllipsisTooltip
         className={mergeClasses(clampClassName, className)}
         text={text}
       />
@@ -71,7 +71,7 @@ export const Highlight: FC<HighlightProps> = ({
     );
 
   return (
-    <DialEllipsisTooltip
+    <EllipsisTooltip
       className={mergeClasses(clampClassName, className)}
       text={content}
     />

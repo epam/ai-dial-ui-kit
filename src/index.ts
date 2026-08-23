@@ -369,6 +369,13 @@ export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
 export { Radio } from './components/New/Radio/Radio';
 export type { RadioProps } from './components/New/Radio/Radio';
+export { RadioGroup } from './components/New/RadioGroup/RadioGroup';
+export type {
+  RadioGroupProps,
+  RadioGroupItem,
+} from './components/New/RadioGroup/RadioGroup';
+export { RadioGroupPopupField } from './components/New/RadioGroupPopupField/RadioGroupPopupField';
+export type { RadioGroupPopupFieldProps } from './components/New/RadioGroupPopupField/RadioGroupPopupField';
 export { Checkbox } from './components/New/Checkbox/Checkbox';
 export type { CheckboxProps } from './components/New/Checkbox/Checkbox';
 export { ToggleIconButton } from './components/New/ToggleIconButton/ToggleIconButton';
