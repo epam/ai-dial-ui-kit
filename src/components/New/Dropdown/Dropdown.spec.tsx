@@ -235,7 +235,7 @@ describe('Dial UI Kit :: Dropdown', () => {
       name: 'With Icon Disabled',
     });
     const disabledIconWrapper = disabledItem.querySelector(
-      'span.text-secondary svg',
+      'span.text-control-disable-primary svg',
     );
     expect(disabledIconWrapper).toBeTruthy();
   });
@@ -1144,5 +1144,122 @@ describe('Dial UI Kit :: Dropdown — overlay keyboard focus', () => {
 
     await user.keyboard('{ArrowDown}');
     expect(screen.getByRole('menuitem', { name: 'C' })).toHaveFocus();
+  });
+
+  describe('selectable items', () => {
+    const selectableItems: DropdownItem[] = [
+      { key: 'a', label: 'A', selectable: true, checked: true },
+      { key: 'b', label: 'B', selectable: true },
+      { key: 'c', label: 'C', selectable: true, disabled: true },
+    ];
+
+    test('announces a selectable item as a checkbox item, not a plain one', () => {
+      render(
+        <Dropdown items={selectableItems}>
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+
+      expect(
+        screen.getByRole('menuitemcheckbox', { name: 'A' }),
+      ).toHaveAttribute('aria-checked', 'true');
+      expect(
+        screen.getByRole('menuitemcheckbox', { name: 'B' }),
+      ).toHaveAttribute('aria-checked', 'false');
+      expect(
+        screen.queryByRole('menuitem', { name: 'A' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('draws the box, and hides it from assistive tech', () => {
+      render(
+        <Dropdown items={selectableItems}>
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+      const checked = screen.getByRole('menuitemcheckbox', { name: 'A' });
+
+      // The row carries the state; a box announcing its own would be a second
+      // control inside the item.
+      expect(checked.querySelector('[aria-hidden="true"]')).toBeTruthy();
+      expect(checked).toHaveClass('bg-control-accent-alpha');
+    });
+
+    test('keeps the menu open across several toggles', () => {
+      const onMenu = vi.fn();
+      render(
+        <Dropdown items={selectableItems} onItemClick={onMenu}>
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+      fireEvent.click(screen.getByRole('menuitemcheckbox', { name: 'B' }));
+      fireEvent.click(screen.getByRole('menuitemcheckbox', { name: 'A' }));
+
+      expect(onMenu).toHaveBeenCalledTimes(2);
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+
+    test('a plain item alongside them still closes the menu', () => {
+      render(
+        <Dropdown
+          items={[...selectableItems, { key: 'apply', label: 'Apply' }]}
+        >
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+      fireEvent.click(screen.getByRole('menuitem', { name: 'Apply' }));
+
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    test('leaves a disabled selectable item unselectable', () => {
+      const onMenu = vi.fn();
+      render(
+        <Dropdown items={selectableItems} onItemClick={onMenu}>
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+      const disabled = screen.getByRole('menuitemcheckbox', { name: 'C' });
+      fireEvent.click(disabled);
+
+      expect(onMenu).not.toHaveBeenCalled();
+      expect(disabled).toHaveClass(
+        'cursor-not-allowed',
+        'hover:bg-transparent',
+      );
+    });
+
+    test('arrow keys walk the checkbox items', async () => {
+      const user = userEvent.setup();
+      render(
+        <Dropdown items={selectableItems}>
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+      openByClick();
+      await waitFor(() => {
+        expect(
+          screen.getByRole('menuitemcheckbox', { name: 'A' }),
+        ).toHaveFocus();
+      });
+
+      await user.keyboard('{ArrowDown}');
+
+      // 'C' is disabled, so the walk skips it and wraps back to 'A'.
+      expect(screen.getByRole('menuitemcheckbox', { name: 'B' })).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(screen.getByRole('menuitemcheckbox', { name: 'A' })).toHaveFocus();
+    });
   });
 });

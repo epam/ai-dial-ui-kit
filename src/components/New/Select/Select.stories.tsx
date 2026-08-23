@@ -382,3 +382,40 @@ export const CustomLabelNode: Story = {
     </div>
   ),
 };
+
+/**
+ * The multiselect row from the design spec, with the list held open. Each row is
+ * one `option`: the box is decorative and the whole 40px rectangle selects.
+ * Hover and focus are interaction states — hover a row or tab to it to see them.
+ */
+export const MultiselectRowStates: Story = {
+  args: {
+    multiple: true,
+    open: true,
+    selectAll: true,
+    labelProps: { label: 'Folders' },
+    defaultValue: ['selected', 'selected-disabled'],
+    options: [
+      { value: 'unselected', label: 'Label' },
+      { value: 'selected', label: 'Label' },
+      { value: 'unselected-disabled', label: 'Label', disabled: true },
+      { value: 'selected-disabled', label: 'Label', disabled: true },
+      {
+        value: 'with-description',
+        label: 'Label',
+        description: 'with description',
+      },
+      {
+        value: 'truncated',
+        label:
+          'A label long enough that the row has to clip it rather than grow',
+      },
+    ],
+  },
+  render: (args) => (
+    // The open list is absolutely positioned, so the story needs room under it.
+    <div className="h-[420px] w-[320px]">
+      <Select {...args} />
+    </div>
+  ),
+};

@@ -757,3 +757,53 @@ export const WithSubMenuHeaderAndFooter: Story = {
     </Dropdown>
   ),
 };
+
+/**
+ * Selectable items turn the menu into a multiselect list: each row is a
+ * `menuitemcheckbox` with a checkbox box, a click toggles it without closing the
+ * menu, and a plain item alongside them still closes it.
+ */
+export const MultiselectItems: Story = {
+  render: () => {
+    const MultiselectExample = () => {
+      const [checked, setChecked] = useState<string[]>(['drafts']);
+
+      const toggle = (key: string) =>
+        setChecked((prev) =>
+          prev.includes(key)
+            ? prev.filter((value) => value !== key)
+            : [...prev, key],
+        );
+
+      return (
+        <Dropdown
+          placement="bottom-start"
+          items={[
+            ...[
+              { key: 'drafts', label: 'Drafts' },
+              { key: 'shared', label: 'Shared with me' },
+              { key: 'archived', label: 'Archived' },
+              { key: 'deleted', label: 'Deleted', disabled: true },
+            ].map((item) => ({
+              ...item,
+              selectable: true,
+              checked: checked.includes(item.key),
+              onClick: () => toggle(item.key),
+            })),
+            { key: 'divider', type: DropdownItemType.Divider },
+            {
+              key: 'reset',
+              label: 'Reset',
+              danger: true,
+              onClick: () => setChecked([]),
+            },
+          ]}
+        >
+          <TriggerBtn label={`Filters (${checked.length})`} />
+        </Dropdown>
+      );
+    };
+
+    return <MultiselectExample />;
+  },
+};

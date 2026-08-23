@@ -24,6 +24,7 @@ migration-guides/
 | 0.13.0 | [field-label-props-unification](0.13.0/field-label-props-unification.md) | `Calendar`, `Switch` and `ProgressBar` take `labelProps` instead of `label`, so every 2.0 field names itself through `Label` |
 | 0.14.0 | [control-color-token-rename](0.14.0/control-color-token-rename.md) | Control tokens renamed by role: `control-disable-alpha`/`-beta` → `-primary`/`-secondary`, `text-control-blue-*` → `text-control-accent-*`, `bg-control-disable` → `bg-control-disable-primary`, `bg-control-neutral-hover` → `-hover-muted` |
 | 0.14.0 | [focus-border-token-role-naming](0.14.0/focus-border-token-role-naming.md) | Border tokens `focus-black` → `focus` and `focus-blue` → `accent-focus`, reversing the 0.13.0 value-based naming |
+| 0.14.0 | [select-multiselect-option-row](0.14.0/select-multiselect-option-row.md) | A multi-select `Select` option is one `option` with `aria-selected` and a decorative box, instead of an option wrapping a real `role="checkbox"` |
 
 ---
 

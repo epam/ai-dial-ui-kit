@@ -42,11 +42,13 @@ import {
   dropdownItemBaseClassName,
   dropdownItemDisabledClassName,
   dropdownItemDangerClassName,
+  dropdownItemSelectedClassName,
   dropdownDividerClassName,
   dropdownGap,
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
+import { CheckboxBox } from '@/components/New/Checkbox/CheckboxBox';
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { DropdownSubMenuItem } from './DropdownSubMenuItem';
@@ -79,11 +81,13 @@ export interface DropdownProps {
 }
 
 /**
- * Options the overlay's arrow keys walk through. Both roles are arrow-navigated
- * per ARIA: `menuitem` covers this component's own item list, `option` covers a
- * listbox rendered through `renderOverlay` (`Select` builds on this component).
+ * Options the overlay's arrow keys walk through. All three roles are
+ * arrow-navigated per ARIA: `menuitem` and `menuitemcheckbox` cover this
+ * component's own item list, `option` covers a listbox rendered through
+ * `renderOverlay` (`Select` builds on this component).
  */
-const OVERLAY_OPTION_SELECTOR = '[role="menuitem"], [role="option"]';
+const OVERLAY_OPTION_SELECTOR =
+  '[role="menuitem"], [role="menuitemcheckbox"], [role="option"]';
 
 const isEnabledOption = (el: HTMLElement): boolean =>
   !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true';
@@ -398,7 +402,10 @@ export const Dropdown: FC<DropdownProps> = ({
       if (item.disabled) return;
       item.onClick?.({ key: item.key, domEvent: e });
       onItemClick?.({ key: item.key, domEvent: e });
-      setOpen(false);
+      // A multiselect row is meant to be toggled several times in a row, so it
+      // leaves the menu open — dismissing it is the user's call, as it is in a
+      // multi-select `Select`.
+      if (!item.selectable) setOpen(false);
     },
     [onItemClick, setOpen],
   );
@@ -456,11 +463,13 @@ export const Dropdown: FC<DropdownProps> = ({
             return (
               <button
                 key={it.key}
-                role="menuitem"
+                role={it.selectable ? 'menuitemcheckbox' : 'menuitem'}
+                aria-checked={it.selectable ? !!it.checked : undefined}
                 type="button"
                 aria-disabled={!!it.disabled}
                 className={mergeClasses(
                   dropdownItemBaseClassName,
+                  it.selectable && it.checked && dropdownItemSelectedClassName,
                   it.disabled && dropdownItemDisabledClassName,
                   it.danger && dropdownItemDangerClassName,
                   it.className,
@@ -472,11 +481,22 @@ export const Dropdown: FC<DropdownProps> = ({
                   it.renderItem(it)
                 ) : (
                   <>
+                    {/*
+                      Decorative: `aria-checked` on the row already carries the
+                      state, and a real checkbox nested in a menu item would be
+                      a control inside a control.
+                    */}
+                    {it.selectable && (
+                      <CheckboxBox
+                        isSelected={!!it.checked}
+                        disabled={it.disabled}
+                      />
+                    )}
                     {it.icon && (
                       <span
                         className={mergeClasses(
                           it.danger && 'text-error',
-                          it.disabled && 'text-secondary',
+                          it.disabled && 'text-control-disable-primary',
                         )}
                       >
                         <DialIcon icon={it.icon} />
@@ -486,7 +506,7 @@ export const Dropdown: FC<DropdownProps> = ({
                       className={mergeClasses(
                         'flex-1 truncate text-start',
                         it.danger && 'text-error',
-                        it.disabled && 'text-secondary',
+                        it.disabled && 'text-control-disable-primary',
                       )}
                     >
                       {it.label}

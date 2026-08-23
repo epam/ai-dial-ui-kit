@@ -198,7 +198,7 @@ describe('Dial UI Kit :: Select', () => {
       fireEvent.click(selectAll);
       expect(selectAll).toHaveAttribute('aria-checked', 'true');
 
-      const cb1 = screen.getByRole('checkbox', { name: 'Option 1' });
+      const cb1 = screen.getByRole('option', { name: 'Option 1' });
       fireEvent.click(cb1);
       expect(selectAll).toHaveAttribute('aria-checked', 'mixed');
     });
@@ -214,7 +214,7 @@ describe('Dial UI Kit :: Select', () => {
         name: /select all/i,
       }) as HTMLInputElement;
 
-      fireEvent.click(screen.getByRole('checkbox', { name: 'Option 1' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Option 1' }));
 
       expect(selectAll.indeterminate).toBe(true);
 
@@ -222,6 +222,79 @@ describe('Dial UI Kit :: Select', () => {
 
       expect(selectAll.indeterminate).toBe(false);
       expect(selectAll.checked).toBe(true);
+    });
+
+    test('an option row is one control, selected through aria-selected', () => {
+      renderSelect({ multiple: true, defaultValue: ['opt-1'] });
+
+      openSelect();
+
+      // The box is decorative, so the row has a single state to announce
+      // rather than an option's `aria-selected` and a checkbox's `aria-checked`.
+      expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+      expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      expect(screen.getByRole('option', { name: 'Option 2' })).toHaveAttribute(
+        'aria-selected',
+        'false',
+      );
+    });
+
+    test('tints the selected row and leaves the others untinted', () => {
+      renderSelect({ multiple: true, defaultValue: ['opt-1'] });
+
+      openSelect();
+
+      expect(screen.getByRole('option', { name: 'Option 1' })).toHaveClass(
+        'bg-control-accent-alpha',
+      );
+      expect(screen.getByRole('option', { name: 'Option 2' })).not.toHaveClass(
+        'bg-control-accent-alpha',
+      );
+    });
+
+    test('toggles an option from anywhere on its row', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderSelect({ multiple: true, onChange });
+
+      openSelect();
+      await user.click(screen.getByRole('option', { name: 'Option 2' }));
+
+      expect(onChange).toHaveBeenCalledWith(['opt-2']);
+    });
+
+    test('toggles an option with Enter and with Space', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderSelect({ multiple: true, onChange });
+
+      openSelect();
+      const option = screen.getByRole('option', { name: 'Option 2' });
+      option.focus();
+
+      await user.keyboard('{Enter}');
+      expect(onChange).toHaveBeenLastCalledWith(['opt-2']);
+
+      await user.keyboard(' ');
+      expect(onChange).toHaveBeenCalledTimes(2);
+    });
+
+    test('leaves a disabled option unselectable and untinted on hover', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderSelect({ multiple: true, onChange });
+
+      openSelect();
+      const option = screen.getByRole('option', { name: 'Disabled option' });
+
+      await user.click(option);
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(option).toHaveAttribute('aria-disabled', 'true');
+      expect(option).toHaveClass('cursor-not-allowed', 'hover:bg-transparent');
     });
 
     test('a11y: listbox has aria-multiselectable', () => {

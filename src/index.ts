@@ -378,6 +378,8 @@ export { RadioGroupPopupField } from './components/New/RadioGroupPopupField/Radi
 export type { RadioGroupPopupFieldProps } from './components/New/RadioGroupPopupField/RadioGroupPopupField';
 export { Checkbox } from './components/New/Checkbox/Checkbox';
 export type { CheckboxProps } from './components/New/Checkbox/Checkbox';
+export { CheckboxBox } from './components/New/Checkbox/CheckboxBox';
+export type { CheckboxBoxProps } from './components/New/Checkbox/CheckboxBox';
 export { ToggleIconButton } from './components/New/ToggleIconButton/ToggleIconButton';
 export type { ToggleIconButtonProps } from './components/New/ToggleIconButton/ToggleIconButton';
 export { SegmentedControl } from './components/New/SegmentedControl/SegmentedControl';

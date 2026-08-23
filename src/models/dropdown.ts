@@ -14,6 +14,16 @@ export interface DropdownItem {
   icon?: ReactNode;
   disabled?: boolean;
   danger?: boolean;
+  /**
+   * Renders the item as a multiselect row: a checkbox box before the label, the
+   * accent tint while checked, and a click that leaves the menu open. The row is
+   * a `menuitemcheckbox` whose state lives on `aria-checked`; the box itself is
+   * decorative. Keep `checked` in your own state and update it from the item's
+   * `onClick` (or the dropdown's `onItemClick`).
+   */
+  selectable?: boolean;
+  /** Whether a `selectable` item is currently checked. */
+  checked?: boolean;
   type?: DropdownItemType;
   className?: string;
   onClick?: (info: { key: string; domEvent: MouseEvent }) => void;

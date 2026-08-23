@@ -28,14 +28,28 @@ export const overlaySubMenuClassName = mergeClasses(
 export const overlayItemClassName = mergeClasses(
   'flex w-full cursor-pointer items-center gap-2 px-3 h-[40px] rounded-lg',
   'dial-small-text text-primary truncate',
+  // Hover sits one step up the accent-alpha ramp from the selected tint, so a
+  // hovered row reads as hovered whether or not it is also selected.
   'hover:bg-control-accent-alpha-hover',
   'focus-visible:outline focus-visible:outline-focus',
 );
 
-/** Tint marking the row that is currently selected. */
-export const overlayItemSelectedClassName = 'bg-control-accent-alpha-hover';
+/**
+ * Tint marking the row that is currently selected, at rest: the faint step of
+ * the accent-alpha ramp, so hovering a selected row still has somewhere to go.
+ */
+export const overlayItemSelectedClassName = 'bg-control-accent-alpha';
 
-export const overlayItemDisabledClassName = 'text-secondary';
+/**
+ * A row that cannot be chosen. `overlayItemClassName` tints every row on hover
+ * and a selected row carries a tint at rest, so both have to be turned off
+ * again here — `mergeClasses` is tailwind-merge, so these later declarations
+ * win as long as the disabled classes are merged after the selected ones.
+ */
+export const overlayItemDisabledClassName = mergeClasses(
+  'cursor-not-allowed text-control-disable-primary',
+  'bg-transparent hover:bg-transparent',
+);
 
 /** Distance between the trigger and its panel, and between nested panels. */
 export const overlayGap = 4;
