@@ -10,7 +10,7 @@ import {
 import { type FC, type MouseEvent, type ReactNode, useId, useRef } from 'react';
 
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { PopupSize } from '@/types/popup';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
@@ -138,7 +138,14 @@ export const Popup: FC<PopupProps> = ({
         id={headingId}
         className={mergeClasses(popupTitleClassName, titleClassName)}
       >
-        <DialTooltip tooltip={title}>{title}</DialTooltip>
+        {/*
+          The trigger has to clip its own text: unlike the 1.0 tooltip, the 2.0
+          one does not force `truncate` on it, and the ellipsis of the `<h2>`
+          never reaches text inside the trigger's own box.
+        */}
+        <Tooltip tooltip={title} triggerClassName="truncate">
+          {title}
+        </Tooltip>
       </h2>
     ) : (
       title

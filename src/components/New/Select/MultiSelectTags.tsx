@@ -1,7 +1,6 @@
 import type { FC, MouseEvent } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
-import { DialTag } from '@/components/Tag/Tag';
+import { Tag } from '@/components/New/Tag/Tag';
 import type { SelectOption } from '@/models/select';
 
 export interface MultiSelectTagsProps {
@@ -32,12 +31,14 @@ export const MultiSelectTags: FC<MultiSelectTagsProps> = ({
       {selectedValues.map((v) => {
         const option = options.find((o) => o.value === v);
         return (
-          <DialTag
+          <Tag
             key={v}
             label={option?.label ?? v}
             closable={!!handleRemoveTag}
             onRemove={(e) => handleRemoveTag?.(e, v)}
-            icon={option?.icon ? <DialIcon icon={option.icon} /> : null}
+            // `Tag` wraps the icon in its own `aria-hidden` box, so it needs no
+            // wrapper of its own here.
+            icon={option?.icon}
             className="max-w-full"
           />
         );

@@ -203,6 +203,27 @@ describe('Dial UI Kit :: Select', () => {
       expect(selectAll).toHaveAttribute('aria-checked', 'mixed');
     });
 
+    test('selectAll sets the native indeterminate property while partial', () => {
+      // `aria-checked="mixed"` alone leaves the box drawn as unchecked: the DOM
+      // property is what the 2.0 `Checkbox` sets, and it has no React prop.
+      renderSelect({ multiple: true, selectAll: true });
+
+      openSelect();
+
+      const selectAll = screen.getByRole('checkbox', {
+        name: /select all/i,
+      }) as HTMLInputElement;
+
+      fireEvent.click(screen.getByRole('checkbox', { name: 'Option 1' }));
+
+      expect(selectAll.indeterminate).toBe(true);
+
+      fireEvent.click(selectAll);
+
+      expect(selectAll.indeterminate).toBe(false);
+      expect(selectAll.checked).toBe(true);
+    });
+
     test('a11y: listbox has aria-multiselectable', () => {
       renderSelect({ multiple: true });
       openSelect();
@@ -232,7 +253,9 @@ describe('Dial UI Kit :: Select', () => {
         onChange,
       });
 
-      fireEvent.click(screen.getAllByRole('button')[0]);
+      // The 2.0 `Tag` names its own remove button after the tag it removes, so
+      // the target can be addressed instead of taken by position.
+      fireEvent.click(screen.getByRole('button', { name: 'Remove Option 1' }));
 
       expect(onChange).toHaveBeenCalledWith(['opt-2']);
       expect(screen.queryByRole('listbox')).not.toBeInTheDocument();

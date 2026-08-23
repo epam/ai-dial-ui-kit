@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
 import { type SelectOption } from '@/models/select';
 import { mergeClasses } from '@/utils/merge-classes';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
@@ -58,7 +58,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
       >
         <div className="flex items-center gap-2 w-full min-w-0">
           {opt.icon && <DialIcon icon={opt.icon} />}
-          <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
+          <EllipsisTooltip text={opt.labelNode ?? opt.label} />
         </div>
         <span className="shrink-0">{selectSubMenuCaretIcon}</span>
       </button>
@@ -90,7 +90,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
               >
                 <div className="flex items-center gap-2 w-full min-w-0">
                   {child.icon && <DialIcon icon={child.icon} />}
-                  <DialEllipsisTooltip text={child.labelNode ?? child.label} />
+                  <EllipsisTooltip text={child.labelNode ?? child.label} />
                 </div>
 
                 {childSelected && selectOptionCheckIcon}

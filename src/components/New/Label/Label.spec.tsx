@@ -135,4 +135,33 @@ describe('Dial UI Kit :: Label', () => {
     expect(label).not.toContainElement(screen.getByRole('button'));
     expect(screen.getByRole('textbox')).toHaveAccessibleName('Phone Number');
   });
+
+  test('Should apply containerClassName to the wrapper, not to the label', () => {
+    render(
+      <Label
+        label="Shrinking Field"
+        htmlFor="shrinking-input"
+        containerClassName="min-w-0 flex-1"
+      />,
+    );
+
+    const label = screen.getByText('Shrinking Field').closest('label');
+
+    expect(label).not.toHaveClass('flex-1');
+    expect(label?.parentElement).toHaveClass('min-w-0', 'flex-1');
+  });
+
+  test('Should not leak containerClassName onto the label element', () => {
+    render(
+      <Label
+        label="Attribute Field"
+        htmlFor="attribute-input"
+        containerClassName="flex-1"
+      />,
+    );
+
+    const label = screen.getByText('Attribute Field').closest('label');
+
+    expect(label).not.toHaveAttribute('containerClassName');
+  });
 });

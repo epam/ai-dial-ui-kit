@@ -13,9 +13,9 @@ import {
   useState,
 } from 'react';
 
-import { DialCheckbox } from '@/components/Checkbox/Checkbox';
+import { Checkbox } from '@/components/New/Checkbox/Checkbox';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
-import { DialEllipsisTooltip } from '@/components/EllipsisTooltip/EllipsisTooltip';
+import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
 import { DialIcon } from '@/components/Icon/Icon';
 import {
   CaptionText,
@@ -381,7 +381,7 @@ export const Select: FC<SelectProps> = ({
 
     return (
       <span className="flex min-w-0 flex-1 items-center gap-2">
-        <DialEllipsisTooltip
+        <EllipsisTooltip
           text={singleSelectedOption.labelNode ?? selectedLabel}
         />
         {singleSelectedOption.description && (
@@ -493,13 +493,12 @@ export const Select: FC<SelectProps> = ({
 
       {multiple && selectAll && selectableFiltered.length > 0 && (
         <div className={mergeClasses(selectOptionBaseClassName, 'mt-2')}>
-          <DialCheckbox
+          <Checkbox
             id={`${fieldId}-selectAll`}
-            label={selectAllLabel}
-            checked={allSelectedInFiltered}
-            indeterminate={someSelectedInFiltered}
+            labelProps={{ label: selectAllLabel }}
+            isSelected={allSelectedInFiltered}
+            isIndeterminate={someSelectedInFiltered}
             onChange={toggleSelectAll}
-            ariaLabel={selectAllLabel}
           />
         </div>
       )}
@@ -530,20 +529,29 @@ export const Select: FC<SelectProps> = ({
                   'w-full',
                 )}
               >
-                <DialCheckbox
+                <Checkbox
                   id={`${fieldId}-${opt.value}`}
-                  label={
-                    <span className="flex w-full flex-1 pl-2 min-w-0 items-center gap-2 text-primary">
-                      {opt.icon && <DialIcon icon={opt.icon} />}
-                      <span className="truncate">
-                        {opt.labelNode ?? opt.label}
+                  labelProps={{
+                    label: (
+                      <span className="flex min-w-0 flex-1 items-center gap-2">
+                        {opt.icon && <DialIcon icon={opt.icon} />}
+                        <span className="truncate">
+                          {opt.labelNode ?? opt.label}
+                        </span>
                       </span>
-                    </span>
-                  }
-                  checked={selected}
+                    ),
+                    // Both boxes have to be allowed to shrink, or the option
+                    // label pushes the row wider instead of truncating.
+                    containerClassName: 'min-w-0 flex-1',
+                    className: 'min-w-0 flex-1',
+                  }}
+                  // The label is a node, so the option's own text names the
+                  // checkbox instead.
+                  aria-label={opt.label}
+                  isSelected={selected}
                   disabled={opt.disabled}
                   onChange={() => !opt.disabled && handleToggle(opt.value)}
-                  ariaLabel={opt.label}
+                  className="w-full"
                 />
 
                 {opt.description && (
@@ -582,7 +590,7 @@ export const Select: FC<SelectProps> = ({
             >
               <div className="flex items-center gap-2 w-full min-w-0">
                 {opt.icon && <DialIcon icon={opt.icon} />}
-                <DialEllipsisTooltip text={opt.labelNode ?? opt.label} />
+                <EllipsisTooltip text={opt.labelNode ?? opt.label} />
 
                 {opt.description && (
                   <div className="text-secondary dial-small-text">
