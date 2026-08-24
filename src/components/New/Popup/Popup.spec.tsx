@@ -275,9 +275,7 @@ describe('Dial UI Kit :: Popup', () => {
       const user = userEvent.setup();
       const onBack = vi.fn();
       const onClose = vi.fn();
-      render(
-        <Popup open header="Title" onBack={onBack} onClose={onClose} />,
-      );
+      render(<Popup open header="Title" onBack={onBack} onClose={onClose} />);
 
       await user.click(screen.getByRole('button', { name: 'Back' }));
 
@@ -338,7 +336,9 @@ describe('Dial UI Kit :: Popup', () => {
       const { container } = render(<Popup open header="Title" />);
 
       expect(
-        container.querySelector(`.${popupHeaderDividerClassName.split(' ')[0]}`),
+        container.querySelector(
+          `.${popupHeaderDividerClassName.split(' ')[0]}`,
+        ),
       ).toBeNull();
     });
 
@@ -383,7 +383,9 @@ describe('Dial UI Kit :: Popup', () => {
       expect(
         screen.getByRole('button', { name: 'Learn more' }),
       ).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Cancel' }),
+      ).toBeInTheDocument();
       expect(
         screen.getByRole('button', { name: 'Confirm' }),
       ).toBeInTheDocument();
