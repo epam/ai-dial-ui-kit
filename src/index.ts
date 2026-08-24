@@ -393,6 +393,7 @@ export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
 export type { FileDropzoneProps } from './components/New/FileDropzone/FileDropzone';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
+export { TagAppearance } from './types/tag';
 export { TagInput } from './components/New/TagInput/TagInput';
 export type { TagInputProps } from './components/New/TagInput/TagInput';
 export { Search } from './components/New/Search/Search';

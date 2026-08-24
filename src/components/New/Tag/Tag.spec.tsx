@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 
 import { ElementSize } from '@/types/size';
+import { TagAppearance } from '@/types/tag';
 import { Tag } from './Tag';
 
 describe('Dial UI Kit :: Tag', () => {
@@ -126,5 +127,130 @@ describe('Dial UI Kit :: Tag', () => {
     expect(screen.getByText('TypeScript').parentElement).toHaveClass(
       'h-[20px]',
     );
+  });
+
+  describe('selectable appearance', () => {
+    test('announces the selection through aria-pressed', () => {
+      const { rerender } = render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveAttribute(
+        'aria-pressed',
+        'false',
+      );
+
+      rerender(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          selected
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+    });
+
+    test('is not a toggle when it cannot be activated', () => {
+      render(
+        <Tag label="Drafts" appearance={TagAppearance.Selectable} selected />,
+      );
+
+      expect(screen.getByText('Drafts').parentElement).not.toHaveAttribute(
+        'aria-pressed',
+      );
+    });
+
+    test('leaves the outlined tag announcing no pressed state', () => {
+      render(<Tag label="Drafts" selected onClick={vi.fn()} />);
+
+      expect(
+        screen.getByRole('button', { name: 'Drafts' }),
+      ).not.toHaveAttribute('aria-pressed');
+    });
+
+    test('drops the rim and the fill until it is selected', () => {
+      const { rerender } = render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={vi.fn()}
+        />,
+      );
+
+      const tag = screen.getByRole('button', { name: 'Drafts' });
+      expect(tag).toHaveClass('border-transparent', 'bg-transparent');
+      expect(tag).not.toHaveClass('border-tertiary', 'bg-layer-raised');
+
+      rerender(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          selected
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveClass(
+        'bg-control-accent-alpha',
+      );
+    });
+
+    test('toggles on click and on Enter', async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+
+      render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={onClick}
+        />,
+      );
+
+      const tag = screen.getByRole('button', { name: 'Drafts' });
+      await user.click(tag);
+      tag.focus();
+      await user.keyboard('{Enter}');
+
+      expect(onClick).toHaveBeenCalledTimes(2);
+    });
+
+    test('reaches the minimum pointer target only where it is too small', () => {
+      // jsdom performs no layout: a 24px standard tag already clears WCAG
+      // 2.5.8 on its own, so only the 20px one takes the pseudo-element.
+      const { rerender } = render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          size={ElementSize.Small}
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveClass(
+        'dial-kit-minimum-target',
+      );
+
+      rerender(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).not.toHaveClass(
+        'dial-kit-minimum-target',
+      );
+    });
   });
 });
