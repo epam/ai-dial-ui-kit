@@ -49,10 +49,7 @@ export const InfoButton: FC<InfoButtonProps> = ({
       icon={<IconInfoCircle size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
       onClick={onClick}
       size={ElementSize.Small}
-      tooltipProps={{
-        tooltip: caption,
-        triggerClassName: 'flex justify-center items-center',
-      }}
+      tooltipProps={{ tooltip: caption }}
     />
   );
 };

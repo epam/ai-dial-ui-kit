@@ -9,13 +9,23 @@ import {
 } from '@floating-ui/react';
 import { type FC, type MouseEvent, type ReactNode, useId, useRef } from 'react';
 
+import { Button, type ButtonProps } from '@/components/New/Button/Button';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
+import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
+import { IconChevronLeft } from '@tabler/icons-react';
 import {
+  popupActionsGroupClassName,
   popupBaseClassName,
+  popupFooterClassName,
+  popupFooterDividerClassName,
   popupHeaderClassName,
+  popupHeaderDividerClassName,
   popupOverlayBaseClassName,
   popupSizeClassMap,
   popupTitleClassName,
@@ -34,7 +44,16 @@ export interface PopupProps {
   bodyClassName?: string;
   children?: ReactNode;
   footer?: ReactNode;
+  footerClassName?: string;
   onClose?: (e?: MouseEvent<HTMLButtonElement> | null) => void;
+  onBack?: (e: MouseEvent<HTMLButtonElement>) => void;
+  backAriaLabel?: string;
+  headerActions?: ReactNode;
+  headerDivider?: boolean;
+  mainButtons?: ButtonProps[];
+  additionalButtons?: ButtonProps[];
+  additionalButtonsOnLeft?: boolean;
+  footerDivider?: boolean;
   size?: PopupSize;
   hideClose?: boolean;
   closeAriaLabel?: string;
@@ -49,8 +68,18 @@ export interface PopupProps {
  *
  * Renders in a portal with a scrim overlay, focus management, a header with the
  * title and close control, a scrollable body and an optional footer. Sections
- * are separated by spacing rather than rules; add your own through
- * `headerClassName` or the footer node if a surface needs them.
+ * are separated by spacing rather than rules; opt into a rule with
+ * `headerDivider` / `footerDivider`.
+ *
+ * The header grows from the title alone: `onBack` prepends a back control,
+ * `headerActions` sits between the title and the close button.
+ *
+ * The footer is declared as data, not markup: `mainButtons` and
+ * `additionalButtons` take {@link ButtonProps} and the popup renders the
+ * {@link Button}s itself, so spacing, order and the neutral default are the
+ * same on every dialog. `additionalButtonsOnLeft` moves the secondary group to
+ * the opposite edge. A `footer` node still wins over both, for the rare surface
+ * that needs something other than a row of buttons.
  *
  * A string `header` names the dialog automatically. A `header` node cannot —
  * pass `ariaLabel` in that case, or the dialog opens unnamed.
@@ -61,12 +90,22 @@ export interface PopupProps {
  *   open
  *   header="Title"
  *   size={PopupSize.Md}
- *   footer={
- *     <div className="flex justify-end gap-2 px-6 py-4">
- *       <NeutralButton label="Cancel" />
- *       <PrimaryButton label="Confirm" />
- *     </div>
- *   }
+ *   onBack={() => setStep(step - 1)}
+ *   headerActions={<InfoButton caption="What is this?" />}
+ *   additionalButtonsOnLeft
+ *   additionalButtons={[
+ *     {
+ *       label: 'Back',
+ *       variant: ButtonVariant.Primary,
+ *       appearance: ButtonAppearance.Link,
+ *       iconBefore: <IconArrowLeft />,
+ *       onClick: goBack,
+ *     },
+ *   ]}
+ *   mainButtons={[
+ *     { label: 'Cancel', onClick: () => setOpen(false) },
+ *     { label: 'Confirm', variant: ButtonVariant.Primary, onClick: submit },
+ *   ]}
  *   onClose={() => setOpen(false)}
  * >
  *   <div className="px-6 py-4">Dialog content goes here…</div>
@@ -83,7 +122,16 @@ export interface PopupProps {
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [bodyClassName] - Additional CSS classes applied to the scrollable body wrapper around `children`
  * @param [children] - Body content
- * @param [footer] - Footer area for actions
+ * @param [footer] - Custom footer node; overrides `mainButtons` and `additionalButtons`
+ * @param [footerClassName] - Additional CSS classes applied to the built-in footer container
+ * @param [onBack] - Callback for the header back button; the button renders only when set
+ * @param [backAriaLabel="Back"] - Accessible name of the back button
+ * @param [headerActions] - Controls rendered between the title and the close button
+ * @param [headerDivider=false] - Whether a rule is drawn under the header
+ * @param [mainButtons] - Primary footer buttons, aligned to the trailing edge; each defaults to `ButtonVariant.Neutral`
+ * @param [additionalButtons] - Secondary footer buttons, next to `mainButtons` unless moved left
+ * @param [additionalButtonsOnLeft=false] - Whether `additionalButtons` sit on the leading edge
+ * @param [footerDivider=false] - Whether a rule is drawn above the footer
  * @param [onClose] - Callback fired when the popup requests to close
  * @param [size=PopupSize.Md] - Sets the max-width of the popup
  * @param [hideClose=false] - Whether the close button is hidden in the header
@@ -103,7 +151,16 @@ export const Popup: FC<PopupProps> = ({
   bodyClassName,
   children,
   footer,
+  footerClassName,
   onClose,
+  onBack,
+  backAriaLabel = 'Back',
+  headerActions,
+  headerDivider = false,
+  mainButtons,
+  additionalButtons,
+  additionalButtonsOnLeft = false,
+  footerDivider = false,
   size = PopupSize.Md,
   hideClose = false,
   closeAriaLabel = 'Close dialog',
@@ -152,6 +209,51 @@ export const Popup: FC<PopupProps> = ({
     );
   };
 
+  const closeButton = hideClose ? null : (
+    <CloseButton ariaLabel={closeAriaLabel} onClose={(e) => onClose?.(e)} />
+  );
+
+  // Neutral rather than the `Button` default of no variant: an unstyled button
+  // in a dialog footer is never what the caller meant, and it matches the
+  // `NeutralButton` wrapper these footers were written with by hand.
+  // The two groups share a parent when the additional buttons are not moved
+  // left, so their keys have to be namespaced or the indices collide.
+  const renderButtons = (prefix: string, buttons: ButtonProps[] = []) =>
+    buttons.map(({ variant = ButtonVariant.Neutral, ...button }, index) => (
+      <Button key={`${prefix}-${index}`} variant={variant} {...button} />
+    ));
+
+  // A `footer` node stays authoritative so callers that hand-rolled one before
+  // the structured props existed render exactly what they did before.
+  const renderFooter = () => {
+    if (footer !== undefined) return footer;
+    if (!mainButtons?.length && !additionalButtons?.length) return null;
+
+    const additional = renderButtons('additional', additionalButtons);
+
+    return (
+      <div
+        className={mergeClasses(
+          popupFooterClassName,
+          footerDivider && popupFooterDividerClassName,
+          footerClassName,
+        )}
+      >
+        {/* Guarded on the content, not just the flag: an empty leading group
+            would still claim the container's gap. */}
+        {additionalButtonsOnLeft && additional.length > 0 && (
+          <div className={popupActionsGroupClassName}>{additional}</div>
+        )}
+        {/* `ml-auto` rather than `justify-end`: it pins the main group to the
+            trailing edge whether or not a leading group precedes it. */}
+        <div className={mergeClasses(popupActionsGroupClassName, 'ml-auto')}>
+          {!additionalButtonsOnLeft && additional}
+          {renderButtons('main', mainButtons)}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
@@ -190,14 +292,39 @@ export const Popup: FC<PopupProps> = ({
               />
             )}
             <div
-              className={mergeClasses(popupHeaderClassName, headerClassName)}
+              className={mergeClasses(
+                popupHeaderClassName,
+                headerDivider && popupHeaderDividerClassName,
+                headerClassName,
+              )}
             >
-              {renderTitle(header)}
-              {!hideClose && (
-                <CloseButton
-                  ariaLabel={closeAriaLabel}
-                  onClose={(e) => onClose?.(e)}
+              {onBack && (
+                <GhostIconButton
+                  aria-label={backAriaLabel}
+                  // Matches the 24px close button across the header rather than
+                  // the 40px default, which would set the header's height.
+                  size={ElementSize.Small}
+                  className="mr-2"
+                  onClick={onBack}
+                  icon={
+                    <IconChevronLeft
+                      size={DIAL_ICON_SIZE.SM}
+                      aria-hidden="true"
+                    />
+                  }
                 />
+              )}
+              {renderTitle(header)}
+              {/* Grouped only when there are actions to group with: without
+                  them the close button stays a direct child of the header, so
+                  markup that predates `headerActions` is untouched. */}
+              {headerActions ? (
+                <div className={popupActionsGroupClassName}>
+                  {headerActions}
+                  {closeButton}
+                </div>
+              ) : (
+                closeButton
               )}
             </div>
 
@@ -205,7 +332,7 @@ export const Popup: FC<PopupProps> = ({
               {children}
             </div>
 
-            {footer}
+            {renderFooter()}
           </div>
         </FloatingFocusManager>
       </FloatingOverlay>

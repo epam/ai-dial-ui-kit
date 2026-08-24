@@ -112,7 +112,15 @@ export const AllPlacements: Story = {
 export const LongContent: Story = {
   args: {
     tooltip:
-      'A long tooltip that wraps onto several lines once it reaches the maximum width of 300 pixels, and keeps the line breaks it is given.',
+      'Very Long Tooltip with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A tooltip never grows past 376px: longer text wraps onto more lines and keeps any line breaks it is given. Keep a line under about 60 characters — beyond that, break the text into sentences rather than letting one line run.',
+      },
+    },
   },
 };
 

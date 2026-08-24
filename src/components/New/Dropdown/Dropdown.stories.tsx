@@ -20,11 +20,12 @@ import {
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
 import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { type DropdownItem } from '@/models/dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { ElementSize } from '@/types/size';
+import { TooltipPlacement } from '@/types/tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   dropdownDividerClassName,
@@ -653,10 +654,10 @@ export const WithSubMenuCustomContent: Story = {
                       'justify-between pr-1',
                     )}
                   >
-                    <DialTooltip
+                    <Tooltip
                       tooltip={collectionItem.description}
                       hideTooltip={!collectionItem.description}
-                      placement="right"
+                      placement={TooltipPlacement.Right}
                       triggerClassName="flex-1"
                     >
                       <button
@@ -669,7 +670,7 @@ export const WithSubMenuCustomContent: Story = {
                           {collectionItem.label}
                         </span>
                       </button>
-                    </DialTooltip>
+                    </Tooltip>
                     <DangerIconButton
                       aria-label={`Delete ${collectionItem.label}`}
                       icon={<IconTrash size={DIAL_ICON_SIZE.SM} />}
@@ -756,4 +757,54 @@ export const WithSubMenuHeaderAndFooter: Story = {
       <TriggerBtn label="Sub-menu header/footer" />
     </Dropdown>
   ),
+};
+
+/**
+ * Selectable items turn the menu into a multiselect list: each row is a
+ * `menuitemcheckbox` with a checkbox box, a click toggles it without closing the
+ * menu, and a plain item alongside them still closes it.
+ */
+export const MultiselectItems: Story = {
+  render: () => {
+    const MultiselectExample = () => {
+      const [checked, setChecked] = useState<string[]>(['drafts']);
+
+      const toggle = (key: string) =>
+        setChecked((prev) =>
+          prev.includes(key)
+            ? prev.filter((value) => value !== key)
+            : [...prev, key],
+        );
+
+      return (
+        <Dropdown
+          placement="bottom-start"
+          items={[
+            ...[
+              { key: 'drafts', label: 'Drafts' },
+              { key: 'shared', label: 'Shared with me' },
+              { key: 'archived', label: 'Archived' },
+              { key: 'deleted', label: 'Deleted', disabled: true },
+            ].map((item) => ({
+              ...item,
+              selectable: true,
+              checked: checked.includes(item.key),
+              onClick: () => toggle(item.key),
+            })),
+            { key: 'divider', type: DropdownItemType.Divider },
+            {
+              key: 'reset',
+              label: 'Reset',
+              danger: true,
+              onClick: () => setChecked([]),
+            },
+          ]}
+        >
+          <TriggerBtn label={`Filters (${checked.length})`} />
+        </Dropdown>
+      );
+    };
+
+    return <MultiselectExample />;
+  },
 };

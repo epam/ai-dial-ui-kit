@@ -14,6 +14,7 @@ import {
 } from 'react';
 
 import { Checkbox } from '@/components/New/Checkbox/Checkbox';
+import { CheckboxBox } from '@/components/New/Checkbox/CheckboxBox';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -517,49 +518,40 @@ export const Select: FC<SelectProps> = ({
 
           if (multiple) {
             return (
-              <div
+              /*
+                The row itself is the control: one `option` whose state rides on
+                `aria-selected`, with a decorative box drawing the check. A real
+                nested checkbox would give the row two states to announce and
+                would leave the rest of the 40px rectangle inert — the design
+                has the whole row selecting the option.
+              */
+              <button
                 key={opt.value}
+                id={`${fieldId}-${opt.value}`}
+                type="button"
                 role="option"
                 aria-selected={selected}
                 aria-disabled={!!opt.disabled}
+                disabled={opt.disabled}
                 className={mergeClasses(
                   selectOptionBaseClassName,
                   selected && selectOptionSelectedClassName,
                   opt.disabled && selectOptionDisabledClassName,
-                  'w-full',
                 )}
+                onClick={() => handleToggle(opt.value)}
               >
-                <Checkbox
-                  id={`${fieldId}-${opt.value}`}
-                  labelProps={{
-                    label: (
-                      <span className="flex min-w-0 flex-1 items-center gap-2">
-                        {opt.icon && <DialIcon icon={opt.icon} />}
-                        <span className="truncate">
-                          {opt.labelNode ?? opt.label}
-                        </span>
-                      </span>
-                    ),
-                    // Both boxes have to be allowed to shrink, or the option
-                    // label pushes the row wider instead of truncating.
-                    containerClassName: 'min-w-0 flex-1',
-                    className: 'min-w-0 flex-1',
-                  }}
-                  // The label is a node, so the option's own text names the
-                  // checkbox instead.
-                  aria-label={opt.label}
-                  isSelected={selected}
-                  disabled={opt.disabled}
-                  onChange={() => !opt.disabled && handleToggle(opt.value)}
-                  className="w-full"
-                />
+                <CheckboxBox isSelected={selected} disabled={opt.disabled} />
+                {opt.icon && <DialIcon icon={opt.icon} />}
+                <span className="min-w-0 flex-1 truncate text-start">
+                  {opt.labelNode ?? opt.label}
+                </span>
 
                 {opt.description && (
-                  <div className="text-secondary dial-small-text">
+                  <span className="shrink-0 text-secondary dial-small-text">
                     {opt.description}
-                  </div>
+                  </span>
                 )}
-              </div>
+              </button>
             );
           }
 

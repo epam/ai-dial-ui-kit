@@ -4,6 +4,7 @@ import {
   overlayGap,
   overlayItemClassName,
   overlayItemDisabledClassName,
+  overlayItemSelectedClassName,
   overlaySubMenuClassName,
   overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
@@ -23,6 +24,9 @@ export const dropdownListBaseClassName = mergeClasses(
 export const dropdownSubMenuClassName = overlaySubMenuClassName;
 
 export const dropdownItemBaseClassName = overlayItemClassName;
+
+/** Tint marking a checked multiselect row. */
+export const dropdownItemSelectedClassName = overlayItemSelectedClassName;
 
 export const dropdownItemDisabledClassName = mergeClasses(
   overlayItemDisabledClassName,

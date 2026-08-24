@@ -184,6 +184,18 @@ describe('Dial UI Kit :: Tooltip', () => {
     );
   });
 
+  test('Should cap the bubble at the design maximum width', () => {
+    render(
+      <Tooltip tooltip="Tooltip text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    // jsdom does no layout, so the class is all there is to check here — the
+    // compiled rule is verified in dist/index.css.
+    expect(screen.getByRole('tooltip')).toHaveClass('max-w-[376px]');
+  });
+
   test('Should render nothing on a mobile screen, where there is no hover', () => {
     setViewportWidth(375);
 

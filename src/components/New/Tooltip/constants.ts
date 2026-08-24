@@ -26,6 +26,11 @@ export const arrowClassName = 'fill-control-inverted';
 /**
  * Tooltips sit above popups, dropdowns and the calendar (all `z-[53]`), since
  * they can be triggered by a control inside one of them.
+ *
+ * `max-w-[376px]` is the cap the design puts on a tooltip: at `dial-small-text`
+ * that is around 60 characters a line, past which a line stops being
+ * comfortable to read. Longer text wraps instead of widening the bubble. The
+ * width stays a literal because Tailwind only sees static class strings.
  */
 export const tooltipClassName =
-  'z-[55] max-w-[300px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted';
+  'z-[55] max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted';

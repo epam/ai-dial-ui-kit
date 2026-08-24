@@ -1,4 +1,3 @@
-import { IconCheck, IconMinus } from '@tabler/icons-react';
 import type { ChangeEvent, FC, InputHTMLAttributes } from 'react';
 import { useCallback, useId } from 'react';
 
@@ -6,7 +5,7 @@ import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { Label, type LabelProps } from '../Label/Label';
-import { CHECKBOX_ICON_PROPS } from './constants';
+import { CheckboxBox } from './CheckboxBox';
 
 type NativeInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -21,6 +20,7 @@ export interface CheckboxProps extends NativeInputProps {
   disabled?: boolean;
   onChange?: (value: boolean) => void;
   caption?: string;
+  boxClassName?: string;
 }
 
 /**
@@ -54,6 +54,9 @@ export interface CheckboxProps extends NativeInputProps {
  * @param [disabled=false] - Whether the checkbox is disabled
  * @param [onChange] - Callback fired with the new value when toggled
  * @param [caption] - Caption text rendered below the label, and described by the checkbox
+ * @param [boxClassName] - Additional classes for the box itself. Use it to drop
+ * the box's own focus ring where the container already draws one, as a
+ * multiselect row does.
  */
 export const Checkbox: FC<CheckboxProps> = ({
   id,
@@ -65,12 +68,12 @@ export const Checkbox: FC<CheckboxProps> = ({
   onChange,
   caption,
   className,
+  boxClassName,
   ...props
 }) => {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
   const captionId = caption ? `${checkboxId}-caption` : undefined;
-  const isFilled = isIndeterminate || isSelected;
 
   const onToggle = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -109,38 +112,14 @@ export const Checkbox: FC<CheckboxProps> = ({
           aria-describedby={captionId}
           className="peer sr-only"
         />
-        <label
+        <CheckboxBox
           htmlFor={checkboxId}
-          className={mergeClasses(
-            'grid size-[20px] shrink-0 place-items-center rounded border transition-colors duration-200',
-            // 20px is below the 24x24 minimum target, so grow the pointer target
-            // without touching the rendered size. The 44px enhanced target would
-            // overhang by 12px per side and swallow the adjacent label.
-            'dial-kit-minimum-target',
-            'peer-focus-visible:outline peer-focus-visible:outline-focus',
-            disabled
-              ? 'cursor-not-allowed border-transparent bg-control-disable-primary text-control-disable-primary'
-              : mergeClasses(
-                  'cursor-pointer',
-                  invalid &&
-                    isFilled &&
-                    'border-transparent bg-control-error text-control-permanent',
-                  invalid && !isFilled && 'border-error bg-control-neutral',
-                  !invalid &&
-                    isFilled &&
-                    'border-transparent bg-control-accent text-control-permanent hover:bg-control-accent-hover',
-                  !invalid &&
-                    !isFilled &&
-                    'border-default bg-control-neutral hover:border-accent hover:bg-control-accent-alpha-hover',
-                ),
-          )}
-        >
-          {isIndeterminate ? (
-            <IconMinus {...CHECKBOX_ICON_PROPS} />
-          ) : (
-            isSelected && <IconCheck {...CHECKBOX_ICON_PROPS} />
-          )}
-        </label>
+          isSelected={isSelected}
+          isIndeterminate={isIndeterminate}
+          invalid={invalid}
+          disabled={disabled}
+          className={boxClassName}
+        />
         {labelProps && (
           <Label
             size={ElementSize.Standard}

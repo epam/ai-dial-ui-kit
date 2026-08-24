@@ -1,9 +1,10 @@
-import { IconTag } from '@tabler/icons-react';
+import { IconArrowNarrowLeft, IconTag } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
+import { TagAppearance } from '@/types/tag';
 import { Tag } from './Tag';
 
 const meta = {
@@ -24,6 +25,12 @@ const meta = {
       control: 'radio',
       options: [ElementSize.Small, ElementSize.Standard],
       description: 'Tag height: standard is 24px, small is 20px',
+    },
+    appearance: {
+      control: 'radio',
+      options: [TagAppearance.Outlined, TagAppearance.Selectable],
+      description:
+        'Outlined is the bordered chip; selectable is the borderless filter chip',
     },
     selected: {
       control: 'boolean',
@@ -123,6 +130,77 @@ export const Clickable: Story = {
   render: () => <SelectableTags />,
 };
 
+const SelectableFilters = () => {
+  const [selected, setSelected] = useState<string[]>(['Shared']);
+
+  const toggle = (value: string) =>
+    setSelected((current) =>
+      current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value],
+    );
+
+  return (
+    <div className="flex flex-wrap gap-1">
+      {['Drafts', 'Shared', 'Archived'].map((value) => (
+        <Tag
+          key={value}
+          label={value}
+          appearance={TagAppearance.Selectable}
+          selected={selected.includes(value)}
+          onClick={() => toggle(value)}
+        />
+      ))}
+    </div>
+  );
+};
+
+export const Selectable: Story = {
+  args: { label: 'Drafts' },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The filter chip of the 2.0 design: no rim or fill until it is selected, ' +
+          'one hover tint shared by both states, and the state on `aria-pressed`.',
+      },
+    },
+  },
+  render: () => <SelectableFilters />,
+};
+
+export const SelectableStates: Story = {
+  args: { label: 'Tag' },
+  render: () => (
+    <div className="flex flex-col gap-2 p-8">
+      <div className="flex items-center gap-2">
+        <Tag
+          label="Tag"
+          appearance={TagAppearance.Selectable}
+          onClick={() => {}}
+        />
+        <Tag
+          label="Tag"
+          appearance={TagAppearance.Selectable}
+          selected
+          onClick={() => {}}
+        />
+        <Tag
+          label="Tag"
+          appearance={TagAppearance.Selectable}
+          selected
+          icon={<IconArrowNarrowLeft size={DIAL_ICON_SIZE.SM} />}
+          onClick={() => {}}
+        />
+      </div>
+      <div className="text-secondary dial-tiny-text">
+        Hover and focus each chip: both states take one accent-alpha hover tint,
+        and focus draws the grey-1000 ring.
+      </div>
+    </div>
+  ),
+};
+
 export const AllVariants: Story = {
   args: { label: 'Tag' },
   render: () => (
@@ -145,6 +223,19 @@ export const AllVariants: Story = {
               closable
               disabled
               onRemove={() => {}}
+            />
+            <Tag
+              size={size}
+              label="Selectable"
+              appearance={TagAppearance.Selectable}
+              onClick={() => {}}
+            />
+            <Tag
+              size={size}
+              label="Selectable on"
+              appearance={TagAppearance.Selectable}
+              selected
+              onClick={() => {}}
             />
           </div>
         </div>
