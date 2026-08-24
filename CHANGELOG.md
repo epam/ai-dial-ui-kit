@@ -19,6 +19,8 @@ Versions match the git tags on the `development` branch.
   See [migration guide](migration-guides/0.14.0/select-multiselect-option-row.md).
 - **Border tokens `focus-black` → `focus`, `focus-blue` → `accent-focus`** — 0.13.0 renamed `focus` to `focus-black` to name the token after its value; the focus tokens are now named after their role instead, matching `accent` / `accent-alpha` elsewhere in the border scale. `border-focus` / `outline-focus` / `divide-focus` / `stroke-focus` are back to the names they had in 0.12.x, and `focus-blue` becomes `accent-focus`. Both keep their variables (`--stroke-focus-black`, with `--stroke-focus` still in the fallback chain, and `--stroke-focus-blue`) and their colours.
   See [migration guide](migration-guides/0.14.0/focus-border-token-role-naming.md).
+- **`Button` and `IconButton` (2.0) — `tooltipProps` is the 2.0 `Tooltip`'s props** — both were still wrapping the 1.0 `DialTooltip`, so a 2.0 button revealed its tooltip in the 1.0 bubble. They now wrap the 2.0 `Tooltip` with `asChild`, which also moves the tooltip's `aria-describedby` from a wrapper `<span>` onto the button itself. `placement` takes the four-sided `TooltipPlacement` enum instead of the full floating-ui `Placement`, so an aligned value such as `'top-start'` no longer compiles, and the trigger `<span>` is gone: a `triggerClassName` now lands on the button, where the classes that used to centre or truncate the wrapper are redundant.
+  See [migration guide](migration-guides/0.14.0/button-tooltip-2-0.md).
 
 ### Changed
 

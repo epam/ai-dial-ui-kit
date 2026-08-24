@@ -20,11 +20,12 @@ import {
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
 import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers';
-import { DialTooltip } from '@/components/Tooltip/Tooltip';
+import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { type DropdownItem } from '@/models/dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { ElementSize } from '@/types/size';
+import { TooltipPlacement } from '@/types/tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   dropdownDividerClassName,
@@ -653,10 +654,10 @@ export const WithSubMenuCustomContent: Story = {
                       'justify-between pr-1',
                     )}
                   >
-                    <DialTooltip
+                    <Tooltip
                       tooltip={collectionItem.description}
                       hideTooltip={!collectionItem.description}
-                      placement="right"
+                      placement={TooltipPlacement.Right}
                       triggerClassName="flex-1"
                     >
                       <button
@@ -669,7 +670,7 @@ export const WithSubMenuCustomContent: Story = {
                           {collectionItem.label}
                         </span>
                       </button>
-                    </DialTooltip>
+                    </Tooltip>
                     <DangerIconButton
                       aria-label={`Delete ${collectionItem.label}`}
                       icon={<IconTrash size={DIAL_ICON_SIZE.SM} />}

@@ -6,16 +6,13 @@ import type {
 } from 'react';
 
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import {
-  DialTooltip,
-  type DialTooltipProps,
-} from '@/components/Tooltip/Tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { ElementSize } from '@/types/size';
+import { Tooltip, type TooltipProps } from '../Tooltip/Tooltip';
 import { getButtonClassNames } from '../Button/utils';
 
-type TooltipProps = Omit<DialTooltipProps, 'children'>;
+type IconButtonTooltipProps = Omit<TooltipProps, 'children'>;
 
 /** Square footprint per size, matching the field heights in `input.scss`. */
 const SIZE_CLASS: Record<ElementSize, string> = {
@@ -32,7 +29,7 @@ export interface IconButtonProps extends DetailedHTMLProps<
   size?: ElementSize;
   appearance?: ButtonAppearance;
   icon: ReactNode;
-  tooltipProps?: TooltipProps;
+  tooltipProps?: IconButtonTooltipProps;
 }
 
 /**
@@ -66,7 +63,7 @@ export interface IconButtonProps extends DetailedHTMLProps<
  * @param [variant] - Defines the visual style of the button
  * @param [appearance=ButtonAppearance.Solid] - Defines the type of the button
  * @param [size=ElementSize.Standard] - Defines the size of the button
- * @param [tooltip] - The content of the icon button tooltip
+ * @param [tooltipProps] - Props of the 2.0 {@link Tooltip} wrapping the button
  * @param icon - Icon display
  */
 export const IconButton: FC<IconButtonProps> = ({
@@ -101,8 +98,13 @@ export const IconButton: FC<IconButtonProps> = ({
       {icon}
     </button>
   );
+
+  // `asChild` puts the tooltip's `aria-describedby` on the button itself; a
+  // wrapper <span> would keep the text away from assistive technology.
   return tooltipProps ? (
-    <DialTooltip {...tooltipProps}>{button}</DialTooltip>
+    <Tooltip asChild {...tooltipProps}>
+      {button}
+    </Tooltip>
   ) : (
     button
   );

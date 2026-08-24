@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { Button } from '../Button';
 import { LinkButton } from '../ButtonWrappers';
@@ -107,11 +108,19 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(button).not.toHaveClass('size-[40px]', 'px-3');
   });
 
-  test('Should render inside a tooltip when tooltipProps is provided', () => {
+  test('Should show the tooltip on hover and describe the button itself', async () => {
+    const user = userEvent.setup();
+
     render(<Button label="Tooltip button" tooltipProps={{ tooltip: 'Tip' }} />);
-    expect(
-      screen.getByRole('button', { name: 'Tooltip button' }),
-    ).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: 'Tooltip button' });
+
+    await user.hover(button);
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Tip');
+    // The 2.0 tooltip is rendered with `asChild`, so `aria-describedby` lands
+    // on the button rather than on a wrapper <span> a reader never reaches.
+    expect(button).toHaveAttribute('aria-describedby', tooltip.id);
   });
 
   test('Should use aria-label when label is ReactNode', () => {
