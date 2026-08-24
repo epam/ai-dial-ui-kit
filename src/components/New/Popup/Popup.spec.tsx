@@ -3,7 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { Popup } from './Popup';
 import { PopupSize } from '@/types/popup';
-import { popupSizeClassMap } from './constants';
+import { ButtonVariant } from '@/types/button';
+import {
+  popupFooterClassName,
+  popupFooterDividerClassName,
+  popupHeaderDividerClassName,
+  popupSizeClassMap,
+} from './constants';
 
 describe('Dial UI Kit :: Popup', () => {
   test('does not render when closed', () => {
@@ -256,5 +262,260 @@ describe('Dial UI Kit :: Popup', () => {
     expect(screen.getByText('A title too long for its header')).toHaveClass(
       'truncate',
     );
+  });
+
+  describe('header', () => {
+    test('renders no back button until onBack is given', () => {
+      render(<Popup open header="Title" />);
+
+      expect(screen.queryByRole('button', { name: 'Back' })).toBeNull();
+    });
+
+    test('calls onBack when the back button is clicked', async () => {
+      const user = userEvent.setup();
+      const onBack = vi.fn();
+      const onClose = vi.fn();
+      render(
+        <Popup open header="Title" onBack={onBack} onClose={onClose} />,
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Back' }));
+
+      expect(onBack).toHaveBeenCalledTimes(1);
+      // The back control must not double as a dismiss.
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
+    test('names the back button from backAriaLabel', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          onBack={vi.fn()}
+          backAriaLabel="Back to templates"
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Back to templates' }),
+      ).toBeInTheDocument();
+    });
+
+    test('renders headerActions alongside the close button', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          headerActions={<button type="button">Details</button>}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Details' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Close dialog' }),
+      ).toBeInTheDocument();
+    });
+
+    test('keeps headerActions when the close button is hidden', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          hideClose
+          headerActions={<button type="button">Details</button>}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Details' }),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Close dialog' })).toBeNull();
+    });
+
+    test('draws no rule under the header by default', () => {
+      const { container } = render(<Popup open header="Title" />);
+
+      expect(
+        container.querySelector(`.${popupHeaderDividerClassName.split(' ')[0]}`),
+      ).toBeNull();
+    });
+
+    test('draws a rule under the header when headerDivider is set', () => {
+      render(<Popup open header="Title" headerDivider />);
+
+      const header = screen.getByRole('heading', { name: 'Title' })
+        .parentElement as HTMLElement;
+      popupHeaderDividerClassName
+        .split(' ')
+        .forEach((cls) => expect(header).toHaveClass(cls));
+    });
+  });
+
+  describe('footer', () => {
+    test('renders no footer when neither buttons nor footer are given', () => {
+      render(<Popup open header="Title" />);
+
+      expect(screen.queryByRole('button', { name: 'Confirm' })).toBeNull();
+    });
+
+    test('renders no footer for empty button lists', () => {
+      const { container } = render(
+        <Popup open header="Title" mainButtons={[]} additionalButtons={[]} />,
+      );
+
+      expect(
+        container.querySelector(`.${popupFooterClassName.split(' ')[0]}.px-6`),
+      ).toBeNull();
+    });
+
+    test('renders mainButtons and additionalButtons', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          additionalButtons={[{ label: 'Learn more' }]}
+          mainButtons={[{ label: 'Cancel' }, { label: 'Confirm' }]}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Learn more' }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Confirm' }),
+      ).toBeInTheDocument();
+    });
+
+    test('renders the buttons in the order they are declared', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          mainButtons={[{ label: 'Cancel' }, { label: 'Confirm' }]}
+        />,
+      );
+
+      const cancel = screen.getByRole('button', { name: 'Cancel' });
+      const confirm = screen.getByRole('button', { name: 'Confirm' });
+
+      expect(
+        cancel.compareDocumentPosition(confirm) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
+
+    test('wires each button up to its own handler', async () => {
+      const user = userEvent.setup();
+      const onCancel = vi.fn();
+      const onConfirm = vi.fn();
+      render(
+        <Popup
+          open
+          header="Title"
+          mainButtons={[
+            { label: 'Cancel', onClick: onCancel },
+            { label: 'Confirm', onClick: onConfirm },
+          ]}
+        />,
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+      expect(onConfirm).toHaveBeenCalledTimes(1);
+      expect(onCancel).not.toHaveBeenCalled();
+    });
+
+    test('defaults a button to the neutral variant', () => {
+      render(<Popup open header="Title" mainButtons={[{ label: 'Cancel' }]} />);
+
+      expect(screen.getByRole('button', { name: 'Cancel' })).toHaveClass(
+        'dial-kit-neutral-solid-button',
+      );
+    });
+
+    test('lets a button override the default variant', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          mainButtons={[{ label: 'Confirm', variant: ButtonVariant.Primary }]}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Confirm' })).toHaveClass(
+        'dial-kit-primary-solid-button',
+      );
+    });
+
+    test('groups additionalButtons with mainButtons by default', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          additionalButtons={[{ label: 'Learn more' }]}
+          mainButtons={[{ label: 'Confirm' }]}
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Learn more' }).parentElement,
+      ).toBe(screen.getByRole('button', { name: 'Confirm' }).parentElement);
+    });
+
+    test('splits additionalButtons into their own group when placed left', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          additionalButtonsOnLeft
+          additionalButtons={[{ label: 'Learn more' }]}
+          mainButtons={[{ label: 'Confirm' }]}
+        />,
+      );
+
+      const additional = screen.getByRole('button', { name: 'Learn more' })
+        .parentElement as HTMLElement;
+      const main = screen.getByRole('button', { name: 'Confirm' })
+        .parentElement as HTMLElement;
+
+      expect(additional).not.toBe(main);
+      // Only the trailing group is pushed over, so the leading one stays put.
+      expect(additional).not.toHaveClass('ml-auto');
+      expect(main).toHaveClass('ml-auto');
+    });
+
+    test('draws a rule above the footer when footerDivider is set', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          footerDivider
+          mainButtons={[{ label: 'Confirm' }]}
+        />,
+      );
+
+      const footer = screen.getByRole('button', { name: 'Confirm' })
+        .parentElement?.parentElement as HTMLElement;
+      popupFooterDividerClassName
+        .split(' ')
+        .forEach((cls) => expect(footer).toHaveClass(cls));
+    });
+
+    test('lets a footer node win over the structured buttons', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          footer={<div>Custom footer</div>}
+          mainButtons={[{ label: 'Confirm' }]}
+        />,
+      );
+
+      expect(screen.getByText('Custom footer')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Confirm' })).toBeNull();
+    });
   });
 });

@@ -2,9 +2,12 @@ import {
   NeutralButton,
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
+import { InfoButton } from '@/components/New/InfoButton/InfoButton';
 import { DialLoader } from '@/components/Loader/Loader';
-import { ButtonAppearance } from '@/types/button';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
+import { IconArrowLeft } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Popup, type PopupProps } from './Popup';
@@ -21,17 +24,19 @@ const meta = {
     titleClassName: { control: { type: 'text' } },
     ariaLabel: { control: { type: 'text' } },
     footer: { control: { type: 'text' } },
+    headerDivider: { control: { type: 'boolean' } },
+    footerDivider: { control: { type: 'boolean' } },
+    additionalButtonsOnLeft: { control: { type: 'boolean' } },
     onClose: { action: 'onClose', control: false },
+    onBack: { action: 'onBack', control: false },
   },
   args: {
     header: 'Title',
     children: <div className="px-6 py-4 min-h-[220px]">Body area</div>,
-    footer: (
-      <div className="px-6 py-4 flex justify-end gap-2">
-        <NeutralButton label="Button label" />
-        <PrimaryButton label="Button label" />
-      </div>
-    ),
+    mainButtons: [
+      { label: 'Button' },
+      { label: 'Button', variant: ButtonVariant.Primary },
+    ],
   },
 } satisfies Meta<PopupProps>;
 
@@ -64,7 +69,69 @@ export const Default: Story = { render: StatefulRender };
 
 export const WithoutFooter: Story = {
   render: StatefulRender,
-  args: { footer: undefined },
+  args: { mainButtons: undefined },
+};
+
+/** Back control, header actions and both rules — the "max view" of the design. */
+export const MaxView: Story = {
+  render: StatefulRender,
+  args: {
+    onBack: () => {},
+    backAriaLabel: 'Back to the previous step',
+    headerActions: <InfoButton caption="What this dialog does" />,
+    headerDivider: true,
+    footerDivider: true,
+    additionalButtonsOnLeft: true,
+    additionalButtons: [
+      {
+        label: 'Button',
+        variant: ButtonVariant.Primary,
+        appearance: ButtonAppearance.Link,
+        iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} aria-hidden />,
+      },
+    ],
+  },
+};
+
+export const WithBackButton: Story = {
+  render: StatefulRender,
+  args: { onBack: () => {}, backAriaLabel: 'Back to the previous step' },
+};
+
+export const WithHeaderActions: Story = {
+  render: StatefulRender,
+  args: { headerActions: <InfoButton caption="What this dialog does" /> },
+};
+
+export const WithDividers: Story = {
+  render: StatefulRender,
+  args: { headerDivider: true, footerDivider: true },
+};
+
+/**
+ * Additional buttons sit beside the main ones by default; flip
+ * `additionalButtonsOnLeft` to move them to the opposite edge.
+ */
+export const WithAdditionalButtons: Story = {
+  render: StatefulRender,
+  args: {
+    additionalButtons: [
+      { label: 'Learn more', appearance: ButtonAppearance.Link },
+    ],
+  },
+};
+
+/** A `footer` node still overrides the structured buttons entirely. */
+export const CustomFooterNode: Story = {
+  render: StatefulRender,
+  args: {
+    footer: (
+      <div className="px-6 py-4 flex justify-between gap-2">
+        <NeutralButton label="Reset" />
+        <PrimaryButton label="Apply" />
+      </div>
+    ),
+  },
 };
 
 export const WithoutTitle: Story = {
@@ -124,6 +191,7 @@ export const WithoutHeaderAndDismiss: Story = {
     header: undefined,
     ariaLabel: 'Moving items',
     footer: undefined,
+    mainButtons: undefined,
     headerClassName: 'hidden',
     hideClose: true,
     children: (
