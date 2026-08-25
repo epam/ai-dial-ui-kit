@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 
-import { ElementSize } from '@/types/size';
 import { TagAppearance } from '@/types/tag';
 import { Tag } from './Tag';
 
@@ -122,10 +121,11 @@ describe('Dial UI Kit :: Tag', () => {
     expect(remove).not.toHaveClass('dial-kit-enhanced-target');
   });
 
-  test('renders the small variant at 20px', () => {
-    render(<Tag label="TypeScript" size={ElementSize.Small} />);
+  test('renders at the single 32px height', () => {
+    render(<Tag label="TypeScript" />);
     expect(screen.getByText('TypeScript').parentElement).toHaveClass(
-      'h-[20px]',
+      'h-[32px]',
+      'rounded-full',
     );
   });
 
@@ -177,7 +177,7 @@ describe('Dial UI Kit :: Tag', () => {
       ).not.toHaveAttribute('aria-pressed');
     });
 
-    test('drops the rim and the fill until it is selected', () => {
+    test('drops the fill until it is selected', () => {
       const { rerender } = render(
         <Tag
           label="Drafts"
@@ -187,8 +187,10 @@ describe('Dial UI Kit :: Tag', () => {
       );
 
       const tag = screen.getByRole('button', { name: 'Drafts' });
-      expect(tag).toHaveClass('border-transparent', 'bg-transparent');
-      expect(tag).not.toHaveClass('border-tertiary', 'bg-layer-raised');
+      // No tag draws a rim, and the selectable one carries no fill either.
+      expect(tag).not.toHaveClass('border');
+      expect(tag).not.toHaveClass('bg-layer-raised');
+      expect(tag).not.toHaveClass('bg-control-accent-alpha');
 
       rerender(
         <Tag
@@ -201,6 +203,58 @@ describe('Dial UI Kit :: Tag', () => {
 
       expect(screen.getByRole('button', { name: 'Drafts' })).toHaveClass(
         'bg-control-accent-alpha',
+      );
+    });
+
+    test('sets the label in semibold only once it is selected', () => {
+      const { rerender } = render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={vi.fn()}
+        />,
+      );
+
+      const unselected = screen.getByRole('button', { name: 'Drafts' });
+      expect(unselected).toHaveClass('dial-tiny-text');
+      expect(unselected).not.toHaveClass('dial-tiny-semi-text');
+
+      rerender(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          selected
+          onClick={vi.fn()}
+        />,
+      );
+
+      const selected = screen.getByRole('button', { name: 'Drafts' });
+      // Exactly one weight class: both would leave stylesheet order deciding.
+      expect(selected).toHaveClass('dial-tiny-semi-text');
+      expect(selected).not.toHaveClass('dial-tiny-text');
+    });
+
+    test('leaves the outlined tag at the regular weight when selected', () => {
+      render(<Tag label="Drafts" selected onClick={vi.fn()} />);
+
+      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveClass(
+        'dial-tiny-text',
+      );
+    });
+
+    test('carries hover by the tint alone, not by the text colour', () => {
+      render(
+        <Tag
+          label="Drafts"
+          appearance={TagAppearance.Selectable}
+          onClick={vi.fn()}
+        />,
+      );
+
+      // jsdom applies no hover state, so assert the utility is absent: an
+      // unselected chip must not darken to `text-primary` under the cursor.
+      expect(screen.getByRole('button', { name: 'Drafts' })).not.toHaveClass(
+        'hover:text-primary',
       );
     });
 
@@ -224,23 +278,11 @@ describe('Dial UI Kit :: Tag', () => {
       expect(onClick).toHaveBeenCalledTimes(2);
     });
 
-    test('reaches the minimum pointer target only where it is too small', () => {
-      // jsdom performs no layout: a 24px standard tag already clears WCAG
-      // 2.5.8 on its own, so only the 20px one takes the pseudo-element.
-      const { rerender } = render(
-        <Tag
-          label="Drafts"
-          appearance={TagAppearance.Selectable}
-          size={ElementSize.Small}
-          onClick={vi.fn()}
-        />,
-      );
-
-      expect(screen.getByRole('button', { name: 'Drafts' })).toHaveClass(
-        'dial-kit-minimum-target',
-      );
-
-      rerender(
+    test('needs no pointer-target pseudo-element of its own', () => {
+      // jsdom performs no layout, so this asserts the utility is absent: the
+      // 32px tag clears the WCAG 2.5.8 minimum on its rendered size alone, and
+      // a target laid over it would swallow the remove button's clicks.
+      render(
         <Tag
           label="Drafts"
           appearance={TagAppearance.Selectable}

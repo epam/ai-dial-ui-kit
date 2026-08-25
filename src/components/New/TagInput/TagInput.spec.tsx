@@ -258,7 +258,9 @@ describe('Dial UI Kit :: TagInput', () => {
     ).toEqual(['React', 'TypeScript', 'Storybook']);
   });
 
-  test('sizes its tags to match a small field', () => {
+  test('keeps its tags at the one tag height in a small field', () => {
+    // `Tag` has a single 32px height, so the small field grows around it
+    // instead — its wrapper is `!h-auto` over a `min-h`, never a fixed height.
     render(
       <TagInput
         id="skills"
@@ -266,6 +268,6 @@ describe('Dial UI Kit :: TagInput', () => {
         defaultValue={['React']}
       />,
     );
-    expect(screen.getByText('React').parentElement).toHaveClass('h-[20px]');
+    expect(screen.getByText('React').parentElement).toHaveClass('h-[32px]');
   });
 });
