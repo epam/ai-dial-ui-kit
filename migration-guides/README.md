@@ -26,6 +26,7 @@ migration-guides/
 | 0.14.0 | [focus-border-token-role-naming](0.14.0/focus-border-token-role-naming.md) | Border tokens `focus-black` → `focus` and `focus-blue` → `accent-focus`, reversing the 0.13.0 value-based naming |
 | 0.14.0 | [select-multiselect-option-row](0.14.0/select-multiselect-option-row.md) | A multi-select `Select` option is one `option` with `aria-selected` and a decorative box, instead of an option wrapping a real `role="checkbox"` |
 | 0.14.0 | [button-tooltip-2-0](0.14.0/button-tooltip-2-0.md) | `Button` and `IconButton` wrap the 2.0 `Tooltip` with `asChild`: `placement` takes `TooltipPlacement`, and the trigger `<span>` is gone |
+| 0.14.0 | [tag-single-size](0.14.0/tag-single-size.md) | `Tag` drops `size` for one 32px pill; the selectable chip gets a semibold selected label |
 
 ---
 

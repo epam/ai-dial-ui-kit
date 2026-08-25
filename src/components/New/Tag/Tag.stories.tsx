@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import { DIAL_ICON_SIZE } from '@/constants/icon';
-import { ElementSize } from '@/types/size';
 import { TagAppearance } from '@/types/tag';
 import { Tag } from './Tag';
 
@@ -21,16 +20,11 @@ const meta = {
   },
   argTypes: {
     label: { control: 'text', description: 'Text content of the tag' },
-    size: {
-      control: 'radio',
-      options: [ElementSize.Small, ElementSize.Standard],
-      description: 'Tag height: standard is 24px, small is 20px',
-    },
     appearance: {
       control: 'radio',
       options: [TagAppearance.Outlined, TagAppearance.Selectable],
       description:
-        'Outlined is the bordered chip; selectable is the borderless filter chip',
+        'Outlined is the filled chip; selectable is the unfilled filter chip',
     },
     selected: {
       control: 'boolean',
@@ -38,7 +32,7 @@ const meta = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Dims the tag and suppresses the remove control',
+      description: 'Stops the tag responding and suppresses the remove control',
     },
     closable: {
       control: 'boolean',
@@ -161,8 +155,9 @@ export const Selectable: Story = {
     docs: {
       description: {
         story:
-          'The filter chip of the 2.0 design: no rim or fill until it is selected, ' +
-          'one hover tint shared by both states, and the state on `aria-pressed`.',
+          'The filter chip of the 2.0 design: no fill until it is selected, ' +
+          'a semibold label once it is, one hover tint shared by both states, and ' +
+          'the state on `aria-pressed`.',
       },
     },
   },
@@ -194,8 +189,10 @@ export const SelectableStates: Story = {
         />
       </div>
       <div className="text-secondary dial-tiny-text">
-        Hover and focus each chip: both states take one accent-alpha hover tint,
-        and focus draws the grey-1000 ring.
+        Unselected is a secondary-grey label on no fill; selected adds the
+        accent-alpha tint and a semibold primary label. Hover and focus each
+        chip: both states take the same accent-alpha hover tint with the label
+        left untouched, and focus draws the grey-1000 ring.
       </div>
     </div>
   ),
@@ -205,41 +202,24 @@ export const AllVariants: Story = {
   args: { label: 'Tag' },
   render: () => (
     <div className="flex min-w-[400px] flex-col gap-y-6 p-8">
-      {[ElementSize.Standard, ElementSize.Small].map((size) => (
-        <div key={size} className="flex flex-col gap-2">
-          <div className="text-primary dial-small-semi-text">{size}</div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Tag size={size} label="Default" />
-            <Tag size={size} label="Selected" selected />
-            <Tag size={size} label="Closable" closable onRemove={() => {}} />
-            <Tag
-              size={size}
-              label="With icon"
-              icon={<IconTag size={DIAL_ICON_SIZE.SM} />}
-            />
-            <Tag
-              size={size}
-              label="Disabled"
-              closable
-              disabled
-              onRemove={() => {}}
-            />
-            <Tag
-              size={size}
-              label="Selectable"
-              appearance={TagAppearance.Selectable}
-              onClick={() => {}}
-            />
-            <Tag
-              size={size}
-              label="Selectable on"
-              appearance={TagAppearance.Selectable}
-              selected
-              onClick={() => {}}
-            />
-          </div>
-        </div>
-      ))}
+      <div className="flex flex-wrap items-center gap-2">
+        <Tag label="Default" />
+        <Tag label="Selected" selected />
+        <Tag label="Closable" closable onRemove={() => {}} />
+        <Tag label="With icon" icon={<IconTag size={DIAL_ICON_SIZE.SM} />} />
+        <Tag label="Disabled" closable disabled onRemove={() => {}} />
+        <Tag
+          label="Selectable"
+          appearance={TagAppearance.Selectable}
+          onClick={() => {}}
+        />
+        <Tag
+          label="Selectable on"
+          appearance={TagAppearance.Selectable}
+          selected
+          onClick={() => {}}
+        />
+      </div>
     </div>
   ),
 };

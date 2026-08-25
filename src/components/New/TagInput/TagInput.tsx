@@ -137,7 +137,6 @@ export const TagInput: FC<TagInputProps> = ({
   const generatedId = useId();
   const fieldId = id || generatedId;
   const isSmall = size === ElementSize.Small;
-  const tagSize = isSmall ? ElementSize.Small : ElementSize.Standard;
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const tagMeasureRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -277,7 +276,6 @@ export const TagInput: FC<TagInputProps> = ({
           key={tag}
           role="listitem"
           label={tag}
-          size={tagSize}
           className={tagClassNames}
           disabled={disabled}
           closable={removable}
@@ -291,7 +289,6 @@ export const TagInput: FC<TagInputProps> = ({
           label={`+${hiddenTags.length}`}
           aria-label={hiddenTagsLabel}
           title={hiddenTagsLabel}
-          size={tagSize}
           className={mergeClasses('shrink-0', tagClassName)}
           disabled={disabled}
         />
@@ -316,7 +313,6 @@ export const TagInput: FC<TagInputProps> = ({
             >
               <Tag
                 label={tag}
-                size={tagSize}
                 className={tagClassName}
                 disabled={disabled}
                 closable={removable}
@@ -325,11 +321,7 @@ export const TagInput: FC<TagInputProps> = ({
             </span>
           ))}
           <span ref={overflowMeasureRef} className="inline-flex">
-            <Tag
-              label={`+${tagCount}`}
-              size={tagSize}
-              className={tagClassName}
-            />
+            <Tag label={`+${tagCount}`} className={tagClassName} />
           </span>
         </span>
       )}
