@@ -1,0 +1,106 @@
+/*
+ * The 2.0 `Slider`.
+ *
+ * The visible track and its fill are sibling elements the component positions
+ * itself, so the fill width can be driven from React. The native input keeps
+ * only its thumb — the browser still owns the drag, the keyboard steps, touch
+ * and the writing direction, which a div-based slider has to re-implement.
+ *
+ * These rules are unlayered on purpose: a thumb is a pseudo-element, so no
+ * Tailwind utility and no consumer `className` can reach it. Every thumb state
+ * has to live here.
+ *
+ * The `-webkit-` and `-moz-` thumbs cannot share a selector list — an engine
+ * drops a whole rule when it does not recognise one of the pseudo-elements —
+ * so every declaration block below is written out once per engine.
+ */
+.dial-kit-slider {
+  @apply m-0 w-full cursor-pointer bg-transparent p-0;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/*
+ * Written flat rather than nested under `&`: nothing in the PostCSS chain
+ * flattens nesting, so a nested rule would ship as native CSS nesting and be
+ * dropped wholesale by a browser that does not support it.
+ */
+
+/* The thumb carries the focus ring, so the input must not paint its own. */
+.dial-kit-slider:focus {
+  @apply outline-none;
+}
+
+.dial-kit-slider:disabled {
+  @apply cursor-not-allowed;
+}
+
+/*
+ * The native track is invisible — `Slider` paints its own. Its 4px height is
+ * still what WebKit measures the thumb offset against, so it is not cosmetic.
+ */
+.dial-kit-slider::-webkit-slider-runnable-track {
+  @apply h-1 border-none bg-transparent;
+}
+
+.dial-kit-slider::-moz-range-track {
+  @apply h-1 border-none bg-transparent;
+}
+
+.dial-kit-slider::-webkit-slider-thumb {
+  @apply size-4 rounded-full border border-default bg-control-neutral shadow-sm;
+
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  cursor: inherit;
+  /*
+   * WebKit lays the thumb against the top edge of the runnable track, so it
+   * needs half the difference between the two heights back: (4px - 16px) / 2.
+   * Firefox centres its own thumb and would read a margin as a 6px shift.
+   */
+  margin-top: -6px;
+}
+
+.dial-kit-slider::-moz-range-thumb {
+  @apply size-4 rounded-full border border-default bg-control-neutral shadow-sm;
+
+  appearance: none;
+  box-sizing: border-box;
+  cursor: inherit;
+}
+
+.dial-kit-slider:not(:disabled):hover::-webkit-slider-thumb,
+.dial-kit-slider:not(:disabled):focus-visible::-webkit-slider-thumb {
+  @apply border-accent shadow-md;
+}
+
+.dial-kit-slider:not(:disabled):hover::-moz-range-thumb,
+.dial-kit-slider:not(:disabled):focus-visible::-moz-range-thumb {
+  @apply border-accent shadow-md;
+}
+
+.dial-kit-slider:not(:disabled):active::-webkit-slider-thumb {
+  @apply border-accent shadow-xs;
+}
+
+.dial-kit-slider:not(:disabled):active::-moz-range-thumb {
+  @apply border-accent shadow-xs;
+}
+
+.dial-kit-slider:focus-visible::-webkit-slider-thumb {
+  @apply outline outline-offset-2 outline-focus;
+}
+
+.dial-kit-slider:focus-visible::-moz-range-thumb {
+  @apply outline outline-offset-2 outline-focus;
+}
+
+.dial-kit-slider:disabled::-webkit-slider-thumb {
+  @apply border-control-disable-primary bg-control-disable-secondary shadow-none;
+}
+
+.dial-kit-slider:disabled::-moz-range-thumb {
+  @apply border-control-disable-primary bg-control-disable-secondary shadow-none;
+}

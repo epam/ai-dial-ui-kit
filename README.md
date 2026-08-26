@@ -212,6 +212,7 @@ not AAA:
 | Clickable `Tag` | 32px tall | A 44px target would overhang 6px per side and swallow the neighbouring chips of a filter row; the tag is already wider than 24px on both axes |
 | `Radio` circle | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label selects the radio, so the practical target is wider |
 | `Checkbox` box | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label toggles the checkbox, so the practical target is wider |
+| `Slider` track row | 24px tall | The pointer target spans the full track width but is only 24px tall; a 44px row would add 20px of dead space to every form the slider sits in, and the thumb is dragged rather than tapped |
 | `SegmentedControl` segment | 32px tall | Sits 4px from its neighbours inside a 40px track, so a 44px target would overhang 6px per side and swallow the adjacent segments; the segment is already wider than 24px on both axes |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach
