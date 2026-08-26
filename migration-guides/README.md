@@ -27,6 +27,7 @@ migration-guides/
 | 0.14.0 | [select-multiselect-option-row](0.14.0/select-multiselect-option-row.md) | A multi-select `Select` option is one `option` with `aria-selected` and a decorative box, instead of an option wrapping a real `role="checkbox"` |
 | 0.14.0 | [button-tooltip-2-0](0.14.0/button-tooltip-2-0.md) | `Button` and `IconButton` wrap the 2.0 `Tooltip` with `asChild`: `placement` takes `TooltipPlacement`, and the trigger `<span>` is gone |
 | 0.14.0 | [tag-single-size](0.14.0/tag-single-size.md) | `Tag` drops `size` for one 32px pill; the selectable chip gets a semibold selected label |
+| 0.14.0 | [shadow-token-per-step-rename](0.14.0/shadow-token-per-step-rename.md) | Shadow variables renamed per step: `--shadow-blue-500`/`--shadow-grey-1000` → `--shadow-xs-sm-1`/`-2`, `--shadow-md`, `--shadow-lg` |
 
 ---
 

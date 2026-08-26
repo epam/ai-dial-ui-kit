@@ -53,6 +53,13 @@ const backgroundsColors = {
   'violet-2': 'var(--bg-visual-violet-2, #F1E9FF)', // violet-150
 };
 
+const shadowColors = {
+  'xs-sm-1': 'var(--shadow-xs-sm-1, #2764D933)', // blue-500 alpha-20
+  'xs-sm-2': 'var(--shadow-xs-sm-2, #161B2D08)', // grey-1000 alpha-3
+  md: 'var(--shadow-md, #2764D90A)', // blue-500 alpha-4
+  lg: 'var(--shadow-lg, #2764D914)', // blue-500 alpha-8
+};
+
 const borderColors = {
   transparent: 'transparent',
   primary: 'var(--stroke-primary, #57647A)', // grey-800
@@ -248,12 +255,15 @@ export default {
       },
       boxShadow: {
         // xs — Button-Pressed; sm — Button-Default, Side Panel
-        xs: '0 1px 4px 0 var(--shadow-grey-1000, #161B2D08), 0 1px 2px 0 var(--shadow-blue-500-alpha-20, var(--shadow-blue-500, #2764D933))',
-        sm: '0 2px 12px 0 var(--shadow-grey-1000, #161B2D08), 0 2px 6px 0 var(--shadow-blue-500-alpha-20, var(--shadow-blue-500, #2764D933))',
-        // md — Button-Hover, Card-Default, Input; lg — Card-Hover. Both are a
-        // single wide blue layer: the grey layer would only muddy it at this size.
-        md: '0 8px 24px 0 var(--shadow-blue-500-alpha-4, #2764D90A)',
-        lg: '0 8px 44px 0 var(--shadow-blue-500-alpha-8, #2764D914)',
+        xs: `0 1px 4px 0 ${shadowColors['xs-sm-1']}, 0 1px 2px 0 ${shadowColors['xs-sm-2']}`,
+        sm: `0 2px 12px 0 ${shadowColors['xs-sm-1']}, 0 2px 6px 0 ${shadowColors['xs-sm-2']}`,
+        /*
+         * md — Button-Hover, Card-Default, Input; lg — Card-Hover. Both are a
+         * single wide blue layer: the grey layer would only muddy it at this
+         * size.
+         */
+        md: `0 8px 24px 0 ${shadowColors.md}`,
+        lg: `0 8px 44px 0 ${shadowColors.lg}`,
       },
       borderRadius: {
         DEFAULT: '4px',
