@@ -399,6 +399,8 @@ export type { TagInputProps } from './components/New/TagInput/TagInput';
 export { Search } from './components/New/Search/Search';
 export type { SearchProps } from './components/New/Search/Search';
 export { matchesAccept } from './utils/file-accept';
+export { Slider } from './components/New/Slider/Slider';
+export type { SliderProps } from './components/New/Slider/Slider';
 export { Tooltip } from './components/New/Tooltip/Tooltip';
 export type { TooltipProps } from './components/New/Tooltip/Tooltip';
 export { TooltipContainer } from './components/New/Tooltip/TooltipContainer';
