@@ -182,13 +182,13 @@ describe('Dial UI Kit :: FileDropzone', () => {
       renderDropzone({});
       const area = screen.getByText(LABEL).closest('label')!;
 
-      expect(area).not.toHaveClass('border-info');
+      expect(area).not.toHaveClass('border-accent');
 
       fireEvent.dragEnter(area, dropData([file('notes.md')]));
-      expect(area).toHaveClass('border-info');
+      expect(area).toHaveClass('border-accent');
 
       fireEvent.dragLeave(area);
-      expect(area).not.toHaveClass('border-info');
+      expect(area).not.toHaveClass('border-accent');
     });
 
     test('keeps the highlight when the drag moves onto a child', () => {
@@ -203,7 +203,7 @@ describe('Dial UI Kit :: FileDropzone', () => {
       );
       fireEvent.dragLeave(area);
 
-      expect(area).toHaveClass('border-info');
+      expect(area).toHaveClass('border-accent');
     });
 
     test('clears the highlight after a drop', () => {
@@ -213,7 +213,7 @@ describe('Dial UI Kit :: FileDropzone', () => {
       fireEvent.dragEnter(area, dropData([file('notes.md')]));
       fireEvent.drop(area, dropData([file('notes.md')]));
 
-      expect(area).not.toHaveClass('border-info');
+      expect(area).not.toHaveClass('border-accent');
     });
 
     test('does not highlight while disabled', () => {
@@ -222,7 +222,7 @@ describe('Dial UI Kit :: FileDropzone', () => {
 
       fireEvent.dragEnter(area, dropData([file('notes.md')]));
 
-      expect(area).not.toHaveClass('border-info');
+      expect(area).not.toHaveClass('border-accent');
     });
   });
 

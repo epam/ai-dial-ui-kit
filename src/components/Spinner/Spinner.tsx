@@ -30,7 +30,7 @@ export const Spinner: FC<SpinnerProps> = ({
         role="img"
         aria-label={ariaLabel}
         style={{ width: size, height: size }}
-        className="rounded-full border-2 border-secondary border-t-info animate-spin-steps shrink-0"
+        className="rounded-full border-2 border-secondary border-t-accent animate-spin-steps shrink-0"
       />
     </div>
   );

@@ -175,7 +175,7 @@ export const Tabs: FC<TabsProps> = ({
                   isDisabled && 'bg-layer-sunken text-control-disable-primary',
                   !isDisabled &&
                     (isActive
-                      ? 'bg-info text-accent'
+                      ? 'bg-control-accent-alpha text-accent'
                       : 'bg-layer-sunken text-secondary'),
                 )}
               >

@@ -220,10 +220,8 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
           disabled
             ? 'cursor-not-allowed border-secondary bg-layer-sunken'
             : 'cursor-pointer bg-layer-base',
-          !disabled && isDragActive && 'border-info bg-control-accent-alpha',
-          !disabled && !isDragActive && 'border-secondary hover:border-info',
-          // The error border wins over the resting and hover states, but not
-          // over the drag highlight — during a drag the target matters more.
+          !disabled && isDragActive && 'border-accent bg-control-accent-alpha',
+          !disabled && !isDragActive && 'border-secondary hover:border-accent',
           errorText && !isDragActive && 'border-error hover:border-error',
           className,
         )}
