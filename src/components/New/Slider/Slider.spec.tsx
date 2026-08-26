@@ -7,7 +7,11 @@ import { Slider } from './Slider';
 describe('Dial UI Kit :: Slider', () => {
   test('renders with an accessible name from its label', () => {
     render(
-      <Slider id="temperature" labelProps={{ label: 'Temperature' }} value={0.5} />,
+      <Slider
+        id="temperature"
+        labelProps={{ label: 'Temperature' }}
+        value={0.5}
+      />,
     );
 
     expect(
@@ -58,7 +62,13 @@ describe('Dial UI Kit :: Slider', () => {
   // Verify the stepping itself in a browser.
   test('leaves keyboard stepping to a native range input', () => {
     render(
-      <Slider aria-label="Temperature" value={0.5} min={0} max={1} step={0.1} />,
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        min={0}
+        max={1}
+        step={0.1}
+      />,
     );
 
     const slider = screen.getByRole('slider', { name: 'Temperature' });
@@ -79,7 +89,12 @@ describe('Dial UI Kit :: Slider', () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <Slider aria-label="Temperature" value={0.5} disabled onChange={onChange} />,
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        disabled
+        onChange={onChange}
+      />,
     );
 
     const slider = screen.getByRole('slider', { name: 'Temperature' });
@@ -127,7 +142,16 @@ describe('Dial UI Kit :: Slider', () => {
   });
 
   test('formats the displayed value to the precision of the step', () => {
-    render(<Slider aria-label="Level" value={50} min={0} max={100} step={1} showValue />);
+    render(
+      <Slider
+        aria-label="Level"
+        value={50}
+        min={0}
+        max={100}
+        step={1}
+        showValue
+      />,
+    );
 
     expect(screen.getByText('50')).toBeInTheDocument();
   });
@@ -184,7 +208,9 @@ describe('Dial UI Kit :: Slider', () => {
   });
 
   test('renders two labels', () => {
-    render(<Slider aria-label="Temperature" value={0.5} labels={['Min', 'Max']} />);
+    render(
+      <Slider aria-label="Temperature" value={0.5} labels={['Min', 'Max']} />,
+    );
 
     expect(screen.getByText('Min')).toBeInTheDocument();
     expect(screen.getByText('Max')).toBeInTheDocument();
@@ -226,7 +252,11 @@ describe('Dial UI Kit :: Slider', () => {
 
   test('applies containerClassName to the outer container', () => {
     const { container } = render(
-      <Slider aria-label="Temperature" value={0.5} containerClassName="custom" />,
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        containerClassName="custom"
+      />,
     );
 
     expect(container.firstChild).toHaveClass('custom');
