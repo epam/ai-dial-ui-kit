@@ -8,7 +8,6 @@ import {
   type GridSizeChangedEvent,
   type ICellRendererParams,
   ModuleRegistry,
-  type RowSelectionOptions,
   type SelectionChangedEvent,
   setupAgTestIds,
   themeBalham,
@@ -450,8 +449,11 @@ export const Grid = <T extends object>({
     return selectionColumn ? [selectionColumn, ...columns] : columns;
   }, [columnDefs, wrapsRenderers, wrapRendererIfNeeded, selectionColumn]);
 
-  const { defaultColDef: consumerDefaultColDef, ...restAdditionalGridOptions } =
-    additionalGridOptions ?? {};
+  const {
+    defaultColDef: consumerDefaultColDef,
+    rowSelection: consumerRowSelection,
+    ...restAdditionalGridOptions
+  } = additionalGridOptions ?? {};
 
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
@@ -500,19 +502,46 @@ export const Grid = <T extends object>({
     [emptyStateTitle, emptyStateDescription, emptyStateIcon],
   );
 
-  const rowSelection = useMemo<RowSelectionOptions | undefined>(() => {
-    if (!selectionMode) return undefined;
+  /*
+    ag-Grid still accepts the legacy `'single'` / `'multiple'` strings for
+    `rowSelection`; only the options object can be merged into the selection
+    this component computes for itself.
+  */
+  const consumerRowSelectionOptions =
+    typeof consumerRowSelection === 'object' ? consumerRowSelection : undefined;
+
+  const rowSelection = useMemo<GridOptions<T>['rowSelection']>(() => {
+    /*
+      Without a selection mode there is no selection column, so a consumer
+      configuring ag-Grid's own selection keeps it exactly as written.
+    */
+    if (!selectionMode) return consumerRowSelection;
 
     return {
+      isRowSelectable: (node) => !isRowDisabled(node.data as T | undefined),
+      /*
+        Merged, not replaced, the way `defaultColDef` is: a consumer reaching
+        for `isRowSelectable` alone would otherwise hand ag-Grid a whole new
+        object and lose the three settings below with it.
+      */
+      ...consumerRowSelectionOptions,
+      /*
+        `selectionMode` owns the mode, because it also decides whether the
+        selection column draws checkboxes or radios.
+      */
       mode:
         selectionMode === GridSelectionMode.SINGLE ? 'singleRow' : 'multiRow',
       // The controls live in this component's own selection column, so
       // ag-Grid's inputs are switched off and only its behaviour is used.
       checkboxes: false,
       headerCheckbox: false,
-      isRowSelectable: (node) => !isRowDisabled(node.data as T | undefined),
     };
-  }, [isRowDisabled, selectionMode]);
+  }, [
+    consumerRowSelection,
+    consumerRowSelectionOptions,
+    isRowDisabled,
+    selectionMode,
+  ]);
 
   useEffect(() => {
     if (gridApi && rowData && selectedNodesRef.current.size) {
