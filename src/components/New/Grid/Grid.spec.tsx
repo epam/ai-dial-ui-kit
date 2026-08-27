@@ -367,6 +367,52 @@ describe('Dial UI Kit :: Grid', () => {
       expect(disabled).not.toBeChecked();
     });
 
+    test('a consumer rowSelection contributes its options without bringing back ag-Grid inputs', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          selectionMode={GridSelectionMode.MULTIPLE}
+          selectRowLabel={(row) => `Select ${row.name}`}
+          additionalGridOptions={{
+            rowSelection: {
+              mode: 'multiRow',
+              isRowSelectable: (node) => node.data?.id !== '3',
+            },
+          }}
+        />,
+      );
+
+      await screen.findByText('Alice');
+
+      /*
+        The consumer's object is merged into the grid's own rather than
+        replacing it, so ag-Grid's own inputs stay switched off and the
+        selection column remains the only set of controls on the row.
+      */
+      await waitFor(() =>
+        expect(screen.getAllByRole('checkbox')).toHaveLength(
+          testRows.length + 1,
+        ),
+      );
+      expect(document.querySelector('.ag-checkbox-input')).toBeNull();
+
+      // The consumer's own `isRowSelectable` still reaches ag-Grid.
+      const selectAll = screen.getByRole('checkbox', {
+        name: 'Select all rows',
+      });
+      await userEvent.setup().click(selectAll);
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole('checkbox', { name: 'Select Alice' }),
+        ).toBeChecked(),
+      );
+      expect(
+        screen.getByRole('checkbox', { name: 'Select Charlie' }),
+      ).not.toBeChecked();
+    });
+
     test('single mode renders radios and keeps one selected at a time', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
