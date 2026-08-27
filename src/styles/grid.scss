@@ -1,0 +1,94 @@
+/**
+ * 2.0 data grid. Every rule is scoped under `.dial-kit-grid`, so it neither
+ * reaches the 1.0 grid nor leans on `ag-grid.scss`, which retires with 1.0 —
+ * the structural rules the grid needs are restated here rather than inherited.
+ *
+ * Imported after `ag-grid.scss`: both files are unlayered and these selectors
+ * are no more specific, so source order is what makes them win.
+ */
+.dial-kit-grid {
+  .ag-root-wrapper {
+    @apply overflow-x-auto;
+
+    .ag-root-wrapper-body {
+      @apply h-auto;
+    }
+  }
+
+  .ag-cell {
+    @apply flex items-center;
+
+    &.ag-cell-focus {
+      @apply border-0;
+    }
+  }
+
+  .ag-header {
+    .ag-column-last::after {
+      @apply border-0;
+    }
+
+    .ag-header-viewport,
+    .ag-pinned-left-header {
+      .ag-floating-filter input {
+        @apply m-0 px-2 py-0;
+        height: 24px !important;
+      }
+    }
+  }
+
+  .ag-layout-auto-height {
+    .ag-center-cols-container,
+    .ag-center-cols-viewport {
+      @apply min-h-0;
+    }
+  }
+
+  .dial-kit-grid-align-right {
+    @apply justify-end;
+
+    .ag-header-cell-label {
+      @apply justify-end;
+    }
+  }
+}
+
+/**
+ * The selection column stays out of the way until it is needed: hovering the
+ * row, selecting anything, or reaching the checkbox with the keyboard brings it
+ * back. `focus-within` is what keeps it operable — a faded-out checkbox is
+ * still in the tab order, and focus has to be visible when it lands there.
+ */
+.dial-kit-grid-with-selection {
+  .ag-row .dial-kit-grid-row-select,
+  .ag-header-row .dial-kit-grid-header-select {
+    @apply opacity-0 transition-opacity motion-reduce:transition-none;
+  }
+
+  .ag-row-hover .dial-kit-grid-row-select,
+  .ag-row-selected .dial-kit-grid-row-select,
+  .ag-row .dial-kit-grid-row-select:focus-within,
+  .ag-header-cell:hover.dial-kit-grid-header-select,
+  .ag-header-row .dial-kit-grid-header-select:focus-within {
+    @apply opacity-100;
+  }
+}
+
+/**
+ * Pinned visible: a touch screen has no hover to reveal the column with, and
+ * hiding a selection the user has just made would take it off screen. Both
+ * classes are matched together so this outweighs the fade above, which is one
+ * selector deeper.
+ */
+.dial-kit-grid-with-selection.dial-kit-grid-selection-visible {
+  .ag-row .dial-kit-grid-row-select,
+  .ag-header-row .dial-kit-grid-header-select {
+    @apply opacity-100;
+  }
+}
+
+.dial-kit-grid-without-header-borders {
+  .ag-header .ag-header-cell::after {
+    @apply border-r-0;
+  }
+}

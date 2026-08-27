@@ -417,3 +417,27 @@ export { ResizableContainer } from './components/New/ResizableContainer/Resizabl
 export type { ResizableContainerProps } from './components/New/ResizableContainer/ResizableContainer';
 export { ConditionalResizableContainer } from './components/New/ResizableContainer/ConditionalResizableContainer';
 export type { ConditionalResizableContainerProps } from './components/New/ResizableContainer/ConditionalResizableContainer';
+export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
+export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
+export { Grid, GRID_SELECTION_COLUMN_ID } from './components/New/Grid/Grid';
+export type { GridProps } from './components/New/Grid/Grid';
+export { DateCellRenderer } from './components/New/Grid/renderers/DateCellRenderer';
+export type {
+  DateCellRendererProps,
+  DateValue,
+} from './components/New/Grid/renderers/DateCellRenderer';
+export {
+  DEFAULT_DATE_FORMAT_OPTIONS,
+  DEFAULT_LOCALE as DEFAULT_DATE_LOCALE,
+} from './components/New/Grid/renderers/constants';
+export {
+  GRID_ALIGN_RIGHT_CLASS,
+  GRID_ROOT_CLASS,
+  GRID_THEME_PARAMS,
+  ROW_HEIGHT as GRID_ROW_HEIGHT,
+} from './components/New/Grid/constants';
+export { convertToDate } from './utils/grid-date';
+export {
+  baseColumnComparator,
+  checkColDefsChanges,
+} from './utils/grid-comparators';
