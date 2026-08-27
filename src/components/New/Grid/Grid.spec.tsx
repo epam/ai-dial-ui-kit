@@ -5,6 +5,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
 import { Grid } from './Grid';
+import { DateCellRenderer } from './renderers/DateCellRenderer';
 
 interface TestRow {
   id: string;
@@ -183,6 +184,52 @@ describe('Dial UI Kit :: Grid', () => {
 
     expect(emptyState).toHaveTextContent('No results found');
     expect(emptyState).toHaveTextContent('Try another search.');
+  });
+
+  describe('cell alignment', () => {
+    const dateColumns: ColDef<TestRow>[] = [
+      testColumns[0],
+      {
+        field: 'age',
+        headerName: 'Updated',
+        cellRenderer: DateCellRenderer,
+        valueGetter: () => '2026-07-20T00:00:00Z',
+        cellRendererParams: {
+          options: { dateStyle: 'medium', timeZone: 'UTC' },
+        },
+      },
+    ];
+
+    test('gives a default cell and a custom renderer the same text box', async () => {
+      render(<Grid<TestRow> columnDefs={dateColumns} rowData={testRows} />);
+
+      const plainCell = await screen.findByText('Alice');
+      const customCell = screen.getAllByText('Jul 20, 2026')[0].closest('span');
+
+      // jsdom performs no layout, so the assertion is on what decides the
+      // alignment: a text box stretched to the row height puts its line at the
+      // top, while one of its natural height is centred by the cell.
+      expect(plainCell).not.toHaveClass('h-full');
+      expect(customCell).not.toHaveClass('h-full');
+      expect(plainCell).toHaveClass('dial-small-text');
+      expect(customCell).toHaveClass('dial-small-text');
+    });
+
+    test('centres the content of a cell wrapped in a context menu', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          getContextMenuItems={() => [{ key: 'edit', label: 'Edit' }]}
+        />,
+      );
+
+      const trigger = (await screen.findByText('Alice')).closest(
+        '[aria-haspopup="menu"]',
+      );
+
+      expect(trigger).toHaveClass('items-center');
+    });
   });
 
   describe('selection', () => {

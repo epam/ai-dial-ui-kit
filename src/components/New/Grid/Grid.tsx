@@ -326,7 +326,10 @@ export const Grid = <T extends object>({
         p,
         <EllipsisTooltip
           text={p.value == null ? '' : String(p.value)}
-          className="h-full max-w-full"
+          // No `h-full`: a full-height text box puts its line at the top of the
+          // row, while a cell renderer of its own natural height is centred by
+          // `.ag-cell`. Mixing the two left the columns visibly out of line.
+          className="max-w-full dial-small-text text-primary"
           hideTooltip={disabled}
         />,
         disabled,
