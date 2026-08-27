@@ -26,8 +26,13 @@
   @apply cursor-not-allowed;
 }
 
+/*
+ * `shadow-none` matters as much as the flat background: the resting shadow of
+ * the solid variants is blue-tinted (`--shadow-xs-sm-1`), so a disabled button
+ * that keeps it reads as a grey pill floating in a blue halo.
+ */
 .dial-kit-solid-button-disable {
-  @apply text-control-disable-primary bg-none bg-control-disable-primary border-transparent;
+  @apply text-control-disable-primary bg-none bg-control-disable-primary border-transparent shadow-none;
 }
 
 /*
@@ -75,12 +80,12 @@
   @apply shadow-sm dial-kit-base-button text-control-permanent bg-control-accent-gradient;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply shadow-md bg-control-accent-gradient-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply shadow-xs bg-control-accent-gradient-active;
   }
 }
@@ -90,12 +95,12 @@
   @apply border-accent-alpha;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-accent-alpha-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-accent-alpha-active;
   }
 }
@@ -104,12 +109,12 @@
   @apply dial-kit-base-button text-control-permanent bg-control-error;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-error-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-error-active;
   }
 }
@@ -118,12 +123,12 @@
   @apply dial-kit-base-button text-secondary bg-transparent;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-neutral-hover-muted;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-neutral-active;
   }
 }
@@ -134,12 +139,12 @@
   @apply border-default;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-neutral-hover-muted;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-neutral-active;
   }
 }
@@ -149,23 +154,42 @@
   @apply border-error;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-error-alpha-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-error-alpha-active;
   }
 }
 
+/*
+ * Both selectors per variant: a `Button` with an `href` renders an `<a>`, which
+ * never matches `:disabled` and carries `aria-disabled` instead — without the
+ * second half a disabled link keeps the enabled fill and shadow.
+ *
+ * The hover and active rules of every variant above are gated on
+ * `:not(:disabled):not([aria-disabled='true'])` rather than being overridden
+ * here: a disabled control must not react to the pointer at all, and leaving
+ * that to source order breaks the moment a rule moves. `:enabled` would not do
+ * — it never matches an `<a>`, so it would take the hover state away from
+ * enabled link buttons too.
+ */
 .dial-kit-primary-solid-button:disabled,
+.dial-kit-primary-solid-button[aria-disabled='true'],
 .dial-kit-neutral-solid-button:disabled,
+.dial-kit-neutral-solid-button[aria-disabled='true'],
 .dial-kit-danger-solid-button:disabled,
+.dial-kit-danger-solid-button[aria-disabled='true'],
 .dial-kit-static-solid-button:disabled,
+.dial-kit-static-solid-button[aria-disabled='true'],
 .dial-kit-neutral-outlined-button:disabled,
+.dial-kit-neutral-outlined-button[aria-disabled='true'],
 .dial-kit-danger-outlined-button:disabled,
-.dial-kit-fab-button:disabled {
+.dial-kit-danger-outlined-button[aria-disabled='true'],
+.dial-kit-fab-button:disabled,
+.dial-kit-fab-button[aria-disabled='true'] {
   @apply dial-kit-solid-button-disable;
 }
 
@@ -176,8 +200,8 @@
   &.dial-kit-base-icon-button {
     @apply text-secondary;
     @media (hover: hover) {
-      &:hover {
-        @apply enabled:text-accent;
+      &:hover:not(:disabled):not([aria-disabled='true']) {
+        @apply text-accent;
       }
     }
 
@@ -187,12 +211,12 @@
   }
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-accent-alpha-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-accent-alpha-active;
   }
 }
@@ -201,12 +225,12 @@
   @apply dial-kit-base-button text-error bg-transparent;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-error-alpha-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-error-alpha-active;
   }
 
@@ -218,7 +242,9 @@
 }
 
 .dial-kit-primary-ghost-button:disabled,
-.dial-kit-danger-ghost-button:disabled {
+.dial-kit-primary-ghost-button[aria-disabled='true'],
+.dial-kit-danger-ghost-button:disabled,
+.dial-kit-danger-ghost-button[aria-disabled='true'] {
   @apply text-control-disable-primary bg-transparent;
 }
 
@@ -228,16 +254,15 @@
   @apply dial-kit-base-button bg-transparent text-accent no-underline;
 
   @media (hover: hover) {
-    &:hover {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply text-control-accent-hover;
     }
   }
 
-  &:active {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply text-control-accent-active;
   }
 
-  /* Must stay last: same specificity as the hover/active rules above. */
   &:disabled,
   &[aria-disabled='true'] {
     @apply text-control-disable-primary;
@@ -249,12 +274,12 @@
   @apply bg-control-neutral shadow-sm text-primary;
 
   @media (hover: hover) {
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       @apply bg-control-neutral-hover-muted;
     }
   }
 
-  &:active:not(:disabled) {
+  &:active:not(:disabled):not([aria-disabled='true']) {
     @apply bg-control-neutral-active;
   }
 
