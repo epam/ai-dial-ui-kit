@@ -39,8 +39,7 @@ const backgroundsColors = {
   'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F764641A)', // red-800 alpha-10
   'control-error-alpha-active':
     'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
-  'control-disable-primary':
-    'var(--bg-control-disable-primary, var(--bg-control-disable, #DCE0E8))', // grey-300
+  'control-disable-primary': 'var(--bg-control-disable-primary, #DCE0E8)', // grey-300
   'control-disable-secondary': 'var(--bg-control-disable-secondary, #ACB3C3)', // grey-450
 
   // visuals
@@ -75,11 +74,10 @@ const borderColors = {
   'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
   'gradient-1': 'var(--stroke-gradient-1, #5976E9)', // blue-300
   'gradient-2': 'var(--stroke-gradient-2, #885DF2)', // Violet-300
-  focus: 'var(--stroke-focus-black, var(--stroke-focus, #161B2D))', // grey-1000
+  focus: 'var(--stroke-focus-black, #161B2D)', // grey-1000
   'accent-focus': 'var(--stroke-accent-focus, #6785FB)', // blue-200
   'error-alpha': 'var(--stroke-error-alpha, #AE2F2F73)', // red-800 alpha-45
-  'control-disable-primary':
-    'var(--stroke-control-disable-primary, var(--text-control-disable-primary, var(--text-control-disable-alpha, #848E9C)))', // grey-600
+  'control-disable-primary': 'var(--stroke-control-disable-primary, #848E9C)', // grey-600
 };
 
 const textColors = {
@@ -108,14 +106,10 @@ const textColors = {
   // controls
   'control-permanent': 'var(--text-control-permanent, #FCFCFC)', // grey-50
   'control-inverted': 'var(--text-control-inverted, #FCFCFC)', // grey-50
-  'control-disable-primary':
-    'var(--text-control-disable-primary, var(--text-control-disable-alpha, #848E9C))', // grey-600
-  'control-disable-secondary':
-    'var(--text-control-disable-secondary, var(--text-control-disable-beta, #DCE0E8))', // grey-300
-  'control-accent-hover':
-    'var(--text-control-accent-hover, var(--text-control-blue-hover, #5976E9))', // blue-300
-  'control-accent-active':
-    'var(--text-control-accent-active, var(--text-control-blue-active, #6785FB))', // blue-200
+  'control-disable-primary': 'var(--text-control-disable-primary,  #848E9C)', // grey-600
+  'control-disable-secondary': 'var(--text-control-disable-secondary, #DCE0E8)', // grey-300
+  'control-accent-hover': 'var(--text-control-accent-hover, #5976E9)', // blue-300
+  'control-accent-active': 'var(--text-control-accent-active,  #6785FB)', // blue-200
 };
 
 const placeholderColor = {
