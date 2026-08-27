@@ -214,6 +214,7 @@ not AAA:
 | `Checkbox` box | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label toggles the checkbox, so the practical target is wider |
 | `Slider` track row | 24px tall | The pointer target spans the full track width but is only 24px tall; a 44px row would add 20px of dead space to every form the slider sits in, and the thumb is dragged rather than tapped |
 | `SegmentedControl` segment | 32px tall | Sits 4px from its neighbours inside a 40px track, so a 44px target would overhang 6px per side and swallow the adjacent segments; the segment is already wider than 24px on both axes |
+| `ResizableContainer` resize handle | 10px wide pointer strip | The handle has to sit exactly on the panel boundary, so a 44px-wide strip would swallow content on both sides of it — essential to the control. It is a focusable `separator`, so the resize is also available from the keyboard with the arrow keys |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach
 AAA in a specific layout, or use the standard size instead.

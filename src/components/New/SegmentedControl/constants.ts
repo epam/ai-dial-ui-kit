@@ -10,7 +10,7 @@ export const NAVIGATION_KEYS = [
 
 /** The sunken track the segments sit in. */
 export const containerClassName =
-  'inline-flex w-fit items-center gap-1 rounded-full bg-layer-sunken p-1';
+  'inline-flex w-fit items-center gap-1 rounded-full border border-tertiary bg-layer-sunken p-[3px]';
 
 export const segmentClassName =
   'flex h-8 min-w-8 flex-1 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 dial-small-text transition-colors duration-200 outline-offset-0 focus-visible:outline focus-visible:outline-focus';
