@@ -411,3 +411,9 @@ export type { TooltipContainerOptions } from './components/New/Tooltip/TooltipCo
 export { TooltipPlacement } from './types/tooltip.ts';
 export { EllipsisTooltip } from './components/New/EllipsisTooltip/EllipsisTooltip';
 export type { EllipsisTooltipProps } from './components/New/EllipsisTooltip/EllipsisTooltip';
+export { CollapsibleSidebar } from './components/New/CollapsibleSidebar/CollapsibleSidebar';
+export type { CollapsibleSidebarProps } from './components/New/CollapsibleSidebar/CollapsibleSidebar';
+export { ResizableContainer } from './components/New/ResizableContainer/ResizableContainer';
+export type { ResizableContainerProps } from './components/New/ResizableContainer/ResizableContainer';
+export { ConditionalResizableContainer } from './components/New/ResizableContainer/ConditionalResizableContainer';
+export type { ConditionalResizableContainerProps } from './components/New/ResizableContainer/ConditionalResizableContainer';
