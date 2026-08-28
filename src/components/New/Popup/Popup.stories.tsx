@@ -2,6 +2,7 @@ import {
   NeutralButton,
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { InfoButton } from '@/components/New/InfoButton/InfoButton';
 import { DialLoader } from '@/components/Loader/Loader';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -87,7 +88,13 @@ export const MaxView: Story = {
         label: 'Button',
         variant: ButtonVariant.Primary,
         appearance: ButtonAppearance.Link,
-        iconBefore: <IconArrowLeft size={DIAL_ICON_SIZE.MD} aria-hidden />,
+        iconBefore: (
+          <IconArrowLeft
+            size={DIAL_ICON_SIZE.MD}
+            stroke={DIAL_KIT_ICON_STROKE}
+            aria-hidden
+          />
+        ),
       },
     ],
   },

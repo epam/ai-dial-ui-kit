@@ -11,15 +11,37 @@ import {
   type SegmentedControlItem,
 } from './SegmentedControl';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+
 const ICON_ITEMS = [
-  { value: 'first', icon: <IconBolt size={20} />, 'aria-label': 'First' },
-  { value: 'second', icon: <IconBolt size={20} />, 'aria-label': 'Second' },
+  {
+    value: 'first',
+    icon: <IconBolt size={20} stroke={DIAL_KIT_ICON_STROKE} />,
+    'aria-label': 'First',
+  },
+  {
+    value: 'second',
+    icon: <IconBolt size={20} stroke={DIAL_KIT_ICON_STROKE} />,
+    'aria-label': 'Second',
+  },
 ];
 
 const VIEW_ITEMS = [
-  { value: 'list', icon: <IconLayoutList size={20} />, label: 'List' },
-  { value: 'grid', icon: <IconLayoutGrid size={20} />, label: 'Grid' },
-  { value: 'table', icon: <IconTable size={20} />, label: 'Table' },
+  {
+    value: 'list',
+    icon: <IconLayoutList size={20} stroke={DIAL_KIT_ICON_STROKE} />,
+    label: 'List',
+  },
+  {
+    value: 'grid',
+    icon: <IconLayoutGrid size={20} stroke={DIAL_KIT_ICON_STROKE} />,
+    label: 'Grid',
+  },
+  {
+    value: 'table',
+    icon: <IconTable size={20} stroke={DIAL_KIT_ICON_STROKE} />,
+    label: 'Table',
+  },
 ];
 
 const meta = {

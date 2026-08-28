@@ -5,6 +5,7 @@ import { useMergeRefs } from '@floating-ui/react';
 
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Input, type InputProps } from '@/components/New/Input/Input';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -106,6 +107,7 @@ export const Search: FC<SearchProps> = ({
       iconBefore={
         <IconSearch
           size={SEARCH_ICON_SIZE[size]}
+          stroke={DIAL_KIT_ICON_STROKE}
           className="text-secondary"
           aria-hidden="true"
         />
@@ -115,7 +117,13 @@ export const Search: FC<SearchProps> = ({
           <GhostIconButton
             size={ElementSize.Small}
             aria-label={clearLabel}
-            icon={<IconX size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
+            icon={
+              <IconX
+                size={DIAL_ICON_SIZE.SM}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden="true"
+              />
+            }
             onClick={onClear}
           />
         ) : undefined

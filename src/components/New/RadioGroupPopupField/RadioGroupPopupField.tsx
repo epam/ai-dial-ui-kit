@@ -15,6 +15,7 @@ import {
   RadioGroup,
   type RadioGroupItem,
 } from '@/components/New/RadioGroup/RadioGroup';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { PopupSize } from '@/types/popup';
 import { RadioGroupOrientation } from '@/types/radio-group';
@@ -243,6 +244,7 @@ export const RadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
 
           <IconMaximize
             size={DIAL_ICON_SIZE.MD}
+            stroke={DIAL_KIT_ICON_STROKE}
             aria-hidden="true"
             className={fieldIconClassName}
           />

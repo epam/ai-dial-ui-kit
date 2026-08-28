@@ -4,6 +4,7 @@ import { type ColDef, type GridApi } from 'ag-grid-community';
 import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
+import { GRID_THEME_PARAMS } from './constants';
 import { Grid } from './Grid';
 import { DateCellRenderer } from './renderers/DateCellRenderer';
 
@@ -42,6 +43,20 @@ const getSortedNames = (api: GridApi<TestRow>): string[] => {
 };
 
 describe('Dial UI Kit :: Grid', () => {
+  /**
+   * ag-Grid takes borders as CSS shorthand, so the width is only visible in the
+   * theme parameters — asserting them is what keeps the three dividers on the
+   * thin stroke the design system reserves for tables, one step below the 1px
+   * the rest of the library uses. The wrapper frame is deliberately absent: it
+   * is driven by the `wrapperBorder` prop and stays on the main stroke.
+   */
+  test('draws the table dividers on the thin stroke', () => {
+    expect(GRID_THEME_PARAMS.rowBorder).toMatch(/^0\.5px solid /);
+    expect(GRID_THEME_PARAMS.headerRowBorder).toMatch(/^0\.5px solid /);
+    expect(GRID_THEME_PARAMS.headerColumnBorder).toMatch(/^0\.5px solid /);
+    expect(GRID_THEME_PARAMS).not.toHaveProperty('wrapperBorder');
+  });
+
   test('renders the rows', async () => {
     render(<Grid<TestRow> columnDefs={testColumns} rowData={testRows} />);
 

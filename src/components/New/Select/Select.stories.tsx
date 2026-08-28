@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconAbc, IconDashboardOff, IconEqual } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { PrimaryButton } from '@/components/New/Button/ButtonWrappers';
 import type { SelectOption } from '@/models/select';
 import { ElementSize } from '@/types/size';
@@ -9,20 +10,36 @@ import { Select, type SelectProps } from './Select';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
-  { value: 'contain', label: 'Contain', icon: <IconAbc size={iconSize} /> },
+  {
+    value: 'contain',
+    label: 'Contain',
+    icon: <IconAbc size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
+  },
   {
     value: 'not-contains',
     label: 'Not contains',
-    icon: <IconAbc size={iconSize} />,
+    icon: <IconAbc size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
   },
-  { value: 'equal', label: 'Equal', icon: <IconEqual size={iconSize} /> },
+  {
+    value: 'equal',
+    label: 'Equal',
+    icon: <IconEqual size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
+  },
   {
     value: 'not-equal',
     label: 'Not equal',
-    icon: <IconDashboardOff size={iconSize} />,
+    icon: <IconDashboardOff size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
   },
-  { value: 'starts', label: 'Starts with', icon: <IconAbc size={iconSize} /> },
-  { value: 'ends', label: 'Ends with', icon: <IconAbc size={iconSize} /> },
+  {
+    value: 'starts',
+    label: 'Starts with',
+    icon: <IconAbc size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
+  },
+  {
+    value: 'ends',
+    label: 'Ends with',
+    icon: <IconAbc size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
+  },
   { value: 'empty', label: 'Is empty' },
   { value: 'disabled', label: 'Disabled option', disabled: true },
   {
@@ -39,14 +56,14 @@ const baseOptions: SelectOption[] = [
   {
     value: 'icon-long-option',
     label: 'Long option that has icon. It should be truncated appropriately',
-    icon: <IconDashboardOff size={iconSize} />,
+    icon: <IconDashboardOff size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
     description: 'icon-long option description',
   },
   { value: 'option-1', label: 'Option 1', description: 'Option 1 description' },
   {
     value: 'option-icon',
     label: 'Option Icon',
-    icon: <IconDashboardOff size={iconSize} />,
+    icon: <IconDashboardOff size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
     description: 'Option Icon description',
   },
   { value: 'option-2', label: 'Option 2' },
@@ -293,12 +310,12 @@ export const WithSubMenuOptions: Story = {
           {
             value: 'contain',
             label: 'Contain',
-            icon: <IconAbc size={iconSize} />,
+            icon: <IconAbc size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
           },
           {
             value: 'equal',
             label: 'Equal',
-            icon: <IconEqual size={iconSize} />,
+            icon: <IconEqual size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />,
           },
           {
             value: 'group-compare',
@@ -314,7 +331,9 @@ export const WithSubMenuOptions: Story = {
             value: 'disabled-group',
             label: 'Disabled group',
             disabled: true,
-            icon: <IconDashboardOff size={iconSize} />,
+            icon: (
+              <IconDashboardOff size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />
+            ),
             children: [{ value: 'x', label: 'Child X' }],
           },
         ]}

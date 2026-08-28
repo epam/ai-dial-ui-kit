@@ -53,9 +53,10 @@ const backgroundsColors = {
 };
 
 const shadowColors = {
-  'xs-sm-1': 'var(--shadow-xs-sm-1, #2764D933)', // blue-500 alpha-20
-  'xs-sm-2': 'var(--shadow-xs-sm-2, #161B2D08)', // grey-1000 alpha-3
-  md: 'var(--shadow-md, #2764D90A)', // blue-500 alpha-4
+  'xs-1': 'var(--shadow-xs-1, #2764D933)', // blue-500 alpha-20
+  'xs-2': 'var(--shadow-xs-2, #161B2D08)', // grey-1000 alpha-3
+  sm: 'var(--shadow-sm, #2764D914)', // blue-500 alpha-8
+  md: 'var(--shadow-md, #2764D90F)', // blue-500 alpha-6
   lg: 'var(--shadow-lg, #2764D914)', // blue-500 alpha-8
 };
 
@@ -200,6 +201,14 @@ const textColorsToRemove = {
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
+  /*
+   * `shadow-sm` is the side bar / side panel / right panel step, and no
+   * component in the kit paints that surface — the sidebar deliberately draws
+   * no background of its own, so the host applies the shadow. Without the
+   * safelist the class is scanned out of the shipped stylesheet and a consumer
+   * that writes it against `@epam/ai-dial-ui-kit/styles.css` gets nothing.
+   */
+  safelist: ['shadow-sm'],
   theme: {
     backgroundColor: {
       ...backgroundsColors,
@@ -248,14 +257,21 @@ export default {
         'spin-steps': 'spin 0.75s steps(8, end) infinite',
       },
       boxShadow: {
-        // xs — Button-Pressed; sm — Button-Default, Side Panel
-        xs: `0 1px 4px 0 ${shadowColors['xs-sm-1']}, 0 1px 2px 0 ${shadowColors['xs-sm-2']}`,
-        sm: `0 2px 12px 0 ${shadowColors['xs-sm-1']}, 0 2px 6px 0 ${shadowColors['xs-sm-2']}`,
         /*
-         * md — Button-Hover, Card-Default, Input; lg — Card-Hover. Both are a
-         * single wide blue layer: the grey layer would only muddy it at this
-         * size.
+         * The four steps of the design scale, and nothing else. xs —
+         * Button-Pressed, the one step that still draws two layers, a wide blue
+         * over a tight grey. The resting shadow of a solid control has no step
+         * here: it used to be `sm`, and stayed where it was when `sm` moved
+         * onto the side panels, so it lives in `buttons.scss` as
+         * `dial-kit-control-shadow` rather than as a fifth key.
          */
+        xs: `0 1px 4px 0 ${shadowColors['xs-1']}, 0 1px 2px 0 ${shadowColors['xs-2']}`,
+        /*
+         * sm — Side Bar, Side Panel, right panel; md — Button-Hover,
+         * Card-Default, Input; lg — Card-Hover. All three are a single wide
+         * blue layer: the grey layer would only muddy it at this size.
+         */
+        sm: `0 8px 10px 0 ${shadowColors.sm}`,
         md: `0 8px 24px 0 ${shadowColors.md}`,
         lg: `0 8px 44px 0 ${shadowColors.lg}`,
       },

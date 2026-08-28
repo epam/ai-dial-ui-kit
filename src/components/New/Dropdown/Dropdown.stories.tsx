@@ -19,6 +19,7 @@ import {
   NeutralButton,
   PrimaryButton,
 } from '@/components/New/Button/ButtonWrappers';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -37,30 +38,34 @@ const items: DropdownItem[] = [
   {
     key: 'profile',
     label: 'Profile',
-    icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconUser size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
   },
   {
     key: 'settings',
     label: 'Settings',
-    icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconSettings size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
   },
   {
     key: 'disabled',
     label: 'Disabled',
-    icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconStack size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
     disabled: true,
   },
   {
     key: 'danger',
     label: 'Danger',
-    icon: <IconRowRemove size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconRowRemove size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
     danger: true,
   },
   { key: 'd1', type: DropdownItemType.Divider },
   {
     key: 'logout',
     label: 'Logout',
-    icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconLogout size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
   },
 ];
 
@@ -68,25 +73,32 @@ const specItems: DropdownItem[] = [
   {
     key: 'open',
     label: 'Open in a new tab',
-    icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconExternalLink
+        size={DIAL_ICON_SIZE.SM}
+        stroke={DIAL_KIT_ICON_STROKE}
+      />
+    ),
   },
   {
     key: 'dup',
     label: 'Duplicate as a new version',
-    icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconCopy size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
   },
   { key: 'd2', type: DropdownItemType.Divider },
   {
     key: 'del',
     label: 'Delete',
-    icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconTrash size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
     danger: true,
   },
 ];
 
 const TriggerBtn = ({ label = 'Open' }: { label?: ReactNode }) => (
   <PrimaryButton
-    iconAfter={<IconChevronDown size={DIAL_ICON_SIZE.SM} />}
+    iconAfter={
+      <IconChevronDown size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    }
     label={label}
   />
 );
@@ -222,7 +234,9 @@ export const SecondaryEllipsisTrigger: Story = {
     children: (
       <NeutralButton
         aria-label="More actions"
-        iconBefore={<IconDots size={DIAL_ICON_SIZE.SM} />}
+        iconBefore={
+          <IconDots size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+        }
       />
     ),
     items: specItems,
@@ -273,7 +287,7 @@ export const WithCustomHeader: Story = {
       <div className="px-3 pt-2">
         <div className="flex items-center justify-between text-secondary">
           <span className="dial-small-text font-medium">Custom Time Range</span>
-          <IconChevronDown size={14} />
+          <IconChevronDown size={14} stroke={DIAL_KIT_ICON_STROKE} />
         </div>
       </div>
     ),
@@ -507,27 +521,46 @@ export const WithSubMenu: Story = {
         {
           key: 'profile',
           label: 'Profile',
-          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconUser size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
         },
         {
           key: 'more',
           label: 'More actions',
-          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconStack size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
           children: [
             {
               key: 'open',
               label: 'Open in new tab',
-              icon: <IconExternalLink size={DIAL_ICON_SIZE.SM} />,
+              icon: (
+                <IconExternalLink
+                  size={DIAL_ICON_SIZE.SM}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              ),
             },
             {
               key: 'copy',
               label: 'Duplicate',
-              icon: <IconCopy size={DIAL_ICON_SIZE.SM} />,
+              icon: (
+                <IconCopy
+                  size={DIAL_ICON_SIZE.SM}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              ),
             },
             {
               key: 'del',
               label: 'Delete',
-              icon: <IconTrash size={DIAL_ICON_SIZE.SM} />,
+              icon: (
+                <IconTrash
+                  size={DIAL_ICON_SIZE.SM}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              ),
               danger: true,
             },
           ],
@@ -535,7 +568,12 @@ export const WithSubMenu: Story = {
         {
           key: 'logout',
           label: 'Logout',
-          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconLogout
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          ),
         },
       ]}
     >
@@ -550,13 +588,17 @@ const collectionItems: CollectionItem[] = [
   {
     key: 'roadmap',
     label: 'Product Roadmap',
-    icon: <IconFileText size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconFileText size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
     description: 'Q3 planning document with feature timelines',
   },
   {
     key: 'notes',
     label: 'Meeting Notes',
-    icon: <IconFileText size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconFileText size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
     description: 'Notes from the last product sync',
   },
 ];
@@ -588,7 +630,12 @@ export const WithCustomItemRender: Story = {
         {
           key: 'storage',
           label: 'Storage',
-          icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconSettings
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          ),
           renderItem: (it) => (
             <>
               {it.icon}
@@ -600,13 +647,20 @@ export const WithCustomItemRender: Story = {
         {
           key: 'collection',
           label: 'My collection',
-          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconStack size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
           children: badgedCollectionItems,
         },
         {
           key: 'logout',
           label: 'Logout',
-          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconLogout
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          ),
         },
       ]}
     >
@@ -630,12 +684,16 @@ export const WithSubMenuCustomContent: Story = {
         {
           key: 'profile',
           label: 'Profile',
-          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconUser size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
         },
         {
           key: 'collection',
           label: 'My collection',
-          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconStack size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
           children: collectionItems,
           renderSubMenu: () => (
             <>
@@ -673,7 +731,12 @@ export const WithSubMenuCustomContent: Story = {
                     </Tooltip>
                     <DangerIconButton
                       aria-label={`Delete ${collectionItem.label}`}
-                      icon={<IconTrash size={DIAL_ICON_SIZE.SM} />}
+                      icon={
+                        <IconTrash
+                          size={DIAL_ICON_SIZE.SM}
+                          stroke={DIAL_KIT_ICON_STROKE}
+                        />
+                      }
                       size={ElementSize.Small}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -699,7 +762,12 @@ export const WithSubMenuCustomContent: Story = {
         {
           key: 'logout',
           label: 'Logout',
-          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconLogout
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          ),
         },
       ]}
     >
@@ -720,12 +788,16 @@ export const WithSubMenuHeaderAndFooter: Story = {
         {
           key: 'profile',
           label: 'Profile',
-          icon: <IconUser size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconUser size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
         },
         {
           key: 'collection',
           label: 'My collection',
-          icon: <IconStack size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconStack size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          ),
           children: collectionItems,
           menuHeader: (
             <div className="px-3 py-2">
@@ -750,7 +822,12 @@ export const WithSubMenuHeaderAndFooter: Story = {
         {
           key: 'logout',
           label: 'Logout',
-          icon: <IconLogout size={DIAL_ICON_SIZE.SM} />,
+          icon: (
+            <IconLogout
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          ),
         },
       ]}
     >

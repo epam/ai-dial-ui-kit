@@ -8,6 +8,7 @@ import {
 } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Fragment, useState } from 'react';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { ElementSize } from '@/types/size';
 import {
   ToggleIconButton,
@@ -78,7 +79,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: InteractiveToggleIconButton,
   args: {
-    icon: <IconBookmark />,
+    icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} />,
     selectedIcon: <IconBookmarkFilled />,
     tooltipProps: { tooltip: 'Bookmark' },
   },
@@ -87,7 +88,7 @@ export const Default: Story = {
 export const Selected: Story = {
   render: InteractiveToggleIconButton,
   args: {
-    icon: <IconBookmark />,
+    icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} />,
     selectedIcon: <IconBookmarkFilled />,
     isSelected: true,
     tooltipProps: { tooltip: 'Bookmark' },
@@ -96,7 +97,7 @@ export const Selected: Story = {
 
 export const Disabled: Story = {
   args: {
-    icon: <IconBookmark />,
+    icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} />,
     selectedIcon: <IconBookmarkFilled />,
     disabled: true,
     'aria-label': 'Bookmark',
@@ -105,7 +106,7 @@ export const Disabled: Story = {
 
 export const DisabledSelected: Story = {
   args: {
-    icon: <IconBookmark />,
+    icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} />,
     selectedIcon: <IconBookmarkFilled />,
     isSelected: true,
     disabled: true,
@@ -120,7 +121,7 @@ export const DisabledSelected: Story = {
 export const SingleIcon: Story = {
   render: InteractiveToggleIconButton,
   args: {
-    icon: <IconPin />,
+    icon: <IconPin stroke={DIAL_KIT_ICON_STROKE} />,
     tooltipProps: { tooltip: 'Pin' },
   },
 };
@@ -131,7 +132,7 @@ export const SingleIcon: Story = {
  * control to see them.
  */
 export const AllVariants: Story = {
-  args: { icon: <IconBookmark /> },
+  args: { icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} /> },
   render: () => {
     const rows: { title: string; disabled?: boolean }[] = [
       { title: 'Default' },
@@ -150,7 +151,7 @@ export const AllVariants: Story = {
             {[false, true].map((isSelected) => (
               <ToggleIconButton
                 key={`${row.title}-${String(isSelected)}`}
-                icon={<IconBookmark />}
+                icon={<IconBookmark stroke={DIAL_KIT_ICON_STROKE} />}
                 selectedIcon={<IconBookmarkFilled />}
                 isSelected={isSelected}
                 disabled={row.disabled}
@@ -166,14 +167,14 @@ export const AllVariants: Story = {
 
 /** Every size tier. The 16px glyph is fixed, so only the tint square grows. */
 export const Sizes: Story = {
-  args: { icon: <IconHeart /> },
+  args: { icon: <IconHeart stroke={DIAL_KIT_ICON_STROKE} /> },
   render: () => (
     <div className="flex items-center gap-6 p-8">
       {Object.values(ElementSize).map((size) => (
         <div key={size} className="flex flex-col items-center gap-2">
           <span className="text-secondary dial-tiny-text">{size}</span>
           <ToggleIconButton
-            icon={<IconHeart />}
+            icon={<IconHeart stroke={DIAL_KIT_ICON_STROKE} />}
             selectedIcon={<IconHeartFilled />}
             size={size}
             isSelected
@@ -187,7 +188,7 @@ export const Sizes: Story = {
 
 /** A row of toggles, each holding its own state. */
 export const Toolbar: Story = {
-  args: { icon: <IconBookmark /> },
+  args: { icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} /> },
   render: () => {
     const ToolbarExample = () => {
       const [active, setActive] = useState<string[]>(['bookmark']);
@@ -195,19 +196,19 @@ export const Toolbar: Story = {
         {
           key: 'bookmark',
           label: 'Bookmark',
-          icon: <IconBookmark />,
+          icon: <IconBookmark stroke={DIAL_KIT_ICON_STROKE} />,
           selectedIcon: <IconBookmarkFilled />,
         },
         {
           key: 'favourite',
           label: 'Favourite',
-          icon: <IconHeart />,
+          icon: <IconHeart stroke={DIAL_KIT_ICON_STROKE} />,
           selectedIcon: <IconHeartFilled />,
         },
         {
           key: 'pin',
           label: 'Pin',
-          icon: <IconPin />,
+          icon: <IconPin stroke={DIAL_KIT_ICON_STROKE} />,
           selectedIcon: <IconPinFilled />,
         },
       ];

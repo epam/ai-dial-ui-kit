@@ -23,6 +23,7 @@ import {
 
 import { Label, type LabelProps } from '@/components/New/Label/Label';
 import { StaticIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
 import { ElementSize } from '@/types/size';
@@ -391,6 +392,7 @@ export const Calendar: FC<CalendarProps> = ({
               </span>
               <IconChevronDown
                 size={DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
                 aria-hidden="true"
                 className={calendarFieldIconClassName}
               />

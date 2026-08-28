@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Dropdown } from '../Dropdown/Dropdown';
 import type { DropdownItem } from '../../../models/dropdown';
+import { DIAL_KIT_ICON_STROKE } from '../constants/icon';
 import { DIAL_ICON_SIZE } from '../../../constants/icon';
 import { mergeClasses } from '../../../utils/merge-classes';
 import { ElementSize } from '../../../types/size';
@@ -54,6 +55,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       {label}
       <IconChevronDown
         size={DIAL_ICON_SIZE.MD}
+        stroke={DIAL_KIT_ICON_STROKE}
         aria-hidden
         className={mergeClasses('transition-transform', isOpen && 'rotate-180')}
       />

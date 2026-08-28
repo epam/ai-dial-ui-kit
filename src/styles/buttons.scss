@@ -28,7 +28,7 @@
 
 /*
  * `shadow-none` matters as much as the flat background: the resting shadow of
- * the solid variants is blue-tinted (`--shadow-xs-sm-1`), so a disabled button
+ * the solid variants is blue-tinted (`--shadow-xs-1`), so a disabled button
  * that keeps it reads as a grey pill floating in a blue halo.
  */
 .dial-kit-solid-button-disable {
@@ -75,9 +75,22 @@
   }
 }
 
+/*
+ * The resting shadow of a solid control — a solid button, the FAB, the slider
+ * thumb. It has no step in the design scale: `sm` moved onto the side panels
+ * and this value stayed where it was, so it is written out here instead of
+ * taking a fifth `boxShadow` key that no Figma token backs. It draws the same
+ * two colours as `shadow-xs`; only the offset and the blur differ.
+ */
+.dial-kit-control-shadow {
+  box-shadow:
+    0 2px 12px 0 var(--shadow-xs-1, #2764d933),
+    0 2px 6px 0 var(--shadow-xs-2, #161b2d08);
+}
+
 /* Solid buttons */
 .dial-kit-primary-solid-button {
-  @apply shadow-sm dial-kit-base-button text-control-permanent bg-control-accent-gradient;
+  @apply dial-kit-control-shadow dial-kit-base-button text-control-permanent bg-control-accent-gradient;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -271,7 +284,7 @@
 
 .dial-kit-fab-button {
   @apply flex items-center justify-center rounded-full;
-  @apply bg-control-neutral shadow-sm text-primary;
+  @apply bg-control-neutral dial-kit-control-shadow text-primary;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {

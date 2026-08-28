@@ -1,3 +1,4 @@
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
@@ -191,8 +192,18 @@ export const AllVariants: Story = {
                     <Fragment key={size}>
                       {render({
                         label: 'Button',
-                        iconAfter: <IconArrowRight size={iconSize} />,
-                        iconBefore: <IconArrowLeft size={iconSize} />,
+                        iconAfter: (
+                          <IconArrowRight
+                            size={iconSize}
+                            stroke={DIAL_KIT_ICON_STROKE}
+                          />
+                        ),
+                        iconBefore: (
+                          <IconArrowLeft
+                            size={iconSize}
+                            stroke={DIAL_KIT_ICON_STROKE}
+                          />
+                        ),
                         className: stateClassName,
                         disabled,
                         size,

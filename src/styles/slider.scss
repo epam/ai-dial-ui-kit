@@ -49,7 +49,7 @@
 }
 
 .dial-kit-slider::-webkit-slider-thumb {
-  @apply size-4 rounded-full border border-default bg-control-neutral shadow-sm;
+  @apply size-4 rounded-full border border-default bg-control-neutral dial-kit-control-shadow;
 
   appearance: none;
   -webkit-appearance: none;
@@ -64,7 +64,7 @@
 }
 
 .dial-kit-slider::-moz-range-thumb {
-  @apply size-4 rounded-full border border-default bg-control-neutral shadow-sm;
+  @apply size-4 rounded-full border border-default bg-control-neutral dial-kit-control-shadow;
 
   appearance: none;
   box-sizing: border-box;

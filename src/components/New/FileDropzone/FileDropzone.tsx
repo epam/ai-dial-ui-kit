@@ -12,6 +12,7 @@ import {
 
 import { ErrorText } from '@/components/New/CaptionText/CaptionText';
 import { Label, type LabelProps } from '@/components/New/Label/Label';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { matchesAccept } from '@/utils/file-accept';
@@ -229,6 +230,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
         {icon ?? (
           <IconUpload
             size={DIAL_ICON_SIZE.LG}
+            stroke={DIAL_KIT_ICON_STROKE}
             aria-hidden="true"
             className={
               disabled ? 'text-control-disable-primary' : 'text-secondary'

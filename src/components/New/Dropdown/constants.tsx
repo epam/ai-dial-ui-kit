@@ -8,6 +8,7 @@ import {
   overlaySubMenuClassName,
   overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -40,5 +41,9 @@ export const dropdownDividerClassName = 'my-1 border-t border-tertiary';
 export const dropdownGap = overlayGap;
 
 export const submenuCaretIcon = (
-  <IconChevronRight size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+  <IconChevronRight
+    size={DIAL_ICON_SIZE.SM}
+    stroke={DIAL_KIT_ICON_STROKE}
+    aria-hidden="true"
+  />
 );

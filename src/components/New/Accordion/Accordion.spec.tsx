@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
+
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { Accordion } from './Accordion';
 
 describe('Dial UI Kit :: Accordion', () => {
@@ -14,6 +16,20 @@ describe('Dial UI Kit :: Accordion', () => {
     expect(screen.getByText('Optional configuration')).toBeInTheDocument();
     expect(screen.getByRole('button')).toHaveAccessibleName(
       'Settings Optional configuration',
+    );
+  });
+
+  /** See the same assertion on `Search` for why the attribute is the subject. */
+  test('draws the chevron at the icon stroke', () => {
+    const { container } = render(
+      <Accordion title="Settings">
+        <p>Content</p>
+      </Accordion>,
+    );
+
+    expect(container.querySelector('svg')).toHaveAttribute(
+      'stroke-width',
+      String(DIAL_KIT_ICON_STROKE),
     );
   });
 

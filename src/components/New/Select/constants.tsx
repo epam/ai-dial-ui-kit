@@ -13,6 +13,7 @@ import {
   overlayItemSelectedClassName,
   overlaySubMenuClassName,
 } from '@/components/New/constants/overlay';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -45,7 +46,11 @@ export const selectSubMenuClassName = overlaySubMenuClassName;
 
 /** Marks an option that opens a nested list. Matches the dropdown's caret. */
 export const selectSubMenuCaretIcon = (
-  <IconChevronRight size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+  <IconChevronRight
+    size={DIAL_ICON_SIZE.SM}
+    stroke={DIAL_KIT_ICON_STROKE}
+    aria-hidden="true"
+  />
 );
 
 /** Classes for the chevron rendered as the field's trailing icon. */
@@ -58,16 +63,29 @@ export const selectFieldIconClassName = 'text-secondary transition-transform';
 export const selectSearchThreshold = 8;
 
 export const selectSearchIcon = (
-  <IconSearch size={DIAL_ICON_SIZE.MD} aria-hidden="true" />
+  <IconSearch
+    size={DIAL_ICON_SIZE.MD}
+    stroke={DIAL_KIT_ICON_STROKE}
+    aria-hidden="true"
+  />
 );
 
 export const selectCloseIcon = (
-  <IconX size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+  <IconX
+    size={DIAL_ICON_SIZE.SM}
+    stroke={DIAL_KIT_ICON_STROKE}
+    aria-hidden="true"
+  />
 );
 
 /** Marks the selected option in single mode, alongside its tinted row. */
 export const selectOptionCheckIcon = (
-  <IconCheck size={DIAL_ICON_SIZE.SM} className="shrink-0" aria-hidden />
+  <IconCheck
+    size={DIAL_ICON_SIZE.SM}
+    stroke={DIAL_KIT_ICON_STROKE}
+    className="shrink-0"
+    aria-hidden
+  />
 );
 
 export const selectEmptyStateIcon = (

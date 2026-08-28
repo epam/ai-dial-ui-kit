@@ -3,6 +3,7 @@ import { type FC, useState } from 'react';
 
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Input, type InputProps } from '@/components/New/Input/Input';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 
@@ -68,9 +69,17 @@ export const PasswordInput: FC<PasswordInputProps> = ({
           aria-pressed={isRevealed}
           icon={
             isRevealed ? (
-              <IconEyeOff size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+              <IconEyeOff
+                size={DIAL_ICON_SIZE.SM}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden="true"
+              />
             ) : (
-              <IconEye size={DIAL_ICON_SIZE.SM} aria-hidden="true" />
+              <IconEye
+                size={DIAL_ICON_SIZE.SM}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden="true"
+              />
             )
           }
           onClick={() => setIsVisible((prev) => !prev)}

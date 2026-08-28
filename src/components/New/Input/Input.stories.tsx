@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconEye, IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Input, type InputProps } from './Input';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { inputBaseArgTypes } from '@/constants/storybook/input';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
@@ -72,7 +73,9 @@ export const Small: Story = {
   args: {
     placeholder: 'Search...',
     size: ElementSize.Small,
-    iconBefore: <IconSearch size={DIAL_ICON_SIZE.SM} />,
+    iconBefore: (
+      <IconSearch size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
   },
 };
 
@@ -111,8 +114,15 @@ export const Sizes: Story = {
                     id={`${size}-icons`}
                     size={size}
                     placeholder="Search..."
-                    iconBefore={<IconSearch size={iconSize} />}
-                    iconAfter={<IconEye size={iconSize} />}
+                    iconBefore={
+                      <IconSearch
+                        size={iconSize}
+                        stroke={DIAL_KIT_ICON_STROKE}
+                      />
+                    }
+                    iconAfter={
+                      <IconEye size={iconSize} stroke={DIAL_KIT_ICON_STROKE} />
+                    }
                   />
 
                   <InteractiveInput
@@ -123,7 +133,12 @@ export const Sizes: Story = {
                     postfix="postfix"
                     caption="Caption text"
                     inputButtonProps={{
-                      icon: <IconSearch size={iconSize} />,
+                      icon: (
+                        <IconSearch
+                          size={iconSize}
+                          stroke={DIAL_KIT_ICON_STROKE}
+                        />
+                      ),
                       onClick: () => alert('Input button clicked'),
                     }}
                   />
@@ -148,13 +163,19 @@ export const MaxView: Story = {
   render: () => {
     const props: InputProps = {
       placeholder: 'Placeholder',
-      iconBefore: <IconSearch size={DIAL_ICON_SIZE.MD} />,
+      iconBefore: (
+        <IconSearch size={DIAL_ICON_SIZE.MD} stroke={DIAL_KIT_ICON_STROKE} />
+      ),
       postfix: 'postfix',
       prefix: 'prefix',
       caption: 'Caption text',
-      iconAfter: <IconEye size={DIAL_ICON_SIZE.MD} />,
+      iconAfter: (
+        <IconEye size={DIAL_ICON_SIZE.MD} stroke={DIAL_KIT_ICON_STROKE} />
+      ),
       inputButtonProps: {
-        icon: <IconSearch size={DIAL_ICON_SIZE.MD} />,
+        icon: (
+          <IconSearch size={DIAL_ICON_SIZE.MD} stroke={DIAL_KIT_ICON_STROKE} />
+        ),
         onClick: () => alert('Input button clicked'),
       },
     };
@@ -235,8 +256,18 @@ export const AllVariants: Story = {
             <InteractiveInput
               id="default-input"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -248,8 +279,18 @@ export const AllVariants: Story = {
               id="field-input"
               placeholder="Placeholder"
               value="Text"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -261,8 +302,18 @@ export const AllVariants: Story = {
               id="hover-input"
               containerClassName="dial-input-for-hover"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -274,8 +325,18 @@ export const AllVariants: Story = {
               id="focus-input"
               containerClassName="dial-input-for-focus"
               placeholder="Placeholder"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -289,8 +350,18 @@ export const AllVariants: Story = {
               invalid={true}
               value="Text"
               error="Error message"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -303,8 +374,18 @@ export const AllVariants: Story = {
               placeholder="Placeholder"
               disabled={true}
               value="Text"
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
 
@@ -316,8 +397,18 @@ export const AllVariants: Story = {
               id="disable-input"
               placeholder="Placeholder"
               disabled={true}
-              iconBefore={<IconSearch size={DIAL_ICON_SIZE.MD} />}
-              iconAfter={<IconEye size={DIAL_ICON_SIZE.MD} />}
+              iconBefore={
+                <IconSearch
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
+              iconAfter={
+                <IconEye
+                  size={DIAL_ICON_SIZE.MD}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                />
+              }
             />
           </div>
         </div>

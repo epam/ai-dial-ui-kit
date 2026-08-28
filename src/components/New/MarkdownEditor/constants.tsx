@@ -36,6 +36,7 @@ import {
   IconTextSize,
 } from '@tabler/icons-react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 
 /** 16px inside the 24px round toolbar buttons, matching the other 2.0
@@ -44,6 +45,13 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
  *  `src/styles/markdown-editor.scss`, which wins over these width/height
  *  attributes. */
 export const MARKDOWN_TOOLBAR_ICON_SIZE = DIAL_ICON_SIZE.SM;
+
+/** Every glyph in the toolbar is the same weight and size, so the pair is
+ *  spread rather than repeated at every command. */
+const TOOLBAR_ICON_PROPS = {
+  size: MARKDOWN_TOOLBAR_ICON_SIZE,
+  stroke: DIAL_KIT_ICON_STROKE,
+};
 
 const withIcon = (command: ICommand, icon: ICommand['icon']): ICommand => ({
   ...command,
@@ -56,34 +64,25 @@ const withIcon = (command: ICommand, icon: ICommand['icon']): ICommand => ({
  * textarea) with icons and grouping matching the design.
  */
 export const getMarkdownFormattingCommands = (): ICommand[] => [
-  withIcon(bold, <IconBold size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(italic, <IconItalic size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(
-    strikethrough,
-    <IconStrikethrough size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
+  withIcon(bold, <IconBold {...TOOLBAR_ICON_PROPS} />),
+  withIcon(italic, <IconItalic {...TOOLBAR_ICON_PROPS} />),
+  withIcon(strikethrough, <IconStrikethrough {...TOOLBAR_ICON_PROPS} />),
   divider,
   group([heading1, heading2, heading3], {
     name: 'heading',
     groupName: 'heading',
-    icon: <IconTextSize size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
+    icon: <IconTextSize {...TOOLBAR_ICON_PROPS} />,
     buttonProps: { 'aria-label': 'Text style', title: 'Text style' },
   }),
   divider,
-  withIcon(
-    unorderedListCommand,
-    <IconList size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
-  withIcon(
-    orderedListCommand,
-    <IconListNumbers size={MARKDOWN_TOOLBAR_ICON_SIZE} />,
-  ),
+  withIcon(unorderedListCommand, <IconList {...TOOLBAR_ICON_PROPS} />),
+  withIcon(orderedListCommand, <IconListNumbers {...TOOLBAR_ICON_PROPS} />),
   divider,
-  withIcon(quote, <IconQuote size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(link, <IconLink size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(code, <IconCode size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(quote, <IconQuote {...TOOLBAR_ICON_PROPS} />),
+  withIcon(link, <IconLink {...TOOLBAR_ICON_PROPS} />),
+  withIcon(code, <IconCode {...TOOLBAR_ICON_PROPS} />),
   divider,
-  withIcon(table, <IconTable size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(table, <IconTable {...TOOLBAR_ICON_PROPS} />),
 ];
 
 /**
@@ -92,9 +91,9 @@ export const getMarkdownFormattingCommands = (): ICommand[] => [
  * the active one is highlighted, followed by fullscreen.
  */
 export const getMarkdownExtraCommands = (): ICommand[] => [
-  withIcon(codeEdit, <IconPencil size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(codeLive, <IconLayoutColumns size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
-  withIcon(codePreview, <IconEye size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(codeEdit, <IconPencil {...TOOLBAR_ICON_PROPS} />),
+  withIcon(codeLive, <IconLayoutColumns {...TOOLBAR_ICON_PROPS} />),
+  withIcon(codePreview, <IconEye {...TOOLBAR_ICON_PROPS} />),
   divider,
-  withIcon(fullscreen, <IconMaximize size={MARKDOWN_TOOLBAR_ICON_SIZE} />),
+  withIcon(fullscreen, <IconMaximize {...TOOLBAR_ICON_PROPS} />),
 ];

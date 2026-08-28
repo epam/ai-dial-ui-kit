@@ -1,6 +1,7 @@
 import { IconX } from '@tabler/icons-react';
 import type { FC, MouseEvent } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { GhostIconButton } from '../IconButton/IconButtonWrappers';
@@ -55,6 +56,7 @@ export const CloseButton: FC<CloseButtonProps> = ({
           size={
             size === ElementSize.Small ? DIAL_ICON_SIZE.SM : DIAL_ICON_SIZE.MD
           }
+          stroke={DIAL_KIT_ICON_STROKE}
           aria-hidden="true"
         />
       }
