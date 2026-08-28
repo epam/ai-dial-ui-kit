@@ -234,7 +234,37 @@ describe('Dial UI Kit :: ResizableContainer', () => {
     );
   });
 
-  test('renders a custom handler inside the separator', () => {
+  test('marks the handle with a chevron pointing away from the panel', () => {
+    const { rerender } = render(
+      <ResizableContainer {...BOUNDS} defaultWidth={260}>
+        <div>Panel content</div>
+      </ResizableContainer>,
+    );
+
+    expect(
+      screen
+        .getByRole('separator')
+        .querySelector('svg.tabler-icon-chevron-right'),
+    ).not.toBeNull();
+
+    rerender(
+      <ResizableContainer
+        {...BOUNDS}
+        defaultWidth={260}
+        side={ResizableContainerSide.Left}
+      >
+        <div>Panel content</div>
+      </ResizableContainer>,
+    );
+
+    expect(
+      screen
+        .getByRole('separator')
+        .querySelector('svg.tabler-icon-chevron-left'),
+    ).not.toBeNull();
+  });
+
+  test('renders a custom handler in place of the chevron', () => {
     render(
       <ResizableContainer
         {...BOUNDS}
@@ -245,8 +275,9 @@ describe('Dial UI Kit :: ResizableContainer', () => {
       </ResizableContainer>,
     );
 
-    expect(screen.getByRole('separator')).toContainElement(
-      screen.getByText('Grip'),
-    );
+    const handle = screen.getByRole('separator');
+
+    expect(handle).toContainElement(screen.getByText('Grip'));
+    expect(handle.querySelector('svg.tabler-icon-chevron-right')).toBeNull();
   });
 });

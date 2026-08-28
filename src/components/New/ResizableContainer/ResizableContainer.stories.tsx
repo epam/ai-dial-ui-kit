@@ -77,7 +77,8 @@ const meta = {
     },
     resizeHandler: {
       control: false,
-      description: 'Custom node rendered inside the handle',
+      description:
+        'Custom node rendered inside the handle, in place of the default chevron',
     },
     onResize: { control: false },
     onResizeStop: { control: false },
