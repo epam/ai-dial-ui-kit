@@ -41,7 +41,7 @@ export interface ResizableContainerProps {
   className?: string;
   /** Additional CSS classes for the resize handle. */
   resizeHandlerClassName?: string;
-  /** Custom node rendered inside the handle. */
+  /** Custom node rendered inside the handle, in place of the default chevron. */
   resizeHandler?: ReactNode;
 }
 
@@ -51,8 +51,9 @@ export interface ResizableContainerProps {
  * Design system 2.0
  *
  * Works as a controlled component when `width` is provided, otherwise it keeps
- * its own width from `defaultWidth`. The handle appears on hover and while
- * dragging, and stays within `minWidth`–`maxWidth` in both modes.
+ * its own width from `defaultWidth`. The handle — an accent line with a chevron
+ * pointing away from the panel — appears on hover and while dragging, and stays
+ * within `minWidth`–`maxWidth` in both modes.
  *
  * The handle is a focusable `separator`, so the panel resizes with the arrow
  * keys — `Home` and `End` jump to the bounds — and each press reports through
@@ -88,7 +89,7 @@ export interface ResizableContainerProps {
  * @param [ariaLabel='Resize panel'] - Accessible name of the handle.
  * @param [className] - Additional CSS classes for the inner content wrapper.
  * @param [resizeHandlerClassName] - Additional CSS classes for the resize handle.
- * @param [resizeHandler] - Custom node rendered inside the handle.
+ * @param [resizeHandler] - Custom node rendered inside the handle, replacing the default chevron.
  */
 export const ResizableContainer: FC<ResizableContainerProps> = ({
   children,
