@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, test, vi } from 'vitest';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { ElementSize } from '@/types/size';
 import { Search } from './Search';
 
@@ -24,6 +25,20 @@ describe('Dial UI Kit :: Search', () => {
     render(<Search id="search" />);
 
     expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument();
+  });
+
+  /**
+   * Tabler defaults to a 2px stroke, which is heavier than the 1.5px the 2.0
+   * scale reserves for icons — the weight only lands if the component passes
+   * `DIAL_KIT_ICON_STROKE`, so the attribute is what proves it did.
+   */
+  test('draws the magnifier at the icon stroke', () => {
+    const { container } = render(<Search id="search" />);
+
+    expect(container.querySelector('svg')).toHaveAttribute(
+      'stroke-width',
+      String(DIAL_KIT_ICON_STROKE),
+    );
   });
 
   test('reports every edit through onChange', async () => {

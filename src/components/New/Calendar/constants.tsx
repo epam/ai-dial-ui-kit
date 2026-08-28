@@ -4,6 +4,7 @@ import {
   IconChevronRight,
 } from '@tabler/icons-react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
 
@@ -42,12 +43,25 @@ export const calendarFieldIconClassName = 'text-secondary';
 export const calendarIcon = (
   <IconCalendar
     size={DIAL_ICON_SIZE.MD}
+    stroke={DIAL_KIT_ICON_STROKE}
     aria-hidden="true"
     className={calendarFieldIconClassName}
   />
 );
 
 export const calendarNavIcons = {
-  prev: <IconChevronLeft size={DIAL_ICON_SIZE.SM} aria-hidden="true" />,
-  next: <IconChevronRight size={DIAL_ICON_SIZE.SM} aria-hidden="true" />,
+  prev: (
+    <IconChevronLeft
+      size={DIAL_ICON_SIZE.SM}
+      stroke={DIAL_KIT_ICON_STROKE}
+      aria-hidden="true"
+    />
+  ),
+  next: (
+    <IconChevronRight
+      size={DIAL_ICON_SIZE.SM}
+      stroke={DIAL_KIT_ICON_STROKE}
+      aria-hidden="true"
+    />
+  ),
 };

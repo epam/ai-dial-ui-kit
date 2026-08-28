@@ -2,6 +2,7 @@ import { IconArrowNarrowLeft, IconTag } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { TagAppearance } from '@/types/tag';
 import { Tag } from './Tag';
@@ -73,7 +74,7 @@ export const Selected: Story = {
 export const WithIcon: Story = {
   args: {
     label: 'TypeScript',
-    icon: <IconTag size={DIAL_ICON_SIZE.SM} />,
+    icon: <IconTag size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />,
   },
 };
 
@@ -184,7 +185,12 @@ export const SelectableStates: Story = {
           label="Tag"
           appearance={TagAppearance.Selectable}
           selected
-          icon={<IconArrowNarrowLeft size={DIAL_ICON_SIZE.SM} />}
+          icon={
+            <IconArrowNarrowLeft
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+            />
+          }
           onClick={() => {}}
         />
       </div>
@@ -206,7 +212,12 @@ export const AllVariants: Story = {
         <Tag label="Default" />
         <Tag label="Selected" selected />
         <Tag label="Closable" closable onRemove={() => {}} />
-        <Tag label="With icon" icon={<IconTag size={DIAL_ICON_SIZE.SM} />} />
+        <Tag
+          label="With icon"
+          icon={
+            <IconTag size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+          }
+        />
         <Tag label="Disabled" closable disabled onRemove={() => {}} />
         <Tag
           label="Selectable"

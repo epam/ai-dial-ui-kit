@@ -26,6 +26,7 @@ import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers'
 import { Input } from '@/components/New/Input/Input';
 import { Label, type LabelProps } from '@/components/New/Label/Label';
 import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
 import { ElementSize } from '@/types/size';
@@ -641,6 +642,7 @@ export const Select: FC<SelectProps> = ({
             iconAfter={
               <IconChevronDown
                 size={isSmall ? DIAL_ICON_SIZE.SM : DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
                 aria-hidden="true"
                 className={mergeClasses(
                   selectFieldIconClassName,

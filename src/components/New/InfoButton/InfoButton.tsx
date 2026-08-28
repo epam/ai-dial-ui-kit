@@ -1,6 +1,7 @@
 import { IconInfoCircle } from '@tabler/icons-react';
 import type { FC } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -46,7 +47,13 @@ export const InfoButton: FC<InfoButtonProps> = ({
     <IconButton
       aria-label={ariaLabel}
       className={infoButtonClassName}
-      icon={<IconInfoCircle size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
+      icon={
+        <IconInfoCircle
+          size={DIAL_ICON_SIZE.SM}
+          stroke={DIAL_KIT_ICON_STROKE}
+          aria-hidden="true"
+        />
+      }
       onClick={onClick}
       size={ElementSize.Small}
       tooltipProps={{ tooltip: caption }}

@@ -7,6 +7,7 @@ import type {
   ReactNode,
 } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { TagAppearance } from '@/types/tag';
@@ -155,7 +156,13 @@ export const Tag: FC<TagProps> = ({
           className="size-[16px] shrink-0 dial-kit-minimum-target"
           size={ElementSize.Small}
           aria-label={removeLabel ?? `Remove ${label}`}
-          icon={<IconX size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
+          icon={
+            <IconX
+              size={DIAL_ICON_SIZE.SM}
+              stroke={DIAL_KIT_ICON_STROKE}
+              aria-hidden="true"
+            />
+          }
           onClick={(event) => {
             // A closable tag may also be clickable; removing it must not also
             // activate it.

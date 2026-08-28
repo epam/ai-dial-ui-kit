@@ -8,6 +8,7 @@ import {
 
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ElementSize } from '@/types/size';
@@ -184,9 +185,17 @@ export const CollapsibleSidebar: FC<CollapsibleSidebarProps> = ({
           tooltipProps={{ tooltip: toggleLabel }}
           icon={
             opened ? (
-              <IconChevronsLeft size={DIAL_ICON_SIZE.MD} aria-hidden="true" />
+              <IconChevronsLeft
+                size={DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden="true"
+              />
             ) : (
-              <IconChevronsRight size={DIAL_ICON_SIZE.MD} aria-hidden="true" />
+              <IconChevronsRight
+                size={DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden="true"
+              />
             )
           }
         />

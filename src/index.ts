@@ -436,6 +436,7 @@ export {
   GRID_THEME_PARAMS,
   ROW_HEIGHT as GRID_ROW_HEIGHT,
 } from './components/New/Grid/constants';
+export { DIAL_KIT_ICON_STROKE } from './components/New/constants/icon';
 export { convertToDate } from './utils/grid-date';
 export {
   baseColumnComparator,

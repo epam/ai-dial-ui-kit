@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconGripVertical } from '@tabler/icons-react';
 import { useState } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { ResizableContainerSide } from '@/types/resizable-container';
 import {
   ResizableContainer,
@@ -149,7 +150,11 @@ export const WithDividers: Story = {
 export const CustomHandler: Story = {
   args: {
     resizeHandler: (
-      <IconGripVertical className="size-4 text-accent" aria-hidden="true" />
+      <IconGripVertical
+        stroke={DIAL_KIT_ICON_STROKE}
+        className="size-4 text-accent"
+        aria-hidden="true"
+      />
     ),
     resizeHandlerClassName: 'w-1 flex items-center justify-center',
   },

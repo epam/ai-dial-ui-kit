@@ -28,6 +28,15 @@ export const GRID_ALIGN_RIGHT_CLASS = 'dial-kit-grid-align-right';
 export const ROW_HEIGHT = 40;
 
 /**
+ * Thin stroke (0.5px) — the width the 2.0 scale reserves for table dividers,
+ * one step below the 1px main stroke controls and standalone dividers use — in
+ * the colour every grid border already uses. ag-Grid takes its borders as CSS
+ * shorthand rather than as a width token, so the width is a literal here, kept
+ * in one constant so the three dividers cannot drift apart.
+ */
+const THIN_TABLE_DIVIDER = '0.5px solid var(--stroke-tertiary, #E0E6F0)';
+
+/**
  * ag-Grid theme parameters, resolved from the 2.0 colour tokens with the same
  * literal fallbacks the Tailwind config carries, so a consumer that defines no
  * CSS variables still gets the intended palette.
@@ -43,7 +52,16 @@ export const GRID_THEME_PARAMS = {
   selectedRowBackgroundColor: 'var(--bg-control-accent-alpha, #2764D90F)',
   rowHoverColor: 'var(--bg-control-accent-alpha-hover, #2764D924)',
   borderColor: 'var(--stroke-tertiary, #E0E6F0)',
-  rowBorder: '1px solid var(--stroke-tertiary, #E0E6F0)',
+  // Dividers inside the table sit on the thin stroke (0.5px) rather than the
+  // 1px main stroke that controls and standalone dividers use, so a dense grid
+  // reads as rows of data instead of a set of boxes. Sub-pixel widths are
+  // antialiased rather than snapped, which is what makes the line look lighter.
+  // `wrapperBorder` and the pinned-column boundary are left on the main stroke
+  // by the theme: those frame the table and separate its regions rather than
+  // dividing rows and columns.
+  rowBorder: THIN_TABLE_DIVIDER,
+  headerRowBorder: THIN_TABLE_DIVIDER,
+  headerColumnBorder: THIN_TABLE_DIVIDER,
   chromeBackgroundColor: 'var(--bg-layer-base, #F5F7FA)',
   foregroundColor: 'var(--text-primary, #161B2D)',
   headerTextColor: 'var(--text-secondary, #57647A)',

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconRepeat, IconSettings } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -57,7 +58,7 @@ const meta = {
     appearance: ButtonAppearance.Solid,
     size: ElementSize.Standard,
     disabled: false,
-    icon: <IconRepeat size={DIAL_ICON_SIZE.MD} />,
+    icon: <IconRepeat size={DIAL_ICON_SIZE.MD} stroke={DIAL_KIT_ICON_STROKE} />,
     'aria-label': 'Settings',
   },
 } satisfies Meta<IconButtonProps>;
@@ -70,7 +71,9 @@ export const Default: Story = {};
 export const Small: Story = {
   args: {
     size: ElementSize.Small,
-    icon: <IconSettings size={DIAL_ICON_SIZE.SM} />,
+    icon: (
+      <IconSettings size={DIAL_ICON_SIZE.SM} stroke={DIAL_KIT_ICON_STROKE} />
+    ),
   },
 };
 
@@ -171,7 +174,12 @@ export const AllVariants: Story = {
                   return (
                     <div key={size}>
                       {render({
-                        icon: <IconSettings size={iconSize} />,
+                        icon: (
+                          <IconSettings
+                            size={iconSize}
+                            stroke={DIAL_KIT_ICON_STROKE}
+                          />
+                        ),
                         'aria-label': 'Settings',
                         disabled,
                         size,

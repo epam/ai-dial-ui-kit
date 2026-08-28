@@ -3,6 +3,7 @@ import type { FC } from 'react';
 
 import { DialBreadcrumb } from '@/components/Breadcrumb/Breadcrumb';
 import { DialIcon } from '@/components/Icon/Icon';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -46,7 +47,13 @@ export const FolderPath: FC<FolderPathProps> = ({
 }) => {
   const folderIcon = (
     <DialIcon
-      icon={<IconFolder size={DIAL_ICON_SIZE.SM} aria-hidden="true" />}
+      icon={
+        <IconFolder
+          size={DIAL_ICON_SIZE.SM}
+          stroke={DIAL_KIT_ICON_STROKE}
+          aria-hidden="true"
+        />
+      }
       className="text-secondary"
     />
   );
@@ -70,6 +77,7 @@ export const FolderPath: FC<FolderPathProps> = ({
           icon={
             <IconChevronRight
               size={14}
+              stroke={DIAL_KIT_ICON_STROKE}
               aria-hidden="true"
               // eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value -- keep in sync with the source implementation's RTL mirroring
               className="rtl:scale-x-[-1]"

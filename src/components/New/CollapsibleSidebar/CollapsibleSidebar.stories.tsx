@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconSettings } from '@tabler/icons-react';
 import { useState } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button } from '../Button/Button';
@@ -114,7 +115,13 @@ export const WithAdditionalButtons: Story = {
         appearance={ButtonAppearance.Ghost}
         aria-label="Panel settings"
         tooltipProps={{ tooltip: 'Panel settings' }}
-        icon={<IconSettings size={DIAL_ICON_SIZE.MD} aria-hidden="true" />}
+        icon={
+          <IconSettings
+            size={DIAL_ICON_SIZE.MD}
+            stroke={DIAL_KIT_ICON_STROKE}
+            aria-hidden="true"
+          />
+        }
       />
     ),
   },

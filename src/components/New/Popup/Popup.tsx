@@ -13,6 +13,7 @@ import { Button, type ButtonProps } from '@/components/New/Button/Button';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
@@ -309,6 +310,7 @@ export const Popup: FC<PopupProps> = ({
                   icon={
                     <IconChevronLeft
                       size={DIAL_ICON_SIZE.SM}
+                      stroke={DIAL_KIT_ICON_STROKE}
                       aria-hidden="true"
                     />
                   }

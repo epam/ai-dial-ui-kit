@@ -1,6 +1,7 @@
 import { IconChevronRight } from '@tabler/icons-react';
 import { useId, useState, type FC, type ReactNode } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -126,6 +127,7 @@ export const Accordion: FC<AccordionProps> = ({
         // Caret at the leading edge; it turns a quarter turn to point down when open.
         <IconChevronRight
           size={DIAL_ICON_SIZE.SM}
+          stroke={DIAL_KIT_ICON_STROKE}
           aria-hidden="true"
           className={mergeClasses(
             'shrink-0 text-secondary transition-transform motion-reduce:transition-none',
