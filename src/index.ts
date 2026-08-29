@@ -167,6 +167,7 @@ export {
   DropdownTrigger,
   DropdownItemType,
 } from './types/dropdown';
+export { MenuItemMark } from './types/menu-item';
 export { ElementSize } from './types/size';
 export { ScreenResolution, TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
@@ -357,6 +358,8 @@ export { ConfirmationPopup } from './components/New/ConfirmationPopup/Confirmati
 export type { ConfirmationPopupProps } from './components/New/ConfirmationPopup/ConfirmationPopup';
 export { Dropdown } from './components/New/Dropdown/Dropdown';
 export type { DropdownProps } from './components/New/Dropdown/Dropdown';
+export { MenuItem } from './components/New/MenuItem/MenuItem';
+export type { MenuItemProps } from './components/New/MenuItem/MenuItem';
 export type { TextareaProps } from './components/New/Textarea/Textarea';
 export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
 export {

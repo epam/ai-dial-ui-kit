@@ -12,5 +12,11 @@ export interface SelectOption {
   description?: string;
   disabled?: boolean;
   icon?: ReactNode;
+  /**
+   * A control of its own at the row's trailing edge — a favourite toggle, a
+   * delete button. It is rendered beside the row rather than inside it, so it
+   * keeps its own click and stays out of the row's accessible name.
+   */
+  rightControl?: ReactNode;
   children?: SelectOption[];
 }

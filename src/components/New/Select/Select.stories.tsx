@@ -1,12 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconAbc, IconDashboardOff, IconEqual } from '@tabler/icons-react';
+import {
+  IconStar,
+  IconAbc,
+  IconDashboardOff,
+  IconEqual,
+} from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { PrimaryButton } from '@/components/New/Button/ButtonWrappers';
 import type { SelectOption } from '@/models/select';
 import { ElementSize } from '@/types/size';
+import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Select, type SelectProps } from './Select';
+import { MenuItemMark } from '@/types/menu-item';
 
 const iconSize = 16;
 const baseOptions: SelectOption[] = [
@@ -437,4 +444,52 @@ export const MultiselectRowStates: Story = {
       <Select {...args} />
     </div>
   ),
+};
+
+/**
+ * A select list tints its chosen row — that is the design's mark, and the
+ * default. `selectedOptionMark` swaps it for a trailing check, the way a menu
+ * marks its rows, or for the navigation highlight.
+ */
+export const SelectedOptionCheck: Story = {
+  name: 'Selected option: trailing check',
+  args: {
+    selectedOptionMark: MenuItemMark.Check,
+    defaultValue: 'contain',
+  },
+};
+
+export const NavigationHighlight: Story = {
+  name: 'Selected option: navigation highlight',
+  args: {
+    selectedOptionMark: MenuItemMark.Highlight,
+    defaultValue: 'contain',
+  },
+};
+
+/**
+ * An option can carry a control of its own at its trailing edge — the design's
+ * favourite toggle. It sits beside the option rather than inside it, so it
+ * keeps its own click and does not become part of the option name.
+ */
+export const OptionsWithRightControl: Story = {
+  name: 'Options with a right control',
+  args: {
+    options: baseOptions.slice(0, 3).map((option) => ({
+      ...option,
+      rightControl: (
+        <GhostIconButton
+          aria-label={`Add ${option.label} to favourites`}
+          size={ElementSize.Small}
+          icon={
+            <IconStar
+              size={iconSize}
+              stroke={DIAL_KIT_ICON_STROKE}
+              aria-hidden="true"
+            />
+          }
+        />
+      ),
+    })),
+  },
 };
