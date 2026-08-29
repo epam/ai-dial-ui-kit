@@ -14,10 +14,8 @@ import {
 } from 'react';
 
 import { Checkbox } from '@/components/New/Checkbox/Checkbox';
-import { CheckboxBox } from '@/components/New/Checkbox/CheckboxBox';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
-import { DialIcon } from '@/components/Icon/Icon';
 import {
   CaptionText,
   ErrorText,
@@ -29,21 +27,20 @@ import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
+import { MenuItem } from '@/components/New/MenuItem/MenuItem';
+import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
 import { MultiSelectTags } from './MultiSelectTags';
 import { SelectSubMenuItem } from './SelectSubMenuItem';
 import {
-  dropdownMenuMaxHeight,
+  selectOptionsScrollClassName,
   selectCloseIcon,
   selectEmptyStateIcon,
   selectFieldIconClassName,
   selectListWidthClassName,
   selectOptionBaseClassName,
-  selectOptionCheckIcon,
-  selectOptionDisabledClassName,
-  selectOptionSelectedClassName,
   selectOverlayBaseClassName,
   selectSearchIcon,
   selectSearchThreshold,
@@ -68,6 +65,16 @@ export interface SelectProps {
   searchPlaceholder?: string;
   selectAll?: boolean;
   selectAllLabel?: string;
+  /**
+   * How the chosen option is marked in single mode. The design tints the row
+   * (`Tint`, the default); `Check` puts a trailing check on it instead, the
+   * way a menu marks its rows, and `Highlight` adds the navigation menu's
+   * accent label. Multiple mode always uses the checkbox row.
+   */
+  selectedOptionMark?:
+    | MenuItemMark.Tint
+    | MenuItemMark.Check
+    | MenuItemMark.Highlight;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
@@ -101,14 +108,17 @@ export interface SelectProps {
  * aliases: OptionPicker|ChoiceSelector
  * Design system 2.0
  *
+ * A list of **values to choose from**, opened from the field. It is not the
+ * control for showing actions or navigation options — that is {@link Dropdown}.
+ *
  * The field is an {@link Input}, so it carries the 2.0 field styling, sizes,
  * label, caption and error states, and it exposes the control as a `combobox`
  * whose popup is the option list.
  *
  * Single mode:
  * - The field shows the selected option's leading icon + label.
- * - In the list, the selected option is indicated by a LEFT border, a tinted background
- *   and a trailing check icon.
+ * - In the list, the selected option is tinted; `selectedOptionMark` swaps that
+ *   for a trailing check or the navigation highlight.
  *
  * Multiple mode uses checkboxes (including Select All with indeterminate state) and
  * renders the selection as removable tags inside the field.
@@ -142,6 +152,7 @@ export interface SelectProps {
  * @param [searchPlaceholder] - Placeholder for the overlay search input.
  * @param [selectAll=false] - Show a "Select All" checkbox in multiple mode.
  * @param [selectAllLabel="Select all"] - Label for the "Select All" checkbox.
+ * @param [selectedOptionMark=MenuItemMark.Tint] - How the chosen option is marked in single mode.
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
  * @param [emptyStateIcon] - Icon to display when there are no options.
@@ -182,6 +193,7 @@ export const Select: FC<SelectProps> = ({
   selectAll = false,
   invalid,
   selectAllLabel = 'Select all',
+  selectedOptionMark = MenuItemMark.Tint,
   emptyStateTitle = 'No options available',
   emptyStateDescription,
   emptyStateIcon,
@@ -505,98 +517,84 @@ export const Select: FC<SelectProps> = ({
         </div>
       )}
 
-      {filtered.length === 0 ? (
-        <div className="px-2 py-3">
-          <DialNoDataContent
-            icon={emptyStateIcon ?? selectEmptyStateIcon}
-            title={emptyStateTitle}
-            description={emptyStateDescription}
-          />
-        </div>
-      ) : (
-        filtered.map((opt) => {
-          const selected = selectedValues.includes(opt.value);
+      {/*
+        `role="none"` keeps the options owned by the listbox: the scroll box is
+        a layout element, and an element of its own between them would break
+        the listbox's ownership of its options.
+      */}
+      <div role="none" className={selectOptionsScrollClassName}>
+        {filtered.length === 0 ? (
+          <div className="px-2 py-3">
+            <DialNoDataContent
+              icon={emptyStateIcon ?? selectEmptyStateIcon}
+              title={emptyStateTitle}
+              description={emptyStateDescription}
+            />
+          </div>
+        ) : (
+          filtered.map((opt) => {
+            const selected = selectedValues.includes(opt.value);
 
-          if (multiple) {
-            return (
-              /*
+            if (opt.children?.length) {
+              return (
+                <SelectSubMenuItem
+                  key={opt.value}
+                  opt={opt}
+                  selectedValues={selectedValues}
+                  mark={multiple ? MenuItemMark.Checkbox : selectedOptionMark}
+                  onSelect={handleToggle}
+                />
+              );
+            }
+
+            if (multiple) {
+              return (
+                /*
                 The row itself is the control: one `option` whose state rides on
                 `aria-selected`, with a decorative box drawing the check. A real
                 nested checkbox would give the row two states to announce and
                 would leave the rest of the 40px rectangle inert — the design
                 has the whole row selecting the option.
               */
-              <button
+                <MenuItem
+                  key={opt.value}
+                  id={`${fieldId}-${opt.value}`}
+                  role="option"
+                  aria-selected={selected}
+                  aria-disabled={!!opt.disabled}
+                  disabled={opt.disabled}
+                  mark={MenuItemMark.Checkbox}
+                  selected={selected}
+                  icon={opt.icon}
+                  label={opt.labelNode ?? opt.label}
+                  description={opt.description}
+                  rightControl={opt.rightControl}
+                  onClick={() => handleToggle(opt.value)}
+                />
+              );
+            }
+
+            return (
+              <MenuItem
                 key={opt.value}
-                id={`${fieldId}-${opt.value}`}
-                type="button"
                 role="option"
                 aria-selected={selected}
                 aria-disabled={!!opt.disabled}
                 disabled={opt.disabled}
-                className={mergeClasses(
-                  selectOptionBaseClassName,
-                  selected && selectOptionSelectedClassName,
-                  opt.disabled && selectOptionDisabledClassName,
-                )}
-                onClick={() => handleToggle(opt.value)}
-              >
-                <CheckboxBox isSelected={selected} disabled={opt.disabled} />
-                {opt.icon && <DialIcon icon={opt.icon} />}
-                <span className="min-w-0 flex-1 truncate text-start">
-                  {opt.labelNode ?? opt.label}
-                </span>
-
-                {opt.description && (
-                  <span className="shrink-0 text-secondary dial-small-text">
-                    {opt.description}
-                  </span>
-                )}
-              </button>
-            );
-          }
-
-          if (opt.children?.length) {
-            return (
-              <SelectSubMenuItem
-                key={opt.value}
-                opt={opt}
-                selectedValues={selectedValues}
-                onSelect={handleToggle}
+                mark={selectedOptionMark}
+                selected={selected}
+                ellipsisLabel
+                icon={opt.icon}
+                label={opt.labelNode ?? opt.label}
+                description={opt.description}
+                rightControl={opt.rightControl}
+                onClick={() => !opt.disabled && handleToggle(opt.value)}
               />
             );
-          }
+          })
+        )}
+      </div>
 
-          return (
-            <button
-              key={opt.value}
-              role="option"
-              type="button"
-              aria-selected={selected}
-              aria-disabled={!!opt.disabled}
-              disabled={opt.disabled}
-              className={mergeClasses(
-                selectOptionBaseClassName,
-                opt.disabled && selectOptionDisabledClassName,
-              )}
-              onClick={() => !opt.disabled && handleToggle(opt.value)}
-            >
-              <div className="flex items-center gap-2 w-full min-w-0">
-                {opt.icon && <DialIcon icon={opt.icon} />}
-                <EllipsisTooltip text={opt.labelNode ?? opt.label} />
-
-                {opt.description && (
-                  <div className="text-secondary dial-small-text">
-                    {opt.description}
-                  </div>
-                )}
-              </div>
-
-              {selected && selectOptionCheckIcon}
-            </button>
-          );
-        })
-      )}
       {footer && (
         <div
           onClick={(e) => {
@@ -625,7 +623,6 @@ export const Select: FC<SelectProps> = ({
           onClose={onClose}
           placement="bottom-start"
           allowedPlacements={['bottom-start', 'top-start']}
-          maxDropdownHeight={searchable ? null : dropdownMenuMaxHeight}
           listClassName={mergeClasses(selectListWidthClassName, listClassName)}
           className="w-full"
           renderOverlay={renderOptionsList}

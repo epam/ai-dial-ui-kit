@@ -1,15 +1,11 @@
 import { type FC } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
-import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
+import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { type SelectOption } from '@/models/select';
-import { mergeClasses } from '@/utils/merge-classes';
+import { MenuItemMark } from '@/types/menu-item';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
 
 import {
-  selectOptionBaseClassName,
-  selectOptionCheckIcon,
-  selectOptionDisabledClassName,
   selectSubMenuCaretIcon,
   selectSubMenuClassName,
   selectSubMenuGap,
@@ -18,12 +14,19 @@ import {
 export interface SelectSubMenuItemProps {
   opt: SelectOption;
   selectedValues: string[];
+  /** How a chosen child row is marked. */
+  mark?:
+    | MenuItemMark.Tint
+    | MenuItemMark.Check
+    | MenuItemMark.Checkbox
+    | MenuItemMark.Highlight;
   onSelect: (value: string) => void;
 }
 
 export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
   opt,
   selectedValues,
+  mark = MenuItemMark.Tint,
   onSelect,
 }) => {
   const {
@@ -41,27 +44,25 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
 
   return (
     <>
-      <button
+      {/*
+        The trigger carries no mark of its own: the check belongs to the child
+        that is actually chosen, one panel over. While its panel is open the row
+        stays tinted, which is what the design shows for an open parent.
+      */}
+      <MenuItem
         ref={refs.setReference}
-        type="button"
         role="option"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-selected={!!parentSelected}
         aria-disabled={!!opt.disabled}
         disabled={opt.disabled}
-        className={mergeClasses(
-          selectOptionBaseClassName,
-          opt.disabled && selectOptionDisabledClassName,
-        )}
+        ellipsisLabel
+        icon={opt.icon}
+        label={opt.labelNode ?? opt.label}
+        trailing={selectSubMenuCaretIcon}
         {...getReferenceProps()}
-      >
-        <div className="flex items-center gap-2 w-full min-w-0">
-          {opt.icon && <DialIcon icon={opt.icon} />}
-          <EllipsisTooltip text={opt.labelNode ?? opt.label} />
-        </div>
-        <span className="shrink-0">{selectSubMenuCaretIcon}</span>
-      </button>
+      />
 
       {isOpen && (
         <SubMenuPanel
@@ -72,31 +73,22 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
           role="listbox"
           surfaceClassName={selectSubMenuClassName}
         >
-          {opt.children!.map((child) => {
-            const childSelected = selectedValues.includes(child.value);
-            return (
-              <button
-                key={child.value}
-                type="button"
-                role="option"
-                aria-selected={childSelected}
-                aria-disabled={!!child.disabled}
-                disabled={child.disabled}
-                className={mergeClasses(
-                  selectOptionBaseClassName,
-                  child.disabled && selectOptionDisabledClassName,
-                )}
-                onClick={() => !child.disabled && onSelect(child.value)}
-              >
-                <div className="flex items-center gap-2 w-full min-w-0">
-                  {child.icon && <DialIcon icon={child.icon} />}
-                  <EllipsisTooltip text={child.labelNode ?? child.label} />
-                </div>
-
-                {childSelected && selectOptionCheckIcon}
-              </button>
-            );
-          })}
+          {opt.children!.map((child) => (
+            <MenuItem
+              key={child.value}
+              role="option"
+              aria-selected={selectedValues.includes(child.value)}
+              aria-disabled={!!child.disabled}
+              disabled={child.disabled}
+              mark={mark}
+              selected={selectedValues.includes(child.value)}
+              ellipsisLabel
+              icon={child.icon}
+              label={child.labelNode ?? child.label}
+              rightControl={child.rightControl}
+              onClick={() => !child.disabled && onSelect(child.value)}
+            />
+          ))}
         </SubMenuPanel>
       )}
     </>

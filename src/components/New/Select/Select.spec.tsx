@@ -4,6 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { ElementSize } from '@/types/size';
 import { Select, type SelectProps } from './Select';
+import { MenuItemMark } from '@/types/menu-item';
 
 const baseOptions = [
   { value: 'opt-1', label: 'Option 1' },
@@ -122,15 +123,36 @@ describe('Dial UI Kit :: Select', () => {
     expect(getField()).toHaveValue('Filter: Option 1');
   });
 
-  test('marks the selected option with a check icon', () => {
+  test('tints the selected option, which is how a select list marks it', () => {
     renderSelect({ defaultValue: 'opt-1' });
 
     openSelect();
 
     const selected = screen.getByRole('option', { name: 'Option 1' });
     expect(selected).toHaveAttribute('aria-selected', 'true');
+    expect(selected).toHaveClass('bg-control-accent-alpha');
+    // A menu marks its rows with a check; a select list does not.
+    expect(
+      selected.querySelector('.tabler-icon-check'),
+    ).not.toBeInTheDocument();
+
+    expect(screen.getByRole('option', { name: 'Option 2' })).not.toHaveClass(
+      'bg-control-accent-alpha',
+    );
+  });
+
+  test('marks the selected option with a check when asked to', () => {
+    renderSelect({
+      defaultValue: 'opt-1',
+      selectedOptionMark: MenuItemMark.Check,
+    });
+
+    openSelect();
+
+    const selected = screen.getByRole('option', { name: 'Option 1' });
     // The icon is decorative, so it is queried structurally rather than by role.
     expect(selected.querySelector('.tabler-icon-check')).toBeInTheDocument();
+    expect(selected).not.toHaveClass('bg-control-accent-alpha');
 
     expect(
       screen
@@ -548,7 +570,7 @@ describe('Dial UI Kit :: Select', () => {
       expect(parentTrigger).toHaveAttribute('aria-selected', 'true');
     });
 
-    test('selected child is marked with a check icon', async () => {
+    test('selected child is tinted, and marked with a check when asked to', async () => {
       const user = userEvent.setup();
       renderSelect({
         defaultValue: 'g1',
@@ -569,15 +591,67 @@ describe('Dial UI Kit :: Select', () => {
       const selectedChild = (await screen.findByText('G One')).closest(
         'button',
       )!;
+      expect(selectedChild).toHaveClass('bg-control-accent-alpha');
+      expect(screen.getByText('G Two').closest('button')!).not.toHaveClass(
+        'bg-control-accent-alpha',
+      );
+    });
+
+    test('selected child takes a check when the list is marked that way', async () => {
+      const user = userEvent.setup();
+      renderSelect({
+        defaultValue: 'g1',
+        selectedOptionMark: MenuItemMark.Check,
+        options: [
+          {
+            value: 'grp',
+            label: 'Group',
+            children: [
+              { value: 'g1', label: 'G One' },
+              { value: 'g2', label: 'G Two' },
+            ],
+          },
+        ],
+      });
+      openSelect();
+      await user.hover(screen.getByText('Group').closest('button')!);
+
       expect(
-        selectedChild.querySelector('.tabler-icon-check'),
-      ).toBeInTheDocument();
-      expect(
-        screen
-          .getByText('G Two')
+        (await screen.findByText('G One'))
           .closest('button')!
           .querySelector('.tabler-icon-check'),
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
+    });
+
+    test('nests a multiselect list too, with checkbox rows that keep it open', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderSelect({
+        multiple: true,
+        onChange,
+        defaultValue: ['g1'],
+        options: [
+          {
+            value: 'grp',
+            label: 'Group',
+            children: [
+              { value: 'g1', label: 'G One' },
+              { value: 'g2', label: 'G Two' },
+            ],
+          },
+        ],
+      });
+      openSelect();
+      await user.hover(screen.getByText('Group').closest('button')!);
+
+      const child = (await screen.findByText('G Two')).closest('button')!;
+      // A multiselect row draws the box in front of the label.
+      expect(child.querySelector('[aria-hidden="true"]')).toBeTruthy();
+
+      fireEvent.click(child);
+      expect(onChange).toHaveBeenCalledWith(['g1', 'g2']);
+      // Both panels stay up: a multiselect is toggled several times in a row.
+      expect(screen.getAllByRole('listbox')).toHaveLength(2);
     });
 
     test('disabled submenu trigger does not open submenu on hover', async () => {
@@ -628,5 +702,71 @@ describe('Dial UI Kit :: Select', () => {
     openSelect();
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     expect(getField()).toBeDisabled();
+  });
+});
+
+describe('Dial UI Kit :: Select — selectedOptionMark', () => {
+  test('gives the chosen option the navigation highlight instead of a check', () => {
+    renderSelect({
+      defaultValue: 'opt-1',
+      selectedOptionMark: MenuItemMark.Highlight,
+    });
+
+    openSelect();
+
+    const chosen = screen.getByRole('option', { name: 'Option 1' });
+    expect(chosen).toHaveClass('bg-control-accent-alpha', 'text-accent');
+    expect(chosen.querySelector('.tabler-icon-check')).not.toBeInTheDocument();
+
+    expect(screen.getByRole('option', { name: 'Option 2' })).not.toHaveClass(
+      'bg-control-accent-alpha',
+    );
+  });
+});
+
+describe('Dial UI Kit :: Select — list layout', () => {
+  test('scrolls the options at the design list length, leaving the search pinned', () => {
+    renderSelect({ searchable: true });
+
+    openSelect();
+
+    const scrollBox = screen.getByRole('option', {
+      name: 'Option 1',
+    }).parentElement!;
+    expect(scrollBox).toHaveClass('max-h-[344px]', 'overflow-y-auto');
+    // The search row sits outside the box, so the list moves under it.
+    expect(
+      scrollBox.contains(screen.getByRole('textbox', { name: /search/i })),
+    ).toBe(false);
+  });
+
+  test('renders the right control of an option as a button of its own', async () => {
+    const user = userEvent.setup();
+    const onFavourite = vi.fn();
+    const onChange = vi.fn();
+    renderSelect({
+      onChange,
+      options: [
+        {
+          value: 'opt-1',
+          label: 'Option 1',
+          rightControl: (
+            <button
+              type="button"
+              aria-label="Favourite Option 1"
+              onClick={onFavourite}
+            />
+          ),
+        },
+      ],
+    });
+
+    openSelect();
+    await user.click(
+      screen.getByRole('button', { name: 'Favourite Option 1' }),
+    );
+
+    expect(onFavourite).toHaveBeenCalledTimes(1);
+    expect(onChange).not.toHaveBeenCalled();
   });
 });

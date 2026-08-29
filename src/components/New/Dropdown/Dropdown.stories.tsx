@@ -25,6 +25,7 @@ import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { type DropdownItem } from '@/models/dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
+import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
 import { TooltipPlacement } from '@/types/tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
@@ -883,5 +884,83 @@ export const MultiselectItems: Story = {
     };
 
     return <MultiselectExample />;
+  },
+};
+
+/**
+ * The design draws a menu's single-select and multiselect the same way: a check
+ * at the trailing edge of the chosen row. `selectable` is what separates them —
+ * it keeps the menu open so several rows can be toggled in a row.
+ */
+export const MarkedItems: Story = {
+  name: 'Marked items (check / navigation)',
+  render: () => {
+    const MarkedExample = () => {
+      const [language, setLanguage] = useState('en');
+      const [tools, setTools] = useState<string[]>(['canvas']);
+      const [page, setPage] = useState('usage');
+
+      const toggleTool = (key: string) =>
+        setTools((prev) =>
+          prev.includes(key)
+            ? prev.filter((value) => value !== key)
+            : [...prev, key],
+        );
+
+      return (
+        <div className="flex gap-4">
+          <Dropdown
+            placement="bottom-start"
+            items={[
+              { key: 'en', label: 'English' },
+              { key: 'de', label: 'Deutsch' },
+            ].map((item) => ({
+              ...item,
+              mark: MenuItemMark.Check,
+              checked: language === item.key,
+              onClick: () => setLanguage(item.key),
+            }))}
+          >
+            <TriggerBtn label="Language" />
+          </Dropdown>
+
+          <Dropdown
+            placement="bottom-start"
+            items={[
+              { key: 'canvas', label: 'Canvas' },
+              { key: 'research', label: 'Deep Research' },
+              { key: 'learn', label: 'Learn' },
+            ].map((item) => ({
+              ...item,
+              // Multiselect: marked with a check like the single-select above,
+              // but `selectable` leaves the menu open across toggles.
+              selectable: true,
+              mark: MenuItemMark.Check,
+              checked: tools.includes(item.key),
+              onClick: () => toggleTool(item.key),
+            }))}
+          >
+            <TriggerBtn label={`Tools (${tools.length})`} />
+          </Dropdown>
+
+          <Dropdown
+            placement="bottom-start"
+            items={[
+              { key: 'usage', label: 'Usage' },
+              { key: 'keys', label: 'API keys' },
+            ].map((item) => ({
+              ...item,
+              mark: MenuItemMark.Highlight,
+              checked: page === item.key,
+              onClick: () => setPage(item.key),
+            }))}
+          >
+            <TriggerBtn label="Navigate" />
+          </Dropdown>
+        </div>
+      );
+    };
+
+    return <MarkedExample />;
   },
 };
