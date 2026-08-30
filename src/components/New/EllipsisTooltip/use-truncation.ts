@@ -6,6 +6,11 @@ import {
   useState,
 } from 'react';
 
+import {
+  observeElementSize,
+  scheduleMeasure,
+} from '@/utils/element-size-observer';
+
 /**
  * Reports whether an element's text is being cut off by `text-overflow`, so a
  * tooltip can carry the full string only when there is something to reveal.
@@ -15,6 +20,11 @@ import {
  * window resize, and — since a parent can resize without the window doing so —
  * whenever the element's own box changes size.
  *
+ * All of that goes through the shared observer in
+ * `@/utils/element-size-observer`, so a screen full of truncating labels costs
+ * one `ResizeObserver`, one resize listener and one animation frame in total
+ * rather than a set per label.
+ *
  * @param text - The rendered content; a change to it re-measures
  * @returns `ref` to attach to the truncating element, whether it `isTruncated`,
  * its `textContent` (the full string even when `text` is a node), and
@@ -22,52 +32,49 @@ import {
  */
 export const useTruncation = <T extends HTMLElement>(text: ReactNode) => {
   const ref = useRef<T | null>(null);
-  const frameRef = useRef<number | null>(null);
   const [isTruncated, setIsTruncated] = useState(false);
   const [textContent, setTextContent] = useState('');
+
+  // A string `text` is already the full string, so the DOM read that recovers
+  // it from a node is skipped for what is by far the common case. It lives in a
+  // ref because `measure` has to stay referentially stable: the shared observer
+  // keys its callbacks by element.
+  const isTextNodeRef = useRef(false);
 
   const measure = useCallback(() => {
     const element = ref.current;
 
     if (!element) return;
 
-    setTextContent(element.textContent ?? '');
+    if (isTextNodeRef.current) {
+      setTextContent(element.textContent ?? '');
+    }
 
-    // `scrollWidth` is rounded, so a sub-pixel box can report one pixel more
-    // than `clientWidth` while nothing is actually clipped. Comparing against
-    // the ceiled rendered width as well keeps that from reading as truncation.
-    const renderedWidth = Math.ceil(element.getBoundingClientRect().width);
-
-    setIsTruncated(
-      element.scrollWidth > element.clientWidth ||
-        element.scrollWidth > renderedWidth,
-    );
+    // `scrollWidth` against `clientWidth` is the whole check: both are layout
+    // widths of the same box, so a wider scroll width is exactly what
+    // `text-overflow` clips.
+    setIsTruncated(element.scrollWidth > element.clientWidth);
   }, []);
 
   // Reading layout inside an event handler forces a synchronous reflow, so the
-  // measurement is deferred to the next frame.
-  const remeasure = useCallback(() => {
-    if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    frameRef.current = requestAnimationFrame(measure);
+  // measurement is deferred to the next frame — shared with every other
+  // pending measurement, which keeps the batch to a single reflow.
+  const remeasure = useCallback(() => scheduleMeasure(measure), [measure]);
+
+  // Observing is tied to the element, not to the text: a new string must not
+  // cost an unobserve and a re-observe.
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) return;
+
+    return observeElementSize(element, measure);
   }, [measure]);
 
   useEffect(() => {
+    isTextNodeRef.current = typeof text !== 'string';
+
     remeasure();
-
-    window.addEventListener('resize', remeasure);
-
-    let observer: ResizeObserver | null = null;
-
-    if ('ResizeObserver' in window && ref.current) {
-      observer = new ResizeObserver(remeasure);
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', remeasure);
-      observer?.disconnect();
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    };
   }, [text, remeasure]);
 
   return { ref, isTruncated, textContent, remeasure };

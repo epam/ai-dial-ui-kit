@@ -6,6 +6,10 @@ import { DialTooltipContent } from '@/components/Tooltip/TooltipContent';
 import type { DialTooltipContainerOptions } from '@/components/Tooltip/TooltipContext';
 import { DialTooltipTrigger } from '@/components/Tooltip/TooltipTrigger';
 import { tooltipContentBaseClassName } from './constants';
+import {
+  observeElementSize,
+  scheduleMeasure,
+} from '@/utils/element-size-observer';
 import { mergeClasses } from '@/utils/merge-classes';
 
 export interface DialEllipsisTooltipProps extends DialTooltipContainerOptions {
@@ -56,41 +60,38 @@ export const DialEllipsisTooltip: FC<DialEllipsisTooltipProps> = ({
   const ref = useRef<HTMLElement | null>(null);
   const [isTruncated, setIsTruncated] = useState(false);
   const [nodeTextSnapshot, setNodeTextSnapshot] = useState<string>('');
-  const rafRef = useRef<number | null>(null);
 
-  const computeTruncation = () => {
+  const computeTruncation = useCallback(() => {
     const el = ref.current as HTMLElement | null;
     if (!el) return;
 
     setNodeTextSnapshot(el.textContent ?? '');
-    const client = el.clientWidth;
-    const scroll = el.scrollWidth;
-    const rectW = Math.ceil(el.getBoundingClientRect().width);
-    setIsTruncated(scroll > client || scroll > rectW);
-  };
-
-  const scheduleCompute = useCallback(() => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(computeTruncation);
+    // `scrollWidth` against `clientWidth` is the whole check: both are layout
+    // widths of the same box, so a wider scroll width is exactly what
+    // `text-overflow` clips.
+    setIsTruncated(el.scrollWidth > el.clientWidth);
   }, []);
+
+  // Reading layout inside an event handler forces a synchronous reflow, so the
+  // measurement is deferred to the next frame — shared with every other pending
+  // measurement, which keeps a screen full of these to one reflow per frame.
+  const scheduleCompute = useCallback(
+    () => scheduleMeasure(computeTruncation),
+    [computeTruncation],
+  );
+
+  // Observing is tied to the element, not to the text: a new string must not
+  // cost an unobserve and a re-observe. The shared observer means the whole
+  // page allocates one `ResizeObserver` and one resize listener in total.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    return observeElementSize(el, computeTruncation);
+  }, [computeTruncation]);
 
   useEffect(() => {
     scheduleCompute();
-
-    const onResize = () => scheduleCompute();
-    window.addEventListener('resize', onResize);
-
-    let ro: ResizeObserver | null = null;
-    if ('ResizeObserver' in window && ref.current) {
-      ro = new ResizeObserver(() => scheduleCompute());
-      ro.observe(ref.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-      if (ro) ro.disconnect();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
   }, [text, scheduleCompute]);
 
   const fullText = useMemo(
