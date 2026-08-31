@@ -417,6 +417,8 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     clearError: clearUploadError,
     openFileDialog: openFileDialogBase,
     fileInputRef,
+    fileInputAccept,
+    handleFileInputChange,
     openArchiveDialog,
 
     uploadConflictingFiles,
@@ -1062,6 +1064,15 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   return (
     <FileManagerContext.Provider value={value}>
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        hidden
+        accept={fileInputAccept}
+        onChange={handleFileInputChange}
+        data-qa="file-manager-upload-input"
+      />
       {children}
     </FileManagerContext.Provider>
   );

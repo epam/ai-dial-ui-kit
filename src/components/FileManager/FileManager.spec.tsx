@@ -1619,4 +1619,102 @@ describe('Dial UI Kit :: FileManager', () => {
       expect(onNewFolderDepthExceeded).not.toHaveBeenCalled();
     });
   });
+
+  describe('upload input survives StrictMode effect re-invocation', () => {
+    const UPLOAD_PATH = 'files/bucket/uploads/2026-08';
+
+    const writableTree = (): DialFile[] => [
+      {
+        id: 'files/bucket',
+        name: 'All files',
+        path: 'files/bucket',
+        folderId: '',
+        parentPath: null,
+        nodeType: DialFileNodeType.FOLDER,
+        permissions: [DialFilePermission.READ, DialFilePermission.WRITE],
+        items: [],
+      },
+    ];
+
+    const getUploadInputs = (): HTMLInputElement[] =>
+      Array.from(
+        document.querySelectorAll<HTMLInputElement>('input[type="file"]'),
+      ).filter((input) => input.accept !== '.zip,application/zip');
+
+    const getUploadInput = (): HTMLInputElement => {
+      const inputs = getUploadInputs();
+      expect(inputs.length).toBeGreaterThan(0);
+      return inputs[inputs.length - 1];
+    };
+
+    const pickFiles = (input: HTMLInputElement, files: File[]): void => {
+      Object.defineProperty(input, 'files', {
+        value: Object.assign(
+          { length: files.length, item: (i: number) => files[i] ?? null },
+          files,
+        ),
+        writable: false,
+        configurable: true,
+      });
+      fireEvent.change(input);
+    };
+
+    test('the element the picker was opened against is still the live one', async () => {
+      const onUploadFiles = vi.fn();
+      const clickSpy = vi
+        .spyOn(HTMLInputElement.prototype, 'click')
+        .mockImplementation(() => undefined);
+
+      render(
+        <React.StrictMode>
+          <div style={{ height: 640, width: 1100 }}>
+            <DialFileManager
+              items={writableTree()}
+              path={UPLOAD_PATH}
+              onUploadFiles={onUploadFiles}
+              uploadEnabled
+              autoSelectUploadedItems
+              initialUploadFilesOpen
+            />
+          </div>
+        </React.StrictMode>,
+      );
+
+      await waitFor(() => {
+        expect(clickSpy).toHaveBeenCalled();
+      });
+
+      const clickedInput = clickSpy.mock.instances[0] as HTMLInputElement;
+      expect(document.body.contains(clickedInput)).toBe(true);
+      expect(getUploadInputs()).toContain(clickedInput);
+
+      pickFiles(clickedInput, [
+        new File(['content'], 'picked.txt', { type: 'text/plain' }),
+      ]);
+
+      await waitFor(() => {
+        expect(onUploadFiles).toHaveBeenCalledTimes(1);
+      });
+      expect(onUploadFiles.mock.calls[0][1]).toBe(UPLOAD_PATH);
+
+      clickSpy.mockRestore();
+    });
+
+    test('the input is removed from the document on unmount', () => {
+      const { unmount } = renderWithinSizedShell(
+        <DialFileManager
+          items={writableTree()}
+          path={UPLOAD_PATH}
+          onUploadFiles={vi.fn()}
+          uploadEnabled
+        />,
+      );
+
+      expect(getUploadInputs()).toHaveLength(1);
+
+      unmount();
+
+      expect(getUploadInputs()).toHaveLength(0);
+    });
+  });
 });
