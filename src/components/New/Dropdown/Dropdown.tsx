@@ -33,25 +33,22 @@ import {
   type RefObject,
 } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
 import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
+import { MenuItemMark } from '@/types/menu-item';
 
 import {
   dropdownBaseClassName,
   dropdownListBaseClassName,
-  dropdownItemBaseClassName,
-  dropdownItemDisabledClassName,
-  dropdownItemDangerClassName,
-  dropdownItemSelectedClassName,
   dropdownDividerClassName,
   dropdownGap,
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
-import { CheckboxBox } from '@/components/New/Checkbox/CheckboxBox';
+import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { DropdownSubMenuItem } from './DropdownSubMenuItem';
+import { getItemRole, resolveItemMark } from './item-mark';
 
 export interface DropdownProps {
   children: ReactNode;
@@ -82,12 +79,13 @@ export interface DropdownProps {
 
 /**
  * Options the overlay's arrow keys walk through. All three roles are
- * arrow-navigated per ARIA: `menuitem` and `menuitemcheckbox` cover this
+ * arrow-navigated per ARIA: `menuitem`, `menuitemcheckbox` and
+ * `menuitemradio` cover this
  * component's own item list, `option` covers a listbox rendered through
  * `renderOverlay` (`Select` builds on this component).
  */
 const OVERLAY_OPTION_SELECTOR =
-  '[role="menuitem"], [role="menuitemcheckbox"], [role="option"]';
+  '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"]';
 
 const isEnabledOption = (el: HTMLElement): boolean =>
   !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true';
@@ -127,9 +125,19 @@ const getRefWidth = (el: ReferenceElement): number => {
  * aliases: ContextMenu|PopupMenu
  * Design system 2.0
  *
+ * A menu of **actions or navigation options**, opened from a trigger. It is not
+ * the control for picking a value out of a list — a country, a sort order, a
+ * filter — which is what {@link Select} is for.
+ *
  * Supports click/hover/contextMenu triggers, controlled/uncontrolled open, and an optional
  * close button inside the overlay. Placement is taken directly from Floating UI; when
  * `placement` is **undefined** (default), automatic placement is handled by `autoPlacement`.
+ *
+ * A chosen row is marked through the item's `mark`: the design draws a menu's
+ * single-select and multiselect the same way, with a check at the trailing edge
+ * (`MenuItemMark.Check`). Pair it with `selectable` for a multiselect row, which
+ * keeps the menu open across toggles. `MenuItemMark.Highlight` is the current
+ * item of a navigation menu.
  *
  * @example
  * ```tsx
@@ -460,60 +468,32 @@ export const Dropdown: FC<DropdownProps> = ({
                 />
               );
             }
+            const mark = resolveItemMark(it);
+            const role = getItemRole(it);
+
             return (
-              <button
+              <MenuItem
                 key={it.key}
-                role={it.selectable ? 'menuitemcheckbox' : 'menuitem'}
-                aria-checked={it.selectable ? !!it.checked : undefined}
-                type="button"
+                role={role}
+                aria-checked={role === 'menuitem' ? undefined : !!it.checked}
+                aria-current={
+                  mark === MenuItemMark.Highlight && it.checked
+                    ? true
+                    : undefined
+                }
                 aria-disabled={!!it.disabled}
-                className={mergeClasses(
-                  dropdownItemBaseClassName,
-                  it.selectable && it.checked && dropdownItemSelectedClassName,
-                  it.disabled && dropdownItemDisabledClassName,
-                  it.danger && dropdownItemDangerClassName,
-                  it.className,
-                )}
                 disabled={it.disabled}
+                mark={mark}
+                selected={!!it.checked}
+                danger={it.danger}
+                icon={it.icon}
+                label={it.label}
+                className={it.className}
+                rightControl={it.rightControl}
                 onClick={handleItemClick(it)}
               >
-                {it.renderItem ? (
-                  it.renderItem(it)
-                ) : (
-                  <>
-                    {/*
-                      Decorative: `aria-checked` on the row already carries the
-                      state, and a real checkbox nested in a menu item would be
-                      a control inside a control.
-                    */}
-                    {it.selectable && (
-                      <CheckboxBox
-                        isSelected={!!it.checked}
-                        disabled={it.disabled}
-                      />
-                    )}
-                    {it.icon && (
-                      <span
-                        className={mergeClasses(
-                          it.danger && 'text-error',
-                          it.disabled && 'text-control-disable-primary',
-                        )}
-                      >
-                        <DialIcon icon={it.icon} />
-                      </span>
-                    )}
-                    <span
-                      className={mergeClasses(
-                        'flex-1 truncate text-start',
-                        it.danger && 'text-error',
-                        it.disabled && 'text-control-disable-primary',
-                      )}
-                    >
-                      {it.label}
-                    </span>
-                  </>
-                )}
-              </button>
+                {it.renderItem?.(it)}
+              </MenuItem>
             );
           })}
         </div>

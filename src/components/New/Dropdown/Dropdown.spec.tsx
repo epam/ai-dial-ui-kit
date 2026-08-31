@@ -5,6 +5,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { Dropdown } from './Dropdown';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { type DropdownItem } from '@/models/dropdown';
+import { MenuItemMark } from '@/types/menu-item';
 import { IconCheck } from '@tabler/icons-react';
 
 const items: DropdownItem[] = [
@@ -1261,5 +1262,212 @@ describe('Dial UI Kit :: Dropdown — overlay keyboard focus', () => {
       await user.keyboard('{ArrowDown}');
       expect(screen.getByRole('menuitemcheckbox', { name: 'A' })).toHaveFocus();
     });
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — marked items', () => {
+  test('marks a single choice with a check and announces it as a radio item', () => {
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'en',
+            label: 'English',
+            mark: MenuItemMark.Check,
+            checked: true,
+          },
+          { key: 'de', label: 'Deutsch', mark: MenuItemMark.Check },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    const chosen = screen.getByRole('menuitemradio', { name: 'English' });
+    expect(chosen).toHaveAttribute('aria-checked', 'true');
+    // The design marks the row with a check alone — no tint underneath it.
+    expect(chosen.querySelector('.tabler-icon-check')).toBeInTheDocument();
+    expect(chosen).not.toHaveClass('bg-control-accent-alpha');
+
+    const other = screen.getByRole('menuitemradio', { name: 'Deutsch' });
+    expect(other).toHaveAttribute('aria-checked', 'false');
+    expect(other.querySelector('.tabler-icon-check')).not.toBeInTheDocument();
+  });
+
+  test('a single choice closes the menu, a selectable one keeps it open', () => {
+    const { unmount } = render(
+      <Dropdown
+        items={[{ key: 'en', label: 'English', mark: MenuItemMark.Check }]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    fireEvent.click(screen.getByRole('menuitemradio', { name: 'English' }));
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    unmount();
+
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'canvas',
+            label: 'Canvas',
+            selectable: true,
+            mark: MenuItemMark.Check,
+            checked: true,
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    const row = screen.getByRole('menuitemcheckbox', { name: 'Canvas' });
+    // A menu's multiselect looks exactly like its single-select: a check, not a box.
+    expect(row.querySelector('.tabler-icon-check')).toBeInTheDocument();
+    fireEvent.click(row);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('marks the current navigation item with the accent tint and aria-current', () => {
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'usage',
+            label: 'Usage',
+            mark: MenuItemMark.Highlight,
+            checked: true,
+          },
+          { key: 'keys', label: 'Keys', mark: MenuItemMark.Highlight },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    const current = screen.getByRole('menuitem', { name: 'Usage' });
+    expect(current).toHaveAttribute('aria-current', 'true');
+    expect(current).toHaveClass('bg-control-accent-alpha', 'text-accent');
+    expect(current.querySelector('.tabler-icon-check')).not.toBeInTheDocument();
+
+    const other = screen.getByRole('menuitem', { name: 'Keys' });
+    expect(other).not.toHaveAttribute('aria-current');
+    expect(other).not.toHaveClass('bg-control-accent-alpha');
+  });
+
+  test('greys a disabled submenu row with the disable colour, not the secondary one', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'export',
+            label: 'Export',
+            disabled: true,
+            children: [{ key: 'x', label: 'With attachments' }],
+          },
+          {
+            key: 'share',
+            label: 'Share',
+            children: [{ key: 'y', label: 'Disabled child', disabled: true }],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    expect(screen.getByText('Export')).toHaveClass(
+      'text-control-disable-primary',
+    );
+
+    await user.hover(screen.getByRole('menuitem', { name: /Share/ }));
+    const child = await screen.findByText('Disabled child');
+    expect(child).toHaveClass('text-control-disable-primary');
+  });
+
+  test('keeps a submenu trigger tinted while its panel is open', () => {
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'export',
+            label: 'Export',
+            children: [{ key: 'x', label: 'With attachments' }],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+
+    // jsdom does no styling, so the variant itself is what can be asserted:
+    // it fires off the aria-expanded the trigger already toggles.
+    expect(screen.getByRole('menuitem', { name: /Export/ })).toHaveClass(
+      'aria-expanded:bg-control-accent-alpha-hover',
+    );
+  });
+
+  test('marks a submenu child, and a selectable one keeps both panels open', async () => {
+    const user = userEvent.setup();
+    const onToggle = vi.fn();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'tools',
+            label: 'Tools',
+            children: [
+              {
+                key: 'canvas',
+                label: 'Canvas',
+                selectable: true,
+                mark: MenuItemMark.Check,
+                checked: true,
+                onClick: onToggle,
+              },
+              {
+                key: 'learn',
+                label: 'Learn',
+                selectable: true,
+                mark: MenuItemMark.Check,
+                onClick: onToggle,
+              },
+            ],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+    openByClick();
+    await user.hover(screen.getByRole('menuitem', { name: /Tools/ }));
+
+    const chosen = await screen.findByRole('menuitemcheckbox', {
+      name: 'Canvas',
+    });
+    expect(chosen).toHaveAttribute('aria-checked', 'true');
+    expect(chosen.querySelector('.tabler-icon-check')).toBeInTheDocument();
+
+    const other = screen.getByRole('menuitemcheckbox', { name: 'Learn' });
+    expect(other.querySelector('.tabler-icon-check')).not.toBeInTheDocument();
+
+    fireEvent.click(other);
+    expect(onToggle).toHaveBeenCalledTimes(1);
+    // A plain child closes the whole menu; a selectable one leaves both up.
+    expect(screen.getAllByRole('menu')).toHaveLength(2);
   });
 });
