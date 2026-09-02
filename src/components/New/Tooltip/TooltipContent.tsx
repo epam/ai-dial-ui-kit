@@ -6,6 +6,7 @@ import {
 import classNames from 'classnames';
 import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
+import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { arrowClassName, tooltipClassName } from './constants';
 import { useTooltipContext } from './TooltipContext';
@@ -33,6 +34,7 @@ export const TooltipContent: FC<TooltipContentProps> = ({
 }) => {
   const context = useTooltipContext();
   const isMobile = useIsMobileScreen();
+  const themeScope = useThemeScope();
   const propRef = useRef(null);
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
@@ -53,6 +55,7 @@ export const TooltipContent: FC<TooltipContentProps> = ({
         {...context.getFloatingProps(props)}
         className={classNames(
           tooltipClassName,
+          themeScope,
           context.getFloatingProps(props).className as string,
         )}
       >
