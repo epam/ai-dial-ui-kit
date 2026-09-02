@@ -27,6 +27,7 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { CalendarMode } from '@/types/calendar';
 import { ElementSize } from '@/types/size';
+import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   DEFAULT_CALENDAR_LOCALE,
@@ -106,6 +107,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   labelledBy,
   panelLabel,
 }) => {
+  const themeScope = useThemeScope();
   const [isOpen, setIsOpen] = useState(false);
 
   const { refs, floatingStyles, context } = useFloating({
@@ -160,7 +162,11 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
               ref={refs.setFloating}
               style={floatingStyles}
               aria-label={panelLabel}
-              className={mergeClasses(calendarPopoverClassName, panelClassName)}
+              className={mergeClasses(
+                calendarPopoverClassName,
+                themeScope,
+                panelClassName,
+              )}
               {...getFloatingProps()}
             >
               {panel(() => setIsOpen(false))}

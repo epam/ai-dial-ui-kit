@@ -50,6 +50,7 @@ import { type DropdownItem } from '@/models/dropdown';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { CheckboxBox } from '@/components/New/Checkbox/CheckboxBox';
 
+import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DropdownSubMenuItem } from './DropdownSubMenuItem';
 
@@ -200,6 +201,7 @@ export const Dropdown: FC<DropdownProps> = ({
   matchReferenceWidth = true,
   maxDropdownHeight,
 }) => {
+  const themeScope = useThemeScope();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? !!open : uncontrolledOpen;
@@ -601,6 +603,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 dropdownListBaseClassName,
                 !matchReferenceWidth && 'w-max',
                 'overflow-auto',
+                themeScope,
                 listClassName,
               )}
               {...getFloatingProps({ onKeyDown: handleFloatingKeyDown })}

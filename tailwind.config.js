@@ -75,7 +75,9 @@ const borderColors = {
   'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
   'gradient-1': 'var(--stroke-gradient-1, #5976E9)', // blue-300
   'gradient-2': 'var(--stroke-gradient-2, #885DF2)', // Violet-300
-  focus: 'var(--stroke-focus-black, #161B2D)', // grey-1000
+  // `--stroke-focus` is the token name the design system settled on;
+  // `--stroke-focus-black` stays as a fallback for consumers still setting it.
+  focus: 'var(--stroke-focus, var(--stroke-focus-black, #161B2D))', // grey-1000
   'accent-focus': 'var(--stroke-accent-focus, #6785FB)', // blue-200
   'error-alpha': 'var(--stroke-error-alpha, #AE2F2F73)', // red-800 alpha-45
   'control-disable-primary': 'var(--stroke-control-disable-primary, #848E9C)', // grey-600

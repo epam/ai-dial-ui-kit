@@ -1,0 +1,16 @@
+@layer base {
+  /*
+   * A panel that owns its palette.
+   *
+   * Redefining the design tokens on a subtree root is not enough on its own for
+   * content carrying no color utility: such content inherits the color computed
+   * on an ancestor — usually `<body>` — which resolved against the tokens in
+   * effect there. This re-resolves both the surface and the inherited text
+   * color against the tokens in effect here, so a re-themed panel does not have
+   * to name a text color on every node inside it.
+   */
+  .dial-surface {
+    background-color: var(--bg-layer-raised, #fcfcfc);
+    color: var(--text-primary, #161b2d);
+  }
+}
