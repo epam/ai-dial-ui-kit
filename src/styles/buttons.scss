@@ -8,9 +8,29 @@
 
 .dial-kit-base-button {
   @apply flex flex-row items-center justify-center;
-  @apply rounded-full border border-solid border-transparent;
+  @apply rounded-control border border-solid border-transparent;
   @apply disabled:cursor-not-allowed outline-offset-0;
   @apply focus-visible:outline focus-visible:outline-focus;
+}
+
+/*
+ * Per-size and icon-only corner radii. Both selectors are compound on purpose:
+ * every variant class inlines `.dial-kit-base-button` with `@apply`, so a
+ * single-class rule here would carry the same specificity as
+ * `.dial-kit-primary-solid-button` and lose or win purely on source order.
+ *
+ * `Button` adds `.dial-kit-base-button-small` at `ElementSize.Small`;
+ * `IconButton` and `ToggleIconButton` always carry
+ * `.dial-kit-base-icon-button`, and an icon-only control stays on its own token
+ * so a host can square the labelled buttons while leaving round icon buttons
+ * round. All three tokens default to the same pill.
+ */
+.dial-kit-base-button.dial-kit-base-button-small {
+  @apply rounded-control-sm;
+}
+
+.dial-kit-base-button.dial-kit-base-icon-button {
+  @apply rounded-control-icon;
 }
 
 /*
