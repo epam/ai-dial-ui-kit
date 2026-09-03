@@ -188,6 +188,10 @@ look:
 Labelled and icon-only buttons read separate variables on purpose: a design that
 wants squarer action buttons usually still wants its icon buttons round.
 
+These are defaults, not overrides: a `rounded-*` utility passed to a single
+control through `className` still wins, because a consumer's utilities are
+emitted after this package's stylesheet.
+
 ## ♿ Accessibility
 
 ### Naming icon-only controls
