@@ -196,6 +196,18 @@ describe('Dial UI Kit :: Tooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveClass('max-w-[376px]');
   });
 
+  test('Should lift the bubble off the surface underneath', () => {
+    render(
+      <Tooltip tooltip="Tooltip text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    // jsdom does no styling, so the class is all there is to check here — the
+    // compiled rule is verified in dist/index.css.
+    expect(screen.getByRole('tooltip')).toHaveClass('shadow-xs');
+  });
+
   test('Should render nothing on a mobile screen, where there is no hover', () => {
     setViewportWidth(375);
 
