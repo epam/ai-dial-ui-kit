@@ -357,6 +357,11 @@ export { ConfirmationPopup } from './components/New/ConfirmationPopup/Confirmati
 export type { ConfirmationPopupProps } from './components/New/ConfirmationPopup/ConfirmationPopup';
 export { Dropdown } from './components/New/Dropdown/Dropdown';
 export type { DropdownProps } from './components/New/Dropdown/Dropdown';
+export {
+  ThemeScope,
+  useThemeScope,
+} from './components/New/ThemeScope/ThemeScope';
+export type { ThemeScopeProps } from './components/New/ThemeScope/ThemeScope';
 export type { TextareaProps } from './components/New/Textarea/Textarea';
 export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
 export {

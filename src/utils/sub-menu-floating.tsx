@@ -15,6 +15,8 @@ import {
 import classNames from 'classnames';
 import { useState, type ReactNode } from 'react';
 
+import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
+
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -113,27 +115,32 @@ export const SubMenuPanel = ({
   surfaceClassName,
   className,
   children,
-}: SubMenuPanelProps) => (
-  <FloatingPortal>
-    <FloatingFocusManager
-      context={context}
-      modal={false}
-      initialFocus={-1}
-      returnFocus
-    >
-      <div
-        ref={refs.setFloating}
-        style={floatingStyles}
-        role={role}
-        className={classNames(
-          'z-[53] overflow-auto text-primary focus-visible:outline-none',
-          surfaceClassName ?? subMenuSurfaceClassName,
-          className,
-        )}
-        {...getFloatingProps()}
+}: SubMenuPanelProps) => {
+  const themeScope = useThemeScope();
+
+  return (
+    <FloatingPortal>
+      <FloatingFocusManager
+        context={context}
+        modal={false}
+        initialFocus={-1}
+        returnFocus
       >
-        {children}
-      </div>
-    </FloatingFocusManager>
-  </FloatingPortal>
-);
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles}
+          role={role}
+          className={classNames(
+            'z-[53] overflow-auto text-primary focus-visible:outline-none',
+            surfaceClassName ?? subMenuSurfaceClassName,
+            themeScope,
+            className,
+          )}
+          {...getFloatingProps()}
+        >
+          {children}
+        </div>
+      </FloatingFocusManager>
+    </FloatingPortal>
+  );
+};

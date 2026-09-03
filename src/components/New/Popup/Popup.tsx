@@ -18,6 +18,7 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonVariant } from '@/types/button';
 import { PopupSize } from '@/types/popup';
 import { ElementSize } from '@/types/size';
+import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconChevronLeft } from '@tabler/icons-react';
 import {
@@ -168,6 +169,7 @@ export const Popup: FC<PopupProps> = ({
   closeOnOutsideClick = true,
   preventKeyboardOnOpen = false,
 }) => {
+  const themeScope = useThemeScope();
   const focusGuardRef = useRef<HTMLDivElement>(null);
   // Generated rather than fixed: two popups mounted at once would otherwise
   // share one heading id, and each dialog would be named by the first title.
@@ -258,7 +260,11 @@ export const Popup: FC<PopupProps> = ({
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
-        className={mergeClasses(popupOverlayBaseClassName, overlayClassName)}
+        className={mergeClasses(
+          popupOverlayBaseClassName,
+          themeScope,
+          overlayClassName,
+        )}
       >
         <FloatingFocusManager
           context={context}
