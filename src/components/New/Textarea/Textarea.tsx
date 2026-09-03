@@ -8,6 +8,13 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { CaptionText, ErrorText } from '../CaptionText/CaptionText';
 import { Label, type LabelProps } from '../Label/Label';
 
+export enum TextareaResize {
+  None = 'none',
+  Both = 'both',
+  Horizontal = 'horizontal',
+  Vertical = 'vertical',
+}
+
 export interface TextareaProps extends DetailedHTMLProps<
   Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>,
   HTMLTextAreaElement
@@ -15,11 +22,26 @@ export interface TextareaProps extends DetailedHTMLProps<
   labelProps?: LabelProps;
   invalid?: boolean;
   containerClassName?: string;
-  resize?: boolean;
+  resize?: boolean | TextareaResize;
   error?: string;
   caption?: string;
   onChange?: (value: string) => void;
 }
+
+const resizeClassNames: Record<TextareaResize, string> = {
+  [TextareaResize.None]: 'resize-none',
+  [TextareaResize.Both]: 'resize',
+  [TextareaResize.Horizontal]: 'resize-x',
+  [TextareaResize.Vertical]: 'resize-y',
+};
+
+const resolveResizeClassName = (resize: boolean | TextareaResize): string => {
+  if (typeof resize === 'boolean') {
+    return resizeClassNames[resize ? TextareaResize.Both : TextareaResize.None];
+  }
+
+  return resizeClassNames[resize];
+};
 
 /**
  * A flexible textarea component with validation support and consistent styling
@@ -44,7 +66,7 @@ export interface TextareaProps extends DetailedHTMLProps<
  * @param [className=""] - Additional CSS classes to apply to the textarea element
  * @param [containerClassName=""] - Additional CSS classes to apply to the container div
  * @param [invalid=false] - Whether the textarea has validation errors (applies error styling)
- * @param [resize=false] - Whether the textarea has possibility to resize
+ * @param [resize=false] - Whether/how the textarea can be resized. Accepts a boolean (`true` = both directions, `false` = none) or a {@link TextareaResize} value for a single axis (`horizontal`/`vertical`)
  * @param [error] - Error message to display below the textarea (also adds error styling)
  * @param [caption] - Optional caption text to display below the textarea
  */
@@ -64,7 +86,7 @@ export const Textarea: FC<TextareaProps> = ({
     'dial-kit-textarea dial-kit-input px-3 py-2',
     props.invalid && 'dial-kit-input-error',
     props.disabled && 'dial-kit-input-disable',
-    resize ? 'resize' : 'resize-none',
+    resolveResizeClassName(resize),
     className,
   );
 

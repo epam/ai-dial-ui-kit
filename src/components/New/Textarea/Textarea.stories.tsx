@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { Textarea, type TextareaProps } from './Textarea';
+import { Textarea, TextareaResize, type TextareaProps } from './Textarea';
 
 const InteractiveTextarea = (args: TextareaProps) => {
   const [value, setValue] = useState(args.value || '');
@@ -59,6 +59,12 @@ const meta = {
       control: false,
       description: 'Callback function called when the textarea value changes',
     },
+    resize: {
+      control: 'select',
+      options: [true, false, ...Object.values(TextareaResize)],
+      description:
+        'Whether/how the textarea can be resized: a boolean (both directions or none) or a single-axis TextareaResize value',
+    },
   },
 } satisfies Meta<typeof Textarea>;
 
@@ -80,6 +86,26 @@ export const Resize: Story = {
     placeholder: 'Enter text...',
     value: 'This textarea can be resized',
     resize: true,
+  },
+};
+
+export const ResizeHorizontal: Story = {
+  render: InteractiveTextarea,
+  args: {
+    id: 'resize-horizontal-textarea',
+    placeholder: 'Enter text...',
+    value: 'This textarea can only be resized horizontally',
+    resize: TextareaResize.Horizontal,
+  },
+};
+
+export const ResizeVertical: Story = {
+  render: InteractiveTextarea,
+  args: {
+    id: 'resize-vertical-textarea',
+    placeholder: 'Enter text...',
+    value: 'This textarea can only be resized vertically',
+    resize: TextareaResize.Vertical,
   },
 };
 
