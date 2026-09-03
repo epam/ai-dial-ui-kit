@@ -5,7 +5,7 @@ import type { DialFileAcceptType } from '@/models/file-manager';
 import type { DialFile } from '@/models/file';
 import { DialFileNodeType } from '@/models/file';
 import { DialFilePermission } from '@/models/file';
-import type { DragEvent } from 'react';
+import type { ChangeEvent, DragEvent } from 'react';
 
 const writableFolder: DialFile = {
   id: 'folder',
@@ -1372,7 +1372,7 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
     });
   });
 
-  describe('hidden file input lifecycle', () => {
+  describe('file input wiring', () => {
     const getHiddenFileInputs = () =>
       Array.from(
         document.body.querySelectorAll<HTMLInputElement>('input[type="file"]'),
@@ -1385,46 +1385,28 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
         { initialProps: { allowedFileTypes: types } },
       );
 
-    it('appends exactly one hidden file input on mount', () => {
+    it('does not append any element to the document', () => {
       renderUseFileUpload();
 
-      expect(getHiddenFileInputs()).toHaveLength(1);
-    });
-
-    it('removes the hidden file input on unmount', () => {
-      const { unmount } = renderUseFileUpload();
-
-      const input = getHiddenFileInputs()[0];
-      expect(input).toBeDefined();
-      expect(document.body.contains(input)).toBe(true);
-
-      unmount();
-
-      expect(document.body.contains(input)).toBe(false);
       expect(getHiddenFileInputs()).toHaveLength(0);
     });
 
-    it('does not create duplicate inputs when dependencies change', () => {
-      const { rerender } = renderWithTypes(['application/pdf']);
+    it('derives the accept string from allowedFileTypes', () => {
+      const { rerender, result } = renderWithTypes(['application/pdf']);
 
-      expect(getHiddenFileInputs()).toHaveLength(1);
-
-      rerender({ allowedFileTypes: ['image/*'] });
-      rerender({ allowedFileTypes: ['text/plain', '.pdf'] });
-
-      expect(getHiddenFileInputs()).toHaveLength(1);
-    });
-
-    it("updates the input's accept attribute when allowedFileTypes changes", () => {
-      const { rerender } = renderWithTypes(['application/pdf']);
-
-      expect(getHiddenFileInputs()[0]?.accept).toBe('application/pdf');
+      expect(result.current.fileInputAccept).toBe('application/pdf');
 
       rerender({ allowedFileTypes: ['image/*', 'text/plain'] });
-      expect(getHiddenFileInputs()[0]?.accept).toBe('image/*,text/plain');
+      expect(result.current.fileInputAccept).toBe('image/*,text/plain');
+    });
 
-      rerender({ allowedFileTypes: [] });
-      expect(getHiddenFileInputs()[0]?.hasAttribute('accept')).toBe(false);
+    it('leaves accept undefined when there is no restriction', () => {
+      const { rerender, result } = renderWithTypes([]);
+
+      expect(result.current.fileInputAccept).toBeUndefined();
+
+      rerender({ allowedFileTypes: undefined });
+      expect(result.current.fileInputAccept).toBeUndefined();
     });
 
     it('surfaces an error and resets input value when the upload throws', async () => {
@@ -1433,8 +1415,8 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       });
       const { result } = renderUseFileUpload({ onUploadFiles });
 
-      const input = getHiddenFileInputs()[0];
-      expect(input).toBeDefined();
+      const input = document.createElement('input');
+      input.type = 'file';
 
       const file = createMockFile('file1.txt', 1024);
       Object.defineProperty(input, 'files', {
@@ -1443,8 +1425,9 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       });
 
       await act(async () => {
-        input.dispatchEvent(new Event('change'));
-        await Promise.resolve();
+        await result.current.handleFileInputChange({
+          currentTarget: input,
+        } as unknown as ChangeEvent<HTMLInputElement>);
       });
 
       await waitFor(() => {

@@ -1,4 +1,5 @@
 import {
+  type ChangeEvent,
   type DragEvent,
   useCallback,
   useEffect,
@@ -500,11 +501,9 @@ export const useFileUpload = ({
     ],
   );
 
-  const handleChangeRef = useRef<() => void | Promise<void>>(() => {});
-
-  useEffect(() => {
-    handleChangeRef.current = async () => {
-      const input = fileInputRef.current;
+  const handleFileInputChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const input = event.currentTarget;
       if (!input) return;
 
       if (!uploadEnabled || !hasWriteAccess) {
@@ -542,45 +541,20 @@ export const useFileUpload = ({
       } finally {
         input.value = '';
       }
-    };
-  }, [
-    uploadEnabled,
-    hasWriteAccess,
-    filterAcceptedFiles,
-    handleUpload,
-    validationMessages,
-  ]);
+    },
+    [
+      uploadEnabled,
+      hasWriteAccess,
+      filterAcceptedFiles,
+      handleUpload,
+      validationMessages,
+    ],
+  );
 
-  useEffect(() => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.multiple = true;
-    input.style.display = 'none';
-    document.body.appendChild(input);
-    fileInputRef.current = input;
-
-    const listener = () => handleChangeRef.current?.();
-    input.addEventListener('change', listener);
-
-    return () => {
-      input.removeEventListener('change', listener);
-      if (fileInputRef.current === input) {
-        document.body.removeChild(input);
-        fileInputRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const input = fileInputRef.current;
-    if (!input) return;
-
-    if (allowedFileTypes && allowedFileTypes.length > 0) {
-      input.accept = allowedFileTypes.join(',');
-    } else {
-      input.removeAttribute('accept');
-    }
-  }, [allowedFileTypes]);
+  const fileInputAccept = useMemo(
+    () => (allowedFileTypes?.length ? allowedFileTypes.join(',') : undefined),
+    [allowedFileTypes],
+  );
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
@@ -682,6 +656,8 @@ export const useFileUpload = ({
     openFileDialog,
     openArchiveDialog,
     fileInputRef,
+    fileInputAccept,
+    handleFileInputChange,
 
     uploadConflictingFiles: conflictingFiles,
     uploadConflictResolutionOpen: conflictResolutionOpen,
