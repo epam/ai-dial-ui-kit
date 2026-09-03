@@ -31,6 +31,15 @@ export const arrowClassName = 'fill-control-inverted';
  * that is around 60 characters a line, past which a line stops being
  * comfortable to read. Longer text wraps instead of widening the bubble. The
  * width stays a literal because Tailwind only sees static class strings.
+ *
+ * `shadow-xs` is the elevation the design gives a tooltip — the tightest step
+ * of the scale, which is what a bubble anchored to its trigger needs: enough to
+ * lift it off the surface underneath without reading as a floating panel, the
+ * way `shadow-md` marks a dropdown or a calendar. It matters most where the
+ * inverted surface is the lightest thing on screen, on a dark panel. The arrow
+ * takes no shadow of its own: both `xs` layers blur 4px or less, so there is
+ * nothing to see around a 7px triangle that the box's own shadow does not
+ * already carry.
  */
 export const tooltipClassName =
-  'z-[55] max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted';
+  'z-[55] max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';
