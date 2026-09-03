@@ -173,6 +173,21 @@ The library uses CSS custom properties for comprehensive theming. Override these
 
 Full list of variables is available [here](tailwind.config.js)
 
+Corner radii of the 2.0 controls are themable the same way. Each defaults to the
+fully rounded pill the buttons ship with, so setting nothing keeps the stock
+look:
+
+```css
+:root {
+  --radius-control: 12px; /* Button at standard and large size */
+  --radius-control-small: 8px; /* Button at ElementSize.Small */
+  --radius-control-icon: 9999px; /* IconButton, ToggleIconButton — any size */
+}
+```
+
+Labelled and icon-only buttons read separate variables on purpose: a design that
+wants squarer action buttons usually still wants its icon buttons round.
+
 ## ♿ Accessibility
 
 ### Naming icon-only controls

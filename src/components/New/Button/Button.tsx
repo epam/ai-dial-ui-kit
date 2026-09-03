@@ -105,6 +105,9 @@ export const Button: FC<ButtonProps> = ({
       ? 'dial-tiny-semi-text'
       : 'dial-small-paragraph-semi-text',
     size === ElementSize.Small ? 'h-[24px] gap-1' : 'h-[40px] gap-2',
+    // Corner radius is themable per size — see the radius tokens in
+    // `buttons.scss`; the standard radius comes from `dial-kit-base-button`.
+    size === ElementSize.Small && 'dial-kit-base-button-small',
     appearance !== ButtonAppearance.Link &&
       (size === ElementSize.Small ? 'px-2' : 'px-4'),
     // A link-appearance button sits inline in text, where WCAG 2.5.5 exempts
