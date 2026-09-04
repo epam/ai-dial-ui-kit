@@ -7,11 +7,8 @@ const baselinePath = resolvePath(
   __dirname,
   '..',
   '..',
-  'openspec',
-  'changes',
-  'archive',
-  '2026-09-04-modularize-package-exports',
-  'baseline',
+  'tools',
+  'baselines',
   'root-exports.json',
 );
 const outputPath = resolvePath(__dirname, 'root-surface.generated.ts');
@@ -26,7 +23,7 @@ const namesByKind = (kind) =>
 const values = namesByKind('value');
 const types = namesByKind('type');
 const generated =
-  '// Generated from the pre-change public API baseline. Do not edit.\n' +
+  '// Generated from the public API baseline. Do not edit.\n' +
   `import { ${values.join(', ')} } from '@epam/ai-dial-ui-kit';\n` +
   `import type { ${types.join(', ')} } from '@epam/ai-dial-ui-kit';\n\n` +
   'export {};\n';
