@@ -454,7 +454,7 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
     handleSearchClear();
     const destinationFolder = currentPath ?? '';
     const existingFiles = currentFolder?.items ?? [];
-    openFileDialogBase(destinationFolder, existingFiles);
+    return openFileDialogBase(destinationFolder, existingFiles);
   }, [currentPath, currentFolder, openFileDialogBase, handleSearchClear]);
 
   const openArchiveUpload = useCallback(() => {
@@ -715,8 +715,10 @@ export const FileManagerProvider: FC<FileManagerProviderProps> = ({
 
   useEffect(() => {
     if (!initialUploadFilesTriggeredRef.current && initialUploadFilesOpen) {
-      openFileDialog();
-      initialUploadFilesTriggeredRef.current = true;
+      const opened = openFileDialog();
+      if (opened) {
+        initialUploadFilesTriggeredRef.current = true;
+      }
     }
   }, [initialUploadFilesOpen, openFileDialog]);
 
