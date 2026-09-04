@@ -40,6 +40,36 @@ describe('Dial UI Kit :: MarkdownEditor', () => {
     ).toBeInTheDocument();
   });
 
+  test('Should name the textarea from ariaLabel', () => {
+    render(<MarkdownEditor value="" ariaLabel="Instructions" />);
+
+    expect(
+      screen.getByRole('textbox', { name: 'Instructions' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should let a visible label name the textarea through id', () => {
+    render(
+      <>
+        <label htmlFor="task-instructions">Instructions</label>
+        <MarkdownEditor value="" id="task-instructions" />
+      </>,
+    );
+
+    expect(screen.getByLabelText('Instructions')).toHaveAttribute(
+      'id',
+      'task-instructions',
+    );
+  });
+
+  test('Should leave the textarea unnamed when neither is given', () => {
+    render(<MarkdownEditor value="" />);
+
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).not.toHaveAttribute('aria-label');
+    expect(textarea).not.toHaveAttribute('id');
+  });
+
   test('Should render the formatting toolbar buttons', () => {
     render(<MarkdownEditor value="Hello" />);
 
