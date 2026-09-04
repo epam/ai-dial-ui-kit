@@ -17,6 +17,10 @@ export interface MarkdownEditorProps {
   placeholder?: string;
   /** Initial edit/live/preview mode; the toolbar lets the user switch it afterwards. */
   defaultPreview?: PreviewType;
+  /** `id` of the underlying textarea, so a visible `<label htmlFor>` can name it. */
+  id?: string;
+  /** Accessible name for the underlying textarea. Use it only where no visible label exists to pair with `id`. */
+  ariaLabel?: string;
 }
 
 /**
@@ -37,6 +41,8 @@ export interface MarkdownEditorProps {
  * @param [className] - Additional CSS classes for the container
  * @param [placeholder] - Placeholder text shown when the editor is empty
  * @param [defaultPreview='edit'] - Initial edit/live/preview mode
+ * @param [id] - `id` of the underlying textarea, for a visible `<label htmlFor>`
+ * @param [ariaLabel] - Accessible name for the underlying textarea
  */
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   value,
@@ -46,6 +52,8 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   className,
   placeholder,
   defaultPreview = 'edit',
+  id,
+  ariaLabel,
 }) => {
   const commands = useMemo(() => getMarkdownFormattingCommands(), []);
   const extraCommands = useMemo(() => getMarkdownExtraCommands(), []);
@@ -62,7 +70,12 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
         preview={defaultPreview}
         commands={commands}
         extraCommands={extraCommands}
-        textareaProps={{ placeholder }}
+        /*
+         * The textarea is the control a user actually operates, so its name has
+         * to live on the element itself: a heading or a label rendered next to
+         * the editor names nothing that assistive tech can associate with it.
+         */
+        textareaProps={{ placeholder, id, 'aria-label': ariaLabel }}
       />
     </div>
   );
