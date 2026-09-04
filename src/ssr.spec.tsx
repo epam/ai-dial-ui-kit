@@ -3,12 +3,23 @@
 // important: this test file require dist build to be present, and to rerun after changes fresh build should be made as well.
 
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, test } from 'vitest';
 
-const distEntry = path.resolve(process.cwd(), 'dist/dial-ui-kit.es.js');
+interface PackageJson {
+  exports: {
+    '.': {
+      import: string;
+    };
+  };
+}
+
+const packageJson = JSON.parse(
+  readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8'),
+) as PackageJson;
+const distEntry = path.resolve(process.cwd(), packageJson.exports['.'].import);
 const distEntryUrl = pathToFileURL(distEntry).href;
 
 // Browser-only side effects (window/document/self access, raw .css imports)
@@ -17,12 +28,12 @@ const distEntryUrl = pathToFileURL(distEntry).href;
 const SSR_BROWSER_FAILURE =
   /window is not defined|document is not defined|self is not defined|ERR_UNKNOWN_FILE_EXTENSION|Unknown file extension "\.css"/i;
 
-function runNodeScript(script: string) {
+const runNodeScript = (script: string) => {
   return spawnSync(process.execPath, ['--input-type=module', '-e', script], {
     cwd: process.cwd(),
     encoding: 'utf-8',
   });
-}
+};
 
 describe.runIf(existsSync(distEntry))('Dial UI Kit :: SSR safety', () => {
   test('main entry imports cleanly in plain Node (SSR)', () => {

@@ -1,0 +1,111 @@
+schema: spec-driven
+
+context: |
+  # AI DIAL UI Kit
+
+  ## Tech Stack
+  - Package: @epam/ai-dial-ui-kit — React 19 + TypeScript component library, published to npm
+  - Build: Vite library mode (vite.config.ts) → ESM (`dial-ui-kit.es.js`) + CJS
+    (`dial-ui-kit.cjs.js`) from the single `src/index.ts` entry, plus a separate
+    Tailwind/SCSS CSS build (`npm run build:css` → `dist/index.css`)
+  - Styling: Tailwind CSS + SCSS partials under `src/styles/`, aggregated via
+    `src/styles/tailwind-entry.scss`
+  - Testing: Vitest + Testing Library, 70% minimum coverage (branches/functions/lines/statements)
+  - Docs/dev: Storybook (`npm run storybook`)
+  - Path alias: `@/*` → `src/*` (tsconfig.json)
+
+  ## Distribution surface
+  - `package.json#exports` currently exposes only `.` (types/import/require) and `./styles.css`
+  - `ag-grid-community` / `ag-grid-react` are bundled `dependencies` (not externalized in
+    vite.config.ts, not peers) — both Grid generations
+    (`src/components/Grid/Grid.tsx`, `src/components/New/Grid/Grid.tsx`) call
+    `ModuleRegistry.registerModules([AllCommunityModule])` at module scope
+  - `@monaco-editor/react`, `monaco-editor`, `@uiw/react-md-editor`,
+    `@uiw/react-markdown-preview` are `peerDependencies`, externalized in
+    `vite.config.ts`'s `rollupOptions.external`, and reached only via the root's lazy
+    loaders (`LazyDialJsonEditor`, `LazyDialMarkdownEditor`, `LazyMarkdownEditor`) — this
+    is the reference isolation pattern for any new feature boundary
+  - `DialFileManager` (`src/components/FileManager/FileManager.tsx`) statically imports
+    the legacy `DialGrid`, so FileManager isolation follows Grid isolation
+
+  ## Commands
+  - `npm run typecheck` — full `tsc --noEmit` (separate from ESLint; always run after `.ts`/`.tsx` changes)
+  - `npm run lint` / `npm run lint:check` — ESLint, must pass with zero warnings
+  - `npm run test` / `npm run test:run` — Vitest (with/without coverage)
+  - `npm run build` — library JS build + CSS build + MCP manifest/server build
+  - `npm run build:css` — Tailwind/SCSS → `dist/index.css` only
+  - `npm run storybook` — local docs and visual QA
+  - `npm run verify:agent-hook` — typecheck + lint:check + test:run in one pass
+
+  Branching: `development` is the main branch; create feature branches from it. Pre-commit
+  hooks enforce lint + format + tests — do not skip them.
+
+  ## Architecture
+  - `src/components/` — ~53 React components (both a legacy `Dial*`-prefixed generation and
+    a "2.0" generation under `src/components/New/`)
+  - `src/hooks/`, `src/models/`, `src/types/`, `src/utils/`, `src/constants/`
+  - `src/mcp/` — MCP server for AI-agent component discovery (`npm run build:manifest`, `npm run build:mcp`)
+  - Public API is the single barrel `src/index.ts`; every export consumers rely on must
+    appear there
+
+  Full conventions (naming, accessibility target WCAG 2.2 AA + 2.5.5 AAA, breaking-change
+  process, component-work checklist) live in `AGENTS.md` — read it before designing or
+  implementing anything under `src/**`.
+
+rules:
+  # Coding conventions (arrow functions, Dial* naming, accessible-name resolution, etc.)
+  # are defined in AGENTS.md — this rules block governs proposal/design/spec/task quality only.
+
+  proposal:
+    - Cite current behavior as `path:line` evidence rather than asserting it from memory —
+      re-check every baseline claim against the current revision before relying on it.
+    - Compare alternatives for any build/export/dependency-classification change (at least a
+      conservative baseline plus 2-3 real options), and state which was picked and why the
+      rest were rejected.
+    - State explicitly whether the change is breaking for existing consumers per AGENTS.md's
+      breaking-change definition, and if so, note the required CHANGELOG entry + migration
+      guide under `migration-guides/`.
+    - Flag any change that would move a bundled `dependency` to `peerDependencies` (or vice
+      versa) as its own compatibility decision, not a side effect of another goal.
+    - Include a rollback note.
+
+  design:
+    - Distinguish measured facts (cited `path:line`) from assumptions; do not present an
+      unresolved assumption as a decision.
+    - >-
+      For any change to emitted module/export layout, state the effect on: ESM tree shaking,
+      root/subpath import compatibility, CJS `require()` resolution, `.d.ts` generation,
+      existing dynamic-import boundaries (JSON/Markdown editors), CSS delivery, and
+      `npm pack` contents together — a change can pass a local `vite build` and still break
+      one of these.
+    - Preserve the existing `LazyDialJsonEditor` / `LazyDialMarkdownEditor` /
+      `LazyMarkdownEditor` dynamic-import boundaries and the nested JSON-editor load inside
+      `MarkdownEditorContainer` / `SchemaAdditionalPropertiesEditor` unless the design's
+      explicit goal is to change that mechanism.
+    - State the `sideEffects` implication of any module-layout change — a wrong entry can let
+      a consumer's bundler drop a required module-scope side effect (e.g. AG Grid's
+      `ModuleRegistry.registerModules(...)`).
+
+  specs:
+    - Every tree-shaking / bundle-isolation claim must be paired with a concrete, automatable
+      verification (bundler build-metadata assertion, `npm pack` file-list check, or
+      resolution test) — never a manual-inspection-only scenario.
+    - State compatibility requirements (root export surface, CJS resolution, TypeScript
+      resolution) separately from tree-shaking requirements, and never claim CJS `require()`
+      is tree-shaken.
+    - State the accessibility contract for any new/changed component per AGENTS.md's
+      Accessibility rules (accessible name resolution, target size, WCAG 2.2 AA + 2.5.5 AAA).
+
+  tasks:
+    - >-
+      Order tasks risk-first for build/export/dependency-classification changes: prove the
+      riskiest assumption (e.g. a `preserveModules`-style build actually tree-shakes for a
+      real consumer) before building the rest on top of it.
+    - Give every task a concrete, automated Verification step naming the exact command,
+      script, or fixture-assertion to run — never "manually verify" or "spot check."
+    - Reference specific file paths — never vague descriptions like "update the build config."
+    - For any task touching `ai-dial-chat` as a consumer-validation step, keep the edit
+      temporary and reversible; do not land a change in that repo from this repo's tasks.
+    - Require `npm run typecheck && npm run lint && npm run test && npm run build` to pass
+      before a change is considered complete; add `npm run build:css` when SCSS/CSS output
+      changes.

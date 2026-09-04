@@ -1,0 +1,23 @@
+{
+  "name": "fixture-consumer-file-manager",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Consumer fixture: imports DialFileManager from ai-dial-ui-kit. Its feature graph must include ag-grid-community/ag-grid-react (FileManager reaches the legacy Grid) but exclude Monaco/@uiw/* editor packages.",
+  "scripts": {
+    "build": "vite build",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --require ag-grid-community,ag-grid-react --forbidden @monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview"
+  },
+  "dependencies": {
+    "@epam/ai-dial-ui-kit": "file:../.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz",
+    "@floating-ui/react": "^0.27.19",
+    "@tabler/icons-react": "^3.41.1",
+    "classnames": "^2.5.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "vite": "^7.1.5"
+  }
+}

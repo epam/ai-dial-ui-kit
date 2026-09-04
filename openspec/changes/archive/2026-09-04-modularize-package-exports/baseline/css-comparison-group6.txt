@@ -1,0 +1,25 @@
+Task 6.1: dist/index.css rule-set comparison, pre- vs. post-restructuring.
+
+Method: `git stash --include-untracked` to get a truly clean pre-change tree
+(confirmed via `git diff --stat HEAD` = empty, `src/subpaths/` absent),
+`npm run build:css` there to produce the real "before" dist/index.css, then
+`git stash pop` to restore this change's edits and rebuild.
+
+Result: `dist/index.css` is BYTE-IDENTICAL before vs. after (84,658 B both -
+matches Task 1.3's recorded baseline exactly; `diff -q` reports no
+difference).
+
+Also verified with the required postcss-AST-based rule-count comparison
+(new `tools/compare-css-rules.mjs`, not just the byte diff):
+  before: 1013 rules
+  after:  1013 rules
+  OK: "after" is a superset of "before" (0 missing; +0 new).
+
+This is expected, not a coincidence: `build:css` is
+`tailwindcss -i ./src/styles/tailwind-entry.scss -o ./dist/index.css`,
+content-scanning `src/**` for utility classes actually used in JSX/render
+code. This change never edited any existing `src/**` file - it only edited
+`vite.config.ts`/`package.json` (JS bundling config) and added 3 new
+`src/subpaths/*.ts` barrels containing nothing but `export { ... } from`
+statements (no JSX, no class-name strings) - so the Tailwind content-scan
+input set is unchanged and the CSS output could not have changed either.

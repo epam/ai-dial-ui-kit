@@ -1,0 +1,50 @@
+Group 4 (Grid and FileManager isolation) verification, run against the
+Group-3-restructured package (dist/ rebuilt, tarball repacked at
+fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz, 830 files).
+
+=== Task 4.1: grep for feature-neutral ag-grid runtime imports ===
+Command:
+  grep -rn "from 'ag-grid" src --include=*.ts --include=*.tsx \
+    | grep -v -E "(Grid/Grid.tsx|New/Grid|Grid.spec|Grid.stories|comparators|renderers)"
+
+Remaining matches (9), all under src/components/FileManager/** (FileManager
+is itself a Grid-feature module, gated behind the ./file-manager subpath) or
+src/constants/file-grid-columns.tsx, and every one is `import type` (or the
+inline `import { type X }` form, which is equally fully erased at compile
+time) - confirmed line-by-line, none is a runtime value import. No code
+change was required.
+
+=== Task 4.2: consumer-grid / consumer-file-manager feature-graph assertions ===
+fixtures/consumer-grid  -> npm run assert -> PASS
+  OK: "@monaco-editor/react" absent from static initial graph.
+  OK: "monaco-editor" absent from static initial graph.
+  OK: "@uiw/react-md-editor" absent from static initial graph.
+  OK: "@uiw/react-markdown-preview" absent from static initial graph.
+  OK: "ag-grid-community" present in static initial graph.
+  OK: "ag-grid-react" present in static initial graph.
+
+fixtures/consumer-file-manager -> npm run assert -> PASS
+  OK: "@monaco-editor/react" absent from static initial graph.
+  OK: "monaco-editor" absent from static initial graph.
+  OK: "@uiw/react-md-editor" absent from static initial graph.
+  OK: "@uiw/react-markdown-preview" absent from static initial graph.
+  OK: "ag-grid-community" present in static initial graph.
+  OK: "ag-grid-react" present in static initial graph.
+
+=== Task 4.3: consumer-grid runtime rendering smoke test ===
+fixtures/consumer-grid/smoke-test.mjs (new) executes the fixture's own
+production bundle (dist/assets/index-*.js) inside a jsdom document (not a
+direct `import()` of the ai-dial-ui-kit package - that path hits the
+pre-existing react/jsx-runtime Node-ESM resolution gap flagged in Task 3.1's
+regression note #2 / the spawned follow-up task) and reads back the
+rendered cell text for one fixture row.
+
+  $ npm run smoke
+  OK: rendered cell text found in DOM: "Smoke-Test-Cell-Alpha"
+  This proves ModuleRegistry.registerModules(...) executed and AG Grid
+  rendered real row data.
+
+Negative-control check (mutated a copy of the script to look for text that
+was never rendered): exits 1, correctly reports FAIL, and prints the actual
+rendered DOM text containing "Smoke-Test-Cell-Alpha" - confirms the
+assertion is discriminating, not vacuously true.

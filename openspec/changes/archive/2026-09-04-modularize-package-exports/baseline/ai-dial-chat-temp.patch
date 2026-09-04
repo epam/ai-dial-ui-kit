@@ -1,0 +1,40 @@
+diff --git a/apps/chat/vite.config.mts b/apps/chat/vite.config.mts
+--- a/apps/chat/vite.config.mts
++++ b/apps/chat/vite.config.mts
+@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
+ import path from 'path';
+ import { defineConfig } from 'vite';
+ import svgr from 'vite-plugin-svgr';
++import { graphReportPlugin } from '../../../ai-dial-ui-kit/fixtures/shared/graph-report-plugin.mjs';
+ 
+ export default defineConfig(() => ({
+   root: import.meta.dirname,
+@@ -21,7 +22,7 @@ export default defineConfig(() => ({
+     port: 4207,
+     host: 'localhost',
+   },
+-  plugins: [react(), svgr()],
++  plugins: [react(), svgr(), graphReportPlugin()],
+   resolve: {
+     alias: {
+       /* remark-math resolves math delimiters through micromark-extension-math, which only
+@@ -219,7 +220,6 @@ export default defineConfig(() => ({
+           if (id.includes('classnames') || id.includes('tailwind-merge'))
+             return 'vendor-utils';
+           if (id.includes('@tabler/icons-react')) return 'tabler-icons';
+-          if (id.includes('@epam/ai-dial-ui-kit')) return 'ui-kit';
+           return undefined;
+         },
+       },
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -123,7 +123,7 @@
+     "@epam/ai-dial-react-pdf-highlighter": "0.2.0-dev.28",
+     "@epam/ai-dial-shared": "0.48.0",
+     "@epam/ai-dial-typescript-sdk": "0.1.0-dev.39",
+-    "@epam/ai-dial-ui-kit": "^0.14.0-dev.15",
++    "@epam/ai-dial-ui-kit": "file:../ai-dial-ui-kit/fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz",
+     "@epam/ai-dial-visualizer-connector": "0.48.0",
+     "@epam/pdf-highlighter-kit": "^0.0.18",
+     "@mcp-ui/client": "^7.1.1",

@@ -1,0 +1,47 @@
+Task 6.3: npm pack integrity, against the fully Group-1-through-5-restructured
+package.
+
+=== node tools/verify-pack-contents.mjs ===
+OK: all 14 package.json#exports file(s) present in the pack.
+OK: all 823 file(s) under dist/ are present in the pack (superset check -
+covers every chunk any fixture could reach, since a fixture's bundler can
+only ever resolve into a file that exists under dist/).
+Pack total: 826 files.
+PASS
+
+=== Diff against baseline/pack-files-before.json (Task 1.2) ===
+before: 393 files, 1,327,859 B tarball, 5,349,436 B unpacked
+after:  826 files, 1,384,786 B tarball, 5,505,367 B unpacked (full JSON
+recorded at baseline/pack-files-after.json)
+
+10 paths present before are absent after - all content-hashed filenames
+that were always expected to change (this is the entire point of Group 2/3's
+restructuring, not a regression):
+  dist/dial-ui-kit.cjs.js, dist/dial-ui-kit.es.js  (old monolithic bundle
+    names -> dist/dial-ui-kit.cjs / dist/dial-ui-kit.js)
+  dist/index-CpVGPv8D.js, dist/index-DBHH26fT.cjs  (old single shared chunk
+    containing everything, incl. AG Grid -> replaced by ~800 per-module
+    files via preserveModules)
+  dist/JsonEditor-*.{js,cjs}, dist/MarkdownEditor-*.{js,cjs}  (old
+    content-hashed lazy-chunk names -> new content-hashed names, same role)
+
+Task 6.4: export-surface check against the unpacked tarball itself (not
+dist/ in the working tree).
+
+Extended tools/export-surface.mjs's --verify-against-baseline mode with a
+new --from-tarball <tgz-path> flag: extracts the tarball to a temp dir
+(node:child_process -> `tar --force-local -xzf ...` - `--force-local`
+because GNU tar otherwise treats a `C:\...`-shaped path's drive-letter
+colon as a `host:path` remote spec; paths are also forward-slashed before
+being passed to tar, since this MSYS-provided tar treats a Windows
+backslash as its own escape character) and resolves entry/types from
+*that* extracted package.json#exports, instead of the local dist/.
+
+  $ node tools/export-surface.mjs --verify-against-baseline baseline/root-exports.json --from-tarball fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz
+  OK: built package (tarball fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz,
+  entry=./dist/dial-ui-kit.js, types=./dist/src/index.d.ts) exposes every
+  baseline export (342).
+
+Exit 0. Re-ran the pre-existing --check and --verify-against-baseline
+(no --from-tarball) modes too, to confirm the refactor (baseDir threading)
+didn't regress them - both still pass unchanged.

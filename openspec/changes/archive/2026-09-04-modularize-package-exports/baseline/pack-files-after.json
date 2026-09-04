@@ -1,0 +1,4146 @@
+[
+  {
+    "id": "@epam/ai-dial-ui-kit@0.0.0",
+    "name": "@epam/ai-dial-ui-kit",
+    "version": "0.0.0",
+    "size": 1384786,
+    "unpackedSize": 5505367,
+    "shasum": "79e3bdae3d78e253240b13fe4f05734257da0931",
+    "integrity": "sha512-FYbgCDhkc5j2OUBpqNFJx2jG+K6gek7EUAKNIiOMGnXVJoaCc9atuLh3JaL9yP7g9f9nduXEPy3r/F9DXa/iBQ==",
+    "filename": "epam-ai-dial-ui-kit-0.0.0.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 11549,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 12773,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/___vite-browser-external.js",
+        "size": 178,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/__vite-browser-external.js",
+        "size": 41,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/_commonjsHelpers.js",
+        "size": 883,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/index.js",
+        "size": 99,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/index2.js",
+        "size": 41,
+        "mode": 420
+      },
+      {
+        "path": "dist/_virtual/index3.js",
+        "size": 217,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/add-child.svg.js",
+        "size": 1372,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/add-sibling.svg.js",
+        "size": 1210,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/copy-to.svg.js",
+        "size": 1098,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/c.svg.js",
+        "size": 3557,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/cpp.svg.js",
+        "size": 5288,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/cs.svg.js",
+        "size": 6321,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/ini.svg.js",
+        "size": 3870,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/json.svg.js",
+        "size": 9271,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/md.svg.js",
+        "size": 4124,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/file/py.svg.js",
+        "size": 3904,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/loader.svg.js",
+        "size": 1603,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/move-to.svg.js",
+        "size": 710,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/open-popup.svg.js",
+        "size": 960,
+        "mode": 420
+      },
+      {
+        "path": "dist/assets/icons/unshare.svg.js",
+        "size": 834,
+        "mode": 420
+      },
+      {
+        "path": "dist/CHANGELOG.md",
+        "size": 36624,
+        "mode": 420
+      },
+      {
+        "path": "dist/components-manifest.json",
+        "size": 394753,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Accordion/Accordion.js",
+        "size": 1957,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/Bar/Bar.js",
+        "size": 2487,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/Bar/utils.js",
+        "size": 822,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/BarGroup/BarGroup.js",
+        "size": 4865,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/Card/Card.js",
+        "size": 3257,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/ErrorTag/ErrorTag.js",
+        "size": 441,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/Histogram/Histogram.js",
+        "size": 6876,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Analytics/Histogram/utils.js",
+        "size": 1100,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/AutocompleteInput/AutocompleteInputValue.js",
+        "size": 532,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Breadcrumb/Breadcrumb.js",
+        "size": 3566,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Breadcrumb/BreadcrumbItem.js",
+        "size": 2085,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Breadcrumb/constants.js",
+        "size": 1180,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Button/Button.js",
+        "size": 1671,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Button/ButtonWrappers.js",
+        "size": 737,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Button/constants.js",
+        "size": 728,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Button/utils.js",
+        "size": 423,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ButtonDropdown/ButtonDropdown.js",
+        "size": 867,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ButtonDropdown/constants.js",
+        "size": 340,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/CaptionText/CaptionText.js",
+        "size": 589,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Checkbox/Checkbox.js",
+        "size": 1924,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Checkbox/constants.js",
+        "size": 67,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/CloseButton/CloseButton.js",
+        "size": 614,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/CollapsibleSidebar/CollapsibleSidebar.js",
+        "size": 2306,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ConfirmationPopup/ConfirmationPopup.js",
+        "size": 2030,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ConfirmationPopup/constants.js",
+        "size": 840,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/DraggableItem/constants.js",
+        "size": 172,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/DraggableItem/DraggableItem.js",
+        "size": 1821,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Dropdown/constants.js",
+        "size": 958,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Dropdown/Dropdown.js",
+        "size": 8397,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Dropdown/DropdownSubMenuItem.js",
+        "size": 3376,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/DropdownIcon/DropdownIcon.js",
+        "size": 2908,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/EllipsisTooltip/constants.js",
+        "size": 73,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/EllipsisTooltip/EllipsisTooltip.js",
+        "size": 1950,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FabButton/FabButton.js",
+        "size": 1015,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileIcon/constants.js",
+        "size": 2170,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileIcon/FileIcon.js",
+        "size": 1086,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup.js",
+        "size": 8160,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup.js",
+        "size": 6385,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell.js",
+        "size": 1790,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerBulkActionsToolbar/constants.js",
+        "size": 78,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar.js",
+        "size": 3621,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup.js",
+        "size": 2095,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerItemIcon/FileManagerItemIcon.js",
+        "size": 1898,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerItemName/FileManagerItemName.js",
+        "size": 2393,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerItemNameInput/FileManagerItemNameInput.js",
+        "size": 2326,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerNavigationPanel/constants.js",
+        "size": 281,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerNavigationPanel/FileManagerNavigationPanel.js",
+        "size": 4013,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileManagerToolbar/DialFileManagerToolbar.js",
+        "size": 3714,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileMetadataPopup/constants.js",
+        "size": 275,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FileMetadataPopup/FileMetadataPopup.js",
+        "size": 3867,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FoldersTree/constants.js",
+        "size": 161,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FoldersTree/FoldersTree.js",
+        "size": 7279,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/components/FoldersTree/hooks/use-expanded-paths.js",
+        "size": 1125,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/constants.js",
+        "size": 1352,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/errors.js",
+        "size": 312,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/FileManager.js",
+        "size": 25230,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/FileManagerContext.js",
+        "size": 103,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/FileManagerProvider.js",
+        "size": 19581,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/FileManagerTooltip.js",
+        "size": 2625,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-bulk-actions.js",
+        "size": 3458,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-collapse-tree.js",
+        "size": 489,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-conflict-resolution.js",
+        "size": 3631,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-current-path.js",
+        "size": 462,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-clipboard.js",
+        "size": 3351,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-delete.js",
+        "size": 699,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-download.js",
+        "size": 313,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-manager-columns.js",
+        "size": 2639,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-manager-context.js",
+        "size": 311,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-manager-tabs.js",
+        "size": 537,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-metadata.js",
+        "size": 429,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-search.js",
+        "size": 2045,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-file-upload.js",
+        "size": 9429,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-folder-creation.js",
+        "size": 4330,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-grid-actions-column.js",
+        "size": 1709,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-grid-context-menu.js",
+        "size": 5261,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-item-renaming.js",
+        "size": 2877,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-new-actions.js",
+        "size": 1918,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-paths-selection.js",
+        "size": 586,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-show-hidden-files.js",
+        "size": 538,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-tree-additional-buttons.js",
+        "size": 1184,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-trigger-view-create-folder.js",
+        "size": 779,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/hooks/use-trigger-view-rename.js",
+        "size": 456,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileManager/utils.js",
+        "size": 4066,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FileName/FileName.js",
+        "size": 1789,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FolderName/FolderName.js",
+        "size": 1772,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FormItem/constants.js",
+        "size": 246,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FormItem/FormItem.js",
+        "size": 2803,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FormPopup/constants.js",
+        "size": 181,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/FormPopup/FormPopup.js",
+        "size": 1487,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Grid/constants.js",
+        "size": 1303,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Grid/Grid.js",
+        "size": 10072,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Grid/renderers/constants.js",
+        "size": 471,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Grid/renderers/DateCellRenderer.js",
+        "size": 896,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Icon/Icon.js",
+        "size": 232,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/IconButton/IconButton.js",
+        "size": 1176,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/IconButton/IconButtonWrappers.js",
+        "size": 901,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/InfoButton/constants.js",
+        "size": 255,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/InfoButton/InfoButton.js",
+        "size": 781,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Input/Button/constants.js",
+        "size": 282,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Input/Button/InputButton.js",
+        "size": 791,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Input/Input.js",
+        "size": 3468,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Input/utils.js",
+        "size": 1007,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/InputPopup/InputPopup.js",
+        "size": 5748,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/JsonEditor/JsonEditor.js",
+        "size": 1454,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Label/Label.js",
+        "size": 715,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LabelledText/LabelledText.js",
+        "size": 888,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Loader/constants.js",
+        "size": 185,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Loader/Loader.js",
+        "size": 833,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LoadFileArea/EmptyFileArea.js",
+        "size": 3784,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LoadFileArea/FilledDropZone.js",
+        "size": 2169,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LoadFileArea/FilledInput.js",
+        "size": 764,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LoadFileArea/LoadFileArea.js",
+        "size": 2136,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/LoadFileArea/LoadFileAreaField.js",
+        "size": 3213,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/MarkdownEditor/MarkdownEditor.js",
+        "size": 926,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/MarkdownEditor/MarkdownEditorContainer.js",
+        "size": 2209,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Accordion/Accordion.js",
+        "size": 3125,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Button/Button.js",
+        "size": 2173,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Button/ButtonWrappers.js",
+        "size": 769,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Button/constants.js",
+        "size": 790,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Button/utils.js",
+        "size": 426,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ButtonDropdown/ButtonDropdown.js",
+        "size": 821,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ButtonDropdown/constants.js",
+        "size": 509,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Calendar/Calendar.js",
+        "size": 10678,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Calendar/constants.js",
+        "size": 2222,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Calendar/utils.js",
+        "size": 2428,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/CaptionText/CaptionText.js",
+        "size": 587,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/CardShell/CardShell.js",
+        "size": 600,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Checkbox/Checkbox.js",
+        "size": 2344,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Checkbox/CheckboxBox.js",
+        "size": 1700,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Checkbox/constants.js",
+        "size": 99,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/CloseButton/CloseButton.js",
+        "size": 762,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/CollapsibleSidebar/CollapsibleSidebar.js",
+        "size": 3128,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ConfirmationPopup/ConfirmationPopup.js",
+        "size": 2069,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ConfirmationPopup/constants.js",
+        "size": 932,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/constants/icon.js",
+        "size": 55,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/constants/overlay.js",
+        "size": 859,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Dropdown/constants.js",
+        "size": 1225,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Dropdown/Dropdown.js",
+        "size": 9907,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Dropdown/DropdownSubMenuItem.js",
+        "size": 3930,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/EllipsisTooltip/EllipsisTooltip.js",
+        "size": 1338,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/EllipsisTooltip/use-truncation.js",
+        "size": 678,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/FileDropzone/FileDropzone.js",
+        "size": 4113,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/FolderPath/FolderPath.js",
+        "size": 1609,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/components/SelectionCell.js",
+        "size": 1220,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/components/SelectionHeader.js",
+        "size": 1235,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/constants.js",
+        "size": 2209,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/Grid.js",
+        "size": 9222,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/renderers/constants.js",
+        "size": 472,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Grid/renderers/DateCellRenderer.js",
+        "size": 936,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Highlight/Highlight.js",
+        "size": 1151,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/IconButton/IconButton.js",
+        "size": 1306,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/IconButton/IconButtonWrappers.js",
+        "size": 740,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/InfoButton/InfoButton.js",
+        "size": 1030,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/InlineSelect/InlineSelect.js",
+        "size": 2492,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Input/Button/constants.js",
+        "size": 307,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Input/Button/InputButton.js",
+        "size": 851,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Input/Input.js",
+        "size": 4427,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Input/utils.js",
+        "size": 1086,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Label/Label.js",
+        "size": 1269,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/MarkdownEditor/constants.js",
+        "size": 1739,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/MarkdownEditor/MarkdownEditor.js",
+        "size": 1002,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/NoDataContent/NoDataContent.js",
+        "size": 1101,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Notification/constants.js",
+        "size": 1321,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Notification/Notification.js",
+        "size": 2452,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Notification/NotificationWrapper.js",
+        "size": 1267,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/NumberInput/NumberInput.js",
+        "size": 1077,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/PasswordInput/PasswordInput.js",
+        "size": 1398,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Popup/constants.js",
+        "size": 933,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Popup/Popup.js",
+        "size": 5608,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Radio/Radio.js",
+        "size": 3026,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/RadioGroup/constants.js",
+        "size": 369,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/RadioGroup/RadioGroup.js",
+        "size": 2583,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/RadioGroupPopupField/constants.js",
+        "size": 560,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/RadioGroupPopupField/RadioGroupPopupField.js",
+        "size": 4451,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ResizableContainer/components/ResizeHandle.js",
+        "size": 2768,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ResizableContainer/ConditionalResizableContainer.js",
+        "size": 269,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ResizableContainer/ResizableContainer.js",
+        "size": 2577,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Search/Search.js",
+        "size": 1833,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/SegmentedControl/constants.js",
+        "size": 1205,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/SegmentedControl/SegmentedControl.js",
+        "size": 2661,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Select/constants.js",
+        "size": 1798,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Select/MultiSelectTags.js",
+        "size": 503,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Select/Select.js",
+        "size": 12355,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Select/SelectSubMenuItem.js",
+        "size": 2801,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Slider/Slider.js",
+        "size": 3800,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Switch/Switch.js",
+        "size": 2821,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tabs/Tabs.js",
+        "size": 2984,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tag/constants.js",
+        "size": 671,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tag/Tag.js",
+        "size": 2457,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/TagInput/TagInput.js",
+        "size": 5255,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/TagInput/utils.js",
+        "size": 373,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Textarea/Textarea.js",
+        "size": 1202,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ThemeScope/ThemeScope.js",
+        "size": 540,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/ToggleIconButton/ToggleIconButton.js",
+        "size": 1474,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/constants.js",
+        "size": 320,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/Tooltip.js",
+        "size": 589,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/TooltipContainer.js",
+        "size": 289,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/TooltipContent.js",
+        "size": 1244,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/TooltipContext.js",
+        "size": 1897,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/New/Tooltip/TooltipTrigger.js",
+        "size": 1220,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/NoDataContent/NoDataContent.js",
+        "size": 1067,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Notification/constants.js",
+        "size": 1217,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Notification/Notification.js",
+        "size": 2113,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/NumberInput/NumberInput.js",
+        "size": 1104,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Pagination/Pagination.js",
+        "size": 2444,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Pagination/utils.js",
+        "size": 429,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/PasswordInput/Icons/HideIcon.js",
+        "size": 367,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/PasswordInput/Icons/ShowIcon.js",
+        "size": 364,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/PasswordInput/PasswordInput.js",
+        "size": 632,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Popup/constants.js",
+        "size": 433,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Popup/Popup.js",
+        "size": 3509,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ProgressBar/ProgressBar.js",
+        "size": 1913,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/RadioButton/RadioButton.js",
+        "size": 2500,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/RadioGroup/constants.js",
+        "size": 289,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/RadioGroup/RadioGroup.js",
+        "size": 2328,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/RadioGroupPopupField/RadioGroupPopupField.js",
+        "size": 2801,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/RemoveButton/RemoveButton.js",
+        "size": 775,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ResizableContainer/components/ResizeHandle.js",
+        "size": 606,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ResizableContainer/components/ResizeIcon.js",
+        "size": 479,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ResizableContainer/ConditionalResizableContainer.js",
+        "size": 277,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/ResizableContainer/ResizableContainer.js",
+        "size": 2027,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaAdditionalPropertiesEditor.js",
+        "size": 1038,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaAnyOfEditor.js",
+        "size": 1852,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaArrayEditor.js",
+        "size": 3258,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaField.js",
+        "size": 1963,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaFieldContent.js",
+        "size": 2839,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaKeyValueEditor.js",
+        "size": 5475,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaObjectEditor.js",
+        "size": 1110,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaOneOfEditor.js",
+        "size": 5888,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaPrimitiveField.js",
+        "size": 4398,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/components/SchemaSection.js",
+        "size": 2913,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/context.js",
+        "size": 283,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/SchemaRenderer.js",
+        "size": 4691,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/types.js",
+        "size": 1313,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SchemaRenderer/utils.js",
+        "size": 6782,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Search/constants.js",
+        "size": 538,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Search/Search.js",
+        "size": 1551,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SegmentedControl/constants.js",
+        "size": 638,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SegmentedControl/SegmentedControl.js",
+        "size": 2110,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Select/constants.js",
+        "size": 986,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Select/MultiSelectTags.js",
+        "size": 660,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Select/Select.js",
+        "size": 14108,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Select/SelectSubMenuItem.js",
+        "size": 2741,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SelectField/SelectField.js",
+        "size": 1438,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/SharedEntityIndicator/SharedEntityIndicator.js",
+        "size": 846,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Skeleton/Skeleton.js",
+        "size": 2962,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Skeleton/utils.js",
+        "size": 299,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Slider/Slider.js",
+        "size": 4635,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Spinner/Spinner.js",
+        "size": 656,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Steps/Step.js",
+        "size": 1194,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Steps/Steps.js",
+        "size": 686,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Steps/utils.js",
+        "size": 990,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Switch/Switch.js",
+        "size": 1838,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tab/Tab.js",
+        "size": 2242,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tabs/constants.js",
+        "size": 53,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tabs/Tabs.js",
+        "size": 6440,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tag/Tag.js",
+        "size": 1177,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/TagInput/TagInput.js",
+        "size": 5272,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Textarea/Textarea.js",
+        "size": 1091,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tooltip/Tooltip.js",
+        "size": 726,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tooltip/TooltipContainer.js",
+        "size": 293,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tooltip/TooltipContent.js",
+        "size": 1278,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tooltip/TooltipContext.js",
+        "size": 1784,
+        "mode": 420
+      },
+      {
+        "path": "dist/components/Tooltip/TooltipTrigger.js",
+        "size": 736,
+        "mode": 420
+      },
+      {
+        "path": "dist/constants/editor.js",
+        "size": 1854,
+        "mode": 420
+      },
+      {
+        "path": "dist/constants/file-grid-columns.js",
+        "size": 5397,
+        "mode": 420
+      },
+      {
+        "path": "dist/constants/icon.js",
+        "size": 237,
+        "mode": 420
+      },
+      {
+        "path": "dist/constants/validation.js",
+        "size": 277,
+        "mode": 420
+      },
+      {
+        "path": "dist/DateCellRenderer-BdsPUuVy.cjs",
+        "size": 1183297,
+        "mode": 420
+      },
+      {
+        "path": "dist/DateCellRenderer-CJDhVYGc.cjs",
+        "size": 28235,
+        "mode": 420
+      },
+      {
+        "path": "dist/dial-ui-kit.cjs",
+        "size": 197133,
+        "mode": 420
+      },
+      {
+        "path": "dist/dial-ui-kit.js",
+        "size": 21036,
+        "mode": 420
+      },
+      {
+        "path": "dist/editor-Ba3vCFHk.cjs",
+        "size": 89,
+        "mode": 420
+      },
+      {
+        "path": "dist/editors.cjs",
+        "size": 596,
+        "mode": 420
+      },
+      {
+        "path": "dist/editors.js",
+        "size": 491,
+        "mode": 420
+      },
+      {
+        "path": "dist/file-manager.cjs",
+        "size": 717,
+        "mode": 420
+      },
+      {
+        "path": "dist/file-manager.js",
+        "size": 1191,
+        "mode": 420
+      },
+      {
+        "path": "dist/grid.cjs",
+        "size": 1026,
+        "mode": 420
+      },
+      {
+        "path": "dist/grid.js",
+        "size": 1465,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-editable-item.js",
+        "size": 2464,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-flexible-actions.js",
+        "size": 2209,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-is-mobile-screen.js",
+        "size": 351,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-is-tablet-screen.js",
+        "size": 352,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-screen-type.js",
+        "size": 453,
+        "mode": 420
+      },
+      {
+        "path": "dist/hooks/use-width-breakpoint.js",
+        "size": 443,
+        "mode": 420
+      },
+      {
+        "path": "dist/icon-CrGVkVpG.cjs",
+        "size": 191,
+        "mode": 420
+      },
+      {
+        "path": "dist/icon-DhjrDQ8I.cjs",
+        "size": 47,
+        "mode": 420
+      },
+      {
+        "path": "dist/IconButton-BCbBgnzo.cjs",
+        "size": 5008,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.css",
+        "size": 84658,
+        "mode": 420
+      },
+      {
+        "path": "dist/JsonEditor-pdzI3xkJ.cjs",
+        "size": 2387,
+        "mode": 420
+      },
+      {
+        "path": "dist/MarkdownEditor-De9b_Po1.cjs",
+        "size": 1651,
+        "mode": 420
+      },
+      {
+        "path": "dist/MarkdownEditor-Dea4eQpw.cjs",
+        "size": 677,
+        "mode": 420
+      },
+      {
+        "path": "dist/MarkdownEditorContainer-BO6PafCS.cjs",
+        "size": 1457,
+        "mode": 420
+      },
+      {
+        "path": "dist/mcp-server.cjs",
+        "size": 19608,
+        "mode": 420
+      },
+      {
+        "path": "dist/merge-classes-Dipy1Ih1.cjs",
+        "size": 26361,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/_template.md",
+        "size": 995,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.11.0/dropdown-menu-prop-flatten.md",
+        "size": 2006,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.12.0/legacy-typography-classes-removal.md",
+        "size": 3233,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/caption-semi-text-lead-rename.md",
+        "size": 3263,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/field-label-props-unification.md",
+        "size": 4368,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/focus-border-token-rename.md",
+        "size": 3585,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/progress-bar-2-0-rewrite.md",
+        "size": 4832,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/spinner-dial-prefix-removal.md",
+        "size": 2356,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.13.0/typography-heading-scale-shift.md",
+        "size": 4214,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/button-tooltip-2-0.md",
+        "size": 3923,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/control-color-token-rename.md",
+        "size": 8950,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/focus-border-token-role-naming.md",
+        "size": 3612,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/select-multiselect-option-row.md",
+        "size": 3846,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/shadow-token-per-step-rename.md",
+        "size": 8116,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/0.14.0/tag-single-size.md",
+        "size": 5452,
+        "mode": 420
+      },
+      {
+        "path": "dist/migration-guides/README.md",
+        "size": 3372,
+        "mode": 420
+      },
+      {
+        "path": "dist/models/file.js",
+        "size": 444,
+        "mode": 420
+      },
+      {
+        "path": "dist/models/selection-mode.js",
+        "size": 130,
+        "mode": 420
+      },
+      {
+        "path": "dist/models/step.js",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/asap/dist/asap.js",
+        "size": 228,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/asap/dist/AsapQueue.js",
+        "size": 1718,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/asap/dist/makeRequestCall.js",
+        "size": 2117,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/asap/dist/RawTask.js",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/asap/dist/TaskFactory.js",
+        "size": 316,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/invariant/dist/index.js",
+        "size": 622,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/@react-dnd/shallowequal/dist/index.js",
+        "size": 570,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/ag-grid-community/dist/package/main.esm.js",
+        "size": 1485353,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/ag-grid-react/dist/package/index.esm.js",
+        "size": 70474,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/beginDrag.js",
+        "size": 1768,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/drop.js",
+        "size": 1590,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/endDrag.js",
+        "size": 477,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/hover.js",
+        "size": 1216,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/index.js",
+        "size": 445,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/local/setClientOffset.js",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/publishDragSource.js",
+        "size": 220,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/dragDrop/types.js",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/actions/registry.js",
+        "size": 635,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/classes/DragDropManagerImpl.js",
+        "size": 1072,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/classes/DragDropMonitorImpl.js",
+        "size": 3586,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/classes/HandlerRegistryImpl.js",
+        "size": 3108,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/contracts.js",
+        "size": 919,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/createDragDropManager.js",
+        "size": 711,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/interfaces.js",
+        "size": 116,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/dirtyHandlerIds.js",
+        "size": 889,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/dragOffset.js",
+        "size": 1332,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/dragOperation.js",
+        "size": 1923,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/index.js",
+        "size": 1235,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/refCount.js",
+        "size": 307,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/reducers/stateId.js",
+        "size": 64,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/coords.js",
+        "size": 517,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/dirtiness.js",
+        "size": 263,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/equality.js",
+        "size": 362,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/getNextUniqueId.js",
+        "size": 77,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/js_utils.js",
+        "size": 618,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/dnd-core/dist/utils/matchesType.js",
+        "size": 148,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/fast-deep-equal/index.js",
+        "size": 1067,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/mime-db/db.json.js",
+        "size": 171523,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/mime-db/index.js",
+        "size": 119,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/mime-types/index.js",
+        "size": 2457,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/mime-types/mimeScore.js",
+        "size": 953,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/re-resizable/lib/index.js",
+        "size": 20878,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/re-resizable/lib/resizer.js",
+        "size": 1651,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/BrowserDetector.js",
+        "size": 193,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/EnterLeaveCounter.js",
+        "size": 618,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/HTML5BackendImpl.js",
+        "size": 14124,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/index.js",
+        "size": 153,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/MonotonicInterpolant.js",
+        "size": 1473,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/NativeDragSources/getDataFromDataTransfer.js",
+        "size": 151,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/NativeDragSources/index.js",
+        "size": 636,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/NativeDragSources/NativeDragSource.js",
+        "size": 1011,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/NativeDragSources/nativeTypesConfig.js",
+        "size": 923,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/NativeTypes.js",
+        "size": 159,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/OffsetUtils.js",
+        "size": 1726,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/OptionsReader.js",
+        "size": 608,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd-html5-backend/dist/utils/js_utils.js",
+        "size": 375,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/core/DndContext.js",
+        "size": 118,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/core/DndProvider.js",
+        "size": 1606,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useCollectedProps.js",
+        "size": 195,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useCollector.js",
+        "size": 417,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/connectors.js",
+        "size": 283,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/DragSourceImpl.js",
+        "size": 774,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useDrag.js",
+        "size": 894,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useDragSource.js",
+        "size": 302,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useDragSourceConnector.js",
+        "size": 644,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useDragSourceMonitor.js",
+        "size": 324,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useDragType.js",
+        "size": 285,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrag/useRegisteredDragSource.js",
+        "size": 627,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDragDropManager.js",
+        "size": 326,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/connectors.js",
+        "size": 165,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/DropTargetImpl.js",
+        "size": 435,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useAccept.js",
+        "size": 309,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useDrop.js",
+        "size": 575,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useDropTarget.js",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useDropTargetConnector.js",
+        "size": 521,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useDropTargetMonitor.js",
+        "size": 324,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useDrop/useRegisteredDropTarget.js",
+        "size": 636,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useIsomorphicLayoutEffect.js",
+        "size": 146,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useMonitorOutput.js",
+        "size": 426,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/hooks/useOptionalFactory.js",
+        "size": 236,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/DragSourceMonitorImpl.js",
+        "size": 2446,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/DropTargetMonitorImpl.js",
+        "size": 1607,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/isRef.js",
+        "size": 206,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/registration.js",
+        "size": 311,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/SourceConnector.js",
+        "size": 3983,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/TargetConnector.js",
+        "size": 2158,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/react-dnd/dist/internals/wrapConnectorHooks.js",
+        "size": 1354,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/redux/es/redux.js",
+        "size": 6474,
+        "mode": 420
+      },
+      {
+        "path": "dist/node_modules/tailwind-merge/dist/bundle-mjs.js",
+        "size": 78157,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/__mocks__/monaco-editor.d.ts",
+        "size": 433,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Accordion/Accordion.d.ts",
+        "size": 2533,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Bar/Bar.d.ts",
+        "size": 3591,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Bar/utils.d.ts",
+        "size": 1069,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Bar/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/BarGroup/BarGroup.d.ts",
+        "size": 5176,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Card/Card.d.ts",
+        "size": 3902,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/ErrorTag/ErrorTag.d.ts",
+        "size": 751,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Histogram/Histogram.d.ts",
+        "size": 2910,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Histogram/utils.d.ts",
+        "size": 2572,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/Histogram/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Analytics/index.d.ts",
+        "size": 833,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/AutocompleteInput/AutocompleteInputValue.d.ts",
+        "size": 1548,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Breadcrumb/Breadcrumb.d.ts",
+        "size": 2184,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Breadcrumb/BreadcrumbItem.d.ts",
+        "size": 618,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Breadcrumb/constants.d.ts",
+        "size": 1028,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/__tests__/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/Button.d.ts",
+        "size": 1905,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/ButtonWrappers.d.ts",
+        "size": 1826,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/ButtonWrappers.test.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/constants.d.ts",
+        "size": 137,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Button/utils.d.ts",
+        "size": 180,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ButtonDropdown/ButtonDropdown.d.ts",
+        "size": 743,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ButtonDropdown/constants.d.ts",
+        "size": 160,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/CaptionText/CaptionText.d.ts",
+        "size": 784,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Checkbox/Checkbox.d.ts",
+        "size": 1250,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Checkbox/constants.d.ts",
+        "size": 61,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/CloseButton/CloseButton.d.ts",
+        "size": 888,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/CollapsibleSidebar/CollapsibleSidebar.d.ts",
+        "size": 1930,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ConfirmationPopup/ConfirmationPopup.d.ts",
+        "size": 2189,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ConfirmationPopup/constants.d.ts",
+        "size": 758,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/DraggableItem/constants.d.ts",
+        "size": 188,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/DraggableItem/DraggableItem.d.ts",
+        "size": 1261,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Dropdown/constants.d.ts",
+        "size": 529,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Dropdown/Dropdown.d.ts",
+        "size": 1207,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Dropdown/DropdownSubMenuItem.d.ts",
+        "size": 319,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/DropdownIcon/DropdownIcon.d.ts",
+        "size": 1341,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/EllipsisTooltip/constants.d.ts",
+        "size": 67,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/EllipsisTooltip/EllipsisTooltip.d.ts",
+        "size": 1771,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FabButton/FabButton.d.ts",
+        "size": 1152,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileIcon/constants.d.ts",
+        "size": 581,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileIcon/FileIcon.d.ts",
+        "size": 1213,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/__mocks__/files.d.ts",
+        "size": 172,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/ConflictResolutionPopup/ConflictResolutionPopup.d.ts",
+        "size": 3783,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup.d.ts",
+        "size": 2993,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell.d.ts",
+        "size": 2475,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/DialFileManagerItemSummaryCell/DialFileManagerItemSummaryCell.test.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerBulkActionsToolbar/constants.d.ts",
+        "size": 128,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerBulkActionsToolbar/FileManagerBulkActionsToolbar.d.ts",
+        "size": 2636,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerDeleteConfirmationPopup/FileManagerDeleteConfirmationPopup.d.ts",
+        "size": 1120,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerItemIcon/FileManagerItemIcon.d.ts",
+        "size": 2104,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerItemName/FileManagerItemName.d.ts",
+        "size": 2004,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerItemNameInput/FileManagerItemNameInput.d.ts",
+        "size": 2975,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerNavigationPanel/constants.d.ts",
+        "size": 297,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerNavigationPanel/FileManagerNavigationPanel.d.ts",
+        "size": 3011,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileManagerToolbar/DialFileManagerToolbar.d.ts",
+        "size": 3681,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileMetadataPopup/constants.d.ts",
+        "size": 324,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FileMetadataPopup/FileMetadataPopup.d.ts",
+        "size": 1742,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FoldersTree/constants.d.ts",
+        "size": 190,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FoldersTree/FoldersTree.d.ts",
+        "size": 6235,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/components/FoldersTree/hooks/use-expanded-paths.d.ts",
+        "size": 490,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/constants.d.ts",
+        "size": 1605,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/errors.d.ts",
+        "size": 151,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/FileManager.d.ts",
+        "size": 18024,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/FileManagerContext.d.ts",
+        "size": 8248,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/FileManagerProvider.d.ts",
+        "size": 726,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/FileManagerTooltip.d.ts",
+        "size": 779,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-conflict-resolution.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-current-path.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-file-clipboard.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-file-delete.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-file-download.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-file-upload.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-show-hidden-files.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/__tests__/use-trigger-view-rename.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-bulk-actions.d.ts",
+        "size": 1609,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-collapse-tree.d.ts",
+        "size": 319,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-conflict-resolution.d.ts",
+        "size": 1692,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-current-path.d.ts",
+        "size": 485,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-clipboard.d.ts",
+        "size": 2045,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-delete.d.ts",
+        "size": 594,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-download.d.ts",
+        "size": 434,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-manager-columns.d.ts",
+        "size": 1993,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-manager-context.d.ts",
+        "size": 298,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-manager-tabs.d.ts",
+        "size": 483,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-metadata.d.ts",
+        "size": 412,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-search.d.ts",
+        "size": 1027,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-file-upload.d.ts",
+        "size": 3197,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-folder-creation.d.ts",
+        "size": 1458,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-grid-actions-column.d.ts",
+        "size": 823,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-grid-context-menu.d.ts",
+        "size": 2345,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-item-renaming.d.ts",
+        "size": 975,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-new-actions.d.ts",
+        "size": 909,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-paths-selection.d.ts",
+        "size": 519,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-show-hidden-files.d.ts",
+        "size": 368,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-tree-additional-buttons.d.ts",
+        "size": 1047,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-trigger-view-create-folder.d.ts",
+        "size": 1426,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/hooks/use-trigger-view-rename.d.ts",
+        "size": 791,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/utils.d.ts",
+        "size": 3144,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileManager/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FileName/FileName.d.ts",
+        "size": 1831,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FolderName/FolderName.d.ts",
+        "size": 1496,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FormItem/constants.d.ts",
+        "size": 207,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FormItem/FormItem.d.ts",
+        "size": 2525,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FormPopup/constants.d.ts",
+        "size": 197,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/FormPopup/FormPopup.d.ts",
+        "size": 1622,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/comparators/base-column-comparator.d.ts",
+        "size": 109,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/comparators/base-column-comparator.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/constants.d.ts",
+        "size": 863,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/Grid.d.ts",
+        "size": 5539,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/renderers/constants.d.ts",
+        "size": 376,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/renderers/DateCellRenderer.d.ts",
+        "size": 1532,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/renderers/utils.d.ts",
+        "size": 58,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Grid/renderers/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Icon/Icon.d.ts",
+        "size": 559,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/IconButton/IconButton.d.ts",
+        "size": 1604,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/IconButton/IconButtonWrappers.d.ts",
+        "size": 2621,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/InfoButton/constants.d.ts",
+        "size": 249,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/InfoButton/InfoButton.d.ts",
+        "size": 459,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/InfoButton/InfoButton.stories.d.ts",
+        "size": 246,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Input/Button/constants.d.ts",
+        "size": 276,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Input/Button/InputButton.d.ts",
+        "size": 791,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Input/Input.d.ts",
+        "size": 1979,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Input/utils.d.ts",
+        "size": 182,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/InputPopup/InputPopup.d.ts",
+        "size": 2831,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/JsonEditor/JsonEditor.d.ts",
+        "size": 1094,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Label/Label.d.ts",
+        "size": 762,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LabelledText/LabelledText.d.ts",
+        "size": 996,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Loader/constants.d.ts",
+        "size": 190,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Loader/Loader.d.ts",
+        "size": 964,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LoadFileArea/EmptyFileArea.d.ts",
+        "size": 3439,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LoadFileArea/FilledDropZone.d.ts",
+        "size": 508,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LoadFileArea/FilledInput.d.ts",
+        "size": 1075,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LoadFileArea/LoadFileArea.d.ts",
+        "size": 2645,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/LoadFileArea/LoadFileAreaField.d.ts",
+        "size": 3079,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/MarkdownEditor/MarkdownEditor.d.ts",
+        "size": 1237,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/MarkdownEditor/MarkdownEditorContainer.d.ts",
+        "size": 1708,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Accordion/Accordion.d.ts",
+        "size": 3176,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Button/__tests__/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Button/Button.d.ts",
+        "size": 2662,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Button/ButtonWrappers.d.ts",
+        "size": 2442,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Button/constants.d.ts",
+        "size": 140,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Button/utils.d.ts",
+        "size": 183,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ButtonDropdown/ButtonDropdown.d.ts",
+        "size": 718,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ButtonDropdown/constants.d.ts",
+        "size": 101,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Calendar/Calendar.d.ts",
+        "size": 2839,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Calendar/constants.d.ts",
+        "size": 1666,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Calendar/utils.d.ts",
+        "size": 1453,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Calendar/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/CaptionText/CaptionText.d.ts",
+        "size": 761,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/CardShell/CardShell.d.ts",
+        "size": 619,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Checkbox/Checkbox.d.ts",
+        "size": 2183,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Checkbox/CheckboxBox.d.ts",
+        "size": 1359,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Checkbox/constants.d.ts",
+        "size": 371,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/CloseButton/CloseButton.d.ts",
+        "size": 1407,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/CollapsibleSidebar/CollapsibleSidebar.d.ts",
+        "size": 3871,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ConfirmationPopup/ConfirmationPopup.d.ts",
+        "size": 2160,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ConfirmationPopup/constants.d.ts",
+        "size": 721,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/constants/icon.d.ts",
+        "size": 1180,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/constants/overlay.d.ts",
+        "size": 1692,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Dropdown/constants.d.ts",
+        "size": 670,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Dropdown/Dropdown.d.ts",
+        "size": 4209,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Dropdown/DropdownSubMenuItem.d.ts",
+        "size": 322,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/EllipsisTooltip/EllipsisTooltip.d.ts",
+        "size": 2300,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/EllipsisTooltip/use-truncation.d.ts",
+        "size": 1240,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/FileDropzone/FileDropzone.d.ts",
+        "size": 3687,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/FolderPath/FolderPath.d.ts",
+        "size": 1393,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/components/SelectionCell.d.ts",
+        "size": 1003,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/components/SelectionHeader.d.ts",
+        "size": 671,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/constants.d.ts",
+        "size": 2754,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/Grid.d.ts",
+        "size": 6780,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/renderers/constants.d.ts",
+        "size": 298,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Grid/renderers/DateCellRenderer.d.ts",
+        "size": 2059,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Highlight/Highlight.d.ts",
+        "size": 814,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/IconButton/IconButton.d.ts",
+        "size": 1625,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/IconButton/IconButtonWrappers.d.ts",
+        "size": 1863,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/InfoButton/InfoButton.d.ts",
+        "size": 805,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/InfoButton/InfoButton.stories.d.ts",
+        "size": 238,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/InlineSelect/InlineSelect.d.ts",
+        "size": 2032,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Input/Button/constants.d.ts",
+        "size": 301,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Input/Button/InputButton.d.ts",
+        "size": 778,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Input/Input.d.ts",
+        "size": 2968,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Input/utils.d.ts",
+        "size": 182,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Label/Label.d.ts",
+        "size": 1636,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/MarkdownEditor/constants.d.ts",
+        "size": 1049,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/MarkdownEditor/MarkdownEditor.d.ts",
+        "size": 1324,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/NoDataContent/NoDataContent.d.ts",
+        "size": 1902,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Notification/constants.d.ts",
+        "size": 1048,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Notification/Notification.d.ts",
+        "size": 2646,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Notification/NotificationWrapper.d.ts",
+        "size": 1129,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/NumberInput/NumberInput.d.ts",
+        "size": 1548,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/PasswordInput/PasswordInput.d.ts",
+        "size": 1346,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Popup/constants.d.ts",
+        "size": 1220,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Popup/Popup.d.ts",
+        "size": 5224,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Radio/Radio.d.ts",
+        "size": 1952,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/RadioGroup/constants.d.ts",
+        "size": 620,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/RadioGroup/RadioGroup.d.ts",
+        "size": 3292,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/RadioGroupPopupField/constants.d.ts",
+        "size": 1419,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/RadioGroupPopupField/RadioGroupPopupField.d.ts",
+        "size": 4129,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ResizableContainer/components/ResizeHandle.d.ts",
+        "size": 698,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ResizableContainer/ConditionalResizableContainer.d.ts",
+        "size": 1206,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ResizableContainer/ResizableContainer.d.ts",
+        "size": 3505,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Search/Search.d.ts",
+        "size": 1755,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/SegmentedControl/constants.d.ts",
+        "size": 1515,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/SegmentedControl/SegmentedControl.d.ts",
+        "size": 2195,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Select/constants.d.ts",
+        "size": 1896,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Select/MultiSelectTags.d.ts",
+        "size": 732,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Select/Select.d.ts",
+        "size": 5847,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Select/SelectSubMenuItem.d.ts",
+        "size": 287,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Slider/Slider.d.ts",
+        "size": 3117,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Switch/Switch.d.ts",
+        "size": 1418,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tabs/Tabs.d.ts",
+        "size": 2382,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tag/constants.d.ts",
+        "size": 1347,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tag/Tag.d.ts",
+        "size": 3166,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/TagInput/TagInput.d.ts",
+        "size": 3064,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/TagInput/utils.d.ts",
+        "size": 935,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/TagInput/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Textarea/Textarea.d.ts",
+        "size": 1795,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ThemeScope/ThemeScope.d.ts",
+        "size": 2013,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/ToggleIconButton/ToggleIconButton.d.ts",
+        "size": 2042,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/constants.d.ts",
+        "size": 1487,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/Tooltip.d.ts",
+        "size": 2017,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/TooltipContainer.d.ts",
+        "size": 1277,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/TooltipContent.d.ts",
+        "size": 797,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/TooltipContext.d.ts",
+        "size": 5872,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/New/Tooltip/TooltipTrigger.d.ts",
+        "size": 695,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/NoDataContent/NoDataContent.d.ts",
+        "size": 1023,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Notification/constants.d.ts",
+        "size": 486,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Notification/Notification.d.ts",
+        "size": 2003,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/NumberInput/NumberInput.d.ts",
+        "size": 1447,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Pagination/Pagination.d.ts",
+        "size": 268,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Pagination/tests/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Pagination/utils.d.ts",
+        "size": 378,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/PasswordInput/Icons/HideIcon.d.ts",
+        "size": 372,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/PasswordInput/Icons/ShowIcon.d.ts",
+        "size": 368,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/PasswordInput/PasswordInput.d.ts",
+        "size": 880,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Popup/constants.d.ts",
+        "size": 393,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Popup/Popup.d.ts",
+        "size": 2711,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ProgressBar/ProgressBar.d.ts",
+        "size": 2292,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/RadioButton/RadioButton.d.ts",
+        "size": 1991,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/RadioGroup/constants.d.ts",
+        "size": 331,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/RadioGroup/RadioGroup.d.ts",
+        "size": 3181,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/RadioGroupPopupField/RadioGroupPopupField.d.ts",
+        "size": 3555,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/RemoveButton/RemoveButton.d.ts",
+        "size": 972,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ResizableContainer/components/ResizeHandle.d.ts",
+        "size": 338,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ResizableContainer/components/ResizeIcon.d.ts",
+        "size": 257,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ResizableContainer/ConditionalResizableContainer.d.ts",
+        "size": 1387,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/ResizableContainer/ResizableContainer.d.ts",
+        "size": 2356,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaAdditionalPropertiesEditor.d.ts",
+        "size": 959,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaAnyOfEditor.d.ts",
+        "size": 1005,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaArrayEditor.d.ts",
+        "size": 1038,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaField.d.ts",
+        "size": 1092,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaFieldContent.d.ts",
+        "size": 874,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaKeyValueEditor.d.ts",
+        "size": 1236,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaObjectEditor.d.ts",
+        "size": 1005,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaOneOfEditor.d.ts",
+        "size": 1086,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaPrimitiveField.d.ts",
+        "size": 1229,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/components/SchemaSection.d.ts",
+        "size": 1247,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/context.d.ts",
+        "size": 845,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/SchemaRenderer.d.ts",
+        "size": 1635,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/tests/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/types.d.ts",
+        "size": 4729,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SchemaRenderer/utils.d.ts",
+        "size": 1273,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Search/constants.d.ts",
+        "size": 239,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Search/Search.d.ts",
+        "size": 1464,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SegmentedControl/constants.d.ts",
+        "size": 676,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SegmentedControl/SegmentedControl.d.ts",
+        "size": 1622,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Select/constants.d.ts",
+        "size": 901,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Select/MultiSelectTags.d.ts",
+        "size": 375,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Select/Select.d.ts",
+        "size": 5195,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Select/SelectSubMenuItem.d.ts",
+        "size": 284,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SelectField/SelectField.d.ts",
+        "size": 1701,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/SharedEntityIndicator/SharedEntityIndicator.d.ts",
+        "size": 1084,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Skeleton/Skeleton.d.ts",
+        "size": 2588,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Skeleton/utils.d.ts",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Slider/Slider.d.ts",
+        "size": 2425,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Spinner/Spinner.d.ts",
+        "size": 231,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Steps/Step.d.ts",
+        "size": 257,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Steps/Steps.d.ts",
+        "size": 827,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Steps/tests/Steps.test.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Steps/tests/utils.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Steps/utils.d.ts",
+        "size": 474,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Switch/Switch.d.ts",
+        "size": 948,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tab/Tab.d.ts",
+        "size": 1445,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tabs/constants.d.ts",
+        "size": 47,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tabs/Tabs.d.ts",
+        "size": 3443,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tag/Tag.d.ts",
+        "size": 892,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/TagInput/TagInput.d.ts",
+        "size": 2418,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Textarea/Textarea.d.ts",
+        "size": 1815,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tooltip/Tooltip.d.ts",
+        "size": 1385,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tooltip/TooltipContainer.d.ts",
+        "size": 824,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tooltip/TooltipContent.d.ts",
+        "size": 429,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tooltip/TooltipContext.d.ts",
+        "size": 5207,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/components/Tooltip/TooltipTrigger.d.ts",
+        "size": 462,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/editor.d.ts",
+        "size": 159,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/file-grid-columns.d.ts",
+        "size": 454,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/icon.d.ts",
+        "size": 200,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/storybook/form-item.d.ts",
+        "size": 197,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/storybook/input.d.ts",
+        "size": 302,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/constants/validation.d.ts",
+        "size": 246,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-editable-item.d.ts",
+        "size": 2941,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-flexible-actions.d.ts",
+        "size": 4313,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-is-mobile-screen.d.ts",
+        "size": 519,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-is-tablet-screen.d.ts",
+        "size": 520,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-screen-type.d.ts",
+        "size": 735,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/hooks/use-width-breakpoint.d.ts",
+        "size": 1401,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/index.d.ts",
+        "size": 20459,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/mcp/generate-manifest.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/mcp/server.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/mcp/types.d.ts",
+        "size": 1872,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/analytics.d.ts",
+        "size": 579,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/base-entity.d.ts",
+        "size": 88,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/breadcrumb.d.ts",
+        "size": 330,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/dropdown.d.ts",
+        "size": 2321,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/file-manager.d.ts",
+        "size": 508,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/file.d.ts",
+        "size": 972,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/radio.d.ts",
+        "size": 163,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/segmented-control.d.ts",
+        "size": 189,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/select.d.ts",
+        "size": 494,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/selection-mode.d.ts",
+        "size": 91,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/step.d.ts",
+        "size": 161,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/models/tab.d.ts",
+        "size": 173,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/subpaths/editors.d.ts",
+        "size": 2083,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/subpaths/file-manager.d.ts",
+        "size": 1716,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/subpaths/grid.d.ts",
+        "size": 2008,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/analytics.d.ts",
+        "size": 94,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/button.d.ts",
+        "size": 342,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/calendar.d.ts",
+        "size": 126,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/caption.d.ts",
+        "size": 89,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/confirmation-popup.d.ts",
+        "size": 90,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/dropdown.d.ts",
+        "size": 309,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/editor.d.ts",
+        "size": 316,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/file-manager.d.ts",
+        "size": 1484,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/flexible-actions.d.ts",
+        "size": 96,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/form-item.d.ts",
+        "size": 1165,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/item.d.ts",
+        "size": 78,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/notification.d.ts",
+        "size": 284,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/popup.d.ts",
+        "size": 78,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/radio-group.d.ts",
+        "size": 85,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/resizable-container.d.ts",
+        "size": 86,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/screen.d.ts",
+        "size": 134,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/select.d.ts",
+        "size": 155,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/size.d.ts",
+        "size": 104,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/skeleton.d.ts",
+        "size": 341,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/tab.d.ts",
+        "size": 261,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/tag.d.ts",
+        "size": 95,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/types/tooltip.d.ts",
+        "size": 120,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/__tests__/accessible-name.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/__tests__/element-size-observer.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/__tests__/file-accept.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/__tests__/merge-classes.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/__tests__/path.spec.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/accessible-name.d.ts",
+        "size": 1021,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/debounce.d.ts",
+        "size": 128,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/element-size-observer.d.ts",
+        "size": 1172,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/file-accept.d.ts",
+        "size": 786,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/flat-to-hierarchy-convertor.d.ts",
+        "size": 1441,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/grid-comparators.d.ts",
+        "size": 410,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/grid-date.d.ts",
+        "size": 363,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/merge-classes.d.ts",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/mobile.d.ts",
+        "size": 1777,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/path.d.ts",
+        "size": 354,
+        "mode": 420
+      },
+      {
+        "path": "dist/src/utils/sub-menu-floating.d.ts",
+        "size": 3169,
+        "mode": 420
+      },
+      {
+        "path": "dist/Switch-CtdhpYik.cjs",
+        "size": 2176,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/analytics.js",
+        "size": 133,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/button.js",
+        "size": 391,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/calendar.js",
+        "size": 161,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/caption.js",
+        "size": 128,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/confirmation-popup.js",
+        "size": 129,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/dropdown.js",
+        "size": 392,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/editor.js",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/file-manager.js",
+        "size": 1669,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/flexible-actions.js",
+        "size": 135,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/form-item.js",
+        "size": 140,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/item.js",
+        "size": 117,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/notification.js",
+        "size": 339,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/popup.js",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/radio-group.js",
+        "size": 124,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/resizable-container.js",
+        "size": 125,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/screen.js",
+        "size": 169,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/select.js",
+        "size": 218,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/size.js",
+        "size": 141,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/skeleton.js",
+        "size": 422,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/tab.js",
+        "size": 348,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/tag.js",
+        "size": 134,
+        "mode": 420
+      },
+      {
+        "path": "dist/types/tooltip.js",
+        "size": 155,
+        "mode": 420
+      },
+      {
+        "path": "dist/use-file-manager-tabs-SUdOVOIj.cjs",
+        "size": 336433,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/accessible-name.js",
+        "size": 118,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/debounce.js",
+        "size": 153,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/element-size-observer.js",
+        "size": 832,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/file-accept.js",
+        "size": 455,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/flat-to-hierarchy-convertor.js",
+        "size": 2503,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/grid-comparators.js",
+        "size": 589,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/grid-date.js",
+        "size": 453,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/merge-classes.js",
+        "size": 181,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/mobile.js",
+        "size": 412,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/path.js",
+        "size": 99,
+        "mode": 420
+      },
+      {
+        "path": "dist/utils/sub-menu-floating.js",
+        "size": 1962,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 5935,
+        "mode": 420
+      }
+    ],
+    "entryCount": 826,
+    "bundled": []
+  }
+]

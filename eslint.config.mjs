@@ -23,6 +23,7 @@ export default [
       '**/dist',
       '**/storybook-static',
       '**/coverage',
+      '**/*.generated.ts',
       '**/.cursor',
       'setupTests.ts',
     ],
@@ -31,7 +32,7 @@ export default [
   js.configs.recommended,
 
   {
-    files: ['tools/**/*.mjs'],
+    files: ['tools/**/*.mjs', 'fixtures/**/*.{mjs,cjs}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
