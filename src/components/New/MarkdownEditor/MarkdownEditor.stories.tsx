@@ -45,6 +45,16 @@ const meta = {
       control: { type: 'text' },
       description: 'Placeholder text shown when the editor is empty',
     },
+    id: {
+      control: { type: 'text' },
+      description:
+        '`id` of the underlying textarea, so a visible `<label htmlFor>` can name it',
+    },
+    ariaLabel: {
+      control: { type: 'text' },
+      description:
+        'Accessible name for the underlying textarea, for cases with no visible label',
+    },
   },
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor.',
@@ -133,4 +143,31 @@ This is a comprehensive markdown editor example.
 `,
   },
   render: renderWithContainer,
+};
+
+export const Labelled: Story = {
+  args: {
+    id: 'markdown-editor-instructions',
+    value: '',
+    placeholder: 'Describe what the task should do…',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The editor renders a plain textarea, which needs a name of its own — surrounding heading text is not associated with it. Pair `id` with a visible `<label htmlFor>`, as here, or pass `ariaLabel` where no visible label exists.',
+      },
+    },
+  },
+  render: (args) => (
+    <div className="w-[600px]">
+      <label
+        htmlFor="markdown-editor-instructions"
+        className="dial-body-semi-text mb-1 block text-primary"
+      >
+        Instructions
+      </label>
+      <MarkdownEditor {...args} />
+    </div>
+  ),
 };
