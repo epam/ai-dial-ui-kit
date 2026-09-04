@@ -4,9 +4,6 @@
  * per-chunk bundler metadata (moduleIds, static imports, dynamic imports)
  * so `assert-static-graph.mjs` can compute the fixture's true static initial
  * graph vs. its dynamically-loaded chunks without guessing from filenames.
- *
- * This is the "bundler metadata" signal referenced by
- * openspec/changes/modularize-package-exports/design.md Decision 6.
  */
 export const graphReportPlugin = ({ outFile = 'graph-report.json' } = {}) => {
   return {

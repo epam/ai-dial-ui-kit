@@ -1,7 +1,7 @@
 # Consumer fixtures
 
-Test harness for `openspec/changes/modularize-package-exports`. Not published,
-not part of the library build - each subdirectory is a standalone Vite app
+These fixtures are not published or included in the library build. Each
+subdirectory is a standalone Vite app
 that installs the **packed tarball** of `@epam/ai-dial-ui-kit` (never a source
 alias) and exercises one import pattern real consumers use, so the assertions
 below reflect what a real consumer's bundler would actually resolve.
@@ -34,10 +34,9 @@ npm run assert
 fixture's own `dist/graph-report.json` (written by
 `../shared/graph-report-plugin.mjs` during `vite build`). See that script's
 header comment for how the static-vs-dynamic graph and the forbidden/required
-package checks are computed, and
-`openspec/changes/modularize-package-exports/design.md` (Decision 6) for why
-the tarball-install + bundler-metadata approach was chosen over inspecting
-`ai-dial-ui-kit`'s own local `dist/` output.
+package checks are computed. Installing the tarball and reading bundler
+metadata makes the checks match what a real consumer resolves instead of
+inspecting the library's local `dist/` output.
 
 `node_modules/`, `dist/`, and `.tarballs/*.tgz` under this directory are
 git-ignored - regenerate them locally as shown above.

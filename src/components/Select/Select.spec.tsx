@@ -185,7 +185,7 @@ describe('Dial UI Kit :: DialSelect', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('inlineSearch: a cleared input is not resurrected on close when customSelectedValue is stale (issue #3053)', () => {
+  test('inlineSearch: a cleared input is not resurrected on close when customSelectedValue is stale', () => {
     const onInlineQueryChange = vi.fn();
     // open is controlled so we can drive the close transition deterministically.
     // customSelectedValue stays stale, mimicking a consumer that commits the

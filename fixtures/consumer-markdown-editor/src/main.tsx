@@ -11,8 +11,8 @@ type LazyContainerModule = Awaited<
 >;
 
 /**
- * Markdown editor lazy-loader fixture (design.md Decision 6 / tasks.md
- * 5.2-5.3): calls both existing Markdown loaders, then renders the container
+ * Markdown editor lazy-loader fixture:
+ * calls both existing Markdown loaders, then renders the container
  * through the editors subpath and programmatically activates JSON mode.
  * Bundle metadata must show that UIW is lazy relative to the app and Monaco
  * is additionally separated by the container's nested dynamic import.

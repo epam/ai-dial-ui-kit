@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
  * Asserts which forbidden/required packages appear in a consumer fixture's
- * complete STATIC INITIAL module graph vs. its dynamically-loaded chunks,
- * per openspec/changes/modularize-package-exports/design.md Decision 6.
+ * complete STATIC INITIAL module graph vs. its dynamically-loaded chunks.
  *
  * Reads <dist>/graph-report.json (written by graph-report-plugin.mjs during
  * the fixture's own `vite build`) and:

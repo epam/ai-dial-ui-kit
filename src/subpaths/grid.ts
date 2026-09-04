@@ -1,10 +1,9 @@
 /**
  * `@epam/ai-dial-ui-kit/grid` - curated subpath for both Grid generations.
  *
- * Re-exports exactly the Grid-related names the root `src/index.ts` barrel
- * already exports (see openspec/changes/modularize-package-exports/design.md
- * Decision 1) - this subpath is an ergonomic/feature-boundary convenience,
- * not a substitute for the root entry's own tree-shaking (which
+ * Re-exports the Grid-related names from the root `src/index.ts` barrel.
+ * This subpath is an ergonomic feature boundary, not a substitute for the
+ * root entry's own tree-shaking (which
  * `preserveModules` already provides for a root `import { Button } from
  * '@epam/ai-dial-ui-kit'`). Importing from here pulls in ag-grid-community /
  * ag-grid-react, exactly as importing `Grid`/`DialGrid` from the root does.

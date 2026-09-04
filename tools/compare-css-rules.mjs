@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /**
  * Compares two built CSS files' rule sets via a `postcss` AST walk (not a
- * byte diff), per openspec/changes/modularize-package-exports/tasks.md
- * Task 6.1: asserts the "after" file's selectors are a superset of (or
+ * byte diff). Asserts the "after" file's selectors are a superset of (or
  * equal to) the "before" file's - no existing rule was dropped by the
  * module-layout restructuring, even though the CSS build
  * (`tailwindcss -i tailwind-entry.scss`) is driven by content-scanning
- * `src/**`, not by the JS chunking strategy those tasks changed.
+ * `src/**`, not by the JS chunking strategy.
  *
  * Usage:
  *   node tools/compare-css-rules.mjs --before <path> --after <path>

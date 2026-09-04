@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
  * Diffs two `tools/measure-sizes.mjs` output files and prints a table of
- * raw/gzip byte deltas per matching file key, per
- * openspec/changes/modularize-package-exports/tasks.md Task 7.3.
+ * raw/gzip byte deltas per matching file key.
  *
  * Only exact key matches are diffed directly; keys present in only one file
  * are listed separately (expected here - the restructuring renamed the root

@@ -28,8 +28,7 @@ coverage
 storybook-static
 src/index.css
 
-# Consumer-fixture harness (openspec/changes/modularize-package-exports):
-# tarballs and lockfiles are regenerated locally/in CI, not committed.
+# Consumer-fixture artifacts are regenerated locally and in CI.
 fixtures/.tarballs/
 fixtures/*/package-lock.json
 fixtures/consumer-subpaths/root-surface.generated.ts

@@ -30,13 +30,10 @@ export default defineConfig({
       // Multi-entry: 'dial-ui-kit' is the existing backward-compatible root
       // entry (kept as the input KEY so the CJS format's `[name]` naming
       // below still produces `dial-ui-kit.cjs`); grid/file-manager/editors
-      // are the new curated subpaths added by
-      // openspec/changes/modularize-package-exports Task 3.1. Each is a
-      // thin re-export barrel under src/subpaths/ - see design.md Decision 1
-      // for why the root entry alone (via `preserveModules` below) already
-      // satisfies the tree-shaking requirement, and why these subpaths are
-      // an additive ergonomic/feature-boundary convenience, not a
-      // substitute for it.
+      // are curated subpaths. Each is a thin re-export barrel under
+      // src/subpaths/. The root entry remains tree-shakeable through
+      // `preserveModules`, while the subpaths provide explicit feature
+      // boundaries.
       entry: {
         'dial-ui-kit': './src/index.ts',
         grid: './src/subpaths/grid.ts',
@@ -46,9 +43,8 @@ export default defineConfig({
       name: 'dial-ui-kit',
       formats: ['es', 'cjs'],
       // `fileName` is intentionally omitted: naming for both formats is now
-      // fully driven by the per-format `rollupOptions.output` entries below
-      // (see openspec/changes/modularize-package-exports/design.md
-      // Decision 1). The ES format uses `preserveModules` so that each
+      // fully driven by the per-format `rollupOptions.output` entries below.
+      // The ES format uses `preserveModules` so that each
       // source module (Button, Grid, FileManager, ...) is emitted as its
       // own file - this is what lets a consumer's bundler tree-shake AG
       // Grid/Monaco/@uiw/* out of a static import that never reaches them.
@@ -60,9 +56,7 @@ export default defineConfig({
       // `ag-grid-community`/`ag-grid-react` are deliberately NOT listed here
       // (unlike Monaco/`@uiw/*`, which are `peerDependencies` above and thus
       // always external): they stay bundled `dependencies` (package.json).
-      // This is Decision 2 in
-      // openspec/changes/modularize-package-exports/design.md - once
-      // `preserveModules` (below) isolates both Grid generations and
+      // Once `preserveModules` (below) isolates both Grid generations and
       // FileManager into their own emitted modules, "bundled" and "peer"
       // are equivalent for tree-shaking (a consumer who never imports
       // Grid/FileManager never evaluates that module either way), so

@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 /**
- * Runtime rendering smoke test for the consumer-grid fixture (tasks.md
- * Task 4.3). Proves `Grid`/`DialGrid` actually renders - not just that the
+ * Runtime rendering smoke test for the consumer-grid fixture.
+ * Proves `Grid`/`DialGrid` actually renders - not just that the
  * static module graph has the right shape (that's assert-static-graph.mjs's
  * job) - by executing the fixture's own production bundle in a jsdom
  * document and reading back one row's rendered cell text.
  *
  * Deliberately does NOT `import()` `@epam/ai-dial-ui-kit` directly: plain
  * Node ESM cannot resolve the package's internal `react/jsx-runtime` shim
- * outside a bundler context (see
- * openspec/changes/modularize-package-exports/tasks.md Task 3.1 regression
- * note #2 - a pre-existing, out-of-scope gap). Instead this loads
+ * outside a bundler context. Instead this loads
  * `dist/assets/index-*.js`, the fixture's own Vite-built bundle: Vite/Rollup
  * already resolved that gap correctly at fixture-build time (a real
  * consumer's bundler always does), so the emitted bundle is fully

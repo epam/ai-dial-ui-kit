@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 /**
  * Runs every consumer fixture end-to-end against the final built/packed
- * `@epam/ai-dial-ui-kit` artifact, per
- * openspec/changes/modularize-package-exports/tasks.md Task 7.2: rebuilds
- * and repacks the package once, then for each fixture under `fixtures/`
+ * `@epam/ai-dial-ui-kit` artifact. Rebuilds and repacks the package once,
+ * then for each fixture under `fixtures/`
  * reinstalls against the fresh tarball, builds, and re-runs every
  * assertion script it defines (`assert`, plus `smoke` where present),
  * exiting non-zero if any fixture regresses.

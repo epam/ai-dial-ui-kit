@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 /**
  * Parses the package's public export surface and compares it against a
- * checked-in baseline. Used by openspec/changes/modularize-package-exports
- * Task 1.1 (capture baseline) and Task 3.3 (verify no export was dropped or
- * renamed by the module-layout restructuring).
+ * checked-in baseline to verify that no export was dropped or renamed.
  *
  * Modes:
  *   --write <baseline.json>              Parse src/index.ts, write the export
@@ -25,7 +23,7 @@
  *                                         local dist/ working tree - catches
  *                                         a `files`/`.npmignore`/`exports`
  *                                         mismatch a local build wouldn't
- *                                         reveal (Task 6.4). Extracts the
+ *                                         reveal. Extracts the
  *                                         tarball to a temp dir and resolves
  *                                         entry/types from *its*
  *                                         package.json#exports.

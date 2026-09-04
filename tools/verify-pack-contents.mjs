@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
- * Verifies the packed npm tarball's file list is complete, per
- * openspec/changes/modularize-package-exports/tasks.md Task 6.3:
+ * Verifies that the packed npm tarball's file list is complete:
  *
  *   1. Every file referenced by `package.json#exports` (root + every new
  *      subpath, for every condition: types/import/require/default) is

@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 /**
  * Records raw + gzip byte sizes for a set of built files, for use as a
- * before/after regression baseline by
- * openspec/changes/modularize-package-exports (Task 1.3 records "before",
- * Task 7.3 records "after" and diffs against this file).
+ * before/after regression baseline.
  *
  * Usage: node tools/measure-sizes.mjs <out.json> <file1> [file2 ...]
  * Missing files are recorded with size 0 and present:false rather than
- * failing the whole run, so a slice that hasn't produced a given output yet
- * (e.g. a new subpath chunk before Task 3.1 lands) doesn't block capture of
- * the files that do exist.
+ * failing the whole run, so a slice that has not produced a given output yet
+ * does not block capture of the files that do exist.
  */
 import { gzipSync } from 'node:zlib';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';

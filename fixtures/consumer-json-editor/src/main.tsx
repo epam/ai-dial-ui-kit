@@ -5,7 +5,7 @@ import { LazyDialJsonEditor } from '@epam/ai-dial-ui-kit';
 type LazyJsonEditorModule = Awaited<ReturnType<typeof LazyDialJsonEditor>>;
 
 /**
- * JSON editor lazy-loader fixture (design.md Decision 6 / tasks.md 1.4, 5.1):
+ * JSON editor lazy-loader fixture:
  * calls `LazyDialJsonEditor()` the same way `MarkdownEditorContainer` does,
  * only after mount - Monaco/@monaco-editor/react must stay out of the static
  * initial graph and load only in the resulting dynamic chunk.

@@ -2,10 +2,8 @@
  * `@epam/ai-dial-ui-kit/file-manager` - curated subpath for `DialFileManager`
  * and its directly related types/hooks/constants.
  *
- * Re-exports exactly the FileManager-related names the root `src/index.ts`
- * barrel already exports (see
- * openspec/changes/modularize-package-exports/design.md Decision 1). Note
- * `DialFileManager` reaches the legacy `DialGrid`
+ * Re-exports the FileManager-related names from the root `src/index.ts`
+ * barrel. `DialFileManager` reaches the legacy `DialGrid`
  * (src/components/FileManager/FileManager.tsx:46), so importing from this
  * subpath pulls in ag-grid-community/ag-grid-react exactly as importing
  * `DialFileManager` from the root does.

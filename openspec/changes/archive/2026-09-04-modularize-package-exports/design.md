@@ -333,5 +333,4 @@ is introduced) that:
   `tailwind-entry.scss` partials is low-risk once the JS split is proven out.
   **Resolved (Task 6.2): deferred entirely.** It's optional by Decision 4, no
   spec scenario requires it, and it's a distinct piece of CSS-architecture
-  work unrelated to this change's tree-shaking goal. See
-  `baseline/css-split-deferred.md` for the full rationale.
+  work unrelated to this change's tree-shaking goal.

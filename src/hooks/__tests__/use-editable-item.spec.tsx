@@ -86,7 +86,7 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
         onCreateFolderCancel={onCreateFolderCancel}
         // names containing % are invalid here; the placeholder "New folder"
         // would itself be valid, but creation must not silently substitute
-        // it for what the user actually typed (see ai-dial-chat #7968).
+        // it for what the user actually typed.
         onValidate={(v) => (/%/.test(v) ? 'forbidden symbol' : null)}
       />,
     );

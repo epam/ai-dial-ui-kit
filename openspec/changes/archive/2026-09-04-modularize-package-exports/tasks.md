@@ -3,32 +3,30 @@
 - [x] 1.1 Record the current root export surface as a checked-in baseline
       fixture: parse `src/index.ts` and write the full list of exported value
       and type names (with kind: value/type) to
-      `openspec/changes/modularize-package-exports/baseline/root-exports.json`.
+      `tools/baselines/root-exports.json`.
       Verification: a new script `tools/export-surface.mjs` run via
-      `node tools/export-surface.mjs --check openspec/changes/modularize-package-exports/baseline/root-exports.json`
+      `node tools/export-surface.mjs --check tools/baselines/root-exports.json`
       exits 0 against current `src/index.ts` (proves the baseline capture
       script itself is correct before it's used as a regression gate later).
       **Done**: `tools/export-surface.mjs` (TypeScript-AST-based, handles
       named/type-only/mixed exports and `export const`); baseline captured at
-      `baseline/root-exports.json` (342 exports: 237 value, 105 type,
+      `tools/baselines/root-exports.json` (342 exports: 237 value, 105 type,
       0 duplicates); `--check` passes (`OK: src/index.ts matches baseline
 (342 exports).`).
-- [x] 1.2 Record the current `npm pack --dry-run` file list to
-      `openspec/changes/modularize-package-exports/baseline/pack-files-before.txt`.
-      Verification: `npm pack --dry-run --json > baseline/pack-files-before.json`
-      succeeds and the file is non-empty.
-      **Done**: captured post-rebuild (see 1.3) at `baseline/pack-files-before.json`
-      (393 files, 1,327,859 B tarball / 5,349,436 B unpacked).
+- [x] 1.2 Record the current `npm pack --dry-run` file list.
+      Verification: `npm pack --dry-run --json` succeeds and returns a
+      non-empty file list.
+      **Done**: captured post-rebuild (see 1.3): 393 files, 1,327,859 B
+      tarball / 5,349,436 B unpacked.
 - [x] 1.3 Build the current package (`npm run build`) and record raw + gzip
       size of `dist/dial-ui-kit.es.js`, `dist/dial-ui-kit.cjs.js`, and
-      `dist/index.css` to
-      `openspec/changes/modularize-package-exports/baseline/sizes-before.json`.
+      `dist/index.css`.
       Verification: script prints raw and gzip bytes for each file and the
       command exits 0; values are committed, not just printed.
       **Done**: `npm run build` succeeded. New script `tools/measure-sizes.mjs`
       records raw/gzip for the root ESM/CJS entries **and** their real shared
       chunk (Rollup already splits a content-hashed shared chunk today - see
-      note below) to `baseline/sizes-before.json`:
+      note below):
       `dial-ui-kit.es.js` 8,334 B/2,902 B gzip (thin re-export barrel);
       `index-CpVGPv8D.js` **2,434,626 B / 589,280 B gzip** (the actual bulk -
       contains AG Grid, confirmed by `grep -c ag-grid` = 15 hits and
@@ -78,9 +76,8 @@
       **Done**: `fixtures/shared/graph-report-plugin.mjs` (emits per-chunk
       `moduleIds`/`imports`/`dynamicImports` via Rollup's `generateBundle`) + `fixtures/shared/assert-static-graph.mjs` (partitions static vs.
       dynamic chunks, checks `--forbidden`/`--require`/`--dynamic-require`
-      via module-id path match + content-grep). Results against the
-      pre-restructuring tarball, recorded at
-      `baseline/fixture-assertions-before.txt`: **consumer-esm FAILS**
+      via module-id path match + content-grep). Against the pre-restructuring
+      tarball, **consumer-esm FAILS**
       (`ag-grid-community`/`ag-grid-react` found via content-grep in the one
       static chunk; Monaco/`@uiw/*` correctly absent already);
       **consumer-json-editor FAILS** and **consumer-markdown-editor FAILS**
@@ -101,11 +98,9 @@
       Verification: `npm run build` exits 0 and
       `find dist -name "*.d.ts" | wc -l` (or Windows equivalent) is compared
       against `find dist -name "*.js" | wc -l`; record the ratio and whether
-      declarations are per-module or rolled-up in
-      `openspec/changes/modularize-package-exports/baseline/dts-spike.md`, and
-      resolve the corresponding Open Question in `design.md` based on the
-      result.
-      **Done**: see `baseline/dts-spike.md`. Finding: `.d.ts` emission was
+      declarations are per-module or rolled-up, and resolve the corresponding
+      Open Question in `design.md` based on the result.
+      **Done**: `.d.ts` emission was
       _already_ per-module (360 files under `dist/src/**`, independent of the
       JS bundling strategy) both before and after — `vite-plugin-dts` walks
       the TS program graph, not the Rollup JS chunk graph, so the flagged
@@ -150,8 +145,7 @@
       output dropped from 2,515.59 kB / gzip 559.32 kB to **768.76 kB / gzip
       141.93 kB**. `assert-static-graph.mjs` with the same forbidden list as
       Task 1.5 now **PASSES** (all 6 packages absent from the static initial
-      graph) — recorded at `baseline/fixture-assertions-after-2.3.txt`. This
-      is the mandatory root ESM fixture requirement
+      graph). This is the mandatory root ESM fixture requirement
       (`specs/package-distribution/spec.md` "Root ESM entry is
       tree-shakeable...") confirmed met.
 
@@ -188,8 +182,7 @@
       export counts (root 237, grid 18, file-manager 12, editors 5 - all
       value-only, matching each subpath file's own export list); full
       fixture re-run (all 7 fixtures reinstalled against a fresh
-      `npm pack` and rebuilt) still **PASSES** end-to-end, recorded at
-      `baseline/fixture-assertions-after-group3.txt`.
+      `npm pack` and rebuilt) still **PASSES** end-to-end.
       **Regression found and fixed during this task** (both discovered via
       the very verification this task requires, not left for later): 1. Initially re-exporting the 3 lazy loaders from a shared
       `src/utils/lazy-editors.ts` (imported by both `src/index.ts` and
@@ -228,9 +221,9 @@
 - [x] 3.3 Run the export/type parity check from Decision 5: extend
       `tools/export-surface.mjs` with a `--verify-against-baseline` mode that
       parses the newly built `dist/` output (root and every new subpath) and
-      diffs it against `baseline/root-exports.json` from Task 1.1.
+      diffs it against `tools/baselines/root-exports.json` from Task 1.1.
       Verification:
-      `node tools/export-surface.mjs --verify-against-baseline openspec/changes/modularize-package-exports/baseline/root-exports.json`
+      `node tools/export-surface.mjs --verify-against-baseline tools/baselines/root-exports.json`
       exits 0 with zero missing/renamed symbols for the root and every
       subpath, including value/type kind parity in declarations and all value
       exports in both ESM and CJS.
@@ -287,8 +280,7 @@ expected export counts.
       feature-neutral) or `src/constants/file-grid-columns.tsx`. Every one is
       `import type { ... }` (or the equivalent inline `import { type X }`
       form) - checked line-by-line, none is a runtime value import. No code
-      change was needed; recorded at
-      `baseline/fixture-assertions-group4.txt`.
+      change was needed.
 - [x] 4.2 Verify `fixtures/consumer-grid` (Task 1.4) and
       `fixtures/consumer-file-manager` against the restructured package: run
       `assert-static-graph.mjs` with the forbidden list restricted to editor
@@ -303,8 +295,7 @@ expected export counts.
       Both fixtures' `npm run assert` (already wired with
       `--require ag-grid-community,ag-grid-react --forbidden
 @monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview`
-      since Task 1.4) **PASS**. Recorded at
-      `baseline/fixture-assertions-group4.txt`.
+      since Task 1.4) **PASS**.
 - [x] 4.3 Add a runtime assertion in `fixtures/consumer-grid` that renders
       `Grid`/`DialGrid` with one row of fixture data and reads back the
       rendered cell text via the fixture's own smoke test (a small
@@ -333,7 +324,7 @@ expected export counts.
       searching for text that was never rendered) correctly exits 1 and
       prints the real rendered text, confirming the assertion is
       discriminating, not vacuously true. `npx eslint` on the new files is
-      clean. Recorded at `baseline/fixture-assertions-group4.txt`.
+      clean.
 
 ## 5. Editor lazy-loading boundary verification
 
@@ -413,28 +404,23 @@ MarkdownEditorContainer:monaco-editor`. The assertion passes: UIW is
       confirms independently: 1013/1013 rules, 0 missing. Expected, not
       coincidental: `build:css` content-scans `src/**` for used utility
       classes, and this change never edited any existing `src/**` file
-      (only added 3 zero-JSX `src/subpaths/*.ts` barrels). Recorded at
-      `baseline/css-comparison-group6.txt`.
+      (only added 3 zero-JSX `src/subpaths/*.ts` barrels).
 - [x] 6.2 If Decision 4's optional per-feature stylesheets (`./core.css`,
       `./grid.css`, `./editors.css`) are implemented in this change, add
       matching `package.json#exports` entries and a fixture check that each
-      compiles standalone; otherwise, record in
-      `openspec/changes/modularize-package-exports/baseline/dts-spike.md` (or
-      a sibling note) that this was evaluated and deferred, per the Open
+      compiles standalone; otherwise, record the deferral in the Open
       Questions in `design.md`.
       Verification: either the new stylesheet fixtures build successfully, or
-      the deferral note exists and is referenced from `design.md`'s Open
-      Questions (no silent scope drop).
-      **Done**: deferred. Recorded rationale at
-      `baseline/css-split-deferred.md` and referenced it from `design.md`'s
-      Open Questions bullet (marked "Resolved (Task 6.2): deferred
-      entirely"). It's optional per Decision 4, no spec scenario requires
+      the deferral is documented in `design.md`'s Open Questions (no silent
+      scope drop).
+      **Done**: deferred. The Open Questions bullet is marked "Resolved
+      (Task 6.2): deferred entirely". It's optional per Decision 4, no spec scenario requires
       it, and it's a separate piece of CSS-architecture work unrelated to
       this change's tree-shaking goal - not a silent drop, an explicit,
       referenced call.
 - [x] 6.3 Run `npm pack --dry-run --json` against the fully restructured
-      package and diff against `baseline/pack-files-before.json` (Task 1.2)
-      plus the new `package.json#exports` map (Task 3.1).
+      package and compare it with the file list from Task 1.2 plus the new
+      `package.json#exports` map (Task 3.1).
       Verification: a script asserts every file referenced by
       `package.json#exports` (root + every new subpath, JS/CJS/types/styles)
       is present in the pack file list, and that every chunk any
@@ -447,19 +433,17 @@ MarkdownEditorContainer:monaco-editor`. The assertion passes: UIW is
       (823 files) is present in the pack, which trivially covers any subset
       of it a fixture's static-or-lazy graph could reach, since a fixture's
       bundler can only ever resolve into a file that exists under `dist/`.
-      Both PASS. Diffed against `baseline/pack-files-before.json`: 393 ->
+      Both PASS. The file count changed from 393 to
       826 files; the only 10 paths present before and absent after are all
       content-hashed filenames that were always expected to change (old
       monolithic bundle/shared-chunk names, replaced by the ~800 per-module
-      files `preserveModules` now emits) - not a regression. Recorded at
-      `baseline/pack-verification-group6.txt` and
-      `baseline/pack-files-after.json`.
+      files `preserveModules` now emits) - not a regression.
 - [x] 6.4 Re-run the export-surface check from Task 3.3 directly against an
       unpacked `npm pack` tarball (not `dist/` in the working tree) to catch
       any `files`/`.npmignore`/`exports` mismatch that a local `dist/` build
       wouldn't reveal.
       Verification:
-      `node tools/export-surface.mjs --verify-against-baseline baseline/root-exports.json --from-tarball <tgz-path>`
+      `node tools/export-surface.mjs --verify-against-baseline tools/baselines/root-exports.json --from-tarball <tgz-path>`
       exits 0.
       **Done**: added `--from-tarball <tgz-path>` to
       `tools/export-surface.mjs`'s `--verify-against-baseline` mode -
@@ -469,12 +453,12 @@ MarkdownEditorContainer:monaco-editor`. The assertion passes: UIW is
       `tar` treats a Windows backslash as its own escape character) and
       resolves entry/types from _that_ extracted `package.json#exports`
       instead of the local `dist/`. `node tools/export-surface.mjs
---verify-against-baseline baseline/root-exports.json --from-tarball
+ --verify-against-baseline tools/baselines/root-exports.json --from-tarball
 fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz` → exposes every
       baseline export (342), exit 0. Re-ran the pre-existing `--check`/
       `--verify-against-baseline` (no `--from-tarball`) modes too - both
-      still pass, confirming the `baseDir`-threading refactor didn't
-      regress them. Recorded at `baseline/pack-verification-group6.txt`.
+      still pass, confirming the `baseDir`-threading refactor didn't regress
+      them.
 
 ## 7. Package-level full verification
 
@@ -508,17 +492,15 @@ fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz` → exposes every
       before packing fixes it.
 - [x] 7.3 Record final raw/gzip sizes for the restructured root ESM/CJS/CSS
       output plus each new subpath's ESM output, using the same measurement
-      method as Task 1.3, into
-      `openspec/changes/modularize-package-exports/baseline/sizes-after.json`,
-      and compute the delta against `sizes-before.json`.
+      method as Task 1.3, and compute the delta against the initial sizes.
       Verification: the delta script exits 0 and prints a table; the root ESM
       entry's _reachable-from-a-non-Grid-import_ portion (as measured by the
       `fixtures/consumer-esm` build, not the whole package) shows a
       significant reduction consistent with AG Grid/Monaco/`@uiw/*` no longer
       being in that fixture's static graph (exact numeric budget is set from
       this measurement, not guessed in advance).
-      **Done**: sizes recorded to `baseline/sizes-after.json` (9 files:
-      root ESM/CJS, CSS, + grid/file-manager/editors ESM+CJS). New
+      **Done**: sizes recorded for 9 files: root ESM/CJS, CSS, and
+      grid/file-manager/editors ESM+CJS. New
       `tools/diff-sizes.mjs` prints the before/after table - `dist/index.css`
       is the only key present in both (byte-identical, 0.0% delta,
       corroborating Task 6.1); every other "before" key was renamed/removed
@@ -527,8 +509,7 @@ fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz` → exposes every
       wording - `fixtures/consumer-esm`'s built size - dropped from
       2,515.59 kB/559.32 kB gzip to **768.76 kB/141.93 kB gzip
       (-69.4% raw, -74.6% gzip)**, reconfirmed unchanged in this session's
-      final `fixtures:run-all` run. Recorded at
-      `baseline/sizes-delta-group7.txt`.
+      final `fixtures:run-all` run.
 
 ## 8. Consumer validation in `ai-dial-chat` (temporary, reversible)
 
@@ -538,11 +519,8 @@ fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz` → exposes every
       `if (id.includes('@epam/ai-dial-ui-kit')) return 'ui-kit';` line from
       `apps/chat/vite.config.mts` (around line 158) — do not replace it with
       filename exclusions, per the design constraint.
-      Verification: the edit is captured as a local diff/patch file saved
-      under this change's `baseline/` directory (e.g.
-      `baseline/ai-dial-chat-temp.patch`), not committed to `ai-dial-chat`,
-      so it can be applied and reverted mechanically
-      (`git apply`/`git apply -R`).
+      Verification: the edit is captured as a local diff, not committed to
+      `ai-dial-chat`, so it can be applied and reverted mechanically.
       **Done**: installed the final tarball via `npm install
 "@epam/ai-dial-ui-kit@file:../ai-dial-ui-kit/fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz"
 --legacy-peer-deps` (`--legacy-peer-deps` needed only because the
@@ -551,9 +529,9 @@ fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz` → exposes every
       the manual `ui-kit` chunk line (now at line 222, the file has grown
       since the task was written), and temporarily wired in
       `fixtures/shared/graph-report-plugin.mjs` for Task 8.3's chunk
-      metadata. The final saved patch contains only those two intended files
-      (`vite.config.mts` and `package.json`), excludes unrelated worktree and
-      lockfile churn, and passes `git apply --check`; `npm install
+      metadata. The temporary diff contained only those two intended files
+      (`vite.config.mts` and `package.json`), excluded unrelated worktree and
+      lockfile churn; `npm install
 --legacy-peer-deps` regenerates the temporary lockfile after applying.
 - [ ] 8.2 Build `ai-dial-chat` with the temporary edit applied.
       Verification: `npm exec nx build @epam/chat -- --skipNxCache` exits 0
@@ -569,8 +547,7 @@ from ".../ai-dial-ui-kit/dist/components/Tooltip/TooltipTrigger.js"`.
       package - nothing to do with this change's restructuring.
       `@floating-ui/react` is an `ai-dial-ui-kit` peer dependency (predates
       this change) that `ai-dial-chat` has never installed; the manual
-      chunk happens to mask this pre-existing gap. Full writeup at
-      `baseline/ai-dial-chat-group8-finding.md`. Fixing it would mean
+      chunk happens to mask this pre-existing gap. Fixing it would mean
       adding a new permanent dependency to `ai-dial-chat` itself - out of
       scope for a temporary/reversible probe, and out of scope for this
       `ai-dial-ui-kit`-side change per design.md's Non-Goal ("Deciding
@@ -581,11 +558,9 @@ from ".../ai-dial-ui-kit/dist/components/Tooltip/TooltipTrigger.js"`.
       the forbidden AG Grid/Monaco/`@uiw/*` markers in chunks that do not
       correspond to a route/component actually using Grid/FileManager/editors.
       Verification: `fixtures/shared/assert-static-graph.mjs` (reused, pointed
-      at the Nx build's own manifest/stats output) records raw/gzip deltas
-      per chunk into
-      `openspec/changes/modularize-package-exports/baseline/ai-dial-chat-delta.json`,
-      and exits 0 only if no non-Grid/FileManager/editor route's initial chunk
-      contains a forbidden marker.
+      at the Nx build's own manifest/stats output) records raw/gzip deltas per
+      chunk and exits 0 only if no non-Grid/FileManager/editor route's initial
+      chunk contains a forbidden marker.
       **BLOCKED**: cannot run - depends on 8.2's build succeeding, which it
       does not (see 8.2).
 - [x] 8.4 Revert the temporary `ai-dial-chat` edit and dependency install from
@@ -596,11 +571,9 @@ from ".../ai-dial-ui-kit/dist/components/Tooltip/TooltipTrigger.js"`.
       confirmed by `git diff --stat` reporting empty for
       `apps/chat/vite.config.mts` and `package.json`/`package-lock.json`.
       **Done**: fully reverted and verified. Final state contains only the
-      pre-existing unrelated changes in that repository; the regenerated
-      scoped patch no longer captures any of them. `package-lock.json` is
-      byte-identical to `HEAD`, and the installed UI kit is restored to
-      `0.14.0-dev.15`. Full writeup is in
-      `baseline/ai-dial-chat-group8-finding.md`.
+      pre-existing unrelated changes in that repository. `package-lock.json`
+      is byte-identical to `HEAD`, and the installed UI kit is restored to
+      `0.14.0-dev.15`.
 
 ## 9. Change validation
 
