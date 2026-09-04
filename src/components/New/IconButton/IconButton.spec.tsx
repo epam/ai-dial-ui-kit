@@ -87,4 +87,22 @@ describe('Dial UI Kit :: DialIconButton', () => {
       'dial-kit-enhanced-target',
     );
   });
+
+  /*
+   * The icon-only class is what keeps an icon button on its own corner-radius
+   * token (`--radius-control-icon`) instead of the labelled button's, so it has
+   * to stay on the element at every size.
+   */
+  test.each([ElementSize.Small, ElementSize.Standard, ElementSize.Large])(
+    'Should mark itself as an icon-only button at %s size',
+    (size) => {
+      render(
+        <IconButton icon={<div>icon</div>} aria-label="Delete" size={size} />,
+      );
+
+      expect(screen.getByRole('button')).toHaveClass(
+        'dial-kit-base-icon-button',
+      );
+    },
+  );
 });

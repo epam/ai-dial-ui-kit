@@ -279,6 +279,16 @@ export default {
       },
       borderRadius: {
         DEFAULT: '4px',
+        /*
+         * Control corner radii, themable like the color tokens above. Each
+         * falls back to the fully rounded pill the 2.0 buttons ship with, so a
+         * host that sets nothing keeps today's look; a host whose design calls
+         * for squarer controls sets the variable once instead of restyling
+         * every button variant.
+         */
+        control: 'var(--radius-control, 9999px)',
+        'control-sm': 'var(--radius-control-small, 9999px)',
+        'control-icon': 'var(--radius-control-icon, 9999px)',
       },
       opacity: {
         15: '15%',

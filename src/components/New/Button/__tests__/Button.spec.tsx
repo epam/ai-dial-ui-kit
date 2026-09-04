@@ -93,7 +93,20 @@ describe('Dial UI Kit :: DialButton', () => {
   test('Should apply small size classes', () => {
     render(<Button label="Small button" size={ElementSize.Small} />);
     const button = screen.getByRole('button', { name: 'Small button' });
-    expect(button).toHaveClass('h-[24px]', 'px-2', 'dial-tiny-semi-text');
+    expect(button).toHaveClass(
+      'h-[24px]',
+      'px-2',
+      'dial-tiny-semi-text',
+      'dial-kit-base-button-small',
+    );
+  });
+
+  test('Should take the corner radius from the base class at standard size', () => {
+    render(<Button label="Standard button" />);
+
+    expect(screen.getByRole('button')).not.toHaveClass(
+      'dial-kit-base-button-small',
+    );
   });
 
   test('Should not apply height/padding classes for link appearance', () => {
