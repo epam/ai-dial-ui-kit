@@ -60,7 +60,7 @@
     "test:run": "vitest run",
     "verify:agent-hook": "npm run typecheck && npm run lint:check && npm run test:run",
     "fixtures:run-all": "node fixtures/run-all.mjs",
-    "verify:distribution": "npm run fixtures:run-all && node tools/export-surface.mjs --check openspec/changes/modularize-package-exports/baseline/root-exports.json && node tools/export-surface.mjs --verify-against-baseline openspec/changes/modularize-package-exports/baseline/root-exports.json --from-tarball fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz && node tools/verify-pack-contents.mjs",
+    "verify:distribution": "npm run fixtures:run-all && node tools/export-surface.mjs --check openspec/changes/archive/2026-09-04-modularize-package-exports/baseline/root-exports.json && node tools/export-surface.mjs --verify-against-baseline openspec/changes/archive/2026-09-04-modularize-package-exports/baseline/root-exports.json --from-tarball fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz && node tools/verify-pack-contents.mjs",
     "format": "prettier --check .",
     "format-fix": "prettier --write .",
     "preview": "vite preview",

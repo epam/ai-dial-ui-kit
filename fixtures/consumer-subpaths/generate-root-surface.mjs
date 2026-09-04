@@ -9,7 +9,8 @@ const baselinePath = resolvePath(
   '..',
   'openspec',
   'changes',
-  'modularize-package-exports',
+  'archive',
+  '2026-09-04-modularize-package-exports',
   'baseline',
   'root-exports.json',
 );
