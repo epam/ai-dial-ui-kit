@@ -18,3 +18,22 @@ jobs:
     secrets: inherit
     with:
       node-version: 24
+
+  verify_distribution:
+    name: Verify package distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify packed consumer fixtures and exports
+        run: npm run verify:distribution
