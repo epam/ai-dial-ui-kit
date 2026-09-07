@@ -233,7 +233,7 @@ export const DialSelect: FC<DialSelectProps> = ({
     // Sync the inline input only when the selected value changes externally —
     // never merely because the dropdown closed. Reverting to customSelectedValue
     // on close would resurrect a value the user just cleared whenever the consumer
-    // commits the change asynchronously (see issue #3053).
+    // commits the change asynchronously.
     if (customSelectedValue === prevCustomSelectedValueRef.current) return;
     // Defer both the ref bump and the sync until the dropdown is closed: while it
     // is open the user may be editing, so we must not clobber their input — but we
