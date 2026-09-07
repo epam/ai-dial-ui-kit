@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { DialFileAcceptType } from '@/models/file-manager';
 import { DialFileNodeType, type DialFile } from '@/models/file';
 import {
+  excludePathsFromTree,
   formatAllowedFileTypesForTooltip,
   getFolderNestingDepth,
   isFileSelectable,
@@ -194,5 +195,93 @@ describe('Dial UI Kit :: getFolderNestingDepth', () => {
   it('returns 5 for fifth-level folder', () => {
     expect(getFolderNestingDepth('public/a/b/c/d')).toBe(5);
     expect(getFolderNestingDepth('public/a/b/c/d/')).toBe(5);
+  });
+});
+
+describe('Dial UI Kit :: excludePathsFromTree', () => {
+  const tree: DialFile[] = [
+    {
+      id: 'documents',
+      folderId: 'documents',
+      name: 'Documents',
+      path: '/Documents',
+      nodeType: DialFileNodeType.FOLDER,
+      parentPath: '/',
+      items: [
+        {
+          id: 'report',
+          folderId: 'documents',
+          name: 'report.pdf',
+          path: '/Documents/report.pdf',
+          nodeType: DialFileNodeType.ITEM,
+          parentPath: '/Documents',
+        },
+      ],
+    },
+    {
+      id: 'photos',
+      folderId: 'photos',
+      name: 'Photos',
+      path: '/Photos',
+      nodeType: DialFileNodeType.FOLDER,
+      parentPath: '/',
+      items: [
+        {
+          id: 'vacation',
+          folderId: 'vacation',
+          name: 'Vacation',
+          path: '/Photos/Vacation',
+          nodeType: DialFileNodeType.FOLDER,
+          parentPath: '/Photos',
+        },
+      ],
+    },
+  ];
+
+  it('returns the same items when no excluded paths are provided', () => {
+    expect(excludePathsFromTree(tree)).toBe(tree);
+  });
+
+  it('returns an empty array when nodes are undefined', () => {
+    expect(excludePathsFromTree(undefined, ['/Photos'])).toEqual([]);
+  });
+
+  it('removes a top-level (root) folder by path', () => {
+    const result = excludePathsFromTree(tree, ['/Photos']);
+
+    expect(result.map((n) => n.path)).toEqual(['/Documents']);
+  });
+
+  it('removes the excluded folder along with its entire subtree', () => {
+    const result = excludePathsFromTree(tree, ['/Photos']);
+
+    expect(
+      result.some((n) =>
+        n.items?.some((child) => child.path === '/Photos/Vacation'),
+      ),
+    ).toBe(false);
+  });
+
+  it('removes a nested item without affecting its unrelated siblings', () => {
+    const result = excludePathsFromTree(tree, ['/Photos/Vacation']);
+
+    expect(result.map((n) => n.path)).toEqual(['/Documents', '/Photos']);
+    expect(result.find((n) => n.path === '/Photos')?.items).toEqual([]);
+  });
+
+  it('supports excluding multiple paths at once', () => {
+    const result = excludePathsFromTree(tree, [
+      '/Documents',
+      '/Photos/Vacation',
+    ]);
+
+    expect(result.map((n) => n.path)).toEqual(['/Photos']);
+    expect(result[0].items).toEqual([]);
+  });
+
+  it('does not mutate the original tree', () => {
+    excludePathsFromTree(tree, ['/Photos/Vacation']);
+
+    expect(tree.find((n) => n.path === '/Photos')?.items).toHaveLength(1);
   });
 });

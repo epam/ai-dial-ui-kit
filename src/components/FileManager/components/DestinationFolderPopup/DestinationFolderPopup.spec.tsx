@@ -612,6 +612,49 @@ describe('Dial UI Kit :: DialDestinationFolderPopup', () => {
     expect(screen.queryByText('Show hidden files')).not.toBeInTheDocument();
   });
 
+  test('excludes a root folder from the tree and grid via excludedPaths', () => {
+    render(
+      <DialDestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        excludedPaths={['/Photos']}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Documents')).toBeInTheDocument();
+    expect(screen.queryByText('Photos')).not.toBeInTheDocument();
+  });
+
+  test('does not affect items when excludedPaths is not provided', () => {
+    render(
+      <DialDestinationFolderPopup
+        open={true}
+        onClose={vi.fn()}
+        items={mockFiles}
+        rootItem={{
+          id: 'root',
+          name: 'Root',
+          path: '/',
+          folderId: 'root-folder',
+          nodeType: DialFileNodeType.FOLDER,
+          label: 'Root',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Documents')).toBeInTheDocument();
+    expect(screen.getByText('Photos')).toBeInTheDocument();
+  });
+
   test('hides Add folder button', () => {
     render(
       <DialDestinationFolderPopup

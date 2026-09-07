@@ -32,6 +32,7 @@ import {
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import type { DropdownItem } from '@/models/dropdown';
+import { excludePathsFromTree } from '@/components/FileManager/utils';
 
 export interface DestinationFolderPopupProps extends DialFileManagerProps {
   onClose: () => void;
@@ -53,6 +54,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
   alertProps?: DialNotificationProps;
   onFolderPopupPathChange?: (newPath?: string) => void;
   processDestinationFolderPath?: (path: string) => string;
+  excludedPaths?: string[];
 }
 
 /**
@@ -98,6 +100,7 @@ export interface DestinationFolderPopupProps extends DialFileManagerProps {
  * @param [disabledPathTooltip="Unavailable for the original path. Please select another folder"] - Tooltip text when destination is disabled
  * @param [collapsedFileTree=false] - Whether the file tree should be initially collapsed
  * @param [processDestinationFolderPath] - Optional function to process the destination folder path before setting it
+ * @param [excludedPaths] - Paths to hide from this popup's tree and grid (e.g. a root folder that shouldn't be a valid destination). Matching items and their subtree are excluded.
  *
  * @returns A React component for the destination folder selection popup
  */
@@ -124,12 +127,19 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
   collapsedFileTree = false,
   alertProps,
   processDestinationFolderPath,
+  excludedPaths,
+  items,
   ...restProps
 }: DestinationFolderPopupProps) => {
   const [showHiddenFiles, setShowHiddenFiles] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const fileManagerActionRef = useRef<DialFileManagerActionsRef>(null);
   const isMobile = useIsMobileScreen();
+
+  const visibleItems = useMemo(
+    () => excludePathsFromTree(items, excludedPaths),
+    [items, excludedPaths],
+  );
 
   const handleShowHiddenFilesChange = useCallback((value: boolean) => {
     setShowHiddenFiles(value);
@@ -291,6 +301,7 @@ export const DialDestinationFolderPopup: FC<DestinationFolderPopupProps> = ({
         <div className="flex-1 min-h-0">
           <DialFileManager
             {...restProps}
+            items={visibleItems}
             gridClassName="size-full"
             className={mergeClasses(
               restProps.className,
