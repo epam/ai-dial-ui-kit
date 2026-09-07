@@ -167,6 +167,7 @@ export {
   DropdownTrigger,
   DropdownItemType,
 } from './types/dropdown';
+export { MenuItemMark } from './types/menu-item';
 export { ElementSize } from './types/size';
 export { ScreenResolution, TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
@@ -362,6 +363,8 @@ export {
   useThemeScope,
 } from './components/New/ThemeScope/ThemeScope';
 export type { ThemeScopeProps } from './components/New/ThemeScope/ThemeScope';
+export { MenuItem } from './components/New/MenuItem/MenuItem';
+export type { MenuItemProps } from './components/New/MenuItem/MenuItem';
 export type { TextareaProps } from './components/New/Textarea/Textarea';
 export type { CaptionTextProps } from './components/New/CaptionText/CaptionText';
 export {
