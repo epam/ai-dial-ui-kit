@@ -90,9 +90,8 @@ export const EditableFolder: Story = {
 };
 
 /**
- * Reproduces the create-folder scenario from
- * https://github.com/epam/ai-dial-chat/issues/7968: type a name containing a
- * forbidden character (e.g. "/"), leave the inline error visible, then blur
+ * Type a folder name containing a forbidden character (e.g. "/"), leave
+ * the inline error visible, then blur
  * the field (click outside, or press Enter which blurs the input). The
  * creation must be cancelled instead of silently committing the "New
  * folder" placeholder — see `useEditableItem.saveOnBlur`.

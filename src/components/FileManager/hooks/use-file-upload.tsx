@@ -558,7 +558,7 @@ export const useFileUpload = ({
 
   const openFileDialog = useCallback(
     (destinationFolder: string, existingFiles: DialFile[]) => {
-      if (!uploadEnabled || !hasWriteAccess) return;
+      if (!uploadEnabled || !hasWriteAccess) return false;
 
       destinationFolderRef.current = destinationFolder;
       existingFilesRef.current = existingFiles;
@@ -566,6 +566,7 @@ export const useFileUpload = ({
       if (fileInputRef.current) {
         fileInputRef.current.click();
       }
+      return true;
     },
     [uploadEnabled, hasWriteAccess],
   );

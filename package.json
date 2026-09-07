@@ -16,8 +16,23 @@
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
-      "import": "./dist/dial-ui-kit.es.js",
-      "require": "./dist/dial-ui-kit.cjs.js"
+      "import": "./dist/dial-ui-kit.js",
+      "require": "./dist/dial-ui-kit.cjs"
+    },
+    "./grid": {
+      "types": "./dist/src/subpaths/grid.d.ts",
+      "import": "./dist/grid.js",
+      "require": "./dist/grid.cjs"
+    },
+    "./file-manager": {
+      "types": "./dist/src/subpaths/file-manager.d.ts",
+      "import": "./dist/file-manager.js",
+      "require": "./dist/file-manager.cjs"
+    },
+    "./editors": {
+      "types": "./dist/src/subpaths/editors.d.ts",
+      "import": "./dist/editors.js",
+      "require": "./dist/editors.cjs"
     },
     "./styles.css": {
       "require": "./dist/index.css",
@@ -31,11 +46,7 @@
     "dist"
   ],
   "sideEffects": [
-    "*.css",
-    "*.scss",
-    "./src/styles/*",
-    "./src/components/JsonEditor/*",
-    "./src/components/MarkdownEditor/*"
+    "dist/**/*.css"
   ],
   "scripts": {
     "dev": "vite",
@@ -48,6 +59,8 @@
     "typecheck": "tsc --noEmit",
     "test:run": "vitest run",
     "verify:agent-hook": "npm run typecheck && npm run lint:check && npm run test:run",
+    "fixtures:run-all": "node fixtures/run-all.mjs",
+    "verify:distribution": "npm run fixtures:run-all && node tools/export-surface.mjs --check tools/baselines/root-exports.json && node tools/export-surface.mjs --verify-against-baseline tools/baselines/root-exports.json --from-tarball fixtures/.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz && node tools/verify-pack-contents.mjs",
     "format": "prettier --check .",
     "format-fix": "prettier --write .",
     "preview": "vite preview",

@@ -1716,5 +1716,35 @@ describe('Dial UI Kit :: FileManager', () => {
 
       expect(getUploadInputs()).toHaveLength(0);
     });
+
+    test('initialUploadFilesOpen retries the click once uploadEnabled resolves to true, instead of giving up after an early no-op call', async () => {
+      const clickSpy = vi
+        .spyOn(HTMLInputElement.prototype, 'click')
+        .mockImplementation(() => undefined);
+
+      const shell = (uploadEnabled: boolean) => (
+        <div style={{ height: 640, width: 1100 }}>
+          <DialFileManager
+            items={writableTree()}
+            path={UPLOAD_PATH}
+            onUploadFiles={vi.fn()}
+            uploadEnabled={uploadEnabled}
+            initialUploadFilesOpen
+          />
+        </div>
+      );
+
+      const { rerender } = render(shell(false));
+
+      expect(clickSpy).not.toHaveBeenCalled();
+
+      rerender(shell(true));
+
+      await waitFor(() => {
+        expect(clickSpy).toHaveBeenCalledTimes(1);
+      });
+
+      clickSpy.mockRestore();
+    });
   });
 });

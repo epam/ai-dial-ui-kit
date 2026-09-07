@@ -19,8 +19,7 @@ const makeRow = (name: string, nodeType: DialFileNodeType): Row => ({
   nodeType,
 });
 
-// Names taken from the reported issue screenshot.
-const reportedNames = [
+const names = [
   'New folder 1',
   'New folder 2',
   'New folder 10',
@@ -33,7 +32,7 @@ const reportedNames = [
   'banana',
 ];
 
-const rows: Row[] = reportedNames.map((name) =>
+const rows: Row[] = names.map((name) =>
   makeRow(
     name,
     name.endsWith('.pdf') ? DialFileNodeType.ITEM : DialFileNodeType.FOLDER,
