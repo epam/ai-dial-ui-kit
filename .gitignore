@@ -27,3 +27,8 @@ coverage
 *storybook.log
 storybook-static
 src/index.css
+
+# Consumer-fixture artifacts are regenerated locally and in CI.
+fixtures/.tarballs/
+fixtures/*/package-lock.json
+fixtures/consumer-subpaths/root-surface.generated.ts

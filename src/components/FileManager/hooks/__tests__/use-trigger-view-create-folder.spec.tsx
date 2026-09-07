@@ -17,16 +17,16 @@ const mockFile: DialFile = {
 const mockFiles = [mockFile];
 
 describe('Dial UI Kit :: useTriggerViewCreateFolder', () => {
-  let onGridAddSibling: ReturnType<typeof vi.fn>;
-  let onGridAddChild: ReturnType<typeof vi.fn>;
-  let onTreeAddSibling: ReturnType<typeof vi.fn>;
-  let onTreeAddChild: ReturnType<typeof vi.fn>;
+  let onGridAddSibling: ReturnType<typeof vi.fn<(files: DialFile[]) => void>>;
+  let onGridAddChild: ReturnType<typeof vi.fn<(files: DialFile[]) => void>>;
+  let onTreeAddSibling: ReturnType<typeof vi.fn<(files: DialFile[]) => void>>;
+  let onTreeAddChild: ReturnType<typeof vi.fn<(files: DialFile[]) => void>>;
 
   beforeEach(() => {
-    onGridAddSibling = vi.fn();
-    onGridAddChild = vi.fn();
-    onTreeAddSibling = vi.fn();
-    onTreeAddChild = vi.fn();
+    onGridAddSibling = vi.fn<(files: DialFile[]) => void>();
+    onGridAddChild = vi.fn<(files: DialFile[]) => void>();
+    onTreeAddSibling = vi.fn<(files: DialFile[]) => void>();
+    onTreeAddChild = vi.fn<(files: DialFile[]) => void>();
   });
 
   describe('initial state', () => {
