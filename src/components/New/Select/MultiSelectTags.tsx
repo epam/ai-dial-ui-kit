@@ -39,7 +39,7 @@ export const MultiSelectTags: FC<MultiSelectTagsProps> = ({
             // `Tag` wraps the icon in its own `aria-hidden` box, so it needs no
             // wrapper of its own here.
             icon={option?.icon}
-            className="max-w-full"
+            className="max-w-full border border-tertiary"
           />
         );
       })}
