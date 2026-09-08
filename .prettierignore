@@ -19,8 +19,9 @@ package-lock.json
 
 # Config files
 .prettierrc
-
 .github
+.ort.yml
+
 CONTRIBUTING.md
 README.md
 SECURITY.md
