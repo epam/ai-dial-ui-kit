@@ -1,4 +1,5 @@
 import type { DropdownItemType } from '@/types/dropdown';
+import type { MenuItemMark } from '@/types/menu-item';
 import type { ReactNode, MouseEvent } from 'react';
 
 export interface DropdownSubMenuHoverOptions {
@@ -22,8 +23,23 @@ export interface DropdownItem {
    * `onClick` (or the dropdown's `onItemClick`).
    */
   selectable?: boolean;
-  /** Whether a `selectable` item is currently checked. */
+  /**
+   * How this item is marked while `checked`, straight from the design's
+   * Menu-item states: a trailing check (`Check`, a single choice that closes
+   * the menu), a leading checkbox box (`Checkbox`, the multiselect row that
+   * keeps the menu open) or an accent tint (`Highlight`, the current item of
+   * a navigation menu). Defaults to `Checkbox` for a `selectable` item and to
+   * `None` otherwise.
+   */
+  mark?: MenuItemMark;
+  /** Whether a marked item is currently checked. */
   checked?: boolean;
+  /**
+   * A control of its own at the row's trailing edge — a favourite toggle, a
+   * delete button. It is rendered beside the row rather than inside it, so it
+   * keeps its own click and stays out of the row's accessible name.
+   */
+  rightControl?: ReactNode;
   type?: DropdownItemType;
   className?: string;
   onClick?: (info: { key: string; domEvent: MouseEvent }) => void;

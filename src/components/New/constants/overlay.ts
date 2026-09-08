@@ -41,6 +41,17 @@ export const overlayItemClassName = mergeClasses(
 export const overlayItemSelectedClassName = 'bg-control-accent-alpha';
 
 /**
+ * The row that is currently open in a navigation menu: the same faint tint as a
+ * selected row, with the label and its icon in the accent colour. Unlike
+ * {@link overlayItemSelectedClassName} it carries no separate mark — the colour
+ * *is* the mark, which is what the design's in-navigation state shows.
+ */
+export const overlayItemHighlightClassName = mergeClasses(
+  overlayItemSelectedClassName,
+  'text-accent',
+);
+
+/**
  * A row that cannot be chosen. `overlayItemClassName` tints every row on hover
  * and a selected row carries a tint at rest, so both have to be turned off
  * again here — `mergeClasses` is tailwind-merge, so these later declarations

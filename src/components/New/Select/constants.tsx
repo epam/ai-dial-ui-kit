@@ -1,5 +1,4 @@
 import {
-  IconCheck,
   IconChevronRight,
   IconClipboardX,
   IconSearch,
@@ -9,8 +8,6 @@ import {
 import {
   overlayGap,
   overlayItemClassName,
-  overlayItemDisabledClassName,
-  overlayItemSelectedClassName,
   overlaySubMenuClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
@@ -19,13 +16,11 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 export const selectOverlayBaseClassName = mergeClasses('w-full flex flex-col');
 
-export const selectOptionBaseClassName = mergeClasses(
-  overlayItemClassName,
-  // The row ends with a check icon, so label and mark sit at opposite edges.
-  'justify-between',
-);
-
-export const selectOptionSelectedClassName = overlayItemSelectedClassName;
+/**
+ * A row of the option list. The options themselves are {@link MenuItem}s; this
+ * is what the list's own non-option rows — Select All — align to.
+ */
+export const selectOptionBaseClassName = overlayItemClassName;
 
 /**
  * Holds the option list to the width of the field.
@@ -39,8 +34,14 @@ export const selectOptionSelectedClassName = overlayItemSelectedClassName;
  */
 export const selectListWidthClassName = '!max-w-[var(--reference-width)]';
 
-export const selectOptionDisabledClassName = overlayItemDisabledClassName;
-export const dropdownMenuMaxHeight = 352;
+/**
+ * The options themselves scroll, at the design's maximum list length of
+ * 344px — not the panel around them, so the search row and Select All stay
+ * put while the list moves under them. The panel keeps its own cap on the
+ * available viewport height, which takes over on a screen too short for this
+ * one.
+ */
+export const selectOptionsScrollClassName = 'max-h-[344px] overflow-y-auto';
 export const selectSubMenuGap = overlayGap;
 export const selectSubMenuClassName = overlaySubMenuClassName;
 
@@ -75,16 +76,6 @@ export const selectCloseIcon = (
     size={DIAL_ICON_SIZE.SM}
     stroke={DIAL_KIT_ICON_STROKE}
     aria-hidden="true"
-  />
-);
-
-/** Marks the selected option in single mode, alongside its tinted row. */
-export const selectOptionCheckIcon = (
-  <IconCheck
-    size={DIAL_ICON_SIZE.SM}
-    stroke={DIAL_KIT_ICON_STROKE}
-    className="shrink-0"
-    aria-hidden
   />
 );
 

@@ -1,15 +1,14 @@
 import { useCallback, type FC, type MouseEvent } from 'react';
 
-import { DialIcon } from '@/components/Icon/Icon';
+import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { type DropdownItem } from '@/models/dropdown';
-import { mergeClasses } from '@/utils/merge-classes';
+import { MenuItemMark } from '@/types/menu-item';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
+
+import { getItemRole, resolveItemMark } from './item-mark';
 
 import {
   dropdownGap,
-  dropdownItemBaseClassName,
-  dropdownItemDangerClassName,
-  dropdownItemDisabledClassName,
   dropdownSubMenuClassName,
   submenuCaretIcon,
 } from './constants';
@@ -37,56 +36,30 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
     (child: DropdownItem) => (e: MouseEvent) => {
       if (child.disabled) return;
       child.onClick?.({ key: child.key, domEvent: e });
-      onRootClose();
+      // A multiselect child is meant to be toggled several times, so it
+      // leaves both panels up — the same rule the root items follow.
+      if (!child.selectable) onRootClose();
     },
     [onRootClose],
   );
 
   return (
     <>
-      <button
+      <MenuItem
         ref={refs.setReference}
-        type="button"
         role="menuitem"
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-disabled={!!item.disabled}
         disabled={item.disabled}
-        className={mergeClasses(
-          dropdownItemBaseClassName,
-          item.disabled && dropdownItemDisabledClassName,
-          item.className,
-        )}
+        icon={item.icon}
+        label={item.label}
+        trailing={submenuCaretIcon}
+        className={item.className}
         {...getReferenceProps()}
       >
-        {item.renderItem ? (
-          item.renderItem(item)
-        ) : (
-          <>
-            {item.icon && (
-              <span className={mergeClasses(item.disabled && 'text-secondary')}>
-                <DialIcon icon={item.icon} />
-              </span>
-            )}
-            <span
-              className={mergeClasses(
-                'flex-1 truncate text-start',
-                item.disabled && 'text-secondary',
-              )}
-            >
-              {item.label}
-            </span>
-          </>
-        )}
-        <span
-          className={mergeClasses(
-            'ml-auto shrink-0',
-            item.disabled && 'text-secondary',
-          )}
-        >
-          {submenuCaretIcon}
-        </span>
-      </button>
+        {item.renderItem?.(item)}
+      </MenuItem>
 
       {isOpen && (
         <SubMenuPanel
@@ -106,48 +79,37 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
                   ? item.menuHeader()
                   : item.menuHeader)}
 
-              {item.children!.map((child) => (
-                <button
-                  key={child.key}
-                  role="menuitem"
-                  type="button"
-                  aria-disabled={!!child.disabled}
-                  disabled={child.disabled}
-                  className={mergeClasses(
-                    dropdownItemBaseClassName,
-                    child.disabled && dropdownItemDisabledClassName,
-                    child.danger && dropdownItemDangerClassName,
-                    child.className,
-                  )}
-                  onClick={handleChildClick(child)}
-                >
-                  {child.renderItem ? (
-                    child.renderItem(child)
-                  ) : (
-                    <>
-                      {child.icon && (
-                        <span
-                          className={mergeClasses(
-                            child.danger && 'text-error',
-                            child.disabled && 'text-secondary',
-                          )}
-                        >
-                          <DialIcon icon={child.icon} />
-                        </span>
-                      )}
-                      <span
-                        className={mergeClasses(
-                          'flex-1 truncate text-start',
-                          child.danger && 'text-error',
-                          child.disabled && 'text-secondary',
-                        )}
-                      >
-                        {child.label}
-                      </span>
-                    </>
-                  )}
-                </button>
-              ))}
+              {item.children!.map((child) => {
+                const role = getItemRole(child);
+
+                return (
+                  <MenuItem
+                    key={child.key}
+                    role={role}
+                    aria-checked={
+                      role === 'menuitem' ? undefined : !!child.checked
+                    }
+                    aria-current={
+                      resolveItemMark(child) === MenuItemMark.Highlight &&
+                      child.checked
+                        ? true
+                        : undefined
+                    }
+                    aria-disabled={!!child.disabled}
+                    disabled={child.disabled}
+                    mark={resolveItemMark(child)}
+                    selected={!!child.checked}
+                    danger={child.danger}
+                    icon={child.icon}
+                    label={child.label}
+                    className={child.className}
+                    rightControl={child.rightControl}
+                    onClick={handleChildClick(child)}
+                  >
+                    {child.renderItem?.(child)}
+                  </MenuItem>
+                );
+              })}
 
               {item.menuFooter &&
                 (typeof item.menuFooter === 'function'

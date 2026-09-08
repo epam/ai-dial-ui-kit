@@ -3,8 +3,6 @@ import { IconChevronRight } from '@tabler/icons-react';
 import {
   overlayGap,
   overlayItemClassName,
-  overlayItemDisabledClassName,
-  overlayItemSelectedClassName,
   overlaySubMenuClassName,
   overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
@@ -24,17 +22,12 @@ export const dropdownListBaseClassName = mergeClasses(
 
 export const dropdownSubMenuClassName = overlaySubMenuClassName;
 
+/**
+ * The row's own styling lives in {@link MenuItem}, which renders every item of
+ * the menu. This alias is what a fully custom overlay row can lean on to match
+ * them.
+ */
 export const dropdownItemBaseClassName = overlayItemClassName;
-
-/** Tint marking a checked multiselect row. */
-export const dropdownItemSelectedClassName = overlayItemSelectedClassName;
-
-export const dropdownItemDisabledClassName = mergeClasses(
-  overlayItemDisabledClassName,
-  '!cursor-not-allowed',
-);
-
-export const dropdownItemDangerClassName = 'text-error';
 
 export const dropdownDividerClassName = 'my-1 border-t border-tertiary';
 

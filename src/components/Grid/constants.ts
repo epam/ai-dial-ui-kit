@@ -5,12 +5,15 @@ export const GRID_THEME_COLORS = {
   accentColor: 'var(--bg-control-accent, var(--bg-accent-primary, #5C8DEA))',
   backgroundColor: 'var(--bg-layer-raised, var(--bg-layer-3, #FCFCFC))',
   oddRowBackgroundColor: 'var(--bg-layer-sunken, var(--bg-layer-2, #EEF1F7))',
-  selectedRowBackgroundColor:
-    'var(--controls-bg-accent-primary-alpha-active, var(--bg-accent-primary-alpha, #7DA4FF26))',
+  // The row tint has to stay translucent: the row it paints carries body text
+  // and a checkbox filled with `accentColor`, so an opaque accent hides both.
+  // `--bg-accent-primary-alpha` is the tint every other 1.0 control hovers
+  // with; the controls' `*-alpha-active` token this used to read is the
+  // pressed-state fill, which themes do define opaque.
+  selectedRowBackgroundColor: 'var(--bg-accent-primary-alpha, #7DA4FF26)',
   borderColor: 'var(--bg-layer-4, #D1DBEA)',
   rowBorder: '1px solid var(--stroke-tertiary, var(--stroke-primary, #6B7280))',
-  rowHoverColor:
-    'var(--controls-bg-accent-primary-alpha-active, var(--bg-accent-primary-alpha, #7DA4FF26))',
+  rowHoverColor: 'var(--bg-accent-primary-alpha, #7DA4FF26)',
   borderRadius: 3,
   browserColorScheme: 'dark',
   chromeBackgroundColor: 'var(--bg-layer-1, #E0E6F0)',
