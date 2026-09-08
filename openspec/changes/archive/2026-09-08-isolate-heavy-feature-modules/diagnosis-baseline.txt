@@ -1,0 +1,335 @@
+Diagnosis baseline — isolate-heavy-feature-modules
+=====================================================
+Recorded while implementing tasks.md Section 1 (red fixture) and Section 2
+(diagnosis), against the CURRENT, UNMODIFIED @epam/ai-dial-ui-kit source
+(no src/index.ts, vite.config.ts, or Grid.tsx changes made yet).
+
+1. What was built
+-----------------
+- fixtures/consumer-esm and fixtures/consumer-grid upgraded from
+  `vite: ^7.1.5` / `@vitejs/plugin-react: ^4.6.0` to `vite: ^8.0.0` (resolved
+  8.2.2) / `@vitejs/plugin-react: ^6.0.0`, matching ai-dial-chat's actual
+  root package.json (`vite: ^8.0.0`, `@vitejs/plugin-react: ^6.0.0`).
+- New fixtures/consumer-mixed-grid added: eagerly renders `Button` from the
+  root `@epam/ai-dial-ui-kit` entry, reaches `Grid` only through
+  `await import('@epam/ai-dial-ui-kit/grid')` behind a click handler
+  (`#load-grid-trigger`). Same Vite 8 pinning, same
+  fixtures/shared/graph-report-plugin.mjs wiring as the other fixtures.
+
+2. First run: two false positives, not a real defect
+------------------------------------------------------
+`npm run fixtures:run-all` reported:
+
+    FAIL  consumer-esm
+    PASS  consumer-file-manager
+    PASS  consumer-grid
+    PASS  consumer-json-editor
+    PASS  consumer-markdown-editor
+    FAIL  consumer-mixed-grid
+    PASS  consumer-schema-renderer
+    PASS  consumer-subpaths
+
+Both failures turned out to be bugs in the new/upgraded test fixtures
+themselves, not in @epam/ai-dial-ui-kit:
+
+(a) consumer-esm's own `src/main.tsx` JSDoc comment literally listed every
+    forbidden marker string ("exclude ag-grid-community, ag-grid-react,
+    @monaco-editor/react, monaco-editor, @uiw/react-md-editor, and
+    @uiw/react-markdown-preview"). With `minify: false` (required so
+    assert-static-graph.mjs's content-grep signal can inspect real output),
+    esbuild/Vite 8 + @vitejs/plugin-react 6 preserves that comment verbatim
+    in the emitted chunk (`dist/assets/index-*.js:16757-16758` in the
+    reproduced build) - so the assertion tripped on its own documentation,
+    not on any bundled dependency. Confirmed by direct grep: `ModuleRegistry`,
+    `AllCommunityModule`, and `AgGridReact` (the *implementation* markers)
+    were absent from that chunk; only the six literal package-name strings
+    from the comment were present, both on the same two lines. Fixed by
+    rewording the comment to describe the requirement generically ("AG Grid
+    and every editor-only (Monaco / `@uiw/*`) dependency") instead of
+    spelling out the exact specifiers the assertion checks for.
+
+(b) consumer-mixed-grid's `--dynamic-after Button:ag-grid-community` check
+    used `Button` as the "parent" marker. `Button` is not in
+    assert-static-graph.mjs's MARKERS map, so it fell back to a literal
+    content-grep for the bare word "Button" - which also matches AG Grid's
+    own bundled UI code (`FilterButton`, `enableFilterButton`, etc. - 185
+    occurrences confirmed via direct grep in the dynamic Grid chunk). That
+    made the dynamic Grid chunk itself register as a "parent" hit, which
+    trivially put it inside its own static closure and failed the nested-
+    boundary check. Fixed by switching the parent marker to
+    `load-grid-trigger` (the fixture's own DOM element id: unique to the
+    eager static chunk, confirmed 2 hits there / 0 hits in the Grid chunk).
+
+3. Second run, after both fixes: clean pass
+---------------------------------------------
+    PASS  consumer-esm
+    PASS  consumer-file-manager
+    PASS  consumer-grid
+    PASS  consumer-json-editor
+    PASS  consumer-markdown-editor
+    PASS  consumer-mixed-grid
+    PASS  consumer-schema-renderer
+    PASS  consumer-subpaths
+
+    PASS: all 8 fixtures passed end-to-end.
+
+consumer-mixed-grid's assert output:
+
+    OK: "@monaco-editor/react" absent from static initial graph.
+    OK: "monaco-editor" absent from static initial graph.
+    OK: "@uiw/react-md-editor" absent from static initial graph.
+    OK: "@uiw/react-markdown-preview" absent from static initial graph.
+    OK: "ag-grid-community" present only in dynamic chunk(s) (assets/grid-DPTUf9bV.js).
+    OK: "ag-grid-react" present only in dynamic chunk(s) (assets/grid-DPTUf9bV.js).
+    OK: "ag-grid-community" is reachable from "load-grid-trigger" only after a dynamic import (assets/grid-DPTUf9bV.js).
+    Static chunks (1): assets/index-DPGauEPq.js
+    Dynamic chunks (1): assets/grid-DPTUf9bV.js
+    PASS
+
+consumer-mixed-grid's smoke output:
+
+    OK: rendered cell text found in DOM: "Smoke-Test-Cell-Mixed"
+    This proves the dynamic import('@epam/ai-dial-ui-kit/grid') resolved at
+    runtime, ModuleRegistry.registerModules(...) executed, and AG Grid
+    rendered real row data.
+
+4. graph-report.json evidence (Task 2.1 diagnosis)
+-----------------------------------------------------
+Inspected fixtures/consumer-mixed-grid/dist/graph-report.json directly
+(bypassing the assertion tool):
+
+    assets/index-DPGauEPq.js  isEntry: true  isDynamicEntry: false
+      moduleCount: 43  dynamicImports: ['assets/grid-DPTUf9bV.js']
+    assets/grid-DPTUf9bV.js   isEntry: false isDynamicEntry: true
+      moduleCount: 66  imports: ['assets/index-DPGauEPq.js']
+
+The static chunk's 43 module ids are exhaustively: React/react-dom/
+scheduler/classnames, @floating-ui/* internals, and
+@epam/ai-dial-ui-kit/dist/{utils,hooks,types,constants}/* plus
+components/New/{Button,Tooltip,ThemeScope}/* and components/Icon/Icon.js.
+**Zero** Grid-related module ids (no `components/Grid/*`, no
+`components/New/Grid/*`, no `ag-grid-community`, no `ag-grid-react`)
+appear anywhere in that list - this is Rollup's own per-module dead-code
+elimination reporting the module as entirely absent, not merely a content-
+grep finding no textual trace. The dynamic chunk's 66 module ids include
+the legacy `components/Button/*`, `components/Tooltip/*`,
+`components/IconButton/*` (pulled in transitively by `DialGrid`'s toolbar,
+confirming Grid's own dependency shape) and, further in the same list,
+ag-grid-community/ag-grid-react and both Grid generations.
+
+5. Conclusion answering design.md's first Open Question
+------------------------------------------------------------
+**The root-barrel import-then-export topology
+(`dist/dial-ui-kit.js:30-32,155-158,239,313-314`, unchanged by this
+diagnosis - no source edits were made) is NOT, by itself, an obstacle to
+correct tree-shaking in a real Vite 8 / Rolldown-style downstream build.**
+Both the pre-existing root-only scenario (consumer-esm) and the new mixed
+eager-root + lazy-`./grid` scenario (consumer-mixed-grid) tree-shake AG Grid
+out of the static graph correctly today, using the package's CURRENT,
+unmodified build output, as long as the consumer applies no manual chunking
+override.
+
+This shifts the primary suspect for the measured `ai-dial-chat` regression
+towards Decision 5's finding in design.md's Context section:
+`apps/chat/vite.config.mts:220-241`'s `manualChunks` rule, which forces every
+non-editor `@epam/ai-dial-ui-kit` module - Grid included - into one named
+`ui-kit` chunk regardless of reachability. That rule was out of scope to
+change from this repository and was not touched here. Section 3's root-
+topology restructuring (tasks.md 3.1-3.3) is downgraded from "required" to
+"conditional, pending Section 7's ai-dial-chat dual-manualChunks
+measurement" - it should not be undertaken as ai-dial-ui-kit source changes
+until that measurement (with the consumer's manualChunks override actually
+disabled) confirms whether any package-level gap remains once the known
+consumer-side cause is accounted for.
+
+Decision 3 (relocate `ModuleRegistry.registerModules` out of module scope)
+remains worth doing regardless of this finding - it is independently
+motivated as side-effect hygiene, not solely as a tree-shaking fix, per
+design.md's own reasoning.
+
+Section 9 — reopened follow-up: root lazy editor loader retains Grid (2026-09-08)
+====================================================================================
+The consumer (`ai-dial-chat`) side of this whole investigation continued in a
+separate, active `ai-dial-chat` change (`complete-chat-cold-load-integration`).
+During its own real-consumer verification it found a fourth, genuinely
+package-level defect this change's earlier sections had not covered: a
+minimal Vite 8.0.16 reproduction with an eager root `Button` + a *retained*
+(not merely imported-and-unused) root `LazyMarkdownEditor` loader + `Grid`
+reached only via a separate dynamically-imported module still pulled AG
+Grid into the initial graph. Their `verification-report.md` (in
+`ai-dial-chat`) documents the exact reproduction, byte counts, and their
+finding that switching the loader import to `@epam/ai-dial-ui-kit/editors`
+avoided it. They amended this change's own `tasks.md` (adding this Section
+9), `specs/package-distribution/spec.md`, and `verification-report.md`
+in place before handing the actual package-level fix back to this repo.
+
+1. Reproduction, confirmed
+---------------------------
+Built `fixtures/consumer-mixed-grid-editor-loader`: eager `Button` +
+`Object.assign(window, { Button, LazyDialJsonEditor, LazyDialMarkdownEditor,
+LazyMarkdownEditor })` (genuine retention a bundler cannot tree-shake away,
+unlike an unused reference) + `Grid` reached only via
+`import('./grid-feature')`, a separate local module statically importing
+`Grid` from `@epam/ai-dial-ui-kit/grid`.
+
+- Against `vite: ^8.0.0` (resolved 8.2.2 at the time): PASSED cleanly - no
+  reproduction. This matches Section 2's original diagnosis and is why the
+  defect was missed earlier.
+- Against `vite: 8.0.16` exactly (the version `ai-dial-chat`'s own
+  `verification-report.md` said it measured with, and the version its root
+  `package.json`'s `^8.0.0` range could still resolve to on an older
+  install): FAILED. Static chunk `index-*.js` grew to 2,193,440 bytes raw /
+  525,880 bytes gzip and contained `ag-grid-community`/`ag-grid-react`
+  (confirmed via `assert-static-graph.mjs`'s module-id and content-grep
+  signals, not filename guessing) - matching the magnitude of `ai-dial-chat`'s
+  own reported 417,119 gzip byte leak. This is a genuine Vite/Rolldown-
+  version-dependent automatic-chunking behavior difference, not a fixture
+  artifact: same source, same package, different bundler patch version,
+  different result.
+
+2. Root cause
+-------------
+`src/index.ts` declared `LazyDialJsonEditor`, `LazyDialMarkdownEditor`, and
+`LazyMarkdownEditor` as inline `export const LazyX = () => import('./path')`
+statements directly inside the root barrel file - and `src/subpaths/editors.ts`
+declared its own separate, textually-duplicated copies of the same three
+functions (each with an identical `import()` call to the same target
+module), by design, to keep the manifest generator's inline-pattern
+detection working (see below). This meant `dist/dial-ui-kit.js` (the root
+entry) and `dist/editors.js` each carried their own independent physical
+copy of each loader's function body - and each loader body's own `import()`
+call gave the *root entry itself* an outgoing dynamic-import edge, not just
+the `./editors` entry.
+
+In Rolldown 8.0.16's automatic chunk-splitting, when the eager root
+(`dial-ui-kit.js`, needed for `Button`) carries its own dynamic-import edges
+(from the retained `LazyMarkdownEditor`'s body) *and* a completely separate
+part of the consumer graph (`grid-feature.tsx` → `grid.js`) also needs
+Grid/AG Grid, the automatic chunker in that version merged everything -
+Button, the editor loaders, Grid, AG Grid - into one shared static chunk.
+8.2.2 does not exhibit this; the exact Rolldown change between these
+versions was not investigated further (out of scope - the fix targets the
+package's own topology so it does not depend on which side of that Rolldown
+behavior a consumer's installed version happens to be on).
+
+3. Fix
+------
+Extracted each loader into its own shared leaf module, so root and
+`./editors` reference the *same* emitted chunk instead of each duplicating
+the loader's own `import()` call inline:
+
+- `src/components/JsonEditor/lazy.ts` → `LazyDialJsonEditor`
+- `src/components/MarkdownEditor/lazy.ts` → `LazyDialMarkdownEditor`
+- `src/components/New/MarkdownEditor/lazy.ts` → `LazyMarkdownEditor`
+
+`src/index.ts` and `src/subpaths/editors.ts` now both
+`export { LazyX } from '<leaf module path>'`. Confirmed via
+`dist/dial-ui-kit.js`/`dist/editors.js` grep: both entries import the exact
+same physical file (`./components/New/MarkdownEditor/lazy.js`), not two
+copies.
+
+`src/mcp/generate-manifest.ts` (the MCP component-manifest generator)
+previously only recognized the inline `export const LazyX = () =>
+import(...)` shape directly inside `src/index.ts`. It now also follows a
+`export { LazyX } from './leaf'` re-export to the leaf module and extracts
+the identical metadata from the declaration found there (new helpers
+`extractLazyLoaderFromDecl`/`findExportedVariableDecl`, shared by both the
+inline and re-export code paths). Verified the regenerated manifest still
+attaches the correct `lazy: { loaderExportName, ... }` metadata to
+`DialJsonEditor`, `DialMarkdownEditor`, and `MarkdownEditor` (2.0) -
+byte-identical Next.js dynamic-import example snippets, same 162-component
+count.
+
+Re-ran the exact failing reproduction against Vite 8.0.16 after the fix:
+static chunk dropped to 724,360 bytes raw / 145,660 bytes gzip, AG Grid and
+`@uiw/*` fully excluded from static and confined to their dynamic chunks
+(`assert-static-graph.mjs` PASS). Also re-tested with all three loaders
+retained simultaneously, and with the loaders imported from `./editors`
+instead of root (`fixtures/consumer-mixed-grid-editors-subpath`) - both
+pass, on both Vite versions.
+
+4. Test-fixture bugs found and fixed along the way (none are product defects)
+------------------------------------------------------------------------------
+- `--forbidden-everywhere` used for `@uiw/*`/monaco on a fixture that
+  legitimately, lazily loads them (once all three loaders are retained)
+  produced a false FAIL - switched those checks to `--dynamic-require`.
+  Package behavior was already correct; only the assertion was wrong.
+- Vite's own `vite/preload-helper` runtime (injected once a fixture has more
+  than one dynamic-import chunk) calls `fetch()` on every
+  `<link rel="modulepreload">` tag; jsdom has no real HTTP server, so this
+  crashed the smoke test with ECONNREFUSED. Stubbed `fetch` as a no-op
+  `Response`, matching the existing `ResizeObserver`/`matchMedia` stub
+  pattern.
+- Invoking `LazyDialJsonEditor`/`LazyDialMarkdownEditor`/`LazyMarkdownEditor`
+  directly from a bare top-level Node script (outside any React
+  event/lifecycle) hangs indefinitely for reasons unrelated to this fix
+  (confirmed: the identical call resolves and renders fine from inside a
+  React click handler). Smoke tests now only verify the loaders are
+  *retained as real function references*, not invoke them directly from the
+  script; the actual editor-rendering runtime path is already covered by
+  the library's own Vitest suite.
+- `fixtures/consumer-markdown-editor`'s stricter nested-boundary check
+  (`--dynamic-after MarkdownEditorContainer:monaco-editor`) started failing
+  independent of any change in this session - confirmed via a controlled
+  `git stash` test against completely unmodified upstream source. A
+  transitive `@monaco-editor/loader`/`monaco-editor` patch bump changed
+  Rollup's automatic chunk consolidation so Monaco now merges directly into
+  `MarkdownEditorContainer`'s own already-dynamic chunk instead of a nested
+  one one hop further. The requirement that actually matters (Monaco absent
+  from the static graph, present only dynamically) is unaffected and still
+  asserted; the overly specific nested-hop assumption was dropped. This is
+  pre-existing dependency drift, unrelated to Section 9 or anything else in
+  this change.
+
+5. `assert-static-graph.mjs` strengthened (addresses task 9.4)
+-----------------------------------------------------------------
+Added two capabilities, independent of the pass/fail package checks:
+- Cross-checks every `--forbidden`/`--forbidden-everywhere` package against
+  the *actual* `index.html` `<script type="module">`/`<link
+  rel="modulepreload">` entries (parsed directly, not inferred from
+  Rollup's own `imports`/`isEntry` metadata) - a genuinely independent
+  second signal for "what a real browser fetches on load," and fails if
+  HTML and the graph-report closure disagree about what counts as initial.
+- Always reports the static closure's initial JS/CSS raw and gzip byte
+  totals, measured independently of each other.
+
+6. Real `ai-dial-chat` consumer re-verification (addresses task 9.6)
+-------------------------------------------------------------------------
+Packed the fixed package and swapped it into `ai-dial-chat`'s
+`node_modules/@epam/ai-dial-ui-kit` (direct tarball extraction - the
+teammate's own `scripts/use-local-ui-kit.mjs` hit a Windows `tar`
+drive-letter-path bug in this environment, so the swap was done manually,
+byte-identical to what that script would have installed; not modified).
+Ran `ai-dial-chat`'s own `npm run verify:cold-load`:
+
+- All 5 of its graph-checker regression tests passed, including "recognizes
+  backtick imports emitted by Rolldown" and "rejects heavy code reached
+  through a static import absent from HTML preload."
+- Final report: `"violations": []`, `sizes: { jsGzip: 614867, cssGzip:
+  37248, totalGzip: 652115 }`, `lazyGrid:
+  ["assets/ai-dial-react-file-manager.es-*.js"]` - AG Grid confirmed
+  confined to a reachable lazy chunk, zero forbidden modules in the initial
+  graph, matching (within normal hash variance) their own prior report's
+  653,289-byte total.
+- `npm exec nx run @epam/chat:test-cold-load-browser` failed both viewport
+  cases on a `getByText(/Good .*Smoke/)` timeout - confirmed via a
+  controlled swap back to the teammate's own previously-installed artifact
+  that this reproduces identically with or without this fix. Unrelated to
+  cold-load bundling (a greeting-text/timing issue in the smoke fixture
+  itself, not an AG-Grid/editor-loader isolation problem) and out of scope
+  here.
+- Restored the fixed package as the final installed artifact and cleaned up
+  all temporary files/directories. `git status --short` in `ai-dial-chat`
+  after cleanup showed only the same pre-existing modified/untracked files
+  that were present before this verification began - nothing from this
+  investigation was added, left behind, or committed there.
+
+7. Not done: publishing a release
+----------------------------------
+Task 9.7 asks for "a version containing the fix so chat can replace its
+local verification artifact with a locked registry release." Bumping the
+package version and publishing to the real npm registry is a maintainer
+action requiring publish credentials and this repository's own release
+process - it was not performed as part of this change. `ai-dial-chat`
+continues to use the locally-packed artifact until a maintainer publishes
+a release containing this fix.
