@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { TooltipPlacement } from '@/types/tooltip';
 import { Tooltip } from './Tooltip';
@@ -15,8 +15,35 @@ const setViewportWidth = (width: number) => {
 
 const DESKTOP_WIDTH = 1024;
 
+/*
+ * The bubble renders only where a pointer can hover, and jsdom ships no
+ * `matchMedia` — with none installed the hook falls back to "hover available",
+ * which is what every test but the touch-only one wants.
+ */
+const stubHoverSupport = (hasHover: boolean) =>
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    writable: true,
+    value: vi.fn((media: string) => ({
+      matches: !hasHover,
+      media,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    })) as unknown as typeof window.matchMedia,
+  });
+
+const removeHoverSupportStub = () =>
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    writable: true,
+    value: undefined,
+  });
+
 describe('Dial UI Kit :: Tooltip', () => {
-  afterEach(() => setViewportWidth(DESKTOP_WIDTH));
+  afterEach(() => {
+    setViewportWidth(DESKTOP_WIDTH);
+    removeHoverSupportStub();
+  });
 
   test('Should render children without a tooltip when hideTooltip is true', () => {
     render(
@@ -208,8 +235,8 @@ describe('Dial UI Kit :: Tooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveClass('shadow-xs');
   });
 
-  test('Should render nothing on a mobile screen, where there is no hover', () => {
-    setViewportWidth(375);
+  test('Should render nothing on a touch-only device, where there is no hover', () => {
+    stubHoverSupport(false);
 
     render(
       <Tooltip tooltip="Tooltip text" initialOpen>
@@ -219,5 +246,21 @@ describe('Dial UI Kit :: Tooltip', () => {
 
     expect(screen.getByRole('button', { name: 'Trigger' })).toBeInTheDocument();
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  test('Should still show the tooltip in a narrow viewport driven by a pointer', () => {
+    // A chat embedded in a 380px overlay iframe reports the iframe's width, not
+    // the desktop's, so a width test used to strip every tooltip in the embed
+    // even though the mouse hovering it worked fine.
+    setViewportWidth(380);
+    stubHoverSupport(true);
+
+    render(
+      <Tooltip tooltip="Tooltip text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Tooltip text');
   });
 });
