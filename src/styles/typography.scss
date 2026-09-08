@@ -82,6 +82,22 @@
   @apply font-mono font-normal text-[14px]/[20px];
 }
 
+.dial-italic-text {
+  @apply font-serif font-normal text-[18px]/[22px] italic;
+}
+
+.dial-small-italic-text {
+  @apply font-serif font-normal text-[14px]/[20px] italic;
+}
+
+.dial-tiny-italic-text {
+  @apply font-serif font-normal text-[12px]/[16px] italic;
+}
+
+.dial-caption-italic-text {
+  @apply font-serif font-normal text-[10px]/[12px] italic;
+}
+
 h1 {
   @apply dial-h1-text;
 }
