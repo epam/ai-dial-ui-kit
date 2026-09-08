@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Shows a short explanation next to an element while it is hovered or focused. Placed on one of the four sides of the trigger, it follows the trigger on scroll and flips to the opposite side when it would not fit. Nothing renders on mobile screens, so a tooltip must never be the only accessible name of a control.',
+          'Shows a short explanation next to an element while it is hovered or focused. Placed on one of the four sides of the trigger, it follows the trigger on scroll and flips to the opposite side when it would not fit. Nothing renders on a touch-only device, where no pointer can hover to reveal it, so a tooltip must never be the only accessible name of a control — a narrow viewport alone still gets one, since an embed a few hundred pixels wide hovers like any other desktop surface.',
       },
     },
   },

@@ -30,7 +30,7 @@ export interface EllipsisTooltipProps extends TooltipContainerOptions {
  *
  * a11y: while truncated, the full string is exposed as the element's
  * `aria-label`, so a screen reader reads the whole label even though the
- * tooltip itself renders nothing on mobile screens.
+ * tooltip itself renders nothing on a touch-only device.
  *
  * @example
  * ```tsx

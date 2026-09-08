@@ -6,7 +6,7 @@ import {
 import classNames from 'classnames';
 import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
-import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
+import { useHasHover } from '@/hooks/use-has-hover';
 import { useTooltipContext } from '@/components/Tooltip/TooltipContext';
 
 export interface Props extends HTMLProps<HTMLDivElement> {
@@ -16,16 +16,20 @@ export interface Props extends HTMLProps<HTMLDivElement> {
  * The content area of a tooltip that displays the tooltip information
  * Design system 1.0
  *
+ * Renders nothing on a touch-only device, where no pointer can hover to reveal
+ * it. A narrow viewport is not itself disqualifying: an embed a few hundred
+ * pixels wide still hovers on a desktop.
+ *
  * @param children - The content to display inside the tooltip
  * @param [style] - Additional inline styles for the tooltip content
  */
 export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
   const context = useTooltipContext();
-  const isMobile = useIsMobileScreen();
+  const hasHover = useHasHover();
   const propRef = useRef(null);
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
-  if (!context.open || isMobile) {
+  if (!context.open || !hasHover) {
     return null;
   }
 

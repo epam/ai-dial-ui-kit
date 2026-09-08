@@ -106,6 +106,6 @@ npm run test
 ## Notes
 
 - The 1.0 `DialButton` and `DialIconButton` are untouched and keep the 1.0 tooltip.
-- As in 1.0, the 2.0 tooltip renders nothing on mobile screens, so a tooltip still cannot be a
+- As in 1.0, the 2.0 tooltip renders nothing on a touch-only device, so a tooltip still cannot be a
   control's only accessible name. Both buttons continue to fall back to a string
   `tooltipProps.tooltip` as their `aria-label` when nothing else names them.
