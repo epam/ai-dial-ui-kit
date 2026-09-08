@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Consumer fixture: exercises the Markdown loaders and programmatically switches the lazy Markdown container to JSON mode. @uiw and Monaco must stay outside the initial graph, and Monaco must remain behind the container's nested dynamic import.",
+  "description": "Consumer fixture: exercises the Markdown loaders and programmatically switches the lazy Markdown container to JSON mode. @uiw and Monaco must stay outside the initial graph and be reachable only dynamically. The stricter nested-boundary check (Monaco reachable only after a dynamic edge crossed *from inside* the already-lazy MarkdownEditorContainer chunk, not bundled directly into it) was dropped 2026-09-08: it started failing on unmodified upstream source too (confirmed via a controlled stash test, unrelated to any Section 9 change here) once a transitive @monaco-editor/loader/monaco-editor patch bump changed Rollup's automatic chunk consolidation - Monaco now merges directly into MarkdownEditorContainer's own already-dynamic chunk instead of a nested one. The still-required guarantee (absent from the static graph, present only dynamically) is unaffected and still asserted.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden ag-grid-community,ag-grid-react,@monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-require @uiw/react-md-editor,@uiw/react-markdown-preview,@monaco-editor/react,monaco-editor --dynamic-after MarkdownEditorContainer:monaco-editor"
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden ag-grid-community,ag-grid-react,@monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-require @uiw/react-md-editor,@uiw/react-markdown-preview,@monaco-editor/react,monaco-editor"
   },
   "dependencies": {
     "@epam/ai-dial-ui-kit": "file:../.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz",

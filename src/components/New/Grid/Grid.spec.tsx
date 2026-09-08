@@ -1,6 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { type ColDef, type GridApi } from 'ag-grid-community';
+import {
+  AllCommunityModule,
+  type ColDef,
+  type GridApi,
+  ModuleRegistry,
+} from 'ag-grid-community';
 import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
@@ -55,6 +60,24 @@ describe('Dial UI Kit :: Grid', () => {
     expect(GRID_THEME_PARAMS.headerRowBorder).toMatch(/^0\.5px solid /);
     expect(GRID_THEME_PARAMS.headerColumnBorder).toMatch(/^0\.5px solid /);
     expect(GRID_THEME_PARAMS).not.toHaveProperty('wrapperBorder');
+  });
+
+  /* Must run before any other test in this file renders a Grid: the spy
+   * below can only observe a genuine "not called yet" state on the very
+   * first render this test file performs (registerAgGridModulesOnce's
+   * internal guard stays flipped for the rest of the module's lifetime,
+   * matching real usage - it should run once, not once per Grid render).
+   * The preceding "draws the table dividers" test above never renders a
+   * Grid, so it is safe to run first. */
+  test('registers AG Grid modules when rendered, not merely when imported', async () => {
+    const registerModulesSpy = vi.spyOn(ModuleRegistry, 'registerModules');
+    expect(registerModulesSpy).not.toHaveBeenCalled();
+
+    render(<Grid<TestRow> columnDefs={testColumns} rowData={testRows} />);
+
+    await screen.findByText('Alice');
+
+    expect(registerModulesSpy).toHaveBeenCalledWith([AllCommunityModule]);
   });
 
   test('renders the rows', async () => {

@@ -264,13 +264,15 @@ export type {
   ValidationError,
 } from './components/SchemaRenderer/types';
 
-// JSON Editor - lazy loader to avoid loading in SSR
-export const LazyDialJsonEditor = () =>
-  import('./components/JsonEditor/JsonEditor');
+// JSON Editor - lazy loader to avoid loading in SSR. Re-exported from a
+// shared leaf module (not declared inline) so this entry and `./editors`
+// reference the same emitted chunk instead of each duplicating the loader's
+// own `import()` call - see that module's comment for why.
+export { LazyDialJsonEditor } from './components/JsonEditor/lazy';
 
-// Markdown Editor - lazy loader to avoid loading in SSR
-export const LazyDialMarkdownEditor = () =>
-  import('./components/MarkdownEditor/MarkdownEditor');
+// Markdown Editor - lazy loader to avoid loading in SSR. Re-exported from a
+// shared leaf module - see `./components/JsonEditor/lazy`'s comment.
+export { LazyDialMarkdownEditor } from './components/MarkdownEditor/lazy';
 
 // new Components
 export { NotificationVariant, NotificationType } from './types/notification.ts';
@@ -324,9 +326,9 @@ export type { FabButtonProps } from './components/FabButton/FabButton';
 export { ButtonDropdown } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { ButtonDropdownProps } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { MarkdownEditorProps } from './components/New/MarkdownEditor/MarkdownEditor';
-// Markdown Editor (2.0) - lazy loader to avoid loading in SSR
-export const LazyMarkdownEditor = () =>
-  import('./components/New/MarkdownEditor/MarkdownEditor');
+// Markdown Editor (2.0) - lazy loader to avoid loading in SSR. Re-exported
+// from a shared leaf module - see `./components/JsonEditor/lazy`'s comment.
+export { LazyMarkdownEditor } from './components/New/MarkdownEditor/lazy';
 export {
   InlineSelect,
   InlineSelectTrigger,

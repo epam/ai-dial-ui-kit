@@ -24,14 +24,36 @@
  *      only after crossing a dynamicImports edge. This verifies nested lazy
  *      boundaries rather than merely checking that both chunks are dynamic
  *      relative to the application entry.
+ *   7. For each package key in --forbidden-everywhere: fails if found in
+ *      EITHER staticChunks OR dynamicChunks - i.e. the package must be
+ *      completely absent from the build, not merely absent from the
+ *      static initial graph. Use this instead of --forbidden when a
+ *      fixture also has its own dynamic import boundary (e.g. a mixed
+ *      eager-root + lazy-feature fixture) and the requirement is that an
+ *      unrelated feature (an editor dependency, say) never appears even in
+ *      the *other* feature's lazy chunk - plain --forbidden only checks the
+ *      static graph and would miss that.
+ *   8. Independently of the above (always, when the fixture has an
+ *      `index.html`): parses every `<script type="module" src="...">` and
+ *      `<link rel="modulepreload" href="...">` tag, re-runs every
+ *      `--forbidden`/`--forbidden-everywhere` package against exactly that
+ *      set, and fails if the HTML entry and the graph-report closure
+ *      disagree about which chunks are initial. This is a second signal
+ *      independent of Rollup's own self-reported `imports`/`isEntry`
+ *      metadata - the actual thing a real browser fetches on load.
+ *   9. Always reports the static closure's initial JS and CSS byte totals
+ *      (raw and gzip) as a final measurement, independent of the
+ *      pass/fail checks above.
  *
  * Usage:
  *   node assert-static-graph.mjs --dist <path> \
- *     [--forbidden pkg1,pkg2] [--require pkg3] [--dynamic-require pkg4] \
+ *     [--forbidden pkg1,pkg2] [--forbidden-everywhere pkg5] \
+ *     [--require pkg3] [--dynamic-require pkg4] \
  *     [--dynamic-after ParentMarker:child-package]
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve as resolvePath } from 'node:path';
+import { gzipSync } from 'node:zlib';
 
 /** Stable content markers per package - the second signal (grep), used both
  * as a backup for externalized packages and as the ONLY viable signal for
@@ -60,6 +82,7 @@ const parseArgs = (argv) => {
   const out = {
     dist: null,
     forbidden: [],
+    forbiddenEverywhere: [],
     require: [],
     dynamicRequire: [],
     dynamicAfter: [],
@@ -69,6 +92,8 @@ const parseArgs = (argv) => {
     if (arg === '--dist') out.dist = argv[++i];
     else if (arg === '--forbidden')
       out.forbidden = argv[++i].split(',').filter(Boolean);
+    else if (arg === '--forbidden-everywhere')
+      out.forbiddenEverywhere = argv[++i].split(',').filter(Boolean);
     else if (arg === '--require')
       out.require = argv[++i].split(',').filter(Boolean);
     else if (arg === '--dynamic-require')
@@ -184,17 +209,63 @@ const chunksReachableAfterDynamicImport = (chunks, startNames) => {
   return { parentStaticClosure, dynamicDescendants: visited };
 };
 
+/**
+ * Reads `<distDir>/index.html` and returns the set of chunk file names (as
+ * they appear as keys in `chunks`, i.e. relative to `distDir`) referenced by
+ * every `<script type="module" src="...">` and `<link rel="modulepreload"
+ * href="...">` tag - the actual set a real browser fetches on page load,
+ * independent of Rollup's own self-reported `imports`/`isEntry` graph
+ * metadata. Returns `null` (skip the cross-check) if there is no
+ * `index.html` - some fixtures build a library, not a page.
+ */
+const readHtmlPreloadedFiles = (distDir) => {
+  const htmlPath = resolvePath(distDir, 'index.html');
+  if (!existsSync(htmlPath)) return null;
+
+  const html = readFileSync(htmlPath, 'utf8');
+  const files = new Set();
+  // Matches both attribute orders and either quote style Vite emits.
+  const tagRe =
+    /<(?:script[^>]*\btype=["']module["'][^>]*\bsrc=["']([^"']+)["']|link[^>]*\brel=["']modulepreload["'][^>]*\bhref=["']([^"']+)["'])[^>]*>/gi;
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    const href = (m[1] ?? m[2] ?? '').replace(/^\.?\//, '');
+    if (href) files.add(href);
+  }
+  return files;
+};
+
+/** Sums raw and gzip byte sizes for `chunkNames`, split by JS vs CSS. */
+const measureChunks = (distDir, chunkNames) => {
+  const totals = { jsRaw: 0, jsGzip: 0, cssRaw: 0, cssGzip: 0 };
+  for (const fileName of chunkNames) {
+    const filePath = resolvePath(distDir, fileName);
+    if (!existsSync(filePath)) continue;
+    const buf = readFileSync(filePath);
+    const gzipLen = gzipSync(buf, { level: 9 }).length;
+    if (fileName.endsWith('.css')) {
+      totals.cssRaw += buf.length;
+      totals.cssGzip += gzipLen;
+    } else {
+      totals.jsRaw += buf.length;
+      totals.jsGzip += gzipLen;
+    }
+  }
+  return totals;
+};
+
 const main = () => {
   const {
     dist,
     forbidden,
+    forbiddenEverywhere,
     require: requirePkgs,
     dynamicRequire,
     dynamicAfter,
   } = parseArgs(process.argv.slice(2));
   if (!dist) {
     console.error(
-      'Usage: node assert-static-graph.mjs --dist <path> [--forbidden a,b] [--require c] [--dynamic-require d] [--dynamic-after Parent:child]',
+      'Usage: node assert-static-graph.mjs --dist <path> [--forbidden a,b] [--forbidden-everywhere e] [--require c] [--dynamic-require d] [--dynamic-after Parent:child]',
     );
     process.exit(1);
   }
@@ -221,6 +292,25 @@ const main = () => {
         console.error(`  - ${h.fileName} (signal: ${h.signal})`);
     } else {
       console.log(`OK: "${pkg}" absent from static initial graph.`);
+    }
+  }
+
+  for (const pkg of forbiddenEverywhere) {
+    const hits = findPackageInChunks({
+      distDir,
+      chunks,
+      chunkNames: Object.keys(chunks),
+      pkg,
+    });
+    if (hits.length > 0) {
+      failed = true;
+      console.error(
+        `FORBIDDEN-EVERYWHERE package "${pkg}" found in the build (static or dynamic):`,
+      );
+      for (const h of hits)
+        console.error(`  - ${h.fileName} (signal: ${h.signal})`);
+    } else {
+      console.log(`OK: "${pkg}" absent from the entire build.`);
     }
   }
 
@@ -326,11 +416,61 @@ const main = () => {
     }
   }
 
+  // Cross-check against the actual HTML entry: an independent signal from
+  // Rollup's own self-reported graph metadata. A real browser only ever
+  // eagerly fetches what index.html's <script type="module"> and
+  // <link rel="modulepreload"> tags name - if any forbidden package is
+  // reachable from THIS set, it is initially loaded regardless of what the
+  // graph-report's `imports` edges say.
+  const htmlPreloaded = readHtmlPreloadedFiles(distDir);
+  if (htmlPreloaded) {
+    const combinedForbidden = [...forbidden, ...forbiddenEverywhere];
+    for (const pkg of combinedForbidden) {
+      const hits = findPackageInChunks({
+        distDir,
+        chunks,
+        chunkNames: htmlPreloaded,
+        pkg,
+      });
+      if (hits.length > 0) {
+        failed = true;
+        console.error(
+          `FORBIDDEN package "${pkg}" reachable from an HTML <script>/<link modulepreload> entry:`,
+        );
+        for (const h of hits)
+          console.error(`  - ${h.fileName} (signal: ${h.signal})`);
+      }
+    }
+    const unaccounted = [...htmlPreloaded].filter(
+      (f) => !staticChunks.has(f) && chunks[f],
+    );
+    if (unaccounted.length > 0) {
+      failed = true;
+      console.error(
+        `HTML references chunk(s) the graph-report closure did not classify as static: ${unaccounted.join(', ')}. ` +
+          'This means index.html and graph-report.json disagree about the initial graph - investigate before trusting either signal alone.',
+      );
+    } else {
+      console.log(
+        `OK: every HTML <script>/<link modulepreload> entry (${htmlPreloaded.size}) is accounted for in the static closure.`,
+      );
+    }
+  }
+
   console.log(
     `\nStatic chunks (${staticChunks.size}): ${[...staticChunks].join(', ')}`,
   );
   console.log(
     `Dynamic chunks (${dynamicChunks.size}): ${[...dynamicChunks].join(', ') || '(none)'}`,
+  );
+
+  const { jsRaw, jsGzip, cssRaw, cssGzip } = measureChunks(
+    distDir,
+    staticChunks,
+  );
+  console.log(
+    `\nInitial JS:  ${jsRaw} raw / ${jsGzip} gzip bytes\n` +
+      `Initial CSS: ${cssRaw} raw / ${cssGzip} gzip bytes`,
   );
 
   if (failed) {
