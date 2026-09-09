@@ -760,9 +760,7 @@ describe('Dial UI Kit :: Select', () => {
             value: 'opt-1',
             label: 'Option 1',
             interactiveTooltip: {
-              content: (
-                <button onClick={onDetailsClick}>View details</button>
-              ),
+              content: <button onClick={onDetailsClick}>View details</button>,
             },
           },
         ],
