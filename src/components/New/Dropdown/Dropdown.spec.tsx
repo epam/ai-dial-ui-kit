@@ -1505,9 +1505,7 @@ describe('Dial UI Kit :: Dropdown — interactiveTooltip', () => {
     );
     openByClick();
 
-    expect(
-      screen.queryByText('More about Web Search'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('More about Web Search')).not.toBeInTheDocument();
   });
 
   test('opens next to a sub-menu child item on hover', async () => {
@@ -1536,9 +1534,7 @@ describe('Dial UI Kit :: Dropdown — interactiveTooltip', () => {
     await user.hover(screen.getByRole('menuitem', { name: /more actions/i }));
     await user.hover(await screen.findByRole('menuitem', { name: 'Archive' }));
 
-    expect(
-      await screen.findByText('More about Archive'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('More about Archive')).toBeInTheDocument();
   });
 
   test('lets a control inside the panel be clicked without firing the item or closing the menu', async () => {
