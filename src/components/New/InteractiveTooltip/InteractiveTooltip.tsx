@@ -136,9 +136,9 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(INTERACTIVE_TOOLTIP_GAP),
-      // No `fallbackAxisSideDirection`: a panel placed to the right should
-      // flip to the left when it does not fit, not drop to the perpendicular
-      // top/bottom axis, which reads as the panel landing in the wrong place.
+      /* No `fallbackAxisSideDirection`: a panel placed to the right should
+       flip to the left when it does not fit, not drop to the perpendicular
+       top/bottom axis, which reads as the panel landing in the wrong place.*/
       flip({ padding: 5 }),
       shift({ padding: 5 }),
     ],
@@ -146,8 +146,8 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
 
   const hover = useHover(context, {
     enabled: controlledOpen == null,
-    // Lets the pointer cross the gap between the trigger and the panel
-    // without closing it, so it can actually be reached and used.
+    /* Lets the pointer cross the gap between the trigger and the panel
+       without closing it, so it can actually be reached and used. */
     handleClose: safePolygon(),
     delay: { open: INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY, close: 0 },
   });

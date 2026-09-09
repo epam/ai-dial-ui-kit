@@ -428,10 +428,10 @@ export const Select: FC<SelectProps> = ({
   const labelText =
     typeof labelProps?.label === 'string' ? labelProps.label : undefined;
 
-  // A combobox announces its value from the input's own value, so a selection
-  // living in the content slot would never be read out. Fold it into the
-  // accessible name instead — together with the field's own name, which an
-  // `aria-label` would otherwise replace.
+  /* A combobox announces its value from the input's own value, so a selection
+     living in the content slot would never be read out. Fold it into the
+     accessible name instead — together with the field's own name, which an
+     `aria-label` would otherwise replace. */
   const fieldAriaLabel = fieldContent
     ? [
         resolveAccessibleName(ariaLabel, labelText),
@@ -454,8 +454,8 @@ export const Select: FC<SelectProps> = ({
   const handleFieldKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (disabled) return;
-      // Enter and Space are already handled by the dropdown trigger this field
-      // is nested in; only the arrow keys need wiring up.
+      /* Enter and Space are already handled by the dropdown trigger this field
+         is nested in; only the arrow keys need wiring up. */
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         if (!isOpen) setOpen(true);
