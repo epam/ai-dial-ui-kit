@@ -1,5 +1,6 @@
 import { IconChevronDown } from '@tabler/icons-react';
 import {
+  Fragment,
   type FC,
   type KeyboardEvent,
   type MouseEvent,
@@ -16,6 +17,7 @@ import {
 import { Checkbox } from '@/components/New/Checkbox/Checkbox';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
+import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import {
   CaptionText,
   ErrorText,
@@ -547,36 +549,30 @@ export const Select: FC<SelectProps> = ({
               );
             }
 
-            if (multiple) {
-              return (
-                /*
+            const row = multiple ? (
+              /*
                 The row itself is the control: one `option` whose state rides on
                 `aria-selected`, with a decorative box drawing the check. A real
                 nested checkbox would give the row two states to announce and
                 would leave the rest of the 40px rectangle inert — the design
                 has the whole row selecting the option.
               */
-                <MenuItem
-                  key={opt.value}
-                  id={`${fieldId}-${opt.value}`}
-                  role="option"
-                  aria-selected={selected}
-                  aria-disabled={!!opt.disabled}
-                  disabled={opt.disabled}
-                  mark={MenuItemMark.Checkbox}
-                  selected={selected}
-                  icon={opt.icon}
-                  label={opt.labelNode ?? opt.label}
-                  description={opt.description}
-                  rightControl={opt.rightControl}
-                  onClick={() => handleToggle(opt.value)}
-                />
-              );
-            }
-
-            return (
               <MenuItem
-                key={opt.value}
+                id={`${fieldId}-${opt.value}`}
+                role="option"
+                aria-selected={selected}
+                aria-disabled={!!opt.disabled}
+                disabled={opt.disabled}
+                mark={MenuItemMark.Checkbox}
+                selected={selected}
+                icon={opt.icon}
+                label={opt.labelNode ?? opt.label}
+                description={opt.description}
+                rightControl={opt.rightControl}
+                onClick={() => handleToggle(opt.value)}
+              />
+            ) : (
+              <MenuItem
                 role="option"
                 aria-selected={selected}
                 aria-disabled={!!opt.disabled}
@@ -590,6 +586,23 @@ export const Select: FC<SelectProps> = ({
                 rightControl={opt.rightControl}
                 onClick={() => !opt.disabled && handleToggle(opt.value)}
               />
+            );
+
+            return (
+              <Fragment key={opt.value}>
+                {opt.interactiveTooltip ? (
+                  <InteractiveTooltip
+                    asChild
+                    placement={opt.interactiveTooltip.placement}
+                    content={opt.interactiveTooltip.content}
+                    contentClassName={opt.interactiveTooltip.contentClassName}
+                  >
+                    {row}
+                  </InteractiveTooltip>
+                ) : (
+                  row
+                )}
+              </Fragment>
             );
           })
         )}

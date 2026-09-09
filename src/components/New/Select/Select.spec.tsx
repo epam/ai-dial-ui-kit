@@ -696,6 +696,93 @@ describe('Dial UI Kit :: Select', () => {
     });
   });
 
+  describe('interactiveTooltip', () => {
+    test('opens next to a top-level option on hover', async () => {
+      const user = userEvent.setup();
+      renderSelect({
+        options: [
+          {
+            value: 'opt-1',
+            label: 'Option 1',
+            interactiveTooltip: { content: 'More about Option 1' },
+          },
+        ],
+      });
+      openSelect();
+
+      await user.hover(screen.getByRole('option', { name: 'Option 1' }));
+
+      expect(
+        await screen.findByText('More about Option 1'),
+      ).toBeInTheDocument();
+    });
+
+    test('does not render a panel for an option without interactiveTooltip', () => {
+      renderSelect();
+      openSelect();
+
+      expect(screen.queryByText('More about Option 1')).not.toBeInTheDocument();
+    });
+
+    test('opens next to a sub-menu child option on hover', async () => {
+      const user = userEvent.setup();
+      renderSelect({
+        options: [
+          {
+            value: 'grp',
+            label: 'Group',
+            children: [
+              {
+                value: 'g1',
+                label: 'G One',
+                interactiveTooltip: { content: 'More about G One' },
+              },
+            ],
+          },
+        ],
+      });
+      openSelect();
+
+      await user.hover(screen.getByText('Group').closest('button')!);
+      await user.hover((await screen.findByText('G One')).closest('button')!);
+
+      expect(await screen.findByText('More about G One')).toBeInTheDocument();
+    });
+
+    test('lets a control inside the panel be clicked without selecting the option', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const onDetailsClick = vi.fn();
+      renderSelect({
+        onChange,
+        options: [
+          {
+            value: 'opt-1',
+            label: 'Option 1',
+            interactiveTooltip: {
+              content: (
+                <button onClick={onDetailsClick}>View details</button>
+              ),
+            },
+          },
+        ],
+      });
+      openSelect();
+
+      await user.hover(screen.getByRole('option', { name: 'Option 1' }));
+      // `fireEvent.click` rather than `user.click`: the latter moves the
+      // pointer there first, and jsdom gives every element a zero-sized rect
+      // at the origin, which breaks the real geometry `safePolygon` needs to
+      // tell the move was still headed into the panel.
+      fireEvent.click(
+        await screen.findByRole('button', { name: 'View details' }),
+      );
+
+      expect(onDetailsClick).toHaveBeenCalledTimes(1);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
   test('disabled select does not open', () => {
     renderSelect({ disabled: true });
 
