@@ -1,5 +1,4 @@
 import {
-  AllCommunityModule,
   type ColDef,
   colorSchemeLight,
   type GridApi,
@@ -7,9 +6,7 @@ import {
   type GridReadyEvent,
   type GridSizeChangedEvent,
   type ICellRendererParams,
-  ModuleRegistry,
   type SelectionChangedEvent,
-  setupAgTestIds,
   themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -32,6 +29,7 @@ import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
 import { debounceFn } from '@/utils/debounce';
 import { baseColumnComparator, omitUndefined } from '@/utils/grid-comparators';
+import { registerAgGridModulesOnce } from '@/utils/grid-registration';
 import { mergeClasses } from '@/utils/merge-classes';
 
 import { Dropdown } from '../Dropdown/Dropdown';
@@ -51,9 +49,6 @@ import {
   SelectionEventSourceType,
 } from './constants';
 import { SELECTION_COL_DEF } from './renderers/constants';
-
-setupAgTestIds({ testIdAttribute: 'dataQA' });
-ModuleRegistry.registerModules([AllCommunityModule]);
 
 /** Column id of the selection column this component prepends itself. */
 export const GRID_SELECTION_COLUMN_ID = 'dial-kit-grid-selection';
@@ -208,6 +203,8 @@ export const Grid = <T extends object>({
   selectRowLabel,
   selectAllLabel = 'Select all rows',
 }: GridProps<T>) => {
+  registerAgGridModulesOnce();
+
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
   const isMobileScreen = useIsMobileScreen();
   const isTabletScreen = useIsTabletScreen();

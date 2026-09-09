@@ -263,6 +263,72 @@ function buildSectionMap(content: string): string[] {
   return sections;
 }
 
+/** A lazy-loader variable declaration's extracted metadata. */
+interface LazyLoaderInfo {
+  underlyingName: string;
+  resolvedPath: string;
+  lazyLoaderName: string;
+}
+
+/**
+ * Extracts lazy-loader metadata from a variable declaration shaped like
+ * `export const LazyDialX = () => import('./path')`, resolving the dynamic
+ * import's target relative to `fromDir`. Returns `null` for any declaration
+ * that doesn't match this shape (wrong name prefix, not an arrow function,
+ * no `import()` call in its body, or an unresolvable module specifier).
+ */
+function extractLazyLoaderFromDecl(
+  decl: ts.VariableDeclaration,
+  fromDir: string,
+): LazyLoaderInfo | null {
+  if (!ts.isIdentifier(decl.name)) return null;
+  const varName = decl.name.text;
+  if (!varName.startsWith('Lazy')) return null;
+
+  const init = decl.initializer;
+  if (!init || !ts.isArrowFunction(init)) return null;
+
+  const moduleSpec = findDynamicImportSpec(init.body);
+  if (!moduleSpec) return null;
+
+  const resolvedPath = resolveModulePath(moduleSpec, fromDir);
+  if (!resolvedPath) {
+    console.warn(`Could not resolve lazy import: ${moduleSpec}`);
+    return null;
+  }
+
+  return {
+    // Strip `Lazy` prefix to match the underlying component declaration
+    underlyingName: varName.slice('Lazy'.length),
+    resolvedPath,
+    lazyLoaderName: varName,
+  };
+}
+
+/** Finds `export const <name> = ...`'s declaration node in `sf`, if any. */
+function findExportedVariableDecl(
+  sf: ts.SourceFile,
+  name: string,
+): ts.VariableDeclaration | null {
+  let found: ts.VariableDeclaration | null = null;
+
+  ts.forEachChild(sf, (node) => {
+    if (found) return;
+    if (!ts.isVariableStatement(node)) return;
+    const hasExport = node.modifiers?.some(
+      (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+    );
+    if (!hasExport) return;
+
+    const decl = node.declarationList.declarations.find(
+      (d) => ts.isIdentifier(d.name) && d.name.text === name,
+    );
+    if (decl) found = decl;
+  });
+
+  return found;
+}
+
 function parseIndexFile(): IndexExport[] {
   const content = readFileSync(INDEX_PATH, 'utf-8');
   const sf = readSf(INDEX_PATH);
@@ -292,6 +358,31 @@ function parseIndexFile(): IndexExport[] {
         const name = element.name.text;
         // `export { Local as Public }` — barrels re-export the local name
         const localName = element.propertyName?.text ?? name;
+
+        // Lazy loaders may now be re-exported from a shared leaf module
+        // (`export { LazyDialX } from './path/lazy'`) instead of declared
+        // inline, so a consumer's bundler sees one emitted chunk per loader
+        // shared across every entry, rather than each entry duplicating the
+        // loader's own `import()` call. Follow the re-export to that leaf
+        // module and extract the same metadata as the inline case below.
+        if (!isTypeOnly && name.startsWith('Lazy')) {
+          const declaringFile = resolveDeclaringFile(localName, resolvedPath);
+          const declSf = readSf(declaringFile);
+          const decl = findExportedVariableDecl(declSf, localName);
+          const lazy =
+            decl && extractLazyLoaderFromDecl(decl, dirname(declaringFile));
+          if (lazy) {
+            records.push({
+              name: lazy.underlyingName,
+              isTypeOnly: false,
+              resolvedPath: lazy.resolvedPath,
+              section,
+              lazyLoaderName: lazy.lazyLoaderName,
+            });
+            continue;
+          }
+        }
+
         records.push({
           name,
           isTypeOnly,
@@ -302,44 +393,30 @@ function parseIndexFile(): IndexExport[] {
       return;
     }
 
-    // Lazy component loader: `export const LazyDialX = () => import('./path')`
+    // Lazy component loader declared inline: `export const LazyDialX = () =>
+    // import('./path')` directly in this file (not re-exported from a leaf
+    // module - see the re-export branch above for that case).
     if (ts.isVariableStatement(node)) {
       const hasExport = node.modifiers?.some(
         (m) => m.kind === ts.SyntaxKind.ExportKeyword,
       );
       if (!hasExport) return;
 
+      const startLine = sf.getLineAndCharacterOfPosition(
+        node.getStart(sf),
+      ).line;
+      const section = sectionByLine[startLine] ?? 'component';
+
       for (const decl of node.declarationList.declarations) {
-        if (!ts.isIdentifier(decl.name)) continue;
-        const varName = decl.name.text;
-        if (!varName.startsWith('Lazy')) continue;
-
-        const init = decl.initializer;
-        if (!init || !ts.isArrowFunction(init)) continue;
-
-        // Find an `import('...')` call inside the arrow body
-        const moduleSpec = findDynamicImportSpec(init.body);
-        if (!moduleSpec) continue;
-
-        const resolvedPath = resolveModulePath(moduleSpec, indexDir);
-        if (!resolvedPath) {
-          console.warn(`Could not resolve lazy import: ${moduleSpec}`);
-          continue;
-        }
-
-        // Strip `Lazy` prefix to match the underlying component declaration
-        const underlyingName = varName.slice('Lazy'.length);
-        const startLine = sf.getLineAndCharacterOfPosition(
-          node.getStart(sf),
-        ).line;
-        const section = sectionByLine[startLine] ?? 'component';
+        const lazy = extractLazyLoaderFromDecl(decl, indexDir);
+        if (!lazy) continue;
 
         records.push({
-          name: underlyingName,
+          name: lazy.underlyingName,
           isTypeOnly: false,
-          resolvedPath,
+          resolvedPath: lazy.resolvedPath,
           section,
-          lazyLoaderName: varName,
+          lazyLoaderName: lazy.lazyLoaderName,
         });
       }
     }

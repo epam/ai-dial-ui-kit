@@ -14,14 +14,19 @@ type Story = StoryObj<typeof meta>;
 interface TypographyRowProps {
   className: string;
   label: string;
+  sample?: string;
 }
 
 const SAMPLE_TEXT = 'The quick brown fox jumps over the lazy dog';
 
-const TypographyRow = ({ className, label }: TypographyRowProps) => (
+const TypographyRow = ({
+  className,
+  label,
+  sample = SAMPLE_TEXT,
+}: TypographyRowProps) => (
   <div className="grid grid-cols-[220px_1fr] items-baseline gap-4 border-b border-primary py-3 last:border-0">
     <code className="dial-tiny-text shrink-0 text-secondary">{label}</code>
-    <span className={className}>{SAMPLE_TEXT}</span>
+    <span className={className}>{sample}</span>
   </div>
 );
 
@@ -105,6 +110,26 @@ const TypographyShowcase = () => (
         label="dial-caption-lead-semi-text"
       />
       <TypographyRow className="dial-code-text" label="dial-code-text" />
+      <TypographyRow
+        className="dial-italic-text"
+        label="dial-italic-text"
+        sample="fx"
+      />
+      <TypographyRow
+        className="dial-small-italic-text"
+        label="dial-small-italic-text"
+        sample="fx"
+      />
+      <TypographyRow
+        className="dial-tiny-italic-text"
+        label="dial-tiny-italic-text"
+        sample="fx"
+      />
+      <TypographyRow
+        className="dial-caption-italic-text"
+        label="dial-caption-italic-text"
+        sample="fx"
+      />
     </Section>
   </div>
 );

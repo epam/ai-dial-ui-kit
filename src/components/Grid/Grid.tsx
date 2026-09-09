@@ -1,5 +1,4 @@
 import {
-  AllCommunityModule,
   type ColDef,
   colorSchemeLight,
   type GridApi,
@@ -7,10 +6,8 @@ import {
   type GridReadyEvent,
   type GridSizeChangedEvent,
   type ICellRendererParams,
-  ModuleRegistry,
   type RowSelectionOptions,
   type SelectionChangedEvent,
-  setupAgTestIds,
   themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -54,8 +51,7 @@ import { ariaDescription } from '@/components/Checkbox/constants';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 import { debounceFn } from '@/utils/debounce.ts';
-
-setupAgTestIds({ testIdAttribute: 'dataQA' });
+import { registerAgGridModulesOnce } from '@/utils/grid-registration.ts';
 
 export interface DialGridProps<T extends object = Record<string, unknown>> {
   columnDefs?: ColDef<T>[];
@@ -81,8 +77,6 @@ export interface DialGridProps<T extends object = Record<string, unknown>> {
   selectionMode?: GridSelectionMode;
   allowDisabledContextMenu?: boolean;
 }
-
-ModuleRegistry.registerModules([AllCommunityModule]);
 
 /**
  * DialGrid — A feature-rich data grid wrapper built on ag-Grid with dark theme support.
@@ -200,6 +194,8 @@ export const DialGrid = <T extends object>({
   allowDisabledContextMenu = false,
   selectionMode,
 }: DialGridProps<T>) => {
+  registerAgGridModulesOnce();
+
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
   const a11yId = useId();
   const isMobileScreen = useIsMobileScreen();

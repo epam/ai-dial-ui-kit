@@ -1,7 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { DialGrid } from './Grid';
-import { type ColDef, type GridApi } from 'ag-grid-community';
+import {
+  AllCommunityModule,
+  type ColDef,
+  type GridApi,
+  ModuleRegistry,
+} from 'ag-grid-community';
 
 interface TestRow {
   id: string;
@@ -37,6 +42,22 @@ describe('Dial UI Kit :: DialGrid', () => {
     });
     return names;
   };
+
+  /* Must run before any other test in this file renders a Grid: the spy
+   * below can only observe a genuine "not called yet" state on the very
+   * first render this test file performs (registerAgGridModulesOnce's
+   * internal guard stays flipped for the rest of the module's lifetime,
+   * matching real usage - it should run once, not once per Grid render). */
+  test('registers AG Grid modules when rendered, not merely when imported', async () => {
+    const registerModulesSpy = vi.spyOn(ModuleRegistry, 'registerModules');
+    expect(registerModulesSpy).not.toHaveBeenCalled();
+
+    render(<DialGrid<TestRow> columnDefs={testColumns} rowData={testRows} />);
+
+    await screen.findByText('Alice');
+
+    expect(registerModulesSpy).toHaveBeenCalledWith([AllCommunityModule]);
+  });
 
   test('sorts names case-insensitively', async () => {
     let api: GridApi<TestRow> | undefined;

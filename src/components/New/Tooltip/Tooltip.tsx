@@ -25,7 +25,7 @@ export interface TooltipProps extends TooltipContainerOptions {
  * Tooltip text does not reach assistive technology unless the trigger itself
  * carries it: pass `asChild` so the `aria-describedby` lands on the control
  * rather than on a wrapper `<span>`, and never let a tooltip be the only
- * accessible name of a control — it renders nothing on mobile screens.
+ * accessible name of a control — it renders nothing on a touch-only device.
  *
  * @example
  * ```tsx

@@ -134,6 +134,17 @@ export const LabelsOnly: Story = {
   ),
 };
 
+const LONG_LABEL_ITEMS = VIEW_ITEMS.map((item) =>
+  item.value === 'grid'
+    ? { ...item, label: 'Grid view with a very long segment label' }
+    : item,
+);
+
+export const LongLabel: Story = {
+  args: { items: LONG_LABEL_ITEMS, value: 'list', onChange: () => {} },
+  render: () => <Interactive items={LONG_LABEL_ITEMS} initialValue="list" />,
+};
+
 export const Disabled: Story = {
   args: {
     items: VIEW_ITEMS,
