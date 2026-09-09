@@ -1,3 +1,4 @@
+import { FloatingNode } from '@floating-ui/react';
 import { Fragment, type FC } from 'react';
 
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
@@ -32,6 +33,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
 }) => {
   const {
     isOpen,
+    nodeId,
     refs,
     floatingStyles,
     context,
@@ -66,7 +68,7 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
   );
 
   return (
-    <>
+    <FloatingNode id={nodeId}>
       {opt.interactiveTooltip ? (
         <InteractiveTooltip
           asChild
@@ -125,6 +127,6 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
           })}
         </SubMenuPanel>
       )}
-    </>
+    </FloatingNode>
   );
 };

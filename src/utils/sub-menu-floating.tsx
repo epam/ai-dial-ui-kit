@@ -4,10 +4,12 @@ import {
   autoUpdate,
   flip,
   offset,
+  safePolygon,
   shift,
   useClick,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
   useHover,
   useInteractions,
   useRole,
@@ -37,8 +39,10 @@ export function useSubMenuFloating(
   hoverOptions?: SubMenuHoverOptions,
 ) {
   const [isOpen, setIsOpen] = useState(false);
+  const nodeId = useFloatingNodeId();
 
   const { refs, floatingStyles, context } = useFloating({
+    nodeId,
     placement: 'right-start',
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -53,6 +57,11 @@ export function useSubMenuFloating(
   const hover = useHover(context, {
     enabled: !disabled,
     move: hoverOptions?.move ?? false,
+    /* Lets the pointer travel into a nested floating element — an
+       InteractiveTooltip anchored to this menu's trigger or a child row —
+       without closing this menu; requires the `FloatingTree`/`FloatingNode`
+       wiring the trigger's own `nodeId` connects to. */
+    handleClose: safePolygon(),
     delay: hoverOptions?.delay ?? { open: 80, close: 80 },
   });
   const click = useClick(context, { enabled: !disabled });
@@ -70,6 +79,7 @@ export function useSubMenuFloating(
 
   return {
     isOpen,
+    nodeId,
     refs,
     floatingStyles,
     context,

@@ -1,5 +1,7 @@
-import { useCallback, type FC, type MouseEvent } from 'react';
+import { FloatingNode } from '@floating-ui/react';
+import { Fragment, useCallback, type FC, type MouseEvent } from 'react';
 
+import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { type DropdownItem } from '@/models/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
@@ -25,6 +27,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
 }) => {
   const {
     isOpen,
+    nodeId,
     refs,
     floatingStyles,
     context,
@@ -43,23 +46,38 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
     [onRootClose],
   );
 
+  const trigger = (
+    <MenuItem
+      ref={refs.setReference}
+      role="menuitem"
+      aria-haspopup="menu"
+      aria-expanded={isOpen}
+      aria-disabled={!!item.disabled}
+      disabled={item.disabled}
+      icon={item.icon}
+      label={item.label}
+      trailing={submenuCaretIcon}
+      className={item.className}
+      {...getReferenceProps()}
+    >
+      {item.renderItem?.(item)}
+    </MenuItem>
+  );
+
   return (
-    <>
-      <MenuItem
-        ref={refs.setReference}
-        role="menuitem"
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        aria-disabled={!!item.disabled}
-        disabled={item.disabled}
-        icon={item.icon}
-        label={item.label}
-        trailing={submenuCaretIcon}
-        className={item.className}
-        {...getReferenceProps()}
-      >
-        {item.renderItem?.(item)}
-      </MenuItem>
+    <FloatingNode id={nodeId}>
+      {item.interactiveTooltip ? (
+        <InteractiveTooltip
+          asChild
+          placement={item.interactiveTooltip.placement}
+          content={item.interactiveTooltip.content}
+          contentClassName={item.interactiveTooltip.contentClassName}
+        >
+          {trigger}
+        </InteractiveTooltip>
+      ) : (
+        trigger
+      )}
 
       {isOpen && (
         <SubMenuPanel
@@ -82,9 +100,8 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
               {item.children!.map((child) => {
                 const role = getItemRole(child);
 
-                return (
+                const childRow = (
                   <MenuItem
-                    key={child.key}
                     role={role}
                     aria-checked={
                       role === 'menuitem' ? undefined : !!child.checked
@@ -109,6 +126,25 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
                     {child.renderItem?.(child)}
                   </MenuItem>
                 );
+
+                return (
+                  <Fragment key={child.key}>
+                    {child.interactiveTooltip ? (
+                      <InteractiveTooltip
+                        asChild
+                        placement={child.interactiveTooltip.placement}
+                        content={child.interactiveTooltip.content}
+                        contentClassName={
+                          child.interactiveTooltip.contentClassName
+                        }
+                      >
+                        {childRow}
+                      </InteractiveTooltip>
+                    ) : (
+                      childRow
+                    )}
+                  </Fragment>
+                );
               })}
 
               {item.menuFooter &&
@@ -119,6 +155,6 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           )}
         </SubMenuPanel>
       )}
-    </>
+    </FloatingNode>
   );
 };
