@@ -168,6 +168,34 @@ export const CompareClickable: Story = {
     onBarClick: (key, value) => alert(`${key}: ${value}`),
     className: 'w-[420px]',
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'In compare mode the whole entry is clickable. Hovering or focusing any part of an entry highlights the pair of bars as one continuous block.',
+      },
+    },
+  },
+};
+
+export const CompareWithBarClassName: Story = {
+  args: {
+    title: 'Relevance',
+    data: { accuracy: 0.82, recall: 0.64, precision: 0.91, f1: 0.74 },
+    compareData: { accuracy: 0.64, recall: 0.82, precision: 0.78, f1: 0.86 },
+    compareLabels: ['Last week', 'This week'],
+    onBarClick: (key, value) => alert(`${key}: ${value}`),
+    barClassName: 'rounded p-1 -mx-1 group-hover:bg-layer-4 transition-colors',
+    className: 'w-[420px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'In compare mode `barClassName` lands on the shared pair container, so `group-hover:` fills both bars as one block. A host `group-hover:bg-*` overrides the default accent fill when `onBarClick` is set.',
+      },
+    },
+  },
 };
 
 /** Admin compare repro: baseline 0.917 vs compared 1.00 — badge should be +0.083. */

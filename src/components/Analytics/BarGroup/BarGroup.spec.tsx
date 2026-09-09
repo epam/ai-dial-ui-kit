@@ -165,6 +165,93 @@ describe('Dial UI Kit :: DialAnalyticsBarGroup', () => {
 
       expect(screen.getAllByRole('button')).toHaveLength(1);
     });
+
+    test('in compare mode marks the entry as a group and applies default pair hover on the shared bars container when onBarClick is set', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+          onBarClick={vi.fn()}
+        />,
+      );
+
+      const entryButton = screen.getByRole('button', { name: /accuracy/i });
+      expect(entryButton.className).toMatch(/\bgroup\b/);
+
+      const progressbars = screen.getAllByRole('progressbar');
+      expect(progressbars).toHaveLength(2);
+      const barsContainer = progressbars[0].parentElement
+        ?.parentElement as HTMLElement;
+      expect(progressbars[1].parentElement?.parentElement).toBe(barsContainer);
+      expect(barsContainer.className).toMatch(
+        /group-hover:bg-accent-primary-alpha/,
+      );
+      expect(barsContainer.className).toMatch(
+        /group-focus-visible:bg-accent-primary-alpha/,
+      );
+      for (const bar of progressbars) {
+        expect((bar.parentElement as HTMLElement).className).not.toMatch(
+          /group-hover:bg-accent-primary-alpha/,
+        );
+      }
+    });
+
+    test('in compare mode without onBarClick still marks the entry as a group but omits default pair hover', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+        />,
+      );
+
+      const label = screen.getByText('accuracy');
+      expect(label.closest('.group')).not.toBeNull();
+
+      const progressbars = screen.getAllByRole('progressbar');
+      const barsContainer = progressbars[0].parentElement
+        ?.parentElement as HTMLElement;
+      expect(barsContainer.className).not.toMatch(
+        /group-hover:bg-accent-primary-alpha/,
+      );
+    });
+
+    test('in compare mode applies barClassName to the shared bars container', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          compareData={{ accuracy: 0.64 }}
+          onBarClick={vi.fn()}
+          barClassName="group-hover:bg-layer-4"
+        />,
+      );
+
+      const progressbars = screen.getAllByRole('progressbar');
+      const barsContainer = progressbars[0].parentElement
+        ?.parentElement as HTMLElement;
+      expect(progressbars[1].parentElement?.parentElement).toBe(barsContainer);
+      expect(barsContainer.className).toMatch(/group-hover:bg-layer-4/);
+    });
+
+    test('in single-bar mode barClassName hover still lands on the bar and the button is not a group', () => {
+      render(
+        <DialAnalyticsBarGroup
+          title="Relevance"
+          data={{ accuracy: 0.82 }}
+          onBarClick={vi.fn()}
+          barClassName="hover:bg-layer-4"
+        />,
+      );
+
+      const barButton = screen.getByRole('button', { name: /accuracy/i });
+      expect(barButton.className).not.toMatch(/\bgroup\b/);
+
+      const barContainer = screen.getByRole('progressbar')
+        .parentElement as HTMLElement;
+      expect(barContainer.className).toMatch(/hover:bg-layer-4/);
+    });
   });
 
   describe('inline mode', () => {

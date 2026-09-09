@@ -58,7 +58,14 @@ export interface DialAnalyticsBarGroupProps {
   barTitleClassName?: string;
   /** Additional CSS classes for each bar's value label. */
   barValueClassName?: string;
-  /** Additional CSS classes for each bar's outer container (e.g. for custom hover effects). */
+  /**
+   * Additional CSS classes for each bar's outer container (e.g. for custom hover
+   * effects). In compare mode these classes apply to the shared container around
+   * both bars (one continuous block), and the entry wrapper is a Tailwind
+   * `group` — use `group-hover:` (not `hover:`) for pair hover. When `onBarClick`
+   * is set, that container also gets a default accent fill on group hover and
+   * `:focus-visible`.
+   */
   barClassName?: string;
   /** Map of bar key to tooltip content. When provided, hovering each bar shows its description. */
   barDescriptions?: Record<string, ReactNode>;
@@ -97,7 +104,7 @@ export interface DialAnalyticsBarGroupProps {
  * @param [inline] - Renders every bar on a single row (50% title, 50% bar + value).
  * @param [barTitleClassName] - Additional CSS classes for each bar's title label.
  * @param [barValueClassName] - Additional CSS classes for each bar's value label.
- * @param [barClassName] - Additional CSS classes for each bar's outer container.
+ * @param [barClassName] - Additional CSS classes for each bar's outer container. In compare mode they apply to the shared pair container (one continuous block); the entry is a Tailwind `group` — use `group-hover:` for pair hover; when `onBarClick` is set that container also gets a default accent fill on hover and `:focus-visible`.
  * @param [barDescriptions] - Map of bar key to tooltip content. Hovering each bar shows its description.
  * @param [className] - Additional CSS classes for the accordion container.
  */
@@ -138,6 +145,13 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
     : [];
   const barClickClassName =
     'cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary';
+  const compareEntryClassName = 'group flex flex-col gap-1.5';
+  const compareBarsClassName = mergeClasses(
+    'flex flex-col gap-1.5 pl-2',
+    onBarClick &&
+      'group-hover:bg-accent-primary-alpha group-focus-visible:bg-accent-primary-alpha',
+    barClassName,
+  );
 
   return (
     <DialAccordion
@@ -200,7 +214,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col gap-1.5 pl-2">
+                <div className={compareBarsClassName}>
                   <DialAnalyticsBar
                     title={compareLabels?.[0]}
                     value={value}
@@ -208,7 +222,6 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                     colorMap={colorMap}
                     inline={inline}
                     titleClassName={compareLabelClass}
-                    className={barClassName}
                     ariaLabel={key}
                   />
                   <DialAnalyticsBar
@@ -218,7 +231,6 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                     colorMap={colorMap}
                     inline={inline}
                     titleClassName={compareLabelClass}
-                    className={barClassName}
                     ariaLabel={`${key} compare`}
                   />
                 </div>
@@ -232,7 +244,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
                   type="button"
                   onClick={() => onBarClick(key, value)}
                   className={mergeClasses(
-                    'flex flex-col gap-1.5',
+                    compareEntryClassName,
                     barClickClassName,
                   )}
                 >
@@ -242,7 +254,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
             }
 
             return (
-              <div key={key} className="flex flex-col gap-1.5">
+              <div key={key} className={compareEntryClassName}>
                 {entryContent}
               </div>
             );
