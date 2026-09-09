@@ -1,5 +1,6 @@
-import { type FC } from 'react';
+import { Fragment, type FC } from 'react';
 
+import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { type SelectOption } from '@/models/select';
 import { MenuItemMark } from '@/types/menu-item';
@@ -42,27 +43,42 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
     selectedValues.includes(c.value),
   );
 
+  const trigger = (
+    /*
+      The trigger carries no mark of its own: the check belongs to the child
+      that is actually chosen, one panel over. While its panel is open the row
+      stays tinted, which is what the design shows for an open parent.
+    */
+    <MenuItem
+      ref={refs.setReference}
+      role="option"
+      aria-haspopup="listbox"
+      aria-expanded={isOpen}
+      aria-selected={!!parentSelected}
+      aria-disabled={!!opt.disabled}
+      disabled={opt.disabled}
+      ellipsisLabel
+      icon={opt.icon}
+      label={opt.labelNode ?? opt.label}
+      trailing={selectSubMenuCaretIcon}
+      {...getReferenceProps()}
+    />
+  );
+
   return (
     <>
-      {/*
-        The trigger carries no mark of its own: the check belongs to the child
-        that is actually chosen, one panel over. While its panel is open the row
-        stays tinted, which is what the design shows for an open parent.
-      */}
-      <MenuItem
-        ref={refs.setReference}
-        role="option"
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-selected={!!parentSelected}
-        aria-disabled={!!opt.disabled}
-        disabled={opt.disabled}
-        ellipsisLabel
-        icon={opt.icon}
-        label={opt.labelNode ?? opt.label}
-        trailing={selectSubMenuCaretIcon}
-        {...getReferenceProps()}
-      />
+      {opt.interactiveTooltip ? (
+        <InteractiveTooltip
+          asChild
+          placement={opt.interactiveTooltip.placement}
+          content={opt.interactiveTooltip.content}
+          contentClassName={opt.interactiveTooltip.contentClassName}
+        >
+          {trigger}
+        </InteractiveTooltip>
+      ) : (
+        trigger
+      )}
 
       {isOpen && (
         <SubMenuPanel
@@ -73,22 +89,40 @@ export const SelectSubMenuItem: FC<SelectSubMenuItemProps> = ({
           role="listbox"
           surfaceClassName={selectSubMenuClassName}
         >
-          {opt.children!.map((child) => (
-            <MenuItem
-              key={child.value}
-              role="option"
-              aria-selected={selectedValues.includes(child.value)}
-              aria-disabled={!!child.disabled}
-              disabled={child.disabled}
-              mark={mark}
-              selected={selectedValues.includes(child.value)}
-              ellipsisLabel
-              icon={child.icon}
-              label={child.labelNode ?? child.label}
-              rightControl={child.rightControl}
-              onClick={() => !child.disabled && onSelect(child.value)}
-            />
-          ))}
+          {opt.children!.map((child) => {
+            const childRow = (
+              <MenuItem
+                role="option"
+                aria-selected={selectedValues.includes(child.value)}
+                aria-disabled={!!child.disabled}
+                disabled={child.disabled}
+                mark={mark}
+                selected={selectedValues.includes(child.value)}
+                ellipsisLabel
+                icon={child.icon}
+                label={child.labelNode ?? child.label}
+                rightControl={child.rightControl}
+                onClick={() => !child.disabled && onSelect(child.value)}
+              />
+            );
+
+            return (
+              <Fragment key={child.value}>
+                {child.interactiveTooltip ? (
+                  <InteractiveTooltip
+                    asChild
+                    placement={child.interactiveTooltip.placement}
+                    content={child.interactiveTooltip.content}
+                    contentClassName={child.interactiveTooltip.contentClassName}
+                  >
+                    {childRow}
+                  </InteractiveTooltip>
+                ) : (
+                  childRow
+                )}
+              </Fragment>
+            );
+          })}
         </SubMenuPanel>
       )}
     </>
