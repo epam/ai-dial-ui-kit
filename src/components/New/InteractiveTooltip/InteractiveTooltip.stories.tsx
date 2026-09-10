@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 
 import { TooltipPlacement } from '@/types/tooltip';
 import { Button } from '../Button/Button';
@@ -109,6 +110,34 @@ export const OnAPlainTrigger: Story = {
       description: {
         story:
           'Without `asChild` the trigger is wrapped in a `<span>`, which is the only option when the trigger is not a single element.',
+      },
+    },
+  },
+};
+
+export const UncontrolledWithOnOpenChange: Story = {
+  render: (args) => {
+    const [log, setLog] = useState<boolean[]>([]);
+
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-[220px] rounded-xl bg-layer-raised p-1 shadow-md">
+          <InteractiveTooltip
+            {...args}
+            onOpenChange={(next) => setLog((prev) => [...prev, next])}
+          />
+        </div>
+        <p className="text-sm text-secondary">
+          onOpenChange log: {log.length === 0 ? '—' : log.join(', ')}
+        </p>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The panel stays uncontrolled (no `open` prop) while `onOpenChange` is only used to observe transitions — e.g. to lazily fetch the panel content on first open. The panel still opens on hover/focus and the callback fires alongside it.',
       },
     },
   },

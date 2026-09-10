@@ -176,6 +176,46 @@ describe('Dial UI Kit :: InteractiveTooltip', () => {
     expect(panel).not.toHaveClass('bg-layer-0');
   });
 
+  test('Should open on hover, and notify onOpenChange, when uncontrolled', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <InteractiveTooltip content="Panel text" onOpenChange={onOpenChange}>
+        <button>Trigger</button>
+      </InteractiveTooltip>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Trigger' });
+
+    await user.hover(button);
+    await waitFor(() => {
+      expect(screen.getByText('Panel text')).toBeInTheDocument();
+    });
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    await user.unhover(button);
+    await waitFor(() => {
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+    });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  test('Should stay closed on hover, only notifying onOpenChange, when controlled', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    render(
+      <InteractiveTooltip content="Panel text" open={false} onOpenChange={onOpenChange}>
+        <button>Trigger</button>
+      </InteractiveTooltip>,
+    );
+
+    await user.hover(screen.getByRole('button', { name: 'Trigger' }));
+
+    expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+  });
+
   test('Should render nothing on a mobile screen, where there is no hover', () => {
     setViewportWidth(375);
 

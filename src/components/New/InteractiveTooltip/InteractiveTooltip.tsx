@@ -128,7 +128,10 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
 
   const open = controlledOpen ?? uncontrolledOpen;
-  const setOpen = setControlledOpen ?? setUncontrolledOpen;
+  const setOpen = (next: boolean) => {
+    setControlledOpen?.(next);
+    if (controlledOpen == null) setUncontrolledOpen(next);
+  };
 
   /*
    * Registers this panel as a node of the ancestor `FloatingTree` (when one
