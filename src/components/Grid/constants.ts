@@ -2,25 +2,25 @@ export const gridBaseClassName = 'h-full w-full';
 export const checkboxClass = '.ag-checkbox-input';
 
 export const GRID_THEME_COLORS = {
-  accentColor: 'var(--bg-control-accent, var(--bg-accent-primary, #5C8DEA))',
-  backgroundColor: 'var(--bg-layer-3, #FCFCFC)',
-  oddRowBackgroundColor: 'var(--bg-layer-2, #EEF1F7)',
+  accentColor: 'var(--bg-control-accent, var(--bg-accent-primary, #3664E2))',
+  backgroundColor: 'var(--bg-layer-raised, var(--bg-layer-3, #1D2439))',
+  oddRowBackgroundColor: 'var(--bg-layer-sunken, var(--bg-layer-2, #161B2D))',
   // The row tint has to stay translucent: the row it paints carries body text
   // and a checkbox filled with `accentColor`, so an opaque accent hides both.
   // `--bg-accent-primary-alpha` is the tint every other 1.0 control hovers
   // with; the controls' `*-alpha-active` token this used to read is the
   // pressed-state fill, which themes do define opaque.
   selectedRowBackgroundColor: 'var(--bg-accent-primary-alpha, #7DA4FF26)',
-  borderColor: 'var(--bg-layer-4, #D1DBEA)',
-  rowBorder: '1px solid var(--stroke-tertiary, var(--stroke-primary, #6B7280))',
+  borderColor: 'var(--bg-layer-4, #242C42)',
+  rowBorder: '1px solid var(--stroke-tertiary, var(--stroke-primary, #696E7C))',
   rowHoverColor: 'var(--bg-accent-primary-alpha, #7DA4FF26)',
   borderRadius: 3,
   browserColorScheme: 'dark',
-  chromeBackgroundColor: 'var(--bg-layer-1, #E0E6F0)',
-  foregroundColor: 'var(--text-primary, #161B2D)',
+  chromeBackgroundColor: 'var(--bg-layer-1, #0C101D)',
+  foregroundColor: 'var(--text-primary, #EEF1F7)',
   headerFontSize: 14,
   headerFontWeight: 600,
-  headerTextColor: 'var(--text-secondary, #6B7280)',
+  headerTextColor: 'var(--text-secondary, #9FA6BD)',
   spacing: 4,
   wrapperBorderRadius: 3,
   fontSize: 14,
