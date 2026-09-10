@@ -55,6 +55,35 @@ export const collectAllDescendants = (folder?: DialFile): DialFile[] => {
   return result;
 };
 
+/**
+ * Removes items (and their entire subtree) whose path matches one of the
+ * excluded paths, at any nesting depth. Used to hide specific folders (e.g.
+ * a root folder) from the Move/Copy destination popup without affecting the
+ * main file manager view.
+ *
+ * @param nodes - Hierarchical items to filter
+ * @param excludedPaths - Paths to exclude; pass `undefined`/empty to no-op
+ * @returns A new array with matching nodes (and their descendants) removed
+ */
+export const excludePathsFromTree = (
+  nodes: DialFile[] | undefined,
+  excludedPaths?: string[],
+): DialFile[] => {
+  if (!nodes?.length) return [];
+  if (!excludedPaths?.length) return nodes;
+
+  const excluded = new Set(excludedPaths);
+
+  const filter = (items: DialFile[]): DialFile[] =>
+    items
+      .filter((node) => !excluded.has(node.path))
+      .map((node) =>
+        node.items?.length ? { ...node, items: filter(node.items) } : node,
+      );
+
+  return filter(nodes);
+};
+
 export const isHiddenDotFile = (node: DialFile) => {
   const name = node.name ?? node.path.split('/').pop() ?? '';
   return name.startsWith('.');

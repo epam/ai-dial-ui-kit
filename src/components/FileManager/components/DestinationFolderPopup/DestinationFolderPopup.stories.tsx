@@ -162,3 +162,55 @@ export const WithoutAddFolderButton: Story = {
     showCreateFolderButton: false,
   },
 };
+
+const twoRootFoldersItems: DestinationFolderPopupProps['items'] = [
+  {
+    id: 'workspace',
+    folderId: 'workspace',
+    name: 'Workspace',
+    path: '/Workspace',
+    nodeType: DialFileNodeType.FOLDER,
+    parentPath: '/',
+    items: [
+      {
+        id: 'project-a',
+        folderId: 'project-a',
+        name: 'Project A',
+        path: '/Workspace/Project A',
+        nodeType: DialFileNodeType.FOLDER,
+        parentPath: '/Workspace',
+      },
+    ],
+  },
+  {
+    id: 'shared-with-me',
+    folderId: 'shared-with-me',
+    name: 'Shared with me',
+    path: '/Shared with me',
+    nodeType: DialFileNodeType.FOLDER,
+    parentPath: '/',
+    items: [
+      {
+        id: 'shared-doc',
+        folderId: 'shared-with-me',
+        name: 'Shared doc.pdf',
+        path: '/Shared with me/Shared doc.pdf',
+        nodeType: DialFileNodeType.ITEM,
+        parentPath: '/Shared with me',
+      },
+    ],
+  },
+];
+
+export const ExcludedRootFolder: Story = {
+  name: 'Excluded root folder (unavailable move destination)',
+  args: {
+    mode: 'move',
+    header: 'Moving 1 item: report.pdf',
+    items: twoRootFoldersItems,
+    // "Shared with me" is a root folder items can't be moved into (e.g. the
+    // current user doesn't own it), so it's hidden from this popup only —
+    // the main File Manager tree/grid are unaffected.
+    excludedPaths: ['/Shared with me'],
+  },
+};

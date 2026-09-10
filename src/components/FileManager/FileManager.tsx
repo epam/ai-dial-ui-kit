@@ -142,6 +142,7 @@ export type DialFileManagerDestinationFolderPopupOptions = Pick<
   | 'disabledPathTooltip'
   | 'emptyStateTitle'
   | 'emptyStateDescription'
+  | 'excludedPaths'
 > & {
   getCopyHeader?: (itemsCount: number, itemName?: string) => string;
   getMoveHeader?: (itemsCount: number, itemName?: string) => string;
@@ -476,6 +477,7 @@ export interface DialFileManagerProps {
  * @param [gridOptions] - Options forwarded to `DialGrid`; supports `columnDefs` override and `filterable` flag and date locale/options
  * @param [bulkActionsToolbarOptions] - Options for the bulk actions toolbar shown when items are selected
  * @param [deleteConfirmationOptions] - Options for the delete confirmation popup
+ * @param [destinationFolderPopupOptions.excludedPaths] - Paths to hide from the Copy/Move destination popup only (e.g. a root folder that shouldn't be a valid destination); the main tree/grid are unaffected
  *
  * @param [compactViewWidthBreakpoint=DEFAULT_COMPACT_VIEW_WIDTH_BREAKPOINT] - Width (px) below which the component switches to compact view.
  *
