@@ -1471,3 +1471,144 @@ describe('Dial UI Kit :: Dropdown — marked items', () => {
     expect(screen.getAllByRole('menu')).toHaveLength(2);
   });
 });
+
+describe('Dial UI Kit :: Dropdown — interactiveTooltip', () => {
+  test('opens next to a top-level item on hover', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'web-search',
+            label: 'Web Search',
+            interactiveTooltip: { content: 'More about Web Search' },
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    await user.hover(screen.getByRole('menuitem', { name: 'Web Search' }));
+
+    expect(
+      await screen.findByText('More about Web Search'),
+    ).toBeInTheDocument();
+  });
+
+  test('does not render a panel for an item without interactiveTooltip', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    expect(screen.queryByText('More about Web Search')).not.toBeInTheDocument();
+  });
+
+  test('opens next to a sub-menu child item on hover', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'more',
+            label: 'More actions',
+            children: [
+              {
+                key: 'archive',
+                label: 'Archive',
+                interactiveTooltip: { content: 'More about Archive' },
+              },
+            ],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    await user.hover(screen.getByRole('menuitem', { name: /more actions/i }));
+    await user.hover(await screen.findByRole('menuitem', { name: 'Archive' }));
+
+    expect(await screen.findByText('More about Archive')).toBeInTheDocument();
+  });
+
+  test('lets a control inside the panel be clicked without firing the item or closing the menu', async () => {
+    const user = userEvent.setup();
+    const onItemClick = vi.fn();
+    const onDetailsClick = vi.fn();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'web-search',
+            label: 'Web Search',
+            onClick: onItemClick,
+            interactiveTooltip: {
+              content: <button onClick={onDetailsClick}>View details</button>,
+            },
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    await user.hover(screen.getByRole('menuitem', { name: 'Web Search' }));
+    // `fireEvent.click` rather than `user.click`: the latter moves the
+    // pointer there first, and jsdom gives every element a zero-sized rect
+    // at the origin, which breaks the real geometry `safePolygon` needs to
+    // tell the move was still headed into the panel.
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'View details' }),
+    );
+
+    expect(onDetailsClick).toHaveBeenCalledTimes(1);
+    expect(onItemClick).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('a control inside a panel nested in a sub-menu can be clicked without closing the sub-menu', async () => {
+    const user = userEvent.setup();
+    const onDetailsClick = vi.fn();
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'more',
+            label: 'More actions',
+            children: [
+              {
+                key: 'archive',
+                label: 'Archive',
+                interactiveTooltip: {
+                  content: (
+                    <button onClick={onDetailsClick}>View details</button>
+                  ),
+                },
+              },
+            ],
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    await user.hover(screen.getByRole('menuitem', { name: /more actions/i }));
+    await user.hover(await screen.findByRole('menuitem', { name: 'Archive' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'View details' }),
+    );
+
+    expect(onDetailsClick).toHaveBeenCalledTimes(1);
+    // Both the root menu and the sub-menu are still open.
+    expect(screen.getAllByRole('menu')).toHaveLength(2);
+  });
+});

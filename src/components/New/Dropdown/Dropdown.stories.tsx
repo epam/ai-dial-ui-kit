@@ -15,6 +15,7 @@ import {
 } from '@tabler/icons-react';
 import { useRef, useState, type ReactNode } from 'react';
 
+import { Button } from '@/components/New/Button/Button';
 import {
   NeutralButton,
   PrimaryButton,
@@ -24,6 +25,7 @@ import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { type DropdownItem } from '@/models/dropdown';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
@@ -962,5 +964,83 @@ export const MarkedItems: Story = {
     };
 
     return <MarkedExample />;
+  },
+};
+
+const viewDetailsButton = (
+  <Button
+    variant={ButtonVariant.Primary}
+    appearance={ButtonAppearance.Link}
+    label="View details"
+  />
+);
+
+/**
+ * An item's `interactiveTooltip` opens an {@link InteractiveTooltip} next to
+ * its row on hover or focus. Unlike a plain `label`, its content can hold
+ * controls of its own — hover "Web Search" (or tab to it) and the panel stays
+ * open long enough to reach the "View details" link inside it, and it will
+ * not close the menu underneath it while you do.
+ */
+export const WithInteractiveTooltip: Story = {
+  name: 'Item with an interactive tooltip',
+  args: {
+    placement: 'bottom-start',
+    items: [
+      {
+        key: 'web-search',
+        label: 'Web Search',
+        interactiveTooltip: {
+          content: (
+            <div className="flex flex-col gap-3">
+              <p>
+                Looks things up on the web instead of answering from memory.
+                Useful for anything that may have changed since training —
+                current events, prices, recent releases.
+              </p>
+              {viewDetailsButton}
+            </div>
+          ),
+        },
+      },
+      { key: 'file-reader', label: 'file-reader' },
+      { key: 'skill-creator', label: 'skill-creator' },
+    ],
+  },
+};
+
+/**
+ * The same `interactiveTooltip` field works on a sub-menu's own items, opened
+ * next to a child row instead of a top-level one.
+ */
+export const WithInteractiveTooltipInSubMenu: Story = {
+  name: 'Interactive tooltip on a sub-menu item',
+  args: {
+    placement: 'bottom-start',
+    items: [
+      { key: 'file-reader', label: 'file-reader' },
+      {
+        key: 'productivity',
+        label: 'Productivity',
+        children: [
+          {
+            key: 'good-morning-breakfast',
+            label: 'good-morning-breakfast',
+            interactiveTooltip: {
+              content: (
+                <div className="flex flex-col gap-3">
+                  <p>
+                    Puts together a breakfast plan and a morning briefing before
+                    you ask for one.
+                  </p>
+                  {viewDetailsButton}
+                </div>
+              ),
+            },
+          },
+          { key: 'skill-creator', label: 'skill-creator' },
+        ],
+      },
+    ],
   },
 };

@@ -1,5 +1,6 @@
 import type { DropdownItemType } from '@/types/dropdown';
 import type { MenuItemMark } from '@/types/menu-item';
+import type { TooltipPlacement } from '@/types/tooltip';
 import type { ReactNode, MouseEvent } from 'react';
 
 export interface DropdownSubMenuHoverOptions {
@@ -7,6 +8,23 @@ export interface DropdownSubMenuHoverOptions {
   delay?: number | { open?: number; close?: number };
   /** Whether pointer movement (not just rest) can trigger the hover open. Defaults to `false`. */
   move?: boolean;
+}
+
+/**
+ * Data for the interactive panel {@link Dropdown} anchors to an item's row —
+ * unlike a plain tooltip, its content can hold controls of its own (a "View
+ * details" link, for example), which is why it takes a full node rather than
+ * a string.
+ */
+export interface DropdownItemInteractiveTooltip {
+  content: ReactNode;
+  /** @default TooltipPlacement.Right */
+  placement?: TooltipPlacement;
+  /**
+   * Additional CSS classes for the panel — e.g. a wider `max-w-*` for content
+   * that does not fit the default 320px.
+   */
+  contentClassName?: string;
 }
 
 export interface DropdownItem {
@@ -62,4 +80,10 @@ export interface DropdownItem {
   renderItem?: (item: DropdownItem) => ReactNode;
   /** Overrides the default hover-open behavior of this item's submenu. */
   subMenuHoverOptions?: DropdownSubMenuHoverOptions;
+  /**
+   * Anchors an {@link InteractiveTooltip} to this item's row, open on hover
+   * or focus. Use it for content too rich for a plain label — an explanation
+   * with its own link or button.
+   */
+  interactiveTooltip?: DropdownItemInteractiveTooltip;
 }

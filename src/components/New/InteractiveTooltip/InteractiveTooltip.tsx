@@ -8,6 +8,7 @@ import {
   shift,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
   useFocus,
   useHover,
   useInteractions,
@@ -129,7 +130,17 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = setControlledOpen ?? setUncontrolledOpen;
 
+  /*
+   * Registers this panel as a node of the ancestor `FloatingTree` (when one
+   * wraps a Dropdown/Select the trigger sits inside), so that trigger's own
+   * hover/dismiss logic knows this panel is a nested floating element rather
+   * than something entirely outside it — see `Dropdown` and
+   * `useSubMenuFloating`.
+   */
+  const nodeId = useFloatingNodeId();
+
   const { refs, floatingStyles, context } = useFloating({
+    nodeId,
     placement,
     open,
     onOpenChange: setOpen,

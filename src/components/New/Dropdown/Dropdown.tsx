@@ -1,15 +1,19 @@
 import {
   FloatingFocusManager,
+  FloatingNode,
   FloatingPortal,
+  FloatingTree,
   autoPlacement,
   autoUpdate,
   flip,
   offset,
+  safePolygon,
   shift,
   size as fuiSize,
   useClick,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
   useHover,
   useInteractions,
   useRole,
@@ -20,6 +24,7 @@ import type {
   ReferenceElement,
 } from '@floating-ui/react';
 import {
+  Fragment,
   useCallback,
   useEffect,
   useId,
@@ -33,6 +38,7 @@ import {
   type RefObject,
 } from 'react';
 
+import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 
@@ -237,8 +243,17 @@ export const Dropdown: FC<DropdownProps> = ({
 
   const listId = useId();
   const useAuto = placement === undefined;
+  /*
+   * Registered with the `FloatingTree` this component provides below, so a
+   * nested `InteractiveTooltip` (on an item or submenu item) is recognized as
+   * this menu's own floating descendant rather than something outside it —
+   * without this, hovering into the tooltip's panel or clicking a control
+   * inside it would read as "left"/"outside" and close the menu underneath it.
+   */
+  const nodeId = useFloatingNodeId();
 
   const { refs, floatingStyles, context } = useFloating({
+    nodeId,
     placement,
     open: isOpen,
     onOpenChange: setOpen,
@@ -291,6 +306,7 @@ export const Dropdown: FC<DropdownProps> = ({
     enabled: trigger.includes(DropdownTrigger.Hover) && !disabled,
     move: false,
     restMs: 40,
+    handleClose: safePolygon(),
     delay: { open: 80, close: 80 },
   });
 
@@ -473,9 +489,8 @@ export const Dropdown: FC<DropdownProps> = ({
             const mark = resolveItemMark(it);
             const role = getItemRole(it);
 
-            return (
+            const row = (
               <MenuItem
-                key={it.key}
                 role={role}
                 aria-checked={role === 'menuitem' ? undefined : !!it.checked}
                 aria-current={
@@ -496,6 +511,23 @@ export const Dropdown: FC<DropdownProps> = ({
               >
                 {it.renderItem?.(it)}
               </MenuItem>
+            );
+
+            return (
+              <Fragment key={it.key}>
+                {it.interactiveTooltip ? (
+                  <InteractiveTooltip
+                    asChild
+                    placement={it.interactiveTooltip.placement}
+                    content={it.interactiveTooltip.content}
+                    contentClassName={it.interactiveTooltip.contentClassName}
+                  >
+                    {row}
+                  </InteractiveTooltip>
+                ) : (
+                  row
+                )}
+              </Fragment>
             );
           })}
         </div>
@@ -548,62 +580,64 @@ export const Dropdown: FC<DropdownProps> = ({
   }, [isOpen, refs.reference, setOpen]);
 
   return (
-    <>
-      <span
-        ref={refs.setReference}
-        className={mergeClasses(
-          dropdownBaseClassName,
-          disabled && '!cursor-not-allowed opacity-75',
-          className,
-        )}
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        aria-controls={listId}
-        {...referenceProps}
-      >
-        {children}
-      </span>
+    <FloatingTree>
+      <FloatingNode id={nodeId}>
+        <span
+          ref={refs.setReference}
+          className={mergeClasses(
+            dropdownBaseClassName,
+            disabled && '!cursor-not-allowed opacity-75',
+            className,
+          )}
+          aria-haspopup="menu"
+          aria-expanded={isOpen}
+          aria-controls={listId}
+          {...referenceProps}
+        >
+          {children}
+        </span>
 
-      {isOpen && (
-        <FloatingPortal>
-          <FloatingFocusManager
-            context={context}
-            modal={false}
-            /* 0 puts focus on the overlay's first control, falling back to the
-               overlay itself when it holds none; -1 leaves focus where it is,
-               which is only right for a menu the pointer opened on hover. */
-            initialFocus={shouldFocusOverlay ? 0 : -1}
-            returnFocus
-          >
-            <div
-              id={listId}
-              ref={refs.setFloating}
-              style={floatingStyles}
-              className={mergeClasses(
-                dropdownListBaseClassName,
-                !matchReferenceWidth && 'w-max',
-                'overflow-auto',
-                themeScope,
-                listClassName,
-              )}
-              {...getFloatingProps({ onKeyDown: handleFloatingKeyDown })}
+        {isOpen && (
+          <FloatingPortal>
+            <FloatingFocusManager
+              context={context}
+              modal={false}
+              /* 0 puts focus on the overlay's first control, falling back to the
+                 overlay itself when it holds none; -1 leaves focus where it is,
+                 which is only right for a menu the pointer opened on hover. */
+              initialFocus={shouldFocusOverlay ? 0 : -1}
+              returnFocus
             >
-              {closable && (
-                <div className="flex items-center justify-between px-2 pt-2">
-                  <CloseButton
-                    ariaLabel="Close dropdown"
-                    onClose={(e) => {
-                      onClose?.(e);
-                      setOpen(false);
-                    }}
-                  />
-                </div>
-              )}
-              {overlayContent}
-            </div>
-          </FloatingFocusManager>
-        </FloatingPortal>
-      )}
-    </>
+              <div
+                id={listId}
+                ref={refs.setFloating}
+                style={floatingStyles}
+                className={mergeClasses(
+                  dropdownListBaseClassName,
+                  !matchReferenceWidth && 'w-max',
+                  'overflow-auto',
+                  themeScope,
+                  listClassName,
+                )}
+                {...getFloatingProps({ onKeyDown: handleFloatingKeyDown })}
+              >
+                {closable && (
+                  <div className="flex items-center justify-between px-2 pt-2">
+                    <CloseButton
+                      ariaLabel="Close dropdown"
+                      onClose={(e) => {
+                        onClose?.(e);
+                        setOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
+                {overlayContent}
+              </div>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        )}
+      </FloatingNode>
+    </FloatingTree>
   );
 };
