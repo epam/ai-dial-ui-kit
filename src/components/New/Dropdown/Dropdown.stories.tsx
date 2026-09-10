@@ -151,6 +151,7 @@ const meta = {
     menuFooter: { control: false },
     renderOverlay: { control: false },
     children: { control: false },
+    initialFocus: { control: false },
   },
   args: {
     trigger: [DropdownTrigger.Click],
@@ -213,6 +214,83 @@ const ControlledExample = (args: DropdownProps) => {
 export const ControlledOpen: Story = {
   args: {},
   render: ControlledExample,
+};
+
+const TYPEAHEAD_COMMANDS = [
+  { key: 'image', label: '/image — Generate an image' },
+  { key: 'code', label: '/code — Write or explain code' },
+  { key: 'summarize', label: '/summarize — Summarize the conversation' },
+];
+
+const TypeaheadExample = (args: DropdownProps) => {
+  const [value, setValue] = useState('');
+  const [open, setOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const query = value.startsWith('/') ? value.slice(1).toLowerCase() : null;
+  const matches =
+    query !== null
+      ? TYPEAHEAD_COMMANDS.filter((c) => c.key.startsWith(query))
+      : [];
+
+  return (
+    <div className="w-[360px]">
+      <Dropdown
+        {...args}
+        trigger={[]}
+        open={open && matches.length > 0}
+        onOpenChange={setOpen}
+        initialFocus={-1}
+        outsidePressIgnoreRef={textareaRef}
+        matchReferenceWidth
+        renderOverlay={() => (
+          <div role="none" className="py-1">
+            {matches.map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                role="menuitem"
+                className={dropdownItemBaseClassName}
+                onClick={() => {
+                  setValue(`/${c.key} `);
+                  setOpen(false);
+                  textareaRef.current?.focus();
+                }}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+        )}
+      >
+        <textarea
+          ref={textareaRef}
+          aria-label="Message"
+          className="w-full resize-none rounded border border-secondary bg-layer-1 p-2 text-primary outline-none"
+          rows={3}
+          placeholder="Type / for commands…"
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setOpen(e.target.value.startsWith('/'));
+          }}
+        />
+      </Dropdown>
+    </div>
+  );
+};
+
+/**
+ * `initialFocus={-1}` keeps focus in the trigger instead of jumping into the
+ * overlay on open — the shape a `/`-command menu needs: the host opens the
+ * dropdown from a text field (here, typing `/`) and the caret must stay put
+ * so the user can keep typing to filter the list. Rows are still reachable
+ * via Tab, and Escape/outside-press still dismiss as usual.
+ */
+export const TypeaheadCommandMenu: Story = {
+  name: 'Typeahead / command menu (initialFocus=-1)',
+  args: {},
+  render: TypeaheadExample,
 };
 
 export const AllPlacements: Story = {

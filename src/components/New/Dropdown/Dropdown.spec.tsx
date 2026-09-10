@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -1072,6 +1073,50 @@ describe('Dial UI Kit :: Dropdown — overlay keyboard focus', () => {
     expect(await screen.findByRole('menu')).toBeInTheDocument();
 
     expect(screen.getByRole('menuitem', { name: 'Profile' })).not.toHaveFocus();
+  });
+
+  test('initialFocus=-1 keeps focus in a controlled typeahead trigger, and Escape still dismisses', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    const Harness = () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <Dropdown
+          open={open}
+          trigger={[]}
+          initialFocus={-1}
+          onOpenChange={(next: boolean) => {
+            setOpen(next);
+            onOpenChange(next);
+          }}
+          renderOverlay={() => <button type="button">Copy link</button>}
+        >
+          <textarea
+            aria-label="command input"
+            onChange={(e) => setOpen(e.target.value.startsWith('/'))}
+          />
+        </Dropdown>
+      );
+    };
+
+    render(<Harness />);
+
+    const textarea = screen.getByLabelText('command input');
+    textarea.focus();
+    await user.type(textarea, '/');
+
+    expect(
+      await screen.findByRole('button', { name: 'Copy link' }),
+    ).toBeInTheDocument();
+    expect(textarea).toHaveFocus();
+
+    await user.type(textarea, 'help');
+    expect(textarea).toHaveValue('/help');
+    expect(textarea).toHaveFocus();
+
+    await user.keyboard('{Escape}');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   test('walks the items with the arrow keys, wrapping at both ends', async () => {

@@ -82,6 +82,15 @@ export interface DropdownProps {
   anchorToMouse?: boolean;
   matchReferenceWidth?: boolean;
   maxDropdownHeight?: number | null;
+  /**
+   * Initial focus inside the overlay on open, forwarded to
+   * `FloatingFocusManager`'s `initialFocus`. `0` focuses the first tabbable
+   * element (menu behavior); `-1` leaves focus where it is (typeahead
+   * behavior, e.g. a `/`-command menu opened from a textarea). When omitted,
+   * defaults to menu behavior for click/context opens and to `-1` for hover
+   * opens, matching the pre-existing behavior.
+   */
+  initialFocus?: 0 | -1 | RefObject<HTMLElement | null>;
 }
 
 /**
@@ -188,6 +197,7 @@ const getRefWidth = (el: ReferenceElement): number => {
  * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position
  * @param [matchReferenceWidth=true] - Whether to match the reference element's width
  * @param [maxDropdownHeight] - Maximum height of the dropdown menu; when omitted, no limit is applied
+ * @param [initialFocus] - Initial focus target inside the overlay on open, forwarded to `FloatingFocusManager`; when omitted, matches pre-existing behavior
  */
 export const Dropdown: FC<DropdownProps> = ({
   children,
@@ -214,6 +224,7 @@ export const Dropdown: FC<DropdownProps> = ({
   anchorToMouse = false,
   matchReferenceWidth = true,
   maxDropdownHeight,
+  initialFocus,
 }) => {
   const themeScope = useThemeScope();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -602,10 +613,19 @@ export const Dropdown: FC<DropdownProps> = ({
             <FloatingFocusManager
               context={context}
               modal={false}
-              /* 0 puts focus on the overlay's first control, falling back to the
-                 overlay itself when it holds none; -1 leaves focus where it is,
+              /* An explicit `initialFocus` prop wins outright — it's how a
+                 host (e.g. a typeahead/command menu opened from a textarea)
+                 opts out of focus theft entirely. Otherwise 0 puts focus on
+                 the overlay's first control, falling back to the overlay
+                 itself when it holds none; -1 leaves focus where it is,
                  which is only right for a menu the pointer opened on hover. */
-              initialFocus={shouldFocusOverlay ? 0 : -1}
+              initialFocus={
+                initialFocus !== undefined
+                  ? initialFocus
+                  : shouldFocusOverlay
+                    ? 0
+                    : -1
+              }
               returnFocus
             >
               <div
