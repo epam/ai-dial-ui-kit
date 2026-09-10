@@ -3,8 +3,8 @@ export const checkboxClass = '.ag-checkbox-input';
 
 export const GRID_THEME_COLORS = {
   accentColor: 'var(--bg-control-accent, var(--bg-accent-primary, #5C8DEA))',
-  backgroundColor: 'var(--bg-layer-raised, var(--bg-layer-3, #FCFCFC))',
-  oddRowBackgroundColor: 'var(--bg-layer-sunken, var(--bg-layer-2, #EEF1F7))',
+  backgroundColor: 'var(--bg-layer-3, var(--bg-layer-3, #FCFCFC))',
+  oddRowBackgroundColor: 'var(--bg-layer-2, var(--bg-layer-2, #EEF1F7))',
   // The row tint has to stay translucent: the row it paints carries body text
   // and a checkbox filled with `accentColor`, so an opaque accent hides both.
   // `--bg-accent-primary-alpha` is the tint every other 1.0 control hovers
