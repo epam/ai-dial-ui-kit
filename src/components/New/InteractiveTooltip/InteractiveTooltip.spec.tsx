@@ -206,7 +206,11 @@ describe('Dial UI Kit :: InteractiveTooltip', () => {
     const onOpenChange = vi.fn();
 
     render(
-      <InteractiveTooltip content="Panel text" open={false} onOpenChange={onOpenChange}>
+      <InteractiveTooltip
+        content="Panel text"
+        open={false}
+        onOpenChange={onOpenChange}
+      >
         <button>Trigger</button>
       </InteractiveTooltip>,
     );
