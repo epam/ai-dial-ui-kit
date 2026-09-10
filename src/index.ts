@@ -419,6 +419,8 @@ export type { TooltipContentProps } from './components/New/Tooltip/TooltipConten
 export { TooltipTrigger } from './components/New/Tooltip/TooltipTrigger';
 export type { TooltipContainerOptions } from './components/New/Tooltip/TooltipContext';
 export { TooltipPlacement } from './types/tooltip.ts';
+export { InteractiveTooltip } from './components/New/InteractiveTooltip/InteractiveTooltip';
+export type { InteractiveTooltipProps } from './components/New/InteractiveTooltip/InteractiveTooltip';
 export { EllipsisTooltip } from './components/New/EllipsisTooltip/EllipsisTooltip';
 export type { EllipsisTooltipProps } from './components/New/EllipsisTooltip/EllipsisTooltip';
 export { CollapsibleSidebar } from './components/New/CollapsibleSidebar/CollapsibleSidebar';

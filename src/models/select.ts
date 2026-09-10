@@ -1,5 +1,24 @@
 import type { ReactNode } from 'react';
 
+import type { TooltipPlacement } from '@/types/tooltip';
+
+/**
+ * Data for the interactive panel {@link Select} anchors to an option's row —
+ * unlike a plain tooltip, its content can hold controls of its own (a "View
+ * details" link, for example), which is why it takes a full node rather than
+ * a string.
+ */
+export interface SelectOptionInteractiveTooltip {
+  content: ReactNode;
+  /** @default TooltipPlacement.Right */
+  placement?: TooltipPlacement;
+  /**
+   * Additional CSS classes for the panel — e.g. a wider `max-w-*` for content
+   * that does not fit the default 320px.
+   */
+  contentClassName?: string;
+}
+
 export interface SelectOption {
   value: string;
   label: string;
@@ -18,5 +37,12 @@ export interface SelectOption {
    * keeps its own click and stays out of the row's accessible name.
    */
   rightControl?: ReactNode;
+  /**
+   * Anchors an {@link InteractiveTooltip} to this option's row, open on hover
+   * or focus. Use it for content too rich for `description` — an explanation
+   * with its own link or button, the way a skill picker explains what a
+   * skill does before it is chosen.
+   */
+  interactiveTooltip?: SelectOptionInteractiveTooltip;
   children?: SelectOption[];
 }

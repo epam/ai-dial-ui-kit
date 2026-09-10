@@ -8,9 +8,12 @@ import {
 import { useRef, useState } from 'react';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+import { Button } from '@/components/New/Button/Button';
 import { PrimaryButton } from '@/components/New/Button/ButtonWrappers';
 import type { SelectOption } from '@/models/select';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { ElementSize } from '@/types/size';
+import { TooltipPlacement } from '@/types/tooltip';
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Select, type SelectProps } from './Select';
 import { MenuItemMark } from '@/types/menu-item';
@@ -491,5 +494,164 @@ export const OptionsWithRightControl: Story = {
         />
       ),
     })),
+  },
+};
+
+const favouriteSkills: SelectOption[] = [
+  {
+    value: 'web-search',
+    label: 'Web Search',
+    interactiveTooltip: {
+      content: (
+        <div className="flex flex-col gap-3">
+          <p>
+            Looks things up on the web instead of answering from memory. Useful
+            for anything that may have changed since training — current events,
+            prices, recent releases.
+          </p>
+          <Button
+            variant={ButtonVariant.Primary}
+            appearance={ButtonAppearance.Link}
+            label="View details"
+          />
+        </div>
+      ),
+    },
+  },
+  {
+    value: 'code-interpreter',
+    label: 'code-interpreter',
+    interactiveTooltip: {
+      placement: TooltipPlacement.Right,
+      content: (
+        <div className="flex flex-col gap-3">
+          <p>
+            Lets the model write and execute Python in an isolated sandbox
+            instead of answering from memory. Useful for analyzing uploaded
+            files, running calculations that need to be exact, generating
+            charts, and converting between formats. Code and results are shown,
+            so you can check the work.
+          </p>
+          <Button
+            variant={ButtonVariant.Primary}
+            appearance={ButtonAppearance.Link}
+            label="View details"
+          />
+        </div>
+      ),
+    },
+  },
+  { value: 'file-reader', label: 'file-reader' },
+  { value: 'good-morning-breakfast', label: 'good-morning-breakfast' },
+  { value: 'skill-creator', label: 'skill-creator' },
+];
+
+export const WithInteractiveTooltip: Story = {
+  name: 'Options with an interactive tooltip',
+  args: {
+    options: favouriteSkills,
+    open: true,
+    labelProps: { label: 'Favorites' },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An option\'s `interactiveTooltip` opens an InteractiveTooltip next to its row on hover or focus. Unlike `description`, its content can hold controls of its own — hover the row (or tab to it) and the panel stays open long enough to reach the "View details" link inside it.',
+      },
+    },
+  },
+};
+
+export const WithWideInteractiveTooltip: Story = {
+  name: 'Interactive tooltip with a wider panel',
+  args: {
+    open: true,
+    labelProps: { label: 'Skills' },
+    options: [
+      {
+        value: 'code-interpreter',
+        label: 'code-interpreter',
+        interactiveTooltip: {
+          // Overrides the panel's default 320px cap; `contentClassName` is
+          // merged with `twMerge`, so a `max-w-*` here wins over the default.
+          contentClassName: 'max-w-[450px]',
+          content: (
+            <div className="flex flex-col gap-3">
+              <p>
+                Lets the model write and execute Python in an isolated sandbox
+                instead of answering from memory. Useful for analyzing uploaded
+                files, running calculations that need to be exact, generating
+                charts, and converting between formats. Code and results are
+                shown, so you can check the work — a longer explanation like
+                this one is why the panel needs the extra room, rather than
+                wrapping across many narrow lines.
+              </p>
+              <Button
+                variant={ButtonVariant.Primary}
+                appearance={ButtonAppearance.Link}
+                label="View details"
+              />
+            </div>
+          ),
+        },
+      },
+      { value: 'file-reader', label: 'file-reader' },
+      { value: 'skill-creator', label: 'skill-creator' },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`interactiveTooltip.contentClassName` reaches the InteractiveTooltip\'s own panel, so a `max-w-*` there overrides the 320px default — useful when the content needs more room than the default panel gives it. Hover "code-interpreter" to see the wider panel.',
+      },
+    },
+  },
+};
+
+export const WithInteractiveTooltipInSubMenu: Story = {
+  name: 'Interactive tooltip on a sub-menu option',
+  args: {
+    open: true,
+    labelProps: { label: 'Skills' },
+    options: [
+      { value: 'file-reader', label: 'file-reader' },
+      {
+        value: 'group-productivity',
+        label: 'Productivity',
+        children: [
+          {
+            value: 'good-morning-breakfast',
+            label: 'good-morning-breakfast',
+            interactiveTooltip: {
+              content: (
+                <div className="flex flex-col gap-3">
+                  <p>
+                    Puts together a morning brief from your calendar, inbox and
+                    the news, so you get one thing to read instead of four apps
+                    to check.
+                  </p>
+                  <Button
+                    variant={ButtonVariant.Primary}
+                    appearance={ButtonAppearance.Link}
+                    label="View details"
+                  />
+                </div>
+              ),
+            },
+          },
+          { value: 'skill-creator', label: 'skill-creator' },
+        ],
+      },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`interactiveTooltip` works the same on a sub-menu\'s child options as it does on a top-level one. Open "Productivity" and hover "good-morning-breakfast" to see it.',
+      },
+    },
   },
 };
