@@ -1,17 +1,17 @@
-import { IconClipboardX } from '@tabler/icons-react';
 import type { FC, ReactNode } from 'react';
 
+import NoDataIcon from '@/assets/icons/no-data.svg?react';
 import { mergeClasses } from '@/utils/merge-classes';
 
 /** Footprint of the default icon, large enough to carry an empty state. */
-const DEFAULT_ICON_SIZE = 60;
+const DEFAULT_ICON_SIZE = 32;
 
 export interface NoDataContentProps {
   /** Headline of the empty state. */
   title: ReactNode;
   /** Optional secondary line under the title. */
   description?: ReactNode;
-  /** Illustration above the title. Defaults to a struck-through clipboard. */
+  /** Illustration above the title. Defaults to the empty-state document mark. */
   icon?: ReactNode;
   /**
    * Announces the empty state to assistive tech as it appears. Turn it on where
@@ -47,7 +47,7 @@ export interface NoDataContentProps {
  *
  * @param title - Headline of the empty state.
  * @param [description] - Optional secondary line under the title.
- * @param [icon] - Illustration above the title. Defaults to a struck-through clipboard.
+ * @param [icon] - Illustration above the title. Defaults to the empty-state document mark.
  * @param [live=false] - Announce the empty state to assistive tech as it appears.
  * @param [className] - Additional CSS classes for the container.
  * @param [titleClassName] - Additional CSS classes for the title.
@@ -73,15 +73,15 @@ export const NoDataContent: FC<NoDataContentProps> = ({
       )}
     >
       {icon ?? (
-        <IconClipboardX
-          size={DEFAULT_ICON_SIZE}
-          stroke={0.5}
+        <NoDataIcon
+          width={DEFAULT_ICON_SIZE}
+          height={DEFAULT_ICON_SIZE}
           aria-hidden="true"
         />
       )}
       <span
         className={mergeClasses(
-          'dial-body-semi-text text-primary',
+          'dial-tiny-text text-secondary',
           titleClassName,
         )}
       >
@@ -90,7 +90,7 @@ export const NoDataContent: FC<NoDataContentProps> = ({
       {description && (
         <span
           className={mergeClasses(
-            'dial-small-text text-secondary',
+            'dial-tiny-text text-secondary',
             descriptionClassName,
           )}
         >
