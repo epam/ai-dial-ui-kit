@@ -90,8 +90,11 @@
     "minimatch": "^10.2.5"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.19",
+    "@tabler/icons-react": "^3.41.1",
     "ag-grid-community": "^35.2.1",
     "ag-grid-react": "^35.2.1",
+    "classnames": "^2.5.1",
     "mime-types": "^3.0.2",
     "re-resizable": "^6.11.2",
     "react-dnd": "^16.0.1",
@@ -99,19 +102,24 @@
     "tailwind-merge": "^3.5.0"
   },
   "peerDependencies": {
-    "@floating-ui/react": "^0.27.19",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@monaco-editor/react": "^4.7.0",
-    "@tabler/icons-react": "^3.41.1",
-    "@uiw/react-markdown-preview": "^5.2.0",
     "@uiw/react-md-editor": "^4.1.0",
-    "classnames": "^2.5.1",
     "monaco-editor": "^0.55.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
   "peerDependenciesMeta": {
     "@modelcontextprotocol/sdk": {
+      "optional": true
+    },
+    "@monaco-editor/react": {
+      "optional": true
+    },
+    "@uiw/react-md-editor": {
+      "optional": true
+    },
+    "monaco-editor": {
       "optional": true
     }
   },
