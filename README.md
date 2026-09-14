@@ -292,11 +292,20 @@ Storybook provides:
 <details>
 <summary>Next.js Integration</summary>
 
-1. Install the package and peer dependencies that are not currently in your project
+1. Install the package. React is the only peer you have to supply — everything
+   the kit renders with, it installs itself.
+
 ``` bash
 npm install @epam/ai-dial-ui-kit
-npm install react react-dom  @tabler/icons-react classnames
-npm install @floating-ui/react monaco-editor @monaco-editor/react
+npm install react react-dom
+```
+
+Add the editor packages only if you use the `@epam/ai-dial-ui-kit/editors`
+subpath. They are optional peers, so `npm install` stays quiet without them, and
+the kit only reaches for them when a `Lazy*` editor actually mounts:
+
+``` bash
+npm install monaco-editor @monaco-editor/react @uiw/react-md-editor
 ```
 
 2. Import style in the root layout of the project:

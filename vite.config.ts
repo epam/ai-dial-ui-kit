@@ -7,10 +7,25 @@ import path from 'path';
 import tailwindcss from 'tailwindcss';
 import { peerDependencies } from './package.json';
 
-const peerDependencyNames = Object.keys(peerDependencies);
+/*
+ * Every peer is external by definition - the consumer installs it. On top of
+ * that, three packages are `dependencies` (so `npm install` brings them in
+ * without the host naming them) yet must still be left external: they are
+ * eagerly reachable from every entry point AND are commonly a direct
+ * dependency of the consuming application too. Bundling them ships a second
+ * copy that the host's bundler cannot deduplicate against its own import -
+ * measured on the chat application as +10,425 bytes gzipped of initial JS and
+ * 93 -> 109 initial chunks, with duplicate Tabler modules in the output.
+ */
+const externalDependencyNames = [
+  ...Object.keys(peerDependencies),
+  '@floating-ui/react',
+  '@tabler/icons-react',
+  'classnames',
+];
 
 const isExternalDependency = (id: string) =>
-  peerDependencyNames.some(
+  externalDependencyNames.some(
     (dependency) => id === dependency || id.startsWith(`${dependency}/`),
   );
 
@@ -53,9 +68,11 @@ export default defineConfig({
       // compatibility/resolution guarantee only, never a tree-shaking one.
     },
     rollupOptions: {
-      // `ag-grid-community`/`ag-grid-react` are deliberately NOT listed here
-      // (unlike Monaco/`@uiw/*`, which are `peerDependencies` above and thus
-      // always external): they stay bundled `dependencies` (package.json).
+      // `ag-grid-community`/`ag-grid-react` are deliberately NOT in
+      // `externalDependencyNames` above (unlike Monaco/`@uiw/*`, which are
+      // `peerDependencies` and thus always external, or
+      // `@floating-ui/react`/`@tabler/icons-react`/`classnames`, which are
+      // `dependencies` that are kept external): they stay bundled.
       // Once `preserveModules` (below) isolates both Grid generations and
       // FileManager into their own emitted modules, "bundled" and "peer"
       // are equivalent for tree-shaking (a consumer who never imports
