@@ -98,8 +98,7 @@ describe('Dial UI Kit :: PasswordInput', () => {
     ).toBeInTheDocument();
   });
 
-  test('a disabled field stays masked and its toggle is disabled', async () => {
-    const user = userEvent.setup();
+  test('a disabled field stays masked and draws no reveal toggle', () => {
     render(
       <PasswordInput
         id="pw"
@@ -109,13 +108,46 @@ describe('Dial UI Kit :: PasswordInput', () => {
       />,
     );
 
-    const toggle = screen.getByRole('button', { name: 'Show password' });
-    expect(toggle).toBeDisabled();
-
-    await user.click(toggle);
     expect(getField()).toHaveAttribute('type', 'password');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
     // The value must not leak through the tooltip `Input` adds to disabled fields.
     expect(screen.queryByText('secret')).not.toBeInTheDocument();
+  });
+
+  test('a field revealed before being disabled comes back masked', async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Show password' }));
+    expect(getField()).toHaveAttribute('type', 'text');
+
+    rerender(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+        disabled
+      />,
+    );
+    expect(getField()).toHaveAttribute('type', 'password');
+
+    rerender(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+      />,
+    );
+    expect(getField()).toHaveAttribute('type', 'password');
+    expect(
+      screen.getByRole('button', { name: 'Show password' }),
+    ).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('reports changes through the Input onChange signature', async () => {
