@@ -9,7 +9,7 @@
     "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden ag-grid-community,ag-grid-react,@monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-require @uiw/react-md-editor,@uiw/react-markdown-preview,@monaco-editor/react,monaco-editor"
   },
   "dependencies": {
-    "@epam/ai-dial-ui-kit": "file:../.tarballs/epam-ai-dial-ui-kit-0.0.0.tgz",
+    "@epam/ai-dial-ui-kit": "file:../.tarballs/ai-dial-ui-kit.tgz",
     "@floating-ui/react": "^0.27.19",
     "@monaco-editor/react": "^4.7.0",
     "@tabler/icons-react": "^3.41.1",
