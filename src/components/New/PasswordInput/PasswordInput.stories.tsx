@@ -100,8 +100,10 @@ export const Disabled: Story = {
     docs: {
       description: {
         story:
-          'A disabled field stays masked and its toggle is disabled, so the value ' +
-          'cannot be revealed while the field is out of reach.',
+          'A disabled field stays masked and draws no toggle: a control that ' +
+          'cannot act is not worth the space, and the value stays unreadable ' +
+          'while the field is out of reach. Enabling the field again brings ' +
+          'the toggle back, masked.',
       },
     },
   },
