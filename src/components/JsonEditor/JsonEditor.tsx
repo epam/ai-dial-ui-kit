@@ -2,7 +2,19 @@ import type { FC } from 'react';
 
 import { EDITOR_THEMES_CONFIG } from '@/constants/editor';
 import { EditorThemes } from '@/types/editor';
-import { Editor, type Monaco, type OnValidate } from '@monaco-editor/react';
+/*
+ * `@monaco-editor/react` is an optional peer, so a consumer that never mounts
+ * an editor does not install it — and a named value import of a package that
+ * is not installed is a build error, not a runtime one: a bundler resolves
+ * this module because the root entry re-exports `LazyDialJsonEditor`, sees an
+ * import of a name the stubbed-out optional peer does not export, and stops.
+ * Reaching the component through the namespace keeps the binding dynamic, so
+ * the failure lands where it belongs — on the consumer that renders an editor
+ * without installing its engine. Types stay named: they are erased before any
+ * bundler sees them.
+ */
+import * as monacoReact from '@monaco-editor/react';
+import type { Monaco, OnValidate } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 
 export interface DialJsonEditorProps {
@@ -55,6 +67,8 @@ export const DialJsonEditor: FC<DialJsonEditorProps> = ({
       ],
     });
   }
+
+  const { Editor } = monacoReact;
 
   return (
     <Editor
