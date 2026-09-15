@@ -228,6 +228,8 @@ export { GridSelectionMode } from './models/selection-mode';
 // Utils
 export { mergeClasses } from './utils/merge-classes';
 export { wrapInRootFolder } from './utils/flat-to-hierarchy-convertor.ts';
+export { getTimezoneLabel } from './utils/timezone';
+export type { TimezoneLabelOptions } from './utils/timezone';
 
 // Constants
 export {

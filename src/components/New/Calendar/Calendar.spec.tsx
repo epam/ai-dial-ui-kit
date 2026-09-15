@@ -4,6 +4,13 @@ import { describe, expect, test, vi } from 'vitest';
 import { CalendarMode } from '@/types/calendar';
 import { Calendar } from './Calendar';
 
+/* Deterministic label for the overlay tests: the real getTimezoneLabel reads
+   the runner's own timezone, which varies by environment. Its formatting is
+   unit-tested in src/utils/__tests__/timezone.spec.ts. */
+vi.mock('@/utils/timezone', () => ({
+  getTimezoneLabel: vi.fn(() => '(GMT+01:00) Europe/Berlin'),
+}));
+
 describe('Dial UI Kit :: Calendar', () => {
   describe('date mode', () => {
     test('Should render the placeholder when there is no value', () => {
@@ -143,6 +150,41 @@ describe('Dial UI Kit :: Calendar', () => {
       expect(
         screen.getByRole('button', { name: 'Pick a day' }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('timezone overlay', () => {
+    const TIMEZONE_LABEL = '(GMT+01:00) Europe/Berlin';
+
+    test('Should show the timezone hint on the time field when showTimezone is set', () => {
+      render(<Calendar mode={CalendarMode.Time} showTimezone />);
+      expect(screen.getByText(TIMEZONE_LABEL)).toBeInTheDocument();
+    });
+
+    test('Should not show the timezone hint by default', () => {
+      render(<Calendar mode={CalendarMode.Time} />);
+      expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
+    });
+
+    test('Should not show the timezone hint in date mode even when showTimezone is set', () => {
+      render(<Calendar mode={CalendarMode.Date} showTimezone />);
+      expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
+    });
+
+    test('Should not show the timezone hint in datetime mode even when showTimezone is set', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          value={new Date(2026, 2, 11, 9, 0)}
+          showTimezone
+        />,
+      );
+      expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
+    });
+
+    test('Should not show the timezone hint in weekday mode even when showTimezone is set', () => {
+      render(<Calendar mode={CalendarMode.Weekday} showTimezone />);
+      expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
     });
   });
 
