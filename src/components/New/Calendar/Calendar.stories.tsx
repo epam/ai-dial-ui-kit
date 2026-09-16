@@ -29,6 +29,7 @@ const meta = {
     placeholder: { control: { type: 'text' } },
     locale: { control: { type: 'text' } },
     fieldClassName: { control: { type: 'text' } },
+    showTimezone: { control: { type: 'boolean' } },
   },
   args: {
     labelProps: { label: 'Date' },
@@ -69,6 +70,16 @@ export const Time: Story = {
     mode: CalendarMode.Time,
     labelProps: { label: 'Time' },
     placeholder: undefined,
+  },
+};
+
+export const TimeWithTimezone: Story = {
+  name: 'Time with timezone',
+  args: {
+    mode: CalendarMode.Time,
+    labelProps: { label: 'Time' },
+    placeholder: undefined,
+    showTimezone: true,
   },
 };
 

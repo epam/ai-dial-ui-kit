@@ -29,6 +29,7 @@ import { CalendarMode } from '@/types/calendar';
 import { ElementSize } from '@/types/size';
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { mergeClasses } from '@/utils/merge-classes';
+import { getTimezoneLabel } from '@/utils/timezone';
 import {
   DEFAULT_CALENDAR_LOCALE,
   calendarDayButtonBaseClassName,
@@ -76,6 +77,12 @@ export interface CalendarProps {
   /** BCP 47 locale tag used to localize month/weekday names and date formatting. */
   locale?: string;
   fieldClassName?: string;
+  /**
+   * Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`, computed
+   * by `getTimezoneLabel`) at the trailing edge of the `time` field, naming
+   * the zone the entered time-of-day refers to.
+   */
+  showTimezone?: boolean;
 }
 
 interface CalendarPopoverFieldProps {
@@ -187,6 +194,8 @@ interface TimeFieldProps {
   className?: string;
   ariaLabel?: string;
   placeholder?: string;
+  /** Timezone hint pinned over the field's trailing edge; omit for a bare input. */
+  timezoneLabel?: string | null;
 }
 
 /**
@@ -203,6 +212,7 @@ const TimeField: FC<TimeFieldProps> = ({
   className,
   ariaLabel,
   placeholder = '--:--',
+  timezoneLabel,
 }) => {
   const [draft, setDraft] = useState(value);
 
@@ -210,7 +220,7 @@ const TimeField: FC<TimeFieldProps> = ({
     setDraft(value);
   }, [value]);
 
-  return (
+  const input = (
     <input
       id={id}
       type="text"
@@ -232,6 +242,25 @@ const TimeField: FC<TimeFieldProps> = ({
         className,
       )}
     />
+  );
+
+  /* Without the hint the input is returned bare, so existing consumers see
+   * no DOM change; with it, the input keeps its own box (and border) and the
+   * hint is pinned over the field's trailing padding, out of the input's
+   * short masked value's way. `pointer-events-none` keeps clicks on the
+   * field reaching the input. */
+  if (!timezoneLabel) return input;
+
+  return (
+    <div className="relative w-full">
+      {input}
+      {/* `truncate` keeps the absolutely-positioned hint on one line: a long
+       * label in a narrow field must cut off with an ellipsis rather than
+       * wrap out of the field or over the masked value. */}
+      <span className="dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary">
+        {timezoneLabel}
+      </span>
+    </div>
   );
 };
 
@@ -268,6 +297,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [maxDate] - Latest selectable date (date/datetime modes)
  * @param [locale="en-GB"] - BCP 47 locale tag used to localize month/weekday names and date formatting
  * @param [fieldClassName] - Additional classes merged onto the trigger field, overriding conflicting defaults
+ * @param [showTimezone=false] - Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`) at the trailing edge of the `time` field
  */
 export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
@@ -283,6 +313,7 @@ export const Calendar: FC<CalendarProps> = ({
   maxDate,
   locale = DEFAULT_CALENDAR_LOCALE,
   fieldClassName,
+  showTimezone = false,
 }) => {
   const resolvedPlaceholder =
     placeholder ?? calendarModeDefaultPlaceholder[mode];
@@ -307,6 +338,14 @@ export const Calendar: FC<CalendarProps> = ({
     () => dateValue ?? new Date(),
   );
   const today = useMemo(() => new Date(), []);
+  /* Only the time field shows the hint, and a time value carries no date, so
+   * the offset is always today's — the util's `date` default. The field's own
+   * locale drives how the platform renders the offset, so it stays consistent
+   * with the month/weekday names in the same popover. */
+  const timezoneLabel = useMemo(
+    () => (showTimezone ? getTimezoneLabel({ locale }) : null),
+    [showTimezone, locale],
+  );
 
   const weekdayShortLabels = useMemo(
     () => getWeekdayShortLabels(locale),
@@ -367,6 +406,7 @@ export const Calendar: FC<CalendarProps> = ({
           invalid={invalid}
           placeholder={resolvedPlaceholder}
           className={fieldClassName}
+          timezoneLabel={timezoneLabel}
         />
       </div>
     );
@@ -457,6 +497,7 @@ export const Calendar: FC<CalendarProps> = ({
             >
               {triggerLabel()}
             </span>
+            {/* The timezone hint is shown on the time field only. */}
             {calendarIcon}
           </>
         }
