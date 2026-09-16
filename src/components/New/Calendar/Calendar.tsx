@@ -14,6 +14,7 @@ import {
 import { IconChevronDown } from '@tabler/icons-react';
 import {
   type FC,
+  type FocusEventHandler,
   type ReactNode,
   useEffect,
   useId,
@@ -66,6 +67,11 @@ export interface CalendarProps {
   mode?: CalendarMode;
   value?: CalendarValue;
   onChange?: (value: CalendarValue) => void;
+  /**
+   * Called when the Calendar's input field loses focus, e.g. for on-blur
+   * validation.
+   */
+  onBlur?: FocusEventHandler<HTMLInputElement>;
   labelProps?: LabelProps;
   placeholder?: string;
   disabled?: boolean;
@@ -189,6 +195,8 @@ interface TimeFieldProps {
   id?: string;
   value: string;
   onChange: (value: string) => void;
+  /** Forwarded to the masked input. */
+  onBlur?: FocusEventHandler<HTMLInputElement>;
   disabled?: boolean;
   invalid?: boolean;
   className?: string;
@@ -207,6 +215,7 @@ const TimeField: FC<TimeFieldProps> = ({
   id,
   value,
   onChange,
+  onBlur,
   disabled,
   invalid,
   className,
@@ -235,6 +244,7 @@ const TimeField: FC<TimeFieldProps> = ({
         setDraft(next);
         if (isCompleteTimeString(next)) onChange(next);
       }}
+      onBlur={onBlur}
       className={mergeClasses(
         calendarFieldBaseClassName,
         invalid && calendarFieldInvalidClassName,
@@ -287,6 +297,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [mode=CalendarMode.Date] - Selection mode: date, datetime, time or weekday
  * @param [value] - Controlled value: a `Date` for date/datetime, an `"HH:mm"` string for time, an ISO weekday number (`"1"`=Monday…`"7"`=Sunday) for weekday
  * @param [onChange] - Callback fired with the next value when the selection changes
+ * @param [onBlur] - Called when the Calendar's input field loses focus, e.g. for on-blur validation
  * @param [labelProps] - Props of the {@link Label} rendered above the control, including `label`, `required` and `caption`
  * @param [placeholder] - Placeholder shown when there is no value; defaults to a mode-appropriate string ("Select date", "Select date and time", "--:--" or "Select day")
  * @param [disabled=false] - Disables the control
@@ -303,6 +314,7 @@ export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
   value,
   onChange,
+  onBlur,
   labelProps,
   placeholder,
   disabled = false,
@@ -402,6 +414,7 @@ export const Calendar: FC<CalendarProps> = ({
           id={fieldId}
           value={timeValue}
           onChange={(next) => onChange?.(next)}
+          onBlur={onBlur}
           disabled={disabled}
           invalid={invalid}
           placeholder={resolvedPlaceholder}
@@ -579,6 +592,7 @@ export const Calendar: FC<CalendarProps> = ({
                   ariaLabel="Time"
                   value={dateValue ? formatTimeLabel(dateValue) : ''}
                   onChange={handleTimeChange}
+                  onBlur={onBlur}
                   className="w-[120px] px-3 py-1.5"
                 />
               </div>

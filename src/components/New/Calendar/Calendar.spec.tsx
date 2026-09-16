@@ -63,6 +63,20 @@ describe('Dial UI Kit :: Calendar', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Previous month' }));
       expect(screen.getByText('March 2026')).toBeInTheDocument();
     });
+
+    test('Should not call onBlur when the popover trigger loses focus — only inputs report blur', () => {
+      const onBlur = vi.fn();
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          value={new Date(2026, 2, 11)}
+          onBlur={onBlur}
+        />,
+      );
+
+      fireEvent.blur(screen.getByRole('button', { name: '11 Mar 2026' }));
+      expect(onBlur).not.toHaveBeenCalled();
+    });
   });
 
   describe('datetime mode', () => {
@@ -89,12 +103,56 @@ describe('Dial UI Kit :: Calendar', () => {
 
       expect(onChange).toHaveBeenCalledWith(new Date(2026, 2, 11, 14, 30));
     });
+
+    test('Should call onBlur when the popover time input loses focus', () => {
+      const onBlur = vi.fn();
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          value={new Date(2026, 2, 11, 9, 0)}
+          onBlur={onBlur}
+        />,
+      );
+
+      fireEvent.click(
+        screen.getByRole('button', { name: '11 Mar 2026, 09:00' }),
+      );
+      const timeInput = screen.getByLabelText('Time');
+      fireEvent.blur(timeInput);
+      expect(onBlur).toHaveBeenCalledTimes(1);
+      expect(onBlur).toHaveBeenCalledWith(
+        expect.objectContaining({ target: timeInput }),
+      );
+    });
   });
 
   describe('time mode', () => {
     test('Should forward a custom placeholder to the time field', () => {
       render(<Calendar mode={CalendarMode.Time} placeholder="hh:mm" />);
       expect(screen.getByPlaceholderText('hh:mm')).toBeInTheDocument();
+    });
+
+    test('Should call onBlur with the field event when the time input loses focus', () => {
+      const onChange = vi.fn();
+      const onBlur = vi.fn();
+      render(
+        <Calendar
+          mode={CalendarMode.Time}
+          value="09:00"
+          onChange={onChange}
+          onBlur={onBlur}
+        />,
+      );
+
+      const input = screen.getByDisplayValue('09:00');
+      fireEvent.change(input, { target: { value: '9:5' } });
+      expect(onChange).not.toHaveBeenCalled();
+
+      fireEvent.blur(input);
+      expect(onBlur).toHaveBeenCalledTimes(1);
+      expect(onBlur).toHaveBeenCalledWith(
+        expect.objectContaining({ target: input }),
+      );
     });
 
     test('Should render a masked time field and forward complete changes', () => {

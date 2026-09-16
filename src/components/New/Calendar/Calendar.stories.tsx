@@ -23,6 +23,7 @@ const meta = {
     },
     value: { control: false },
     onChange: { control: false },
+    onBlur: { control: false },
     disabled: { control: { type: 'boolean' } },
     invalid: { control: { type: 'boolean' } },
     labelProps: { control: { type: 'object' } },
