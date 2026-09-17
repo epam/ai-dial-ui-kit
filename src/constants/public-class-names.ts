@@ -1,32 +1,3 @@
-/*
- * Public, host-addressable class names — part of this package's public API.
- *
- * Every design-system 2.0 component stamps its own class on the element that
- * draws it, so a host embedding the kit can restyle a part the props do not
- * reach without substring-matching hashed CSS-module locals, walking DOM order
- * (`> div:nth-child(2)`), or selecting on ARIA attributes. `role` and
- * `aria-label` are accessibility contracts rather than styling hooks:
- * `aria-label="dropdown"` in particular is a plain English string a localised
- * host cannot rely on.
- *
- * These classes carry no declarations of their own — nothing in the kit's
- * stylesheet selects on them. They exist only as stable selectors, so adding
- * one is never a visual change, and renaming one or moving it to a different
- * element is a breaking change.
- *
- * A few 2.0 components are deliberately absent, because an element that already
- * carries a stable `dial-kit-*` class needs no second one: `Button` and its
- * variant wrappers (`dial-kit-base-button`), `IconButton`
- * (`dial-kit-base-icon-button`), `FabButton` (`dial-kit-fab-button`), `Input`
- * (`dial-kit-input`), `Textarea` (`dial-kit-textarea`), `Slider`
- * (`dial-kit-slider`), `MarkdownEditor` (`dial-kit-markdown-editor`) and `Grid`
- * (`dial-kit-grid`). `ThemeScope` renders a `display: contents` wrapper with no
- * box of its own, `MultiSelectTags` renders `Tag`s and nothing else, and
- * `TooltipContainer` / `TooltipTrigger` contribute no element of their own — all
- * four are addressed through what they render.
- *
- * Requested in https://github.com/epam/ai-dial-chat/issues/8707.
- */
 export const DIAL_KIT_CLASS = {
   /* ── Feedback and status ───────────────────────────────────────────────── */
   /** The `role="status"` root of a `Spinner`. */
