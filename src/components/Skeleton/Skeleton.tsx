@@ -11,6 +11,7 @@ import {
   SkeletonAvatarShape,
 } from '@/types/skeleton';
 import { getAvatarSize } from './utils';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   active?: boolean;
@@ -169,7 +170,12 @@ export const Skeleton: FC<SkeletonProps> = ({
   return (
     <div
       {...props}
-      className={mergeClasses('flex gap-4', !!overlay && 'relative', className)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.skeleton,
+        'flex gap-4',
+        !!overlay && 'relative',
+        className,
+      )}
     >
       {showAvatar && (
         <div

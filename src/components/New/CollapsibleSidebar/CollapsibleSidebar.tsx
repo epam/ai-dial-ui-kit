@@ -15,6 +15,7 @@ import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 
 import { IconButton } from '../IconButton/IconButton';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** Width of the collapsed rail — wide enough for the 40px toggle button. */
 const COLLAPSED_WIDTH = 48;
@@ -141,7 +142,11 @@ export const CollapsibleSidebar: FC<CollapsibleSidebarProps> = ({
     <aside
       aria-label={ariaLabel}
       style={{ width: `${opened ? width : collapsedWidth}px` }}
-      className={mergeClasses('flex flex-col justify-between', className)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.collapsibleSidebar,
+        'flex flex-col justify-between',
+        className,
+      )}
     >
       <div
         id={contentId}

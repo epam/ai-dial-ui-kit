@@ -1,5 +1,6 @@
 import { mergeClasses } from '@/utils/merge-classes';
 import type { FC } from 'react';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface SpinnerProps {
   size?: number;
@@ -21,6 +22,7 @@ export const Spinner: FC<SpinnerProps> = ({
     <div
       role="status"
       className={mergeClasses(
+        DIAL_KIT_CLASS.spinner,
         'flex items-center justify-center',
         { 'size-full': fullWidth },
         className,

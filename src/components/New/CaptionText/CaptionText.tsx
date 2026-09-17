@@ -1,6 +1,7 @@
 import { mergeClasses } from '@/utils/merge-classes';
 import type { FC, HTMLAttributes } from 'react';
 import { CaptionType } from '@/types/caption';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface CaptionTextProps extends HTMLAttributes<HTMLSpanElement> {
   text?: string;
@@ -33,6 +34,8 @@ export const CaptionText: FC<CaptionTextProps> = ({
       {...props}
       role="alert"
       className={mergeClasses(
+        DIAL_KIT_CLASS.captionText,
+        variant === CaptionType.Error && DIAL_KIT_CLASS.errorText,
         'dial-tiny-text',
         variant === CaptionType.Error ? 'text-error' : 'text-secondary',
         className,

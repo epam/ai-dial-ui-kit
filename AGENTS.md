@@ -23,16 +23,18 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 - **API**: Extend native HTML/React props where appropriate; export prop types when consumers need them.
 - **Styles**: Tailwind + existing tokens/utilities; keep a11y (labels, roles, keyboard) in mind.
 - **Barrel**: Add public exports to `src/index.ts` (and `export type` for types).
+- **Public class**: A generation 2.0 component stamps its `DIAL_KIT_CLASS` entry on the element that draws it (see [Public class names](#public-class-names)).
 
 ## When to add or update
 
-| Change                      | Also do                                                                         |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| New public component        | Storybook story, spec, entry in `src/index.ts`                                  |
-| Visual / interaction change | Update stories; adjust or add tests                                             |
-| New interactive control     | Accessible name + target size (see [Accessibility rules](#accessibility-rules)) |
-| Peer dependency surface     | Document in README or story descriptions if needed                              |
-| **Breaking change**         | CHANGELOG.md entry + migration guide (see below)                                |
+| Change                       | Also do                                                                                                                                                                            |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| New public component         | Storybook story, spec, entry in `src/index.ts`                                                                                                                                     |
+| New public **2.0** component | A `DIAL_KIT_CLASS` entry stamped on its root, a case in `src/constants/public-class-names.spec.tsx`, and a row in the README table (see [Public class names](#public-class-names)) |
+| Visual / interaction change  | Update stories; adjust or add tests                                                                                                                                                |
+| New interactive control      | Accessible name + target size (see [Accessibility rules](#accessibility-rules))                                                                                                    |
+| Peer dependency surface      | Document in README or story descriptions if needed                                                                                                                                 |
+| **Breaking change**          | CHANGELOG.md entry + migration guide (see below)                                                                                                                                   |
 
 ## Breaking changes — documentation required
 
@@ -118,6 +120,38 @@ Add a row to the table in `migration-guides/README.md`:
 - Use `mergeClasses` (from `src/utils/merge-classes`) for Tailwind class merging
 - No inline styles or hardcoded values (hex colors, font sizes, etc.)
 - SCSS mixins in `src/styles/` for reusable patterns
+
+### Public class names
+
+Every generation 2.0 component stamps a stable, host-addressable class from the
+`DIAL_KIT_CLASS` record in `src/constants/public-class-names.ts`. It exists so an
+embedding host can restyle a part the props do not reach without
+substring-matching hashed module locals, walking DOM order, or selecting on
+`role` / `aria-label` — those are accessibility contracts, and a localisable
+`aria-label` is not a selector at all. The full table, and the list of
+components that have no entry because their element already carries a stable
+`dial-kit-*` class, are in the [README](README.md#public-class-names).
+
+When you add or change a 2.0 component:
+
+- **Add its entry to the record**, named after the component in camelCase, with a
+  JSDoc line naming the element it lands on. Never write the string literal in a
+  component file — it is read from the record, so the contract has one source.
+- **Stamp it on the element that draws the component**, first in the existing
+  `mergeClasses` call, before the Tailwind utilities and before any
+  caller-supplied `className`. Where the drawn box moves — a `MenuItem` with a
+  `rightControl` draws on the wrapper, a `ProgressBar` with no label returns its
+  track as the root — the class follows the box, and the JSDoc says so.
+- **The class carries no declarations.** Nothing in `src/styles/` may select on
+  it; `npm run build:css` then grepping `dist/index.css` must find nothing, which
+  is what makes adding one a non-visual change.
+- **Add a case to `src/constants/public-class-names.spec.tsx`.** Its last test
+  fails on any record entry without a case, so the contract cannot grow untested.
+- **Renaming one, or moving it to a different element, is a breaking change** and
+  takes a CHANGELOG entry plus a migration guide.
+
+A component whose target element already has a stable `dial-kit-*` class gets no
+entry: two names for one thing is worse than one.
 
 ## Accessibility rules
 

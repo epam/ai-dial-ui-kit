@@ -9,6 +9,7 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** The magnifier tracks the field height; the clear button stays small at every size. */
 const SEARCH_ICON_SIZE: Record<ElementSize, DIAL_ICON_SIZE> = {
@@ -101,6 +102,7 @@ export const Search: FC<SearchProps> = ({
       placeholder={placeholder}
       inputRef={ref}
       wrapperClassName={mergeClasses(
+        DIAL_KIT_CLASS.search,
         withoutBorder && 'dial-kit-input-borderless',
         wrapperClassName,
       )}

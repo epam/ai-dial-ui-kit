@@ -60,6 +60,7 @@ import {
   sanitizeTimeInput,
   setTimeOnDate,
 } from './utils';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export type CalendarValue = Date | string | null;
 
@@ -408,7 +409,13 @@ export const Calendar: FC<CalendarProps> = ({
           : '';
 
     return (
-      <div className={mergeClasses('flex flex-col gap-y-3', className)}>
+      <div
+        className={mergeClasses(
+          DIAL_KIT_CLASS.calendar,
+          'flex flex-col gap-y-3',
+          className,
+        )}
+      >
         {fieldLabel}
         <TimeField
           id={fieldId}
@@ -430,7 +437,13 @@ export const Calendar: FC<CalendarProps> = ({
     const selectedOption = weekdayOptions.find((o) => o.value === weekdayValue);
 
     return (
-      <div className={mergeClasses('flex flex-col gap-y-3', className)}>
+      <div
+        className={mergeClasses(
+          DIAL_KIT_CLASS.calendar,
+          'flex flex-col gap-y-3',
+          className,
+        )}
+      >
         {fieldLabel}
         <CalendarPopoverField
           id={fieldId}
@@ -491,7 +504,13 @@ export const Calendar: FC<CalendarProps> = ({
   }
 
   return (
-    <div className={mergeClasses('flex flex-col gap-y-3', className)}>
+    <div
+      className={mergeClasses(
+        DIAL_KIT_CLASS.calendar,
+        'flex flex-col gap-y-3',
+        className,
+      )}
+    >
       {fieldLabel}
       <CalendarPopoverField
         id={fieldId}

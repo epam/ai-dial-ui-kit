@@ -19,6 +19,7 @@ import {
   tagInteractiveClassName,
   tagStateClassNames,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 type NativeTagProps = Omit<HTMLAttributes<HTMLSpanElement>, 'children'>;
 
@@ -129,6 +130,7 @@ export const Tag: FC<TagProps> = ({
       onClick={disabled ? undefined : onClick}
       onKeyDown={handleKeyDown}
       className={mergeClasses(
+        DIAL_KIT_CLASS.tag,
         tagBaseClassName,
         hasBoldLabel ? 'dial-tiny-semi-text' : 'dial-tiny-text',
         tagStateClassNames[appearance][selected ? 'selected' : 'default'],

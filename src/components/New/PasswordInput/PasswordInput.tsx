@@ -6,6 +6,8 @@ import { Input, type InputProps } from '@/components/New/Input/Input';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface PasswordInputProps extends Omit<
   InputProps,
@@ -75,6 +77,10 @@ export const PasswordInput: FC<PasswordInputProps> = ({
   return (
     <Input
       {...props}
+      wrapperClassName={mergeClasses(
+        DIAL_KIT_CLASS.passwordInput,
+        props.wrapperClassName,
+      )}
       size={size}
       disabled={disabled}
       type={isRevealed ? 'text' : 'password'}

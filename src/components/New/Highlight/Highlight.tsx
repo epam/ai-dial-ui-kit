@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { mergeClasses } from '../../../utils/merge-classes';
 import { EllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** Props for `Highlight`. */
 export interface HighlightProps {
@@ -40,15 +41,14 @@ export const Highlight: FC<HighlightProps> = ({
   className,
   maxLines = 2,
 }) => {
-  const clampClassName = getClampClassName(maxLines);
+  const textClassName = mergeClasses(
+    DIAL_KIT_CLASS.highlight,
+    getClampClassName(maxLines),
+    className,
+  );
 
   if (!query.trim()) {
-    return (
-      <EllipsisTooltip
-        className={mergeClasses(clampClassName, className)}
-        text={text}
-      />
-    );
+    return <EllipsisTooltip className={textClassName} text={text} />;
   }
 
   const idx = text.toLowerCase().indexOf(query.toLowerCase());
@@ -70,10 +70,5 @@ export const Highlight: FC<HighlightProps> = ({
       </>
     );
 
-  return (
-    <EllipsisTooltip
-      className={mergeClasses(clampClassName, className)}
-      text={content}
-    />
-  );
+  return <EllipsisTooltip className={textClassName} text={content} />;
 };

@@ -14,6 +14,7 @@ import {
   segmentUnselectedClassName,
   segmentUnselectedInteractiveClassName,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface SegmentedControlItem<T extends string = string> {
   value: T;
@@ -140,7 +141,11 @@ export const SegmentedControl = <T extends string>({
       aria-label={ariaLabel}
       aria-disabled={disabled || undefined}
       onKeyDown={handleKeyDown}
-      className={mergeClasses(containerClassName, className)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.segmentedControl,
+        containerClassName,
+        className,
+      )}
     >
       {items.map((item) => {
         const isSelected = item.value === value;
@@ -163,6 +168,7 @@ export const SegmentedControl = <T extends string>({
             disabled={isDisabled}
             onClick={() => onChange(item.value)}
             className={mergeClasses(
+              DIAL_KIT_CLASS.segmentedControlItem,
               segmentClassName,
               isSelected
                 ? segmentSelectedClassName

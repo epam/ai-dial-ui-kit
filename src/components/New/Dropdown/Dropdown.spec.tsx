@@ -1657,3 +1657,67 @@ describe('Dial UI Kit :: Dropdown — interactiveTooltip', () => {
     expect(screen.getAllByRole('menu')).toHaveLength(2);
   });
 });
+
+describe('Dial UI Kit :: Dropdown — public class names', () => {
+  test('stamps the list and every row so a host can style them', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const row = screen.getByRole('menuitem', { name: 'Profile' });
+    expect(row).toHaveClass('dial-kit-menuitem');
+    // The list is the row's own parent — the box that owns their padding,
+    // not the floating panel the consumer's `listClassName` lands on.
+    expect(row.parentElement).toHaveClass('dial-kit-dropdown-list');
+    expect(screen.getByRole('menuitem', { name: 'Logout' })).toHaveClass(
+      'dial-kit-menuitem',
+    );
+  });
+
+  test('stamps the trailing check of a chosen row', () => {
+    render(
+      <Dropdown
+        items={[
+          {
+            key: 'en',
+            label: 'English',
+            mark: MenuItemMark.Check,
+            checked: true,
+          },
+          { key: 'de', label: 'German', mark: MenuItemMark.Check },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const chosen = screen.getByRole('menuitemradio', { name: 'English' });
+    const other = screen.getByRole('menuitemradio', { name: 'German' });
+    // Decorative, so there is no role to find it by — the row's aria-checked
+    // carries the state.
+    expect(
+      chosen.querySelector('.dial-kit-menuitem-check'),
+    ).toBeInTheDocument();
+    expect(
+      other.querySelector('.dial-kit-menuitem-check'),
+    ).not.toBeInTheDocument();
+  });
+
+  test('keeps a consumer overlay class alongside the public one', () => {
+    render(
+      <Dropdown items={items} overlayContentClassName="host-list">
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const list = screen.getByRole('menuitem', {
+      name: 'Profile',
+    }).parentElement;
+    expect(list).toHaveClass('dial-kit-dropdown-list', 'host-list');
+  });
+});

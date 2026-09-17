@@ -36,6 +36,7 @@ import {
   INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY,
   interactiveTooltipClassName,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface InteractiveTooltipProps {
   /**
@@ -234,6 +235,7 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
               style={floatingStyles}
               {...getFloatingProps()}
               className={mergeClasses(
+                DIAL_KIT_CLASS.interactiveTooltip,
                 interactiveTooltipClassName,
                 themeScope,
                 contentClassName,

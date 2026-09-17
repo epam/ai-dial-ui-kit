@@ -7,6 +7,16 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [0.15.0]
+
+### Added
+
+- **Public class names on every design-system 2.0 component** — a host embedding the kit had no honest selector for the parts of a component its props do not reach: the kit's own classes are Tailwind utilities and hashed module locals, so hosts were left on `[class*='_selectedItem_']`, `> div:nth-child(2) > button` and `[role='none'][aria-label='dropdown']` — the last an accessibility contract, and a plain English string a localised host cannot rely on. Every 2.0 component now stamps a stable class on the element that draws it, exported as one record: `DIAL_KIT_CLASS.menuItem` is `'dial-kit-menuitem'`, and so on for 48 elements across the feedback components (`Spinner`, `ProgressBar`, `Skeleton`, `Notification`, `NoDataContent`), the text components (`Highlight`, `CaptionText`/`ErrorText`, `Label`), the containers (`CardShell`, `CollapsibleSidebar`, `ResizableContainer`, `Popup`, `ConfirmationPopup`, `Accordion`, `FolderPath`), the menus and overlays (`Dropdown` and its item list, rows and chosen-row check, `DialDropdownIcon`'s icon and caret badge, `Tooltip`, `InteractiveTooltip`, `EllipsisTooltip`), the fields (`Search`, `PasswordInput`, `NumberInput`, `TagInput`, `Select`, `InlineSelect`, `Calendar`, `FileDropzone`, `RadioGroupPopupField`) and the controls (`Switch`, `Checkbox`, `CheckboxBox`, `Radio`, `RadioGroup`, `SegmentedControl` and its segments, `Tabs` and its tabs, `Tag`, `ToggleIconButton`, `CloseButton`, `InfoButton`, `ButtonDropdown`). `dial-kit-dropdown-list` and `dial-kit-menuitem` are on the 1.0 dropdown family too, since `DialDropdownIcon` opens one.
+
+  Nothing in `dist/index.css` selects on any of them — they carry no declarations and exist only as selectors, so this is not a visual change and a host rule needs no `!important` it would not otherwise need. A row's class sits on the element that draws the row box, which is the wrapper rather than the inner button for a `MenuItem` with a `rightControl`; a `ProgressBar` with neither label nor readout returns its track as its own root, and the class follows it there. Components whose target element already carries a stable `dial-kit-*` class have no entry, because a second name for one thing is worse than none: `Button` and `IconButton` with their variant wrappers, `FabButton`, `Input`, `Textarea`, `Slider`, `MarkdownEditor` and `Grid`. A `Dropdown`'s floating panel, a `Popup`'s backdrop and the `DialDropdownIcon` trigger button keep being reached through `listClassName`, `overlayClassName` and `buttonClassName`. See the README for the full table. Requested in [ai-dial-chat#8707](https://github.com/epam/ai-dial-chat/issues/8707), the counterpart of the `dial-*` classes that issue adds to the chat libraries.
+
+---
+
 ## [0.14.0]
 
 ### Breaking Changes

@@ -12,6 +12,7 @@ import { ResizableContainerSide } from '@/types/resizable-container';
 import { mergeClasses } from '@/utils/merge-classes';
 
 import { ResizeHandle } from './components/ResizeHandle';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** Width change per arrow key press while the handle has keyboard focus. */
 const DEFAULT_KEYBOARD_STEP = 16;
@@ -225,6 +226,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     <Resizable ref={resizableRef} {...resizeSettings}>
       <div
         className={mergeClasses(
+          DIAL_KIT_CLASS.resizableContainer,
           'group flex size-full flex-col bg-layer-raised transition-all motion-reduce:transition-none',
           className,
         )}

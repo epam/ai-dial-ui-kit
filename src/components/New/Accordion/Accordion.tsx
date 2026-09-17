@@ -5,6 +5,7 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface AccordionProps {
   /** Title rendered in the header. */
@@ -141,6 +142,7 @@ export const Accordion: FC<AccordionProps> = ({
   return (
     <div
       className={mergeClasses(
+        DIAL_KIT_CLASS.accordion,
         'flex flex-col gap-3 py-3 overflow-hidden bg-transparent ',
         className,
       )}

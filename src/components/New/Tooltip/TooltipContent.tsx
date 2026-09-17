@@ -10,6 +10,7 @@ import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { useHasHover } from '@/hooks/use-has-hover';
 import { arrowClassName, tooltipClassName } from './constants';
 import { useTooltipContext } from './TooltipContext';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface TooltipContentProps extends HTMLProps<HTMLDivElement> {
   style?: CSSProperties;
@@ -55,6 +56,7 @@ export const TooltipContent: FC<TooltipContentProps> = ({
         }}
         {...context.getFloatingProps(props)}
         className={classNames(
+          DIAL_KIT_CLASS.tooltip,
           tooltipClassName,
           themeScope,
           context.getFloatingProps(props).className as string,
