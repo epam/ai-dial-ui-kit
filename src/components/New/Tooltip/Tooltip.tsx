@@ -62,10 +62,7 @@ export const Tooltip: FC<TooltipProps> = ({
       <TooltipTrigger asChild={asChild} className={triggerClassName}>
         {children}
       </TooltipTrigger>
-      {/*
-        Nothing to show is nothing to render: an empty bubble would still
-        portal a positioned element and announce itself to a screen reader.
-      */}
+
       {hasTooltip && (
         <TooltipContent className={contentClassName}>{tooltip}</TooltipContent>
       )}

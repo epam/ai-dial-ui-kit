@@ -472,11 +472,7 @@ export const Select: FC<SelectProps> = ({
       className={selectOverlayBaseClassName}
     >
       {header && <>{typeof header === 'function' ? header() : header}</>}
-      {/*
-        A short list needs no filtering — but once a query is active the row has
-        to stay, or it would vanish under the cursor as soon as the results (or
-        externally fetched options) drop below the threshold.
-      */}
+
       {(searchable || closable) &&
         (options.length > selectSearchThreshold || !!query) && (
           <div className="flex items-center gap-2 px-2 pt-2">
@@ -519,11 +515,6 @@ export const Select: FC<SelectProps> = ({
         </div>
       )}
 
-      {/*
-        `role="none"` keeps the options owned by the listbox: the scroll box is
-        a layout element, and an element of its own between them would break
-        the listbox's ownership of its options.
-      */}
       <div role="none" className={selectOptionsScrollClassName}>
         {filtered.length === 0 ? (
           <div className="px-2 py-3">

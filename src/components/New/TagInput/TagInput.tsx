@@ -294,12 +294,6 @@ export const TagInput: FC<TagInputProps> = ({
         />
       )}
 
-      {/*
-        Measures every tag at its natural width so the `+N` cut-off can be
-        calculated. `invisible` keeps the copies out of the layout and out of the
-        tab order — `visibility: hidden` is not focusable — while still leaving
-        them measurable, which `display: none` would not.
-      */}
       {collapseTagOverflow && (
         <span
           aria-hidden="true"

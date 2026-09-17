@@ -189,11 +189,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Both labels point at the input, so its accessible name reads as the
-          field name followed by the in-area copy. */}
       {labelProps && <Label {...labelProps} htmlFor={inputId} />}
-      {/* Kept a sibling of the label rather than a child: `peer-*` variants only
-          reach following siblings, and the focus ring belongs on the area. */}
       <input
         id={inputId}
         type="file"

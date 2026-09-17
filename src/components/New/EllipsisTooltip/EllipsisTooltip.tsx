@@ -80,11 +80,6 @@ export const EllipsisTooltip: FC<EllipsisTooltipProps> = ({
 
   return (
     <TooltipContainer {...tooltipProps}>
-      {/*
-        The trigger is the text element itself rather than a wrapper: a wrapper
-        would be the box that truncates, and its `aria-describedby` would not
-        reach the text a screen reader is reading.
-      */}
       <TooltipTrigger
         asChild
         onMouseEnter={remeasure}
