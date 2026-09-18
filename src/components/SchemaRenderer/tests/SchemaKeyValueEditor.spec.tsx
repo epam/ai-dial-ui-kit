@@ -384,4 +384,379 @@ describe('Dial UI Kit :: SchemaKeyValueEditor', () => {
       expect(screen.getByDisplayValue('eu')).toBeInTheDocument();
     });
   });
+
+  describe('unschematized values (additionalProperties: true)', () => {
+    test('renders a JSON editor instead of "[object Object]" when an entry value is a plain object', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ publication_type: { type: 'string' } }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(screen.getByDisplayValue('publication_type')).toBeInTheDocument();
+      expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+    });
+
+    test('keeps rendering the JSON editor after the entry is edited down to a JSON primitive', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ publication_type: { type: 'string' } }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      const editor = await screen.findByLabelText('JSON content');
+      fireEvent.change(editor, { target: { value: '"hello"' } });
+
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+      expect(screen.queryByDisplayValue('hello')).not.toBeInTheDocument();
+    });
+
+    test('shows an "Invalid JSON" error while the JSON editor content does not parse', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ publication_type: { type: 'string' } }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      const editor = await screen.findByLabelText('JSON content');
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+      fireEvent.change(editor, { target: { value: '{ "type": ' } });
+      expect(screen.getByRole('alert')).toHaveTextContent('Invalid JSON');
+
+      fireEvent.change(editor, { target: { value: '{ "type": "string" }' } });
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
+
+    test('shows an "Invalid JSON" error for a broken array entry too', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ publication_topics: ['a', 'b'] }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      const editor = await screen.findByLabelText('JSON content');
+      fireEvent.change(editor, { target: { value: '["a", "b",]' } });
+
+      expect(screen.getByRole('alert')).toHaveTextContent('Invalid JSON');
+    });
+
+    test('renders a JSON editor instead of "[object Object]" when an entry value is an array', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ publication_topics: ['a', 'b'] }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+    });
+
+    test('still renders a plain string entry inline in the same unschematized map', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{
+            title: 'DocumentMetadataSchema',
+            properties: { publication_type: { type: 'string' } },
+          }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(
+        screen.getByDisplayValue('DocumentMetadataSchema'),
+      ).toBeInTheDocument();
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+    });
+
+    test('shows a type selector for an unschematized entry, plus a Type column header', () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+      expect(screen.getByText('Type')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'String' }),
+      ).toBeInTheDocument();
+    });
+
+    test('shows a warning tooltip on hover explaining the type selector resets the value', async () => {
+      const user = userEvent.setup();
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(
+        screen.queryByText('Changing type will reset the current value.'),
+      ).not.toBeInTheDocument();
+
+      await user.hover(screen.getByRole('button', { name: 'String' }));
+
+      expect(
+        await screen.findByText('Changing type will reset the current value.'),
+      ).toBeInTheDocument();
+    });
+
+    test('does not show a type selector for a schema-declared complex map', () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{
+            type: 'object',
+            additionalProperties: { type: 'string' },
+          }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+      expect(
+        screen.queryByRole('button', { name: 'String' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('disables (but does not hide) the type selector when readonly', () => {
+      render(
+        <SchemaRendererContext.Provider
+          value={{
+            rootSchema: {},
+            texts: DEFAULT_SCHEMA_TEXTS,
+            readonly: true,
+          }}
+        >
+          <SchemaKeyValueEditor
+            schema={{ type: 'object', additionalProperties: true }}
+            value={{ title: 'DocumentMetadataSchema' }}
+            onChange={vi.fn()}
+            path={[]}
+            level={0}
+          />
+        </SchemaRendererContext.Provider>,
+      );
+      const trigger = screen.getByRole('button', { name: 'String' });
+      expect(trigger).toBeInTheDocument();
+
+      fireEvent.click(trigger);
+      expect(
+        screen.queryByRole('option', { name: 'Boolean' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test("initially selects the type inferred from each entry's runtime value", () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{
+            enabled: true,
+            count: 3,
+            missing: null,
+            tags: ['a'],
+            meta: {},
+          }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+      expect(
+        screen.getByRole('button', { name: 'Boolean' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Number' }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Null' })).toBeInTheDocument();
+      expect(
+        screen.getAllByRole('button', { name: 'Array' })[0],
+      ).toBeInTheDocument();
+      expect(
+        screen.getAllByRole('button', { name: 'Object' })[0],
+      ).toBeInTheDocument();
+    });
+
+    test("changing the type resets the value to that type's default and swaps the widget", () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'String' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Boolean' }));
+
+      expect(screen.getByRole('button', { name: 'False' })).toBeInTheDocument();
+    });
+
+    test('shows a True/False selector for a boolean entry, not a switch', () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ enabled: true }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'True' })).toBeInTheDocument();
+    });
+
+    test('editing a boolean entry inline calls onChange with a real boolean, not a string', () => {
+      const handleChange = vi.fn();
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ enabled: true }}
+          onChange={handleChange}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'True' }));
+      fireEvent.click(screen.getByRole('option', { name: 'False' }));
+
+      expect(handleChange).toHaveBeenCalledWith({ enabled: false });
+    });
+
+    test('selecting Object seeds an empty object and shows the JSON editor', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'String' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Object' }));
+
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+      expect(screen.getByLabelText('JSON content')).toHaveValue('{}');
+    });
+
+    test('switching from Object to Array resets the JSON editor content instead of keeping stale text', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'String' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Object' }));
+      await screen.findByLabelText('JSON content');
+
+      fireEvent.click(screen.getByRole('button', { name: 'Object' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Array' }));
+
+      expect(await screen.findByLabelText('JSON content')).toHaveValue('[]');
+    });
+
+    test('selecting Array seeds an empty array and shows the JSON editor', async () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ title: 'DocumentMetadataSchema' }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'String' }));
+      fireEvent.click(screen.getByRole('option', { name: 'Array' }));
+
+      expect(
+        await screen.findByRole('textbox', { name: 'JSON Editor' }),
+      ).toBeInTheDocument();
+      expect(screen.getByLabelText('JSON content')).toHaveValue('[]');
+    });
+
+    test('renders a disabled "null" input for a Null entry', () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{ missing: null }}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      expect(screen.getByDisplayValue('null')).toBeDisabled();
+    });
+
+    test('Add Field defaults the new entry to type String', () => {
+      renderWithSchema(
+        <SchemaKeyValueEditor
+          schema={{ type: 'object', additionalProperties: true }}
+          value={{}}
+          onChange={vi.fn()}
+          path={[]}
+          level={0}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /add field/i }));
+
+      expect(
+        screen.getByRole('button', { name: 'String' }),
+      ).toBeInTheDocument();
+    });
+  });
 });

@@ -11,10 +11,14 @@ import {
   getItemTitle,
   getSchemaDefault,
   sortByPropertyOrder,
+  inferEntryType,
+  getEntryTypeDefault,
+  ENTRY_TYPE_OPTIONS,
 } from '@/components/SchemaRenderer/utils';
-import type {
-  JsonSchema,
-  JsonSchemaDef,
+import {
+  JsonSchemaType,
+  type JsonSchema,
+  type JsonSchemaDef,
 } from '@/components/SchemaRenderer/types';
 
 // ---------------------------------------------------------------------------
@@ -792,5 +796,61 @@ describe('getSchemaDefault', () => {
 
   test('uses first element when type is an array', () => {
     expect(getSchemaDefault({ type: ['string', 'null'] })).toBe('');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// inferEntryType / getEntryTypeDefault / ENTRY_TYPE_OPTIONS
+// ---------------------------------------------------------------------------
+
+describe('inferEntryType', () => {
+  test('infers Array for an array value', () => {
+    expect(inferEntryType(['a', 'b'])).toBe(JsonSchemaType.Array);
+  });
+
+  test('infers Object for a plain object value', () => {
+    expect(inferEntryType({ a: 1 })).toBe(JsonSchemaType.Object);
+  });
+
+  test('infers Boolean for a boolean value', () => {
+    expect(inferEntryType(true)).toBe(JsonSchemaType.Boolean);
+    expect(inferEntryType(false)).toBe(JsonSchemaType.Boolean);
+  });
+
+  test('infers Number for a number value', () => {
+    expect(inferEntryType(42)).toBe(JsonSchemaType.Number);
+  });
+
+  test('infers Null for a null value', () => {
+    expect(inferEntryType(null)).toBe(JsonSchemaType.Null);
+  });
+
+  test('infers String for a string value and as the fallback for undefined', () => {
+    expect(inferEntryType('hello')).toBe(JsonSchemaType.String);
+    expect(inferEntryType(undefined)).toBe(JsonSchemaType.String);
+  });
+});
+
+describe('getEntryTypeDefault', () => {
+  test('returns the correct default for each type', () => {
+    expect(getEntryTypeDefault(JsonSchemaType.String)).toBe('');
+    expect(getEntryTypeDefault(JsonSchemaType.Number)).toBe(0);
+    expect(getEntryTypeDefault(JsonSchemaType.Boolean)).toBe(false);
+    expect(getEntryTypeDefault(JsonSchemaType.Null)).toBeNull();
+    expect(getEntryTypeDefault(JsonSchemaType.Object)).toEqual({});
+    expect(getEntryTypeDefault(JsonSchemaType.Array)).toEqual([]);
+  });
+});
+
+describe('ENTRY_TYPE_OPTIONS', () => {
+  test('lists all 6 entry types in the expected order', () => {
+    expect(ENTRY_TYPE_OPTIONS).toEqual([
+      JsonSchemaType.String,
+      JsonSchemaType.Number,
+      JsonSchemaType.Boolean,
+      JsonSchemaType.Null,
+      JsonSchemaType.Object,
+      JsonSchemaType.Array,
+    ]);
   });
 });
