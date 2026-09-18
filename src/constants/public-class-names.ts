@@ -135,6 +135,11 @@ export const DIAL_KIT_CLASS = {
    * `dial-kit-tab-selected-underline`.
    */
   tab: 'dial-kit-tab',
+  /**
+   * The `role="group"` row of a `FilterChips`. Its chips are `Tag` pills, so
+   * they carry `dial-kit-tag` and have no entry of their own.
+   */
+  filterChips: 'dial-kit-filter-chips',
   /** A `Tag` pill, wherever it is rendered — including a `TagInput`'s rows. */
   tag: 'dial-kit-tag',
   /**

@@ -404,6 +404,11 @@ export type {
 } from './components/New/SegmentedControl/SegmentedControl';
 export { Tabs } from './components/New/Tabs/Tabs';
 export type { TabsProps, TabItem } from './components/New/Tabs/Tabs';
+export { FilterChips } from './components/New/FilterChips/FilterChips';
+export type {
+  FilterChipsProps,
+  FilterChipItem,
+} from './components/New/FilterChips/FilterChips';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
 export type { FileDropzoneProps } from './components/New/FileDropzone/FileDropzone';
 export { Tag } from './components/New/Tag/Tag';

@@ -26,6 +26,7 @@ import { ConfirmationPopup } from '@/components/New/ConfirmationPopup/Confirmati
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
 import { FileDropzone } from '@/components/New/FileDropzone/FileDropzone';
+import { FilterChips } from '@/components/New/FilterChips/FilterChips';
 import { FolderPath } from '@/components/New/FolderPath/FolderPath';
 import { Highlight } from '@/components/New/Highlight/Highlight';
 import { IconButton } from '@/components/New/IconButton/IconButton';
@@ -188,6 +189,17 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
         value="a"
         onChange={noop}
         aria-label="Mode"
+      />
+    ),
+  ],
+  [
+    'filterChips',
+    () => (
+      <FilterChips
+        items={[{ value: 'a', label: 'A' }]}
+        value="a"
+        onChange={noop}
+        aria-label="Filter"
       />
     ),
   ],
