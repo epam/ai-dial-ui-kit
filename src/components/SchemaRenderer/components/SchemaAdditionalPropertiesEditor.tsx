@@ -1,5 +1,6 @@
 import { type ComponentType, type FC, useEffect, useState } from 'react';
 import type { DialJsonEditorProps } from '@/components/JsonEditor/JsonEditor';
+import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import { EditorThemes } from '@/types/editor';
 
@@ -24,7 +25,7 @@ export interface SchemaAdditionalPropertiesEditorProps {
 export const SchemaAdditionalPropertiesEditor: FC<
   SchemaAdditionalPropertiesEditorProps
 > = ({ value, onChange, theme = EditorThemes.dark, height = 240 }) => {
-  const { readonly } = useSchemaContext();
+  const { readonly, texts } = useSchemaContext();
   const [EditorComponent, setEditorComponent] =
     useState<ComponentType<DialJsonEditorProps> | null>(null);
   const [text, setText] = useState<string>(() =>
@@ -39,6 +40,13 @@ export const SchemaAdditionalPropertiesEditor: FC<
     }
   }, []);
 
+  let hasParseError = false;
+  try {
+    JSON.parse(text);
+  } catch {
+    hasParseError = true;
+  }
+
   const handleChange = (next: string | undefined) => {
     const nextText = next ?? '';
     setText(nextText);
@@ -51,18 +59,23 @@ export const SchemaAdditionalPropertiesEditor: FC<
   };
 
   return (
-    <div
-      className="border border-primary rounded"
-      style={{ height: `${height}px` }}
-    >
-      {EditorComponent && (
-        <EditorComponent
-          value={text}
-          currentTheme={theme}
-          onChange={handleChange}
-          options={{ readOnly: readonly }}
-        />
-      )}
+    <div>
+      <div
+        className="border border-primary rounded"
+        style={{ height: `${height}px` }}
+      >
+        {EditorComponent && (
+          <EditorComponent
+            value={text}
+            currentTheme={theme}
+            onChange={handleChange}
+            options={{ readOnly: readonly }}
+          />
+        )}
+      </div>
+      <DialErrorText
+        text={hasParseError ? texts.invalidJsonError : undefined}
+      />
     </div>
   );
 };

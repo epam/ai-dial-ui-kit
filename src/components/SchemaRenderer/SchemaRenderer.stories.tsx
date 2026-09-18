@@ -8,6 +8,7 @@ import {
   type JsonSchema,
   type DialSchemaRendererProps,
 } from './types';
+import { EditorThemes } from '@/types/editor';
 
 const simpleSchema: JsonSchema = {
   properties: {
@@ -387,6 +388,77 @@ export const AdditionalProperties: Story = {
       count: 10,
       metadata: { owner: 'team-ai', tags: ['prod', 'eu'] },
       customFlag: true,
+    },
+  },
+};
+
+const primitiveMapSchema: JsonSchema = {
+  type: 'object',
+  properties: {
+    config: {
+      title: 'Config',
+      type: 'object',
+      additionalProperties: true,
+    },
+  },
+};
+
+export const AdditionalPropertiesPrimitiveValues: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An `additionalProperties: true` map whose entries are all scalars — confirms the ' +
+          'unschematized-object-value fix does not change the existing flat key-value-row ' +
+          'rendering for the common case.',
+      },
+    },
+  },
+  args: {
+    schema: primitiveMapSchema,
+    defaultValue: {
+      config: { environment: 'production', retries: 3, enabled: true },
+    },
+  },
+};
+
+const jsonSchemaDocumentAsValueSchema: JsonSchema = {
+  type: 'object',
+  properties: {
+    metadata_schema: {
+      title: 'Metadata Schema',
+      type: 'object',
+      additionalProperties: true,
+    },
+  },
+};
+
+export const AdditionalPropertiesWithNestedObjectValue: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An `additionalProperties: true` map storing a JSON Schema document as its value — ' +
+          'the `properties` entry is itself a nested object with no declared schema. Confirms ' +
+          'it renders as a JSON editor instead of "[object Object]", while sibling string ' +
+          'entries ($schema, title, type) keep rendering inline.',
+      },
+    },
+  },
+  args: {
+    jsonEditorTheme: EditorThemes.light,
+    schema: jsonSchemaDocumentAsValueSchema,
+    defaultValue: {
+      metadata_schema: {
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+        title: 'DocumentMetadataSchema',
+        type: 'object',
+        properties: {
+          publication_type: { type: 'string' },
+          publication_date: { type: 'string', format: 'date' },
+        },
+        additionalProperties: true,
+      },
     },
   },
 };

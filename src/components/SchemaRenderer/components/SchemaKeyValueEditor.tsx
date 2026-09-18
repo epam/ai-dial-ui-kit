@@ -1,13 +1,17 @@
-import { type FC, useState } from 'react';
+import { type FC, useCallback, useMemo, useState } from 'react';
 import { IconPlus } from '@tabler/icons-react';
 import { DialInput } from '@/components/Input/Input';
 import { DialErrorText } from '@/components/CaptionText/CaptionText';
 import { DialGhostButton } from '@/components/Button/ButtonWrappers';
 import { DialRemoveButton } from '@/components/RemoveButton/RemoveButton';
+import { DialSelect } from '@/components/Select/Select';
+import { DialTooltip } from '@/components/Tooltip/Tooltip';
 import { ElementSize } from '@/types/size';
+import type { EditorThemes } from '@/types/editor';
 import {
   JsonSchemaType,
   type JsonSchemaDef,
+  type SchemaRendererTexts,
 } from '@/components/SchemaRenderer/types';
 import { useSchemaContext } from '@/components/SchemaRenderer/context';
 import {
@@ -17,10 +21,15 @@ import {
   validateRequired,
   isObjectType,
   getSchemaDefault,
+  inferEntryType,
+  getEntryTypeDefault,
+  ENTRY_TYPE_OPTIONS,
+  type EntryType,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaPrimitiveField } from './SchemaPrimitiveField';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
+import { SchemaAdditionalPropertiesEditor } from './SchemaAdditionalPropertiesEditor';
 
 interface KeyValuePair {
   id: string;
@@ -42,11 +51,22 @@ const isComplexValueSchema = (schema: JsonSchemaDef): boolean =>
     isObjectType(schema),
   );
 
+const entryTypeLabelKey: Record<EntryType, keyof SchemaRendererTexts> = {
+  [JsonSchemaType.String]: 'entryTypeString',
+  [JsonSchemaType.Number]: 'entryTypeNumber',
+  [JsonSchemaType.Boolean]: 'entryTypeBoolean',
+  [JsonSchemaType.Null]: 'entryTypeNull',
+  [JsonSchemaType.Object]: 'entryTypeObject',
+  [JsonSchemaType.Array]: 'entryTypeArray',
+};
+
 interface KeyValueRowProps {
   pairId: string;
   pairKey: string;
   pairValue: unknown;
   valueSchema: JsonSchemaDef;
+  isUnschematizedValue: boolean;
+  jsonEditorTheme?: EditorThemes;
   onKeyChange: (key: string) => void;
   onValueChange: (value: unknown) => void;
   onRemove: () => void;
@@ -63,6 +83,8 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
   pairKey,
   pairValue,
   valueSchema,
+  isUnschematizedValue,
+  jsonEditorTheme,
   onKeyChange,
   onValueChange,
   onRemove,
@@ -82,10 +104,47 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
     skipUntouched = false,
   } = useSchemaContext();
   const [keyDraft, setKeyDraft] = useState(pairKey);
-  const isComplex = isComplexValueSchema(valueSchema);
+  const isSchemaComplex = isComplexValueSchema(valueSchema);
+  const [entryType, setEntryType] = useState<EntryType>(() =>
+    inferEntryType(pairValue),
+  );
+  const isJsonMode =
+    isUnschematizedValue &&
+    (entryType === JsonSchemaType.Object || entryType === JsonSchemaType.Array);
+  const isNullMode = isUnschematizedValue && entryType === JsonSchemaType.Null;
+  const isComplex = isSchemaComplex || isJsonMode;
   const keyTouchedPath = [...path, pairId, 'key'].join('.');
   const isKeyTouched = !skipUntouched || touchedPaths.has(keyTouchedPath);
   const showKeyError = isKeyTouched && pairKey === '';
+
+  const handleChangeType = useCallback(
+    (next: EntryType) => {
+      onValueChange(getEntryTypeDefault(next));
+      setEntryType(next);
+    },
+    [onValueChange],
+  );
+
+  const entryTypeOptions = useMemo(
+    () =>
+      ENTRY_TYPE_OPTIONS.map((type) => ({
+        value: type,
+        label: texts[entryTypeLabelKey[type]],
+      })),
+    [texts],
+  );
+
+  const booleanOptions = useMemo(
+    () => [
+      { value: 'true', label: texts.booleanTrueOption },
+      { value: 'false', label: texts.booleanFalseOption },
+    ],
+    [texts],
+  );
+
+  const keyErrorId = `${pairId}-key-error`;
+  const isUnschematizedBoolean =
+    isUnschematizedValue && entryType === JsonSchemaType.Boolean;
 
   const keyRow = (
     <div className="flex gap-2 items-start">
@@ -94,6 +153,7 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
           value={keyDraft}
           disabled={readonly}
           invalid={showKeyError}
+          aria-describedby={showKeyError ? keyErrorId : undefined}
           onChange={(v) => setKeyDraft(v ?? '')}
           onBlur={() => {
             markTouched(keyTouchedPath);
@@ -103,18 +163,56 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
           containerClassName={inputClassName}
         />
         <DialErrorText
+          id={keyErrorId}
           text={
             showKeyError ? `${texts.keyColumnHeader} is required` : undefined
           }
         />
       </div>
-      {!isComplex && (
+      {!isSchemaComplex && !isJsonMode && (
         <div className="flex-1 min-w-0">
-          <SchemaPrimitiveField
-            schema={valueSchema}
-            value={pairValue}
-            onChange={onValueChange}
-          />
+          {isNullMode ? (
+            <DialInput
+              value="null"
+              disabled
+              onChange={undefined}
+              className="opacity-60"
+            />
+          ) : isUnschematizedBoolean ? (
+            <DialSelect
+              options={booleanOptions}
+              value={pairValue ? 'true' : 'false'}
+              disabled={readonly}
+              onChange={(next) => {
+                const nextValue = typeof next === 'string' ? next : next[0];
+                if (nextValue) onValueChange(nextValue === 'true');
+              }}
+            />
+          ) : (
+            <SchemaPrimitiveField
+              schema={isUnschematizedValue ? { type: entryType } : valueSchema}
+              value={pairValue}
+              onChange={onValueChange}
+            />
+          )}
+        </div>
+      )}
+      {isUnschematizedValue && (
+        <div className="w-28 shrink-0">
+          <DialTooltip
+            tooltip={texts.entryTypeChangeWarning}
+            triggerClassName="block"
+          >
+            <DialSelect
+              options={entryTypeOptions}
+              value={entryType}
+              disabled={readonly}
+              onChange={(next) => {
+                const nextType = typeof next === 'string' ? next : next[0];
+                if (nextType) handleChangeType(nextType as EntryType);
+              }}
+            />
+          </DialTooltip>
         </div>
       )}
       {!readonly && (
@@ -129,6 +227,20 @@ const KeyValueRow: FC<KeyValueRowProps> = ({
   );
 
   if (!isComplex) return keyRow;
+
+  if (isJsonMode) {
+    return (
+      <div className="flex flex-col gap-2">
+        {keyRow}
+        <SchemaAdditionalPropertiesEditor
+          key={entryType}
+          value={pairValue}
+          onChange={onValueChange}
+          theme={jsonEditorTheme}
+        />
+      </div>
+    );
+  }
 
   const entryPath = [...path, pairKey];
   const summary = buildSummary(pairValue, valueSchema, rootSchema);
@@ -204,14 +316,17 @@ export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
     texts,
     readonly = false,
     inputClassName,
+    jsonEditorTheme,
   } = useSchemaContext();
 
-  const valueSchema: JsonSchemaDef =
-    schema.additionalProperties === true || schema.additionalProperties == null
-      ? { type: 'string' }
-      : typeof schema.additionalProperties === 'object'
-        ? resolveRef(schema.additionalProperties as JsonSchemaDef, rootSchema)
-        : { type: 'string' };
+  const isUnschematizedValue =
+    schema.additionalProperties === true || schema.additionalProperties == null;
+
+  const valueSchema: JsonSchemaDef = isUnschematizedValue
+    ? { type: 'string' }
+    : typeof schema.additionalProperties === 'object'
+      ? resolveRef(schema.additionalProperties as JsonSchemaDef, rootSchema)
+      : { type: 'string' };
 
   const isComplexValue = isComplexValueSchema(valueSchema);
 
@@ -275,6 +390,11 @@ export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
           <span className="flex-1 dial-tiny-text text-secondary font-medium">
             {texts.valueColumnHeader}
           </span>
+          {isUnschematizedValue && (
+            <span className="w-28 shrink-0 dial-tiny-text text-secondary font-medium">
+              {texts.typeColumnHeader}
+            </span>
+          )}
         </div>
       )}
 
@@ -285,6 +405,8 @@ export const SchemaKeyValueEditor: FC<SchemaKeyValueEditorProps> = ({
           pairKey={pair.key}
           pairValue={pair.value}
           valueSchema={valueSchema}
+          isUnschematizedValue={isUnschematizedValue}
+          jsonEditorTheme={jsonEditorTheme}
           onKeyChange={(k) => handleKeyChange(i, k)}
           onValueChange={(v) => handleValueChange(i, v)}
           onRemove={() => handleRemove(i)}

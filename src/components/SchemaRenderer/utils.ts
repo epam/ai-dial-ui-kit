@@ -418,3 +418,42 @@ export function getSchemaDefault(schema: JsonSchemaDef): unknown {
       return {};
   }
 }
+
+export type EntryType =
+  | JsonSchemaType.String
+  | JsonSchemaType.Number
+  | JsonSchemaType.Boolean
+  | JsonSchemaType.Null
+  | JsonSchemaType.Object
+  | JsonSchemaType.Array;
+
+export const ENTRY_TYPE_OPTIONS: EntryType[] = [
+  JsonSchemaType.String,
+  JsonSchemaType.Number,
+  JsonSchemaType.Boolean,
+  JsonSchemaType.Null,
+  JsonSchemaType.Object,
+  JsonSchemaType.Array,
+];
+
+export function inferEntryType(value: unknown): EntryType {
+  if (Array.isArray(value)) return JsonSchemaType.Array;
+  if (typeof value === 'object' && value !== null) return JsonSchemaType.Object;
+  if (typeof value === 'boolean') return JsonSchemaType.Boolean;
+  if (typeof value === 'number') return JsonSchemaType.Number;
+  if (value === null) return JsonSchemaType.Null;
+  return JsonSchemaType.String;
+}
+
+const ENTRY_TYPE_DEFAULTS: Record<EntryType, unknown> = {
+  [JsonSchemaType.String]: '',
+  [JsonSchemaType.Number]: 0,
+  [JsonSchemaType.Boolean]: false,
+  [JsonSchemaType.Null]: null,
+  [JsonSchemaType.Object]: {},
+  [JsonSchemaType.Array]: [],
+};
+
+export function getEntryTypeDefault(type: EntryType): unknown {
+  return ENTRY_TYPE_DEFAULTS[type];
+}

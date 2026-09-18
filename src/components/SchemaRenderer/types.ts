@@ -89,6 +89,17 @@ export interface SchemaRendererTexts {
   selectTypePlaceholder: string;
   removeItemAriaLabel: string;
   removeFieldAriaLabel: string;
+  typeColumnHeader: string;
+  entryTypeString: string;
+  entryTypeNumber: string;
+  entryTypeBoolean: string;
+  entryTypeNull: string;
+  entryTypeObject: string;
+  entryTypeArray: string;
+  entryTypeChangeWarning: string;
+  booleanTrueOption: string;
+  booleanFalseOption: string;
+  invalidJsonError: string;
 }
 
 export const DEFAULT_SCHEMA_TEXTS: SchemaRendererTexts = {
@@ -109,6 +120,17 @@ export const DEFAULT_SCHEMA_TEXTS: SchemaRendererTexts = {
   selectTypePlaceholder: 'Select type',
   removeItemAriaLabel: 'Remove item',
   removeFieldAriaLabel: 'Remove field',
+  typeColumnHeader: 'Type',
+  entryTypeString: 'String',
+  entryTypeNumber: 'Number',
+  entryTypeBoolean: 'Boolean',
+  entryTypeNull: 'Null',
+  entryTypeObject: 'Object',
+  entryTypeArray: 'Array',
+  entryTypeChangeWarning: 'Changing type will reset the current value.',
+  booleanTrueOption: 'True',
+  booleanFalseOption: 'False',
+  invalidJsonError: 'Invalid JSON',
 };
 
 export interface DialSchemaRendererProps {
