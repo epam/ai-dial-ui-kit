@@ -265,9 +265,6 @@ const TimeField: FC<TimeFieldProps> = ({
   return (
     <div className="relative w-full">
       {input}
-      {/* `truncate` keeps the absolutely-positioned hint on one line: a long
-       * label in a narrow field must cut off with an ellipsis rather than
-       * wrap out of the field or over the masked value. */}
       <span className="dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary">
         {timezoneLabel}
       </span>
@@ -557,11 +554,6 @@ export const Calendar: FC<CalendarProps> = ({
             </div>
 
             <div className="grid grid-cols-7 gap-y-1 text-center">
-              {/*
-                Abbreviations ("Mo", "Tu") that are not associated with their
-                columns, so they read as loose text. Each day button already
-                announces its own weekday, making these purely visual.
-              */}
               {weekdayShortLabels.map((weekday) => (
                 <div
                   key={weekday}
