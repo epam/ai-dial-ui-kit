@@ -6,6 +6,7 @@ import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface FolderPathProps {
   segments: string[];
@@ -70,7 +71,7 @@ export const FolderPath: FC<FolderPathProps> = ({
 
   return (
     <DialBreadcrumb
-      className={className}
+      className={mergeClasses(DIAL_KIT_CLASS.folderPath, className)}
       ariaLabel={ariaLabel}
       separator={
         <DialIcon

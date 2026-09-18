@@ -16,6 +16,7 @@ import {
   notificationVariantRoleMap,
   variantIcons,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface NotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
@@ -122,6 +123,7 @@ export const Notification: FC<NotificationProps> = ({
       role={notificationVariantRoleMap[variant]}
       {...props}
       className={mergeClasses(
+        DIAL_KIT_CLASS.notification,
         alertBaseClassName,
         notificationVariantClassNameMap[variant],
         type === NotificationType.Toast &&

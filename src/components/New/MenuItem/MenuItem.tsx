@@ -9,6 +9,7 @@ import {
   overlayItemHighlightClassName,
   overlayItemSelectedClassName,
 } from '@/components/New/constants/overlay';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { MenuItemMark } from '@/types/menu-item';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -112,6 +113,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   );
 
   const rowClassName = mergeClasses(
+    DIAL_KIT_CLASS.menuItem,
     overlayItemClassName,
     // A row that opens a panel stays tinted while that panel is up, so the
     // trail back to it is visible once the pointer has moved into it.

@@ -30,6 +30,7 @@ import {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
 
 import {
@@ -336,7 +337,11 @@ export const DialDropdown: FC<DialDropdownProps> = ({
 
         <div
           role="none"
-          className={mergeClasses('py-1', overlayContentClassName)}
+          className={mergeClasses(
+            DIAL_KIT_CLASS.dropdownList,
+            'py-1',
+            overlayContentClassName,
+          )}
           aria-label="dropdown"
         >
           {items.map((it) => {

@@ -1,6 +1,7 @@
 import { useCallback, useRef, type FC, type KeyboardEvent } from 'react';
 
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** A single tab entry rendered by {@link Tabs}. */
 export interface TabItem {
@@ -135,7 +136,11 @@ export const Tabs: FC<TabsProps> = ({
       role="tablist"
       aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
-      className={mergeClasses('flex justify-start gap-1', className)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.tabs,
+        'flex justify-start gap-1',
+        className,
+      )}
     >
       {tabs.map((tab) => {
         const isActive = activeTabId === tab.id;
@@ -154,6 +159,7 @@ export const Tabs: FC<TabsProps> = ({
             tabIndex={tab.id === tabStopId ? 0 : -1}
             onClick={() => onTabChange(tab.id)}
             className={mergeClasses(
+              DIAL_KIT_CLASS.tab,
               'dial-small-paragraph-semi-text dial-kit-enhanced-target',
               'border-b-2 border-transparent flex items-center gap-2 px-3 py-2 text-start',
               'transition-colors motion-reduce:transition-none',

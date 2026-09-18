@@ -7,6 +7,7 @@ import {
 } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -107,6 +108,7 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
         <DialIcon
           icon={icon}
           className={mergeClasses(
+            DIAL_KIT_CLASS.dropdownIcon,
             'flex items-center justify-center text-inherit',
             iconSizeClass[size],
             showCaret && '-mr-2',
@@ -114,7 +116,12 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
           )}
         />
         {showCaret && (
-          <div className="relative z-10 inline-grid size-5 shrink-0 place-items-center">
+          <div
+            className={mergeClasses(
+              DIAL_KIT_CLASS.dropdownIconCaret,
+              'relative z-10 inline-grid size-5 shrink-0 place-items-center',
+            )}
+          >
             <div className="absolute inset-0 rounded-full bg-layer-2" />
             <DialIcon
               icon={caretIcon}

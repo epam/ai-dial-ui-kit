@@ -5,6 +5,7 @@ import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button, type ButtonProps } from '../Button/Button';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { getButtonChevron } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface ButtonDropdownProps extends Omit<ButtonProps, 'iconAfter'> {
   items: DropdownItem[];
@@ -39,7 +40,7 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
   }, [isDropdownOpen]);
 
   return (
-    <div>
+    <div className={DIAL_KIT_CLASS.buttonDropdown}>
       <Dropdown items={items} onOpenChange={(open) => setIsDropdownOpen(open)}>
         <Button
           {...props}

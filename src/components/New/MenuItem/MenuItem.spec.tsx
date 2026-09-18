@@ -217,4 +217,45 @@ describe('Dial UI Kit :: MenuItem', () => {
       'has-[[data-menu-item-row]:focus-visible]:outline',
     );
   });
+
+  test('stamps the public row class on whichever element draws the row', () => {
+    const { rerender } = render(<MenuItem role="menuitem" label="Rename" />);
+
+    expect(screen.getByRole('menuitem', { name: 'Rename' })).toHaveClass(
+      'dial-kit-menuitem',
+    );
+
+    rerender(
+      <MenuItem
+        role="option"
+        aria-selected={false}
+        label="GPT-4o"
+        rightControl={<button type="button" aria-label="Favourite" />}
+      />,
+    );
+
+    // Beside a control of its own the row is only part of the rectangle, so the
+    // class follows the box a host would style — the wrapper.
+    const row = screen.getByRole('option', { name: 'GPT-4o' });
+    expect(row).not.toHaveClass('dial-kit-menuitem');
+    expect(row.parentElement).toHaveClass('dial-kit-menuitem');
+  });
+
+  test('stamps the trailing check of a chosen row', () => {
+    render(
+      <MenuItem
+        role="option"
+        aria-selected
+        label="English"
+        mark={MenuItemMark.Check}
+        selected
+      />,
+    );
+
+    expect(
+      screen
+        .getByRole('option', { name: 'English' })
+        .querySelector('.dial-kit-menuitem-check'),
+    ).toBeInTheDocument();
+  });
 });

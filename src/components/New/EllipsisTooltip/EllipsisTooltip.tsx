@@ -6,6 +6,7 @@ import { TooltipContent } from '../Tooltip/TooltipContent';
 import type { TooltipContainerOptions } from '../Tooltip/TooltipContext';
 import { TooltipTrigger } from '../Tooltip/TooltipTrigger';
 import { useTruncation } from './use-truncation';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface EllipsisTooltipProps extends TooltipContainerOptions {
   text: ReactNode;
@@ -90,6 +91,7 @@ export const EllipsisTooltip: FC<EllipsisTooltipProps> = ({
           ref={ref}
           aria-label={isTruncated && fullText ? fullText : undefined}
           className={mergeClasses(
+            DIAL_KIT_CLASS.ellipsisTooltip,
             'block min-w-0 max-w-full flex-1 truncate text-start',
             className,
           )}

@@ -47,6 +47,7 @@ import {
   selectSearchIcon,
   selectSearchThreshold,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface SelectProps {
   options: SelectOption[];
@@ -615,7 +616,13 @@ export const Select: FC<SelectProps> = ({
   );
 
   return (
-    <div className={mergeClasses('flex w-full flex-col gap-2', className)}>
+    <div
+      className={mergeClasses(
+        DIAL_KIT_CLASS.select,
+        'flex w-full flex-col gap-2',
+        className,
+      )}
+    >
       {labelProps && <Label {...labelProps} htmlFor={fieldId} />}
 
       <div className="flex flex-col gap-1">

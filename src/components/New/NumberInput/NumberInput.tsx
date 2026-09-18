@@ -2,6 +2,8 @@ import type { ClipboardEvent, FC, KeyboardEvent } from 'react';
 
 import { Input, type InputProps } from '@/components/New/Input/Input';
 import { handleKeyDown } from '@/components/New/Input/utils';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { mergeClasses } from '@/utils/merge-classes';
 
 const lessThanOnePattern = /^0+\.(\d+)?$/;
 const leadingZerosPattern = /^0+/;
@@ -109,6 +111,10 @@ export const NumberInput: FC<NumberInputProps> = ({
   return (
     <Input
       {...props}
+      wrapperClassName={mergeClasses(
+        DIAL_KIT_CLASS.numberInput,
+        props.wrapperClassName,
+      )}
       type="number"
       min={min}
       max={max}

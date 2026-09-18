@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useCallback, type FC, type MouseEvent } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { type DropdownItem } from '@/models/dropdown';
 import { SubMenuPanel, useSubMenuFloating } from '@/utils/sub-menu-floating';
 
@@ -90,7 +91,10 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           role="menu"
           className="w-max"
         >
-          <div role="none" className="py-1">
+          <div
+            role="none"
+            className={classNames(DIAL_KIT_CLASS.dropdownList, 'py-1')}
+          >
             {item.children!.map((child) => (
               <button
                 key={child.key}

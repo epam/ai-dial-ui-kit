@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import { IconChevronRight } from '@tabler/icons-react';
 
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+
 export const dropdownBaseClassName = classNames(
   'flex items-center gap-2 align-middle',
   'h-auto px-0 bg-transparent border-0',
@@ -11,6 +13,7 @@ export const dropdownListBaseClassName = classNames(
 );
 
 export const dropdownItemBaseClassName = classNames(
+  DIAL_KIT_CLASS.menuItem,
   'flex w-full cursor-pointer items-center gap-3',
   'focus-visible:border-none focus-visible:outline-none',
   'hover:bg-accent-primary-alpha px-3',

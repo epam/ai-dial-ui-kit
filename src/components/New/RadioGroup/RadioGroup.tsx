@@ -16,6 +16,7 @@ import {
   orientationClassMap,
   selectedContentClassName,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface RadioGroupItem {
   value: string;
@@ -119,7 +120,13 @@ export const RadioGroup: FC<RadioGroupProps> = ({
   const labelText = resolveAccessibleName(labelProps?.label);
 
   return (
-    <div className={mergeClasses(groupBaseClassName, className)}>
+    <div
+      className={mergeClasses(
+        DIAL_KIT_CLASS.radioGroup,
+        groupBaseClassName,
+        className,
+      )}
+    >
       {labelProps && <Label {...labelProps} id={labelId} />}
 
       <div
