@@ -3,6 +3,7 @@ import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
 
 import { ElementSize } from '../../../types/size';
 import { InfoButton } from '../InfoButton/InfoButton';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 type NativeLabelProps = Omit<
   LabelHTMLAttributes<HTMLLabelElement>,
@@ -56,7 +57,11 @@ export const Label: FC<LabelProps> = ({
 
   return (
     <span
-      className={mergeClasses('flex items-center gap-0.5', containerClassName)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.label,
+        'flex items-center gap-0.5',
+        containerClassName,
+      )}
     >
       <label
         {...props}

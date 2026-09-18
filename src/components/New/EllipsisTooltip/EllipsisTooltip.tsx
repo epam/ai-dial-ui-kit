@@ -6,6 +6,7 @@ import { TooltipContent } from '../Tooltip/TooltipContent';
 import type { TooltipContainerOptions } from '../Tooltip/TooltipContext';
 import { TooltipTrigger } from '../Tooltip/TooltipTrigger';
 import { useTruncation } from './use-truncation';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface EllipsisTooltipProps extends TooltipContainerOptions {
   text: ReactNode;
@@ -80,11 +81,6 @@ export const EllipsisTooltip: FC<EllipsisTooltipProps> = ({
 
   return (
     <TooltipContainer {...tooltipProps}>
-      {/*
-        The trigger is the text element itself rather than a wrapper: a wrapper
-        would be the box that truncates, and its `aria-describedby` would not
-        reach the text a screen reader is reading.
-      */}
       <TooltipTrigger
         asChild
         onMouseEnter={remeasure}
@@ -95,6 +91,7 @@ export const EllipsisTooltip: FC<EllipsisTooltipProps> = ({
           ref={ref}
           aria-label={isTruncated && fullText ? fullText : undefined}
           className={mergeClasses(
+            DIAL_KIT_CLASS.ellipsisTooltip,
             'block min-w-0 max-w-full flex-1 truncate text-start',
             className,
           )}

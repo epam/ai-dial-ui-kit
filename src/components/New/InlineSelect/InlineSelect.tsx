@@ -13,6 +13,7 @@ import { DIAL_KIT_ICON_STROKE } from '../constants/icon';
 import { DIAL_ICON_SIZE } from '../../../constants/icon';
 import { mergeClasses } from '../../../utils/merge-classes';
 import { ElementSize } from '../../../types/size';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface InlineSelectTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Currently selected option's label, shown before the chevron. */
@@ -44,6 +45,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
       // so the selected value has to be folded in or it stops being announced.
       aria-label={ariaLabel ? `${ariaLabel} ${label}` : undefined}
       className={mergeClasses(
+        DIAL_KIT_CLASS.inlineSelect,
         'dial-small-paragraph-text px-3 focus-visible:outline focus-visible:outline-focus',
         'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-primary',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',

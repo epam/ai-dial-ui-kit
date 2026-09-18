@@ -17,6 +17,7 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { matchesAccept } from '@/utils/file-accept';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface FileDropzoneProps {
   /**
@@ -189,11 +190,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Both labels point at the input, so its accessible name reads as the
-          field name followed by the in-area copy. */}
       {labelProps && <Label {...labelProps} htmlFor={inputId} />}
-      {/* Kept a sibling of the label rather than a child: `peer-*` variants only
-          reach following siblings, and the focus ring belongs on the area. */}
       <input
         id={inputId}
         type="file"
@@ -215,6 +212,7 @@ export const FileDropzone: FC<FileDropzoneProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={mergeClasses(
+          DIAL_KIT_CLASS.fileDropzone,
           'flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-6 py-10 text-center',
           'transition-colors motion-reduce:transition-none',
           'peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus',

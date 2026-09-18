@@ -2,6 +2,7 @@ import type { FC, ReactNode } from 'react';
 
 import NoDataIcon from '@/assets/icons/no-data.svg?react';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** Footprint of the default icon, large enough to carry an empty state. */
 const DEFAULT_ICON_SIZE = 32;
@@ -68,6 +69,7 @@ export const NoDataContent: FC<NoDataContentProps> = ({
       // emptied by a filter needs; a decorative empty state stays silent.
       role={live ? 'status' : undefined}
       className={mergeClasses(
+        DIAL_KIT_CLASS.noDataContent,
         'flex size-full flex-col items-center justify-center gap-2 text-tertiary',
         className,
       )}

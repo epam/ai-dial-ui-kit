@@ -5,6 +5,8 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { GhostIconButton } from '../IconButton/IconButtonWrappers';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { mergeClasses } from '@/utils/merge-classes';
 
 export interface CloseButtonProps {
   ariaLabel?: string;
@@ -49,7 +51,7 @@ export const CloseButton: FC<CloseButtonProps> = ({
       {...props}
       size={size}
       aria-label={ariaLabel}
-      className={className}
+      className={mergeClasses(DIAL_KIT_CLASS.closeButton, className)}
       onClick={onClose}
       icon={
         <IconX

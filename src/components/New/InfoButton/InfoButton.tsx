@@ -6,6 +6,7 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { IconButton } from '../IconButton/IconButton';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface InfoButtonProps {
   caption?: string;
@@ -39,6 +40,7 @@ export const InfoButton: FC<InfoButtonProps> = ({
   if (!caption) return null;
 
   const infoButtonClassName = mergeClasses(
+    DIAL_KIT_CLASS.infoButton,
     'text-secondary hover:text-control-accent-hover active:text-control-accent-active',
     'focus-visible:outline focus-visible:outline-focus',
   );

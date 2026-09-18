@@ -16,6 +16,7 @@ import {
   notificationVariantRoleMap,
   variantIcons,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface NotificationProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
@@ -122,6 +123,7 @@ export const Notification: FC<NotificationProps> = ({
       role={notificationVariantRoleMap[variant]}
       {...props}
       className={mergeClasses(
+        DIAL_KIT_CLASS.notification,
         alertBaseClassName,
         notificationVariantClassNameMap[variant],
         type === NotificationType.Toast &&
@@ -133,12 +135,6 @@ export const Notification: FC<NotificationProps> = ({
       )}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
-        {/*
-          The variant icon restates what the message already says. It also has
-          to stay out of the accessibility tree because the Loading variant's
-          spinner carries its own `role="status"` — a live region nested inside
-          this one causes the content to be announced twice.
-        */}
         <span aria-hidden="true" className="flex shrink-0">
           <DialIcon icon={icon} />
         </span>
@@ -165,13 +161,11 @@ export const Notification: FC<NotificationProps> = ({
 
       {children}
       {closable && (
-        <div className="relative size-[40px]">
-          <CloseButton
-            className="absolute top-[-2px] right-0 size-auto hover:bg-transparent "
-            ariaLabel="Close notification"
-            onClose={(e) => onClose?.(e)}
-          />
-        </div>
+        <CloseButton
+          className="shrink-0 self-start"
+          ariaLabel="Close notification"
+          onClose={(e) => onClose?.(e)}
+        />
       )}
     </div>
   );

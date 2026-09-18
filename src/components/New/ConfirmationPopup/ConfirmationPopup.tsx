@@ -15,6 +15,7 @@ import {
   loaderContainerClassName,
   variantConfig,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface ConfirmationPopupProps extends PopupProps {
   description?: ReactNode;
@@ -140,7 +141,11 @@ export const ConfirmationPopup: FC<ConfirmationPopupProps> = ({
       {...popupProps}
       open={open}
       header={header}
-      className={mergeClasses(variantConfig[variant].container, className)}
+      className={mergeClasses(
+        DIAL_KIT_CLASS.confirmationPopup,
+        variantConfig[variant].container,
+        className,
+      )}
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}
       size={size}

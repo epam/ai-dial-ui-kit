@@ -209,3 +209,34 @@ export const General: Story = {
     },
   },
 };
+
+export const ClosableLineCount: Story = {
+  render: () => (
+    <div className="p-6 flex flex-col gap-4 max-w-[600px]">
+      <SuccessToastNotification message="Successfully logged out" closable />
+      <SuccessToastNotification
+        title="File downloaded successfully"
+        message="dial-report-2026-09.csv is in your Downloads folder"
+        closable
+      />
+      <InfoToastNotification
+        title="Successful login"
+        message="This is a long toast message that wraps onto several lines so the close button can be checked against a tall notification. The button stays on the first line, opposite the variant icon, however far the text runs."
+        closable
+      />
+      <ErrorMessageNotification
+        title="Error"
+        message="A closable section message that wraps onto multiple lines, so the close button is checked outside the toast layout too."
+        closable
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The close button across one, two and many lines. It sits on the first line next to the variant icon rather than drifting as the message grows — the layout that Issue #880 reported broken for multi-line toasts.',
+      },
+    },
+  },
+};

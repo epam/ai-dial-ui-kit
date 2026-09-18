@@ -31,6 +31,7 @@ import {
   popupBodyClassName,
   popupFooterClassName,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface RadioGroupPopupFieldProps {
   items: RadioGroupItem[];
@@ -200,7 +201,13 @@ export const RadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   const fieldValue = customValue ?? selectedLabel;
 
   return (
-    <div className={mergeClasses('flex w-full flex-col gap-2', className)}>
+    <div
+      className={mergeClasses(
+        DIAL_KIT_CLASS.radioGroupPopupField,
+        'flex w-full flex-col gap-2',
+        className,
+      )}
+    >
       {labelProps && <Label {...labelProps} id={labelId} htmlFor={fieldId} />}
 
       <div className="flex flex-col gap-1">

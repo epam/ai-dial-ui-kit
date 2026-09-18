@@ -251,6 +251,9 @@ export {
   NOT_ALLOWED_SPACES_REGEXP,
 } from './constants/validation.ts';
 
+// Public class name constants — stable selectors for an embedding host
+export { DIAL_KIT_CLASS } from './constants/public-class-names';
+
 // SchemaRenderer
 export { DialSchemaRenderer } from './components/SchemaRenderer/SchemaRenderer';
 export {

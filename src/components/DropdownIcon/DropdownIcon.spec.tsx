@@ -142,4 +142,50 @@ describe('Dial UI Kit :: DropdownIcon', () => {
       domEvent: expect.any(Object),
     });
   });
+
+  test('stamps public classes on the icon and the caret badge', () => {
+    const { container, rerender } = render(
+      <DialDropdownIcon
+        ariaLabel="Select model"
+        icon={<IconBrandOpenai />}
+        items={items}
+      />,
+    );
+
+    const button = screen.getByRole('button', { name: 'Select model' });
+    expect(button.querySelector('.dial-kit-dropdown-icon')).toBeInTheDocument();
+    expect(
+      button.querySelector('.dial-kit-dropdown-icon-caret'),
+    ).toBeInTheDocument();
+
+    rerender(
+      <DialDropdownIcon
+        ariaLabel="Select model"
+        icon={<IconBrandOpenai />}
+        items={items}
+        showCaret={false}
+      />,
+    );
+
+    // No caret drawn, so nothing to address.
+    expect(
+      container.querySelector('.dial-kit-dropdown-icon-caret'),
+    ).not.toBeInTheDocument();
+  });
+
+  test('stamps the list and rows of the menu it opens', () => {
+    render(
+      <DialDropdownIcon
+        ariaLabel="Select model"
+        icon={<IconBrandOpenai />}
+        items={items}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Select model' }));
+
+    const row = screen.getByRole('menuitem', { name: 'GPT 5.4' });
+    expect(row).toHaveClass('dial-kit-menuitem');
+    expect(row.parentElement).toHaveClass('dial-kit-dropdown-list');
+  });
 });

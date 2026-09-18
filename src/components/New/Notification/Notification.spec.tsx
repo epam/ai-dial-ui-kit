@@ -107,4 +107,36 @@ describe('Dial UI Kit :: Notification', () => {
     // their content twice.
     expect(screen.getAllByRole('status')).toHaveLength(1);
   });
+
+  test('Should keep the close button in the flow, on the first line', () => {
+    render(
+      <Notification
+        title="File downloaded successfully"
+        message="dial-report-2026-09.csv is in your Downloads folder"
+        onClose={vi.fn()}
+        closable
+      />,
+    );
+
+    const notification = screen.getByRole('status');
+    const closeBtn = screen.getByRole('button', { name: 'Close notification' });
+
+    // jsdom lays nothing out, so the alignment can only be asserted through
+    // the classes: absolutely positioning the button inside a fixed 40px
+    // spacer detached it from the content, and it drifted out of alignment as
+    // soon as the message outgrew the spacer.
+    expect(closeBtn.parentElement).toBe(notification);
+    expect(closeBtn).toHaveClass('self-start');
+    expect(closeBtn).not.toHaveClass('absolute');
+  });
+
+  test('Should give the close button its full small footprint', () => {
+    render(<Notification message="Closable" onClose={vi.fn()} closable />);
+
+    // `size-auto` used to win over the control's own size and collapse the
+    // 24px box down to its 18px icon.
+    expect(
+      screen.getByRole('button', { name: 'Close notification' }),
+    ).toHaveClass('size-[24px]');
+  });
 });

@@ -26,6 +26,7 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
   - [Development Setup](#development-setup)
   - [Project Structure](#project-structure)
 - [🎨 Theming & Customization](#-theming--customization)
+  - [Public class names](#public-class-names)
 - [♿ Accessibility](#-accessibility)
   - [Naming icon-only controls](#naming-icon-only-controls)
   - [Target size (WCAG 2.5.5, Level AAA)](#target-size-wcag-255-level-aaa)
@@ -191,6 +192,144 @@ wants squarer action buttons usually still wants its icon buttons round.
 These are defaults, not overrides: a `rounded-*` utility passed to a single
 control through `className` still wins, because a consumer's utilities are
 emitted after this package's stylesheet.
+
+### Public class names
+
+Some hosts need to restyle a part of a component the props do not reach — the
+padding of a menu's row list, the radius of a row, the caret badge of an icon
+trigger. The kit's own classes are Tailwind utilities and hashed module locals,
+so a host that reaches for them ends up on selectors that break on the next
+upgrade: `[class*='_selectedItem_']`, `> div:nth-child(2) > button`,
+`[role='none'][aria-label='dropdown']` — the last of which is an accessibility
+contract and, being a plain English string, is not one a localised host can rely
+on either.
+
+Every design-system 2.0 component therefore stamps a stable class on the element
+that draws it. They are exported as one record:
+
+```tsx
+import { DIAL_KIT_CLASS } from '@epam/ai-dial-ui-kit';
+
+DIAL_KIT_CLASS.menuItem; // 'dial-kit-menuitem'
+```
+
+```css
+.dial-kit-dropdown-list {
+  padding-block: 0;
+}
+
+.dial-kit-menuitem {
+  border-radius: 8px;
+}
+```
+
+Nothing in `dist/index.css` selects on them: they carry no declarations of their
+own and exist only as selectors, so a host's rule needs no `!important` it would
+not otherwise need. Renaming one, or moving it to a different element, is a
+breaking change and goes through the migration-guide process.
+
+#### Feedback and status
+
+| Key             | Class                     | Element                                                                                  |
+| --------------- | ------------------------- | ---------------------------------------------------------------------------------------- |
+| `spinner`       | `dial-kit-spinner`        | The `role="status"` root of a `Spinner`                                                  |
+| `progressBar`   | `dial-kit-progress-bar`   | The outermost element of a `ProgressBar` — its wrapper, or the track when it has neither label nor readout |
+| `skeleton`      | `dial-kit-skeleton`       | The root of a `Skeleton`                                                                 |
+| `notification`  | `dial-kit-notification`   | The `Notification` surface, including every toast and section-message wrapper             |
+| `noDataContent` | `dial-kit-no-data-content` | The empty-state root of `NoDataContent`                                                 |
+
+#### Text
+
+| Key             | Class                     | Element                                                             |
+| --------------- | ------------------------- | ------------------------------------------------------------------- |
+| `highlight`     | `dial-kit-highlight`      | The text element of a `Highlight`                                   |
+| `captionText`   | `dial-kit-caption-text`   | The caption line under a field                                      |
+| `errorText`     | `dial-kit-error-text`     | A caption in its error variant, additive to `captionText`           |
+| `label`         | `dial-kit-label`          | The `Label` root, wrapping its `label` element and its info button   |
+
+#### Containers
+
+| Key                  | Class                             | Element                                                              |
+| -------------------- | --------------------------------- | -------------------------------------------------------------------- |
+| `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
+| `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
+| `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
+| `popup`              | `dial-kit-popup`                  | The `role="dialog"` panel of a `Popup`                               |
+| `confirmationPopup`  | `dial-kit-confirmation-popup`     | A `ConfirmationPopup`'s panel, additive to `popup`                   |
+| `accordion`          | `dial-kit-accordion`              | The root of an `Accordion`                                           |
+| `folderPath`         | `dial-kit-folder-path`            | The breadcrumb root of a `FolderPath`                                |
+
+#### Menus and overlays
+
+| Key                 | Class                             | Element                                                                                          |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `dropdown`          | `dial-kit-dropdown`               | The trigger wrapper of a `Dropdown`                                                              |
+| `dropdownList`      | `dial-kit-dropdown-list`          | The `role="none"` item list inside a dropdown overlay, and a submenu's own list. Both generations |
+| `menuItem`          | `dial-kit-menuitem`               | One overlay row: a dropdown item, a `Select` option, a submenu trigger or child                   |
+| `menuItemCheck`     | `dial-kit-menuitem-check`         | The trailing check of a chosen `MenuItemMark.Check` row                                          |
+| `dropdownIcon`      | `dial-kit-dropdown-icon`          | The primary icon of a `DialDropdownIcon` trigger                                                 |
+| `dropdownIconCaret` | `dial-kit-dropdown-icon-caret`    | Its caret badge. Absent when `showCaret` is `false`                                              |
+| `tooltip`           | `dial-kit-tooltip`                | The bubble of a `Tooltip`                                                                        |
+| `interactiveTooltip` | `dial-kit-interactive-tooltip`   | The panel of an `InteractiveTooltip`                                                             |
+| `ellipsisTooltip`   | `dial-kit-ellipsis-tooltip`       | The text element of an `EllipsisTooltip`, which is also its trigger                              |
+
+#### Fields
+
+| Key                    | Class                                 | Element                                                        |
+| ---------------------- | ------------------------------------- | -------------------------------------------------------------- |
+| `search`               | `dial-kit-search`                     | The `Search` field box, additive to `dial-kit-input`           |
+| `passwordInput`        | `dial-kit-password-input`             | The `PasswordInput` field box, additive to `dial-kit-input`    |
+| `numberInput`          | `dial-kit-number-input`               | The `NumberInput` field box, additive to `dial-kit-input`      |
+| `tagInput`             | `dial-kit-tag-input`                  | The `TagInput` field box, additive to `dial-kit-input`         |
+| `select`               | `dial-kit-select`                     | The root of a `Select`                                         |
+| `inlineSelect`         | `dial-kit-inline-select`              | The trigger button of an `InlineSelect`                        |
+| `calendar`             | `dial-kit-calendar`                   | The root of a `Calendar`, in every mode                        |
+| `fileDropzone`         | `dial-kit-file-dropzone`              | The drop area of a `FileDropzone`                              |
+| `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
+
+#### Controls
+
+| Key                    | Class                                 | Element                                                    |
+| ---------------------- | ------------------------------------- | ---------------------------------------------------------- |
+| `switch`               | `dial-kit-switch`                     | The row of a `Switch`: the control and its label           |
+| `checkbox`             | `dial-kit-checkbox`                   | The row of a `Checkbox`                                    |
+| `checkboxBox`          | `dial-kit-checkbox-box`               | The decorative box a `CheckboxBox` draws                   |
+| `radio`                | `dial-kit-radio`                      | The row of a `Radio`                                       |
+| `radioGroup`           | `dial-kit-radio-group`                | The root of a `RadioGroup`                                 |
+| `segmentedControl`     | `dial-kit-segmented-control`          | The `role="radiogroup"` track of a `SegmentedControl`       |
+| `segmentedControlItem` | `dial-kit-segmented-control-item`     | One segment of it                                          |
+| `tabs`                 | `dial-kit-tabs`                       | The `role="tablist"` root of `Tabs`                        |
+| `tab`                  | `dial-kit-tab`                        | One tab inside it                                          |
+| `tag`                  | `dial-kit-tag`                        | A `Tag` pill, including a `TagInput`'s rows                |
+| `toggleIconButton`     | `dial-kit-toggle-icon-button`         | A `ToggleIconButton`, additive to `dial-kit-base-icon-button` |
+| `closeButton`          | `dial-kit-close-button`               | A `CloseButton`, additive to `dial-kit-base-icon-button`    |
+| `infoButton`           | `dial-kit-info-button`                | An `InfoButton`, additive to `dial-kit-base-icon-button`    |
+| `buttonDropdown`       | `dial-kit-button-dropdown`            | The wrapper of a `ButtonDropdown`                          |
+
+#### Components with no entry, and why
+
+Some 2.0 components are deliberately absent, because the element a host would
+target already carries a stable class:
+
+| Component                                     | Target it already |
+| --------------------------------------------- | ----------------- |
+| `Button` and its six variant wrappers         | `dial-kit-base-button` (plus a per-variant class such as `dial-kit-primary-solid-button`) |
+| `IconButton` and its five variant wrappers    | `dial-kit-base-icon-button` |
+| `FabButton`                                   | `dial-kit-fab-button` |
+| `Input`                                       | `dial-kit-input` |
+| `Textarea`                                    | `dial-kit-textarea` |
+| `Slider`                                      | `dial-kit-slider` |
+| `MarkdownEditor`                              | `dial-kit-markdown-editor` |
+| `Grid`                                        | `dial-kit-grid` (exported as `GRID_ROOT_CLASS`) |
+
+Four more contribute no element of their own, and are addressed through what
+they render: `ThemeScope` (a `display: contents` wrapper), `MultiSelectTags`
+(`Tag`s), and `TooltipContainer` / `TooltipTrigger`.
+
+Two neighbouring elements are reached through props instead, and keep being: a
+`Dropdown`'s floating panel takes `listClassName`, a `Popup`'s backdrop takes
+`overlayClassName`, and the `DialDropdownIcon` trigger button takes
+`buttonClassName`.
 
 ## ♿ Accessibility
 

@@ -14,6 +14,7 @@ import { Input } from '../Input/Input';
 import type { LabelProps } from '../Label/Label';
 import { Tag } from '../Tag/Tag';
 import { getVisibleTagCount } from './utils';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 /** Matches the `gap-1` between the rendered tags. */
 const TAG_GAP_PX = 4;
@@ -294,12 +295,6 @@ export const TagInput: FC<TagInputProps> = ({
         />
       )}
 
-      {/*
-        Measures every tag at its natural width so the `+N` cut-off can be
-        calculated. `invisible` keeps the copies out of the layout and out of the
-        tab order — `visibility: hidden` is not focusable — while still leaving
-        them measurable, which `display: none` would not.
-      */}
       {collapseTagOverflow && (
         <span
           aria-hidden="true"
@@ -347,6 +342,7 @@ export const TagInput: FC<TagInputProps> = ({
       onBlur={handleBlur}
       containerClassName={mergeClasses('w-full', className)}
       wrapperClassName={mergeClasses(
+        DIAL_KIT_CLASS.tagInput,
         tagCount > 0 && [
           '!h-auto',
           isSmall ? 'min-h-[24px] py-0.5' : 'min-h-[40px] py-1.5',

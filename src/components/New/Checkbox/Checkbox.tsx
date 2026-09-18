@@ -6,6 +6,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { Label, type LabelProps } from '../Label/Label';
 import { CheckboxBox } from './CheckboxBox';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 type NativeInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -93,7 +94,13 @@ export const Checkbox: FC<CheckboxProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className={mergeClasses('flex items-center gap-2', className)}>
+      <div
+        className={mergeClasses(
+          DIAL_KIT_CLASS.checkbox,
+          'flex items-center gap-2',
+          className,
+        )}
+      >
         <input
           {...props}
           ref={applyIndeterminate}

@@ -39,6 +39,7 @@ import {
 } from 'react';
 
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 
@@ -459,7 +460,11 @@ export const Dropdown: FC<DropdownProps> = ({
 
         <div
           role="none"
-          className={mergeClasses('py-1', overlayContentClassName)}
+          className={mergeClasses(
+            DIAL_KIT_CLASS.dropdownList,
+            'py-1',
+            overlayContentClassName,
+          )}
           aria-label="dropdown"
         >
           {items.map((it) => {
@@ -596,6 +601,7 @@ export const Dropdown: FC<DropdownProps> = ({
         <span
           ref={refs.setReference}
           className={mergeClasses(
+            DIAL_KIT_CLASS.dropdown,
             dropdownBaseClassName,
             disabled && '!cursor-not-allowed opacity-75',
             className,

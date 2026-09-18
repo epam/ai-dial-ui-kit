@@ -7,6 +7,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { IconButton, type IconButtonProps } from '../IconButton/IconButton';
 import { Tooltip, type TooltipProps } from '../Tooltip/Tooltip';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 type ToggleTooltipProps = Omit<TooltipProps, 'children'>;
 
@@ -93,6 +94,7 @@ export const ToggleIconButton: FC<ToggleIconButtonProps> = ({
       )}
       onClick={onButtonClick}
       className={mergeClasses(
+        DIAL_KIT_CLASS.toggleIconButton,
         '!rounded',
         // The glyph stays 16px at every size tier — only the tint square grows.
         // CSS outranks the width/height attributes Tabler renders, so callers

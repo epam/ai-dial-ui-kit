@@ -32,6 +32,7 @@ import {
   popupSizeClassMap,
   popupTitleClassName,
 } from './constants';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 export interface PopupProps {
   open?: boolean;
@@ -285,6 +286,7 @@ export const Popup: FC<PopupProps> = ({
             aria-labelledby={headingId}
             aria-label={headingId ? undefined : ariaLabel}
             className={mergeClasses(
+              DIAL_KIT_CLASS.popup,
               popupBaseClassName,
               popupSizeClassMap[size],
               className,

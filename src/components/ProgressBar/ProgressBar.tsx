@@ -5,6 +5,7 @@ import { Label, type LabelProps } from '@/components/New/Label/Label';
 import { ElementSize } from '@/types/size';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
 type NativeProgressBarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'>;
 
@@ -94,6 +95,10 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         hasLabel ? undefined : 'Progress',
       )}
       className={mergeClasses(
+        /* The track is the component's root when there is no label and no
+           readout to wrap it, and the public class belongs on whichever
+           element that is. */
+        !hasLabel && !valueLabel && DIAL_KIT_CLASS.progressBar,
         'w-full overflow-hidden rounded-full bg-control-disable-primary',
         size === ElementSize.Small ? 'h-1' : 'h-2',
         className,
@@ -111,18 +116,16 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   if (!hasLabel && !valueLabel) return bar;
 
   return (
-    <div className="flex w-full flex-col gap-1">
+    <div
+      className={mergeClasses(
+        DIAL_KIT_CLASS.progressBar,
+        'flex w-full flex-col gap-1',
+      )}
+    >
       <div className="flex items-baseline gap-2">
-        {/*
-         * No `htmlFor`: it only associates with labelable elements, and a
-         * `div[role="progressbar"]` is not one. `aria-labelledby` on the bar
-         * points back at this `id` instead.
-         */}
         {labelProps && <Label {...labelProps} id={labelId} />}
 
         {valueLabel && (
-          // `ml-auto` rather than `justify-between` so the readout still sits
-          // at the end when there is no label beside it.
           <span className="dial-tiny-text text-secondary ml-auto shrink-0">
             {valueLabel}
           </span>
