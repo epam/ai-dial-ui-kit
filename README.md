@@ -301,6 +301,7 @@ breaking change and goes through the migration-guide process.
 | `tabs`                 | `dial-kit-tabs`                       | The `role="tablist"` root of `Tabs`                        |
 | `tab`                  | `dial-kit-tab`                        | One tab inside it                                          |
 | `tag`                  | `dial-kit-tag`                        | A `Tag` pill, including a `TagInput`'s rows                |
+| `filterChips`          | `dial-kit-filter-chips`               | The `role="group"` row of a `FilterChips`; its chips carry `dial-kit-tag` |
 | `toggleIconButton`     | `dial-kit-toggle-icon-button`         | A `ToggleIconButton`, additive to `dial-kit-base-icon-button` |
 | `closeButton`          | `dial-kit-close-button`               | A `CloseButton`, additive to `dial-kit-base-icon-button`    |
 | `infoButton`           | `dial-kit-info-button`                | An `InfoButton`, additive to `dial-kit-base-icon-button`    |
