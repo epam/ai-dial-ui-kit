@@ -303,6 +303,7 @@ breaking change and goes through the migration-guide process.
 | `tabs`                 | `dial-kit-tabs`                       | The outermost element of a `Tabs` — the heading wrapper, or the tab list when there is no `sectionLabel` |
 | `tabList`              | `dial-kit-tab-list`                   | The `role="tablist"` inside it, in either orientation      |
 | `tab`                  | `dial-kit-tab`                        | One tab inside it                                          |
+| `tabSelected`          | `dial-kit-tab-selected`               | The selected tab, in either orientation                    |
 | `tabsSectionLabel`     | `dial-kit-tabs-section-label`         | The `sectionLabel` heading above a `Tabs`                  |
 | `tag`                  | `dial-kit-tag`                        | A `Tag` pill, including a `TagInput`'s rows                |
 | `filterChips`          | `dial-kit-filter-chips`               | The `role="group"` row of a `FilterChips`; its chips carry `dial-kit-tag` |

@@ -47,6 +47,12 @@ export interface TabsProps {
   ariaLabel?: string;
   /** Additional CSS classes for the root element. */
   className?: string;
+  /**
+   * Additional CSS classes for the `role="tablist"`. `className` reaches it
+   * only when there is no `sectionLabel`, since the heading wrapper is then
+   * the root; this prop reaches it in either case.
+   */
+  tabListClassName?: string;
   /** Additional CSS classes applied to every tab. */
   tabClassName?: string;
   /** Additional CSS classes for the `sectionLabel` heading. */
@@ -120,6 +126,7 @@ const NAVIGATION_KEYS: Record<
  * @param [sectionLabel] - Heading rendered above the tabs, which also names the tab list.
  * @param [ariaLabel] - Accessible name for the tab list.
  * @param [className] - Additional CSS classes for the root element.
+ * @param [tabListClassName] - Additional CSS classes for the `role="tablist"`.
  * @param [tabClassName] - Additional CSS classes applied to every tab.
  * @param [sectionLabelClassName] - Additional CSS classes for the `sectionLabel` heading.
  */
@@ -131,6 +138,7 @@ export const Tabs: FC<TabsProps> = ({
   sectionLabel,
   ariaLabel,
   className,
+  tabListClassName,
   tabClassName,
   sectionLabelClassName,
 }) => {
@@ -204,6 +212,7 @@ export const Tabs: FC<TabsProps> = ({
         // Without a heading the list is the root, so it takes the caller's
         // classes — and the root kit class below — itself.
         !sectionLabel && className,
+        tabListClassName,
         DIAL_KIT_CLASS.tabList,
         !sectionLabel && DIAL_KIT_CLASS.tabs,
       )}
@@ -254,6 +263,7 @@ export const Tabs: FC<TabsProps> = ({
                     : 'border-transparent text-secondary'),
               tabClassName,
               DIAL_KIT_CLASS.tab,
+              isActive && DIAL_KIT_CLASS.tabSelected,
             )}
           >
             {tab.icon && (

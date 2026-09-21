@@ -255,6 +255,17 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     ),
   ],
   [
+    'tabSelected',
+    () => (
+      <Tabs
+        tabs={[{ id: 'a', label: 'A' }]}
+        activeTabId="a"
+        onTabChange={noop}
+        ariaLabel="Sections"
+      />
+    ),
+  ],
+  [
     'tabsSectionLabel',
     () => (
       <Tabs
