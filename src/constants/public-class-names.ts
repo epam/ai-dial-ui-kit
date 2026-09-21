@@ -50,6 +50,13 @@ export const DIAL_KIT_CLASS = {
   accordion: 'dial-kit-accordion',
   /** The breadcrumb root of a `FolderPath`. */
   folderPath: 'dial-kit-folder-path',
+  /** The `nav` element of a `Breadcrumbs` trail. */
+  breadcrumbs: 'dial-kit-breadcrumbs',
+  /**
+   * One segment of a `Breadcrumbs` trail: the link, button or plain span that
+   * draws the label — not the `li`, which also holds the separator after it.
+   */
+  breadcrumbsItem: 'dial-kit-breadcrumbs-item',
 
   /* ── Menus and overlays ────────────────────────────────────────────────── */
   /**
@@ -128,13 +135,24 @@ export const DIAL_KIT_CLASS = {
   segmentedControl: 'dial-kit-segmented-control',
   /** One segment of a `SegmentedControl`. */
   segmentedControlItem: 'dial-kit-segmented-control-item',
-  /** The `role="tablist"` root of `Tabs`. */
+  /**
+   * The outermost element of a `Tabs`: the box wrapping its heading and tab
+   * list — or the `role="tablist"` itself, which is the root when the tabs
+   * carry no `sectionLabel`.
+   */
   tabs: 'dial-kit-tabs',
   /**
-   * One tab inside `Tabs`. The selected tab's underline keeps its own
-   * `dial-kit-tab-selected-underline`.
+   * The `role="tablist"` holding the tabs, in either orientation. Additive to
+   * `tabs` when there is no heading above it, since one element is then both.
+   */
+  tabList: 'dial-kit-tab-list',
+  /**
+   * One tab inside `Tabs`, in either orientation. The selected tab of a
+   * horizontal row keeps its own `dial-kit-tab-selected-underline`.
    */
   tab: 'dial-kit-tab',
+  /** The `sectionLabel` heading above a `Tabs`. Absent when there is none. */
+  tabsSectionLabel: 'dial-kit-tabs-section-label',
   /**
    * The `role="group"` row of a `FilterChips`. Its chips are `Tag` pills, so
    * they carry `dial-kit-tag` and have no entry of their own.

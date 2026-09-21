@@ -10,6 +10,7 @@ import { ProgressBar } from '@/components/ProgressBar/ProgressBar';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Spinner } from '@/components/Spinner/Spinner';
 import { Accordion } from '@/components/New/Accordion/Accordion';
+import { Breadcrumbs } from '@/components/New/Breadcrumbs/Breadcrumbs';
 import { Button } from '@/components/New/Button/Button';
 import { ButtonDropdown } from '@/components/New/ButtonDropdown/ButtonDropdown';
 import { Calendar } from '@/components/New/Calendar/Calendar';
@@ -56,6 +57,7 @@ import { ToggleIconButton } from '@/components/New/ToggleIconButton/ToggleIconBu
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { MenuItemMark } from '@/types/menu-item';
+import { TabOrientation } from '@/types/tab';
 
 /*
  * The contract test for the public class names. It is deliberately one table
@@ -117,6 +119,22 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ],
   ['accordion', () => <Accordion title="Section">Body</Accordion>],
   ['folderPath', () => <FolderPath segments={['root', 'nested']} />],
+  [
+    'breadcrumbs',
+    () => (
+      <Breadcrumbs
+        items={[{ label: 'Root', href: '/' }, { label: 'Current' }]}
+      />
+    ),
+  ],
+  [
+    'breadcrumbsItem',
+    () => (
+      <Breadcrumbs
+        items={[{ label: 'Root', href: '/' }, { label: 'Current' }]}
+      />
+    ),
+  ],
 
   [
     'dropdown',
@@ -215,6 +233,17 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     ),
   ],
   [
+    'tabList',
+    () => (
+      <Tabs
+        tabs={[{ id: 'a', label: 'A' }]}
+        activeTabId="a"
+        onTabChange={noop}
+        ariaLabel="Sections"
+      />
+    ),
+  ],
+  [
     'tab',
     () => (
       <Tabs
@@ -222,6 +251,18 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
         activeTabId="a"
         onTabChange={noop}
         ariaLabel="Sections"
+      />
+    ),
+  ],
+  [
+    'tabsSectionLabel',
+    () => (
+      <Tabs
+        orientation={TabOrientation.Vertical}
+        sectionLabel="Settings"
+        tabs={[{ id: 'a', label: 'A' }]}
+        activeTabId="a"
+        onTabChange={noop}
       />
     ),
   ],
