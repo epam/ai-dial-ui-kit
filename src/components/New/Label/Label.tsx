@@ -58,9 +58,9 @@ export const Label: FC<LabelProps> = ({
   return (
     <span
       className={mergeClasses(
-        DIAL_KIT_CLASS.label,
         'flex items-center gap-0.5',
         containerClassName,
+        DIAL_KIT_CLASS.label,
       )}
     >
       <label

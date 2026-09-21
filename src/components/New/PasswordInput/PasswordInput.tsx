@@ -78,8 +78,8 @@ export const PasswordInput: FC<PasswordInputProps> = ({
     <Input
       {...props}
       wrapperClassName={mergeClasses(
-        DIAL_KIT_CLASS.passwordInput,
         props.wrapperClassName,
+        DIAL_KIT_CLASS.passwordInput,
       )}
       size={size}
       disabled={disabled}

@@ -226,9 +226,9 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     <Resizable ref={resizableRef} {...resizeSettings}>
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.resizableContainer,
           'group flex size-full flex-col bg-layer-raised transition-all motion-reduce:transition-none',
           className,
+          DIAL_KIT_CLASS.resizableContainer,
         )}
       >
         {children}

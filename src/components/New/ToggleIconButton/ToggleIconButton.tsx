@@ -94,7 +94,6 @@ export const ToggleIconButton: FC<ToggleIconButtonProps> = ({
       )}
       onClick={onButtonClick}
       className={mergeClasses(
-        DIAL_KIT_CLASS.toggleIconButton,
         '!rounded',
         // The glyph stays 16px at every size tier — only the tint square grows.
         // CSS outranks the width/height attributes Tabler renders, so callers
@@ -102,6 +101,7 @@ export const ToggleIconButton: FC<ToggleIconButtonProps> = ({
         '[&_svg]:size-4',
         isSelected && '!text-accent',
         className,
+        DIAL_KIT_CLASS.toggleIconButton,
       )}
     />
   );

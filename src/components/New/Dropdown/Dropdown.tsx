@@ -461,9 +461,9 @@ export const Dropdown: FC<DropdownProps> = ({
         <div
           role="none"
           className={mergeClasses(
-            DIAL_KIT_CLASS.dropdownList,
             'py-1',
             overlayContentClassName,
+            DIAL_KIT_CLASS.dropdownList,
           )}
           aria-label="dropdown"
         >
@@ -601,10 +601,10 @@ export const Dropdown: FC<DropdownProps> = ({
         <span
           ref={refs.setReference}
           className={mergeClasses(
-            DIAL_KIT_CLASS.dropdown,
             dropdownBaseClassName,
             disabled && '!cursor-not-allowed opacity-75',
             className,
+            DIAL_KIT_CLASS.dropdown,
           )}
           aria-haspopup="menu"
           aria-expanded={isOpen}

@@ -143,9 +143,9 @@ export const CollapsibleSidebar: FC<CollapsibleSidebarProps> = ({
       aria-label={ariaLabel}
       style={{ width: `${opened ? width : collapsedWidth}px` }}
       className={mergeClasses(
-        DIAL_KIT_CLASS.collapsibleSidebar,
         'flex flex-col justify-between',
         className,
+        DIAL_KIT_CLASS.collapsibleSidebar,
       )}
     >
       <div

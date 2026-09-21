@@ -408,9 +408,9 @@ export const Calendar: FC<CalendarProps> = ({
     return (
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.calendar,
           'flex flex-col gap-y-3',
           className,
+          DIAL_KIT_CLASS.calendar,
         )}
       >
         {fieldLabel}
@@ -436,9 +436,9 @@ export const Calendar: FC<CalendarProps> = ({
     return (
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.calendar,
           'flex flex-col gap-y-3',
           className,
+          DIAL_KIT_CLASS.calendar,
         )}
       >
         {fieldLabel}
@@ -503,9 +503,9 @@ export const Calendar: FC<CalendarProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.calendar,
         'flex flex-col gap-y-3',
         className,
+        DIAL_KIT_CLASS.calendar,
       )}
     >
       {fieldLabel}

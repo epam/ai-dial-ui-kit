@@ -338,9 +338,9 @@ export const DialDropdown: FC<DialDropdownProps> = ({
         <div
           role="none"
           className={mergeClasses(
-            DIAL_KIT_CLASS.dropdownList,
             'py-1',
             overlayContentClassName,
+            DIAL_KIT_CLASS.dropdownList,
           )}
           aria-label="dropdown"
         >

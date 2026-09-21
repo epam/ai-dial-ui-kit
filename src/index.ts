@@ -307,6 +307,11 @@ export type {
 } from './components/New/Calendar/Calendar';
 export { FolderPath } from './components/New/FolderPath/FolderPath';
 export type { FolderPathProps } from './components/New/FolderPath/FolderPath';
+export { Breadcrumbs } from './components/New/Breadcrumbs/Breadcrumbs';
+export type {
+  BreadcrumbsProps,
+  BreadcrumbsItem,
+} from './components/New/Breadcrumbs/Breadcrumbs';
 export {
   DangerButton,
   GhostButton,

@@ -13,11 +13,11 @@ export const dropdownListBaseClassName = classNames(
 );
 
 export const dropdownItemBaseClassName = classNames(
-  DIAL_KIT_CLASS.menuItem,
   'flex w-full cursor-pointer items-center gap-3',
   'focus-visible:border-none focus-visible:outline-none',
   'hover:bg-accent-primary-alpha px-3',
   'dial-small-text h-[34px] rounded text-primary',
+  DIAL_KIT_CLASS.menuItem,
 );
 
 export const dropdownItemDisabledClassName = 'opacity-75 !cursor-not-allowed';

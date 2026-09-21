@@ -123,7 +123,6 @@ export const Notification: FC<NotificationProps> = ({
       role={notificationVariantRoleMap[variant]}
       {...props}
       className={mergeClasses(
-        DIAL_KIT_CLASS.notification,
         alertBaseClassName,
         notificationVariantClassNameMap[variant],
         type === NotificationType.Toast &&
@@ -132,6 +131,7 @@ export const Notification: FC<NotificationProps> = ({
           variant === NotificationVariant.Loading &&
           'border-secondary',
         className,
+        DIAL_KIT_CLASS.notification,
       )}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">

@@ -51,7 +51,7 @@ export const CloseButton: FC<CloseButtonProps> = ({
       {...props}
       size={size}
       aria-label={ariaLabel}
-      className={mergeClasses(DIAL_KIT_CLASS.closeButton, className)}
+      className={mergeClasses(className, DIAL_KIT_CLASS.closeButton)}
       onClick={onClose}
       icon={
         <IconX

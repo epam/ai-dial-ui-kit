@@ -113,7 +113,6 @@ export const MenuItem: FC<MenuItemProps> = ({
   );
 
   const rowClassName = mergeClasses(
-    DIAL_KIT_CLASS.menuItem,
     overlayItemClassName,
     // A row that opens a panel stays tinted while that panel is up, so the
     // trail back to it is visible once the pointer has moved into it.
@@ -123,6 +122,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     disabled && overlayItemDisabledClassName,
     danger && 'text-error',
     className,
+    DIAL_KIT_CLASS.menuItem,
   );
 
   const row = (

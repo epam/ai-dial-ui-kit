@@ -56,10 +56,10 @@ export const TooltipContent: FC<TooltipContentProps> = ({
         }}
         {...context.getFloatingProps(props)}
         className={classNames(
-          DIAL_KIT_CLASS.tooltip,
           tooltipClassName,
           themeScope,
           context.getFloatingProps(props).className as string,
+          DIAL_KIT_CLASS.tooltip,
         )}
       >
         {props.children}

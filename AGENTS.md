@@ -137,11 +137,15 @@ When you add or change a 2.0 component:
 - **Add its entry to the record**, named after the component in camelCase, with a
   JSDoc line naming the element it lands on. Never write the string literal in a
   component file — it is read from the record, so the contract has one source.
-- **Stamp it on the element that draws the component**, first in the existing
-  `mergeClasses` call, before the Tailwind utilities and before any
-  caller-supplied `className`. Where the drawn box moves — a `MenuItem` with a
-  `rightControl` draws on the wrapper, a `ProgressBar` with no label returns its
-  track as the root — the class follows the box, and the JSDoc says so.
+- **Stamp it on the element that draws the component**, **last** in the existing
+  `mergeClasses` call, after the Tailwind utilities and after any
+  caller-supplied `className`. It carries no declarations, so its position never
+  changes what is rendered; putting it last keeps it in one predictable place
+  and keeps the styling arguments — base utilities, then variants, then the
+  caller's overrides — reading as one uninterrupted cascade. Where the drawn box
+  moves — a `MenuItem` with a `rightControl` draws on the wrapper, a
+  `ProgressBar` with no label returns its track as the root — the class follows
+  the box, and the JSDoc says so.
 - **The class carries no declarations.** Nothing in `src/styles/` may select on
   it; `npm run build:css` then grepping `dist/index.css` must find nothing, which
   is what makes adding one a non-visual change.

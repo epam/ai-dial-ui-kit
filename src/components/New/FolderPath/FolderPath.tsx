@@ -71,7 +71,7 @@ export const FolderPath: FC<FolderPathProps> = ({
 
   return (
     <DialBreadcrumb
-      className={mergeClasses(DIAL_KIT_CLASS.folderPath, className)}
+      className={mergeClasses(className, DIAL_KIT_CLASS.folderPath)}
       ariaLabel={ariaLabel}
       separator={
         <DialIcon

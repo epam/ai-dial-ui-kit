@@ -95,13 +95,13 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         hasLabel ? undefined : 'Progress',
       )}
       className={mergeClasses(
+        'w-full overflow-hidden rounded-full bg-control-disable-primary',
+        size === ElementSize.Small ? 'h-1' : 'h-2',
+        className,
         /* The track is the component's root when there is no label and no
            readout to wrap it, and the public class belongs on whichever
            element that is. */
         !hasLabel && !valueLabel && DIAL_KIT_CLASS.progressBar,
-        'w-full overflow-hidden rounded-full bg-control-disable-primary',
-        size === ElementSize.Small ? 'h-1' : 'h-2',
-        className,
       )}
     >
       <div
@@ -118,8 +118,8 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.progressBar,
         'flex w-full flex-col gap-1',
+        DIAL_KIT_CLASS.progressBar,
       )}
     >
       <div className="flex items-baseline gap-2">

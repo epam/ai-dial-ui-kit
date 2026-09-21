@@ -93,7 +93,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
         >
           <div
             role="none"
-            className={classNames(DIAL_KIT_CLASS.dropdownList, 'py-1')}
+            className={classNames('py-1', DIAL_KIT_CLASS.dropdownList)}
           >
             {item.children!.map((child) => (
               <button

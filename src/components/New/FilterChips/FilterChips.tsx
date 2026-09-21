@@ -90,9 +90,9 @@ export const FilterChips = <T extends string = string>({
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     className={mergeClasses(
-      DIAL_KIT_CLASS.filterChips,
       containerClassName,
       className,
+      DIAL_KIT_CLASS.filterChips,
     )}
   >
     {items.map((item) => (

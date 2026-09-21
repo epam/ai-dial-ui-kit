@@ -203,9 +203,9 @@ export const RadioGroupPopupField: FC<RadioGroupPopupFieldProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.radioGroupPopupField,
         'flex w-full flex-col gap-2',
         className,
+        DIAL_KIT_CLASS.radioGroupPopupField,
       )}
     >
       {labelProps && <Label {...labelProps} id={labelId} htmlFor={fieldId} />}

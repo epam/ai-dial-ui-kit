@@ -235,10 +235,10 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
               style={floatingStyles}
               {...getFloatingProps()}
               className={mergeClasses(
-                DIAL_KIT_CLASS.interactiveTooltip,
                 interactiveTooltipClassName,
                 themeScope,
                 contentClassName,
+                DIAL_KIT_CLASS.interactiveTooltip,
               )}
             >
               {content}

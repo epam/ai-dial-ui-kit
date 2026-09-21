@@ -69,9 +69,9 @@ export const NoDataContent: FC<NoDataContentProps> = ({
       // emptied by a filter needs; a decorative empty state stays silent.
       role={live ? 'status' : undefined}
       className={mergeClasses(
-        DIAL_KIT_CLASS.noDataContent,
         'flex size-full flex-col items-center justify-center gap-2 text-tertiary',
         className,
+        DIAL_KIT_CLASS.noDataContent,
       )}
     >
       {icon ?? (

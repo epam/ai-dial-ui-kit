@@ -22,10 +22,10 @@ export const Spinner: FC<SpinnerProps> = ({
     <div
       role="status"
       className={mergeClasses(
-        DIAL_KIT_CLASS.spinner,
         'flex items-center justify-center',
         { 'size-full': fullWidth },
         className,
+        DIAL_KIT_CLASS.spinner,
       )}
     >
       <div

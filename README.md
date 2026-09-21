@@ -258,6 +258,8 @@ breaking change and goes through the migration-guide process.
 | `confirmationPopup`  | `dial-kit-confirmation-popup`     | A `ConfirmationPopup`'s panel, additive to `popup`                   |
 | `accordion`          | `dial-kit-accordion`              | The root of an `Accordion`                                           |
 | `folderPath`         | `dial-kit-folder-path`            | The breadcrumb root of a `FolderPath`                                |
+| `breadcrumbs`        | `dial-kit-breadcrumbs`            | The `nav` element of a `Breadcrumbs` trail                           |
+| `breadcrumbsItem`    | `dial-kit-breadcrumbs-item`       | One segment of it: the link, button or span that draws the label     |
 
 #### Menus and overlays
 
@@ -298,8 +300,10 @@ breaking change and goes through the migration-guide process.
 | `radioGroup`           | `dial-kit-radio-group`                | The root of a `RadioGroup`                                 |
 | `segmentedControl`     | `dial-kit-segmented-control`          | The `role="radiogroup"` track of a `SegmentedControl`       |
 | `segmentedControlItem` | `dial-kit-segmented-control-item`     | One segment of it                                          |
-| `tabs`                 | `dial-kit-tabs`                       | The `role="tablist"` root of `Tabs`                        |
+| `tabs`                 | `dial-kit-tabs`                       | The outermost element of a `Tabs` — the heading wrapper, or the tab list when there is no `sectionLabel` |
+| `tabList`              | `dial-kit-tab-list`                   | The `role="tablist"` inside it, in either orientation      |
 | `tab`                  | `dial-kit-tab`                        | One tab inside it                                          |
+| `tabsSectionLabel`     | `dial-kit-tabs-section-label`         | The `sectionLabel` heading above a `Tabs`                  |
 | `tag`                  | `dial-kit-tag`                        | A `Tag` pill, including a `TagInput`'s rows                |
 | `filterChips`          | `dial-kit-filter-chips`               | The `role="group"` row of a `FilterChips`; its chips carry `dial-kit-tag` |
 | `toggleIconButton`     | `dial-kit-toggle-icon-button`         | A `ToggleIconButton`, additive to `dial-kit-base-icon-button` |
@@ -372,6 +376,8 @@ not AAA:
 | `Radio` circle | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label selects the radio, so the practical target is wider |
 | `Checkbox` box | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label toggles the checkbox, so the practical target is wider |
 | `Slider` track row | 24px tall | The pointer target spans the full track width but is only 24px tall; a 44px row would add 20px of dead space to every form the slider sits in, and the thumb is dragged rather than tapped |
+| `Breadcrumbs` segment link | content | Exempt under the 2.5.5 *Inline* exception — a segment is a text link in a line of text, and expanding it would overlap the segments beside it |
+| `Breadcrumbs` overflow button | 16×16 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 14px per side and swallow the segments on either side of it in an inline trail |
 | `SegmentedControl` segment | 32px tall | Sits 4px from its neighbours inside a 40px track, so a 44px target would overhang 6px per side and swallow the adjacent segments; the segment is already wider than 24px on both axes |
 | `ResizableContainer` resize handle | 10px wide pointer strip | The handle has to sit exactly on the panel boundary, so a 44px-wide strip would swallow content on both sides of it — essential to the control. It is a focusable `separator`, so the resize is also available from the keyboard with the arrow keys |
 

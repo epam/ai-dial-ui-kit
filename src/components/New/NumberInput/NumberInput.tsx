@@ -112,8 +112,8 @@ export const NumberInput: FC<NumberInputProps> = ({
     <Input
       {...props}
       wrapperClassName={mergeClasses(
-        DIAL_KIT_CLASS.numberInput,
         props.wrapperClassName,
+        DIAL_KIT_CLASS.numberInput,
       )}
       type="number"
       min={min}
