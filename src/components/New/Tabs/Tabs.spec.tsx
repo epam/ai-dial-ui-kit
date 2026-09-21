@@ -509,9 +509,7 @@ describe('Dial UI Kit :: Tabs', () => {
     ];
 
     test('marks the selected tab in a horizontal row', () => {
-      render(
-        <Tabs tabs={items} activeTabId="usage" onTabChange={vi.fn()} />,
-      );
+      render(<Tabs tabs={items} activeTabId="usage" onTabChange={vi.fn()} />);
 
       expect(screen.getByRole('tab', { name: 'Usage' })).toHaveClass(
         DIAL_KIT_CLASS.tabSelected,
