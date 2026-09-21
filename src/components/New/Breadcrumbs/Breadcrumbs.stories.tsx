@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { BreadcrumbsSize } from '@/types/breadcrumbs';
 import { Breadcrumbs, type BreadcrumbsItem } from './Breadcrumbs';
 
 const FILE_PATH: BreadcrumbsItem[] = [
@@ -43,6 +44,12 @@ const meta = {
       control: { type: 'number', min: 3, max: 8 },
       description:
         'Segments drawn before the middle collapses behind an ellipsis menu',
+    },
+    size: {
+      control: 'inline-radio',
+      options: Object.values(BreadcrumbsSize),
+      description:
+        "The trail's type scale: `dial-small-text` or `dial-h2-text`",
     },
     separator: {
       control: false,
@@ -92,6 +99,22 @@ export const WithRootIcon: Story = {
       },
       ...FILE_PATH.slice(1),
     ],
+  },
+};
+
+export const Heading: Story = {
+  args: {
+    items: FILE_PATH,
+    ariaLabel: 'File path',
+    size: BreadcrumbsSize.Heading,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`BreadcrumbsSize.Heading` draws the trail at `dial-h2-text`, for a path that doubles as the page title. The token is semibold, so every segment is — the current page included.',
+      },
+    },
   },
 };
 

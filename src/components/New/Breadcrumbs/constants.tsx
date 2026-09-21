@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { BreadcrumbsSize } from '@/types/breadcrumbs';
 
 /**
  * The `<nav>`. It clips rather than wraps: a breadcrumb that reflows onto a
@@ -16,7 +17,26 @@ export const listClassName =
   'flex min-w-0 flex-nowrap items-center gap-2 whitespace-nowrap';
 
 /** One `<li>`: the segment and the separator that follows it. */
-export const itemClassName = 'flex min-w-0 items-center gap-2 dial-small-text';
+export const itemClassName = 'flex min-w-0 items-center gap-2';
+
+/**
+ * The trail's type scale. It sits on the `<li>`, so the segment, the
+ * separator and the tooltip trigger inside it all read from one declaration.
+ */
+export const sizeClassName: Record<BreadcrumbsSize, string> = {
+  [BreadcrumbsSize.Small]: 'dial-small-text',
+  [BreadcrumbsSize.Heading]: 'dial-h2-text',
+};
+
+/**
+ * The current page is always semibold. `dial-h2-text` already is, so the
+ * heading trail repeats its own token rather than reaching for a semibold
+ * variant that does not exist.
+ */
+export const currentSizeClassName: Record<BreadcrumbsSize, string> = {
+  [BreadcrumbsSize.Small]: 'dial-small-semi-text',
+  [BreadcrumbsSize.Heading]: 'dial-h2-text',
+};
 
 /**
  * How each segment gives up width when the trail does not fit. The root keeps
@@ -48,8 +68,7 @@ export const linkSegmentClassName =
  * The last segment: where the user is. Semibold and primary, and never a
  * link — a control that navigates to the page it is on has nothing to do.
  */
-export const currentSegmentClassName =
-  'dial-small-semi-text cursor-default text-primary';
+export const currentSegmentClassName = 'cursor-default text-primary';
 
 /** A segment with nowhere to go: rendered, but not a control. */
 export const staticSegmentClassName = 'cursor-default text-secondary';
