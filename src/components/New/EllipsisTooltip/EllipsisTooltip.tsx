@@ -91,9 +91,9 @@ export const EllipsisTooltip: FC<EllipsisTooltipProps> = ({
           ref={ref}
           aria-label={isTruncated && fullText ? fullText : undefined}
           className={mergeClasses(
-            DIAL_KIT_CLASS.ellipsisTooltip,
             'block min-w-0 max-w-full flex-1 truncate text-start',
             className,
+            DIAL_KIT_CLASS.ellipsisTooltip,
           )}
         >
           {text}

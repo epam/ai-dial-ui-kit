@@ -12,7 +12,7 @@ export const menuItemCheckIcon = (
   <IconCheck
     size={DIAL_ICON_SIZE.SM}
     stroke={DIAL_KIT_ICON_STROKE}
-    className={`${DIAL_KIT_CLASS.menuItemCheck} shrink-0`}
+    className={`shrink-0 ${DIAL_KIT_CLASS.menuItemCheck}`}
     aria-hidden
   />
 );

@@ -171,10 +171,10 @@ export const Skeleton: FC<SkeletonProps> = ({
     <div
       {...props}
       className={mergeClasses(
-        DIAL_KIT_CLASS.skeleton,
         'flex gap-4',
         !!overlay && 'relative',
         className,
+        DIAL_KIT_CLASS.skeleton,
       )}
     >
       {showAvatar && (

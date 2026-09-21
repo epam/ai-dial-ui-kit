@@ -12,5 +12,5 @@ alwaysApply: false
 - **Stories**: `*.stories.tsx` alongside the component; use Storybook 10 patterns already in the repo.
 - **Tests**: `*.spec.tsx` or `__tests__/` with Vitest + Testing Library; mirror user-visible behavior and a11y where relevant.
 - **Styles**: Tailwind + `tailwind-merge` / `mergeClasses` where the codebase already does; follow `eslint-plugin-tailwindcss` rules.
-- **Public classes**: A generation 2.0 component stamps its `DIAL_KIT_CLASS` entry (`src/constants/public-class-names.ts`) on the element that draws it, read from the record rather than written as a literal, first in the `mergeClasses` call. The class carries no declarations, and a new entry needs a case in `src/constants/public-class-names.spec.tsx` and a README row. See AGENTS.md § Public class names.
+- **Public classes**: A generation 2.0 component stamps its `DIAL_KIT_CLASS` entry (`src/constants/public-class-names.ts`) on the element that draws it, read from the record rather than written as a literal, last in the `mergeClasses` call. The class carries no declarations, and a new entry needs a case in `src/constants/public-class-names.spec.tsx` and a README row. See AGENTS.md § Public class names.
 - **Types**: Shared types under `src/types/`; co-locate small types in the component file if local only.

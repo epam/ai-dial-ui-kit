@@ -142,9 +142,9 @@ export const Accordion: FC<AccordionProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.accordion,
         'flex flex-col gap-3 py-3 overflow-hidden bg-transparent ',
         className,
+        DIAL_KIT_CLASS.accordion,
       )}
     >
       {nonCollapsible ? (

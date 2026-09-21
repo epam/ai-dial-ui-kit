@@ -108,18 +108,18 @@ export const DialDropdownIcon: FC<DialDropdownIconProps> = ({
         <DialIcon
           icon={icon}
           className={mergeClasses(
-            DIAL_KIT_CLASS.dropdownIcon,
             'flex items-center justify-center text-inherit',
             iconSizeClass[size],
             showCaret && '-mr-2',
             iconClassName,
+            DIAL_KIT_CLASS.dropdownIcon,
           )}
         />
         {showCaret && (
           <div
             className={mergeClasses(
-              DIAL_KIT_CLASS.dropdownIconCaret,
               'relative z-10 inline-grid size-5 shrink-0 place-items-center',
+              DIAL_KIT_CLASS.dropdownIconCaret,
             )}
           >
             <div className="absolute inset-0 rounded-full bg-layer-2" />

@@ -83,9 +83,9 @@ export const Radio: FC<RadioProps> = ({
     <div className="flex flex-col gap-1">
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.radio,
           'flex items-center gap-2 ',
           className,
+          DIAL_KIT_CLASS.radio,
         )}
       >
         <input

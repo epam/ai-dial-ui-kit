@@ -618,9 +618,9 @@ export const Select: FC<SelectProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.select,
         'flex w-full flex-col gap-2',
         className,
+        DIAL_KIT_CLASS.select,
       )}
     >
       {labelProps && <Label {...labelProps} htmlFor={fieldId} />}

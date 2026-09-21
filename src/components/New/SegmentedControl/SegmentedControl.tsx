@@ -142,9 +142,9 @@ export const SegmentedControl = <T extends string>({
       aria-disabled={disabled || undefined}
       onKeyDown={handleKeyDown}
       className={mergeClasses(
-        DIAL_KIT_CLASS.segmentedControl,
         containerClassName,
         className,
+        DIAL_KIT_CLASS.segmentedControl,
       )}
     >
       {items.map((item) => {
@@ -168,7 +168,6 @@ export const SegmentedControl = <T extends string>({
             disabled={isDisabled}
             onClick={() => onChange(item.value)}
             className={mergeClasses(
-              DIAL_KIT_CLASS.segmentedControlItem,
               segmentClassName,
               isSelected
                 ? segmentSelectedClassName
@@ -181,6 +180,7 @@ export const SegmentedControl = <T extends string>({
                   ? segmentSelectedInteractiveClassName
                   : segmentUnselectedInteractiveClassName,
               segmentClassNameProp,
+              DIAL_KIT_CLASS.segmentedControlItem,
             )}
           >
             {item.icon}

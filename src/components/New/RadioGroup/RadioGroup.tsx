@@ -122,9 +122,9 @@ export const RadioGroup: FC<RadioGroupProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.radioGroup,
         groupBaseClassName,
         className,
+        DIAL_KIT_CLASS.radioGroup,
       )}
     >
       {labelProps && <Label {...labelProps} id={labelId} />}

@@ -102,9 +102,9 @@ export const Search: FC<SearchProps> = ({
       placeholder={placeholder}
       inputRef={ref}
       wrapperClassName={mergeClasses(
-        DIAL_KIT_CLASS.search,
         withoutBorder && 'dial-kit-input-borderless',
         wrapperClassName,
+        DIAL_KIT_CLASS.search,
       )}
       iconBefore={
         <IconSearch

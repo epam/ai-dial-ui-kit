@@ -179,7 +179,6 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   ) => {
     const interactive = !isCurrent && (!!item.href || !!item.onClick);
     const contentClassName = mergeClasses(
-      DIAL_KIT_CLASS.breadcrumbsItem,
       segmentClassName,
       interactive
         ? linkSegmentClassName
@@ -187,6 +186,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
           ? currentSegmentClassName
           : staticSegmentClassName,
       segmentClassNameProp,
+      DIAL_KIT_CLASS.breadcrumbsItem,
     );
     const content = (
       <>
@@ -245,9 +245,9 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
     <nav
       aria-label={ariaLabel}
       className={mergeClasses(
-        DIAL_KIT_CLASS.breadcrumbs,
         navClassName,
         className,
+        DIAL_KIT_CLASS.breadcrumbs,
       )}
     >
       <ol className={listClassName}>

@@ -96,9 +96,9 @@ export const Checkbox: FC<CheckboxProps> = ({
     <div className="flex flex-col gap-1">
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.checkbox,
           'flex items-center gap-2',
           className,
+          DIAL_KIT_CLASS.checkbox,
         )}
       >
         <input

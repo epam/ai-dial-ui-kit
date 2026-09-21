@@ -342,13 +342,13 @@ export const TagInput: FC<TagInputProps> = ({
       onBlur={handleBlur}
       containerClassName={mergeClasses('w-full', className)}
       wrapperClassName={mergeClasses(
-        DIAL_KIT_CLASS.tagInput,
         tagCount > 0 && [
           '!h-auto',
           isSmall ? 'min-h-[24px] py-0.5' : 'min-h-[40px] py-1.5',
           collapseTagOverflow ? 'flex-nowrap overflow-hidden' : 'flex-wrap',
         ],
         fieldClassName,
+        DIAL_KIT_CLASS.tagInput,
       )}
       className={mergeClasses(
         'w-auto flex-1',

@@ -200,12 +200,12 @@ export const Tabs: FC<TabsProps> = ({
       aria-labelledby={!ariaLabel && sectionLabel ? sectionLabelId : undefined}
       onKeyDown={handleKeyDown}
       className={mergeClasses(
-        DIAL_KIT_CLASS.tabList,
         isVertical ? 'flex flex-col gap-1 px-2' : 'flex justify-start gap-1',
-        // Without a heading the list is the root, so it takes the kit class and
-        // the caller's classes itself.
-        !sectionLabel && DIAL_KIT_CLASS.tabs,
+        // Without a heading the list is the root, so it takes the caller's
+        // classes — and the root kit class below — itself.
         !sectionLabel && className,
+        DIAL_KIT_CLASS.tabList,
+        !sectionLabel && DIAL_KIT_CLASS.tabs,
       )}
     >
       {tabs.map((tab) => {
@@ -225,7 +225,6 @@ export const Tabs: FC<TabsProps> = ({
             tabIndex={tab.id === tabStopId ? 0 : -1}
             onClick={() => onTabChange(tab.id)}
             className={mergeClasses(
-              DIAL_KIT_CLASS.tab,
               'dial-kit-enhanced-target flex items-center gap-2 text-start',
               'transition-colors motion-reduce:transition-none',
               'focus-visible:outline focus-visible:outline-focus',
@@ -254,6 +253,7 @@ export const Tabs: FC<TabsProps> = ({
                     ? 'dial-kit-tab-selected-underline text-primary'
                     : 'border-transparent text-secondary'),
               tabClassName,
+              DIAL_KIT_CLASS.tab,
             )}
           >
             {tab.icon && (
@@ -299,9 +299,9 @@ export const Tabs: FC<TabsProps> = ({
   return (
     <div
       className={mergeClasses(
-        DIAL_KIT_CLASS.tabs,
         'flex flex-col gap-3',
         className,
+        DIAL_KIT_CLASS.tabs,
       )}
     >
       <div
@@ -313,9 +313,9 @@ export const Tabs: FC<TabsProps> = ({
         <span
           id={sectionLabelId}
           className={mergeClasses(
-            DIAL_KIT_CLASS.tabsSectionLabel,
             'dial-h1-text text-primary',
             sectionLabelClassName,
+            DIAL_KIT_CLASS.tabsSectionLabel,
           )}
         >
           {sectionLabel}

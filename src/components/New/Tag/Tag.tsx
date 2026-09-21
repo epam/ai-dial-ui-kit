@@ -130,7 +130,6 @@ export const Tag: FC<TagProps> = ({
       onClick={disabled ? undefined : onClick}
       onKeyDown={handleKeyDown}
       className={mergeClasses(
-        DIAL_KIT_CLASS.tag,
         tagBaseClassName,
         hasBoldLabel ? 'dial-tiny-semi-text' : 'dial-tiny-text',
         tagStateClassNames[appearance][selected ? 'selected' : 'default'],
@@ -139,6 +138,7 @@ export const Tag: FC<TagProps> = ({
         disabled && 'cursor-not-allowed',
         clickable && [tagInteractiveClassName, tagHoverClassName],
         className,
+        DIAL_KIT_CLASS.tag,
       )}
     >
       {icon && (

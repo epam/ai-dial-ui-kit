@@ -42,9 +42,9 @@ export const Highlight: FC<HighlightProps> = ({
   maxLines = 2,
 }) => {
   const textClassName = mergeClasses(
-    DIAL_KIT_CLASS.highlight,
     getClampClassName(maxLines),
     className,
+    DIAL_KIT_CLASS.highlight,
   );
 
   if (!query.trim()) {

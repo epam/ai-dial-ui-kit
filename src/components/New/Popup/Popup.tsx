@@ -286,10 +286,10 @@ export const Popup: FC<PopupProps> = ({
             aria-labelledby={headingId}
             aria-label={headingId ? undefined : ariaLabel}
             className={mergeClasses(
-              DIAL_KIT_CLASS.popup,
               popupBaseClassName,
               popupSizeClassMap[size],
               className,
+              DIAL_KIT_CLASS.popup,
             )}
           >
             {preventKeyboardOnOpen && (

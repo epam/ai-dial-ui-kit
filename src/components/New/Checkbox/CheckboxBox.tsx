@@ -46,7 +46,6 @@ export const CheckboxBox: FC<CheckboxBoxProps> = ({
   const isControl = !!htmlFor;
 
   const boxClassName = mergeClasses(
-    DIAL_KIT_CLASS.checkboxBox,
     'grid size-[20px] shrink-0 place-items-center rounded border transition-colors duration-200',
     // 20px is below the 24x24 minimum target, so grow the pointer target
     // without touching the rendered size. The 44px enhanced target would
@@ -70,6 +69,7 @@ export const CheckboxBox: FC<CheckboxBoxProps> = ({
         ),
     disabled ? 'cursor-not-allowed' : isControl && 'cursor-pointer',
     className,
+    DIAL_KIT_CLASS.checkboxBox,
   );
 
   const glyph = isIndeterminate ? (

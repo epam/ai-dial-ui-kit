@@ -34,11 +34,11 @@ export const CaptionText: FC<CaptionTextProps> = ({
       {...props}
       role="alert"
       className={mergeClasses(
-        DIAL_KIT_CLASS.captionText,
-        variant === CaptionType.Error && DIAL_KIT_CLASS.errorText,
         'dial-tiny-text',
         variant === CaptionType.Error ? 'text-error' : 'text-secondary',
         className,
+        DIAL_KIT_CLASS.captionText,
+        variant === CaptionType.Error && DIAL_KIT_CLASS.errorText,
       )}
     >
       {text}

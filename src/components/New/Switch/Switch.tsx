@@ -71,9 +71,9 @@ export const Switch: FC<SwitchProps> = ({
     <div className="flex flex-col gap-1">
       <div
         className={mergeClasses(
-          DIAL_KIT_CLASS.switch,
           'flex items-center gap-2',
           className,
+          DIAL_KIT_CLASS.switch,
         )}
       >
         <input

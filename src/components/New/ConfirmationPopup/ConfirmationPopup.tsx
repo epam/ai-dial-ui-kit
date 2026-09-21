@@ -142,9 +142,9 @@ export const ConfirmationPopup: FC<ConfirmationPopupProps> = ({
       open={open}
       header={header}
       className={mergeClasses(
-        DIAL_KIT_CLASS.confirmationPopup,
         variantConfig[variant].container,
         className,
+        DIAL_KIT_CLASS.confirmationPopup,
       )}
       onClose={() => onClose?.()}
       footer={footer ?? defaultFooter}
