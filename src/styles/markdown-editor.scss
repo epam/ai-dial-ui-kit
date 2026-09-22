@@ -6,9 +6,13 @@
 
 .dial-kit-markdown-editor {
   .w-md-editor {
-    @apply gap-3 rounded-lg border px-4 py-3 border-secondary !bg-layer-raised;
+    @apply gap-3 rounded-lg border px-4 py-3 border-secondary text-primary !bg-layer-raised;
 
     box-shadow: none !important;
+    /* the base library hardcodes its own sans stack on the card; the face
+       belongs to the host theme. The edit pane keeps the monospace one below,
+       which it asks for by variable. */
+    font-family: inherit;
     --md-editor-font-family:
       ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
       monospace;
@@ -102,6 +106,117 @@
   .w-md-editor-toolbar-child {
     @apply rounded-md border border-primary bg-layer-raised shadow-md;
     box-shadow: none !important;
+  }
+
+  /* --- preview pane ---------------------------------------------------- */
+
+  /* live mode splits the card in two, and the base library draws that split as
+     an `inset` box-shadow on the preview, in its own hardcoded grey. The
+     markdown body paints an opaque background over it and is only as tall as
+     its content, so the shadow survives just below the last rendered block — a
+     divider that starts halfway down the pane. Drop it and draw the split as a
+     real border instead, on the logical edge so it flips in RTL. */
+  .w-md-editor-preview {
+    box-shadow: none !important;
+    /* the library pins the preview with a physical `right: 0`, while the edit
+       pane is a plain block that sits at the inline start — so under
+       `dir="rtl"` the two land on top of each other unless the host adds the
+       library's own `w-md-editor-rtl` class. Logical insets put the preview
+       opposite the edit pane in either direction, with no class to remember. */
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+  }
+
+  /* same reason: the library hardcodes `text-align: left` on both panes. */
+  .w-md-editor,
+  .w-md-editor-text {
+    text-align: start;
+  }
+
+  /* only live mode shows both panes: in edit/preview mode one of them collapses
+     to `width: 0`, where a border would be a stray hairline at the card edge. */
+  .w-md-editor-show-live .w-md-editor-preview {
+    @apply border-s border-solid border-secondary ps-4;
+  }
+
+  .w-md-editor-show-live .w-md-editor-input {
+    @apply pe-4;
+  }
+
+  /* the card owns the background (`bg-layer-raised`); the markdown body must
+     not repaint it in the library's canvas colour — that opaque layer is also
+     what hid the divider above. Text colour and font follow the host theme
+     instead of the library's GitHub stack. */
+  .wmde-markdown {
+    @apply bg-transparent text-primary;
+
+    font-family: inherit;
+  }
+
+  .wmde-markdown a {
+    @apply text-accent;
+  }
+
+  .wmde-markdown code {
+    @apply bg-layer-sunken text-primary;
+
+    font-family: var(--md-editor-font-family);
+  }
+
+  .wmde-markdown pre > code {
+    @apply bg-transparent p-0;
+  }
+
+  /* the rest of the markdown body still paints GitHub's own canvas greys and
+     stroke colours. Map them onto the kit tokens, so the preview matches the
+     card and follows the host theme instead of staying light-mode grey. */
+  .wmde-markdown pre {
+    @apply bg-layer-sunken;
+  }
+
+  .wmde-markdown hr {
+    @apply bg-layer-sunken;
+  }
+
+  .wmde-markdown blockquote {
+    @apply text-secondary;
+    /* the library draws the quote bar with a physical `border-left`, which
+       ends up on the wrong side in RTL. */
+    border-inline: 0;
+    border-inline-start: 4px solid var(--stroke-secondary, #d1dbea);
+  }
+
+  /* Tailwind's preflight strips list markers globally and the base library
+     never restores them for a top-level list, so rendered markdown lost its
+     bullets and numbers. Nested lists inherit these; the deeper `ol` variants
+     and task lists keep the markers the base library assigns them. */
+  .wmde-markdown ul {
+    list-style-type: disc;
+  }
+
+  .wmde-markdown ol {
+    list-style-type: decimal;
+  }
+
+  /* preflight strips the native checkbox too, so a GFM task list rendered as
+     `<input type="checkbox">` collapsed to a 0×0 box. */
+  .wmde-markdown input[type='checkbox'] {
+    appearance: auto;
+  }
+
+  .wmde-markdown table tr {
+    @apply border-secondary bg-transparent;
+  }
+
+  .wmde-markdown table tr:nth-child(2n) {
+    @apply bg-layer-base;
+  }
+
+  .wmde-markdown table th,
+  .wmde-markdown table td,
+  .wmde-markdown h1,
+  .wmde-markdown h2 {
+    @apply border-secondary;
   }
 
   .w-md-editor-toolbar-child .w-md-editor-toolbar li > button {
