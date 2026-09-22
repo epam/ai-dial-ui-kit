@@ -462,6 +462,81 @@ describe('Dial UI Kit :: Tabs', () => {
       expect(screen.getByRole('tablist')).not.toHaveClass('w-60');
       expect(container.querySelector('.w-60')).toHaveClass(DIAL_KIT_CLASS.tabs);
     });
+
+    test('tabListClassName reaches the tab list even behind a heading', () => {
+      render(
+        <Tabs
+          orientation={TabOrientation.Vertical}
+          sectionLabel="Settings"
+          className="w-60"
+          tabListClassName="px-6"
+          tabs={items}
+          activeTabId="preferences"
+          onTabChange={vi.fn()}
+        />,
+      );
+
+      const tabList = screen.getByRole('tablist');
+
+      expect(tabList).toHaveClass('px-6');
+      expect(tabList).not.toHaveClass('w-60');
+    });
+
+    test('tabListClassName and className land together when there is no heading', () => {
+      render(
+        <Tabs
+          orientation={TabOrientation.Vertical}
+          className="w-60"
+          tabListClassName="px-6"
+          tabs={items}
+          activeTabId="preferences"
+          onTabChange={vi.fn()}
+          ariaLabel="Settings sections"
+        />,
+      );
+
+      const tabList = screen.getByRole('tablist');
+
+      expect(tabList).toHaveClass('w-60');
+      expect(tabList).toHaveClass('px-6');
+    });
+  });
+
+  describe('selected tab class', () => {
+    const items = [
+      { id: 'preferences', label: 'Preferences' },
+      { id: 'usage', label: 'Usage' },
+    ];
+
+    test('marks the selected tab in a horizontal row', () => {
+      render(<Tabs tabs={items} activeTabId="usage" onTabChange={vi.fn()} />);
+
+      expect(screen.getByRole('tab', { name: 'Usage' })).toHaveClass(
+        DIAL_KIT_CLASS.tabSelected,
+      );
+      expect(screen.getByRole('tab', { name: 'Preferences' })).not.toHaveClass(
+        DIAL_KIT_CLASS.tabSelected,
+      );
+    });
+
+    test('marks the selected tab in a vertical rail', () => {
+      render(
+        <Tabs
+          orientation={TabOrientation.Vertical}
+          tabs={items}
+          activeTabId="preferences"
+          onTabChange={vi.fn()}
+          ariaLabel="Settings sections"
+        />,
+      );
+
+      expect(screen.getByRole('tab', { name: 'Preferences' })).toHaveClass(
+        DIAL_KIT_CLASS.tabSelected,
+      );
+      expect(screen.getByRole('tab', { name: 'Usage' })).not.toHaveClass(
+        DIAL_KIT_CLASS.tabSelected,
+      );
+    });
   });
 
   describe('tab icons', () => {

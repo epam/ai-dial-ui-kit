@@ -3,6 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 
+import { BreadcrumbsSize } from '@/types/breadcrumbs';
 import { Breadcrumbs, type BreadcrumbsItem } from './Breadcrumbs';
 
 const TRAIL: BreadcrumbsItem[] = [
@@ -201,6 +202,43 @@ describe('Dial UI Kit :: Breadcrumbs', () => {
     await user.click(screen.getByRole('menuitem', { name: 'Level 1' }));
 
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('draws the trail at dial-small-text by default, semibold on the current page', () => {
+    render(<Breadcrumbs items={TRAIL} />);
+
+    screen
+      .getAllByRole('listitem')
+      .forEach((item) => expect(item).toHaveClass('dial-small-text'));
+    expect(
+      screen.getByText('DK Test with nested').closest('[aria-current="page"]'),
+    ).toHaveClass('dial-small-semi-text');
+  });
+
+  test('draws the trail at dial-h2-text when asked, semibold throughout', () => {
+    render(<Breadcrumbs items={TRAIL} size={BreadcrumbsSize.Heading} />);
+
+    screen.getAllByRole('listitem').forEach((item) => {
+      expect(item).toHaveClass('dial-h2-text');
+      expect(item).not.toHaveClass('dial-small-text');
+    });
+    // `dial-h2-text` is semibold on its own, so the current page repeats it
+    // rather than stacking a small-text weight on top.
+    const current = screen
+      .getByText('DK Test with nested')
+      .closest('[aria-current="page"]');
+    expect(current).toHaveClass('dial-h2-text');
+    expect(current).not.toHaveClass('dial-small-semi-text');
+  });
+
+  test('sizes the ellipsis segment with the rest of the trail', () => {
+    render(<Breadcrumbs items={DEEP_TRAIL} size={BreadcrumbsSize.Heading} />);
+
+    expect(
+      screen
+        .getByRole('button', { name: 'Show hidden path segments' })
+        .closest('li'),
+    ).toHaveClass('dial-h2-text');
   });
 
   test('draws a separator after every segment but the last, hidden from assistive tech', () => {

@@ -13,12 +13,14 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import type { DropdownItem } from '@/models/dropdown';
+import { BreadcrumbsSize } from '@/types/breadcrumbs';
 import { mergeClasses } from '@/utils/merge-classes';
 
 import {
   DEFAULT_MAX_VISIBLE_ITEMS,
   MIN_VISIBLE_ITEMS,
   currentSegmentClassName,
+  currentSizeClassName,
   defaultSeparator,
   itemClassName,
   linkSegmentClassName,
@@ -28,6 +30,7 @@ import {
   segmentClassName,
   segmentWidthClassName,
   separatorClassName,
+  sizeClassName,
   staticSegmentClassName,
 } from './constants';
 
@@ -59,6 +62,11 @@ export interface BreadcrumbsProps {
    * the current page.
    */
   maxVisibleItems?: number;
+  /**
+   * The trail's type scale: `dial-small-text` by default, or `dial-h2-text`
+   * for a trail that doubles as the page heading.
+   */
+  size?: BreadcrumbsSize;
   /** Node drawn between two segments. Defaults to a right chevron, mirrored in RTL. */
   separator?: ReactNode;
   /** Accessible name for the `<nav>`. */
@@ -91,6 +99,10 @@ export interface BreadcrumbsProps {
  * segment. Separators are decorative and hidden from assistive tech, so the
  * trail is announced as a list of links rather than a string of chevrons.
  *
+ * The trail is drawn at `dial-small-text` by default; `size` switches it to
+ * `dial-h2-text` for a trail that doubles as the page heading, where the
+ * token's own semibold weight applies to every segment.
+ *
  * Labels are the caller's to translate; the two accessible names default to
  * English and take an override.
  *
@@ -108,6 +120,7 @@ export interface BreadcrumbsProps {
  *
  * @param items - The trail, outermost first; the last entry is the current page
  * @param [maxVisibleItems=4] - Segments drawn before the middle collapses behind an ellipsis menu
+ * @param [size=BreadcrumbsSize.Small] - The trail's type scale: `dial-small-text` or `dial-h2-text`
  * @param [separator] - Node drawn between two segments; defaults to a right chevron
  * @param [ariaLabel='Breadcrumb'] - Accessible name for the `<nav>`
  * @param [overflowAriaLabel='Show hidden path segments'] - Accessible name for the ellipsis button
@@ -117,6 +130,7 @@ export interface BreadcrumbsProps {
 export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   items,
   maxVisibleItems = DEFAULT_MAX_VISIBLE_ITEMS,
+  size = BreadcrumbsSize.Small,
   separator = defaultSeparator,
   ariaLabel = 'Breadcrumb',
   overflowAriaLabel = 'Show hidden path segments',
@@ -183,7 +197,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
       interactive
         ? linkSegmentClassName
         : isCurrent
-          ? currentSegmentClassName
+          ? mergeClasses(currentSegmentClassName, currentSizeClassName[size])
           : staticSegmentClassName,
       segmentClassNameProp,
       DIAL_KIT_CLASS.breadcrumbsItem,
@@ -200,6 +214,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
         key={`segment-${index}`}
         className={mergeClasses(
           itemClassName,
+          sizeClassName[size],
           segmentWidthClassName[
             isCurrent ? 'last' : isFirst ? 'first' : 'middle'
           ],
@@ -258,7 +273,13 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
         })}
 
         {collapsed.length > 0 && (
-          <li className={mergeClasses(itemClassName, 'shrink-0')}>
+          <li
+            className={mergeClasses(
+              itemClassName,
+              sizeClassName[size],
+              'shrink-0',
+            )}
+          >
             <Dropdown
               items={collapsedMenuItems}
               onItemClick={handleCollapsedClick}

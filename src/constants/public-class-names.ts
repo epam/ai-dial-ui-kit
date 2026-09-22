@@ -151,6 +151,13 @@ export const DIAL_KIT_CLASS = {
    * horizontal row keeps its own `dial-kit-tab-selected-underline`.
    */
   tab: 'dial-kit-tab',
+  /**
+   * The selected tab, additive to `tab`. A horizontal row draws its selection
+   * with `dial-kit-tab-selected-underline`, which carries the gradient rule;
+   * this one carries no declarations and marks the selected tab in either
+   * orientation.
+   */
+  tabSelected: 'dial-kit-tab-selected',
   /** The `sectionLabel` heading above a `Tabs`. Absent when there is none. */
   tabsSectionLabel: 'dial-kit-tabs-section-label',
   /**
