@@ -123,6 +123,9 @@ export const CustomHeight: Story = {
 
 export const ComplexMarkdown: Story = {
   args: {
+    /* live, so the story covers how the preview renders each block type */
+    defaultPreview: 'live',
+    height: 600,
     value: `# Markdown Editor
 
 This is a comprehensive markdown editor example.
