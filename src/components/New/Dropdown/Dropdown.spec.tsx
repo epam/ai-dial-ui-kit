@@ -1721,3 +1721,34 @@ describe('Dial UI Kit :: Dropdown — public class names', () => {
     expect(list).toHaveClass('dial-kit-dropdown-list', 'host-list');
   });
 });
+
+describe('Dial UI Kit :: Dropdown — listStyle', () => {
+  test('hands custom properties to the portalled panel', () => {
+    render(
+      <Dropdown
+        items={items}
+        listStyle={{ ['--host-row-bg' as string]: 'rgb(1, 2, 3)' }}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    expect(
+      screen.getByRole('menu').style.getPropertyValue('--host-row-bg'),
+    ).toBe('rgb(1, 2, 3)');
+  });
+
+  test('keeps the dropdown in charge of positioning', () => {
+    render(
+      <Dropdown items={items} listStyle={{ position: 'static', top: '999px' }}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    const panel = screen.getByRole('menu');
+    expect(panel.style.position).not.toBe('static');
+    expect(panel.style.top).not.toBe('999px');
+  });
+});

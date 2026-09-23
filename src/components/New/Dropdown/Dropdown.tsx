@@ -31,6 +31,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type FC,
   type KeyboardEvent,
   type MouseEvent,
@@ -78,6 +79,13 @@ export interface DropdownProps {
   overlayContentClassName?: string;
   separatorClassName?: string;
   listClassName?: string;
+  /**
+   * Inline style for the floating overlay. The overlay renders in a portal, so
+   * this is the only way to hand it CSS custom properties from a caller's own
+   * scope — e.g. theme variables that its rows and header read. Positioning
+   * stays the dropdown's own: `floatingStyles` is applied on top of it.
+   */
+  listStyle?: CSSProperties;
   outsidePressIgnoreRef?: RefObject<HTMLElement | null>;
   outsideClosable?: boolean;
   anchorToMouse?: boolean;
@@ -193,6 +201,7 @@ const getRefWidth = (el: ReferenceElement): number => {
  * @param [overlayContentClassName] - Additional CSS classes applied to the overlay content
  * @param [separatorClassName] - Additional CSS classes applied to the separators between items
  * @param [listClassName] - Additional CSS classes applied to the floating overlay
+ * @param [listStyle] - Inline style applied to the floating overlay, under the dropdown's own positioning styles
  * @param [outsidePressIgnoreRef] - Ref to an element that should not trigger outside press behavior
  * @param [outsideClosable=true] - Whether clicks outside the overlay should close it
  * @param [anchorToMouse=false] - Whether to anchor the dropdown to the mouse position
@@ -219,6 +228,7 @@ export const Dropdown: FC<DropdownProps> = ({
   overlayContentClassName,
   separatorClassName,
   listClassName,
+  listStyle,
   outsidePressIgnoreRef,
   outsideClosable = true,
   allowedPlacements,
@@ -637,7 +647,11 @@ export const Dropdown: FC<DropdownProps> = ({
               <div
                 id={listId}
                 ref={refs.setFloating}
-                style={floatingStyles}
+                style={
+                  listStyle
+                    ? { ...listStyle, ...floatingStyles }
+                    : floatingStyles
+                }
                 className={mergeClasses(
                   dropdownListBaseClassName,
                   !matchReferenceWidth && 'w-max',
