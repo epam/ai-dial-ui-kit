@@ -30,6 +30,14 @@ describe('mergeClasses utility', () => {
     expect(result).toBe('a b c e');
   });
 
+  test.each(['z-popup', 'z-floating', 'z-interactive-tooltip', 'z-tooltip'])(
+    'lets a caller z-index replace the overlay step %s',
+    (step) => {
+      expect(mergeClasses(step, 'z-[9999]')).toBe('z-[9999]');
+      expect(mergeClasses('z-[9999]', step)).toBe(step);
+    },
+  );
+
   test('preserves non-conflicting utilities', () => {
     expect(mergeClasses('truncate', 'min-w-0', 'max-w-full')).toBe(
       'truncate min-w-0 max-w-full',

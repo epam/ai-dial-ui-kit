@@ -141,7 +141,7 @@ export const SubMenuPanel = ({
           style={floatingStyles}
           role={role}
           className={classNames(
-            'z-[53] overflow-auto text-primary focus-visible:outline-none',
+            'z-floating overflow-auto text-primary focus-visible:outline-none',
             surfaceClassName ?? subMenuSurfaceClassName,
             themeScope,
             className,

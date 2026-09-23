@@ -1,7 +1,7 @@
 import { PopupSize } from '@/types/popup';
 
 export const overlayBaseClassName =
-  'z-[52] flex items-center justify-center bg-blackout md:p-4';
+  'z-popup flex items-center justify-center bg-blackout md:p-4';
 
 export const popupDividerClassName = 'divide-tertiary divide-y';
 

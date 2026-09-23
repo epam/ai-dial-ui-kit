@@ -193,6 +193,39 @@ These are defaults, not overrides: a `rounded-*` utility passed to a single
 control through `className` still wins, because a consumer's utilities are
 emitted after this package's stylesheet.
 
+#### Overlay stacking
+
+Overlays render in a portal at the end of `<body>`, so they stack against the
+host's own fixed and sticky chrome — a header, a side sheet, an embedding
+overlay. They sit on a four-step ladder driven by one variable:
+
+| Layer             | Utility                 | `z-index`                  | Components                                                       |
+| ----------------- | ----------------------- | -------------------------- | ---------------------------------------------------------------- |
+| Popup             | `z-popup`               | `var(--z-overlay, 52)`     | `Popup` backdrop, both generations                               |
+| Floating panel    | `z-floating`            | `--z-overlay` + 1          | `Dropdown` and `Select` overlays, submenus, `Calendar`           |
+| Interactive panel | `z-interactive-tooltip` | `--z-overlay` + 2          | `InteractiveTooltip`                                             |
+| Tooltip           | `z-tooltip`             | `--z-overlay` + 3          | `Tooltip`, both generations                                      |
+
+To lift every overlay above a host layer, set the base once:
+
+```css
+:root {
+  --z-overlay: 1000; /* popup 1000, dropdown 1001, interactive tooltip 1002, tooltip 1003 */
+}
+```
+
+Each layer is a fixed step above the one below, so raising the base never
+reorders them: a dropdown still opens above the popup it sits in, and a tooltip
+above the dropdown row that triggered it. Set the variable on `:root`, or in the
+class a `ThemeScope` re-applies to its portalled overlays — a portal escapes any
+other wrapper, so a value set only there never reaches the overlay.
+
+A single overlay can still be moved on its own: a `z-*` utility passed to a
+`Dropdown`'s `listClassName`, a `Popup`'s `overlayClassName`, an
+`InteractiveTooltip`'s `contentClassName` or a `Calendar`'s `panelClassName`
+replaces the layer's own step rather than landing beside it, because
+`mergeClasses` knows the ladder utilities are z-index.
+
 ### Public class names
 
 Some hosts need to restyle a part of a component the props do not reach — the

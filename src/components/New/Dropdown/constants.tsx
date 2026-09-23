@@ -16,7 +16,7 @@ export const dropdownBaseClassName = mergeClasses(
 );
 
 export const dropdownListBaseClassName = mergeClasses(
-  'z-[53] focus-visible:outline-none',
+  'z-floating focus-visible:outline-none',
   overlaySurfaceClassName,
 );
 

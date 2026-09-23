@@ -290,6 +290,22 @@ export default {
         'control-sm': 'var(--radius-control-small, 9999px)',
         'control-icon': 'var(--radius-control-icon, 9999px)',
       },
+      zIndex: {
+        /*
+         * The stacking ladder of the kit's portalled overlays, themable like
+         * the radii above. A host sets one variable, `--z-overlay`, and every
+         * layer moves with it — each is a fixed step above the one below, so
+         * raising the whole ladder over the host's own sticky header or modal
+         * never reorders it: a tooltip still opens above the dropdown row
+         * that triggered it, and a dropdown above the popup it sits in. The
+         * fallback reproduces the literals the overlays shipped with (52–55),
+         * so a host that sets nothing sees no change.
+         */
+        popup: 'var(--z-overlay, 52)',
+        floating: 'calc(var(--z-overlay, 52) + 1)',
+        'interactive-tooltip': 'calc(var(--z-overlay, 52) + 2)',
+        tooltip: 'calc(var(--z-overlay, 52) + 3)',
+      },
       opacity: {
         15: '15%',
       },
