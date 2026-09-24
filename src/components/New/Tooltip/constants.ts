@@ -24,8 +24,10 @@ export const HOVER_OPEN_DELAY = 500;
 export const arrowClassName = 'fill-control-inverted';
 
 /**
- * Tooltips sit above popups, dropdowns and the calendar (all `z-[53]`), since
- * they can be triggered by a control inside one of them.
+ * Tooltips sit at the top of the overlay ladder (`z-tooltip`, see `zIndex` in
+ * `tailwind.config.js`) — above popups (`z-popup`), dropdowns and the calendar
+ * (`z-floating`) and interactive tooltips — since they can be triggered by a
+ * control inside any of them.
  *
  * `max-w-[376px]` is the cap the design puts on a tooltip: at `dial-small-text`
  * that is around 60 characters a line, past which a line stops being
@@ -42,4 +44,4 @@ export const arrowClassName = 'fill-control-inverted';
  * already carry.
  */
 export const tooltipClassName =
-  'z-[55] max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';
+  'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';

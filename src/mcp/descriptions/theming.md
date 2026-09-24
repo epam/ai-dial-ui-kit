@@ -41,4 +41,24 @@ Use these classes in your components:
 }
 ```
 
+## Overlay stacking
+
+Portalled overlays stack on a ladder driven by one variable, `--z-overlay`
+(default `52`): `z-popup` (base — `Popup` backdrop), `z-floating` (+1 —
+`Dropdown`/`Select` overlays, submenus, `Calendar`), `z-interactive-tooltip`
+(+2 — `InteractiveTooltip`), `z-tooltip` (+3 — `Tooltip`). To lift every
+overlay above a host's own sticky header or modal, set the base once on `:root`
+(or in a `ThemeScope` class) — the steps move together, so their order is kept:
+
+```css
+:root {
+  --z-overlay: 1000;
+}
+```
+
+Do not override `[role='menu']` or hardcode `z-[53]` in a host. To move one
+overlay only, pass a `z-*` utility through its class prop (`listClassName`,
+`overlayClassName`, `contentClassName`, `panelClassName`) — `mergeClasses`
+replaces the layer's step with it.
+
 ## Token Reference

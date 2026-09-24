@@ -26,7 +26,7 @@ export const calendarFieldDisabledClassName = // TODO: check after design review
 export const calendarFieldInvalidClassName = '!border-error'; // TODO: check after design review for input
 
 export const calendarPopoverClassName =
-  'z-[53] flex w-[248px] flex-col gap-4 rounded-lg bg-layer-raised px-2 py-4 shadow-md';
+  'z-floating flex w-[248px] flex-col gap-4 rounded-lg bg-layer-raised px-2 py-4 shadow-md';
 
 export const calendarDayButtonBaseClassName =
   'flex size-10 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-none focus-visible:outline focus-visible:outline-focus';

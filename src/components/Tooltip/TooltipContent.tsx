@@ -43,7 +43,7 @@ export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
         }}
         {...context.getFloatingProps(props)}
         className={classNames(
-          'z-[55] whitespace-pre-wrap break-words rounded border border-primary bg-layer-0 px-2 py-1 dial-tiny-text shadow max-w-[300px]',
+          'z-tooltip whitespace-pre-wrap break-words rounded border border-primary bg-layer-0 px-2 py-1 dial-tiny-text shadow max-w-[300px]',
           context.getFloatingProps(props).className as string,
         )}
       >

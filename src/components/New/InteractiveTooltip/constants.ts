@@ -13,9 +13,10 @@ export const INTERACTIVE_TOOLTIP_GAP = 8;
 export const INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY = 400;
 
 /**
- * The panel sits above the surface it is anchored to — a dropdown or select
- * overlay, both `z-[53]` — since it can be opened from a row inside one of
- * them.
+ * The panel sits one step of the overlay ladder (`z-interactive-tooltip`, see
+ * `zIndex` in `tailwind.config.js`) above the surface it is anchored to — a
+ * dropdown or select overlay, both `z-floating` — since it can be opened from
+ * a row inside one of them.
  *
  * By style this is a neutral floating panel rather than the coloured
  * `Notification` banner: it shares the raised-card shape a dropdown or the
@@ -27,4 +28,4 @@ export const INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY = 400;
  * controls rather than a menu row.
  */
 export const interactiveTooltipClassName =
-  'z-[54] max-w-[320px] rounded-xl bg-layer-0 p-4 dial-small-text text-primary shadow-md';
+  'z-interactive-tooltip max-w-[320px] rounded-xl bg-layer-0 p-4 dial-small-text text-primary shadow-md';

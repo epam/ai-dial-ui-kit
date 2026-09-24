@@ -141,6 +141,7 @@ const meta = {
     matchReferenceWidth: { control: { type: 'boolean' } },
     className: { control: { type: 'text' } },
     listClassName: { control: { type: 'text' } },
+    listStyle: { control: { type: 'object' } },
     open: { control: false },
     defaultOpen: { control: false },
     onOpenChange: { control: false },

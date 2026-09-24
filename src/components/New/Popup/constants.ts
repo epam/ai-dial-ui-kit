@@ -1,7 +1,7 @@
 import { PopupSize } from '@/types/popup';
 
 export const popupOverlayBaseClassName =
-  'z-[52] flex items-center justify-center bg-backdrop md:p-4 gap-5 p-6';
+  'z-popup flex items-center justify-center bg-backdrop md:p-4 gap-5 p-6';
 
 export const popupBaseClassName =
   'relative flex w-full max-h-full flex-col rounded-xl bg-layer-raised md:h-auto';
