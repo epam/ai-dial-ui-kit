@@ -15,9 +15,65 @@ import {
   useRole,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import { useState, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type HTMLProps,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
 
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
+
+// ---------------------------------------------------------------------------
+// Keyboard helpers
+// ---------------------------------------------------------------------------
+
+/** Rows a submenu's keyboard navigation moves focus between. */
+const SUB_MENU_OPTION_SELECTOR =
+  '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="option"]';
+
+/** Keys that move focus between a submenu's rows. */
+const SUB_MENU_NAV_KEYS = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+
+const getEnabledOptions = (container: HTMLElement): HTMLElement[] =>
+  Array.from(
+    container.querySelectorAll<HTMLElement>(SUB_MENU_OPTION_SELECTOR),
+  ).filter(
+    (el) =>
+      !el.hasAttribute('disabled') &&
+      el.getAttribute('aria-disabled') !== 'true',
+  );
+
+const isRtl = (el: Element): boolean =>
+  el.ownerDocument.defaultView?.getComputedStyle(el).direction === 'rtl';
+
+/* The inline-end arrow opens a submenu and the inline-start one closes it, so
+   both flip with the writing direction. */
+const getOpenKey = (el: Element): string =>
+  isRtl(el) ? 'ArrowLeft' : 'ArrowRight';
+const getCloseKey = (el: Element): string =>
+  isRtl(el) ? 'ArrowRight' : 'ArrowLeft';
+
+/* Caret and Home/End keys belong to a text field the submenu may host (e.g. a
+   search input), so the panel leaves them alone there. */
+const isTextField = (el: EventTarget): boolean =>
+  el instanceof HTMLElement &&
+  (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+
+const nextSubMenuOptionIndex = (
+  key: string,
+  currentIndex: number,
+  length: number,
+): number => {
+  if (key === 'Home') return 0;
+  if (key === 'End') return length - 1;
+
+  const step = key === 'ArrowDown' ? 1 : -1;
+  if (currentIndex === -1) return step === 1 ? 0 : length - 1;
+  return (currentIndex + step + length) % length;
+};
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -30,7 +86,10 @@ export interface SubMenuHoverOptions {
 
 /**
  * Shared floating state for right-side submenus.
- * Handles open state, Floating UI positioning and hover/dismiss/role interactions.
+ * Handles open state, Floating UI positioning, hover/dismiss/role interactions,
+ * and the menu keyboard pattern: the inline-end arrow, Enter, or Space on the
+ * trigger opens the submenu and focuses its first row; ArrowUp/ArrowDown/Home/End
+ * move between its rows; the inline-start arrow closes it back to the trigger.
  */
 export function useSubMenuFloating(
   gap: number,
@@ -41,7 +100,7 @@ export function useSubMenuFloating(
   const [isOpen, setIsOpen] = useState(false);
   const nodeId = useFloatingNodeId();
 
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, elements, floatingStyles, context } = useFloating({
     nodeId,
     placement: 'right-start',
     open: isOpen,
@@ -70,12 +129,91 @@ export function useSubMenuFloating(
   });
   const role = useRole(context, { role: ariaRole });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    click,
-    dismiss,
-    role,
-  ]);
+  const {
+    getReferenceProps: getInteractionReferenceProps,
+    getFloatingProps: getInteractionFloatingProps,
+  } = useInteractions([hover, click, dismiss, role]);
+
+  /*
+   * Set by a keyboard open so focus lands on the first row once the panel has
+   * mounted: the panel renders through a portal, so its element only exists a
+   * commit after `isOpen` flips.
+   */
+  const [shouldFocusFirstOption, setShouldFocusFirstOption] = useState(false);
+  const floatingElement = elements.floating;
+
+  useEffect(() => {
+    if (!isOpen || !shouldFocusFirstOption || floatingElement == null) return;
+    getEnabledOptions(floatingElement)[0]?.focus();
+    setShouldFocusFirstOption(false);
+  }, [isOpen, shouldFocusFirstOption, floatingElement]);
+
+  const handleReferenceKeyDown = useCallback(
+    (event: KeyboardEvent<Element>) => {
+      if (disabled) return;
+      const isOpenKey =
+        event.key === getOpenKey(event.currentTarget) ||
+        event.key === 'Enter' ||
+        event.key === ' ';
+      if (!isOpenKey) return;
+
+      /* Keeps the native button click (and `useClick`'s toggle) from closing
+         an already-open submenu: a keyboard open always opens. */
+      event.preventDefault();
+      event.stopPropagation();
+      setIsOpen(true);
+      setShouldFocusFirstOption(true);
+    },
+    [disabled],
+  );
+
+  const handleFloatingKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (event.defaultPrevented || isTextField(event.target)) return;
+
+      if (event.key === getCloseKey(event.currentTarget)) {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsOpen(false);
+        (refs.domReference.current as HTMLElement | null)?.focus();
+        return;
+      }
+
+      if (!SUB_MENU_NAV_KEYS.includes(event.key)) return;
+
+      /* Consumed even with no rows to move to, so the key never reaches the
+         parent menu, which would move focus out of this panel. */
+      event.preventDefault();
+      event.stopPropagation();
+      const options = getEnabledOptions(event.currentTarget);
+      if (options.length === 0) return;
+
+      const focused = event.currentTarget.ownerDocument.activeElement;
+      const currentIndex = options.findIndex((el) => el === focused);
+      options[
+        nextSubMenuOptionIndex(event.key, currentIndex, options.length)
+      ]?.focus();
+    },
+    [refs.domReference],
+  );
+
+  const getReferenceProps = useCallback(
+    (userProps?: HTMLProps<Element>) =>
+      getInteractionReferenceProps({
+        ...userProps,
+        onKeyDown: handleReferenceKeyDown,
+      }),
+    [getInteractionReferenceProps, handleReferenceKeyDown],
+  );
+
+  const getFloatingProps = useCallback(
+    (userProps?: HTMLProps<HTMLElement>) =>
+      getInteractionFloatingProps({
+        ...userProps,
+        onKeyDown: handleFloatingKeyDown,
+      }),
+    [getInteractionFloatingProps, handleFloatingKeyDown],
+  );
 
   return {
     isOpen,

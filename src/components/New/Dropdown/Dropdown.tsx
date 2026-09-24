@@ -427,6 +427,10 @@ export const Dropdown: FC<DropdownProps> = ({
     (event: KeyboardEvent<HTMLDivElement>) => {
       if (event.defaultPrevented) return;
       if (!OVERLAY_NAV_KEYS.includes(event.key)) return;
+      /* A submenu renders through a portal, so its key events bubble here
+         through the React tree from outside this overlay's DOM; moving focus
+         among this overlay's rows would pull it out of the open submenu. */
+      if (!event.currentTarget.contains(event.target as Node)) return;
 
       const options = Array.from(
         event.currentTarget.querySelectorAll<HTMLElement>(

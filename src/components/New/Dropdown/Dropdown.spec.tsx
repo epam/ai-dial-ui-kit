@@ -785,6 +785,118 @@ describe('Dial UI Kit :: Dropdown', () => {
     expect(subTrigger).toHaveAttribute('aria-expanded', 'true');
   });
 
+  const renderSubMenuDropdown = (
+    renderSubMenu?: DropdownItem['renderSubMenu'],
+  ) =>
+    render(
+      <Dropdown
+        items={[
+          { key: 'first', label: 'First' },
+          {
+            key: 'sub',
+            label: 'More',
+            children: [
+              { key: 'sub-1', label: 'Sub One' },
+              { key: 'sub-2', label: 'Sub Two' },
+            ],
+            renderSubMenu,
+          },
+        ]}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+  /* Opens the root menu and walks to the submenu trigger by keyboard, so the
+     root's deferred initial focus has landed before the submenu is driven. */
+  const focusSubMenuTrigger = async (
+    user: ReturnType<typeof userEvent.setup>,
+  ) => {
+    openByClick();
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'First' })).toHaveFocus(),
+    );
+    await user.keyboard('{ArrowDown}');
+    const subTrigger = screen.getByRole('menuitem', { name: /more/i });
+    expect(subTrigger).toHaveFocus();
+    return subTrigger;
+  };
+
+  test('ArrowRight on the trigger opens the submenu and focuses its first row', async () => {
+    const user = userEvent.setup();
+    renderSubMenuDropdown();
+    const subTrigger = await focusSubMenuTrigger(user);
+    await user.keyboard('{ArrowRight}');
+
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Sub One' })).toHaveFocus(),
+    );
+    expect(subTrigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Enter focuses the first submenu row so ArrowDown moves inside the submenu', async () => {
+    const user = userEvent.setup();
+    renderSubMenuDropdown();
+    await focusSubMenuTrigger(user);
+    await user.keyboard('{Enter}');
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Sub One' })).toHaveFocus(),
+    );
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Sub Two' })).toHaveFocus();
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Sub One' })).toHaveFocus();
+
+    await user.keyboard('{End}');
+    expect(screen.getByRole('menuitem', { name: 'Sub Two' })).toHaveFocus();
+  });
+
+  test('ArrowLeft closes the submenu and returns focus to its trigger', async () => {
+    const user = userEvent.setup();
+    renderSubMenuDropdown();
+    const subTrigger = await focusSubMenuTrigger(user);
+    await user.keyboard('{ArrowRight}');
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Sub One' })).toHaveFocus(),
+    );
+
+    await user.keyboard('{ArrowLeft}');
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('menuitem', { name: 'Sub One' }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(subTrigger).toHaveFocus();
+  });
+
+  test('keyboard reaches the menuitem rows of a renderSubMenu panel', async () => {
+    const user = userEvent.setup();
+    renderSubMenuDropdown(() => (
+      <div role="none">
+        <div role="menuitem" tabIndex={-1}>
+          Custom One
+        </div>
+        <div role="menuitem" tabIndex={-1}>
+          Custom Two
+        </div>
+      </div>
+    ));
+    await focusSubMenuTrigger(user);
+    await user.keyboard('{ArrowRight}');
+    await waitFor(() =>
+      expect(
+        screen.getByRole('menuitem', { name: 'Custom One' }),
+      ).toHaveFocus(),
+    );
+
+    await user.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('menuitem', { name: 'Custom Two' })).toHaveFocus();
+  });
+
   test('Escape closes only submenu and returns focus to its trigger', async () => {
     const user = userEvent.setup();
     const { container } = render(
