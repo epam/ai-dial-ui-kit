@@ -12,6 +12,7 @@ import { getItemRole, resolveItemMark } from './item-mark';
 import {
   dropdownGap,
   dropdownSubMenuClassName,
+  dropdownSubMenuListClassName,
   submenuCaretIcon,
 } from './constants';
 
@@ -86,7 +87,11 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           context={context}
           getFloatingProps={getFloatingProps}
           role="menu"
-          surfaceClassName={dropdownSubMenuClassName}
+          surfaceClassName={
+            item.renderSubMenu
+              ? dropdownSubMenuClassName
+              : dropdownSubMenuListClassName
+          }
         >
           {item.renderSubMenu ? (
             item.renderSubMenu()

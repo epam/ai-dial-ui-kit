@@ -962,6 +962,38 @@ describe('Dial UI Kit :: Dropdown', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('a submenu of rows carries the list inset; a custom submenu body does not', async () => {
+    const user = userEvent.setup();
+    const itemsWithSub: DropdownItem[] = [
+      {
+        key: 'sub',
+        label: 'More',
+        children: [{ key: 'sub-1', label: 'Sub One' }],
+      },
+      {
+        key: 'custom',
+        label: 'Custom',
+        children: [{ key: 'custom-1', label: 'Custom One' }],
+        renderSubMenu: () => <div role="none">Custom submenu content</div>,
+      },
+    ];
+    render(
+      <Dropdown items={itemsWithSub}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+
+    await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+    const subOne = await screen.findByRole('menuitem', { name: 'Sub One' });
+    expect(subOne.parentElement).toHaveClass('py-2', 'gap-0.5');
+
+    await user.hover(screen.getByRole('menuitem', { name: /custom/i }));
+    const custom = await screen.findByText('Custom submenu content');
+    expect(custom.parentElement).not.toHaveClass('py-2', 'gap-0.5');
+    expect(custom.parentElement).toHaveClass('p-1');
+  });
+
   test('item.renderItem customizes a top-level item while keeping its click handler', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
@@ -1671,7 +1703,13 @@ describe('Dial UI Kit :: Dropdown — public class names', () => {
     expect(row).toHaveClass('dial-kit-menuitem');
     // The list is the row's own parent — the box that owns their padding,
     // not the floating panel the consumer's `listClassName` lands on.
-    expect(row.parentElement).toHaveClass('dial-kit-dropdown-list');
+    expect(row.parentElement).toHaveClass(
+      'dial-kit-dropdown-list',
+      'flex',
+      'flex-col',
+      'gap-0.5',
+      'py-1',
+    );
     expect(screen.getByRole('menuitem', { name: 'Logout' })).toHaveClass(
       'dial-kit-menuitem',
     );
