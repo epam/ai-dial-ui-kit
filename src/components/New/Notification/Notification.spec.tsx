@@ -139,4 +139,59 @@ describe('Dial UI Kit :: Notification', () => {
       screen.getByRole('button', { name: 'Close notification' }),
     ).toHaveClass('size-[24px]');
   });
+
+  test('Should render the action inside the live region and fire its handler', () => {
+    const onRetry = vi.fn();
+    render(
+      <Notification
+        variant={NotificationVariant.Error}
+        title="Couldn't finish this response"
+        message="Try again in a moment."
+        action={
+          <button type="button" onClick={onRetry}>
+            Try again
+          </button>
+        }
+      />,
+    );
+
+    const alert = screen.getByRole('alert');
+    const action = screen.getByRole('button', { name: 'Try again' });
+    expect(alert).toContainElement(action);
+
+    fireEvent.click(action);
+    expect(onRetry).toHaveBeenCalledOnce();
+  });
+
+  test('Should place the action after the text and before the close button', () => {
+    render(
+      <Notification
+        message="Something went wrong"
+        action={<button type="button">Try again</button>}
+        onClose={vi.fn()}
+        closable
+      />,
+    );
+
+    const message = screen.getByText('Something went wrong');
+    const action = screen.getByRole('button', { name: 'Try again' });
+    const closeBtn = screen.getByRole('button', { name: 'Close notification' });
+
+    expect(message.compareDocumentPosition(action)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(action.compareDocumentPosition(closeBtn)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    // The wrapper must not shrink, or a wrapping message squeezes the control.
+    expect(action.parentElement).toHaveClass('shrink-0');
+  });
+
+  test('Should render no action wrapper when action is omitted', () => {
+    render(<Notification message="Plain" />);
+
+    const notification = screen.getByRole('status');
+    expect(notification.querySelector('.shrink-0.items-center')).toBeNull();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
 });
