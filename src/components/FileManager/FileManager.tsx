@@ -1359,10 +1359,10 @@ export const DialFileManagerView: FC = () => {
 
   const gridAdditionalOptions = useMemo<AgGridOptions<GridRow>>(
     () => ({
-      ...forwardedGridOptions.additionalGridOptions,
-      onCellClicked: cellClickHandler,
       headerHeight: COMPACT_VIEW_HEADER_HEIGHT,
       rowHeight: COMPACT_VIEW_HEADER_HEIGHT,
+      ...forwardedGridOptions.additionalGridOptions,
+      onCellClicked: cellClickHandler,
       rowClass: 'group/grid-row',
       defaultColDef: {
         ...forwardedGridOptions.additionalGridOptions?.defaultColDef,
