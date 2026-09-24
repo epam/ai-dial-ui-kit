@@ -417,6 +417,14 @@ export type {
 } from './components/New/FilterChips/FilterChips';
 export { FileDropzone } from './components/New/FileDropzone/FileDropzone';
 export type { FileDropzoneProps } from './components/New/FileDropzone/FileDropzone';
+export { FileIcon } from './components/New/FileIcon/FileIcon';
+export type { FileIconProps } from './components/New/FileIcon/FileIcon';
+export { FileName } from './components/New/FileName/FileName';
+export type { FileNameProps } from './components/New/FileName/FileName';
+export { FolderName } from './components/New/FolderName/FolderName';
+export type { FolderNameProps } from './components/New/FolderName/FolderName';
+export { SharedEntityIndicator } from './components/New/SharedEntityIndicator/SharedEntityIndicator';
+export type { SharedEntityIndicatorProps } from './components/New/SharedEntityIndicator/SharedEntityIndicator';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';

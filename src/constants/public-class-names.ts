@@ -114,6 +114,20 @@ export const DIAL_KIT_CLASS = {
   calendar: 'dial-kit-calendar',
   /** The drop area of a `FileDropzone`. */
   fileDropzone: 'dial-kit-file-dropzone',
+  /**
+   * The root of a `FileIcon`, wrapping the file or folder glyph (or
+   * its spinner while loading) and the shared badge.
+   */
+  fileIcon: 'dial-kit-file-icon',
+  /** The row of a `FileName`: its type icon, the name and any details. */
+  fileName: 'dial-kit-file-name',
+  /** The `FileName` row of a `FolderName`, additive to `fileName`. */
+  folderName: 'dial-kit-folder-name',
+  /**
+   * The `role="img"` badge of a `SharedEntityIndicator` — standalone, or the
+   * shared badge a `FileIcon` draws over its glyph.
+   */
+  sharedEntityIndicator: 'dial-kit-shared-entity-indicator',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */

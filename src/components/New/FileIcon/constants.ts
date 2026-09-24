@@ -1,0 +1,157 @@
+/** The kinds of file the 2.0 glyph distinguishes. */
+export enum FileGlyphKind {
+  Images = 'images',
+  Video = 'video',
+  Audio = 'audio',
+  Code = 'code',
+  Text = 'text',
+  Pdf = 'pdf',
+  Spreadsheet = 'spreadsheet',
+  Presentation = 'presentation',
+  Archive = 'archive',
+  Dial = 'dial',
+  Other = 'other',
+}
+
+/**
+ * Lower-case extensions (no leading dot) for each kind. `Other` has none — it
+ * is what every extension not listed here falls back to.
+ */
+const EXTENSIONS_BY_KIND: Record<
+  Exclude<FileGlyphKind, FileGlyphKind.Other>,
+  string[]
+> = {
+  [FileGlyphKind.Images]: [
+    'apng',
+    'avif',
+    'bmp',
+    'gif',
+    'heic',
+    'heif',
+    'ico',
+    'jpeg',
+    'jpg',
+    'png',
+    'svg',
+    'tif',
+    'tiff',
+    'webp',
+  ],
+  [FileGlyphKind.Video]: [
+    'avi',
+    'flv',
+    'm4v',
+    'mkv',
+    'mov',
+    'mp4',
+    'mpeg',
+    'mpg',
+    'ogv',
+    'webm',
+    'wmv',
+  ],
+  [FileGlyphKind.Audio]: [
+    'aac',
+    'aiff',
+    'flac',
+    'm4a',
+    'mid',
+    'midi',
+    'mp3',
+    'oga',
+    'ogg',
+    'opus',
+    'wav',
+    'wma',
+  ],
+  // Source files, markup, stylesheets, scripts and structured config.
+  [FileGlyphKind.Code]: [
+    'bash',
+    'c',
+    'cjs',
+    'cpp',
+    'cs',
+    'css',
+    'go',
+    'h',
+    'hpp',
+    'htm',
+    'html',
+    'ini',
+    'ipynb',
+    'java',
+    'js',
+    'json',
+    'jsx',
+    'kt',
+    'less',
+    'lua',
+    'mjs',
+    'php',
+    'ps1',
+    'py',
+    'r',
+    'rb',
+    'rs',
+    'sass',
+    'scala',
+    'scss',
+    'sh',
+    'sql',
+    'svelte',
+    'swift',
+    'toml',
+    'ts',
+    'tsx',
+    'vue',
+    'xml',
+    'yaml',
+    'yml',
+    'zsh',
+  ],
+  // Prose and documents.
+  [FileGlyphKind.Text]: [
+    'doc',
+    'docx',
+    'log',
+    'markdown',
+    'md',
+    'odt',
+    'rtf',
+    'text',
+    'txt',
+  ],
+  [FileGlyphKind.Pdf]: ['pdf'],
+  [FileGlyphKind.Spreadsheet]: [
+    'csv',
+    'numbers',
+    'ods',
+    'tsv',
+    'xls',
+    'xlsm',
+    'xlsx',
+  ],
+  [FileGlyphKind.Presentation]: ['key', 'odp', 'pps', 'ppsx', 'ppt', 'pptx'],
+  [FileGlyphKind.Archive]: [
+    '7z',
+    'bz2',
+    'gz',
+    'rar',
+    'tar',
+    'tgz',
+    'xz',
+    'zip',
+  ],
+  // TODO: confirm with design which DIAL entities draw this glyph.
+  [FileGlyphKind.Dial]: ['dial'],
+};
+
+const KIND_BY_EXTENSION = new Map<string, FileGlyphKind>(
+  Object.entries(EXTENSIONS_BY_KIND).flatMap(([kind, extensions]) =>
+    extensions.map((extension) => [extension, kind as FileGlyphKind] as const),
+  ),
+);
+
+/** The glyph kind for a lower-case extension; anything unknown is `Other`. */
+export const getFileGlyphKind = (extension: string): FileGlyphKind =>
+  KIND_BY_EXTENSION.get(extension) ?? FileGlyphKind.Other;
