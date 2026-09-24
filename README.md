@@ -320,6 +320,10 @@ breaking change and goes through the migration-guide process.
 | `inlineSelect`         | `dial-kit-inline-select`              | The trigger button of an `InlineSelect`                        |
 | `calendar`             | `dial-kit-calendar`                   | The root of a `Calendar`, in every mode                        |
 | `fileDropzone`         | `dial-kit-file-dropzone`              | The drop area of a `FileDropzone`                              |
+| `fileIcon`             | `dial-kit-file-icon`                  | The root of a `FileIcon`: glyph or spinner, and the shared badge |
+| `fileName`             | `dial-kit-file-name`                  | The row of a `FileName`: its type icon, the name and any details |
+| `folderName`           | `dial-kit-folder-name`                | The `FileName` row of a `FolderName`, additive to `fileName` |
+| `sharedEntityIndicator` | `dial-kit-shared-entity-indicator`   | The badge of a `SharedEntityIndicator`, including the one on a `FileIcon` |
 | `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
 
 #### Controls

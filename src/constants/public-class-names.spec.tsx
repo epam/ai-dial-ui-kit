@@ -27,6 +27,9 @@ import { ConfirmationPopup } from '@/components/New/ConfirmationPopup/Confirmati
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
 import { FileDropzone } from '@/components/New/FileDropzone/FileDropzone';
+import { FileIcon } from '@/components/New/FileIcon/FileIcon';
+import { FileName } from '@/components/New/FileName/FileName';
+import { FolderName } from '@/components/New/FolderName/FolderName';
 import { FilterChips } from '@/components/New/FilterChips/FilterChips';
 import { FolderPath } from '@/components/New/FolderPath/FolderPath';
 import { Highlight } from '@/components/New/Highlight/Highlight';
@@ -48,6 +51,7 @@ import { ResizableContainer } from '@/components/New/ResizableContainer/Resizabl
 import { Search } from '@/components/New/Search/Search';
 import { SegmentedControl } from '@/components/New/SegmentedControl/SegmentedControl';
 import { Select } from '@/components/New/Select/Select';
+import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/SharedEntityIndicator';
 import { Switch } from '@/components/New/Switch/Switch';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
@@ -56,6 +60,7 @@ import { Textarea } from '@/components/New/Textarea/Textarea';
 import { ToggleIconButton } from '@/components/New/ToggleIconButton/ToggleIconButton';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { DialItemType } from '@/types/item';
 import { MenuItemMark } from '@/types/menu-item';
 import { TabOrientation } from '@/types/tab';
 
@@ -157,6 +162,10 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['inlineSelect', () => <InlineSelect items={items} />],
   ['calendar', () => <Calendar />],
   ['fileDropzone', () => <FileDropzone label="Drop" onChange={noop} />],
+  ['fileIcon', () => <FileIcon name="a.pdf" type={DialItemType.File} />],
+  ['fileName', () => <FileName name="a.pdf" />],
+  ['folderName', () => <FolderName name="Docs" />],
+  ['sharedEntityIndicator', () => <SharedEntityIndicator />],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [
