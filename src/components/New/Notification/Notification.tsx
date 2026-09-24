@@ -26,6 +26,7 @@ export interface NotificationProps extends Omit<
   type?: NotificationType;
   title?: ReactNode;
   message: ReactNode;
+  action?: ReactNode;
   closable?: boolean;
   iconSize?: number;
   iconStroke?: number;
@@ -79,12 +80,29 @@ export interface NotificationProps extends Omit<
  *   title="Title"
  *   message="Description text example"
  * />
+ *
+ * <Notification
+ *   variant={NotificationVariant.Error}
+ *   type={NotificationType.SectionMessage}
+ *   title="Couldn't finish this response"
+ *   message="Something went wrong. Try again in a moment."
+ *   action={
+ *     <Button
+ *       variant={ButtonVariant.Neutral}
+ *       appearance={ButtonAppearance.Outlined}
+ *       size={ElementSize.Small}
+ *       label="Try again"
+ *       onClick={handleRetry}
+ *     />
+ *   }
+ * />
  * ```
  *
  * @param [variant=NotificationVariant.Info] - Defines the visual style and icon of the alert
  * @param [type=NotificationType.Toast] - Defines the type of notification, either a toast or a section message
  * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
+ * @param [action] - Optional control (typically a small `Button`) rendered at the inline end, after the text and before the close button; the caller supplies its accessible name
  * @param [className] - Additional CSS classes applied to the alert container
  * @param [textClassName] - Additional CSS classes applied to the message text
  * @param [closable=false] - Whether the alert has a close button
@@ -97,6 +115,7 @@ export const Notification: FC<NotificationProps> = ({
   type = NotificationType.Toast,
   title,
   message,
+  action,
   className,
   iconSize = 24,
   iconStroke = 2,
@@ -159,6 +178,9 @@ export const Notification: FC<NotificationProps> = ({
         )}
       </div>
 
+      {action != null && (
+        <div className="flex shrink-0 items-center">{action}</div>
+      )}
       {children}
       {closable && (
         <CloseButton
