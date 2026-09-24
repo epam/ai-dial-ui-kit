@@ -534,6 +534,23 @@ describe('Dial UI Kit :: Select', () => {
       expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     });
 
+    test('the submenu panel carries the same vertical inset as the option list', async () => {
+      const user = userEvent.setup();
+      renderSelect({
+        options: [
+          {
+            value: 'grp',
+            label: 'Group',
+            children: [{ value: 'g1', label: 'G One' }],
+          },
+        ],
+      });
+      openSelect();
+      await user.hover(screen.getByText('Group').closest('button')!);
+      const child = await screen.findByRole('option', { name: 'G One' });
+      expect(child.parentElement).toHaveClass('py-2', 'gap-0.5');
+    });
+
     test('selected child value is shown in the field', async () => {
       const user = userEvent.setup();
       renderSelect({
@@ -818,7 +835,12 @@ describe('Dial UI Kit :: Select — list layout', () => {
     const scrollBox = screen.getByRole('option', {
       name: 'Option 1',
     }).parentElement!;
-    expect(scrollBox).toHaveClass('max-h-[344px]', 'overflow-y-auto');
+    expect(scrollBox).toHaveClass(
+      'max-h-[344px]',
+      'overflow-y-auto',
+      'py-1',
+      'gap-0.5',
+    );
     // The search row sits outside the box, so the list moves under it.
     expect(
       scrollBox.contains(screen.getByRole('textbox', { name: /search/i })),

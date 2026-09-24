@@ -48,6 +48,7 @@ import {
   dropdownBaseClassName,
   dropdownListBaseClassName,
   dropdownDividerClassName,
+  dropdownItemListClassName,
   dropdownGap,
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
@@ -471,7 +472,7 @@ export const Dropdown: FC<DropdownProps> = ({
         <div
           role="none"
           className={mergeClasses(
-            'py-1',
+            dropdownItemListClassName,
             overlayContentClassName,
             DIAL_KIT_CLASS.dropdownList,
           )}

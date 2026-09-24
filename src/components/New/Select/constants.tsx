@@ -4,7 +4,8 @@ import NoDataIcon from '@/assets/icons/no-data.svg?react';
 import {
   overlayGap,
   overlayItemClassName,
-  overlaySubMenuClassName,
+  overlayListClassName,
+  overlaySubMenuListClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -35,11 +36,15 @@ export const selectListWidthClassName = '!max-w-[var(--reference-width)]';
  * 344px — not the panel around them, so the search row and Select All stay
  * put while the list moves under them. The panel keeps its own cap on the
  * available viewport height, which takes over on a screen too short for this
- * one.
+ * one. `py-1` matches the Dropdown menu's list inset, so the first and last
+ * rows (and their focus ring) do not sit flush against the panel edge.
  */
-export const selectOptionsScrollClassName = 'max-h-[344px] overflow-y-auto';
+export const selectOptionsScrollClassName = mergeClasses(
+  'max-h-[344px] overflow-y-auto py-1',
+  overlayListClassName,
+);
 export const selectSubMenuGap = overlayGap;
-export const selectSubMenuClassName = overlaySubMenuClassName;
+export const selectSubMenuClassName = overlaySubMenuListClassName;
 
 /** Marks an option that opens a nested list. Matches the dropdown's caret. */
 export const selectSubMenuCaretIcon = (

@@ -11,6 +11,12 @@ export const overlaySurfaceClassName =
   'rounded-xl bg-layer-raised p-1 shadow-md';
 
 /**
+ * Stacks the rows of a menu or option list with a 2px gap, so the tints of
+ * adjacent selected and hovered rows read as separate rows instead of one block.
+ */
+export const overlayListClassName = 'flex flex-col gap-0.5';
+
+/**
  * A nested panel opened from a row of the surface above it. It is the same
  * object as its parent panel, so it reads from `overlaySurfaceClassName` too —
  * only the width behaviour differs, since a submenu is sized by its own content
@@ -19,6 +25,19 @@ export const overlaySurfaceClassName =
 export const overlaySubMenuClassName = mergeClasses(
   overlaySurfaceClassName,
   'w-max',
+);
+
+/**
+ * A submenu panel that lists kit-rendered rows. The top-level menu and option
+ * list wrap their rows in `py-1` inside the panel's `p-1`; a submenu renders
+ * its rows straight into the panel, so it takes the same total vertical inset
+ * here. A caller-rendered submenu body keeps the plain panel, as a
+ * `renderOverlay` body does at the top level.
+ */
+export const overlaySubMenuListClassName = mergeClasses(
+  overlaySubMenuClassName,
+  overlayListClassName,
+  'py-2',
 );
 
 /**

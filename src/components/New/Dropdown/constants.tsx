@@ -3,7 +3,9 @@ import { IconChevronRight } from '@tabler/icons-react';
 import {
   overlayGap,
   overlayItemClassName,
+  overlayListClassName,
   overlaySubMenuClassName,
+  overlaySubMenuListClassName,
   overlaySurfaceClassName,
 } from '@/components/New/constants/overlay';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
@@ -21,6 +23,13 @@ export const dropdownListBaseClassName = mergeClasses(
 );
 
 export const dropdownSubMenuClassName = overlaySubMenuClassName;
+export const dropdownSubMenuListClassName = overlaySubMenuListClassName;
+
+/** The top-level item list: rows 2px apart, inset from the panel edge. */
+export const dropdownItemListClassName = mergeClasses(
+  overlayListClassName,
+  'py-1',
+);
 
 /**
  * The row's own styling lives in {@link MenuItem}, which renders every item of
