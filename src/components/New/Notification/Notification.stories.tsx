@@ -1,4 +1,7 @@
+import { Button } from '@/components/New/Button/Button';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { NotificationVariant } from '@/types/notification';
+import { ElementSize } from '@/types/size';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Notification, type NotificationProps } from './Notification';
 import {
@@ -48,6 +51,11 @@ const meta = {
     message: {
       control: { type: 'text' },
       description: 'Message text displayed inside the alert',
+    },
+    action: {
+      control: false,
+      description:
+        'Optional control rendered at the inline end, after the text and before the close button',
     },
     className: {
       control: { type: 'text' },
@@ -205,6 +213,45 @@ export const General: Story = {
       description: {
         story:
           'The neutral `general` variant, shown with the message inline with the title (default for a section message) and stacked under it via `textClassName`.',
+      },
+    },
+  },
+};
+
+export const WithAction: Story = {
+  render: () => (
+    <div className="p-6 flex flex-col gap-4 max-w-[600px]">
+      <ErrorMessageNotification
+        title="Couldn't finish this response"
+        message="Something went wrong while generating the response. Try again in a moment."
+        action={
+          <Button
+            variant={ButtonVariant.Neutral}
+            appearance={ButtonAppearance.Outlined}
+            size={ElementSize.Small}
+            label="Try again"
+          />
+        }
+      />
+      <InfoToastNotification
+        message="A new version is available"
+        action={
+          <Button
+            variant={ButtonVariant.Neutral}
+            appearance={ButtonAppearance.Outlined}
+            size={ElementSize.Small}
+            label="Reload"
+          />
+        }
+        closable
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`action` places a control at the inline end of the notification, after the text and before the close button, vertically centred against the text. Pass a small button with a visible label; it flips sides with the document direction.',
       },
     },
   },
