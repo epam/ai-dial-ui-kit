@@ -329,6 +329,7 @@ export interface DialFileManagerProps {
   renameValidationMessages?: RenameValidationMessages;
   forbiddenSymbolsRegExp?: RegExp;
   forbiddenSymbolsTooltip?: ReactNode;
+  skipForbiddenSymbolsCheckForActions?: boolean;
 
   onCreateFolder?: (
     file: DialUploadFileItem,
@@ -493,6 +494,7 @@ export interface DialFileManagerProps {
  * @param [renameValidationMessages] - Optional custom validation messages for renaming files and folders. Note that you need to add `${NotificationVariant.Warning}__` prefix to the `hiddenItemWarning` message to display it as a warning with the warning icon.
  * @param [forbiddenSymbolsRegExp] - Optional RegExp will be used in the validation for the files and folders names. The "g" and "y" flags are not allowed in this RegExp and will be ignored.
  * @param [forbiddenSymbolsTooltip] - Optional tooltip displayed when a file or folder name contains forbidden characters
+ * @param [skipForbiddenSymbolsCheckForActions] - When provided, skips the forbidden-symbols check when building row action menus, so all actions are shown even for items whose names contain forbidden characters.
  *
  * @param [onDownloadFiles] - Callback fired when files are downloaded
  *
@@ -610,6 +612,7 @@ export const DialFileManagerView: FC = () => {
     createdFolderPath,
     forbiddenSymbolsRegExp,
     forbiddenSymbolsTooltip,
+    skipForbiddenSymbolsCheckForActions,
     getDisplayName,
     isDragging,
     isDraggingOverWindow,
@@ -791,9 +794,9 @@ export const DialFileManagerView: FC = () => {
       const items: DropdownItem[] = [];
       const elements: DropdownItem[] = [];
       const isRootNode = !file.parentPath;
-      const hasRestrictedSymbolsInName = forbiddenSymbolsRegExp?.test(
-        file.name,
-      );
+      const hasRestrictedSymbolsInName =
+        !skipForbiddenSymbolsCheckForActions &&
+        forbiddenSymbolsRegExp?.test(file.name);
       if (treeOptions?.actionLabels) {
         if (
           treeOptions.actionLabels[DialFileManagerActions.AddSibling] &&
@@ -1007,6 +1010,7 @@ export const DialFileManagerView: FC = () => {
     [
       treeOptions?.actionLabels,
       forbiddenSymbolsRegExp,
+      skipForbiddenSymbolsCheckForActions,
       onManagePermissions,
       handleDuplicate,
       handleSetCopiedFiles,
@@ -1252,6 +1256,7 @@ export const DialFileManagerView: FC = () => {
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
     forbiddenSymbolsRegExp,
+    skipForbiddenSymbolsCheckForActions,
     onGridCreateSiblingFolder,
     onGridCreateChildFolder,
   });
