@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+import { AccordionCaretPosition } from '@/types/accordion';
 import { Accordion } from './Accordion';
 
 describe('Dial UI Kit :: Accordion', () => {
@@ -31,6 +32,43 @@ describe('Dial UI Kit :: Accordion', () => {
       'stroke-width',
       String(DIAL_KIT_ICON_STROKE),
     );
+  });
+
+  test('draws the caret after the title by default', () => {
+    render(
+      <Accordion title="Settings">
+        <p>Content</p>
+      </Accordion>,
+    );
+
+    const header = screen.getByRole('button', { name: 'Settings' });
+    expect(header.lastElementChild?.tagName.toLowerCase()).toBe('svg');
+  });
+
+  test('draws the caret before the title with caretPosition Start', () => {
+    render(
+      <Accordion title="Settings" caretPosition={AccordionCaretPosition.Start}>
+        <p>Content</p>
+      </Accordion>,
+    );
+
+    const header = screen.getByRole('button', { name: 'Settings' });
+    expect(header.firstElementChild?.tagName.toLowerCase()).toBe('svg');
+    expect(header).toHaveAccessibleName('Settings');
+  });
+
+  test('draws no caret on a non-collapsible panel, whatever its position', () => {
+    const { container } = render(
+      <Accordion
+        title="Always open"
+        nonCollapsible
+        caretPosition={AccordionCaretPosition.Start}
+      >
+        <p>Content</p>
+      </Accordion>,
+    );
+
+    expect(container.querySelector('svg')).toBeNull();
   });
 
   test('is collapsed by default and expands on header click', () => {

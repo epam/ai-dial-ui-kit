@@ -386,6 +386,7 @@ export {
 } from './components/New/CaptionText/CaptionText';
 export { Accordion } from './components/New/Accordion/Accordion';
 export type { AccordionProps } from './components/New/Accordion/Accordion';
+export { AccordionCaretPosition } from './types/accordion';
 export { Switch } from './components/New/Switch/Switch';
 export type { SwitchProps } from './components/New/Switch/Switch';
 export { Radio } from './components/New/Radio/Radio';
