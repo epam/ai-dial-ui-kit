@@ -270,6 +270,7 @@ breaking change and goes through the migration-guide process.
 | `skeleton`      | `dial-kit-skeleton`       | The root of a `Skeleton`                                                                 |
 | `notification`  | `dial-kit-notification`   | The `Notification` surface, including every toast and section-message wrapper             |
 | `noDataContent` | `dial-kit-no-data-content` | The empty-state root of `NoDataContent`                                                 |
+| `transferQueue` | `dial-kit-transfer-queue` | The `role="status"` panel of a `TransferQueue`: header, rows and aggregate bar           |
 
 #### Text
 

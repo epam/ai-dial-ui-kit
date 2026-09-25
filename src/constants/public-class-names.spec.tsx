@@ -40,6 +40,8 @@ import { Input } from '@/components/New/Input/Input';
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { Label } from '@/components/New/Label/Label';
 import { NoDataContent } from '@/components/New/NoDataContent/NoDataContent';
+import { TransferQueue } from '@/components/New/TransferQueue/TransferQueue';
+import { TransferQueueItemStatus } from '@/types/transfer-queue';
 import { Notification } from '@/components/New/Notification/Notification';
 import { NumberInput } from '@/components/New/NumberInput/NumberInput';
 import { PasswordInput } from '@/components/New/PasswordInput/PasswordInput';
@@ -94,6 +96,22 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['skeleton', () => <Skeleton />],
   ['notification', () => <Notification message="Saved" />],
   ['noDataContent', () => <NoDataContent title="Nothing here" />],
+  [
+    'transferQueue',
+    () => (
+      <TransferQueue
+        title="Importing 1 file"
+        items={[
+          {
+            id: '1',
+            name: 'a.pdf',
+            status: TransferQueueItemStatus.Success,
+          },
+        ]}
+        onClose={noop}
+      />
+    ),
+  ],
 
   ['highlight', () => <Highlight text="alpha beta" query="beta" />],
   ['captionText', () => <CaptionText text="Helper" />],

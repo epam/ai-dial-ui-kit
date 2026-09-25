@@ -455,6 +455,17 @@ export { ConditionalResizableContainer } from './components/New/ResizableContain
 export type { ConditionalResizableContainerProps } from './components/New/ResizableContainer/ConditionalResizableContainer';
 export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
+export { TransferQueue } from './components/New/TransferQueue/TransferQueue';
+export type {
+  TransferQueueItem,
+  TransferQueueLabels,
+  TransferQueueProps,
+} from './components/New/TransferQueue/TransferQueue';
+export {
+  DEFAULT_TRANSFER_QUEUE_LABELS,
+  TRANSFER_QUEUE_AUTO_CLOSE_DELAY_MS,
+} from './components/New/TransferQueue/constants';
+export { TransferQueueItemStatus } from './types/transfer-queue';
 export { Grid, GRID_SELECTION_COLUMN_ID } from './components/New/Grid/Grid';
 export type { GridProps } from './components/New/Grid/Grid';
 export { DateCellRenderer } from './components/New/Grid/renderers/DateCellRenderer';

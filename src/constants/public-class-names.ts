@@ -18,6 +18,8 @@ export const DIAL_KIT_CLASS = {
   notification: 'dial-kit-notification',
   /** The empty-state root of `NoDataContent`. */
   noDataContent: 'dial-kit-no-data-content',
+  /** The `role="status"` panel of a `TransferQueue`: header, rows and aggregate bar. */
+  transferQueue: 'dial-kit-transfer-queue',
 
   /* ── Text ──────────────────────────────────────────────────────────────── */
   /** The text element of a `Highlight`, which renders the matched query. */
