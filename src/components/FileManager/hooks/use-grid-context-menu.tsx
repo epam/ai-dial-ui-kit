@@ -58,6 +58,7 @@ export interface UseGridContextMenuProps {
   isRenameFileAvailable?: boolean;
   isDuplicateFolderAvailable?: boolean;
   forbiddenSymbolsRegExp?: RegExp;
+  skipForbiddenSymbolsCheckForActions?: boolean;
   onGridCreateSiblingFolder: (files: DialFile[]) => void;
   onGridCreateChildFolder: (files: DialFile[]) => void;
 }
@@ -82,6 +83,7 @@ export const useGridContextMenu = ({
   isRenameFileAvailable = true,
   isDuplicateFolderAvailable = true,
   forbiddenSymbolsRegExp,
+  skipForbiddenSymbolsCheckForActions,
   onGridCreateSiblingFolder,
   onGridCreateChildFolder,
 }: UseGridContextMenuProps) => {
@@ -93,9 +95,9 @@ export const useGridContextMenu = ({
         return items;
       }
 
-      const hasRestrictedSymbolsInName = cleanForbiddenSymbolsRegExp(
-        forbiddenSymbolsRegExp,
-      )?.test(file.name);
+      const hasRestrictedSymbolsInName =
+        !skipForbiddenSymbolsCheckForActions &&
+        cleanForbiddenSymbolsRegExp(forbiddenSymbolsRegExp)?.test(file.name);
 
       if (
         actionLabels[DialFileManagerActions.AddSibling] &&
@@ -364,6 +366,7 @@ export const useGridContextMenu = ({
     isRenameFileAvailable,
     isDuplicateFolderAvailable,
     forbiddenSymbolsRegExp,
+    skipForbiddenSymbolsCheckForActions,
     onGridCreateChildFolder,
     onGridCreateSiblingFolder,
   ]);
