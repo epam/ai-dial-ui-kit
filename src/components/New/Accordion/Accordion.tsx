@@ -6,6 +6,7 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { AccordionCaretPosition } from '@/types/accordion';
 
 export interface AccordionProps {
   /** Title rendered in the header. */
@@ -32,6 +33,8 @@ export interface AccordionProps {
   ariaLabel?: string;
   /** Fired when the header is clicked. Receives the next expanded state. */
   onToggle?: (expanded: boolean) => void;
+  /** Where the header draws its caret. Defaults to `AccordionCaretPosition.End`. */
+  caretPosition?: AccordionCaretPosition;
   /** Additional CSS classes for the outer container. */
   className?: string;
   /** Additional CSS classes for the header. */
@@ -73,6 +76,7 @@ export interface AccordionProps {
  * @param [nonCollapsible] - Renders the panel permanently expanded, with a static header.
  * @param [ariaLabel] - Accessible name for the header; needed when `title` carries no text.
  * @param [onToggle] - Fired when the header is clicked. Receives the next expanded state.
+ * @param [caretPosition=AccordionCaretPosition.End] - Where the header draws its caret: before or after the title.
  * @param [className] - Additional CSS classes for the outer container.
  * @param [headerClassName] - Additional CSS classes for the header.
  * @param [contentClassName] - Additional CSS classes for the content region.
@@ -87,6 +91,7 @@ export const Accordion: FC<AccordionProps> = ({
   nonCollapsible,
   ariaLabel,
   onToggle,
+  caretPosition = AccordionCaretPosition.End,
   className,
   headerClassName,
   contentClassName,
@@ -114,8 +119,24 @@ export const Accordion: FC<AccordionProps> = ({
     onToggle?.(next);
   };
 
+  const isCaretAtStart = caretPosition === AccordionCaretPosition.Start;
+
+  // The caret turns a quarter turn to point down when open.
+  const caret = nonCollapsible ? null : (
+    <IconChevronRight
+      size={DIAL_ICON_SIZE.SM}
+      stroke={DIAL_KIT_ICON_STROKE}
+      aria-hidden="true"
+      className={mergeClasses(
+        'shrink-0 text-secondary transition-transform motion-reduce:transition-none',
+        isExpanded && 'rotate-90',
+      )}
+    />
+  );
+
   const headerContent = (
     <>
+      {isCaretAtStart && caret}
       <span className="flex min-w-0 flex-col">
         <span className="truncate dial-body-text text-primary">{title}</span>
         {description ? (
@@ -124,20 +145,14 @@ export const Accordion: FC<AccordionProps> = ({
           </span>
         ) : null}
       </span>
-      {!nonCollapsible && (
-        // Caret at the leading edge; it turns a quarter turn to point down when open.
-        <IconChevronRight
-          size={DIAL_ICON_SIZE.SM}
-          stroke={DIAL_KIT_ICON_STROKE}
-          aria-hidden="true"
-          className={mergeClasses(
-            'shrink-0 text-secondary transition-transform motion-reduce:transition-none',
-            isExpanded && 'rotate-90',
-          )}
-        />
-      )}
+      {!isCaretAtStart && caret}
     </>
   );
+
+  // A leading caret sits beside the title; a trailing one is pushed to the far edge.
+  const headerLayoutClassName = isCaretAtStart
+    ? 'justify-start gap-2'
+    : 'justify-between';
 
   return (
     <div
@@ -151,7 +166,8 @@ export const Accordion: FC<AccordionProps> = ({
         <div
           id={headerId}
           className={mergeClasses(
-            'flex w-full px-4 rounded-xl items-center justify-between dial-tiny-text',
+            'flex w-full px-4 rounded-xl items-center dial-tiny-text',
+            headerLayoutClassName,
             headerClassName,
           )}
         >
@@ -169,7 +185,8 @@ export const Accordion: FC<AccordionProps> = ({
           disabled={disabled}
           onClick={handleToggle}
           className={mergeClasses(
-            'flex w-full px-4 rounded-xl items-center justify-between dial-tiny-text',
+            'flex w-full px-4 rounded-xl items-center dial-tiny-text',
+            headerLayoutClassName,
             disabled
               ? 'cursor-not-allowed opacity-75'
               : // Applied only to a header that can actually be operated.

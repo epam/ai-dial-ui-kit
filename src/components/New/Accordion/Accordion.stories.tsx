@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { AccordionCaretPosition } from '@/types/accordion';
 import { Accordion } from './Accordion';
 
 const meta: Meta<typeof Accordion> = {
@@ -30,6 +31,12 @@ const meta: Meta<typeof Accordion> = {
       control: 'boolean',
       description:
         'Renders the panel permanently expanded, with a static header.',
+    },
+    caretPosition: {
+      control: 'inline-radio',
+      options: Object.values(AccordionCaretPosition),
+      description:
+        'Where the header draws its caret: before or after the title.',
     },
     onToggle: { action: 'toggled' },
   },
@@ -67,6 +74,17 @@ export const Expanded: Story = {
 export const WithoutDescription: Story = {
   args: {
     title: 'Advanced settings',
+    children: sampleContent,
+    className: 'w-[420px]',
+  },
+};
+
+/** The caret sits before the title instead of at the far edge of the header. */
+export const CaretAtStart: Story = {
+  args: {
+    title: 'Advanced settings',
+    description: 'Optional configuration',
+    caretPosition: AccordionCaretPosition.Start,
     children: sampleContent,
     className: 'w-[420px]',
   },
