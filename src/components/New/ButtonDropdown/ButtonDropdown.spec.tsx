@@ -109,6 +109,25 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     expect(button).toHaveAttribute('aria-expanded', 'false');
   });
 
+  test('Should forward dropdownProps to the menu panel', () => {
+    render(
+      <ButtonDropdown
+        title="Menu"
+        items={items}
+        dropdownProps={{
+          listClassName: 'min-w-[108px]',
+          matchReferenceWidth: false,
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+    const menu = screen.getByRole('menu');
+    expect(menu).toHaveClass('min-w-[108px]');
+    expect(menu.style.minWidth).toBe('');
+  });
+
   test('Should reflect the open state on the button', () => {
     render(<ButtonDropdown title="Menu" items={items} />);
     const button = screen.getByRole('button', { name: 'Menu' });
