@@ -5,6 +5,10 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { AccordionCaretPosition } from '@/types/accordion';
 import { Accordion } from './Accordion';
 
+/** Whether the text sits inside the inert, collapsed part of the panel. */
+const isCollapsedContent = (text: string) =>
+  screen.getByText(text).closest('[inert]') !== null;
+
 describe('Dial UI Kit :: Accordion', () => {
   test('renders title and description in the header', () => {
     render(
@@ -80,12 +84,12 @@ describe('Dial UI Kit :: Accordion', () => {
 
     const header = screen.getByRole('button', { name: 'Settings' });
     expect(header).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByText('Content')).toBeNull();
+    expect(isCollapsedContent('Content')).toBe(true);
 
     fireEvent.click(header);
 
     expect(header).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByText('Content')).toBeInTheDocument();
+    expect(isCollapsedContent('Content')).toBe(false);
   });
 
   test('respects defaultExpanded', () => {
@@ -99,7 +103,7 @@ describe('Dial UI Kit :: Accordion', () => {
       'aria-expanded',
       'true',
     );
-    expect(screen.getByText('Content')).toBeInTheDocument();
+    expect(isCollapsedContent('Content')).toBe(false);
   });
 
   test('collapses again on a second click', () => {
@@ -110,7 +114,7 @@ describe('Dial UI Kit :: Accordion', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
-    expect(screen.queryByText('Content')).toBeNull();
+    expect(isCollapsedContent('Content')).toBe(true);
   });
 
   test('calls onToggle with the next state', () => {
@@ -139,14 +143,14 @@ describe('Dial UI Kit :: Accordion', () => {
     // stays collapsed because it is controlled
     expect(onToggle).toHaveBeenCalledWith(true);
     expect(header).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByText('Content')).toBeNull();
+    expect(isCollapsedContent('Content')).toBe(true);
 
     rerender(
       <Accordion title="Settings" expanded onToggle={onToggle}>
         <p>Content</p>
       </Accordion>,
     );
-    expect(screen.getByText('Content')).toBeInTheDocument();
+    expect(isCollapsedContent('Content')).toBe(false);
   });
 
   test('does not toggle when disabled', () => {
@@ -161,7 +165,7 @@ describe('Dial UI Kit :: Accordion', () => {
     fireEvent.click(header);
 
     expect(onToggle).not.toHaveBeenCalled();
-    expect(screen.queryByText('Content')).toBeNull();
+    expect(isCollapsedContent('Content')).toBe(true);
     expect(header).toBeDisabled();
   });
 
@@ -177,16 +181,36 @@ describe('Dial UI Kit :: Accordion', () => {
     expect(header.getAttribute('aria-controls')).toBe(region.id);
   });
 
-  test('drops aria-controls while the panel is unmounted', () => {
+  test('keeps collapsed content mounted but inert, still named by aria-controls', () => {
     render(
+      <Accordion title="Settings">
+        <button type="button">Inside</button>
+      </Accordion>,
+    );
+
+    const header = screen.getByRole('button', { name: 'Settings' });
+    const inside = screen.getByText('Inside');
+    expect(inside.closest('[inert]')).not.toBeNull();
+    expect(header.getAttribute('aria-controls')).toBe(
+      inside.closest('[role="region"]')?.id,
+    );
+  });
+
+  test('turns the collapsed caret to point left in RTL, and down once open', () => {
+    const { container } = render(
       <Accordion title="Settings">
         <p>Content</p>
       </Accordion>,
     );
 
-    expect(
-      screen.getByRole('button', { name: 'Settings' }),
-    ).not.toHaveAttribute('aria-controls');
+    const caret = container.querySelector('svg');
+    expect(caret).toHaveClass('rtl:rotate-180');
+    expect(caret).not.toHaveClass('rotate-90');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+
+    expect(caret).toHaveClass('rotate-90');
+    expect(caret).not.toHaveClass('rtl:rotate-180');
   });
 
   test('nonCollapsible renders a static header and keeps the content visible', () => {

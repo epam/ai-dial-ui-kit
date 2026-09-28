@@ -53,7 +53,8 @@ export interface AccordionProps {
  * expanded, a title, and an optional description stacked beneath it.
  *
  * The revealed content is a labelled `region`, so assistive tech announces it by the
- * header it belongs to. `nonCollapsible` renders the header as static text instead of
+ * header it belongs to. It stays mounted while collapsed so it can slide open and shut,
+ * and is `inert` then, out of both the tab order and the accessibility tree. `nonCollapsible` renders the header as static text instead of
  * a permanently disabled button, which keeps a decorative panel out of the tab order.
  *
  * @example
@@ -121,7 +122,8 @@ export const Accordion: FC<AccordionProps> = ({
 
   const isCaretAtStart = caretPosition === AccordionCaretPosition.Start;
 
-  // The caret turns a quarter turn to point down when open.
+  // Collapsed, the caret points along the reading direction: right in LTR,
+  // turned to point left in RTL. Open, it points down in both.
   const caret = nonCollapsible ? null : (
     <IconChevronRight
       size={DIAL_ICON_SIZE.SM}
@@ -129,7 +131,7 @@ export const Accordion: FC<AccordionProps> = ({
       aria-hidden="true"
       className={mergeClasses(
         'shrink-0 text-secondary transition-transform motion-reduce:transition-none',
-        isExpanded && 'rotate-90',
+        isExpanded ? 'rotate-90' : 'rtl:rotate-180',
       )}
     />
   );
@@ -157,7 +159,7 @@ export const Accordion: FC<AccordionProps> = ({
   return (
     <div
       className={mergeClasses(
-        'flex flex-col gap-3 py-3 overflow-hidden bg-transparent ',
+        'flex flex-col py-3 overflow-hidden bg-transparent',
         className,
         DIAL_KIT_CLASS.accordion,
       )}
@@ -178,9 +180,7 @@ export const Accordion: FC<AccordionProps> = ({
           id={headerId}
           type="button"
           aria-expanded={isExpanded}
-          // The panel is unmounted while collapsed, so pointing at it only while
-          // it exists keeps `aria-controls` from dangling on a missing id.
-          aria-controls={isExpanded ? contentId : undefined}
+          aria-controls={contentId}
           aria-label={resolveAccessibleName(ariaLabel)}
           disabled={disabled}
           onClick={handleToggle}
@@ -198,19 +198,32 @@ export const Accordion: FC<AccordionProps> = ({
         </button>
       )}
 
-      {isExpanded && (
-        <div
-          id={contentId}
-          role="region"
-          aria-labelledby={headerId}
-          className={mergeClasses(
-            'px-4 dial-small-text text-primary',
-            contentClassName,
-          )}
-        >
-          {children}
+      {/* The row animates between 0fr and 1fr; the clipping wrapper lets the
+          content shrink to nothing, and the spacer's padding (once the gap under
+          the header) is clipped with it, so a collapsed panel leaves no gap. */}
+      <div
+        inert={!isExpanded}
+        className={mergeClasses(
+          'grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none',
+          isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+        )}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="pt-3">
+            <div
+              id={contentId}
+              role="region"
+              aria-labelledby={headerId}
+              className={mergeClasses(
+                'px-4 dial-small-text text-primary',
+                contentClassName,
+              )}
+            >
+              {children}
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
