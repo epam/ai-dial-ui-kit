@@ -57,3 +57,19 @@ export const WithDropdown: Story = {
     },
   },
 };
+
+/**
+ * `triggerClassName` and `triggerLabelClassName` restyle the trigger without
+ * rebuilding it: here a bordered pill whose border follows the open state
+ * through `aria-expanded`.
+ */
+export const StyledTrigger: Story = {
+  render: () => (
+    <InlineSelect
+      items={selectItems}
+      ariaLabel="Link access"
+      triggerClassName="gap-1.5 border border-primary hover:bg-transparent aria-expanded:border-accent"
+      triggerLabelClassName="dial-small-semi-text"
+    />
+  ),
+};

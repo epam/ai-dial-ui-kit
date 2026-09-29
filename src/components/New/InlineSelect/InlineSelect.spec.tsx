@@ -62,6 +62,25 @@ describe('Dial UI Kit :: DialInlineSelectTrigger', () => {
     );
     expect(screen.getByRole('button')).toHaveClass('custom-trigger-class');
   });
+
+  test('Should keep its own classes and the public class next to a custom one', () => {
+    render(
+      <InlineSelectTrigger label="Option A" className="custom-trigger-class" />,
+    );
+    const button = screen.getByRole('button');
+
+    expect(button).toHaveClass('custom-trigger-class');
+    expect(button).toHaveClass('rounded-full');
+    expect(button).toHaveClass('dial-kit-inline-select');
+  });
+
+  test('Should apply labelClassName to the label', () => {
+    render(
+      <InlineSelectTrigger label="Option A" labelClassName="label-class" />,
+    );
+
+    expect(screen.getByText('Option A')).toHaveClass('label-class');
+  });
 });
 
 describe('Dial UI Kit :: DialInlineSelect', () => {
@@ -121,6 +140,30 @@ describe('Dial UI Kit :: DialInlineSelect', () => {
     fireEvent.click(trigger);
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Should style the trigger and its label through triggerClassName and triggerLabelClassName', () => {
+    render(
+      <InlineSelect
+        items={items}
+        triggerClassName="pill"
+        triggerLabelClassName="pill-label"
+      />,
+    );
+
+    const trigger = screen.getByRole('button');
+    expect(trigger).toHaveClass('pill');
+    expect(trigger).toHaveClass('dial-kit-inline-select');
+    expect(screen.getByText('Option A')).toHaveClass('pill-label');
+  });
+
+  test('Should report the open state through onOpenChange', () => {
+    const onOpenChange = vi.fn();
+    render(<InlineSelect items={items} onOpenChange={onOpenChange} />);
+
+    fireEvent.click(screen.getByRole('button'));
+
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
   });
 
   test('Should announce the field name alongside the selected value', () => {

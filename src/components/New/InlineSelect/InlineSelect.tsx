@@ -22,12 +22,16 @@ export interface InlineSelectTriggerProps extends ButtonHTMLAttributes<HTMLButto
   size?: ElementSize;
   /** Whether the inline select is open or not. */
   isOpen?: boolean;
+  /** Additional CSS classes applied to the label, e.g. its type scale or colour. */
+  labelClassName?: string;
 }
 
 export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
   label,
   size,
   isOpen = false,
+  labelClassName,
+  className: triggerClassName,
   'aria-label': ariaLabel,
   ...rest
 }) => {
@@ -39,6 +43,7 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
   return (
     <button
       type="button"
+      {...rest}
       aria-haspopup="menu"
       aria-expanded={isOpen}
       // An `aria-label` replaces the button's content rather than adding to it,
@@ -49,12 +54,11 @@ export const InlineSelectTrigger: FC<InlineSelectTriggerProps> = ({
         'flex items-center gap-1 rounded-full text-primary disabled:text-control-disable-primary',
         'hover:bg-control-accent-alpha-hover focus-visible:outline-offset-2 active:bg-control-accent-alpha-active',
         className,
-        rest.className,
+        triggerClassName,
         DIAL_KIT_CLASS.inlineSelect,
       )}
-      {...rest}
     >
-      {label}
+      <span className={labelClassName}>{label}</span>
       <IconChevronDown
         size={DIAL_ICON_SIZE.MD}
         stroke={DIAL_KIT_ICON_STROKE}
@@ -89,6 +93,12 @@ export interface InlineSelectProps {
    * current value ("Option A"), never what is being selected.
    */
   ariaLabel?: string;
+  /** Additional CSS classes applied to the trigger button, merged after its own. */
+  triggerClassName?: string;
+  /** Additional CSS classes applied to the trigger's label. */
+  triggerLabelClassName?: string;
+  /** Fired when the dropdown opens or closes. Receives the new open state. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 /**
@@ -114,8 +124,19 @@ export const InlineSelect: FC<InlineSelectProps> = ({
   matchReferenceWidth = false,
   listClassName,
   ariaLabel,
+  triggerClassName,
+  triggerLabelClassName,
+  onOpenChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      onOpenChange?.(open);
+    },
+    [onOpenChange],
+  );
   const [uncontrolledSelectedKey, setUncontrolledSelectedKey] = useState(
     defaultSelectedKey ?? items[0]?.key,
   );
@@ -144,7 +165,7 @@ export const InlineSelect: FC<InlineSelectProps> = ({
       matchReferenceWidth={matchReferenceWidth}
       listClassName={listClassName}
       disabled={disabled}
-      onOpenChange={setIsOpen}
+      onOpenChange={handleOpenChange}
       onItemClick={handleItemClick}
     >
       <InlineSelectTrigger
@@ -153,6 +174,8 @@ export const InlineSelect: FC<InlineSelectProps> = ({
         isOpen={isOpen}
         disabled={disabled}
         aria-label={ariaLabel}
+        className={triggerClassName}
+        labelClassName={triggerLabelClassName}
       />
     </Dropdown>
   );
