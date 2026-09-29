@@ -117,7 +117,7 @@ describe('Dial UI Kit :: SchemaField', () => {
       {},
       new Set(['field']),
     );
-    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('"Email" is required')).toBeInTheDocument();
   });
 
   test('show required error before the field is touched when skipUntouched is undefined', () => {
@@ -132,7 +132,7 @@ describe('Dial UI Kit :: SchemaField', () => {
         required
       />,
     );
-    expect(screen.queryByText('Email is required')).toBeInTheDocument();
+    expect(screen.queryByText('"Email" is required')).toBeInTheDocument();
   });
 
   test('does not show required error before the field is touched if skipUntouched is true', () => {
@@ -150,7 +150,7 @@ describe('Dial UI Kit :: SchemaField', () => {
       undefined,
       true,
     );
-    expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('"Email" is required')).not.toBeInTheDocument();
   });
 
   test('does not show error when value is provided', () => {
@@ -165,7 +165,7 @@ describe('Dial UI Kit :: SchemaField', () => {
         required
       />,
     );
-    expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('"Email" is required')).not.toBeInTheDocument();
   });
 
   test('does not show error when field is not required', () => {
@@ -179,7 +179,7 @@ describe('Dial UI Kit :: SchemaField', () => {
         level={0}
       />,
     );
-    expect(screen.queryByText('Notes is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('"Notes" is required')).not.toBeInTheDocument();
   });
 
   test('passes description to the label when provided', () => {

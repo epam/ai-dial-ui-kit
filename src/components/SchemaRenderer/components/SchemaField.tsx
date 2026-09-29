@@ -9,6 +9,7 @@ import {
   buildSummary,
   validateRequired,
   isMissingRequiredValue,
+  toRequiredMessage,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaSection } from './SchemaSection';
 import { SchemaFieldContent } from './SchemaFieldContent';
@@ -97,7 +98,7 @@ export const SchemaField: FC<SchemaFieldProps> = ({
   const isTouched = !skipUntouched || touchedPaths.has(path.join('.'));
   const error =
     isTouched && required && isMissingRequiredValue(value)
-      ? `${label ?? 'Field'} is required`
+      ? toRequiredMessage(label ?? 'Field')
       : undefined;
 
   return (

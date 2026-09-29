@@ -88,6 +88,13 @@ export function toFieldLabel(key: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/**
+ * Builds the "required" error message for a field. The label is quoted so a
+ * long title stays visually separate from the "is required" suffix.
+ */
+export const toRequiredMessage = (label: string): string =>
+  `"${label}" is required`;
+
 export function getOptionLabel(
   schema: JsonSchemaDef,
   rootSchema: JsonSchema,
@@ -247,7 +254,7 @@ export function validateRequired(
     const v = obj?.[key];
     if (isMissingRequiredValue(v)) {
       const label = propSchema?.title ?? toFieldLabel(key);
-      errors.push({ path: fieldPath, message: `${label} is required` });
+      errors.push({ path: fieldPath, message: toRequiredMessage(label) });
     }
   }
 

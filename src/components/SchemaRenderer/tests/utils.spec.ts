@@ -3,6 +3,7 @@ import {
   resolveRef,
   isObjectType,
   toFieldLabel,
+  toRequiredMessage,
   getOptionLabel,
   extractDefaults,
   validateRequired,
@@ -423,6 +424,17 @@ describe('extractDefaults', () => {
 // validateRequired
 // ---------------------------------------------------------------------------
 
+describe('toRequiredMessage', () => {
+  test('wraps the label in double quotes', () => {
+    expect(toRequiredMessage('Name')).toBe('"Name" is required');
+  });
+
+  test('keeps a long label visually separate from the suffix', () => {
+    const label = 'Maximum number of retries before the request is abandoned';
+    expect(toRequiredMessage(label)).toBe(`"${label}" is required`);
+  });
+});
+
 describe('validateRequired', () => {
   test('returns empty array when schema has no required fields', () => {
     const schema: JsonSchemaDef = {
@@ -440,7 +452,7 @@ describe('validateRequired', () => {
     };
     const errors = validateRequired({}, schema, {}, '');
     expect(errors).toHaveLength(1);
-    expect(errors[0].message).toContain('Name');
+    expect(errors[0].message).toBe('"Name" is required');
     expect(errors[0].path).toBe('name');
   });
 
@@ -471,7 +483,7 @@ describe('validateRequired', () => {
       properties: { myField: { type: 'string' } },
     };
     const errors = validateRequired({}, schema, {}, '');
-    expect(errors[0].message).toContain('My Field');
+    expect(errors[0].message).toBe('"My Field" is required');
   });
 
   test('recursively validates nested object properties', () => {

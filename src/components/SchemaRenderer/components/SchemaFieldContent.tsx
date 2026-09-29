@@ -7,6 +7,7 @@ import {
   resolveRef,
   isObjectType,
   isMissingRequiredValue,
+  toRequiredMessage,
 } from '@/components/SchemaRenderer/utils';
 import { SchemaObjectEditor } from './SchemaObjectEditor';
 import { SchemaArrayEditor } from './SchemaArrayEditor';
@@ -137,7 +138,7 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
       isTouched && required && isMissingRequiredValue(value);
     const primitiveErrorMessage =
       !suppressInlineError && isPrimitiveInvalid
-        ? `${resolved.title ?? 'Field'} is required`
+        ? toRequiredMessage(resolved.title ?? 'Field')
         : undefined;
     defaultElement = (
       <>
