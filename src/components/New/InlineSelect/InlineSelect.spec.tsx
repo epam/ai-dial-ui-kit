@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import type { CSSProperties } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { InlineSelect, InlineSelectTrigger } from './InlineSelect';
 import { ElementSize } from '../../../types/size';
@@ -155,6 +156,48 @@ describe('Dial UI Kit :: DialInlineSelect', () => {
     expect(trigger).toHaveClass('pill');
     expect(trigger).toHaveClass('dial-kit-inline-select');
     expect(screen.getByText('Option A')).toHaveClass('pill-label');
+  });
+
+  test('Should stay closed while controlled closed, and still report the request to open', () => {
+    const onOpenChange = vi.fn();
+    render(
+      <InlineSelect items={items} open={false} onOpenChange={onOpenChange} />,
+    );
+    const trigger = screen.getByRole('button');
+
+    fireEvent.click(trigger);
+
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('menu')).toBeNull();
+  });
+
+  test('Should open and close from the controlled open prop', () => {
+    const { rerender } = render(<InlineSelect items={items} open />);
+
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+    expect(screen.getByRole('button', { expanded: true })).toHaveAttribute(
+      'aria-haspopup',
+      'menu',
+    );
+
+    rerender(<InlineSelect items={items} open={false} />);
+
+    expect(screen.queryByRole('menu')).toBeNull();
+  });
+
+  test('Should put listStyle on the dropdown overlay', () => {
+    render(
+      <InlineSelect
+        items={items}
+        open
+        listStyle={{ '--row-colour': 'red' } as CSSProperties}
+      />,
+    );
+
+    expect(
+      screen.getByRole('menu').style.getPropertyValue('--row-colour'),
+    ).toBe('red');
   });
 
   test('Should report the open state through onOpenChange', () => {

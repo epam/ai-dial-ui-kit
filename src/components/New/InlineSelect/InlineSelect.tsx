@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
   type ButtonHTMLAttributes,
+  type CSSProperties,
   type FC,
 } from 'react';
 import { Dropdown } from '../Dropdown/Dropdown';
@@ -89,6 +90,11 @@ export interface InlineSelectProps {
   /** Additional CSS classes applied to the dropdown overlay. */
   listClassName?: string;
   /**
+   * Inline style for the dropdown overlay. The overlay renders in a portal, so
+   * this is how custom properties reach its rows.
+   */
+  listStyle?: CSSProperties;
+  /**
    * Accessible name for the trigger. Without it the control announces only its
    * current value ("Option A"), never what is being selected.
    */
@@ -97,6 +103,8 @@ export interface InlineSelectProps {
   triggerClassName?: string;
   /** Additional CSS classes applied to the trigger's label. */
   triggerLabelClassName?: string;
+  /** Controlled open state of the dropdown. Pair it with `onOpenChange`. */
+  open?: boolean;
   /** Fired when the dropdown opens or closes. Receives the new open state. */
   onOpenChange?: (open: boolean) => void;
 }
@@ -123,19 +131,23 @@ export const InlineSelect: FC<InlineSelectProps> = ({
   placement = 'bottom-end',
   matchReferenceWidth = false,
   listClassName,
+  listStyle,
   ariaLabel,
   triggerClassName,
   triggerLabelClassName,
+  open,
   onOpenChange,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isOpenControlled = open !== undefined;
+  const isOpen = isOpenControlled ? open : uncontrolledOpen;
 
   const handleOpenChange = useCallback(
-    (open: boolean) => {
-      setIsOpen(open);
-      onOpenChange?.(open);
+    (next: boolean) => {
+      if (!isOpenControlled) setUncontrolledOpen(next);
+      onOpenChange?.(next);
     },
-    [onOpenChange],
+    [isOpenControlled, onOpenChange],
   );
   const [uncontrolledSelectedKey, setUncontrolledSelectedKey] = useState(
     defaultSelectedKey ?? items[0]?.key,
@@ -164,7 +176,9 @@ export const InlineSelect: FC<InlineSelectProps> = ({
       placement={placement}
       matchReferenceWidth={matchReferenceWidth}
       listClassName={listClassName}
+      listStyle={listStyle}
       disabled={disabled}
+      open={isOpenControlled ? open : undefined}
       onOpenChange={handleOpenChange}
       onItemClick={handleItemClick}
     >
