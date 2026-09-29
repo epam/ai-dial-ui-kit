@@ -10,7 +10,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { ElementSize } from '@/types/size';
 import { Tooltip, type TooltipProps } from '../Tooltip/Tooltip';
-import { getButtonClassNames } from '../Button/utils';
+import { getButtonClassNames, getDisabledButtonProps } from '../Button/utils';
 
 type IconButtonTooltipProps = Omit<TooltipProps, 'children'>;
 
@@ -74,6 +74,7 @@ export const IconButton: FC<IconButtonProps> = ({
   icon,
   tooltipProps,
   type = 'button',
+  disabled,
   ...props
 }) => {
   const btnClassName = mergeClasses(
@@ -88,6 +89,7 @@ export const IconButton: FC<IconButtonProps> = ({
   const button = (
     <button
       {...props}
+      {...getDisabledButtonProps(disabled, tooltipProps, props.onClick)}
       type={type}
       className={btnClassName}
       aria-label={resolveAccessibleName(

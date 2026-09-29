@@ -218,7 +218,8 @@
       }
     }
 
-    &:disabled {
+    &:disabled,
+    &[aria-disabled='true'] {
       @apply !text-control-disable-primary;
     }
   }
@@ -248,7 +249,8 @@
   }
 
   &.dial-kit-base-icon-button {
-    &:disabled {
+    &:disabled,
+    &[aria-disabled='true'] {
       @apply !text-control-disable-primary;
     }
   }

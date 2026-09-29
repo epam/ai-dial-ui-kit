@@ -242,6 +242,76 @@ describe('Dial UI Kit :: DialButton', () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  describe('disabled with a tooltip', () => {
+    test('Should stay focusable and be marked aria-disabled instead of disabled', () => {
+      render(
+        <Button
+          label="Save"
+          disabled
+          tooltipProps={{ tooltip: 'Pick a format first' }}
+        />,
+      );
+      const button = screen.getByRole('button', { name: 'Save' });
+
+      expect(button).not.toHaveAttribute('disabled');
+      expect(button).toHaveAttribute('aria-disabled', 'true');
+      button.focus();
+      expect(button).toHaveFocus();
+    });
+
+    test('Should not call onClick or submit its form', () => {
+      const onClick = vi.fn();
+      const onSubmit = vi.fn((event: { preventDefault: () => void }) =>
+        event.preventDefault(),
+      );
+      render(
+        <form onSubmit={onSubmit}>
+          <Button
+            label="Save"
+            type="submit"
+            disabled
+            onClick={onClick}
+            tooltipProps={{ tooltip: 'Pick a format first' }}
+          />
+        </form>,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(onClick).not.toHaveBeenCalled();
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    test('Should stay natively disabled while the tooltip is hidden', () => {
+      render(
+        <Button
+          label="Save"
+          disabled
+          tooltipProps={{ tooltip: 'Pick a format first', hideTooltip: true }}
+        />,
+      );
+      const button = screen.getByRole('button', { name: 'Save' });
+
+      expect(button).toBeDisabled();
+      expect(button).not.toHaveAttribute('aria-disabled');
+    });
+
+    test('Should call onClick again once enabled', () => {
+      const onClick = vi.fn();
+      render(
+        <Button
+          label="Save"
+          onClick={onClick}
+          tooltipProps={{ tooltip: 'Saves the settings' }}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(onClick).toHaveBeenCalledOnce();
+    });
+  });
+
   test('Should pass mouse event to onClick handler', () => {
     const onClick = vi.fn();
     render(<Button label="Event test" onClick={onClick} />);

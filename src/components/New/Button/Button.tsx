@@ -13,7 +13,7 @@ import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { Tooltip, type TooltipProps } from '../Tooltip/Tooltip';
-import { getButtonClassNames } from './utils';
+import { getButtonClassNames, getDisabledButtonProps } from './utils';
 
 type ButtonTooltipProps = Omit<TooltipProps, 'children'>;
 
@@ -76,7 +76,10 @@ export interface ButtonProps extends DetailedHTMLProps<
  * `<button>`, so the control keeps the link role, middle-click, and
  * "open in new tab". Pair it with `ButtonAppearance.Link` (or `LinkButton`)
  * unless a button-shaped link is intended.
- * @param [tooltipProps] - Props of the 2.0 {@link Tooltip} wrapping the button
+ * @param [tooltipProps] - Props of the 2.0 {@link Tooltip} wrapping the button.
+ * A disabled button with a visible tooltip is marked `aria-disabled` rather
+ * than natively `disabled`, so it stays focusable and hoverable and the
+ * tooltip can still explain why it is unavailable; its click does nothing.
  * @param [target] - Anchor target, only meaningful alongside `href`
  * @param [rel] - Anchor `rel`. Defaults to `noopener noreferrer` when
  * `target="_blank"`.
@@ -165,8 +168,8 @@ export const Button: FC<ButtonProps> = ({
     ) : (
       <button
         {...props}
+        {...getDisabledButtonProps(disabled, tooltipProps, props.onClick)}
         type={type}
-        disabled={disabled}
         className={btnClassName}
         aria-label={accessibleName}
       >
