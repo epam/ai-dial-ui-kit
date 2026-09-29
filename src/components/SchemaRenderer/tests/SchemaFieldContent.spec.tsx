@@ -155,4 +155,18 @@ describe('Dial UI Kit :: SchemaFieldContent', () => {
     );
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
+
+  test('shows a quoted required error for an empty required primitive', () => {
+    renderWithSchema(
+      <SchemaFieldContent
+        schema={{ type: 'string', title: 'API key' }}
+        value=""
+        onChange={vi.fn()}
+        path={['apiKey']}
+        level={0}
+        required
+      />,
+    );
+    expect(screen.getByText('"API key" is required')).toBeInTheDocument();
+  });
 });
