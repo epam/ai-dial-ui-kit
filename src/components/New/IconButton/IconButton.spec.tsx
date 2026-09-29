@@ -18,6 +18,26 @@ describe('Dial UI Kit :: DialIconButton', () => {
     expect(onClick).toHaveBeenCalled();
   });
 
+  test('Should stay focusable and aria-disabled when disabled with a tooltip', () => {
+    const onClick = vi.fn();
+    render(
+      <IconButton
+        icon={<div>icon</div>}
+        disabled
+        onClick={onClick}
+        tooltipProps={{ tooltip: 'Nothing to delete' }}
+      />,
+    );
+    const button = screen.getByRole('button', { name: 'Nothing to delete' });
+
+    expect(button).not.toHaveAttribute('disabled');
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+    button.focus();
+    expect(button).toHaveFocus();
+    fireEvent.click(button);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
   test('Should be disabled when disabled prop is true', () => {
     render(<IconButton icon={<div>icon</div>} disabled />);
     expect(screen.getByRole('button')).toBeDisabled();
