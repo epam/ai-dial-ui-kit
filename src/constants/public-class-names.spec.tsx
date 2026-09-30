@@ -55,6 +55,7 @@ import { Search } from '@/components/New/Search/Search';
 import { SegmentedControl } from '@/components/New/SegmentedControl/SegmentedControl';
 import { Select } from '@/components/New/Select/Select';
 import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/SharedEntityIndicator';
+import { Badge } from '@/components/New/Badge/Badge';
 import { Switch } from '@/components/New/Switch/Switch';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
@@ -186,6 +187,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['fileName', () => <FileName name="a.pdf" />],
   ['folderName', () => <FolderName name="Docs" />],
   ['sharedEntityIndicator', () => <SharedEntityIndicator />],
+  ['badge', () => <Badge label="Topic" />],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [
