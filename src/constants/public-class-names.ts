@@ -48,6 +48,8 @@ export const DIAL_KIT_CLASS = {
   popup: 'dial-kit-popup',
   /** The `role="dialog"` panel of a `BottomSheet`. */
   bottomSheet: 'dial-kit-bottom-sheet',
+  /** The `role="dialog"` panel of a `SideDrawer`, open or closed. */
+  sideDrawer: 'dial-kit-side-drawer',
   /** The `Popup` panel of a `ConfirmationPopup`, additive to `popup`. */
   confirmationPopup: 'dial-kit-confirmation-popup',
   /** The root of an `Accordion`. */

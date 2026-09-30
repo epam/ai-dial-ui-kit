@@ -47,6 +47,7 @@ import { NumberInput } from '@/components/New/NumberInput/NumberInput';
 import { PasswordInput } from '@/components/New/PasswordInput/PasswordInput';
 import { Popup } from '@/components/New/Popup/Popup';
 import { BottomSheet } from '@/components/New/BottomSheet/BottomSheet';
+import { SideDrawer } from '@/components/New/SideDrawer/SideDrawer';
 import { Radio } from '@/components/New/Radio/Radio';
 import { RadioGroup } from '@/components/New/RadioGroup/RadioGroup';
 import { RadioGroupPopupField } from '@/components/New/RadioGroupPopupField/RadioGroupPopupField';
@@ -140,6 +141,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ],
   ['popup', () => <Popup open header="Title" />],
   ['bottomSheet', () => <BottomSheet open title="Title" onClose={noop} />],
+  ['sideDrawer', () => <SideDrawer open header="Title" onClose={noop} />],
   [
     'confirmationPopup',
     () => <ConfirmationPopup open header="Sure?" onConfirm={noop} />,
