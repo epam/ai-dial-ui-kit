@@ -134,6 +134,8 @@ export const DIAL_KIT_CLASS = {
   sharedEntityIndicator: 'dial-kit-shared-entity-indicator',
   /** The root of a `Badge`: the label box, with its icon when it has one. */
   badge: 'dial-kit-badge',
+  /** The root of an `Avatar`: the image, or the initials box that replaces it. */
+  avatar: 'dial-kit-avatar',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */

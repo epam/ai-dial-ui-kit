@@ -56,6 +56,7 @@ import { SegmentedControl } from '@/components/New/SegmentedControl/SegmentedCon
 import { Select } from '@/components/New/Select/Select';
 import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/SharedEntityIndicator';
 import { Badge } from '@/components/New/Badge/Badge';
+import { Avatar } from '@/components/New/Avatar/Avatar';
 import { Switch } from '@/components/New/Switch/Switch';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
@@ -188,6 +189,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['folderName', () => <FolderName name="Docs" />],
   ['sharedEntityIndicator', () => <SharedEntityIndicator />],
   ['badge', () => <Badge label="Topic" />],
+  ['avatar', () => <Avatar name="Ada Lovelace" />],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [

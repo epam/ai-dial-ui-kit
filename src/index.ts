@@ -432,6 +432,10 @@ export type { BottomSheetProps } from './components/New/BottomSheet/BottomSheet'
 export { Badge } from './components/New/Badge/Badge';
 export type { BadgeProps } from './components/New/Badge/Badge';
 export { BadgeColor, BadgeVariant } from './types/badge';
+export { Avatar } from './components/New/Avatar/Avatar';
+export type { AvatarProps } from './components/New/Avatar/Avatar';
+export { AvatarShape } from './types/avatar';
+export { extractInitials } from './utils/avatar';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';
