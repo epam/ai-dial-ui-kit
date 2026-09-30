@@ -429,6 +429,9 @@ export { SharedEntityIndicator } from './components/New/SharedEntityIndicator/Sh
 export type { SharedEntityIndicatorProps } from './components/New/SharedEntityIndicator/SharedEntityIndicator';
 export { BottomSheet } from './components/New/BottomSheet/BottomSheet';
 export type { BottomSheetProps } from './components/New/BottomSheet/BottomSheet';
+export { Badge } from './components/New/Badge/Badge';
+export type { BadgeProps } from './components/New/Badge/Badge';
+export { BadgeColor, BadgeVariant } from './types/badge';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';

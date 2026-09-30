@@ -326,6 +326,7 @@ breaking change and goes through the migration-guide process.
 | `fileName`             | `dial-kit-file-name`                  | The row of a `FileName`: its type icon, the name and any details |
 | `folderName`           | `dial-kit-folder-name`                | The `FileName` row of a `FolderName`, additive to `fileName` |
 | `sharedEntityIndicator` | `dial-kit-shared-entity-indicator`   | The badge of a `SharedEntityIndicator`, including the one on a `FileIcon` |
+| `badge`                | `dial-kit-badge`                      | The root of a `Badge`: the label box, with its icon when it has one |
 | `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
 
 #### Controls

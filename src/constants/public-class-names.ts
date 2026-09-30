@@ -132,6 +132,8 @@ export const DIAL_KIT_CLASS = {
    * shared badge a `FileIcon` draws over its glyph.
    */
   sharedEntityIndicator: 'dial-kit-shared-entity-indicator',
+  /** The root of a `Badge`: the label box, with its icon when it has one. */
+  badge: 'dial-kit-badge',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */
