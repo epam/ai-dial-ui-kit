@@ -320,6 +320,7 @@ export {
   NeutralButton,
   OutlinedButton,
   PrimaryButton,
+  StarterButton,
 } from './components/New/Button/ButtonWrappers';
 export {
   DangerIconButton,

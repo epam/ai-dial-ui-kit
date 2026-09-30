@@ -20,6 +20,9 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
   [ButtonVariant.Static]: {
     [ButtonAppearance.Solid]: 'dial-kit-static-solid-button',
   },
+  [ButtonVariant.Starter]: {
+    [ButtonAppearance.Outlined]: 'dial-kit-starter-outlined-button',
+  },
 
   // TODO: remove these once we have a design for the icon button variants
   [ButtonVariant.Success]: {},

@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type CSSProperties, type FC, useId } from 'react';
 
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button, type ButtonProps } from './Button';
@@ -90,6 +90,99 @@ export const DangerButton = ButtonVariantCreator(
   ButtonVariant.Danger,
   ButtonAppearance.Solid,
 );
+/*
+ * The icon stroke gradient, in the 24×24 user space of a Tabler icon. It is the
+ * design's `linear-gradient(119.74deg, … -10.06%, … 115.51%)` projected onto
+ * that box, so the stops can sit at 0 and 1.
+ */
+const STARTER_ICON_GRADIENT = {
+  x1: '-5.06',
+  y1: '2.26',
+  x2: '30.62',
+  y2: '22.63',
+  from: 'var(--stroke-gradient-1, #5976E9)',
+  to: 'var(--stroke-gradient-2, #885DF2)',
+};
+
+/** A Starter Button component — a conversation starter: an outlined neutral
+ * pill whose icons are stroked with the accent gradient
+ * Design system 2.0
+ *
+ * An SVG stroke cannot take a CSS gradient, so the button renders its own
+ * `linearGradient` with a per-instance id and hands it to its icons through
+ * the `--dial-kit-starter-icon-stroke` custom property. Any icon that strokes
+ * with `currentColor`, as Tabler icons do, picks it up.
+ * @example
+ * ```tsx
+ * <StarterButton
+ *  label="Summarize this document"
+ *  iconBefore={<IconSparkles />}
+ *  onClick={handleClick}
+ * />
+ * ```
+ *
+ * Inherits all properties from the `ButtonProps`
+ */
+export const StarterButton: FC<ButtonVariantProps> = ({
+  appearance = ButtonAppearance.Outlined,
+  iconBefore,
+  iconAfter,
+  style,
+  ...props
+}) => {
+  // `useId` output contains `:` or `«»`, which are unsafe inside `url(#…)`.
+  const gradientId = `dial-kit-starter-gradient-${useId().replace(/[^\w-]/g, '')}`;
+
+  // A zero-size box rather than `display: none`: browsers do not paint a
+  // gradient whose defining `<svg>` is not rendered.
+  const gradient = (
+    <svg
+      className="pointer-events-none absolute size-0 overflow-hidden"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient
+          id={gradientId}
+          x1={STARTER_ICON_GRADIENT.x1}
+          y1={STARTER_ICON_GRADIENT.y1}
+          x2={STARTER_ICON_GRADIENT.x2}
+          y2={STARTER_ICON_GRADIENT.y2}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor={STARTER_ICON_GRADIENT.from} />
+          <stop offset="1" stopColor={STARTER_ICON_GRADIENT.to} />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+
+  // The definition rides along with the first icon, so a label-only button
+  // renders no extra icon slot.
+  const withGradient = (icon: ButtonProps['iconBefore']) => (
+    <>
+      {gradient}
+      {icon}
+    </>
+  );
+
+  return (
+    <Button
+      {...props}
+      variant={ButtonVariant.Starter}
+      appearance={appearance}
+      iconBefore={iconBefore ? withGradient(iconBefore) : undefined}
+      iconAfter={iconAfter && !iconBefore ? withGradient(iconAfter) : iconAfter}
+      style={
+        {
+          '--dial-kit-starter-icon-stroke': `url(#${gradientId})`,
+          ...style,
+        } as CSSProperties
+      }
+    />
+  );
+};
+
 /** A Link Button component with predefined link appearance
  * @example
  * ```tsx

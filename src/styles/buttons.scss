@@ -147,9 +147,14 @@
 }
 
 /* Outlined buttons */
+/*
+ * The focus ring stands 1px off the border rather than touching it: against
+ * the grey `border-default` stroke a flush ring reads as a thicker border, not
+ * as focus.
+ */
 .dial-kit-neutral-outlined-button {
-  @apply dial-kit-base-button text-primary bg-transparent;
-  @apply border-default;
+  @apply dial-kit-base-button text-secondary bg-transparent;
+  @apply border-default focus-visible:outline-offset-1;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -178,6 +183,41 @@
 }
 
 /*
+ * A conversation starter: a neutral pill whose icons are stroked with the
+ * accent gradient while the label stays secondary. The icons are reached
+ * through their `svg` because `Button` wraps each one in an unstyled span;
+ * the CSS `stroke` property outranks Tabler's `stroke="currentColor"`
+ * attribute and is inherited by every path. `StarterButton` sets
+ * `--dial-kit-starter-icon-stroke` to its own gradient; without it the icons
+ * fall back to the accent colour.
+ */
+.dial-kit-starter-outlined-button {
+  @apply dial-kit-base-button text-secondary bg-control-neutral;
+  @apply border-default;
+
+  & svg {
+    @apply text-accent;
+    stroke: var(--dial-kit-starter-icon-stroke, currentColor);
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
+      @apply bg-control-neutral-hover-muted;
+    }
+  }
+
+  &:active:not(:disabled):not([aria-disabled='true']) {
+    @apply bg-control-neutral-active;
+  }
+
+  &:disabled svg,
+  &[aria-disabled='true'] svg {
+    @apply text-control-disable-primary;
+    stroke: currentColor;
+  }
+}
+
+/*
  * Both selectors per variant: a `Button` with an `href` renders an `<a>`, which
  * never matches `:disabled` and carries `aria-disabled` instead — without the
  * second half a disabled link keeps the enabled fill and shadow.
@@ -201,6 +241,8 @@
 .dial-kit-neutral-outlined-button[aria-disabled='true'],
 .dial-kit-danger-outlined-button:disabled,
 .dial-kit-danger-outlined-button[aria-disabled='true'],
+.dial-kit-starter-outlined-button:disabled,
+.dial-kit-starter-outlined-button[aria-disabled='true'],
 .dial-kit-fab-button:disabled,
 .dial-kit-fab-button[aria-disabled='true'] {
   @apply dial-kit-solid-button-disable;
