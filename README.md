@@ -289,6 +289,7 @@ breaking change and goes through the migration-guide process.
 | `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
 | `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
 | `popup`              | `dial-kit-popup`                  | The `role="dialog"` panel of a `Popup`                               |
+| `bottomSheet`        | `dial-kit-bottom-sheet`           | The `role="dialog"` panel of a `BottomSheet`                         |
 | `confirmationPopup`  | `dial-kit-confirmation-popup`     | A `ConfirmationPopup`'s panel, additive to `popup`                   |
 | `accordion`          | `dial-kit-accordion`              | The root of an `Accordion`                                           |
 | `folderPath`         | `dial-kit-folder-path`            | The breadcrumb root of a `FolderPath`                                |

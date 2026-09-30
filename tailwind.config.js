@@ -340,9 +340,14 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        slideUp: {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
       },
       animation: {
         fadeIn: 'fadeIn 100ms ease-in',
+        slideUp: 'slideUp 300ms cubic-bezier(0.32, 0.72, 0, 1)',
       },
       typography: {
         DEFAULT: {

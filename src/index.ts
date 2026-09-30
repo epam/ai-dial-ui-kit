@@ -427,6 +427,8 @@ export { FolderName } from './components/New/FolderName/FolderName';
 export type { FolderNameProps } from './components/New/FolderName/FolderName';
 export { SharedEntityIndicator } from './components/New/SharedEntityIndicator/SharedEntityIndicator';
 export type { SharedEntityIndicatorProps } from './components/New/SharedEntityIndicator/SharedEntityIndicator';
+export { BottomSheet } from './components/New/BottomSheet/BottomSheet';
+export type { BottomSheetProps } from './components/New/BottomSheet/BottomSheet';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';
