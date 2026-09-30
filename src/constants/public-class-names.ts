@@ -46,6 +46,8 @@ export const DIAL_KIT_CLASS = {
    * `overlayClassName`.
    */
   popup: 'dial-kit-popup',
+  /** The `role="dialog"` panel of a `BottomSheet`. */
+  bottomSheet: 'dial-kit-bottom-sheet',
   /** The `Popup` panel of a `ConfirmationPopup`, additive to `popup`. */
   confirmationPopup: 'dial-kit-confirmation-popup',
   /** The root of an `Accordion`. */
