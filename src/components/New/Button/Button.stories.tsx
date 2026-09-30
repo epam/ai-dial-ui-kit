@@ -11,6 +11,7 @@ import {
   NeutralButton,
   OutlinedButton,
   PrimaryButton,
+  StarterButton,
 } from './ButtonWrappers';
 import { ElementSize } from '@/types/size';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
@@ -154,6 +155,10 @@ export const AllVariants: Story = {
         ),
       },
       {
+        title: 'Starter · Outlined',
+        render: (p) => <StarterButton {...p} />,
+      },
+      {
         title: 'Primary · Link',
         render: (p) => <LinkButton {...p} />,
       },
@@ -246,6 +251,56 @@ export const AsLink: Story = {
       description: {
         story:
           'Passing `href` renders a real `<a>`, so the control keeps the link role, middle-click, and "open in new tab". `target="_blank"` gets `rel="noopener noreferrer"` unless `rel` is set explicitly. A disabled link drops its `href` and leaves the tab order, and is marked `aria-disabled` since an anchor has no disabled state.',
+      },
+    },
+  },
+};
+
+const STARTER_STATES = [
+  { label: 'Default', id: 'starter-default' },
+  { label: 'Hover', id: 'starter-hover' },
+  { label: 'Active', id: 'starter-active' },
+  { label: 'Focus', id: 'starter-focus' },
+  { label: 'Disable', id: 'starter-disable', disabled: true },
+];
+
+export const Starter: Story = {
+  render: () => (
+    <div className="grid grid-cols-[auto_auto] items-center gap-x-8 gap-y-4">
+      {STARTER_STATES.map(({ label, id, disabled }) => (
+        <Fragment key={id}>
+          <span className="text-sm text-secondary">{label}</span>
+          <StarterButton
+            id={id}
+            label="Button"
+            disabled={disabled}
+            iconBefore={
+              <IconArrowLeft
+                size={DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
+              />
+            }
+            iconAfter={
+              <IconArrowRight
+                size={DIAL_ICON_SIZE.MD}
+                stroke={DIAL_KIT_ICON_STROKE}
+              />
+            }
+          />
+        </Fragment>
+      ))}
+    </div>
+  ),
+  parameters: {
+    pseudo: {
+      hover: ['#starter-hover'],
+      active: ['#starter-active'],
+      focusVisible: ['#starter-focus'],
+    },
+    docs: {
+      description: {
+        story:
+          '`StarterButton` — a conversation starter. An outlined neutral pill with a secondary label and icons stroked with the accent gradient, shown across its default, hover, active, focus, and disabled states.',
       },
     },
   },

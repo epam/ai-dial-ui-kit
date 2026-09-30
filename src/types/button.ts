@@ -4,6 +4,7 @@ export enum ButtonVariant {
   Neutral = 'neutral',
   Danger = 'danger',
   Static = 'static',
+  Starter = 'starter',
 
   // icon button specific
   Success = 'success',
