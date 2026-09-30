@@ -436,6 +436,8 @@ export { Avatar } from './components/New/Avatar/Avatar';
 export type { AvatarProps } from './components/New/Avatar/Avatar';
 export { AvatarShape } from './types/avatar';
 export { extractInitials } from './utils/avatar';
+export { SideDrawer } from './components/New/SideDrawer/SideDrawer';
+export type { SideDrawerProps } from './components/New/SideDrawer/SideDrawer';
 export { Tag } from './components/New/Tag/Tag';
 export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';
