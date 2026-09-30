@@ -59,8 +59,22 @@
   @apply cursor-not-allowed bg-layer-sunken text-control-disable-primary;
 }
 
+/*
+ * An invalid field keeps its error border on hover and swaps the blue focus
+ * ring for the error one — a blue outline hugging a red border reads as two
+ * clashing frames. Same selectors as the base rule so the cascade order wins.
+ */
 .dial-kit-input-error {
   @apply border-error;
+
+  &:not(:disabled):hover {
+    @apply border-error;
+  }
+
+  &:focus-within,
+  &:active:not(:has(> input:disabled)) {
+    @apply outline-error-alpha;
+  }
 }
 
 .dial-input {

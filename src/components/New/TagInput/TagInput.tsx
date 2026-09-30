@@ -344,7 +344,9 @@ export const TagInput: FC<TagInputProps> = ({
       wrapperClassName={mergeClasses(
         tagCount > 0 && [
           '!h-auto',
-          isSmall ? 'min-h-[24px] py-0.5' : 'min-h-[40px] py-1.5',
+          // 1px border + 3px + 32px tag + 3px + 1px keeps a one-row field at
+          // the 40px of the empty one.
+          isSmall ? 'min-h-[24px] py-0.5' : 'min-h-[40px] py-[3px]',
           collapseTagOverflow ? 'flex-nowrap overflow-hidden' : 'flex-wrap',
         ],
         fieldClassName,
