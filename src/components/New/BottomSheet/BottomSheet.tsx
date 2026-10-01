@@ -8,7 +8,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import { IconArrowLeft } from '@tabler/icons-react';
-import { useId, type FC, type ReactNode } from 'react';
+import { useId, type CSSProperties, type FC, type ReactNode } from 'react';
 
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
@@ -43,6 +43,15 @@ export interface BottomSheetProps {
   className?: string;
   /** Additional CSS classes for the backdrop. */
   overlayClassName?: string;
+  /** Additional CSS classes for the header row. */
+  headerClassName?: string;
+  /**
+   * Inline style for the panel. It renders in a portal, so this is how custom
+   * properties reach the panel and its content.
+   */
+  style?: CSSProperties;
+  /** Inline style for the backdrop, merged after its own positioning. */
+  overlayStyle?: CSSProperties;
   /** Additional CSS classes for the scrolling body. */
   bodyClassName?: string;
   /** Type-scale class for the title, replacing its own. */
@@ -86,6 +95,9 @@ export interface BottomSheetProps {
  * @param [children] - Content of the sheet
  * @param [className] - Additional CSS classes for the sheet panel
  * @param [overlayClassName] - Additional CSS classes for the backdrop
+ * @param [headerClassName] - Additional CSS classes for the header row
+ * @param [style] - Inline style for the panel, e.g. custom properties
+ * @param [overlayStyle] - Inline style for the backdrop
  * @param [bodyClassName] - Additional CSS classes for the scrolling body
  * @param [titleClassName] - Type-scale class for the title
  * @param [portalId] - Id of the element to portal into
@@ -102,6 +114,9 @@ export const BottomSheet: FC<BottomSheetProps> = ({
   children,
   className,
   overlayClassName,
+  headerClassName,
+  style,
+  overlayStyle,
   bodyClassName,
   titleClassName,
   portalId,
@@ -125,6 +140,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({
     <FloatingPortal id={portalId}>
       <FloatingOverlay
         lockScroll
+        style={overlayStyle}
         className={mergeClasses(
           'z-popup flex items-end bg-backdrop',
           themeScope,
@@ -142,6 +158,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({
             aria-modal="true"
             aria-labelledby={title ? titleId : undefined}
             aria-label={title ? undefined : ariaLabel}
+            style={style}
             className={mergeClasses(
               'flex max-h-[85dvh] w-full flex-col rounded-t-lg bg-layer-raised outline-none',
               'animate-slideUp motion-reduce:animate-none',
@@ -150,7 +167,12 @@ export const BottomSheet: FC<BottomSheetProps> = ({
             )}
           >
             {title && (
-              <div className="relative flex h-[60px] shrink-0 items-center justify-center border-b border-tertiary px-14">
+              <div
+                className={mergeClasses(
+                  'relative flex h-[60px] shrink-0 items-center justify-center border-b border-tertiary px-14',
+                  headerClassName,
+                )}
+              >
                 {onBack && (
                   <GhostIconButton
                     aria-label={backAriaLabel}

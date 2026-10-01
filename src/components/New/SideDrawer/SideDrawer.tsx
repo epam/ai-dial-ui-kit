@@ -8,7 +8,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useId, type FC, type ReactNode } from 'react';
+import { useId, type CSSProperties, type FC, type ReactNode } from 'react';
 
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
@@ -53,6 +53,13 @@ export interface SideDrawerProps {
   overlayClassName?: string;
   /** Additional CSS classes for the header row. */
   headerClassName?: string;
+  /**
+   * Inline style for the panel. It renders in a portal, so this is how custom
+   * properties reach the panel and its content.
+   */
+  style?: CSSProperties;
+  /** Inline style for the backdrop, merged after its own positioning. */
+  overlayStyle?: CSSProperties;
   /** Additional CSS classes for the scrolling body. */
   bodyClassName?: string;
   /** Type-scale class for a string title, replacing its own. */
@@ -105,6 +112,8 @@ export interface SideDrawerProps {
  * @param [className] - Additional CSS classes for the drawer panel
  * @param [overlayClassName] - Additional CSS classes for the backdrop
  * @param [headerClassName] - Additional CSS classes for the header row
+ * @param [style] - Inline style for the panel, e.g. custom properties
+ * @param [overlayStyle] - Inline style for the backdrop
  * @param [bodyClassName] - Additional CSS classes for the scrolling body
  * @param [titleClassName] - Type-scale class for a string title
  * @param [portalId] - Id of the element to portal into
@@ -126,6 +135,8 @@ export const SideDrawer: FC<SideDrawerProps> = ({
   className,
   overlayClassName,
   headerClassName,
+  style,
+  overlayStyle,
   bodyClassName,
   titleClassName,
   portalId,
@@ -150,6 +161,7 @@ export const SideDrawer: FC<SideDrawerProps> = ({
     <FloatingPortal id={portalId}>
       <FloatingOverlay
         lockScroll={open}
+        style={overlayStyle}
         className={mergeClasses(
           'z-popup bg-backdrop transition-opacity duration-300 motion-reduce:transition-none',
           open ? 'opacity-100' : 'pointer-events-none opacity-0',
@@ -172,6 +184,7 @@ export const SideDrawer: FC<SideDrawerProps> = ({
             aria-labelledby={isTitleText ? titleId : undefined}
             aria-label={isTitleText ? undefined : ariaLabel}
             inert={!open}
+            style={style}
             className={mergeClasses(
               'fixed inset-y-0 end-0 flex w-full flex-col overflow-hidden bg-layer-raised outline-none',
               'desktop:w-[540px] desktop:rounded-s-xl desktop:border-s desktop:border-secondary',

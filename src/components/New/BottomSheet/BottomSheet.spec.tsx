@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { CSSProperties } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { BottomSheet } from './BottomSheet';
@@ -167,5 +168,43 @@ describe('Dial UI Kit :: BottomSheet', () => {
       'h-1/2',
       'dial-kit-bottom-sheet',
     );
+  });
+  test('puts style on the panel and overlayStyle on the backdrop', () => {
+    render(
+      <BottomSheet
+        open
+        title="Select model"
+        onClose={vi.fn()}
+        style={{ '--panel-bg': 'red' } as CSSProperties}
+        overlayStyle={{ '--backdrop': 'blue' } as CSSProperties}
+      >
+        Body
+      </BottomSheet>,
+    );
+
+    const panel = screen.getByRole('dialog', { hidden: true });
+    expect(panel.style.getPropertyValue('--panel-bg')).toBe('red');
+    expect(
+      (panel.closest('.z-popup') as HTMLElement).style.getPropertyValue(
+        '--backdrop',
+      ),
+    ).toBe('blue');
+  });
+
+  test('adds headerClassName to the header row', () => {
+    render(
+      <BottomSheet
+        open
+        title="Select model"
+        onClose={vi.fn()}
+        headerClassName="header-hook"
+      >
+        Body
+      </BottomSheet>,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Select model' }).parentElement,
+    ).toHaveClass('header-hook');
   });
 });
