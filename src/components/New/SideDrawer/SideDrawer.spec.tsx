@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { CSSProperties } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { SideDrawer } from './SideDrawer';
@@ -216,5 +217,26 @@ describe('Dial UI Kit :: SideDrawer', () => {
     );
 
     expect(getDrawer()).toHaveClass('w-96', 'dial-kit-side-drawer');
+  });
+  test('puts style on the panel and overlayStyle on the backdrop', () => {
+    render(
+      <SideDrawer
+        open
+        header="Publish"
+        onClose={vi.fn()}
+        style={{ '--panel-bg': 'red' } as CSSProperties}
+        overlayStyle={{ '--backdrop': 'blue' } as CSSProperties}
+      >
+        Body
+      </SideDrawer>,
+    );
+
+    const panel = screen.getByRole('dialog', { hidden: true });
+    expect(panel.style.getPropertyValue('--panel-bg')).toBe('red');
+    expect(
+      (panel.closest('.z-popup') as HTMLElement).style.getPropertyValue(
+        '--backdrop',
+      ),
+    ).toBe('blue');
   });
 });
