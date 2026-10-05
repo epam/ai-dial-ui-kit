@@ -1,7 +1,12 @@
 import type { FC, MouseEvent } from 'react';
 
+import { mergeClasses } from '@/utils/merge-classes';
 import { Tag } from '@/components/New/Tag/Tag';
 import type { SelectOption } from '@/models/select';
+
+/** Geometry shared by every tag of a multi-select field, and its `+N` counter. */
+export const selectTagClassName =
+  'h-[24px] max-w-full rounded-md border border-secondary bg-layer-sunken px-2';
 
 export interface MultiSelectTagsProps {
   options: SelectOption[];
@@ -10,6 +15,8 @@ export interface MultiSelectTagsProps {
     event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
     val: string,
   ) => void;
+  /** Additional classes for every tag. */
+  tagClassName?: string;
 }
 
 /**
@@ -20,11 +27,13 @@ export interface MultiSelectTagsProps {
  * @param options - All available options, used to resolve labels and icons
  * @param selectedValues - Values currently selected
  * @param [handleRemoveTag] - Called with the value whose tag was removed; when omitted the tags are not removable
+ * @param [tagClassName] - Additional classes for every tag
  */
 export const MultiSelectTags: FC<MultiSelectTagsProps> = ({
   options,
   selectedValues,
   handleRemoveTag,
+  tagClassName,
 }) => {
   return (
     <>
@@ -39,7 +48,7 @@ export const MultiSelectTags: FC<MultiSelectTagsProps> = ({
             // `Tag` wraps the icon in its own `aria-hidden` box, so it needs no
             // wrapper of its own here.
             icon={option?.icon}
-            className="max-w-full border border-tertiary"
+            className={mergeClasses(selectTagClassName, tagClassName)}
           />
         );
       })}

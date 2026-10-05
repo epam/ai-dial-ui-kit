@@ -45,7 +45,9 @@ export const overlaySubMenuListClassName = mergeClasses(
  * reached by keyboard, and the 1.0 versions suppressed the ring outright.
  */
 export const overlayItemClassName = mergeClasses(
-  'flex w-full cursor-pointer items-center gap-2 px-3 h-[40px] rounded-lg',
+  // `shrink-0` keeps the 40px: a column squeezed by the panel's height cap
+  // would otherwise collapse the rows to their content.
+  'flex w-full shrink-0 cursor-pointer items-center gap-2 px-3 h-[40px] rounded-lg',
   'dial-small-text text-primary truncate',
   // Hover sits one step up the accent-alpha ramp from the selected tint, so a
   // hovered row reads as hovered whether or not it is also selected.

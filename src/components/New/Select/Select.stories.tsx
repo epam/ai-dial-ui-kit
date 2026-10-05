@@ -169,6 +169,22 @@ export const Multiple: Story = {
   },
 };
 
+export const MultipleCollapsed: Story = {
+  name: 'Multiple, collapsed to a +N counter',
+  args: {
+    multiple: true,
+    collapseTagOverflow: true,
+    defaultValue: ['contain', 'not-contains', 'equal', 'not-equal', 'starts'],
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-[360px]">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 export const Small: Story = {
   args: {
     size: ElementSize.Small,

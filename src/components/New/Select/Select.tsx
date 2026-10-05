@@ -32,8 +32,10 @@ import type { SelectOption } from '@/models/select';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
+import { CollapsedSelectTags } from './CollapsedSelectTags';
 import { MultiSelectTags } from './MultiSelectTags';
 import { SelectSubMenuItem } from './SelectSubMenuItem';
 import {
@@ -68,6 +70,14 @@ export interface SelectProps {
   searchPlaceholder?: string;
   selectAll?: boolean;
   selectAllLabel?: string;
+  /**
+   * Keeps a multi-select's tags on one row, folding the ones that do not fit
+   * into a `+N` counter whose hover panel lists them (as `TagInput` does with
+   * the same prop). Without it the tags wrap and the field grows.
+   * Ignored with `customMultiSelectTagsRenderer`, and on a mobile screen, where
+   * the hover panel is unavailable and the tags wrap instead.
+   */
+  collapseTagOverflow?: boolean;
   /**
    * How the chosen option is marked in single mode. The design tints the row
    * (`Tint`, the default); `Check` puts a trailing check on it instead, the
@@ -155,6 +165,7 @@ export interface SelectProps {
  * @param [searchPlaceholder] - Placeholder for the overlay search input.
  * @param [selectAll=false] - Show a "Select All" checkbox in multiple mode.
  * @param [selectAllLabel="Select all"] - Label for the "Select All" checkbox.
+ * @param [collapseTagOverflow=false] - Keep a multi-select's tags on one row, folding those that do not fit into a `+N` counter by the width available; the hover panel lists them and removes them.
  * @param [selectedOptionMark=MenuItemMark.Tint] - How the chosen option is marked in single mode.
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
@@ -196,6 +207,7 @@ export const Select: FC<SelectProps> = ({
   selectAll = false,
   invalid,
   selectAllLabel = 'Select all',
+  collapseTagOverflow = false,
   selectedOptionMark = MenuItemMark.Tint,
   emptyStateTitle = 'No options available',
   emptyStateDescription,
@@ -366,6 +378,14 @@ export const Select: FC<SelectProps> = ({
       : singleSelectedOption.label
     : undefined;
 
+  // The `+N` panel opens on hover, which a touch screen does not have.
+  const isMobile = useIsMobileScreen();
+  const collapseTags =
+    multiple &&
+    collapseTagOverflow &&
+    !customMultiSelectTagsRenderer &&
+    !isMobile;
+
   /**
    * Values an `<input>` cannot hold — the tags of a multi-select, an option's
    * `labelNode`, an option description — are rendered in the field's content
@@ -374,8 +394,17 @@ export const Select: FC<SelectProps> = ({
   const fieldContent = useMemo(() => {
     if (multiple) {
       if (!hasSelection) return null;
+      if (collapseTags) {
+        return (
+          <CollapsedSelectTags
+            options={options}
+            selectedValues={selectedValues}
+            handleRemoveTag={handleRemoveTag}
+          />
+        );
+      }
       return (
-        <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+        <span className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
           {customMultiSelectTagsRenderer?.(
             options,
             selectedValues,
@@ -409,6 +438,7 @@ export const Select: FC<SelectProps> = ({
       </span>
     );
   }, [
+    collapseTags,
     customMultiSelectTagsRenderer,
     handleRemoveTag,
     hasSelection,
@@ -668,8 +698,9 @@ export const Select: FC<SelectProps> = ({
             wrapperClassName={mergeClasses(
               !disabled && 'cursor-pointer',
               multiple &&
-                hasSelection && [
-                  '!h-auto flex-wrap py-1.5',
+                hasSelection &&
+                !collapseTags && [
+                  '!h-auto flex-wrap py-2',
                   isSmall ? 'min-h-[24px]' : 'min-h-[40px]',
                 ],
               fieldClassName,
