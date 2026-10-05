@@ -1156,6 +1156,10 @@
     "kind": "value"
   },
   {
+    "name": "SelectTagsOverflow",
+    "kind": "value"
+  },
+  {
     "name": "SelectVariant",
     "kind": "value"
   },

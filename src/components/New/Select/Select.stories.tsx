@@ -12,6 +12,7 @@ import { Button } from '@/components/New/Button/Button';
 import { PrimaryButton } from '@/components/New/Button/ButtonWrappers';
 import type { SelectOption } from '@/models/select';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
+import { SelectTagsOverflow } from '@/types/select';
 import { ElementSize } from '@/types/size';
 import { TooltipPlacement } from '@/types/tooltip';
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
@@ -167,6 +168,22 @@ export const Multiple: Story = {
     multiple: true,
     defaultValue: ['contain', 'equal'],
   },
+};
+
+export const MultipleCollapsed: Story = {
+  name: 'Multiple, collapsed to a +N counter',
+  args: {
+    multiple: true,
+    tagsOverflow: SelectTagsOverflow.Collapse,
+    defaultValue: ['contain', 'not-contains', 'equal', 'not-equal', 'starts'],
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-[360px]">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const Small: Story = {
