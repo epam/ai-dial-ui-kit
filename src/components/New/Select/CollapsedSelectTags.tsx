@@ -138,7 +138,6 @@ export const CollapsedSelectTags: FC<CollapsedSelectTagsProps> = ({
               .map((v) => options.find((o) => o.value === v)?.label ?? v)
               .join(', ')}`}
             title=""
-
             className={mergeClasses(selectTagClassName, 'shrink-0')}
           />
         </InteractiveTooltip>

@@ -85,7 +85,9 @@ export interface SelectProps {
    * accent label. Multiple mode always uses the checkbox row.
    */
   selectedOptionMark?:
-    MenuItemMark.Tint | MenuItemMark.Check | MenuItemMark.Highlight;
+    | MenuItemMark.Tint
+    | MenuItemMark.Check
+    | MenuItemMark.Highlight;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
