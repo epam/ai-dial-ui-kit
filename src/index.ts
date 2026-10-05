@@ -172,7 +172,7 @@ export { ElementSize } from './types/size';
 export { ScreenResolution, TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
-export { SelectSize, SelectTagsOverflow, SelectVariant } from './types/select';
+export { SelectSize, SelectVariant } from './types/select';
 export {
   DialFileManagerTabs,
   DialFileManagerActions,

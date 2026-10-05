@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { ElementSize } from '@/types/size';
 import { Select, type SelectProps } from './Select';
@@ -244,6 +244,63 @@ describe('Dial UI Kit :: Select', () => {
 
       expect(selectAll.indeterminate).toBe(false);
       expect(selectAll.checked).toBe(true);
+    });
+
+    describe('collapseTagOverflow', () => {
+      const selected = ['opt-1', 'opt-2', 'opt-3'];
+
+      beforeEach(() => {
+        vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(
+          300,
+        );
+        vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(
+          100,
+        );
+      });
+
+      afterEach(() => vi.restoreAllMocks());
+
+      test('wraps every tag by default', () => {
+        renderSelect({ multiple: true, defaultValue: selected });
+
+        expect(screen.getAllByRole('button', { name: /^Remove/ })).toHaveLength(
+          3,
+        );
+        expect(
+          screen.queryByRole('button', { name: /more selected/ }),
+        ).not.toBeInTheDocument();
+      });
+
+      test('collapses the tags that do not fit into a +N counter', () => {
+        renderSelect({
+          multiple: true,
+          defaultValue: selected,
+          collapseTagOverflow: true,
+        });
+
+        expect(screen.getAllByRole('button', { name: /^Remove/ })).toHaveLength(
+          1,
+        );
+        expect(
+          screen.getByRole('button', {
+            name: '2 more selected: Option 2, Option 3',
+          }),
+        ).toBeInTheDocument();
+      });
+
+      test('leaves the tags to customMultiSelectTagsRenderer', () => {
+        renderSelect({
+          multiple: true,
+          defaultValue: selected,
+          collapseTagOverflow: true,
+          customMultiSelectTagsRenderer: () => <span>custom tags</span>,
+        });
+
+        expect(screen.getByText('custom tags')).toBeInTheDocument();
+        expect(
+          screen.queryByRole('button', { name: /more selected/ }),
+        ).not.toBeInTheDocument();
+      });
     });
 
     test('an option row is one control, selected through aria-selected', () => {

@@ -1,5 +1,6 @@
 import {
   type FC,
+  type KeyboardEvent,
   type MouseEvent,
   useCallback,
   useLayoutEffect,
@@ -7,13 +8,13 @@ import {
   useState,
 } from 'react';
 
+import { getVisibleTagCount } from '@/components/New/TagInput/utils';
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { Tag } from '@/components/New/Tag/Tag';
 import type { SelectOption } from '@/models/select';
 import { TooltipPlacement } from '@/types/tooltip';
 import { observeElementSize } from '@/utils/element-size-observer';
 import { mergeClasses } from '@/utils/merge-classes';
-import { countFittingTags } from './collapsed-tags';
 import { MultiSelectTags, selectTagClassName } from './MultiSelectTags';
 
 /** Matches the `gap-2` between the tags, in px. */
@@ -30,6 +31,11 @@ export interface CollapsedSelectTagsProps {
 
 const stopPropagation = (event: { stopPropagation: () => void }) =>
   event.stopPropagation();
+
+/** Escape is left to bubble: it is what dismisses the panel. */
+const stopKeyPropagation = (event: KeyboardEvent<HTMLElement>) => {
+  if (event.key !== 'Escape') event.stopPropagation();
+};
 
 /**
  * The selected tags of a multi-select on a single row. The tags that do not fit
@@ -60,14 +66,17 @@ export const CollapsedSelectTags: FC<CollapsedSelectTagsProps> = ({
     const ruler = measureRef.current;
     if (!row || !ruler) return;
 
-    const widths = Array.from(ruler.children, (el) => el.scrollWidth);
-    const counterWidth = widths.pop() ?? 0;
+    const widths = Array.from(
+      ruler.children,
+      (el) => (el as HTMLElement).offsetWidth,
+    );
+    const overflowChipWidth = widths.pop() ?? 0;
 
     setVisibleCount(
-      countFittingTags({
+      getVisibleTagCount({
         tagWidths: widths,
-        counterWidth,
-        available: row.clientWidth,
+        overflowChipWidth,
+        availableWidth: row.clientWidth,
         gap: TAG_GAP,
       }),
     );
@@ -109,7 +118,7 @@ export const CollapsedSelectTags: FC<CollapsedSelectTagsProps> = ({
             <div
               className="flex flex-wrap gap-2"
               onClick={stopPropagation}
-              onKeyDown={stopPropagation}
+              onKeyDown={stopKeyPropagation}
             >
               <MultiSelectTags
                 options={options}
@@ -121,8 +130,15 @@ export const CollapsedSelectTags: FC<CollapsedSelectTagsProps> = ({
         >
           <Tag
             label={`+${hiddenValues.length}`}
+            role="button"
             tabIndex={0}
-            aria-label={`${hiddenValues.length} more selected`}
+            aria-haspopup="true"
+            // Names the hidden tags too: the panel that lists them is hover-only.
+            aria-label={`${hiddenValues.length} more selected: ${hiddenValues
+              .map((v) => options.find((o) => o.value === v)?.label ?? v)
+              .join(', ')}`}
+            title=""
+
             className={mergeClasses(selectTagClassName, 'shrink-0')}
           />
         </InteractiveTooltip>

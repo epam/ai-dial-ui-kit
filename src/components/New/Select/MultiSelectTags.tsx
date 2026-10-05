@@ -6,7 +6,7 @@ import type { SelectOption } from '@/models/select';
 
 /** Geometry shared by every tag of a multi-select field, and its `+N` counter. */
 export const selectTagClassName =
-  'h-[24px] max-w-full rounded-md border border-tertiary px-2';
+  'h-[24px] max-w-full rounded-md border border-secondary bg-layer-sunken px-2';
 
 export interface MultiSelectTagsProps {
   options: SelectOption[];

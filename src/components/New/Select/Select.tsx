@@ -31,8 +31,8 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
 import { MenuItemMark } from '@/types/menu-item';
-import { SelectTagsOverflow } from '@/types/select';
 import { ElementSize } from '@/types/size';
+import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
 import { CollapsedSelectTags } from './CollapsedSelectTags';
@@ -71,12 +71,13 @@ export interface SelectProps {
   selectAll?: boolean;
   selectAllLabel?: string;
   /**
-   * What a multi-select does when its tags outgrow the field: `Wrap` (the
-   * default) grows the field row by row, `Collapse` keeps one row and folds the
-   * tags that do not fit into a `+N` counter whose hover panel lists them.
-   * Ignored with `customMultiSelectTagsRenderer`.
+   * Keeps a multi-select's tags on one row, folding the ones that do not fit
+   * into a `+N` counter whose hover panel lists them (as `TagInput` does with
+   * the same prop). Without it the tags wrap and the field grows.
+   * Ignored with `customMultiSelectTagsRenderer`, and on a mobile screen, where
+   * the hover panel is unavailable and the tags wrap instead.
    */
-  tagsOverflow?: SelectTagsOverflow;
+  collapseTagOverflow?: boolean;
   /**
    * How the chosen option is marked in single mode. The design tints the row
    * (`Tint`, the default); `Check` puts a trailing check on it instead, the
@@ -162,7 +163,7 @@ export interface SelectProps {
  * @param [searchPlaceholder] - Placeholder for the overlay search input.
  * @param [selectAll=false] - Show a "Select All" checkbox in multiple mode.
  * @param [selectAllLabel="Select all"] - Label for the "Select All" checkbox.
- * @param [tagsOverflow=SelectTagsOverflow.Wrap] - How a multi-select shows tags that outgrow the field: wrapped onto more rows, or collapsed into a `+N` counter by the width available.
+ * @param [collapseTagOverflow=false] - Keep a multi-select's tags on one row, folding those that do not fit into a `+N` counter by the width available; the hover panel lists them and removes them.
  * @param [selectedOptionMark=MenuItemMark.Tint] - How the chosen option is marked in single mode.
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
@@ -204,7 +205,7 @@ export const Select: FC<SelectProps> = ({
   selectAll = false,
   invalid,
   selectAllLabel = 'Select all',
-  tagsOverflow = SelectTagsOverflow.Wrap,
+  collapseTagOverflow = false,
   selectedOptionMark = MenuItemMark.Tint,
   emptyStateTitle = 'No options available',
   emptyStateDescription,
@@ -375,10 +376,13 @@ export const Select: FC<SelectProps> = ({
       : singleSelectedOption.label
     : undefined;
 
+  // The `+N` panel opens on hover, which a touch screen does not have.
+  const isMobile = useIsMobileScreen();
   const collapseTags =
     multiple &&
-    tagsOverflow === SelectTagsOverflow.Collapse &&
-    !customMultiSelectTagsRenderer;
+    collapseTagOverflow &&
+    !customMultiSelectTagsRenderer &&
+    !isMobile;
 
   /**
    * Values an `<input>` cannot hold — the tags of a multi-select, an option's
