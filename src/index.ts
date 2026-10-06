@@ -436,6 +436,13 @@ export { Avatar } from './components/New/Avatar/Avatar';
 export type { AvatarProps } from './components/New/Avatar/Avatar';
 export { AvatarShape } from './types/avatar';
 export { extractInitials } from './utils/avatar';
+export { EntityIdentity } from './components/New/EntityIdentity/EntityIdentity';
+export type {
+  EntityIdentityProps,
+  EntityIdentityItem,
+  EntityIdentityLabels,
+} from './components/New/EntityIdentity/EntityIdentity';
+export { EntityType } from './types/entity-type';
 export { SideDrawer } from './components/New/SideDrawer/SideDrawer';
 export type { SideDrawerProps } from './components/New/SideDrawer/SideDrawer';
 export { Tag } from './components/New/Tag/Tag';
