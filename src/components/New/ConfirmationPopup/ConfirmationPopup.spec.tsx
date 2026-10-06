@@ -64,7 +64,7 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
     ).toHaveClass('text-red-500');
   });
 
-  test('danger variant applies the error accent and a danger confirm button', () => {
+  test('danger variant draws no top accent and uses a danger confirm button', () => {
     render(
       <ConfirmationPopup
         {...baseProps}
@@ -72,7 +72,7 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
       />,
     );
 
-    expect(screen.getByRole('dialog')).toHaveClass(
+    expect(screen.getByRole('dialog')).not.toHaveClass(
       'border-t-4',
       'border-error',
     );

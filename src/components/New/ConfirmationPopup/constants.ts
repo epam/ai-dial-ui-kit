@@ -16,7 +16,6 @@ export const defaultConfirmLabel = 'Ok';
 export const variantConfig: Record<
   ConfirmationPopupVariant,
   {
-    container?: string;
     confirm: {
       variant: ButtonVariant;
       appearance: ButtonAppearance;
@@ -30,9 +29,6 @@ export const variantConfig: Record<
     },
   },
   [ConfirmationPopupVariant.Danger]: {
-    // Utilities rather than the legacy `.dial-danger-popup` SCSS rule, which is
-    // scoped as `div .dial-danger-popup` and only lands by accident of nesting.
-    container: 'border-t-4 border-error',
     confirm: {
       variant: ButtonVariant.Danger,
       appearance: ButtonAppearance.Solid,
