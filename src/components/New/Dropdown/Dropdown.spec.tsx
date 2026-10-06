@@ -755,6 +755,59 @@ describe('Dial UI Kit :: Dropdown', () => {
     );
   });
 
+  describe('submenu and scrolling', () => {
+    const renderWithSubMenu = () =>
+      render(
+        <Dropdown
+          items={[
+            {
+              key: 'sub',
+              label: 'More',
+              children: [{ key: 'sub-1', label: 'Sub One' }],
+            },
+          ]}
+        >
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+
+    const openSubMenu = async (user: ReturnType<typeof userEvent.setup>) => {
+      openByClick();
+      await user.hover(screen.getByRole('menuitem', { name: /more/i }));
+      return screen.findByRole('menuitem', { name: 'Sub One' });
+    };
+
+    test('closes the submenu when an ancestor of its trigger scrolls', async () => {
+      const user = userEvent.setup();
+      renderWithSubMenu();
+      await openSubMenu(user);
+
+      fireEvent.scroll(window);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('menuitem', { name: 'Sub One' }),
+        ).not.toBeInTheDocument(),
+      );
+      expect(screen.getByRole('menuitem', { name: /more/i })).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
+    });
+
+    test('keeps the submenu open when the submenu itself scrolls', async () => {
+      const user = userEvent.setup();
+      renderWithSubMenu();
+      const subOne = await openSubMenu(user);
+
+      fireEvent.scroll(subOne.closest('[role="menu"]')!);
+
+      expect(
+        screen.getByRole('menuitem', { name: 'Sub One' }),
+      ).toBeInTheDocument();
+    });
+  });
+
   test.each([
     ['Enter', '{Enter}'],
     ['Space', ' '],
