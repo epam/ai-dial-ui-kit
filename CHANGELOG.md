@@ -9,6 +9,11 @@ Versions match the git tags on the `development` branch.
 
 ## [0.15.0]
 
+### Breaking Changes
+
+- **Legacy theme variable fallbacks removed** — 0.14.0 renamed several theme variables but kept the old names in the fallback chain, so every token resolved two variables and a theme could set either. The old names are no longer read: `--bg-control-neutral-hover` → `--bg-control-neutral-hover-muted`, `--stroke-focus-black` → `--stroke-focus`, and `--bg-control-accent-gradient-from` / `-to` / `-hover-from` / `-active-to` → `--bg-gradient-1` / `-2` / `-1-hover` / `-2-active`. A theme that still sets an old name falls back to the kit's default colour; rename the variable.
+  See [migration guide](migration-guides/0.15.0/legacy-theme-variable-fallbacks-removal.md).
+
 ### Added
 
 - **Public class names on every design-system 2.0 component** — a host embedding the kit had no honest selector for the parts of a component its props do not reach: the kit's own classes are Tailwind utilities and hashed module locals, so hosts were left on `[class*='_selectedItem_']`, `> div:nth-child(2) > button` and `[role='none'][aria-label='dropdown']` — the last an accessibility contract, and a plain English string a localised host cannot rely on. Every 2.0 component now stamps a stable class on the element that draws it, exported as one record: `DIAL_KIT_CLASS.menuItem` is `'dial-kit-menuitem'`, and so on for 48 elements across the feedback components (`Spinner`, `ProgressBar`, `Skeleton`, `Notification`, `NoDataContent`), the text components (`Highlight`, `CaptionText`/`ErrorText`, `Label`), the containers (`CardShell`, `CollapsibleSidebar`, `ResizableContainer`, `Popup`, `ConfirmationPopup`, `Accordion`, `FolderPath`), the menus and overlays (`Dropdown` and its item list, rows and chosen-row check, `DialDropdownIcon`'s icon and caret badge, `Tooltip`, `InteractiveTooltip`, `EllipsisTooltip`), the fields (`Search`, `PasswordInput`, `NumberInput`, `TagInput`, `Select`, `InlineSelect`, `Calendar`, `FileDropzone`, `RadioGroupPopupField`) and the controls (`Switch`, `Checkbox`, `CheckboxBox`, `Radio`, `RadioGroup`, `SegmentedControl` and its segments, `Tabs` and its tabs, `Tag`, `ToggleIconButton`, `CloseButton`, `InfoButton`, `ButtonDropdown`). `dial-kit-dropdown-list` and `dial-kit-menuitem` are on the 1.0 dropdown family too, since `DialDropdownIcon` opens one.
