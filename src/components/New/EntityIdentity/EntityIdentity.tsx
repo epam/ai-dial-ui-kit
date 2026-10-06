@@ -4,9 +4,9 @@ import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { AvatarShape } from '@/types/avatar';
 import { EntityType } from '@/types/entity-type';
 import { mergeClasses } from '@/utils/merge-classes';
-import { Avatar } from '../Avatar/Avatar';
-import { EllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
-import { Highlight } from '../Highlight/Highlight';
+import { Avatar } from '@/components/New/Avatar/Avatar';
+import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
+import { Highlight } from '@/components/New/Highlight/Highlight';
 
 /** Identity fields of the entity rendered by `EntityIdentity`. */
 export interface EntityIdentityItem {
