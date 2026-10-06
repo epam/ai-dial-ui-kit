@@ -329,6 +329,7 @@ breaking change and goes through the migration-guide process.
 | `sharedEntityIndicator` | `dial-kit-shared-entity-indicator`   | The badge of a `SharedEntityIndicator`, including the one on a `FileIcon` |
 | `badge`                | `dial-kit-badge`                      | The root of a `Badge`: the label box, with its icon when it has one |
 | `avatar`               | `dial-kit-avatar`                     | The root of an `Avatar`: the image, or the initials box that replaces it |
+| `entityIdentity`         | `dial-kit-entity-identity`              | The root row of an `EntityIdentity`: icon, type label, name and version |
 | `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
 
 #### Controls

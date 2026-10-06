@@ -138,6 +138,8 @@ export const DIAL_KIT_CLASS = {
   badge: 'dial-kit-badge',
   /** The root of an `Avatar`: the image, or the initials box that replaces it. */
   avatar: 'dial-kit-avatar',
+  /** The root row of an `EntityIdentity`: its icon, type label, name and version. */
+  entityIdentity: 'dial-kit-entity-identity',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */
