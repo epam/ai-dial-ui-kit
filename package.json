@@ -82,6 +82,8 @@
   },
   "overrides": {
     "dompurify": "3.4.16",
+    "esbuild": "0.28.1",
+    "shell-quote": "1.11.0",
     "postcss-selector-parser": "^7.1.6"
   },
   "dependencies": {
