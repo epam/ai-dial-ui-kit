@@ -53,6 +53,8 @@ Versions match the git tags on the `development` branch.
 
 ### Changed
 
+- **`Grid` (2.0) — a 1px header divider and an accent outline on hovered and selected rows** — the line under the header was on the thin 0.5px stroke like the rows, so the table body did not read as separate from its header; it is now the 1px main stroke, while the rows keep 0.5px. A hovered or selected row is outlined top and bottom with `--stroke-accent-alpha`, drawn as an inset shadow so the row keeps its height. The line between the header titles and the filter row is removed, and the search fields use an 8px radius. Visual only; no prop changes.
+
 - **`Select` (2.0) — multi-select tags are 24px, and the field wraps them with an 8px gap** — the tags in a multi-select field used the 32px pill of `Tag`, taller than the design's field chip. They are now 24px with a `rounded-md` shape, a `layer-sunken` fill and a `stroke-secondary` rim, and the wrapped field pads 8px vertically with 8px between tags, so one row of tags still fills the 40px field. `Tag` itself is unchanged. Visual only; no API changes.
 
 ### Fixed
