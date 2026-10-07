@@ -356,6 +356,7 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
             'z-floating overflow-y-auto',
             overlaySurfaceClassName,
             overlayListClassName,
+            !isListShown && 'hidden',
             themeScope,
             listClassName,
           )}
