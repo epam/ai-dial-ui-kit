@@ -319,6 +319,7 @@ breaking change and goes through the migration-guide process.
 | `passwordInput`        | `dial-kit-password-input`             | The `PasswordInput` field box, additive to `dial-kit-input`    |
 | `numberInput`          | `dial-kit-number-input`               | The `NumberInput` field box, additive to `dial-kit-input`      |
 | `tagInput`             | `dial-kit-tag-input`                  | The `TagInput` field box, additive to `dial-kit-input`         |
+| `autocompleteTagInput` | `dial-kit-autocomplete-tag-input`     | The `AutocompleteTagInput` field box, additive to `dial-kit-input` |
 | `select`               | `dial-kit-select`                     | The root of a `Select`                                         |
 | `inlineSelect`         | `dial-kit-inline-select`              | The trigger button of an `InlineSelect`                        |
 | `calendar`             | `dial-kit-calendar`                   | The root of a `Calendar`, in every mode                        |

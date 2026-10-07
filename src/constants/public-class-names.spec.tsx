@@ -64,6 +64,7 @@ import { Switch } from '@/components/New/Switch/Switch';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
+import { AutocompleteTagInput } from '@/components/New/AutocompleteTagInput/AutocompleteTagInput';
 import { Textarea } from '@/components/New/Textarea/Textarea';
 import { ToggleIconButton } from '@/components/New/ToggleIconButton/ToggleIconButton';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
@@ -181,6 +182,10 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['passwordInput', () => <PasswordInput value="" onChange={noop} />],
   ['numberInput', () => <NumberInput value={1} onChange={noop} />],
   ['tagInput', () => <TagInput value={[]} onChange={noop} />],
+  [
+    'autocompleteTagInput',
+    () => <AutocompleteTagInput value={[]} suggestions={[]} onChange={noop} />,
+  ],
   [
     'select',
     () => <Select options={[{ value: 'a', label: 'A' }]} onChange={noop} />,

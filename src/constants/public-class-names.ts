@@ -112,6 +112,8 @@ export const DIAL_KIT_CLASS = {
   numberInput: 'dial-kit-number-input',
   /** The `TagInput` field, additive to `dial-kit-input`. */
   tagInput: 'dial-kit-tag-input',
+  /** The `AutocompleteTagInput` field, additive to `dial-kit-input`. */
+  autocompleteTagInput: 'dial-kit-autocomplete-tag-input',
   /** The root of a `Select`, wrapping its label, field and caption. */
   select: 'dial-kit-select',
   /** The trigger button of an `InlineSelect`. */
