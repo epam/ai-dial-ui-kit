@@ -55,11 +55,17 @@ const meta = {
       description:
         'Accessible name for the underlying textarea, for cases with no visible label',
     },
+    showDragbar: {
+      control: { type: 'boolean' },
+      description:
+        'Whether to show the bottom drag bar that resizes the editor height',
+    },
   },
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor.',
     height: 300,
     theme: EditorThemes.light,
+    showDragbar: true,
   },
 } satisfies Meta<MarkdownEditorProps>;
 

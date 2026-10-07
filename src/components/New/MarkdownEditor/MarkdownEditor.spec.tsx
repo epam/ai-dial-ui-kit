@@ -181,4 +181,18 @@ describe('Dial UI Kit :: MarkdownEditor', () => {
       container.querySelector('.w-md-editor-fullscreen'),
     ).toBeInTheDocument();
   });
+
+  test('Should render the drag bar by default', () => {
+    const { container } = render(<MarkdownEditor value="# Test" />);
+
+    expect(container.querySelector('.w-md-editor-bar')).toBeInTheDocument();
+  });
+
+  test('Should not render the drag bar when showDragbar is false', () => {
+    const { container } = render(
+      <MarkdownEditor value="# Test" showDragbar={false} />,
+    );
+
+    expect(container.querySelector('.w-md-editor-bar')).not.toBeInTheDocument();
+  });
 });
