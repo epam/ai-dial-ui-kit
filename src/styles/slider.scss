@@ -60,7 +60,6 @@
   -webkit-appearance: none;
   box-sizing: border-box;
   cursor: inherit;
-  transition: box-shadow 150ms ease-out;
   /*
    * WebKit lays the thumb against the top edge of the runnable track, so it
    * needs half the difference between the two heights back: (4px - 12px) / 2.
@@ -75,19 +74,6 @@
   appearance: none;
   box-sizing: border-box;
   cursor: inherit;
-  transition: box-shadow 150ms ease-out;
-}
-
-.dial-kit-slider:not(:disabled):hover::-webkit-slider-thumb,
-.dial-kit-slider:not(:disabled):focus-visible::-webkit-slider-thumb,
-.dial-kit-slider:not(:disabled):active::-webkit-slider-thumb {
-  box-shadow: 0 0 0 4px theme('borderColor.accent-alpha');
-}
-
-.dial-kit-slider:not(:disabled):hover::-moz-range-thumb,
-.dial-kit-slider:not(:disabled):focus-visible::-moz-range-thumb,
-.dial-kit-slider:not(:disabled):active::-moz-range-thumb {
-  box-shadow: 0 0 0 4px theme('borderColor.accent-alpha');
 }
 
 /*

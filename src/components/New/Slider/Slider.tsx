@@ -224,7 +224,7 @@ export const Slider: FC<SliderProps> = ({
                 'pointer-events-none absolute inset-x-0 h-1 rounded-full',
                 disabled
                   ? 'bg-control-disable-primary'
-                  : 'bg-control-accent-alpha-hover',
+                  : 'bg-control-accent-muted',
                 trackClassName,
               )}
             />
