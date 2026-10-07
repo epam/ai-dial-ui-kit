@@ -140,7 +140,7 @@ export const StatesMatrix: Story = {
             <p className="mb-2 text-secondary dial-caption-text">
               {column.title}
             </p>
-            <div className="rounded-xl bg-layer-raised p-1 shadow-md">
+            <div className="rounded-xl border border-tertiary bg-layer-raised p-1 shadow-md">
               <MenuItem
                 role="menuitem"
                 label="Label"

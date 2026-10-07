@@ -6,9 +6,15 @@ import { mergeClasses } from '@/utils/merge-classes';
  * rather than each keeping its own copy of the tokens.
  */
 
-/** The floating panel itself: rounded raised card with a one-unit inset. */
+/**
+ * The floating panel itself: rounded raised card with a one-unit inset. The
+ * hairline border gives the panel an edge of its own: `bg-layer-raised` is the
+ * same colour as the form fields a select list opens over, and `shadow-md` is
+ * too faint to separate them, so without it the list reads as merging into the
+ * fields underneath.
+ */
 export const overlaySurfaceClassName =
-  'rounded-xl bg-layer-raised p-1 shadow-md';
+  'rounded-xl border border-tertiary bg-layer-raised p-1 shadow-md';
 
 /**
  * Stacks the rows of a menu or option list with a 2px gap, so the tints of
