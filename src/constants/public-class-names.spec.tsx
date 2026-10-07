@@ -53,6 +53,7 @@ import { RadioGroup } from '@/components/New/RadioGroup/RadioGroup';
 import { RadioGroupPopupField } from '@/components/New/RadioGroupPopupField/RadioGroupPopupField';
 import { ResizableContainer } from '@/components/New/ResizableContainer/ResizableContainer';
 import { Search } from '@/components/New/Search/Search';
+import { SchemaRenderer } from '@/components/New/SchemaRenderer/SchemaRenderer';
 import { SegmentedControl } from '@/components/New/SegmentedControl/SegmentedControl';
 import { Select } from '@/components/New/Select/Select';
 import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/SharedEntityIndicator';
@@ -192,6 +193,18 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ],
   ['inlineSelect', () => <InlineSelect items={items} />],
   ['calendar', () => <Calendar />],
+  [
+    'schemaRenderer',
+    () => (
+      <SchemaRenderer schema={{ properties: { name: { type: 'string' } } }} />
+    ),
+  ],
+  [
+    'schemaRendererSection',
+    () => (
+      <SchemaRenderer schema={{ properties: { name: { type: 'string' } } }} />
+    ),
+  ],
   ['fileDropzone', () => <FileDropzone label="Drop" onChange={noop} />],
   ['fileIcon', () => <FileIcon name="a.pdf" type={DialItemType.File} />],
   ['fileName', () => <FileName name="a.pdf" />],

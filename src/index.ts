@@ -267,7 +267,13 @@ export type {
   JsonSchema,
   JsonSchemaDef,
   ValidationError,
+  SchemaRendererTexts,
 } from './components/SchemaRenderer/types';
+export { SchemaRenderer } from './components/New/SchemaRenderer/SchemaRenderer';
+export type {
+  SchemaRendererProps,
+  SchemaRenderField,
+} from './components/New/SchemaRenderer/types';
 
 // JSON Editor - lazy loader to avoid loading in SSR. Re-exported from a
 // shared leaf module (not declared inline) so this entry and `./editors`
