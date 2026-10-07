@@ -49,7 +49,7 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
 - 🎨 **Highly Customizable**: Deep theming capabilities with CSS custom properties
 - 🧪 **Well-Tested**: Comprehensive test coverage (70%+) with Vitest and React Testing Library
 - 📚 **Storybook Ready**: Includes interactive component documentation and development playground
-- 🛠️ **Developer Experience**: Leverage ESLint, Prettier, Husky for maintainable code quality
+- 🛠️ **Developer Experience**: Leverage ESLint and Prettier for maintainable code quality
 - 📦 **Distribution Ready**: Deployed as NPM package ready for easy integration
 
 ## 📖 Documentation
