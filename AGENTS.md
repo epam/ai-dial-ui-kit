@@ -94,7 +94,7 @@ Add a row to the table in `migration-guides/README.md`:
 | Script              | Use                                                                   |
 | ------------------- | --------------------------------------------------------------------- |
 | `npm run typecheck` | Full `tsc` typecheck via `tsconfig.json`; **does not** replace ESLint |
-| `npm run lint`      | ESLint (must pass; pre-commit hooks may run it)                       |
+| `npm run lint`      | ESLint (must pass)                                                    |
 | `npm run test`      | Vitest with coverage                                                  |
 | `npm run build`     | Library + CSS build                                                   |
 | `npm run storybook` | Local docs and visual QA                                              |
@@ -191,7 +191,7 @@ Conformance target is **WCAG 2.2 Level AA**, plus **2.5.5 Target Size (Enhanced,
 - **Always run `typecheck`** after changing `.ts`/`.tsx` files — ESLint doesn't catch all TS errors
 - Tests: prefer roles over tags/text/testId; test layout/callbacks; move complex logic to utils and test separately
 - Branching: `development` is the main branch; create feature branches from it
-- Pre-commit hooks enforce lint + format + tests — do not skip them
+- Run lint + format + tests before committing — there are no git hooks to do it for you
 
 ## Cursor-specific assets
 

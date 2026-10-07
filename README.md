@@ -49,7 +49,7 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
 - 🎨 **Highly Customizable**: Deep theming capabilities with CSS custom properties
 - 🧪 **Well-Tested**: Comprehensive test coverage (70%+) with Vitest and React Testing Library
 - 📚 **Storybook Ready**: Includes interactive component documentation and development playground
-- 🛠️ **Developer Experience**: Leverage ESLint, Prettier, Husky for maintainable code quality
+- 🛠️ **Developer Experience**: Leverage ESLint and Prettier for maintainable code quality
 - 📦 **Distribution Ready**: Deployed as NPM package ready for easy integration
 
 ## 📖 Documentation
@@ -319,6 +319,7 @@ breaking change and goes through the migration-guide process.
 | `passwordInput`        | `dial-kit-password-input`             | The `PasswordInput` field box, additive to `dial-kit-input`    |
 | `numberInput`          | `dial-kit-number-input`               | The `NumberInput` field box, additive to `dial-kit-input`      |
 | `tagInput`             | `dial-kit-tag-input`                  | The `TagInput` field box, additive to `dial-kit-input`         |
+| `autocompleteTagInput` | `dial-kit-autocomplete-tag-input`     | The `AutocompleteTagInput` field box, additive to `dial-kit-input` |
 | `select`               | `dial-kit-select`                     | The root of a `Select`                                         |
 | `inlineSelect`         | `dial-kit-inline-select`              | The trigger button of an `InlineSelect`                        |
 | `calendar`             | `dial-kit-calendar`                   | The root of a `Calendar`, in every mode                        |
