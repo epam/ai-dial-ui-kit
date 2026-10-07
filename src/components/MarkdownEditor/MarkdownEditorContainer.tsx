@@ -26,6 +26,7 @@ export interface DialMarkdownEditorContainerProps {
   theme?: EditorThemes;
   onValidateJSON?: OnValidate;
   preview?: PreviewType;
+  showDragbar?: boolean;
 }
 
 /**
@@ -60,6 +61,7 @@ export interface DialMarkdownEditorContainerProps {
  * @param [theme='dark'] - Theme for the editor (EditorThemes.dark or EditorThemes.light)
  * @param [onValidateJSON] - Callback fired when JSON validation occurs
  * @param [preview='edit'] - Preview mode for Markdown editor
+ * @param [showDragbar=true] - Whether to show the Markdown editor's bottom drag bar that resizes its height
  */
 export const DialMarkdownEditorContainer: FC<
   DialMarkdownEditorContainerProps
@@ -73,6 +75,7 @@ export const DialMarkdownEditorContainer: FC<
   theme = EditorThemes.dark,
   onValidateJSON,
   preview = 'edit',
+  showDragbar = true,
 }) => {
   const switchId = useId();
   const [isJSONContentMode, setIsJSONContentMode] = useState(false);
@@ -150,6 +153,7 @@ export const DialMarkdownEditorContainer: FC<
               onChange={onChangeContent}
               height={height}
               preview={preview}
+              showDragbar={showDragbar}
               theme={theme}
             />
           )}
