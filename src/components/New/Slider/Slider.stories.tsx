@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
+import { IconMicrophone, IconSpeakerphone } from '@tabler/icons-react';
+
+import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { NumberInput } from '../NumberInput/NumberInput';
 import { Slider, type SliderProps } from './Slider';
 
 const InteractiveSlider = (args: SliderProps) => {
@@ -60,6 +64,25 @@ const meta = {
     showValue: {
       control: 'boolean',
       description: 'Renders the current value at the end of the label row',
+    },
+    showTooltip: {
+      control: 'boolean',
+      description:
+        'Renders the current value in a bubble above the thumb; hidden while disabled',
+    },
+    showTicks: {
+      control: 'boolean',
+      description:
+        'Renders a tick mark at every value the thumb can snap to; hidden while disabled',
+    },
+    leftContent: {
+      control: false,
+      description: 'Content before the track, e.g. an icon',
+    },
+    rightContent: {
+      control: false,
+      description:
+        'Content after the track, e.g. a `NumberInput` or the formatted value',
     },
     caption: {
       control: 'text',
@@ -180,6 +203,158 @@ export const CustomFormat: Story = {
   },
 };
 
+const percent = (v: number) => `${Math.round(v * 100)}%`;
+
+export const Continuous: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The continuous slider of the design: the value rides above the thumb in a bubble. The bubble is a visual echo — the input announces the value itself.',
+      },
+    },
+  },
+  render: InteractiveSlider,
+  args: {
+    'aria-label': 'Creativity',
+    step: 0.01,
+    showTooltip: true,
+    formatValue: percent,
+  },
+};
+
+export const Discrete: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`showTicks` marks every value the thumb snaps to on the unfilled track. Keep the step coarse enough that the marks stay apart.',
+      },
+    },
+  },
+  render: InteractiveSlider,
+  args: {
+    'aria-label': 'Creativity',
+    step: 0.025,
+    showTooltip: true,
+    showTicks: true,
+    formatValue: percent,
+  },
+};
+
+const SliderWithNumberInput = (args: SliderProps) => {
+  const [value, setValue] = useState(args.value);
+
+  return (
+    <div className="w-[320px]">
+      <Slider
+        {...args}
+        value={value}
+        onChange={setValue}
+        rightContent={
+          <div className="w-16">
+            <NumberInput
+              aria-label="Volume value"
+              integer
+              min={args.min}
+              max={args.max}
+              value={value}
+              onChange={(v) => {
+                const next = Number(v);
+                if (!Number.isNaN(next)) {
+                  setValue(
+                    Math.min(
+                      args.max ?? next,
+                      Math.max(args.min ?? next, next),
+                    ),
+                  );
+                }
+              }}
+            />
+          </div>
+        }
+      />
+    </div>
+  );
+};
+
+export const SliderContainer: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The slider container: a label, an icon in `leftContent` and a `NumberInput` in `rightContent`, both centred on the track. The kit does not sync the field — the story passes both the same `value` and setter.',
+      },
+    },
+  },
+  render: SliderWithNumberInput,
+  args: {
+    id: 'volume-container',
+    labelProps: { label: 'Volume' },
+    value: 50,
+    min: 0,
+    max: 100,
+    step: 1,
+    showTooltip: true,
+    formatValue: (v: number) => `${v}%`,
+    leftContent: (
+      <IconMicrophone
+        size={DIAL_ICON_SIZE.MD}
+        aria-hidden="true"
+        className="text-secondary"
+      />
+    ),
+  },
+};
+
+const SliderWithText = (args: SliderProps) => {
+  const [value, setValue] = useState(args.value);
+
+  return (
+    <div className="w-[320px]">
+      <Slider
+        {...args}
+        value={value}
+        onChange={setValue}
+        rightContent={
+          // A visual echo: the slider already announces its value.
+          <span aria-hidden="true" className="dial-small-text text-primary">
+            {percent(value)}
+          </span>
+        }
+      />
+    </div>
+  );
+};
+
+export const IconAndText: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An icon on the left and the value as text on the right, over a discrete track.',
+      },
+    },
+  },
+  render: SliderWithText,
+  args: {
+    id: 'announcements',
+    labelProps: { label: 'Announcements' },
+    value: 0.25,
+    step: 0.025,
+    showTooltip: true,
+    showTicks: true,
+    formatValue: percent,
+    leftContent: (
+      <IconSpeakerphone
+        size={DIAL_ICON_SIZE.MD}
+        aria-hidden="true"
+        className="text-secondary"
+      />
+    ),
+  },
+};
+
 export const WithCaption: Story = {
   parameters: {
     docs: {
@@ -240,30 +415,30 @@ export const States: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Every value position and the disabled state side by side.',
+        story:
+          'The design matrix: continuous and discrete, at 0–100%, enabled and disabled. Hover, focus and drag show the halo around the thumb; a disabled slider drops the bubble and the ticks.',
       },
     },
   },
   render: (args: SliderProps) => (
-    <div className="flex w-[420px] flex-col gap-6">
-      {[0, 0.3, 1].map((v) => (
-        <Slider
-          {...args}
-          key={v}
-          id={`state-${v}`}
-          value={v}
-          labelProps={{ label: `Value ${v}` }}
-          showValue
-        />
-      ))}
-      <Slider
-        {...args}
-        id="state-disabled"
-        value={0.6}
-        labelProps={{ label: 'Disabled' }}
-        showValue
-        disabled
-      />
+    <div className="grid w-[640px] grid-cols-2 gap-x-8 gap-y-2">
+      {[false, true].map((showTicks) =>
+        [0, 0.25, 0.5, 0.75, 1].flatMap((v) =>
+          [false, true].map((disabled) => (
+            <Slider
+              {...args}
+              key={`${showTicks}-${v}-${disabled}`}
+              aria-label={`${showTicks ? 'Discrete' : 'Continuous'} ${percent(v)}${disabled ? ', disabled' : ''}`}
+              value={v}
+              step={showTicks ? 0.025 : 0.01}
+              showTicks={showTicks}
+              showTooltip
+              formatValue={percent}
+              disabled={disabled}
+            />
+          )),
+        ),
+      )}
     </div>
   ),
 };

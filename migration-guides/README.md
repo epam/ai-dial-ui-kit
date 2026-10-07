@@ -29,6 +29,7 @@ migration-guides/
 | 0.14.0 | [tag-single-size](0.14.0/tag-single-size.md) | `Tag` drops `size` for one 32px pill; the selectable chip gets a semibold selected label |
 | 0.14.0 | [shadow-token-per-step-rename](0.14.0/shadow-token-per-step-rename.md) | Shadow scale rebuilt per step: `sm` moves to the side panels, controls keep their shadow under `dial-kit-control-shadow` |
 | 0.15.0 | [legacy-theme-variable-fallbacks-removal](0.15.0/legacy-theme-variable-fallbacks-removal.md) | Old theme variable names (`--bg-control-neutral-hover`, `--stroke-focus-black`, `--bg-control-accent-gradient-*`) dropped from the fallback chains |
+| 0.15.0 | [slider-redesign](0.15.0/slider-redesign.md) | `Slider` redrawn: 12px accent thumb with a hover/focus halo, accent-tint track; adds `showTooltip`, `showTicks`, `leftContent`, `rightContent` |
 
 ---
 
