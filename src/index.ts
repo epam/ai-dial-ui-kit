@@ -450,6 +450,11 @@ export type { TagProps } from './components/New/Tag/Tag';
 export { TagAppearance } from './types/tag';
 export { TagInput } from './components/New/TagInput/TagInput';
 export type { TagInputProps } from './components/New/TagInput/TagInput';
+export { AutocompleteTagInput } from './components/New/AutocompleteTagInput/AutocompleteTagInput';
+export type {
+  AutocompleteTagInputProps,
+  AutocompleteTagInputSuggestion,
+} from './components/New/AutocompleteTagInput/AutocompleteTagInput';
 export { Search } from './components/New/Search/Search';
 export type { SearchProps } from './components/New/Search/Search';
 export { matchesAccept } from './utils/file-accept';
