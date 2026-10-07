@@ -118,4 +118,24 @@ describe('Dial UI Kit :: DialMarkdownEditor', () => {
 
     expect(screen.queryByText('Start typing here…')).not.toBeInTheDocument();
   });
+
+  test('Should render the drag bar by default', () => {
+    const { container } = render(
+      <DialMarkdownEditor value="# Test" theme={EditorThemes.dark} />,
+    );
+
+    expect(container.querySelector('.w-md-editor-bar')).toBeInTheDocument();
+  });
+
+  test('Should not render the drag bar when showDragbar is false', () => {
+    const { container } = render(
+      <DialMarkdownEditor
+        value="# Test"
+        showDragbar={false}
+        theme={EditorThemes.dark}
+      />,
+    );
+
+    expect(container.querySelector('.w-md-editor-bar')).not.toBeInTheDocument();
+  });
 });

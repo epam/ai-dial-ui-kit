@@ -12,6 +12,7 @@ export interface DialMarkdownEditorProps {
   theme?: EditorThemes;
   className?: string;
   placeholder?: ReactNode;
+  showDragbar?: boolean;
 }
 
 /**
@@ -36,6 +37,7 @@ export interface DialMarkdownEditorProps {
  * @param [placeholder] - Content to display when the editor is empty
  * @param [theme='dark'] - Theme for the editor ('light' or 'dark')
  * @param [className] - Additional CSS classes for the container
+ * @param [showDragbar=true] - Whether to show the bottom drag bar that resizes the editor height
  */
 export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
   value,
@@ -45,6 +47,7 @@ export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
   theme = EditorThemes.dark,
   className,
   placeholder,
+  showDragbar = true,
 }) => {
   const showPlaceholder = placeholder !== undefined && !value;
 
@@ -58,6 +61,7 @@ export const DialMarkdownEditor: FC<DialMarkdownEditorProps> = ({
         onChange={(val) => onChange?.(val || '')}
         height={height}
         preview={preview}
+        visibleDragbar={showDragbar}
       />
       {showPlaceholder && (
         <div className="pointer-events-none absolute left-0 top-8 px-2 dial-small-text text-secondary opacity-40">
