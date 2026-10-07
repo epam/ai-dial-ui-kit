@@ -67,6 +67,8 @@ Versions match the git tags on the `development` branch.
 
 ### Changed
 
+- **`StarterButton` (2.0) — a sparkles icon by default** — the design puts a sparkles glyph before every starter label, so each host was passing the same `iconBefore`. `iconBefore` now defaults to a 20px `IconSparkles` at the 1.5 stroke, `aria-hidden`, and stroked with the starter gradient like any other icon. A caller-supplied `iconBefore` replaces it; `iconBefore={null}` keeps a label-only pill. A `StarterButton` that passed no `iconBefore` now draws the icon; no other API changes.
+
 - **`Select` (2.0) — multi-select tags are 24px, and the field wraps them with an 8px gap** — the tags in a multi-select field used the 32px pill of `Tag`, taller than the design's field chip. They are now 24px with a `rounded-md` shape, a `layer-sunken` fill and a `stroke-secondary` rim, and the wrapped field pads 8px vertically with 8px between tags, so one row of tags still fills the 40px field. `Tag` itself is unchanged. Visual only; no API changes.
 
 ### Fixed

@@ -78,7 +78,11 @@ describe('Dial UI Kit :: StarterButton', () => {
 
     test('Should render one gradient when only iconAfter is set', () => {
       const { container } = render(
-        <StarterButton label="Summarize" iconAfter={<Icon />} />,
+        <StarterButton
+          label="Summarize"
+          iconBefore={null}
+          iconAfter={<Icon />}
+        />,
       );
       expect(container.querySelectorAll('linearGradient')).toHaveLength(1);
       expect(screen.getByTestId('icon')).toBeInTheDocument();
@@ -96,8 +100,26 @@ describe('Dial UI Kit :: StarterButton', () => {
       expect(screen.getAllByTestId('icon')).toHaveLength(2);
     });
 
-    test('Should render no gradient and no icon slot without icons', () => {
+    test('Should render a default sparkles icon stroked with the gradient', () => {
       const { container } = render(<StarterButton label="Summarize" />);
+      expect(container.querySelectorAll('linearGradient')).toHaveLength(1);
+      const icon = container.querySelector('svg.tabler-icon-sparkles');
+      expect(icon).toHaveAttribute('aria-hidden', 'true');
+      expect(icon).toHaveAttribute('stroke-width', '1.5');
+    });
+
+    test('Should replace the default icon with a caller-supplied one', () => {
+      const { container } = render(
+        <StarterButton label="Summarize" iconBefore={<Icon />} />,
+      );
+      expect(screen.getByTestId('icon')).toBeInTheDocument();
+      expect(container.querySelector('.tabler-icon-sparkles')).toBeNull();
+    });
+
+    test('Should render no gradient and no icon slot when iconBefore is null', () => {
+      const { container } = render(
+        <StarterButton label="Summarize" iconBefore={null} />,
+      );
       expect(container.querySelector('svg')).toBeNull();
     });
 

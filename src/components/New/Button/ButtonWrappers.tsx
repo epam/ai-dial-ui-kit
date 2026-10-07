@@ -1,5 +1,8 @@
+import { IconSparkles } from '@tabler/icons-react';
 import { type CSSProperties, type FC, useId } from 'react';
 
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { Button, type ButtonProps } from './Button';
 
@@ -104,9 +107,19 @@ const STARTER_ICON_GRADIENT = {
   to: 'var(--stroke-gradient-2, #885DF2)',
 };
 
+const STARTER_DEFAULT_ICON = (
+  <IconSparkles
+    size={DIAL_ICON_SIZE.MD}
+    stroke={DIAL_KIT_ICON_STROKE}
+    aria-hidden
+  />
+);
+
 /** A Starter Button component — a conversation starter: an outlined neutral
  * pill whose icons are stroked with the accent gradient
  * Design system 2.0
+ *
+ * `iconBefore` defaults to a sparkles icon; pass `null` for a label-only pill.
  *
  * An SVG stroke cannot take a CSS gradient, so the button renders its own
  * `linearGradient` with a per-instance id and hands it to its icons through
@@ -116,7 +129,6 @@ const STARTER_ICON_GRADIENT = {
  * ```tsx
  * <StarterButton
  *  label="Summarize this document"
- *  iconBefore={<IconSparkles />}
  *  onClick={handleClick}
  * />
  * ```
@@ -125,7 +137,7 @@ const STARTER_ICON_GRADIENT = {
  */
 export const StarterButton: FC<ButtonVariantProps> = ({
   appearance = ButtonAppearance.Outlined,
-  iconBefore,
+  iconBefore = STARTER_DEFAULT_ICON,
   iconAfter,
   style,
   ...props
