@@ -270,23 +270,7 @@ export const Starter: Story = {
       {STARTER_STATES.map(({ label, id, disabled }) => (
         <Fragment key={id}>
           <span className="text-sm text-secondary">{label}</span>
-          <StarterButton
-            id={id}
-            label="Button"
-            disabled={disabled}
-            iconBefore={
-              <IconArrowLeft
-                size={DIAL_ICON_SIZE.MD}
-                stroke={DIAL_KIT_ICON_STROKE}
-              />
-            }
-            iconAfter={
-              <IconArrowRight
-                size={DIAL_ICON_SIZE.MD}
-                stroke={DIAL_KIT_ICON_STROKE}
-              />
-            }
-          />
+          <StarterButton id={id} label="Prompting tips" disabled={disabled} />
         </Fragment>
       ))}
     </div>
@@ -300,7 +284,7 @@ export const Starter: Story = {
     docs: {
       description: {
         story:
-          '`StarterButton` — a conversation starter. An outlined neutral pill with a secondary label and icons stroked with the accent gradient, shown across its default, hover, active, focus, and disabled states.',
+          '`StarterButton` — a conversation starter. An outlined neutral pill with a secondary label and a default sparkles icon stroked with the accent gradient (`iconBefore` replaces it, `null` removes it), shown across its default, hover, active, focus, and disabled states.',
       },
     },
   },
