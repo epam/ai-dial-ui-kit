@@ -49,8 +49,8 @@ export const GRID_THEME_PARAMS = {
   backgroundColor: 'var(--bg-layer-raised, #FCFCFC)',
   oddRowBackgroundColor: 'var(--bg-layer-sunken, #EEF1F7)',
   selectedRowBackgroundColor:
-    'var(--bg-control-accent-alpha-selected, #2764D914)',
-  rowHoverColor: 'var(--bg-control-accent-alpha-subtle, #2764D90A)',
+    'var(--bg-control-accent-alpha-active-subtle, #2764D914)',
+  rowHoverColor: 'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)',
   borderColor: 'var(--stroke-tertiary, #E0E6F0)',
   // Dividers inside the table sit on the thin stroke (0.5px) rather than the
   // 1px main stroke that controls and standalone dividers use, so a dense grid

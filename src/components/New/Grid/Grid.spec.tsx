@@ -66,10 +66,10 @@ describe('Dial UI Kit :: Grid', () => {
 
   test('tints hovered and selected rows per the cell design', () => {
     expect(GRID_THEME_PARAMS.rowHoverColor).toBe(
-      'var(--bg-control-accent-alpha-subtle, #2764D90A)',
+      'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)',
     );
     expect(GRID_THEME_PARAMS.selectedRowBackgroundColor).toBe(
-      'var(--bg-control-accent-alpha-selected, #2764D914)',
+      'var(--bg-control-accent-alpha-active-subtle, #2764D914)',
     );
   });
 

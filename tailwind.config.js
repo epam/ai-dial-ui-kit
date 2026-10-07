@@ -19,10 +19,10 @@ const backgroundsColors = {
   'gradient-2-hover': 'var(--bg-gradient-2-hover, #885DF2)', // Violet-300
   'gradient-2-active': 'var(--bg-gradient-2-active, #7C3AED)', // Violet-500
   'control-accent-alpha': 'var(--bg-control-accent-alpha, #2764D90F)', // blue-500 alpha-6
-  'control-accent-alpha-subtle':
-    'var(--bg-control-accent-alpha-subtle, #2764D90A)', // blue-500 alpha-4
-  'control-accent-alpha-selected':
-    'var(--bg-control-accent-alpha-selected, #2764D914)', // blue-500 alpha-8
+  'control-accent-alpha-hover-subtle':
+    'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)', // blue-500 alpha-4
+  'control-accent-alpha-active-subtle':
+    'var(--bg-control-accent-alpha-active-subtle, #2764D914)', // blue-500 alpha-8
   'control-accent-alpha-hover':
     'var(--bg-control-accent-alpha-hover, #2764D924)', // blue-500 alpha-14
   'control-accent-alpha-active':
@@ -40,7 +40,8 @@ const backgroundsColors = {
   'control-error': 'var(--bg-control-error, #AE2F2F)', // red-800
   'control-error-hover': 'var(--bg-control-error-hover, #BF3939)', // red-700
   'control-error-active': 'var(--bg-control-error-active, #CC4545)', // red-600
-  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F764641A)', // red-800 alpha-10
+  'control-error-alpha': 'var(--bg-control-error-alpha, #F764641A)', // red-800 alpha-10
+  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F7646426)', // red-800 alpha-15
   'control-error-alpha-active':
     'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
   'control-disable-primary': 'var(--bg-control-disable-primary, #DCE0E8)', // grey-300
