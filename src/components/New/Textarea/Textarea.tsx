@@ -80,11 +80,12 @@ export const Textarea: FC<TextareaProps> = ({
   labelProps,
   caption,
   id,
+  invalid,
   ...props
 }) => {
   const textareaClassName = mergeClasses(
     'dial-kit-textarea dial-kit-input px-3 py-2',
-    props.invalid && 'dial-kit-input-error',
+    invalid && 'dial-kit-input-error',
     props.disabled && 'dial-kit-input-disable',
     resolveResizeClassName(resize),
     className,

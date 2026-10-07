@@ -323,6 +323,8 @@ breaking change and goes through the migration-guide process.
 | `select`               | `dial-kit-select`                     | The root of a `Select`                                         |
 | `inlineSelect`         | `dial-kit-inline-select`              | The trigger button of an `InlineSelect`                        |
 | `calendar`             | `dial-kit-calendar`                   | The root of a `Calendar`, in every mode                        |
+| `schemaRenderer`       | `dial-kit-schema-renderer`            | The root of a `SchemaRenderer`                                 |
+| `schemaRendererSection` | `dial-kit-schema-renderer-section`   | One collapsible `SchemaRenderer` section card, at any depth    |
 | `fileDropzone`         | `dial-kit-file-dropzone`              | The drop area of a `FileDropzone`                              |
 | `fileIcon`             | `dial-kit-file-icon`                  | The root of a `FileIcon`: glyph or spinner, and the shared badge |
 | `fileName`             | `dial-kit-file-name`                  | The row of a `FileName`: its type icon, the name and any details |

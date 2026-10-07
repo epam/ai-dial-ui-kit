@@ -120,6 +120,14 @@ export const DIAL_KIT_CLASS = {
   inlineSelect: 'dial-kit-inline-select',
   /** The root of a `Calendar`, wrapping its label and date field. */
   calendar: 'dial-kit-calendar',
+  /** The root of a `SchemaRenderer`, wrapping its top-level sections or fields. */
+  schemaRenderer: 'dial-kit-schema-renderer',
+  /**
+   * The card of one collapsible `SchemaRenderer` section, at any depth: a
+   * top-level property, a nested object or array, an array item, or a
+   * key-value entry holding an object.
+   */
+  schemaRendererSection: 'dial-kit-schema-renderer-section',
   /** The drop area of a `FileDropzone`. */
   fileDropzone: 'dial-kit-file-dropzone',
   /**
