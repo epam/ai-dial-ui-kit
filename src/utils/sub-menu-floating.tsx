@@ -124,7 +124,11 @@ export function useSubMenuFloating(
     delay: hoverOptions?.delay ?? { open: 80, close: 80 },
   });
   const click = useClick(context, { enabled: !disabled });
+  /* `ancestorScroll` closes the panel when the parent list or the page
+     scrolls; otherwise `autoUpdate` keeps it pinned to a trigger that may
+     have scrolled out of view. The panel's own scrolling does not count. */
   const dismiss = useDismiss(context, {
+    ancestorScroll: true,
     bubbles: { escapeKey: false, outsidePress: true },
   });
   const role = useRole(context, { role: ariaRole });

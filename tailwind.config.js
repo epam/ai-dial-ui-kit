@@ -33,7 +33,7 @@ const backgroundsColors = {
   'control-neutral-hover-strong':
     'var(--bg-control-neutral-hover-strong, #848E9C)', // grey-600
   'control-neutral-hover-muted':
-    'var(--bg-control-neutral-hover-muted, var(--bg-control-neutral-hover, #E0E6F0))', // grey-250
+    'var(--bg-control-neutral-hover-muted, #E0E6F0)', // grey-250
   'control-neutral-active': 'var(--bg-control-neutral-active, #D1DBEA)', // grey-350
   'control-neutral-default': 'var(--bg-control-neutral-default, #ACB3C3)', // grey-450
   'control-inverted': 'var(--bg-control-inverted, #57647A)', // grey-800
@@ -79,9 +79,7 @@ const borderColors = {
   'accent-alpha': 'var(--stroke-accent-alpha, #2764D933)', // blue-500 alpha-20
   'gradient-1': 'var(--stroke-gradient-1, #5976E9)', // blue-300
   'gradient-2': 'var(--stroke-gradient-2, #885DF2)', // Violet-300
-  // `--stroke-focus` is the token name the design system settled on;
-  // `--stroke-focus-black` stays as a fallback for consumers still setting it.
-  focus: 'var(--stroke-focus, var(--stroke-focus-black, #161B2D))', // grey-1000
+  focus: 'var(--stroke-focus, #161B2D)', // grey-1000
   'accent-focus': 'var(--stroke-accent-focus, #6785FB)', // blue-200
   'error-alpha': 'var(--stroke-error-alpha, #AE2F2F73)', // red-800 alpha-45
   'control-disable-primary': 'var(--stroke-control-disable-primary, #848E9C)', // grey-600
@@ -315,11 +313,11 @@ export default {
       },
       backgroundImage: {
         'control-accent-gradient':
-          'linear-gradient(99.78deg, var(--bg-gradient-1, var(--bg-control-accent-gradient-from, #1D4ED8)) 8.59%, var(--bg-gradient-2, var(--bg-control-accent-gradient-to, #885DF2)) 98.14%)',
+          'linear-gradient(99.78deg, var(--bg-gradient-1, #1D4ED8) 8.59%, var(--bg-gradient-2, #885DF2) 98.14%)',
         'control-accent-gradient-hover':
-          'linear-gradient(99.78deg, var(--bg-gradient-1-hover, var(--bg-control-accent-gradient-hover-from, #6785FB)) 8.59%, var(--bg-gradient-2-hover, var(--bg-control-accent-gradient-to, #885DF2)) 98.14%)',
+          'linear-gradient(99.78deg, var(--bg-gradient-1-hover, #6785FB) 8.59%, var(--bg-gradient-2-hover, #885DF2) 98.14%)',
         'control-accent-gradient-active':
-          'linear-gradient(99.78deg, var(--bg-gradient-1-active, var(--bg-control-accent-gradient-from, #1D4ED8)) 8.59%, var(--bg-gradient-2-active, var(--bg-control-accent-gradient-active-to, #7C3AED)) 98.14%)',
+          'linear-gradient(99.78deg, var(--bg-gradient-1-active, #1D4ED8) 8.59%, var(--bg-gradient-2-active, #7C3AED) 98.14%)',
       },
       colors: {
         transparent: 'transparent',

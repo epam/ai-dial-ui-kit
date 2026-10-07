@@ -58,6 +58,8 @@ import { Select } from '@/components/New/Select/Select';
 import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/SharedEntityIndicator';
 import { Badge } from '@/components/New/Badge/Badge';
 import { Avatar } from '@/components/New/Avatar/Avatar';
+import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
+import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
@@ -192,6 +194,10 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['sharedEntityIndicator', () => <SharedEntityIndicator />],
   ['badge', () => <Badge label="Topic" />],
   ['avatar', () => <Avatar name="Ada Lovelace" />],
+  [
+    'entityIdentity',
+    () => <EntityIdentity item={{ type: EntityType.Model, name: 'GPT-4o' }} />,
+  ],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [

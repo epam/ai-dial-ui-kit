@@ -18,6 +18,8 @@ jobs:
     secrets: inherit
     with:
       node-version: 24
+      trivy-severity: "CRITICAL,HIGH,MEDIUM,LOW"
+      trivy-severity-for-sarif: "CRITICAL,HIGH,MEDIUM,LOW"
 
   verify_distribution:
     name: Verify package distribution
