@@ -1,7 +1,7 @@
 # AI agents — AI DIAL UI Kit
 
 This file is read by Cursor, Codex, and other agent harnesses alongside project context. It defines how AI assistants should work in this repository.
-
+ 
 ## Product
 
 - **What**: `@epam/ai-dial-ui-kit` — React 19 + TypeScript component library for AI DIAL interfaces.
