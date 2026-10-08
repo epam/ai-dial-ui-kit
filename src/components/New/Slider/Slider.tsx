@@ -1,17 +1,20 @@
 import {
   useCallback,
   useId,
+  useState,
   type ChangeEvent,
   type FC,
   type InputHTMLAttributes,
   type ReactNode,
 } from 'react';
 
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { CaptionText, ErrorText } from '../CaptionText/CaptionText';
 import { Label, type LabelProps } from '../Label/Label';
-import { getTickPercents } from './utils';
+import { NumberInput } from '../NumberInput/NumberInput';
+import { getStepPrecision, getTickPercents, snapToStep } from './utils';
 
 /**
  * Rendered thumb diameter, mirrored from `.dial-kit-slider` in `slider.scss`.
@@ -21,9 +24,6 @@ import { getTickPercents } from './utils';
  * 6px behind it at the maximum.
  */
 const THUMB_SIZE = 12;
-
-const getPrecision = (step: number): number =>
-  (step.toString().split('.')[1] ?? '').length;
 
 /** Horizontal position of the thumb's centre for a 0–100 percentage. */
 const getThumbCenter = (percent: number): string =>
@@ -72,6 +72,13 @@ export interface SliderProps extends NativeInputProps {
   leftContent?: ReactNode;
   /** Content after the track, e.g. a `NumberInput` or the formatted value */
   rightContent?: ReactNode;
+  /**
+   * Renders a compact, 24px `NumberInput` after the track, synced with the slider:
+   * typing clamps to `min`/`max` and snaps to `step`. Takes the place of `rightContent`.
+   */
+  showValueInput?: boolean;
+  /** Accessible name of the value input; defaults to a string `labelProps.label` */
+  valueInputAriaLabel?: string;
   caption?: string;
   error?: string;
   onChange?: (value: number) => void;
@@ -128,6 +135,8 @@ export interface SliderProps extends NativeInputProps {
  * @param [showTicks=false] - Renders a tick mark at every step on the unfilled track; hidden while disabled
  * @param [leftContent] - Content before the track, vertically centred on it
  * @param [rightContent] - Content after the track, vertically centred on it
+ * @param [showValueInput=false] - Renders a compact (24px), synced `NumberInput` after the track (clamped to `min`/`max`, snapped to `step`); replaces `rightContent`
+ * @param [valueInputAriaLabel] - Accessible name of the value input; defaults to a string `labelProps.label`
  * @param [caption] - Helper text rendered below the track, and described by the slider
  * @param [error] - Error message rendered below the track; replaces the caption
  * @param [onChange] - Callback fired with the new value
@@ -151,6 +160,8 @@ export const Slider: FC<SliderProps> = ({
   showTicks = false,
   leftContent,
   rightContent,
+  showValueInput = false,
+  valueInputAriaLabel,
   caption,
   error,
   onChange,
@@ -173,11 +184,15 @@ export const Slider: FC<SliderProps> = ({
   const ticks = showTicks && !disabled ? getTickPercents(range, step) : [];
   const tooltipVisible = showTooltip && !disabled;
   const hasLeft = leftContent != null;
-  const hasRight = rightContent != null;
+  const hasRight = showValueInput || rightContent != null;
+  const precision = getStepPrecision(step);
+  // The text being typed into the value input; null while it is not being edited,
+  // so a half-typed "0." is not snapped back to "0" on the next render.
+  const [valueDraft, setValueDraft] = useState<string | null>(null);
 
   const displayValue = formatValue
     ? formatValue(value)
-    : value.toFixed(getPrecision(step));
+    : value.toFixed(precision);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -185,6 +200,20 @@ export const Slider: FC<SliderProps> = ({
     },
     [onChange],
   );
+
+  const handleValueInputChange = useCallback(
+    (next?: number | string) => {
+      const text = next == null ? '' : String(next);
+      setValueDraft(text);
+      const parsed = Number(text);
+      if (text !== '' && Number.isFinite(parsed)) {
+        onChange?.(snapToStep(parsed, min, max, step));
+      }
+    },
+    [max, min, onChange, step],
+  );
+
+  const handleValueInputBlur = useCallback(() => setValueDraft(null), []);
 
   return (
     <div className={mergeClasses('flex flex-col gap-2', containerClassName)}>
@@ -232,7 +261,9 @@ export const Slider: FC<SliderProps> = ({
               <span
                 key={tickPercent}
                 aria-hidden="true"
-                className="pointer-events-none absolute size-0.5 -translate-x-1/2 rounded-full bg-control-neutral-default"
+                // A 1px border fills the 2px dot, so the tick takes the
+                // Controls/Stroke/Accent-focus token, which is a stroke colour.
+                className="pointer-events-none absolute size-0.5 -translate-x-1/2 rounded-full border border-accent-focus"
                 style={{ left: getThumbCenter(tickPercent) }}
               />
             ))}
@@ -291,7 +322,34 @@ export const Slider: FC<SliderProps> = ({
             />
           </div>
 
-          {hasRight && <div className="flex items-center">{rightContent}</div>}
+          {hasRight && (
+            <div className="flex items-center">
+              {showValueInput ? (
+                <NumberInput
+                  aria-label={resolveAccessibleName(
+                    valueInputAriaLabel ??
+                      (typeof labelProps?.label === 'string'
+                        ? labelProps.label
+                        : undefined),
+                  )}
+                  value={valueDraft ?? value.toFixed(precision)}
+                  min={min}
+                  max={max}
+                  step={step}
+                  disabled={disabled}
+                  // 24px like the track row, so the field does not make the
+                  // slider taller than its track and push the next field away.
+                  size={ElementSize.Small}
+                  containerClassName="w-12"
+                  className="text-center"
+                  onChange={handleValueInputChange}
+                  onBlur={handleValueInputBlur}
+                />
+              ) : (
+                rightContent
+              )}
+            </div>
+          )}
 
           {labels && (
             <div

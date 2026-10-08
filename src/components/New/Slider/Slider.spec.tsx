@@ -331,3 +331,134 @@ describe('Dial UI Kit :: Slider', () => {
     ).toBeTruthy();
   });
 });
+
+describe('Dial UI Kit :: Slider :: ticks', () => {
+  const getTicks = (container: HTMLElement) =>
+    container.querySelectorAll(`span[aria-hidden="true"][class~="size-0.5"]`);
+
+  test('draws exactly one tick per step after the start', () => {
+    const { container } = render(
+      <Slider aria-label="Temperature" value={0.5} showTicks />,
+    );
+
+    expect(getTicks(container)).toHaveLength(10);
+  });
+
+  test('paints ticks with the accent-focus stroke token', () => {
+    const { container } = render(
+      <Slider aria-label="Temperature" value={0.5} showTicks />,
+    );
+
+    getTicks(container).forEach((tick) =>
+      expect(tick).toHaveClass('border', 'border-accent-focus'),
+    );
+  });
+});
+
+describe('Dial UI Kit :: Slider :: showValueInput', () => {
+  test('renders a value input named by the label, after the track', () => {
+    render(
+      <Slider
+        labelProps={{ label: 'Temperature' }}
+        value={0.5}
+        showValueInput
+      />,
+    );
+
+    const slider = screen.getByRole('slider', { name: 'Temperature' });
+    const input = screen.getByRole('spinbutton', { name: 'Temperature' });
+
+    expect(input).toHaveValue(0.5);
+    expect(
+      slider.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  test('uses valueInputAriaLabel when given', () => {
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        showValueInput
+        valueInputAriaLabel="Temperature value"
+      />,
+    );
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Temperature value' }),
+    ).toBeInTheDocument();
+  });
+
+  test('replaces rightContent', () => {
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        showValueInput
+        rightContent={<span>Custom</span>}
+      />,
+    );
+
+    expect(screen.queryByText('Custom')).not.toBeInTheDocument();
+  });
+
+  test('reports a typed value snapped to the step and never past max', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        showValueInput
+        valueInputAriaLabel="Temperature value"
+        onChange={onChange}
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton', { name: 'Temperature value' });
+    await user.clear(input);
+    await user.type(input, '0.36');
+    expect(onChange).toHaveBeenLastCalledWith(0.4);
+
+    // Input rejects a value past max, so the slider is never pushed out of range.
+    fireEvent.change(input, { target: { value: '5' } });
+    expect(onChange).toHaveBeenLastCalledWith(0.4);
+  });
+
+  test('keeps the typed text while editing and shows the value on blur', async () => {
+    const user = userEvent.setup();
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        showValueInput
+        valueInputAriaLabel="Temperature value"
+      />,
+    );
+
+    const input = screen.getByRole('spinbutton', { name: 'Temperature value' });
+    await user.clear(input);
+    await user.type(input, '0.3');
+    // The parent has not updated value yet; the input keeps what was typed.
+    expect(input).toHaveDisplayValue('0.3');
+
+    await user.tab();
+    expect(input).toHaveDisplayValue('0.5');
+  });
+
+  test('is disabled with the slider', () => {
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.5}
+        showValueInput
+        valueInputAriaLabel="Temperature value"
+        disabled
+      />,
+    );
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Temperature value' }),
+    ).toBeDisabled();
+  });
+});
