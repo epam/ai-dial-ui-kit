@@ -7,7 +7,14 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { type FC, type MouseEvent, type ReactNode, useId, useRef } from 'react';
+import {
+  type CSSProperties,
+  type FC,
+  type MouseEvent,
+  type ReactNode,
+  useId,
+  useRef,
+} from 'react';
 
 import { Button, type ButtonProps } from '@/components/New/Button/Button';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
@@ -41,6 +48,12 @@ export interface PopupProps {
   portalId?: string;
   className?: string;
   overlayClassName?: string;
+  /**
+   * Inline styles applied to the overlay. Floating UI sets `position`, `inset`
+   * and `overflow: auto` inline, which no class can override; keys passed here
+   * are merged after them and win.
+   */
+  overlayStyle?: CSSProperties;
   titleClassName?: string;
   headerClassName?: string;
   /** Additional CSS classes applied to the scrollable body wrapper around `children`. */
@@ -121,6 +134,7 @@ export interface PopupProps {
  * @param [portalId] - Optional portal container id
  * @param [className] - Additional CSS classes applied to the popup container
  * @param [overlayClassName] - Additional CSS classes applied to the overlay
+ * @param [overlayStyle] - Inline styles merged over Floating UI's own overlay styles (`position`, `inset`, `overflow: auto`)
  * @param [titleClassName] - Additional CSS classes applied to the title element
  * @param [headerClassName] - Additional CSS classes applied to the popup header container
  * @param [bodyClassName] - Additional CSS classes applied to the scrollable body wrapper around `children`
@@ -149,6 +163,7 @@ export const Popup: FC<PopupProps> = ({
   portalId,
   className,
   overlayClassName,
+  overlayStyle,
   titleClassName,
   headerClassName,
   bodyClassName,
@@ -261,6 +276,7 @@ export const Popup: FC<PopupProps> = ({
   return (
     <FloatingPortal id={portalId}>
       <FloatingOverlay
+        style={overlayStyle}
         className={mergeClasses(
           popupOverlayBaseClassName,
           themeScope,
