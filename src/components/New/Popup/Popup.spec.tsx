@@ -28,6 +28,16 @@ describe('Dial UI Kit :: Popup', () => {
     expect(screen.getByText('Body content')).toBeInTheDocument();
   });
 
+  test('merges overlayStyle over the overlay inline styles', () => {
+    render(
+      <Popup open header="Title" overlayStyle={{ overflow: 'hidden' }}>
+        <div>Body</div>
+      </Popup>,
+    );
+    const overlay = screen.getByRole('dialog').parentElement;
+    expect(overlay).toHaveStyle({ position: 'fixed', overflow: 'hidden' });
+  });
+
   test('renders footer', () => {
     render(
       <Popup open header="With footer" footer={<div>Footer here</div>}>
