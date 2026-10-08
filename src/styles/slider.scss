@@ -48,8 +48,13 @@
   @apply h-1 border-none bg-transparent;
 }
 
+/*
+ * A solid accent disc with no border. Hover and keyboard focus grow a soft
+ * halo around it — drawn as a spread shadow, so it takes no layout and never
+ * shifts the thumb.
+ */
 .dial-kit-slider::-webkit-slider-thumb {
-  @apply size-4 rounded-full border border-default bg-control-neutral dial-kit-control-shadow;
+  @apply size-3 rounded-full border-none bg-control-accent;
 
   appearance: none;
   -webkit-appearance: none;
@@ -57,50 +62,37 @@
   cursor: inherit;
   /*
    * WebKit lays the thumb against the top edge of the runnable track, so it
-   * needs half the difference between the two heights back: (4px - 16px) / 2.
-   * Firefox centres its own thumb and would read a margin as a 6px shift.
+   * needs half the difference between the two heights back: (4px - 12px) / 2.
+   * Firefox centres its own thumb and would read a margin as a 4px shift.
    */
-  margin-top: -6px;
+  margin-top: -4px;
 }
 
 .dial-kit-slider::-moz-range-thumb {
-  @apply size-4 rounded-full border border-default bg-control-neutral dial-kit-control-shadow;
+  @apply size-3 rounded-full border-none bg-control-accent;
 
   appearance: none;
   box-sizing: border-box;
   cursor: inherit;
 }
 
-.dial-kit-slider:not(:disabled):hover::-webkit-slider-thumb,
-.dial-kit-slider:not(:disabled):focus-visible::-webkit-slider-thumb {
-  @apply border-accent shadow-md;
-}
-
-.dial-kit-slider:not(:disabled):hover::-moz-range-thumb,
-.dial-kit-slider:not(:disabled):focus-visible::-moz-range-thumb {
-  @apply border-accent shadow-md;
-}
-
-.dial-kit-slider:not(:disabled):active::-webkit-slider-thumb {
-  @apply border-accent shadow-xs;
-}
-
-.dial-kit-slider:not(:disabled):active::-moz-range-thumb {
-  @apply border-accent shadow-xs;
-}
-
+/*
+ * The halo is a 20% tint, too faint to be the only focus indicator (WCAG
+ * 2.4.11 / 1.4.11), so keyboard focus also keeps the kit's focus outline,
+ * outset past the halo.
+ */
 .dial-kit-slider:focus-visible::-webkit-slider-thumb {
-  @apply outline outline-offset-2 outline-focus;
+  @apply outline outline-offset-4 outline-focus;
 }
 
 .dial-kit-slider:focus-visible::-moz-range-thumb {
-  @apply outline outline-offset-2 outline-focus;
+  @apply outline outline-offset-4 outline-focus;
 }
 
 .dial-kit-slider:disabled::-webkit-slider-thumb {
-  @apply border-control-disable-primary bg-control-disable-secondary shadow-none;
+  @apply bg-control-disable-secondary shadow-none;
 }
 
 .dial-kit-slider:disabled::-moz-range-thumb {
-  @apply border-control-disable-primary bg-control-disable-secondary shadow-none;
+  @apply bg-control-disable-secondary shadow-none;
 }

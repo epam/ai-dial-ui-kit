@@ -9,14 +9,14 @@ const backgroundsColors = {
   warning: 'var(--bg-warning, #FAF0CF)', // yellow-100
   info: 'var(--bg-info, #E1EAF9)', // blue-100
   success: 'var(--bg-success, #DBF1EB)', // green-100
-  backdrop: 'var(--bg-backdrop, #161B2D4D)', // grey-1000 alpha-30
+  backdrop: 'var(--bg-backdrop, #161B2D4D)', // grey-950 alpha-30
 
   // controls
   'gradient-1': 'var(--bg-gradient-1, #1D4ED8)', // blue-500
   'gradient-1-hover': 'var(--bg-gradient-1-hover, #6785FB)', // blue-200
   'gradient-1-active': 'var(--bg-gradient-1-active, #1D4ED8)', // blue-500
   'gradient-2': 'var(--bg-gradient-2, #885DF2)', // Violet-300
-  'gradient-2-hover': 'var(--bg-gradient-2-hover, #885DF2)', // Violet-300
+  'gradient-2-hover': 'var(--bg-gradient-2-hover, #885DF2)', // Violet-200
   'gradient-2-active': 'var(--bg-gradient-2-active, #7C3AED)', // Violet-500
   'control-accent-alpha': 'var(--bg-control-accent-alpha, #2764D90F)', // blue-500 alpha-6
   'control-accent-alpha-hover-subtle':
@@ -25,9 +25,14 @@ const backgroundsColors = {
     'var(--bg-control-accent-alpha-active-subtle, #2764D914)', // blue-500 alpha-8
   'control-accent-alpha-hover':
     'var(--bg-control-accent-alpha-hover, #2764D924)', // blue-500 alpha-14
+  'control-accent-alpha-hover-subtle':
+    'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)', // blue-500 alpha-4
   'control-accent-alpha-active':
     'var(--bg-control-accent-alpha-active, #2764D933)', // blue-500 alpha-20
+  'control-accent-alpha-active-subtle':
+    'var(--bg-control-accent-alpha-active-subtle, #2764D914)', // blue-500 alpha-8
   'control-accent': 'var(--bg-control-accent, #1D4ED8)', // blue-500
+  'control-accent-muted': 'var(--bg-control-accent-muted, #E1EAF9)', // blue-100
   'control-accent-hover': 'var(--bg-control-accent-hover, #5976E9)', // blue-300
   'control-neutral': 'var(--bg-control-neutral, #FCFCFC)', // grey-50
   'control-neutral-hover-strong':
@@ -59,7 +64,7 @@ const backgroundsColors = {
 
 const shadowColors = {
   'xs-1': 'var(--shadow-xs-1, #2764D933)', // blue-500 alpha-20
-  'xs-2': 'var(--shadow-xs-2, #161B2D08)', // grey-1000 alpha-3
+  'xs-2': 'var(--shadow-xs-2, #161B2D08)', // grey-950 alpha-3
   sm: 'var(--shadow-sm, #2764D914)', // blue-500 alpha-8
   md: 'var(--shadow-md, #2764D90F)', // blue-500 alpha-6
   lg: 'var(--shadow-lg, #2764D914)', // blue-500 alpha-8
@@ -67,7 +72,7 @@ const shadowColors = {
 
 const borderColors = {
   transparent: 'transparent',
-  primary: 'var(--stroke-primary, #57647A)', // grey-800
+  primary: 'var(--stroke-primary, #57647A)', // grey-700
   secondary: 'var(--stroke-secondary, #D1DBEA)', // grey-350
   tertiary: 'var(--stroke-tertiary, #E0E6F0)', // grey-250
   error: 'var(--stroke-error, #AE2F2F)', // red-800
@@ -88,11 +93,11 @@ const borderColors = {
 
 const textColors = {
   transparent: 'transparent',
-  primary: 'var(--text-primary, #161B2D)', // grey-1000
-  secondary: 'var(--text-secondary, #57647a)', // grey-800
+  primary: 'var(--text-primary, #161B2D)', // grey-950
+  secondary: 'var(--text-secondary, #57647a)', // grey-700
   tertiary: 'var(--text-tertiary, #848e9c)', // grey-600
   accent: 'var(--text-accent, #1D4ED8)', // blue-500
-  error: 'var(--text-error, #AE2F2F)', // red-500
+  error: 'var(--text-error, #AE2F2F)', // red-800
   warning: 'var(--text-warning, #7F6300)', // yellow-800
   'warning-icon': 'var(--text-warning-icon, #EEC840)', // yellow-500
   info: 'var(--text-info, #1D4ED8)', // blue-500

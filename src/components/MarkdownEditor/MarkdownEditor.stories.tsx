@@ -47,12 +47,18 @@ const meta = {
       control: false,
       description: 'Content to display when the editor value is empty',
     },
+    showDragbar: {
+      control: { type: 'boolean' },
+      description:
+        'Whether to show the bottom drag bar that resizes the editor height',
+    },
   },
   args: {
     value: '# Hello World\n\nThis is a **markdown** editor.',
     height: 300,
     preview: 'edit',
     theme: EditorThemes.dark,
+    showDragbar: true,
   },
 } satisfies Meta<DialMarkdownEditorProps>;
 

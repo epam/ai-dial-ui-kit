@@ -1,0 +1,470 @@
+import { JsonSchemaType } from '@/types/json-schema';
+import type {
+  JsonSchema,
+  JsonSchemaDef,
+  ValidationError,
+} from '@/models/json-schema';
+
+function mergeSchemas(a: JsonSchemaDef, b: JsonSchemaDef): JsonSchemaDef {
+  const merged: JsonSchemaDef = { ...a, ...b };
+  if (a.properties || b.properties) {
+    merged.properties = { ...a.properties, ...b.properties };
+  }
+  if (a.required || b.required) {
+    merged.required = Array.from(
+      new Set([...(a.required ?? []), ...(b.required ?? [])]),
+    );
+  }
+  return merged;
+}
+
+export function resolveRef(
+  schema: JsonSchemaDef,
+  rootSchema: JsonSchema,
+  depth = 0,
+): JsonSchemaDef {
+  if (depth > 10) return schema;
+
+  let result = schema;
+
+  if (result.$ref) {
+    const parts = result.$ref.replace(/^#\//, '').split('/');
+    let resolved: unknown = rootSchema;
+    for (const part of parts) {
+      resolved = (resolved as Record<string, unknown>)?.[part];
+    }
+    if (!resolved || typeof resolved !== 'object') return schema;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { $ref: _ref, ...siblings } = result;
+    const resolvedDef = resolved as JsonSchemaDef;
+    const fullyResolved = resolvedDef.$ref
+      ? resolveRef(resolvedDef, rootSchema, depth + 1)
+      : resolvedDef;
+    result = { ...fullyResolved, ...siblings };
+  }
+
+  if (result.allOf && result.allOf.length > 0) {
+    const { allOf, ...rest } = result;
+    let merged: JsonSchemaDef = {};
+    for (const sub of allOf) {
+      merged = mergeSchemas(merged, resolveRef(sub, rootSchema, depth + 1));
+    }
+    result = mergeSchemas(merged, rest);
+  }
+
+  return result;
+}
+
+export function sortByPropertyOrder(
+  entries: [string, JsonSchemaDef][],
+): [string, JsonSchemaDef][] {
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => {
+      const orderA =
+        a.entry[1]['dial:meta']?.['dial:propertyOrder'] ?? Infinity;
+      const orderB =
+        b.entry[1]['dial:meta']?.['dial:propertyOrder'] ?? Infinity;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.index - b.index;
+    })
+    .map(({ entry }) => entry);
+}
+
+export function isMissingRequiredValue(value: unknown): boolean {
+  return value === undefined || value === null || value === '';
+}
+
+export function isObjectType(schema: JsonSchemaDef): boolean {
+  return (
+    schema.type === JsonSchemaType.Object ||
+    (schema.properties != null &&
+      schema.oneOf == null &&
+      schema.anyOf == null &&
+      schema.type == null)
+  );
+}
+
+export function toFieldLabel(key: string): string {
+  return key
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/**
+ * Builds the "required" error message for a field. The label is quoted so a
+ * long title stays visually separate from the "is required" suffix.
+ */
+export const toRequiredMessage = (label: string): string =>
+  `"${label}" is required`;
+
+export function getOptionLabel(
+  schema: JsonSchemaDef,
+  rootSchema: JsonSchema,
+): string {
+  if (schema.type === JsonSchemaType.Null) return 'null';
+  if (schema.$ref) {
+    const resolved = resolveRef(schema, rootSchema);
+    return resolved.title ?? schema.$ref.split('/').pop() ?? 'Option';
+  }
+  if (schema.title) return schema.title;
+  if (schema.type) {
+    return Array.isArray(schema.type) ? schema.type.join(' | ') : schema.type;
+  }
+  if (schema.discriminator) {
+    return Object.keys(schema.discriminator.mapping).join(' | ');
+  }
+  if (schema.const != null) return String(schema.const);
+  if (schema.oneOf) return 'One of options';
+  return 'Option';
+}
+
+export function extractDefaults(
+  schema: JsonSchemaDef,
+  rootSchema: JsonSchema,
+  depth = 0,
+): unknown {
+  if (depth > 15) return undefined;
+  const resolved = resolveRef(schema, rootSchema);
+
+  if ('default' in resolved) {
+    return resolved.default;
+  }
+
+  if (resolved.discriminator && resolved.oneOf) {
+    const firstType = Object.keys(resolved.discriminator.mapping)[0];
+    if (firstType) {
+      const variantSchema = resolveRef(
+        { $ref: resolved.discriminator.mapping[firstType] },
+        rootSchema,
+      );
+      const variantDefaults =
+        (extractDefaults(variantSchema, rootSchema, depth + 1) as Record<
+          string,
+          unknown
+        >) ?? {};
+      return {
+        ...variantDefaults,
+        [resolved.discriminator.propertyName]: firstType,
+      };
+    }
+  }
+
+  if (isObjectType(resolved)) {
+    if (resolved.properties) {
+      const obj: Record<string, unknown> = {};
+      let hasAny = false;
+      for (const [key, propSchema] of Object.entries(resolved.properties)) {
+        const def = extractDefaults(propSchema, rootSchema, depth + 1);
+        if (def !== undefined) {
+          obj[key] = def;
+          hasAny = true;
+        }
+      }
+      return hasAny ? obj : undefined;
+    }
+
+    // Key-value map objects (additionalProperties only, no fixed properties)
+    // default to an empty object so required map fields are not left as null.
+    if (
+      resolved.additionalProperties != null &&
+      resolved.additionalProperties !== false
+    ) {
+      return {};
+    }
+  }
+
+  return undefined;
+}
+
+export function validateRequired(
+  value: unknown,
+  schema: JsonSchemaDef,
+  rootSchema: JsonSchema,
+  path = '',
+  depth = 0,
+): ValidationError[] {
+  if (depth > 15) return [];
+  const errors: ValidationError[] = [];
+  const resolved = resolveRef(schema, rootSchema);
+
+  if (resolved.anyOf) {
+    const nonNullSchemas = resolved.anyOf.filter(
+      (s) => s.type !== JsonSchemaType.Null,
+    );
+    if (value !== null && value !== undefined && nonNullSchemas.length === 1) {
+      return validateRequired(
+        value,
+        nonNullSchemas[0],
+        rootSchema,
+        path,
+        depth + 1,
+      );
+    }
+    return errors;
+  }
+
+  if (resolved.oneOf && resolved.discriminator) {
+    const discProp = resolved.discriminator.propertyName;
+    const discValue = (value as Record<string, unknown> | undefined)?.[
+      discProp
+    ] as string | undefined;
+    if (discValue && resolved.discriminator.mapping[discValue]) {
+      const variantRef = { $ref: resolved.discriminator.mapping[discValue] };
+      const variantSchema = resolveRef(variantRef, rootSchema);
+      return validateRequired(
+        value,
+        variantSchema,
+        rootSchema,
+        path,
+        depth + 1,
+      );
+    }
+    return errors;
+  }
+
+  if (
+    resolved.type === JsonSchemaType.Array ||
+    (!resolved.type && Array.isArray(value))
+  ) {
+    if (Array.isArray(value) && resolved.items) {
+      for (let i = 0; i < value.length; i++) {
+        const childErrors = validateRequired(
+          value[i],
+          resolved.items,
+          rootSchema,
+          `${path}[${i}]`,
+          depth + 1,
+        );
+        errors.push(...childErrors);
+      }
+    }
+    return errors;
+  }
+
+  if (!isObjectType(resolved)) return errors;
+
+  const required = resolved.required ?? [];
+  const obj = value as Record<string, unknown> | undefined;
+
+  for (const key of required) {
+    const propSchema = resolved.properties?.[key];
+    if (propSchema && resolveRef(propSchema, rootSchema).isHidden) {
+      continue;
+    }
+
+    const fieldPath = path ? `${path}.${key}` : key;
+    const v = obj?.[key];
+    if (isMissingRequiredValue(v)) {
+      const label = propSchema?.title ?? toFieldLabel(key);
+      errors.push({ path: fieldPath, message: toRequiredMessage(label) });
+    }
+  }
+
+  if (obj && resolved.properties) {
+    for (const [key, propSchema] of Object.entries(resolved.properties)) {
+      if (resolveRef(propSchema, rootSchema).isHidden) {
+        continue;
+      }
+
+      const fieldPath = path ? `${path}.${key}` : key;
+      const v = obj[key];
+      if (v !== undefined && v !== null) {
+        const childErrors = validateRequired(
+          v,
+          propSchema,
+          rootSchema,
+          fieldPath,
+          depth + 1,
+        );
+        errors.push(...childErrors);
+      }
+    }
+  }
+
+  if (
+    obj &&
+    resolved.additionalProperties != null &&
+    resolved.additionalProperties !== false &&
+    typeof resolved.additionalProperties === 'object'
+  ) {
+    const entrySchema = resolved.additionalProperties as JsonSchemaDef;
+    for (const [key, entryValue] of Object.entries(obj)) {
+      const fieldPath = path ? `${path}.${key}` : key;
+      const childErrors = validateRequired(
+        entryValue,
+        entrySchema,
+        rootSchema,
+        fieldPath,
+        depth + 1,
+      );
+      errors.push(...childErrors);
+    }
+  }
+
+  return errors;
+}
+
+export function buildSummary(
+  value: unknown,
+  schema: JsonSchemaDef,
+  rootSchema: JsonSchema,
+): string {
+  const resolved = resolveRef(schema, rootSchema);
+
+  if (Array.isArray(value)) {
+    return `${value.length} item${value.length !== 1 ? 's' : ''}`;
+  }
+
+  if (isObjectType(resolved) && resolved.properties) {
+    const visibleEntries = Object.entries(resolved.properties).filter(
+      ([, propSchema]) => !resolveRef(propSchema, rootSchema).isHidden,
+    );
+    const total = visibleEntries.length;
+    const obj = value as Record<string, unknown> | undefined;
+    const filled = visibleEntries.filter(([key]) => {
+      const v = obj?.[key];
+      return v !== undefined && v !== null && v !== '';
+    }).length;
+    return `${filled}/${total} fields`;
+  }
+
+  return '';
+}
+
+export function detectAnyOfVariant(
+  value: unknown,
+  schemas: JsonSchemaDef[],
+  rootSchema: JsonSchema,
+): number {
+  if (value === null || value === undefined) {
+    const nullIdx = schemas.findIndex((s) => s.type === JsonSchemaType.Null);
+    return nullIdx >= 0 ? nullIdx : 0;
+  }
+
+  if (Array.isArray(value)) {
+    const idx = schemas.findIndex((s) => {
+      const r = resolveRef(s, rootSchema);
+      return r.type === JsonSchemaType.Array;
+    });
+    return idx >= 0 ? idx : 0;
+  }
+
+  if (typeof value === 'boolean') {
+    const idx = schemas.findIndex((s) => {
+      const r = resolveRef(s, rootSchema);
+      return r.type === JsonSchemaType.Boolean;
+    });
+    return idx >= 0 ? idx : 0;
+  }
+
+  if (typeof value === 'number') {
+    const idx = schemas.findIndex((s) => {
+      const r = resolveRef(s, rootSchema);
+      return (
+        r.type === JsonSchemaType.Number || r.type === JsonSchemaType.Integer
+      );
+    });
+    return idx >= 0 ? idx : 0;
+  }
+
+  if (typeof value === 'string') {
+    const idx = schemas.findIndex((s) => {
+      const r = resolveRef(s, rootSchema);
+      return r.type === JsonSchemaType.String;
+    });
+    return idx >= 0 ? idx : 0;
+  }
+
+  if (typeof value === 'object') {
+    const objVal = value as Record<string, unknown>;
+    for (let i = 0; i < schemas.length; i++) {
+      const r = resolveRef(schemas[i], rootSchema);
+      if (r.discriminator) {
+        const discProp = r.discriminator.propertyName;
+        if (discProp in objVal) return i;
+      }
+    }
+    for (let i = 0; i < schemas.length; i++) {
+      const r = resolveRef(schemas[i], rootSchema);
+      if (isObjectType(r) || r.oneOf) return i;
+    }
+    return 0;
+  }
+
+  return 0;
+}
+
+export function getItemTitle(
+  item: unknown,
+  discriminatorProp: string | undefined,
+  index: number,
+): string {
+  if (discriminatorProp && typeof item === 'object' && item !== null) {
+    const typeVal = (item as Record<string, unknown>)[discriminatorProp];
+    if (typeVal) return `Item ${index + 1}: ${typeVal}`;
+  }
+  if (typeof item === 'object' && item !== null) {
+    const obj = item as Record<string, unknown>;
+    const nameVal = obj.name ?? obj.title ?? obj.id;
+    if (nameVal) return `Item ${index + 1}: ${nameVal}`;
+  }
+  return `Item ${index + 1}`;
+}
+
+export function getSchemaDefault(schema: JsonSchemaDef): unknown {
+  const type = Array.isArray(schema.type) ? schema.type[0] : schema.type;
+  switch (type) {
+    case JsonSchemaType.String:
+      return '';
+    case JsonSchemaType.Boolean:
+      return false;
+    case JsonSchemaType.Array:
+      return [];
+    case JsonSchemaType.Integer:
+    case JsonSchemaType.Number:
+      return undefined;
+    default:
+      return {};
+  }
+}
+
+export type EntryType =
+  | JsonSchemaType.String
+  | JsonSchemaType.Number
+  | JsonSchemaType.Boolean
+  | JsonSchemaType.Null
+  | JsonSchemaType.Object
+  | JsonSchemaType.Array;
+
+export const ENTRY_TYPE_OPTIONS: EntryType[] = [
+  JsonSchemaType.String,
+  JsonSchemaType.Number,
+  JsonSchemaType.Boolean,
+  JsonSchemaType.Null,
+  JsonSchemaType.Object,
+  JsonSchemaType.Array,
+];
+
+export function inferEntryType(value: unknown): EntryType {
+  if (Array.isArray(value)) return JsonSchemaType.Array;
+  if (typeof value === 'object' && value !== null) return JsonSchemaType.Object;
+  if (typeof value === 'boolean') return JsonSchemaType.Boolean;
+  if (typeof value === 'number') return JsonSchemaType.Number;
+  if (value === null) return JsonSchemaType.Null;
+  return JsonSchemaType.String;
+}
+
+const ENTRY_TYPE_DEFAULTS: Record<EntryType, unknown> = {
+  [JsonSchemaType.String]: '',
+  [JsonSchemaType.Number]: 0,
+  [JsonSchemaType.Boolean]: false,
+  [JsonSchemaType.Null]: null,
+  [JsonSchemaType.Object]: {},
+  [JsonSchemaType.Array]: [],
+};
+
+export function getEntryTypeDefault(type: EntryType): unknown {
+  return ENTRY_TYPE_DEFAULTS[type];
+}

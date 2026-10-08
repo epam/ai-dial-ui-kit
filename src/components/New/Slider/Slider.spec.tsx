@@ -189,7 +189,7 @@ describe('Dial UI Kit :: Slider', () => {
     );
 
     expect(container.querySelector('[style*="calc"]')).toHaveStyle({
-      width: 'calc(0% + 8px)',
+      width: 'calc(0% + 6px)',
     });
   });
 
@@ -270,5 +270,64 @@ describe('Dial UI Kit :: Slider', () => {
     expect(screen.getByRole('slider', { name: 'Temperature' })).toHaveClass(
       'custom-input',
     );
+  });
+
+  test('shows the formatted value in a bubble when showTooltip is set', () => {
+    render(
+      <Slider
+        aria-label="Temperature"
+        value={0.25}
+        formatValue={(v) => `${Math.round(v * 100)}%`}
+        showTooltip
+      />,
+    );
+
+    // The bubble echoes the value visually; the slider stays the one source
+    // of truth for assistive tech, so its name does not pick the text up.
+    expect(screen.getByText('25%').closest('[aria-hidden="true"]')).not.toBe(
+      null,
+    );
+    expect(
+      screen.getByRole('slider', { name: 'Temperature' }),
+    ).toHaveAccessibleName('Temperature');
+  });
+
+  test('renders no bubble without showTooltip', () => {
+    render(<Slider aria-label="Temperature" value={0.5} />);
+
+    expect(screen.queryByText('0.5')).not.toBeInTheDocument();
+  });
+
+  test('hides the bubble while disabled', () => {
+    render(
+      <Slider aria-label="Temperature" value={0.5} showTooltip disabled />,
+    );
+
+    expect(screen.queryByText('0.5')).not.toBeInTheDocument();
+  });
+
+  test('renders leftContent and rightContent around the track', () => {
+    render(
+      <Slider
+        aria-label="Volume"
+        value={10}
+        min={0}
+        max={100}
+        step={1}
+        leftContent={<span>Mic</span>}
+        rightContent={<input aria-label="Volume value" readOnly value={10} />}
+      />,
+    );
+
+    const slider = screen.getByRole('slider', { name: 'Volume' });
+    const left = screen.getByText('Mic');
+    const right = screen.getByRole('textbox', { name: 'Volume value' });
+
+    expect(
+      left.compareDocumentPosition(slider) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      slider.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 });

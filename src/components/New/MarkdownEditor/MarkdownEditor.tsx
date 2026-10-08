@@ -21,6 +21,8 @@ export interface MarkdownEditorProps {
   id?: string;
   /** Accessible name for the underlying textarea. Use it only where no visible label exists to pair with `id`. */
   ariaLabel?: string;
+  /** Whether to show the bottom drag bar that resizes the editor height. */
+  showDragbar?: boolean;
 }
 
 /**
@@ -43,6 +45,7 @@ export interface MarkdownEditorProps {
  * @param [defaultPreview='edit'] - Initial edit/live/preview mode
  * @param [id] - `id` of the underlying textarea, for a visible `<label htmlFor>`
  * @param [ariaLabel] - Accessible name for the underlying textarea
+ * @param [showDragbar=true] - Whether to show the bottom drag bar that resizes the editor height
  */
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   value,
@@ -54,6 +57,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   defaultPreview = 'edit',
   id,
   ariaLabel,
+  showDragbar = true,
 }) => {
   const commands = useMemo(() => getMarkdownFormattingCommands(), []);
   const extraCommands = useMemo(() => getMarkdownExtraCommands(), []);
@@ -68,6 +72,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
         onChange={(val) => onChange?.(val || '')}
         height={height}
         preview={defaultPreview}
+        visibleDragbar={showDragbar}
         commands={commands}
         extraCommands={extraCommands}
         /*
