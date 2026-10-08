@@ -239,10 +239,13 @@ export const Slider: FC<SliderProps> = ({
       <div className="flex flex-col gap-1">
         <div
           className={mergeClasses(
-            'grid items-center gap-x-3 gap-y-1',
+            'grid items-center gap-y-1',
+            // The value field reads as part of the control, so it sits closer
+            // to the track than free-form side content does.
+            showValueInput ? 'gap-x-2' : 'gap-x-3',
             getGridColumns(hasLeft, hasRight),
             // Room for the value bubble, which hangs above the track row.
-            tooltipVisible && 'mt-7',
+            tooltipVisible && 'mt-2',
           )}
         >
           {hasLeft && <div className="flex items-center">{leftContent}</div>}
