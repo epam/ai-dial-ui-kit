@@ -53,13 +53,28 @@ describe('Dial UI Kit :: Grid', () => {
    * theme parameters — asserting them is what keeps the three dividers on the
    * thin stroke the design system reserves for tables, one step below the 1px
    * the rest of the library uses. The wrapper frame is deliberately absent: it
-   * is driven by the `wrapperBorder` prop and stays on the main stroke.
+   * is driven by the `wrapperBorder` prop and stays on the main stroke. The
+   * header row border is off, so there is no line between the title and filter
+   * rows; the line under the header is drawn in `styles/grid.scss`.
    */
   test('draws the table dividers on the thin stroke', () => {
     expect(GRID_THEME_PARAMS.rowBorder).toMatch(/^0\.5px solid /);
-    expect(GRID_THEME_PARAMS.headerRowBorder).toMatch(/^0\.5px solid /);
+    expect(GRID_THEME_PARAMS.headerRowBorder).toBe(false);
     expect(GRID_THEME_PARAMS.headerColumnBorder).toMatch(/^0\.5px solid /);
     expect(GRID_THEME_PARAMS).not.toHaveProperty('wrapperBorder');
+  });
+
+  test('tints hovered and selected rows per the cell design', () => {
+    expect(GRID_THEME_PARAMS.rowHoverColor).toBe(
+      'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)',
+    );
+    expect(GRID_THEME_PARAMS.selectedRowBackgroundColor).toBe(
+      'var(--bg-control-accent-alpha-active-subtle, #2764D914)',
+    );
+  });
+
+  test('rounds the search fields to 8px', () => {
+    expect(GRID_THEME_PARAMS.inputBorderRadius).toBe(8);
   });
 
   /* Must run before any other test in this file renders a Grid: the spy

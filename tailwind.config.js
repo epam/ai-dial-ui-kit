@@ -41,7 +41,8 @@ const backgroundsColors = {
   'control-error': 'var(--bg-control-error, #AE2F2F)', // red-800
   'control-error-hover': 'var(--bg-control-error-hover, #BF3939)', // red-700
   'control-error-active': 'var(--bg-control-error-active, #CC4545)', // red-600
-  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F764641A)', // red-800 alpha-10
+  'control-error-alpha': 'var(--bg-control-error-alpha, #F764641A)', // red-800 alpha-10
+  'control-error-alpha-hover': 'var(--bg-control-error-alpha-hover, #F7646426)', // red-800 alpha-15
   'control-error-alpha-active':
     'var(--bg-control-error-alpha-active, #F7646433)', // red-800 alpha-20
   'control-disable-primary': 'var(--bg-control-disable-primary, #DCE0E8)', // grey-300

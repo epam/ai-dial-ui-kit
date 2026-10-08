@@ -32,7 +32,7 @@ export const ROW_HEIGHT = 40;
  * one step below the 1px main stroke controls and standalone dividers use — in
  * the colour every grid border already uses. ag-Grid takes its borders as CSS
  * shorthand rather than as a width token, so the width is a literal here, kept
- * in one constant so the three dividers cannot drift apart.
+ * in one constant so the row and column dividers cannot drift apart.
  */
 const THIN_TABLE_DIVIDER = '0.5px solid var(--stroke-tertiary, #E0E6F0)';
 
@@ -41,16 +41,16 @@ const THIN_TABLE_DIVIDER = '0.5px solid var(--stroke-tertiary, #E0E6F0)';
  * literal fallbacks the Tailwind config carries, so a consumer that defines no
  * CSS variables still gets the intended palette.
  *
- * Hover sits one step up the accent-alpha ramp from the selected tint, so a
- * hovered selected row still reads as hovered — the same relationship the 2.0
- * dropdown and select rows use.
+ * Hover uses the subtle accent tint and selection the slightly stronger
+ * selected tint, as in the grid cell design.
  */
 export const GRID_THEME_PARAMS = {
   accentColor: 'var(--bg-control-accent, #1D4ED8)',
   backgroundColor: 'var(--bg-layer-raised, #FCFCFC)',
   oddRowBackgroundColor: 'var(--bg-layer-sunken, #EEF1F7)',
-  selectedRowBackgroundColor: 'var(--bg-control-accent-alpha, #2764D90F)',
-  rowHoverColor: 'var(--bg-control-accent-alpha-hover, #2764D924)',
+  selectedRowBackgroundColor:
+    'var(--bg-control-accent-alpha-active-subtle, #2764D914)',
+  rowHoverColor: 'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)',
   borderColor: 'var(--stroke-tertiary, #E0E6F0)',
   // Dividers inside the table sit on the thin stroke (0.5px) rather than the
   // 1px main stroke that controls and standalone dividers use, so a dense grid
@@ -60,9 +60,16 @@ export const GRID_THEME_PARAMS = {
   // by the theme: those frame the table and separate its regions rather than
   // dividing rows and columns.
   rowBorder: THIN_TABLE_DIVIDER,
-  headerRowBorder: THIN_TABLE_DIVIDER,
+  // Off: ag-Grid draws this one both under the header and between the title
+  // row and the filter row, and the design has no line between those two. The
+  // line under the header is drawn at 1px in `styles/grid.scss`.
+  headerRowBorder: false,
   headerColumnBorder: THIN_TABLE_DIVIDER,
+  // The design's header divider is a short 12px mark centred in the cell, not
+  // the 20px (half the row) ag-Grid draws by default.
+  headerColumnBorderHeight: 12,
   chromeBackgroundColor: 'var(--bg-layer-base, #F5F7FA)',
+  headerBackgroundColor: 'var(--bg-layer-raised, #FCFCFC)',
   foregroundColor: 'var(--text-primary, #161B2D)',
   headerTextColor: 'var(--text-secondary, #57647A)',
   // 1.0 asked the browser for dark native widgets while painting a light
@@ -74,6 +81,8 @@ export const GRID_THEME_PARAMS = {
   fontFamily: 'var(--theme-font, var(--font-inter))',
   spacing: 4,
   borderRadius: 4,
+  // Search fields in the header and filter popups: `rounded-lg`.
+  inputBorderRadius: 8,
   wrapperBorderRadius: 8,
 };
 
