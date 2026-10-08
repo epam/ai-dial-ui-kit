@@ -56,6 +56,15 @@
       @apply border-0;
     }
 
+    /*
+     * The selection column is not a titled column: the design draws its header
+     * checkbox and its empty filter cell without the divider the titled
+     * columns carry on their trailing edge.
+     */
+    .ag-header-cell[col-id='dial-kit-grid-selection']::after {
+      @apply border-0;
+    }
+
     /* Column titles: 10px semibold caps, as in the design's table header. */
     .ag-header-cell-text {
       @apply dial-caption-lead-semi-text;
