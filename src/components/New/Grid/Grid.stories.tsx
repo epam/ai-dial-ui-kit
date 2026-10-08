@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import { IconInbox } from '@tabler/icons-react';
+import { IconDotsVertical, IconInbox } from '@tabler/icons-react';
 import { useState, type FC } from 'react';
 
 import { Avatar } from '@/components/New/Avatar/Avatar';
 import { Badge } from '@/components/New/Badge/Badge';
+import { Dropdown } from '@/components/New/Dropdown/Dropdown';
+import { IconButton } from '@/components/New/IconButton/IconButton';
+import { Input } from '@/components/New/Input/Input';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
+import { ButtonAppearance, ButtonVariant } from '@/types/button';
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { Grid, type GridProps } from './Grid';
 import { DateCellRenderer } from './renderers/DateCellRenderer';
@@ -425,6 +430,151 @@ export const ComplexRows: StoryObj<GridProps<ModelUsage>> = {
     additionalGridOptions: { rowHeight: 84, domLayout: 'autoHeight' },
   },
   render: ComplexRowsStory,
+};
+
+interface LimitRow extends Record<string, unknown> {
+  id: string;
+  type: string;
+  expirationHours: string;
+  maxUsers: string;
+}
+
+const limitRows: LimitRow[] = [
+  { id: '1', type: 'Applications', expirationHours: '120', maxUsers: '50' },
+  { id: '2', type: 'Toolsets', expirationHours: '72', maxUsers: 'No limits' },
+  { id: '3', type: 'Prompts', expirationHours: '72', maxUsers: 'No limits' },
+  { id: '4', type: 'Files', expirationHours: '72', maxUsers: 'No limits' },
+  {
+    id: '5',
+    type: 'Conversations',
+    expirationHours: '72',
+    maxUsers: 'No limits',
+  },
+];
+
+/**
+ * An input in a cell. It keeps what is being typed in its own state and hands
+ * the value to the grid once the user leaves the field or presses Enter, so a
+ * keystroke does not rebuild the cell under the caret.
+ */
+const EditableInputCell = ({
+  value,
+  data,
+  node,
+  colDef,
+}: ICellRendererParams<LimitRow>) => {
+  const [draft, setDraft] = useState(value == null ? '' : String(value));
+  const commit = () => node.setDataValue(colDef?.field ?? '', draft);
+
+  if (!data) return null;
+
+  return (
+    <Input
+      size={ElementSize.Small}
+      value={draft}
+      aria-label={`${colDef?.headerName} for ${data.type}`}
+      onChange={(next) => setDraft(next ?? '')}
+      onBlur={commit}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') commit();
+      }}
+    />
+  );
+};
+
+const RowActionsCell = ({ data }: ICellRendererParams<LimitRow>) => {
+  if (!data) return null;
+
+  return (
+    <Dropdown
+      items={[
+        { key: 'reset', label: 'Reset to default' },
+        { key: 'remove-limit', label: 'Remove limit', danger: true },
+      ]}
+    >
+      <IconButton
+        variant={ButtonVariant.Primary}
+        appearance={ButtonAppearance.Ghost}
+        size={ElementSize.Small}
+        icon={<IconDotsVertical size={16} aria-hidden="true" />}
+        aria-label={`Actions for ${data.type}`}
+      />
+    </Dropdown>
+  );
+};
+
+// The design divides the cells of an editable table, not only its rows. The
+// grid draws column dividers in the header alone, so the body cells carry
+// theirs, on the same thin stroke the header and row dividers use. ag-Grid sets
+// a transparent 1px border on every cell, hence the important modifiers.
+const CELL_DIVIDER_CLASS = '!border-r-[0.5px] !border-r-tertiary';
+
+const limitColumns: ColDef<LimitRow>[] = [
+  {
+    field: 'type',
+    headerName: 'Type',
+    width: 240,
+    cellClass: CELL_DIVIDER_CLASS,
+  },
+  {
+    field: 'expirationHours',
+    headerName: 'Expiration time (hours)',
+    flex: 1,
+    cellRenderer: EditableInputCell,
+    cellClass: CELL_DIVIDER_CLASS,
+  },
+  {
+    field: 'maxUsers',
+    headerName: 'Max users',
+    flex: 1,
+    cellRenderer: EditableInputCell,
+    cellClass: CELL_DIVIDER_CLASS,
+  },
+  {
+    colId: 'actions',
+    headerName: '',
+    width: 48,
+    minWidth: 48,
+    cellRenderer: RowActionsCell,
+  },
+].map((column) => ({
+  ...column,
+  filter: false,
+  floatingFilter: false,
+  sortable: false,
+  headerClass: 'dial-caption-lead-semi-text',
+}));
+
+const EditableCellsStory = (args: GridProps<LimitRow>) => {
+  // The grid writes committed values into the row objects, so the story
+  // owns copies and a remount starts from the original data.
+  const [rows] = useState(() => limitRows.map((row) => ({ ...row })));
+
+  return (
+    <div className="bg-layer-base p-4">
+      <Grid<LimitRow> {...args} rowData={rows} />
+    </div>
+  );
+};
+
+/**
+ * Editing without a dedicated editor: each cell renders a 2.0 `Input` through
+ * `cellRenderer` and commits the value with `node.setDataValue` when the field
+ * loses focus or Enter is pressed, which fires ag-Grid's `onCellValueChanged`.
+ * The recommended density for an editable table is compact (40px rows).
+ */
+export const EditableCells: StoryObj<GridProps<LimitRow>> = {
+  args: {
+    columnDefs: limitColumns,
+    getRowId: (row) => row.id,
+    additionalGridOptions: {
+      domLayout: 'autoHeight',
+      onCellValueChanged: (event) => {
+        console.info('Cell value changed', event.colDef.field, event.newValue);
+      },
+    },
+  },
+  render: EditableCellsStory,
 };
 
 const ControlledStory = (args: GridProps<Product>) => {
