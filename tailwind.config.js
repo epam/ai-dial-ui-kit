@@ -19,10 +19,6 @@ const backgroundsColors = {
   'gradient-2-hover': 'var(--bg-gradient-2-hover, #885DF2)', // Violet-200
   'gradient-2-active': 'var(--bg-gradient-2-active, #7C3AED)', // Violet-500
   'control-accent-alpha': 'var(--bg-control-accent-alpha, #2764D90F)', // blue-500 alpha-6
-  'control-accent-alpha-hover-subtle':
-    'var(--bg-control-accent-alpha-hover-subtle, #2764D90A)', // blue-500 alpha-4
-  'control-accent-alpha-active-subtle':
-    'var(--bg-control-accent-alpha-active-subtle, #2764D914)', // blue-500 alpha-8
   'control-accent-alpha-hover':
     'var(--bg-control-accent-alpha-hover, #2764D924)', // blue-500 alpha-14
   'control-accent-alpha-hover-subtle':
