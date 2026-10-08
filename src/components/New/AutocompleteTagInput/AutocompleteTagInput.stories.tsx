@@ -72,6 +72,11 @@ const meta = {
       control: 'number',
       description: 'How many matching suggestions the list shows at most',
     },
+    openOnFocus: {
+      control: 'boolean',
+      description:
+        'Opens the full list of suggestions that are not yet tags on focus or click, and keeps it open after a pick',
+    },
     size: {
       control: 'radio',
       options: [ElementSize.Small, ElementSize.Standard],
@@ -126,6 +131,24 @@ export const WithTags: Story = {
     ...baseArgs,
     id: 'with-tags-autocomplete-tag-input',
     defaultValue: ['application/pdf', 'image/png', 'audio/mpeg'],
+  },
+};
+
+export const OpenOnFocus: Story = {
+  render: InteractiveAutocompleteTagInput,
+  args: {
+    ...baseArgs,
+    id: 'open-on-focus-autocomplete-tag-input',
+    defaultValue: ['text/markdown'],
+    openOnFocus: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Focusing or clicking the field lists every suggestion that is not yet a tag, with nothing highlighted, so Enter adds nothing by itself. The list stays open after a pick; typing filters it.',
+      },
+    },
   },
 };
 

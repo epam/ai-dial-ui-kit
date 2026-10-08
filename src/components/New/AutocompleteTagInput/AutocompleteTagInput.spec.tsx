@@ -352,4 +352,108 @@ describe('Dial UI Kit :: AutocompleteTagInput', () => {
       screen.getByRole('list', { name: 'Attachment types list' }),
     ).toBeInTheDocument();
   });
+
+  describe('openOnFocus', () => {
+    test('stays closed on focus without it', async () => {
+      const user = userEvent.setup();
+      render(<ControlledAutocomplete />);
+
+      await user.click(getInput());
+
+      expect(getInput()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    test('opens every suggestion that is not a tag on focus, uncapped and with nothing highlighted', async () => {
+      const user = userEvent.setup();
+      render(
+        <ControlledAutocomplete defaultValue={['image/png']} openOnFocus />,
+      );
+
+      await user.click(getInput());
+
+      const options = screen.getAllByRole('option');
+      expect(options).toHaveLength(suggestions.length - 1);
+      expect(options.map((option) => option.textContent)).not.toContainEqual(
+        expect.stringContaining('image/png'),
+      );
+      expect(
+        options.every(
+          (option) => option.getAttribute('aria-selected') === 'false',
+        ),
+      ).toBe(true);
+      expect(getInput()).not.toHaveAttribute('aria-activedescendant');
+    });
+
+    test('adds nothing on Enter until a suggestion is highlighted', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<ControlledAutocomplete openOnFocus onChange={onChange} />);
+
+      await user.click(getInput());
+      await user.keyboard('{Enter}');
+      expect(onChange).not.toHaveBeenCalled();
+
+      await user.keyboard('{ArrowDown}{Enter}');
+      expect(onChange).toHaveBeenLastCalledWith(['image/gif']);
+    });
+
+    test('lands on the last suggestion on ArrowUp from nothing highlighted', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<ControlledAutocomplete openOnFocus onChange={onChange} />);
+
+      await user.click(getInput());
+      await user.keyboard('{ArrowUp}{Enter}');
+
+      expect(onChange).toHaveBeenLastCalledWith(['image/avif']);
+    });
+
+    test('keeps the list open on the remaining suggestions after a pick', async () => {
+      const user = userEvent.setup();
+      render(<ControlledAutocomplete openOnFocus />);
+
+      await user.click(getInput());
+      await user.click(screen.getByRole('option', { name: /PDF/ }));
+
+      expect(getInput()).toHaveFocus();
+      expect(screen.getAllByRole('option')).toHaveLength(
+        suggestions.length - 1,
+      );
+      expect(
+        screen.queryByRole('option', { name: /PDF/ }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('filters and caps while typing, and shows everything again when cleared', async () => {
+      const user = userEvent.setup();
+      render(<ControlledAutocomplete openOnFocus />);
+
+      await user.type(getInput(), 'image/');
+      expect(screen.getAllByRole('option')).toHaveLength(5);
+
+      await user.clear(getInput());
+      expect(screen.getAllByRole('option')).toHaveLength(suggestions.length);
+    });
+
+    test('reopens on click after Escape', async () => {
+      const user = userEvent.setup();
+      render(<ControlledAutocomplete openOnFocus />);
+
+      await user.click(getInput());
+      await user.keyboard('{Escape}');
+      expect(getInput()).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(getInput());
+      expect(getInput()).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    test('opens nothing when read-only', async () => {
+      const user = userEvent.setup();
+      render(<ControlledAutocomplete openOnFocus readOnly />);
+
+      await user.click(getInput());
+
+      expect(screen.queryByRole('option')).not.toBeInTheDocument();
+    });
+  });
 });
