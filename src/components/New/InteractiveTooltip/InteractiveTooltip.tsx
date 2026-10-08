@@ -6,6 +6,7 @@ import {
   offset,
   safePolygon,
   shift,
+  useClick,
   useDismiss,
   useFloating,
   useFloatingNodeId,
@@ -29,7 +30,7 @@ import {
 
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
-import { TooltipPlacement } from '@/types/tooltip';
+import { InteractiveTooltipTrigger, TooltipPlacement } from '@/types/tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   INTERACTIVE_TOOLTIP_GAP,
@@ -54,6 +55,12 @@ export interface InteractiveTooltipProps {
   hideTooltip?: boolean;
   /** Whether the panel starts open (uncontrolled only). */
   initialOpen?: boolean;
+  /**
+   * What opens the panel: hover or keyboard focus (the default), or a click or
+   * tap on the trigger, which then stays open until a second click, a press
+   * outside or Escape.
+   */
+  trigger?: InteractiveTooltipTrigger;
   /** Controlled open state; disables the hover and focus triggers. */
   open?: boolean;
   /** Callback fired when the open state should change. */
@@ -82,7 +89,11 @@ type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
  *
  * Renders nothing on a mobile screen, where there is no hover to reveal it —
  * so, as with {@link Tooltip}, a control must never depend on this panel alone
- * to be understood or operated.
+ * to be understood or operated. A trigger whose only job is to reveal the
+ * panel, such as an info chip, sets `trigger={InteractiveTooltipTrigger.Click}`
+ * instead: the panel then opens on click or tap, works on every screen size,
+ * and no longer reacts to hover or focus. Do not use it on a trigger that has
+ * an action of its own, since the same tap would run both.
  *
  * @example
  * ```tsx
@@ -109,6 +120,7 @@ type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
  * @param [contentClassName] - Additional CSS classes for the panel
  * @param [placement=TooltipPlacement.Right] - Side of the trigger the panel is placed on
  * @param [initialOpen=false] - Whether the panel starts open (uncontrolled only)
+ * @param [trigger=InteractiveTooltipTrigger.Hover] - What opens the panel: hover or focus, or a click or tap that keeps it open until dismissed
  * @param [open] - Controlled open state; disables the hover and focus triggers
  * @param [onOpenChange] - Callback fired when the open state should change
  */
@@ -119,12 +131,14 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
   asChild = false,
   hideTooltip = false,
   initialOpen = false,
+  trigger: triggerMode = InteractiveTooltipTrigger.Hover,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
   triggerClassName,
   contentClassName,
 }) => {
   const isMobile = useIsMobileScreen();
+  const isClickTriggered = triggerMode === InteractiveTooltipTrigger.Click;
   const themeScope = useThemeScope();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
 
@@ -160,18 +174,22 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
   });
 
   const hover = useHover(context, {
-    enabled: controlledOpen == null,
+    enabled: controlledOpen == null && !isClickTriggered,
     /* Lets the pointer cross the gap between the trigger and the panel
        without closing it, so it can actually be reached and used. */
     handleClose: safePolygon(),
     delay: { open: INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY, close: 0 },
   });
-  const focus = useFocus(context, { enabled: controlledOpen == null });
+  const focus = useFocus(context, {
+    enabled: controlledOpen == null && !isClickTriggered,
+  });
+  const click = useClick(context, { enabled: isClickTriggered });
   const dismiss = useDismiss(context);
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
     focus,
+    click,
     dismiss,
   ]);
 
@@ -191,7 +209,8 @@ export const InteractiveTooltip: FC<InteractiveTooltipProps> = ({
     ),
   );
 
-  const hasContent = !hideTooltip && !isMobile && !!content;
+  const hasContent =
+    !hideTooltip && (isClickTriggered || !isMobile) && !!content;
 
   const trigger = asValidChild ? (
     cloneElement(
