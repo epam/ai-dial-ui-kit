@@ -4,3 +4,8 @@ export enum TooltipPlacement {
   Bottom = 'bottom',
   Left = 'left',
 }
+
+export enum InteractiveTooltipTrigger {
+  Hover = 'hover',
+  Click = 'click',
+}

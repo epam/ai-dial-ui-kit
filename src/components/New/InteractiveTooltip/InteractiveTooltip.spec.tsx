@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { TooltipPlacement } from '@/types/tooltip';
+import { InteractiveTooltipTrigger, TooltipPlacement } from '@/types/tooltip';
 import { InteractiveTooltip } from './InteractiveTooltip';
 
 const setViewportWidth = (width: number) => {
@@ -231,5 +231,92 @@ describe('Dial UI Kit :: InteractiveTooltip', () => {
 
     expect(screen.getByRole('button', { name: 'Trigger' })).toBeInTheDocument();
     expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+  });
+
+  describe('trigger="click"', () => {
+    const renderClickTooltip = (props = {}) =>
+      render(
+        <>
+          <InteractiveTooltip
+            content="Panel text"
+            trigger={InteractiveTooltipTrigger.Click}
+            {...props}
+          >
+            <button>Trigger</button>
+          </InteractiveTooltip>
+          <button>Outside</button>
+        </>,
+      );
+
+    test('Should open on tap and stay open on a mobile screen', async () => {
+      setViewportWidth(375);
+      const user = userEvent.setup();
+
+      renderClickTooltip();
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Trigger' }));
+
+      expect(screen.getByText('Panel text')).toBeInTheDocument();
+    });
+
+    test('Should close on a second tap on the trigger', async () => {
+      const user = userEvent.setup();
+
+      renderClickTooltip();
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+
+      await user.click(trigger);
+      await user.click(trigger);
+
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+    });
+
+    test('Should close on a press outside', async () => {
+      const user = userEvent.setup();
+
+      renderClickTooltip();
+
+      await user.click(screen.getByRole('button', { name: 'Trigger' }));
+      await user.click(screen.getByRole('button', { name: 'Outside' }));
+
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+    });
+
+    test('Should close on Escape', async () => {
+      const user = userEvent.setup();
+
+      renderClickTooltip();
+
+      await user.click(screen.getByRole('button', { name: 'Trigger' }));
+      await user.keyboard('{Escape}');
+
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+    });
+
+    test('Should not open on hover or focus', async () => {
+      const user = userEvent.setup();
+
+      renderClickTooltip();
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+
+      await user.hover(trigger);
+      trigger.focus();
+
+      await waitFor(() => {
+        expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+      });
+    });
+
+    test('Should notify onOpenChange when controlled', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+
+      renderClickTooltip({ open: false, onOpenChange });
+      await user.click(screen.getByRole('button', { name: 'Trigger' }));
+
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(screen.queryByText('Panel text')).not.toBeInTheDocument();
+    });
   });
 });
