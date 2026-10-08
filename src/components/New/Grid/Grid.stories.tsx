@@ -402,7 +402,6 @@ const usageColumns = usageColumnDefs.map((column) => ({
   filter: false,
   floatingFilter: false,
   sortable: false,
-  headerClass: 'dial-caption-lead-semi-text',
 }));
 
 const ComplexRowsStory = (args: GridProps<ModelUsage>) => (
@@ -542,7 +541,6 @@ const limitColumns: ColDef<LimitRow>[] = [
   filter: false,
   floatingFilter: false,
   sortable: false,
-  headerClass: 'dial-caption-lead-semi-text',
 }));
 
 const EditableCellsStory = (args: GridProps<LimitRow>) => {

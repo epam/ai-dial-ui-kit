@@ -45,17 +45,26 @@
      * the theme params. It is drawn here because the `headerRowBorder` theme
      * param is switched off: ag-Grid also uses it between the title and filter
      * rows, which the design leaves undivided.
+     *
+     * `border-solid` is not decoration: with `headerRowBorder` off ag-Grid sets
+     * `border-bottom: none` on `.ag-header`, and a border style of `none`
+     * collapses the width to 0, so the width and colour alone draw nothing.
      */
-    @apply border-b border-tertiary;
+    @apply border-b border-solid border-tertiary;
 
     .ag-column-last::after {
       @apply border-0;
     }
 
+    /* Column titles: 10px semibold caps, as in the design's table header. */
+    .ag-header-cell-text {
+      @apply dial-caption-lead-semi-text;
+    }
+
     .ag-header-viewport,
     .ag-pinned-left-header {
       .ag-floating-filter input {
-        @apply m-0 px-2 py-0;
+        @apply m-0 px-2 py-0 dial-tiny-text;
         height: 24px !important;
       }
     }

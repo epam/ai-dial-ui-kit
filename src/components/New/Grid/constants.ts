@@ -65,6 +65,9 @@ export const GRID_THEME_PARAMS = {
   // line under the header is drawn at 1px in `styles/grid.scss`.
   headerRowBorder: false,
   headerColumnBorder: THIN_TABLE_DIVIDER,
+  // The design's header divider is a short 12px mark centred in the cell, not
+  // the 20px (half the row) ag-Grid draws by default.
+  headerColumnBorderHeight: 12,
   chromeBackgroundColor: 'var(--bg-layer-base, #F5F7FA)',
   headerBackgroundColor: 'var(--bg-layer-raised, #FCFCFC)',
   foregroundColor: 'var(--text-primary, #161B2D)',
