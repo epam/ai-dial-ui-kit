@@ -84,6 +84,16 @@ const meta = {
       description:
         'Content after the track, e.g. a `NumberInput` or the formatted value',
     },
+    showValueInput: {
+      control: 'boolean',
+      description:
+        'Renders a compact `NumberInput` after the track, synced with the slider (clamped to min/max, snapped to step); replaces `rightContent`',
+    },
+    valueInputAriaLabel: {
+      control: 'text',
+      description:
+        'Accessible name of the value input; defaults to a string `labelProps.label`',
+    },
     caption: {
       control: 'text',
       description: 'Helper text rendered below the track',
@@ -220,6 +230,33 @@ export const Continuous: Story = {
     step: 0.01,
     showTooltip: true,
     formatValue: percent,
+  },
+};
+
+export const WithValueInput: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`showValueInput` puts a compact number field after the track and keeps it in sync: typing snaps to the step, the slider moves the field. Here with the temperature design: ticks at every 0.1 and the scale word in the bubble.',
+      },
+    },
+  },
+  render: InteractiveSlider,
+  args: {
+    labelProps: { label: 'Temperature' },
+    value: 0.5,
+    min: 0,
+    max: 1,
+    step: 0.1,
+    showTicks: true,
+    showTooltip: true,
+    showValueInput: true,
+    formatValue: (v: number) => {
+      if (v < 0.35) return 'Precise';
+      if (v > 0.65) return 'Creative';
+      return 'Neutral';
+    },
   },
 };
 

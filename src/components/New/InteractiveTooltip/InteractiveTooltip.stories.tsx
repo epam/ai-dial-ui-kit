@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
-import { TooltipPlacement } from '@/types/tooltip';
+import { InteractiveTooltipTrigger, TooltipPlacement } from '@/types/tooltip';
 import { Button } from '../Button/Button';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import { MenuItem } from '../MenuItem/MenuItem';
@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A hover panel that, unlike Tooltip, can hold its own interactive content. It opens next to the trigger on hover or focus and stays open while the pointer moves into the panel, so buttons and links inside it can be used. Renders nothing on a mobile screen, where there is no hover to reveal it.',
+          'A hover panel that, unlike Tooltip, can hold its own interactive content. It opens next to the trigger on hover or focus and stays open while the pointer moves into the panel, so buttons and links inside it can be used. Renders nothing on a mobile screen, where there is no hover to reveal it, unless it is opened by click or tap (`trigger`).',
       },
     },
   },
@@ -49,6 +49,15 @@ const meta = {
     initialOpen: {
       control: { type: 'boolean' },
       description: 'Whether the panel starts open',
+    },
+    trigger: {
+      control: { type: 'select' },
+      options: [
+        InteractiveTooltipTrigger.Hover,
+        InteractiveTooltipTrigger.Click,
+      ],
+      description:
+        'What opens the panel: hover or focus (default), or a click or tap that keeps it open until dismissed',
     },
     triggerClassName: {
       control: { type: 'text' },
@@ -152,6 +161,24 @@ export const Hidden: Story = {
       description: {
         story:
           '`hideTooltip` suppresses the panel without changing how the trigger renders.',
+      },
+    },
+  },
+};
+
+export const OpenedByClick: Story = {
+  args: {
+    asChild: false,
+    placement: TooltipPlacement.Top,
+    trigger: InteractiveTooltipTrigger.Click,
+    children: <Button label="Tap me" />,
+  },
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' },
+    docs: {
+      description: {
+        story:
+          '`trigger={InteractiveTooltipTrigger.Click}` opens the panel on a click or tap and keeps it open until a second tap on the trigger, a press outside or Escape. It works on every screen size, including a mobile one where the default hover panel renders nothing, and it ignores hover and focus. Use it for a trigger whose only job is to reveal the panel, such as an info chip; a trigger with an action of its own would run both on the same tap.',
       },
     },
   },

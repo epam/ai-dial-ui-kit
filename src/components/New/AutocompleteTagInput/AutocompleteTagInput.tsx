@@ -50,6 +50,11 @@ export interface AutocompleteTagInputProps {
   suggestions: AutocompleteTagInputSuggestion[];
   /** How many matching suggestions the list shows at most. */
   maxSuggestions?: number;
+  /**
+   * Opens the list of every suggestion that is not yet a tag when the input
+   * gains focus or is clicked, and keeps it open after a pick.
+   */
+  openOnFocus?: boolean;
   size?: ElementSize;
   labelProps?: LabelProps;
   placeholder?: string;
@@ -83,6 +88,11 @@ export interface AutocompleteTagInputProps {
  * removes the last tag, and duplicate tags are ignored. Entered text is not
  * validated — say what format is expected through `caption`.
  *
+ * With `openOnFocus`, focusing or clicking the input opens the list of every
+ * suggestion that is not yet a tag, uncapped by `maxSuggestions`, with nothing
+ * highlighted, so Enter adds nothing the user did not choose. Picking one keeps
+ * the list open for the next pick; typing filters it as usual.
+ *
  * Reach for {@link TagInput} when there is nothing to suggest, and for a
  * multiple `Select` when only listed values are allowed.
  *
@@ -115,6 +125,7 @@ export interface AutocompleteTagInputProps {
  * @param [defaultValue=[]] - Initial tag list when uncontrolled.
  * @param suggestions - Values offered while typing.
  * @param [maxSuggestions=5] - How many matching suggestions the list shows at most.
+ * @param [openOnFocus=false] - Opens the full list of suggestions that are not yet tags on focus or click, and keeps it open after a pick.
  * @param [size=ElementSize.Standard] - Field height: standard is 40px, small is 24px.
  * @param [labelProps] - Props of the {@link Label} rendered above the field.
  * @param [placeholder] - Placeholder shown while there are no tags.
@@ -138,6 +149,7 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
   defaultValue,
   suggestions,
   maxSuggestions = DEFAULT_MAX_SUGGESTIONS,
+  openOnFocus = false,
   size = ElementSize.Standard,
   labelProps,
   placeholder,
@@ -171,7 +183,9 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
 
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  // -1 while nothing is highlighted: the full list opened on focus.
   const [highlightIndex, setHighlightIndex] = useState(0);
+  const isBlank = !inputValue.trim();
 
   const matches = useMemo(
     () =>
@@ -179,12 +193,14 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
         suggestions,
         inputValue,
         tags,
-        maxSuggestions,
+        // The list opened on focus is meant to show every choice.
+        openOnFocus && isBlank ? suggestions.length : maxSuggestions,
       ),
-    [inputValue, maxSuggestions, suggestions, tags],
+    [inputValue, isBlank, maxSuggestions, openOnFocus, suggestions, tags],
   );
   const isListShown = isOpen && isEditable && matches.length > 0;
   const activeIndex = Math.min(highlightIndex, matches.length - 1);
+  const hasActive = isListShown && activeIndex >= 0;
   const getOptionId = (index: number) => `${listboxId}-option-${index}`;
 
   const { refs, floatingStyles } = useFloating({
@@ -218,11 +234,22 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
     setHighlightIndex(0);
   };
 
+  const openOnFocusList = () => {
+    if (!openOnFocus || !isEditable) return;
+    setIsOpen(true);
+    setHighlightIndex(isBlank ? -1 : 0);
+  };
+
   const addTag = (raw: string) => {
     const trimmed = raw.trim();
     if (trimmed && !tags.includes(trimmed)) setTags([...tags, trimmed]);
     setInputValue('');
-    closeList();
+    if (openOnFocus) {
+      // Stays open on the remaining suggestions for the next pick.
+      setHighlightIndex(-1);
+    } else {
+      closeList();
+    }
   };
 
   const removeTag = (tag: string) =>
@@ -230,11 +257,13 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
 
   const handleInputChange = (next?: string) => {
     const text = next ?? '';
+    const hasText = !!text.trim();
     setInputValue(text);
     // Blank text would match every suggestion and let Enter pick one the user
-    // never asked for; ArrowDown still opens the full list on purpose.
-    setIsOpen(!!text.trim());
-    setHighlightIndex(0);
+    // never asked for, so it opens nothing, or with `openOnFocus` the full list
+    // with nothing highlighted; ArrowDown still opens the full list on purpose.
+    setIsOpen(hasText || openOnFocus);
+    setHighlightIndex(hasText ? 0 : -1);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -244,12 +273,16 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
       case 'ArrowDown':
       case 'ArrowUp': {
         event.preventDefault();
-        setIsOpen(true);
-        if (!isListShown) return;
+        if (!isListShown) {
+          setIsOpen(true);
+          setHighlightIndex(0);
+          return;
+        }
         const step = event.key === 'ArrowDown' ? 1 : -1;
-        setHighlightIndex(
-          (activeIndex + step + matches.length) % matches.length,
-        );
+        // With nothing highlighted, ArrowDown lands on the first suggestion
+        // and ArrowUp on the last.
+        const from = activeIndex < 0 ? Math.min(-step, 0) : activeIndex;
+        setHighlightIndex((from + step + matches.length) % matches.length);
         return;
       }
       case 'Enter':
@@ -257,7 +290,7 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
         // Enter would submit the surrounding form, and the comma is the
         // delimiter rather than part of the tag.
         event.preventDefault();
-        addTag(isListShown ? matches[activeIndex].value : inputValue);
+        addTag(hasActive ? matches[activeIndex].value : inputValue);
         return;
       case 'Escape':
         if (isListShown) event.preventDefault();
@@ -285,9 +318,7 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
         aria-autocomplete="list"
         aria-expanded={isListShown}
         aria-controls={listboxId}
-        aria-activedescendant={
-          isListShown ? getOptionId(activeIndex) : undefined
-        }
+        aria-activedescendant={hasActive ? getOptionId(activeIndex) : undefined}
         aria-invalid={invalid || undefined}
         aria-label={ariaLabel}
         size={size}
@@ -302,6 +333,9 @@ export const AutocompleteTagInput: FC<AutocompleteTagInputProps> = ({
         wrapperRef={refs.setReference}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
+        onFocus={openOnFocusList}
+        // Reopens the list closed by Escape or a pick without leaving the input.
+        onClick={openOnFocusList}
         onBlur={closeList}
         containerClassName={mergeClasses('w-full', className)}
         wrapperClassName={mergeClasses(
