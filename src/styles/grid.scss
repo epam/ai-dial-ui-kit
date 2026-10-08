@@ -23,15 +23,57 @@
     }
   }
 
+  /*
+   * A hovered or selected row is outlined top and bottom in the design
+   * system's shadow colour (`--shadow-xs-1`, the one the buttons draw with).
+   * The outline is an inset shadow rather than a border so it takes no height
+   * from the row and does not collide with the neighbour's divider.
+   */
+  .ag-row-hover,
+  .ag-row-selected {
+    --dial-kit-grid-row-outline: var(--shadow-xs-1, #2764d933);
+
+    box-shadow:
+      inset 0 1px 0 0 var(--dial-kit-grid-row-outline),
+      inset 0 -1px 0 0 var(--dial-kit-grid-row-outline);
+  }
+
   .ag-header {
+    /*
+     * The line under the whole header (title and filter rows) sits on the main
+     * 1px stroke, while the dividers inside stay on the thin 0.5px stroke from
+     * the theme params. It is drawn here because the `headerRowBorder` theme
+     * param is switched off: ag-Grid also uses it between the title and filter
+     * rows, which the design leaves undivided.
+     *
+     * `border-solid` is not decoration: with `headerRowBorder` off ag-Grid sets
+     * `border-bottom: none` on `.ag-header`, and a border style of `none`
+     * collapses the width to 0, so the width and colour alone draw nothing.
+     */
+    @apply border-b border-solid border-tertiary;
+
     .ag-column-last::after {
       @apply border-0;
+    }
+
+    /*
+     * The selection column is not a titled column: the design draws its header
+     * checkbox and its empty filter cell without the divider the titled
+     * columns carry on their trailing edge.
+     */
+    .ag-header-cell[col-id='dial-kit-grid-selection']::after {
+      @apply border-0;
+    }
+
+    /* Column titles: 10px semibold caps, as in the design's table header. */
+    .ag-header-cell-text {
+      @apply dial-caption-lead-semi-text;
     }
 
     .ag-header-viewport,
     .ag-pinned-left-header {
       .ag-floating-filter input {
-        @apply m-0 px-2 py-0;
+        @apply m-0 px-2 py-0 dial-tiny-text;
         height: 24px !important;
       }
     }
