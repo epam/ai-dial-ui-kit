@@ -48,10 +48,12 @@ describe('pickAvatarColor', () => {
   });
 
   test('returns an entry of the palette', () => {
-    expect(AVATAR_PALETTE).toContain(pickAvatarColor('Summarizer'));
+    expect(Object.values(AVATAR_PALETTE)).toContain(
+      pickAvatarColor('Summarizer'),
+    );
   });
 
   test('returns the first entry for an empty name', () => {
-    expect(pickAvatarColor('')).toBe(AVATAR_PALETTE[0]);
+    expect(pickAvatarColor('')).toBe(Object.values(AVATAR_PALETTE)[0]);
   });
 });

@@ -440,8 +440,9 @@ export type { BadgeProps } from './components/New/Badge/Badge';
 export { BadgeColor, BadgeVariant } from './types/badge';
 export { Avatar } from './components/New/Avatar/Avatar';
 export type { AvatarProps } from './components/New/Avatar/Avatar';
-export { AvatarShape } from './types/avatar';
-export { extractInitials } from './utils/avatar';
+export { AvatarColor, AvatarShape } from './types/avatar';
+export { AVATAR_PALETTE, extractInitials } from './utils/avatar';
+export type { AvatarColorClasses } from './utils/avatar';
 export { EntityIdentity } from './components/New/EntityIdentity/EntityIdentity';
 export type {
   EntityIdentityProps,

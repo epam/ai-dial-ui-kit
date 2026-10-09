@@ -7,6 +7,12 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [0.16.0]
+
+### Added
+
+- **`Avatar` (2.0) — `color`, with `AVATAR_PALETTE`, `AvatarColor` and `AvatarColorClasses` exported** — the colour pair was derived from `name` alone, so a host that needed every avatar of one kind to share a colour — every row of one entity type in its brand pairing — could only fight the component: a root `className` could at best force the background with `!important` arbitrary values, and the initials' foreground sits on an inner element no root class reaches, where the only prop landing there (`textClassName`) ties with the kit's own class at equal specificity and the winner is decided by stylesheet order. `color` takes an `AvatarColorClasses` pair and replaces both halves of the name-derived pick, background and initials foreground, applied with the component's own class cascade. `AVATAR_PALETTE` is exported as a record keyed by the new `AvatarColor` enum (one key per entry, named after its background token), so a host pins a colour directly — `color={AVATAR_PALETTE[AvatarColor.Violet1]}` — with no `.find` on class-name substrings and no new colour vocabulary; the `AvatarColorClasses` pair type is exported with it. A name that is a locale string no longer reshuffles the colour per translation. Without `color` the deterministic pick is unchanged, and a missing or broken image still falls back to the initials — on the overridden pair. Additive. Requested in [#928](https://github.com/epam/ai-dial-ui-kit/issues/928).
+
 ## [0.15.0]
 
 ### Breaking Changes

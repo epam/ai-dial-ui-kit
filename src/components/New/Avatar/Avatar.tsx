@@ -2,7 +2,11 @@ import { useState, type FC, type SyntheticEvent } from 'react';
 
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { AvatarShape } from '@/types/avatar';
-import { extractInitials, pickAvatarColor } from '@/utils/avatar';
+import {
+  extractInitials,
+  pickAvatarColor,
+  type AvatarColorClasses,
+} from '@/utils/avatar';
 import { mergeClasses } from '@/utils/merge-classes';
 
 /** Props for `Avatar`. */
@@ -19,6 +23,8 @@ export interface AvatarProps {
   size?: number;
   /** Outline of the avatar. */
   shape?: AvatarShape;
+  /** Explicit colour pair overriding the deterministic pick from `name`. */
+  color?: AvatarColorClasses;
   /** Additional CSS classes for the avatar. */
   className?: string;
   /** Type-scale class for the initials. When set, it replaces the font size derived from `size`. */
@@ -39,9 +45,11 @@ const SHAPE_CLASS: Record<AvatarShape, string> = {
  * Design system 2.0
  *
  * The same name always gets the same colour, drawn from the theme's visual
- * tokens, so a list of avatars stays stable between renders and sessions. An
- * image that is missing or fails to load falls back to the initials; a new
- * `src` tries the image again.
+ * tokens, so a list of avatars stays stable between renders and sessions; pass
+ * `color` to pin one entry of `AVATAR_PALETTE` instead, so every avatar of a
+ * kind shares one colour regardless of name or locale. An image that is
+ * missing or fails to load falls back to the initials; a new `src` tries the
+ * image again.
  *
  * An avatar with an `alt` is a `role="img"` named by it, whether it shows the
  * image or the initials. Without one it is decorative and hidden from
@@ -59,6 +67,7 @@ const SHAPE_CLASS: Record<AvatarShape, string> = {
  * @param [alt=''] - Accessible name; empty makes the avatar decorative
  * @param [size=32] - Width and height in px
  * @param [shape=AvatarShape.Circle] - Outline of the avatar
+ * @param [color] - Explicit colour pair overriding the deterministic pick from `name`
  * @param [className] - Additional CSS classes for the avatar
  * @param [textClassName] - Type-scale class for the initials, replacing the size-derived font size
  * @param [onImageError] - Called when the image fails to load
@@ -70,6 +79,7 @@ export const Avatar: FC<AvatarProps> = ({
   alt = '',
   size = 32,
   shape = AvatarShape.Circle,
+  color,
   className,
   textClassName,
   onImageError,
@@ -107,7 +117,7 @@ export const Avatar: FC<AvatarProps> = ({
     );
   }
 
-  const { background, foreground } = pickAvatarColor(name);
+  const { background, foreground } = color ?? pickAvatarColor(name);
 
   return (
     <span
