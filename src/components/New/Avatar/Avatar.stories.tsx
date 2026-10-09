@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { AvatarShape } from '@/types/avatar';
+import { AVATAR_PALETTE } from '@/utils/avatar';
+import { AvatarColor, AvatarShape } from '@/types/avatar';
 import { Avatar, type AvatarProps } from './Avatar';
 
 const meta = {
@@ -28,6 +29,11 @@ const meta = {
       control: 'inline-radio',
       options: Object.values(AvatarShape),
       description: 'Outline of the avatar',
+    },
+    color: {
+      control: { type: 'object' },
+      description:
+        'Explicit colour pair overriding the deterministic pick from `name`',
     },
   },
   args: { name: 'Ada Lovelace', size: 32 },
@@ -62,6 +68,25 @@ export const Palette: Story = {
         'Linus',
       ].map((name) => (
         <Avatar key={name} {...args} name={name} />
+      ))}
+    </div>
+  ),
+};
+
+/*
+ * One palette entry pinned on every row, so names — and their translations —
+ * cannot reshuffle the colour.
+ */
+export const PinnedColour: Story = {
+  render: (args) => (
+    <div className="flex gap-2">
+      {['Summarizer', 'Code Reviewer', 'Олена Коваль', 'Linus'].map((name) => (
+        <Avatar
+          key={name}
+          {...args}
+          name={name}
+          color={AVATAR_PALETTE[AvatarColor.Violet1]}
+        />
       ))}
     </div>
   ),

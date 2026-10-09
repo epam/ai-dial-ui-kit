@@ -1,3 +1,5 @@
+import { AvatarColor } from '@/types/avatar';
+
 /** A background and text colour pair for an initials avatar, as Tailwind classes. */
 export interface AvatarColorClasses {
   /** Background class, bound to a `--bg-visual-*` token. */
@@ -9,25 +11,52 @@ export interface AvatarColorClasses {
 /*
  * One pair per visual background token, each with the text token designed to
  * sit on it, so the avatar follows the active theme. Written out as literal
- * class names so Tailwind's content scan keeps every one of them.
+ * class names so Tailwind's content scan keeps every one of them. Keyed by
+ * `AvatarColor`, after the entry's background token.
+ *
+ * The record's key order is load-bearing: `pickAvatarColor` hashes a name onto
+ * `Object.values` of this record, so reordering the entries reshuffles which
+ * colour every existing name gets.
  */
-export const AVATAR_PALETTE: readonly AvatarColorClasses[] = [
-  { background: 'bg-green-1', foreground: 'text-green-2' },
-  { background: 'bg-violet-2', foreground: 'text-violet-1' },
-  { background: 'bg-brown', foreground: 'text-brown-2' },
-  { background: 'bg-red', foreground: 'text-red' },
-  { background: 'bg-green-2', foreground: 'text-green-3' },
-  { background: 'bg-blue', foreground: 'text-accent' },
-  { background: 'bg-violet-1', foreground: 'text-violet-2' },
-];
+export const AVATAR_PALETTE: Record<AvatarColor, AvatarColorClasses> = {
+  [AvatarColor.Green1]: {
+    background: 'bg-green-1',
+    foreground: 'text-green-2',
+  },
+  [AvatarColor.Violet2]: {
+    background: 'bg-violet-2',
+    foreground: 'text-violet-1',
+  },
+  [AvatarColor.Brown]: {
+    background: 'bg-brown',
+    foreground: 'text-brown-2',
+  },
+  [AvatarColor.Red]: {
+    background: 'bg-red',
+    foreground: 'text-red',
+  },
+  [AvatarColor.Green2]: {
+    background: 'bg-green-2',
+    foreground: 'text-green-3',
+  },
+  [AvatarColor.Blue]: {
+    background: 'bg-blue',
+    foreground: 'text-accent',
+  },
+  [AvatarColor.Violet1]: {
+    background: 'bg-violet-1',
+    foreground: 'text-violet-2',
+  },
+};
 
 /** Returns the palette entry for a name; the same name always gets the same colours. */
 export const pickAvatarColor = (name: string): AvatarColorClasses => {
+  const entries = Object.values(AVATAR_PALETTE);
   let sum = 0;
   for (let i = 0; i < name.length; i++) {
     sum += name.charCodeAt(i);
   }
-  return AVATAR_PALETTE[sum % AVATAR_PALETTE.length];
+  return entries[sum % entries.length];
 };
 
 const firstLetter = (word: string): string => word.match(/\p{L}/u)?.[0] ?? '';

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
-import { AvatarShape } from '@/types/avatar';
-import { pickAvatarColor } from '@/utils/avatar';
+import { AvatarColor, AvatarShape } from '@/types/avatar';
+import { AVATAR_PALETTE, pickAvatarColor } from '@/utils/avatar';
 import { Avatar } from './Avatar';
 
 describe('Dial UI Kit :: Avatar', () => {
@@ -48,6 +48,32 @@ describe('Dial UI Kit :: Avatar', () => {
 
     expect(root).toHaveClass(background);
     expect(root).toHaveClass(foreground);
+  });
+
+  test('paints the initials in a given colour pair instead of the picked one', () => {
+    const picked = pickAvatarColor('Ada Lovelace');
+    const entries = Object.values(AVATAR_PALETTE);
+    /* The entry after the picked one, so the override is proven. */
+    const color = entries[(entries.indexOf(picked) + 1) % entries.length];
+    render(<Avatar name="Ada Lovelace" color={color} />);
+    const root = screen.getByText('AL').parentElement;
+
+    expect(root).toHaveClass(color.background);
+    expect(root).toHaveClass(color.foreground);
+    expect(root).not.toHaveClass(picked.background);
+  });
+
+  test('falls back to the initials on the given colour pair when the image fails', () => {
+    const color = AVATAR_PALETTE[AvatarColor.Violet1];
+    render(
+      <Avatar name="Ada Lovelace" src="/broken.png" alt="Ada" color={color} />,
+    );
+
+    fireEvent.error(screen.getByRole('img', { name: 'Ada' }));
+
+    const root = screen.getByText('AL').parentElement;
+    expect(root).toHaveClass(color.background);
+    expect(root).toHaveClass(color.foreground);
   });
 
   test('sizes itself and its initials from size', () => {
