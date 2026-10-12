@@ -85,6 +85,8 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **`MarkdownEditor` (2.0) — toolbar no longer overflows on narrow cards** — on a phone-width card the formatting group did not wrap, so its last buttons ran past the card edge and the edit/preview/fullscreen group dropped onto a second line at the start. The formatting group now wraps inside the card and the mode group stays at the inline end. Wide toolbars are unchanged ([ai-dial-chat#9389](https://github.com/epam/ai-dial-chat/issues/9389)).
+
 - **`Textarea` (2.0) — `invalid` no longer reaches the DOM** — the prop was spread onto the `<textarea>`, so React warned about a non-boolean `invalid` attribute on every render. It now only selects the error styling. No visual change.
 
 - **`Dropdown` and `Select` — a submenu closes when its menu or the page scrolls** — a submenu is portalled and repositioned by Floating UI's `autoUpdate`, so scrolling the list that holds its trigger, or the page, left the submenu open and dragged it along after the trigger, even once the trigger had scrolled out of the clipped list. The submenu now closes when an ancestor of its trigger scrolls. Scrolling inside the submenu does not close it. The fix is in the shared submenu hook, so it covers the 2.0 and 1.0 `Dropdown` and `Select` submenus. Reported in [ai-dial-chat#9295](https://github.com/epam/ai-dial-chat/issues/9295), on the catalog's Create menu.
