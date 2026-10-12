@@ -13,6 +13,10 @@ Versions match the git tags on the `development` branch.
 
 - **`Popup` (2.0) — footer buttons split the row evenly on mobile** — below the `mobile` breakpoint (768px), where the popup fills the screen, the trailing `mainButtons` group now spans the footer and each of its buttons takes an equal share, so a Cancel/Confirm pair renders 50/50 and a single button fills the row. `additionalButtons` in the trailing group stretch with it; with `additionalButtonsOnLeft` they keep their natural width. Desktop is unchanged, a caller's `className` on a button still merges on top, and a custom `footer` node is not touched. The props are unchanged. Reported on the mobile dialogs in ai-dial-chat.
 
+### Fixed
+
+- **`MarkdownEditor` (2.0) — toolbar no longer overflows on narrow cards** — on a phone-width card the formatting group did not wrap, so its last buttons ran past the card edge and the edit/preview/fullscreen group dropped onto a second line at the start. The formatting group now wraps inside the card and the mode group stays at the inline end. Wide toolbars are unchanged ([ai-dial-chat#9389](https://github.com/epam/ai-dial-chat/issues/9389)).
+
 ---
 
 ## [0.15.0]
