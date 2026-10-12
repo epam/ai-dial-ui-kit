@@ -9,6 +9,7 @@ import {
 import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
+import { GridColorScheme } from '@/types/grid';
 import { GRID_THEME_PARAMS } from './constants';
 import { Grid } from './Grid';
 import { DateCellRenderer } from './renderers/DateCellRenderer';
@@ -515,6 +516,119 @@ describe('Dial UI Kit :: Grid', () => {
       expect(
         screen.getByRole('checkbox', { name: 'Select Charlie' }),
       ).not.toBeChecked();
+    });
+  });
+
+  describe('color scheme', () => {
+    const dateColumns: ColDef<TestRow>[] = [
+      testColumns[0],
+      {
+        field: 'age',
+        headerName: 'Updated',
+        filter: 'agDateColumnFilter',
+      },
+    ];
+
+    /**
+     * jsdom has no `document.fonts`, so ag-Grid treats the environment as SSR
+     * and never inserts its stylesheets. The variable native controls inherit
+     * is still on the theme the grid passes in: `color-scheme` on
+     * `.ag-root-wrapper` reads `--ag-browser-color-scheme`.
+     */
+    const themeCss = async (colorScheme?: GridColorScheme) => {
+      let css = '';
+
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          colorScheme={colorScheme}
+          onGridApiChange={(api) => {
+            css = (
+              api.getGridOption('theme') as unknown as {
+                _getParamsCss: () => string;
+              }
+            )._getParamsCss();
+          }}
+        />,
+      );
+
+      await screen.findByText('Alice');
+
+      return css;
+    };
+
+    const browserColorSchemeOf = (css: string) =>
+      css.match(
+        /--ag-browser-color-scheme:\s*var\(--ag-inherited-browser-color-scheme,\s*(\w+)\)/,
+      )?.[1] ?? null;
+
+    const themeParamsClass = (container: HTMLElement) => {
+      const root = container.querySelector('.ag-root-wrapper');
+
+      return [...(root?.parentElement?.classList ?? [])].find((cls) =>
+        cls.startsWith('ag-theme-params-'),
+      );
+    };
+
+    test('keeps the light browser color scheme by default', async () => {
+      const css = await themeCss();
+
+      expect(browserColorSchemeOf(css)).toBe('light');
+      expect(css).toContain('var(--bg-layer-raised, #FCFCFC)');
+    });
+
+    test('asks the browser for dark native controls when the scheme is dark', async () => {
+      const css = await themeCss(GridColorScheme.Dark);
+
+      expect(browserColorSchemeOf(css)).toBe('dark');
+      expect(css).toContain('var(--bg-layer-raised, #FCFCFC)');
+    });
+
+    test('puts the date filter input in the grid and swaps the theme class without a remount', async () => {
+      const { container, rerender } = render(
+        <Grid<TestRow>
+          columnDefs={dateColumns}
+          rowData={testRows}
+          colorScheme={GridColorScheme.Light}
+        />,
+      );
+
+      await screen.findByText('Alice');
+
+      const lightClass = themeParamsClass(container);
+      const dateInput = container.querySelector('input[type="date"]');
+
+      expect(lightClass).toBeTruthy();
+      expect(dateInput).not.toBeNull();
+      expect(dateInput?.closest('.ag-root-wrapper')).not.toBeNull();
+
+      rerender(
+        <Grid<TestRow>
+          columnDefs={dateColumns}
+          rowData={testRows}
+          colorScheme={GridColorScheme.Dark}
+        />,
+      );
+
+      const darkClass = themeParamsClass(container);
+
+      expect(darkClass).toBeTruthy();
+      expect(darkClass).not.toBe(lightClass);
+      expect(screen.getByText('Alice')).toBeInTheDocument();
+
+      rerender(
+        <Grid<TestRow>
+          columnDefs={dateColumns}
+          rowData={testRows}
+          colorScheme={GridColorScheme.Light}
+        />,
+      );
+
+      // Each theme instance gets its own class, so returning to light applies
+      // a new light class rather than the one from the first render.
+      expect(themeParamsClass(container)).not.toBe(darkClass);
+      expect(screen.getByText('Alice')).toBeInTheDocument();
     });
   });
 });
