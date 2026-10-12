@@ -35,6 +35,8 @@ import {
   popupFooterDividerClassName,
   popupHeaderClassName,
   popupHeaderDividerClassName,
+  popupMainActionButtonClassName,
+  popupMainActionsGroupClassName,
   popupOverlayBaseClassName,
   popupSizeClassMap,
   popupTitleClassName,
@@ -237,10 +239,21 @@ export const Popup: FC<PopupProps> = ({
   // `NeutralButton` wrapper these footers were written with by hand.
   // The two groups share a parent when the additional buttons are not moved
   // left, so their keys have to be namespaced or the indices collide.
-  const renderButtons = (prefix: string, buttons: ButtonProps[] = []) =>
-    buttons.map(({ variant = ButtonVariant.Neutral, ...button }, index) => (
-      <Button key={`${prefix}-${index}`} variant={variant} {...button} />
-    ));
+  const renderButtons = (
+    prefix: string,
+    buttons: ButtonProps[] = [],
+    buttonClassName?: string,
+  ) =>
+    buttons.map(
+      ({ variant = ButtonVariant.Neutral, className, ...button }, index) => (
+        <Button
+          key={`${prefix}-${index}`}
+          variant={variant}
+          className={mergeClasses(buttonClassName, className)}
+          {...button}
+        />
+      ),
+    );
 
   // A `footer` node stays authoritative so callers that hand-rolled one before
   // the structured props existed render exactly what they did before.
@@ -248,7 +261,13 @@ export const Popup: FC<PopupProps> = ({
     if (footer !== undefined) return footer;
     if (!mainButtons?.length && !additionalButtons?.length) return null;
 
-    const additional = renderButtons('additional', additionalButtons);
+    // Only buttons in the trailing group stretch on mobile; a leading group
+    // keeps its natural width beside them.
+    const additional = renderButtons(
+      'additional',
+      additionalButtons,
+      additionalButtonsOnLeft ? undefined : popupMainActionButtonClassName,
+    );
 
     return (
       <div
@@ -265,9 +284,14 @@ export const Popup: FC<PopupProps> = ({
         )}
         {/* `ml-auto` rather than `justify-end`: it pins the main group to the
             trailing edge whether or not a leading group precedes it. */}
-        <div className={mergeClasses(popupActionsGroupClassName, 'ml-auto')}>
+        <div
+          className={mergeClasses(
+            popupActionsGroupClassName,
+            popupMainActionsGroupClassName,
+          )}
+        >
           {!additionalButtonsOnLeft && additional}
-          {renderButtons('main', mainButtons)}
+          {renderButtons('main', mainButtons, popupMainActionButtonClassName)}
         </div>
       </div>
     );
