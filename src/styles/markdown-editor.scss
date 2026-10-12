@@ -39,8 +39,21 @@
     @apply -mx-1;
   }
 
+  /* `flex-wrap` lets the command group break onto a second line on narrow
+     cards (a 320–375px phone) instead of overflowing the card edge; the bar
+     itself already wraps, so the mode group then drops below it. */
   .w-md-editor > .w-md-editor-toolbar > ul {
-    @apply flex items-center gap-0.5;
+    @apply flex flex-wrap items-center gap-0.5;
+  }
+
+  /* Keeps the mode group (edit/preview/fullscreen) at the inline end when the
+     bar wraps it onto its own line; on one line `space-between` already puts
+     it there. Grow + end-justify rather than `margin-inline-start: auto`: the
+     base library's unlayered `ul { margin: 0 }` beats a margin set here.
+     `ul + ul` rather than `:last-child`, so a bar with no extra commands does
+     not push its only group to the end. */
+  .w-md-editor > .w-md-editor-toolbar > ul + ul {
+    @apply grow justify-end;
   }
 
   .w-md-editor-text,
