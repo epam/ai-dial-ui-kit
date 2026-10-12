@@ -7,14 +7,6 @@ Versions match the git tags on the `development` branch.
 
 ---
 
-## [0.16.0]
-
-### Changed
-
-- **`Popup` (2.0) — footer buttons split the row evenly on mobile** — below the `mobile` breakpoint (768px), where the popup fills the screen, the trailing `mainButtons` group now spans the footer and each of its buttons takes an equal share, so a Cancel/Confirm pair renders 50/50 and a single button fills the row. `additionalButtons` in the trailing group stretch with it; with `additionalButtonsOnLeft` they keep their natural width. Desktop is unchanged, a caller's `className` on a button still merges on top, and a custom `footer` node is not touched. The props are unchanged. Reported on the mobile dialogs in ai-dial-chat.
-
----
-
 ## [0.15.0]
 
 ### Breaking Changes
@@ -80,6 +72,8 @@ Versions match the git tags on the `development` branch.
 - **`Select` (2.0) — `collapseTagOverflow`, a one-row multi-select with a `+N` counter** — a multi-select could only wrap its tags onto more rows, so a field in a dense form or a table cell grew without bound. `collapseTagOverflow` keeps the tags on one row, as it does on `TagInput`, and folds the ones that do not fit into a `+N` tag; hovering it opens an `InteractiveTooltip` listing the hidden tags, each still removable. The count follows the width the field has, not the number of tags: the tags are taken in order while they fit beside the counter, and it is recomputed on resize. Without the prop the tags wrap as before; the prop is ignored with `customMultiSelectTagsRenderer`, and on a mobile screen the tags wrap, since the panel opens on hover. Additive.
 
 ### Changed
+
+- **`Popup` (2.0) — footer buttons split the row evenly on mobile** — below the `mobile` breakpoint (768px), where the popup fills the screen, the trailing `mainButtons` group now spans the footer and each of its buttons takes an equal share, so a Cancel/Confirm pair renders 50/50 and a single button fills the row. `additionalButtons` in the trailing group stretch with it; with `additionalButtonsOnLeft` they keep their natural width. Desktop is unchanged, a caller's `className` on a button still merges on top, and a custom `footer` node is not touched. The props are unchanged. Reported on the mobile dialogs in ai-dial-chat.
 
 - **`Slider` (2.0) — ticks** — ticks are drawn in the `Controls/Stroke/Accent-focus` token (`--stroke-accent-focus`, was the neutral control grey), and there is one per step after `min`: a 0–1 slider at 0.1 now draws exactly 10. The tick at `min` was always under the thumb or the fill, so nothing visible is lost. Visual only; no props change.
 
