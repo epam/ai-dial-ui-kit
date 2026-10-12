@@ -1,5 +1,6 @@
 import {
   type ColDef,
+  colorSchemeDark,
   colorSchemeLight,
   type GridApi,
   type GridOptions,
@@ -27,6 +28,7 @@ import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 import type { DropdownItem } from '@/models/dropdown';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
+import { GridColorScheme } from '@/types/grid';
 import { debounceFn } from '@/utils/debounce';
 import { baseColumnComparator, omitUndefined } from '@/utils/grid-comparators';
 import { registerAgGridModulesOnce } from '@/utils/grid-registration';
@@ -108,6 +110,12 @@ export interface GridProps<T extends object = Record<string, unknown>> {
   selectRowLabel?: (row: T) => string;
   /** Accessible name of the select-all control. Defaults to `'Select all rows'`. */
   selectAllLabel?: string;
+  /**
+   * AG Grid color scheme. `dark` selects the dark theme part and asks the
+   * browser to paint native controls — the date filter calendar, scrollbars —
+   * dark. Defaults to `light`, which leaves the current appearance unchanged.
+   */
+  colorScheme?: GridColorScheme;
 }
 
 /**
@@ -150,6 +158,9 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  *   selectRowLabel={(row) => `Select ${row.name}`}
  *   getContextMenuItems={(row) => [{ key: 'edit', label: 'Edit' }]}
  * />
+ *
+ * // Dark native controls, including the date-filter calendar
+ * <Grid<Product> columnDefs={columns} rowData={products} colorScheme={GridColorScheme.Dark} />
  * ```
  *
  * @param [columnDefs] - Column definitions, in ag-Grid `ColDef` format.
@@ -176,6 +187,7 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * @param [allowDisabledContextMenu=false] - Keeps the context menu on a non-selectable row.
  * @param [selectRowLabel] - Accessible name of a row's selection control.
  * @param [selectAllLabel='Select all rows'] - Accessible name of the select-all control.
+ * @param [colorScheme='light'] - AG Grid color scheme. `dark` paints native controls dark.
  */
 export const Grid = <T extends object>({
   columnDefs,
@@ -202,6 +214,7 @@ export const Grid = <T extends object>({
   selectionMode,
   selectRowLabel,
   selectAllLabel = 'Select all rows',
+  colorScheme = GridColorScheme.Light,
 }: GridProps<T>) => {
   registerAgGridModulesOnce();
 
@@ -251,14 +264,23 @@ export const Grid = <T extends object>({
 
   const theme = useMemo(
     () =>
-      themeBalham.withPart(colorSchemeLight).withParams({
-        ...GRID_THEME_PARAMS,
-        oddRowBackgroundColor: alternateOddRowColors
-          ? GRID_THEME_PARAMS.oddRowBackgroundColor
-          : GRID_THEME_PARAMS.backgroundColor,
-        wrapperBorder,
-      }),
-    [alternateOddRowColors, wrapperBorder],
+      themeBalham
+        .withPart(
+          colorScheme === GridColorScheme.Dark
+            ? colorSchemeDark
+            : colorSchemeLight,
+        )
+        .withParams({
+          ...GRID_THEME_PARAMS,
+          // The shared params pin `browserColorScheme` to light and are applied
+          // after the part, so the chosen scheme is set again here.
+          browserColorScheme: colorScheme,
+          oddRowBackgroundColor: alternateOddRowColors
+            ? GRID_THEME_PARAMS.oddRowBackgroundColor
+            : GRID_THEME_PARAMS.backgroundColor,
+          wrapperBorder,
+        }),
+    [alternateOddRowColors, colorScheme, wrapperBorder],
   );
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
