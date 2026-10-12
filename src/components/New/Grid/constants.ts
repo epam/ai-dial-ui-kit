@@ -72,8 +72,11 @@ export const GRID_THEME_PARAMS = {
   headerBackgroundColor: 'var(--bg-layer-raised, #FCFCFC)',
   foregroundColor: 'var(--text-primary, #161B2D)',
   headerTextColor: 'var(--text-secondary, #57647A)',
-  // 1.0 asked the browser for dark native widgets while painting a light
-  // theme; the scheme now matches the palette it is used with.
+  // Native form controls inside the grid, including the date filter's
+  // calendar, follow this value. The light default matches the token
+  // fallbacks. `Grid` sets it again after this object is spread, because a
+  // dark `colorScheme` has to replace this light value or the browser keeps
+  // painting those controls light.
   browserColorScheme: 'light',
   headerFontSize: 14,
   headerFontWeight: 600,

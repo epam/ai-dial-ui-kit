@@ -12,6 +12,7 @@ import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
+import { GridColorScheme } from '@/types/grid';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { Grid, type GridProps } from './Grid';
@@ -100,6 +101,12 @@ const meta = {
     alternateOddRowColors: { control: { type: 'boolean' } },
     wrapperBorder: { control: { type: 'boolean' } },
     withoutHeaderBorders: { control: { type: 'boolean' } },
+    colorScheme: {
+      control: { type: 'select' },
+      options: Object.values(GridColorScheme),
+      description:
+        'AG Grid color scheme. Dark paints native controls, including the date filter calendar, with the dark scheme.',
+    },
     getContextMenuItems: { control: false },
     onSelectionChange: { control: false },
     onGridApiChange: { control: false },
@@ -109,6 +116,7 @@ const meta = {
   args: {
     columnDefs: columns,
     rowData: products,
+    colorScheme: GridColorScheme.Light,
   },
   render: Layout,
 } satisfies Meta<GridProps<Product>>;
@@ -117,6 +125,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const DarkColorScheme: Story = {
+  args: {
+    colorScheme: GridColorScheme.Dark,
+    columnDefs: columns.map((column) =>
+      column.field === 'updatedAt'
+        ? { ...column, filter: 'agDateColumnFilter' }
+        : column,
+    ),
+  },
+};
 
 export const MultipleSelection: Story = {
   args: {
