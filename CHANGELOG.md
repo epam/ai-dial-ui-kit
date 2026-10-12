@@ -7,6 +7,14 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [0.16.0]
+
+### Changed
+
+- **`Popup` (2.0) — footer buttons split the row evenly on mobile** — below the `mobile` breakpoint (768px), where the popup fills the screen, the trailing `mainButtons` group now spans the footer and each of its buttons takes an equal share, so a Cancel/Confirm pair renders 50/50 and a single button fills the row. `additionalButtons` in the trailing group stretch with it; with `additionalButtonsOnLeft` they keep their natural width. Desktop is unchanged, a caller's `className` on a button still merges on top, and a custom `footer` node is not touched. The props are unchanged. Reported on the mobile dialogs in ai-dial-chat.
+
+---
+
 ## [0.15.0]
 
 ### Breaking Changes
