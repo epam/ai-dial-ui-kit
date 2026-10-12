@@ -8,6 +8,7 @@ import {
   popupFooterClassName,
   popupFooterDividerClassName,
   popupHeaderDividerClassName,
+  popupMainActionButtonClassName,
   popupSizeClassMap,
 } from './constants';
 
@@ -497,6 +498,49 @@ describe('Dial UI Kit :: Popup', () => {
       // Only the trailing group is pushed over, so the leading one stays put.
       expect(additional).not.toHaveClass('ml-auto');
       expect(main).toHaveClass('ml-auto');
+    });
+
+    test('stretches the trailing group and its buttons evenly on mobile', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          mainButtons={[
+            { label: 'Cancel' },
+            { label: 'Confirm', className: 'custom-confirm' },
+          ]}
+        />,
+      );
+
+      const cancel = screen.getByRole('button', { name: 'Cancel' });
+      const confirm = screen.getByRole('button', { name: 'Confirm' });
+
+      expect(cancel.parentElement).toHaveClass('mobile:flex-1');
+      expect(cancel).toHaveClass(popupMainActionButtonClassName);
+      expect(confirm).toHaveClass(
+        popupMainActionButtonClassName,
+        'custom-confirm',
+      );
+    });
+
+    test('keeps leading additionalButtons at their natural width on mobile', () => {
+      render(
+        <Popup
+          open
+          header="Title"
+          additionalButtonsOnLeft
+          additionalButtons={[{ label: 'Learn more' }]}
+          mainButtons={[{ label: 'Confirm' }]}
+        />,
+      );
+
+      const learnMore = screen.getByRole('button', { name: 'Learn more' });
+
+      expect(learnMore).not.toHaveClass(popupMainActionButtonClassName);
+      expect(learnMore.parentElement).not.toHaveClass('mobile:flex-1');
+      expect(screen.getByRole('button', { name: 'Confirm' })).toHaveClass(
+        popupMainActionButtonClassName,
+      );
     });
 
     test('draws a rule above the footer when footerDivider is set', () => {
