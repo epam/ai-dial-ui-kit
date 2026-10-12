@@ -26,6 +26,15 @@ export const popupActionsGroupClassName =
   'flex shrink-0 flex-row items-center gap-2';
 
 /**
+ * Trailing footer group. Below the `mobile` breakpoint it spans the footer and
+ * every button in it takes an equal share, so a Cancel/Confirm pair splits 50/50.
+ */
+export const popupMainActionsGroupClassName = 'ml-auto mobile:flex-1';
+
+/** Applied to each button in the trailing footer group. */
+export const popupMainActionButtonClassName = 'mobile:flex-1';
+
+/**
  * Max widths per size. Full width below the `md` breakpoint, where the popup
  * fills the screen.
  */
