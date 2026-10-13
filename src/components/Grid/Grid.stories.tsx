@@ -19,11 +19,9 @@ import {
   IconPencil,
   IconTrashX,
 } from '@tabler/icons-react';
-import { BASE_ICON_PROPS } from '@/constants/icon';
+import { BASE_ICON_PROPS, DIAL_ICON_SIZE } from '@/constants/icon';
 import { DialDateCellRenderer } from './renderers/DateCellRenderer';
-import { DialFileManagerItemName } from '@/components/FileManager/components/FileManagerItemName/FileManagerItemName';
-import { BASE_FILE_MANAGER_ICON_SIZE } from '@/components/FileManager/constants';
-import { DialItemType } from '@/types/item';
+import { DialFolderName } from '@/components/FolderName/FolderName';
 import { DialFileNodeType } from '@/models/file';
 import { DialDropdown } from '@/components/Dropdown/Dropdown';
 import { DialIcon } from '@/components/Icon/Icon';
@@ -375,26 +373,26 @@ export const Compact: Story = {
         filter: false,
         floatingFilter: false,
         cellRenderer: (param: { data: Row }) => {
-          const type =
-            param.data.type === DialFileNodeType.FOLDER
-              ? DialItemType.Folder
-              : DialItemType.File;
-
           return (
             <div className="flex">
               <div className="flex flex-1 min-w-0">
-                <DialFileManagerItemName
-                  type={type}
-                  name={param.data.name}
-                  elementId={param.data.id}
-                  iconSize={BASE_FILE_MANAGER_ICON_SIZE}
-                  details={
-                    <div className="flex gap-1 dial-tiny-text text-secondary">
-                      <span>{param.data.size}</span>
-                      <span>{param.data.updateTime}</span>
-                    </div>
-                  }
-                />
+                {param.data.type === DialFileNodeType.FOLDER ? (
+                  <DialFolderName
+                    name={param.data.name}
+                    iconSize={DIAL_ICON_SIZE.MD}
+                  />
+                ) : (
+                  <DialFileName
+                    name={param.data.name}
+                    iconSize={DIAL_ICON_SIZE.MD}
+                    details={
+                      <div className="flex gap-1 dial-tiny-text text-secondary">
+                        <span>{param.data.size}</span>
+                        <span>{param.data.updateTime}</span>
+                      </div>
+                    }
+                  />
+                )}
               </div>
               <div className="flex justify-end">
                 <DialDropdown

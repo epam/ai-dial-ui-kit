@@ -1,6 +1,5 @@
 import * as root from '@epam/ai-dial-ui-kit';
 import * as grid from '@epam/ai-dial-ui-kit/grid';
-import * as fileManager from '@epam/ai-dial-ui-kit/file-manager';
 import * as editors from '@epam/ai-dial-ui-kit/editors';
 
 const assertExports = (label, module, names) => {
@@ -11,13 +10,8 @@ const assertExports = (label, module, names) => {
   }
 };
 
-assertExports('root', root, ['Button', 'Grid', 'DialFileManager']);
+assertExports('root', root, ['Button', 'Grid']);
 assertExports('grid', grid, ['Grid', 'DialGrid', 'GridSelectionMode']);
-assertExports('file-manager', fileManager, [
-  'DialFileManager',
-  'FileManagerProvider',
-  'useDialFileManagerTabs',
-]);
 assertExports('editors', editors, [
   'LazyDialJsonEditor',
   'LazyDialMarkdownEditor',

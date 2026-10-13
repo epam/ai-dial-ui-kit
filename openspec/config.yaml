@@ -25,8 +25,6 @@ context: |
     `vite.config.ts`'s `rollupOptions.external`, and reached only via the root's lazy
     loaders (`LazyDialJsonEditor`, `LazyDialMarkdownEditor`, `LazyMarkdownEditor`) — this
     is the reference isolation pattern for any new feature boundary
-  - `DialFileManager` (`src/components/FileManager/FileManager.tsx`) statically imports
-    the legacy `DialGrid`, so FileManager isolation follows Grid isolation
 
   ## Commands
   - `npm run typecheck` — full `tsc --noEmit` (separate from ESLint; always run after `.ts`/`.tsx` changes)

@@ -1,6 +1,5 @@
 import type { ButtonProps } from '@epam/ai-dial-ui-kit';
 import type { GridProps } from '@epam/ai-dial-ui-kit/grid';
-import type { FileManagerGridRow } from '@epam/ai-dial-ui-kit/file-manager';
 import type {
   DialMarkdownEditorContainerProps,
   MarkdownEditorProps,
@@ -9,7 +8,6 @@ import type {
 type PublicTypes = [
   ButtonProps,
   GridProps,
-  FileManagerGridRow,
   MarkdownEditorProps,
   DialMarkdownEditorContainerProps,
 ];

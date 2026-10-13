@@ -6,7 +6,7 @@ An MCP (Model Context Protocol) server that gives AI agents fast, structured acc
 
 Storybook documents components for humans. The MCP server documents them for AI agents. When an AI assistant needs to build a UI with your components, it can:
 
-- **Discover all available components** — Button, Input, Dropdown, FileManager, Form, etc.
+- **Discover all available components** — Button, Input, Dropdown, Form, etc.
 - **Land on the current generation** — 2.0 components rank first, and legacy 1.0 components point at their replacement
 - **Read exact props and types** — required fields, defaults, enums, component-specific behaviors
 - **Access code examples** — copy-paste usage patterns for common scenarios
@@ -80,7 +80,7 @@ The kit ships two generations of components. **Generation 2.0 is the current des
 - 2.0 components are exported **without** the `Dial` prefix: `Button`, `Input`, `Select`, `Popup`.
 - 1.0 components are the legacy `Dial*` set. Most have a 2.0 replacement.
 - `searchEntity("component", …)` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` states the generation and flags a superseded component.
-- Reach for a 1.0 component **only** when it has no 2.0 replacement (nothing in **Use instead**) — e.g. `DialGrid`, `DialFileManager`, `DialTabs`.
+- Reach for a 1.0 component **only** when it has no 2.0 replacement (nothing in **Use instead**) — e.g. `DialGrid`, `DialTabs`.
 - Do not mix generations for the same control in one screen.
 
 ## MCP Tools
