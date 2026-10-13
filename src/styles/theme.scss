@@ -241,9 +241,9 @@
   );
 
   /*
-   * backgroundsColorsToRemove: deprecated, TODO: remove. Declared after
-   * backgroundsColors, so a key both sets define (`error`, `info` …) takes
-   * this value.
+   * backgroundsColorsToRemove: deprecated, TODO: remove. A key here must not
+   * repeat one of backgroundsColors: declared later, it would replace the 2.0
+   * fallback for every component that uses the class.
    */
   --background-color-layer-0: var(--bg-layer-0, #fcfcfc);
   --background-color-layer-1: var(--bg-layer-1, #e0e6f0);
@@ -251,10 +251,6 @@
   --background-color-layer-3: var(--bg-layer-3, #fcfcfc);
   --background-color-layer-4: var(--bg-layer-4, #d1dbea);
   --background-color-blackout: var(--bg-blackout, #0c101d4d);
-  --background-color-error: var(--bg-error, #f3d6d8);
-  --background-color-warning: var(--bg-warning, #faf0cf);
-  --background-color-info: var(--bg-info, #d6e2f9);
-  --background-color-success: var(--bg-success, #d9f0f1);
   --background-color-neutral: var(--bg-neutral, #fcfcfc);
   --background-color-accent-primary-alpha: var(
     --bg-accent-primary-alpha,
@@ -453,6 +449,8 @@
 
   --breakpoint-desktop: 769px;
 
+  /* A spin in eight discrete steps: the `Spinner` and `Loader` tick. */
+  --animate-spin-steps: spin 0.75s steps(8, end) infinite;
   --animate-fadeIn: fadeIn 100ms ease-in;
   --animate-slideUp: slideUp 300ms cubic-bezier(0.32, 0.72, 0, 1);
 

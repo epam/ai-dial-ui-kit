@@ -27,6 +27,10 @@ Versions match the git tags on the `development` branch.
 
 - **`MarkdownEditor` (2.0) — toolbar no longer overflows on narrow cards** — on a phone-width card the formatting group did not wrap, so its last buttons ran past the card edge and the edit/preview/fullscreen group dropped onto a second line at the start. The formatting group now wraps inside the card and the mode group stays at the inline end. Wide toolbars are unchanged ([ai-dial-chat#9389](https://github.com/epam/ai-dial-chat/issues/9389)).
 
+- **`Spinner` (2.0), `DialLoader` — spin again** — both carry `animate-spin-steps`, a spin in eight discrete steps, but the stylesheet has had no rule for it since 0.13.0: a second `animation` key in the Tailwind config replaced the first, so the indicator rendered as a still ring. The class is generated again.
+
+- **`bg-info` / `bg-success` — 2.0 fallback colours** — the deprecated 1.0 background set redefined both keys with its own fallback, and won, so without a host theme they rendered `#D6E2F9` / `#D9F0F1` instead of the 2.0 `#E1EAF9` / `#DBF1EB`. The duplicates are removed. A theme that sets `--bg-info` / `--bg-success` sees no change; without one, `Notification` (1.0 and 2.0), the 1.0 analytics cards and the 1.0 `DialGrid`'s new and changed rows get the 2.0 shade.
+
 ## [0.15.0]
 
 ### Breaking Changes
