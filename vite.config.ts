@@ -32,7 +32,17 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    dts({ exclude: ['**/*.stories.tsx', '**/*.spec.tsx'] }),
+    dts({
+      // Tests and their mocks are not part of the package: without these
+      // globs their declarations land in `dist` and ship to npm.
+      exclude: [
+        '**/*.stories.tsx',
+        '**/*.spec.{ts,tsx}',
+        '**/*.test.{ts,tsx}',
+        '**/__tests__/**',
+        '**/__mocks__/**',
+      ],
+    }),
   ],
   resolve: {
     alias: {
