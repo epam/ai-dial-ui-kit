@@ -25,6 +25,8 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **Package — test declarations no longer published** — `dist/` carried 36 `.d.ts` files for specs, tests and mocks (`*.spec.ts`, `*.test.tsx`, `__tests__/`, `__mocks__/`), because the declaration build excluded only `*.spec.tsx` and stories. They are no longer emitted; the declarations `package.json` `exports` points to are unchanged.
+
 - **`MarkdownEditor` (2.0) — toolbar no longer overflows on narrow cards** — on a phone-width card the formatting group did not wrap, so its last buttons ran past the card edge and the edit/preview/fullscreen group dropped onto a second line at the start. The formatting group now wraps inside the card and the mode group stays at the inline end. Wide toolbars are unchanged ([ai-dial-chat#9389](https://github.com/epam/ai-dial-chat/issues/9389)).
 
 ## [0.15.0]
