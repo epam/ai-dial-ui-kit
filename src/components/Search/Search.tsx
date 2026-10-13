@@ -107,7 +107,7 @@ export const DialSearch: FC<DialSearchProps> = ({
       className={sizeConfig.className}
       wrapperClassName={mergeClasses(
         sizeConfig.wrapperClassName,
-        withoutBorder ? '!border-0 ps-5 [&>div]:!border-0' : '',
+        withoutBorder ? '!border-0 !ps-5 [&>div]:!border-0' : '',
       )}
       {...props}
     />

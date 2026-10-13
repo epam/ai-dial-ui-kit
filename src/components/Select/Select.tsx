@@ -696,7 +696,7 @@ export const DialSelect: FC<DialSelectProps> = ({
               onKeyDown={(e) => {
                 e.stopPropagation();
               }}
-              className="bg-transparent outline-none w-full dial-small-text"
+              className="bg-transparent outline-hidden w-full dial-small-text"
               ref={inlineSearchInputRef}
               disabled={disabled}
               aria-disabled={disabled}

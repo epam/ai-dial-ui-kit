@@ -422,7 +422,7 @@ export const DialGrid = <T extends object>({
             anchorToMouse
             matchReferenceWidth
             className={classNames(
-              'w-full h-full',
+              'size-full',
               disabled && '!cursor-not-allowed opacity-75',
             )}
             disabled={disabled && !allowDisabledContextMenu}

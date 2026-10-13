@@ -216,7 +216,7 @@ export const DialEmptyFileArea: FC<DialEmptyFileAreaProps> = ({
   };
 
   const containerClassName = classNames(
-    'border border-dashed rounded w-full cursor-pointer relative h-full hover:border-hover',
+    'border border-dashed rounded size-full cursor-pointer relative hover:border-hover',
     !canDrop && !isFileValidationError && 'border-primary',
     canDrop && (!isOver ? 'border-hover' : 'border-accent-primary'),
     isFileValidationError && 'border-error',

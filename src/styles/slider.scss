@@ -29,7 +29,7 @@
 
 /* The thumb carries the focus ring, so the input must not paint its own. */
 .dial-kit-slider:focus {
-  @apply outline-none;
+  @apply outline-hidden;
 }
 
 .dial-kit-slider:disabled {

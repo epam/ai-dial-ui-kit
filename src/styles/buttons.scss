@@ -1,12 +1,43 @@
+/*
+ * The legacy variants share the base rules through these selector lists:
+ * Tailwind v4's `@apply` only takes utilities, not a class like
+ * `.dial-base-button`.
+ */
 @media (hover: hover) {
-  .dial-base-button:focus-visible {
+  .dial-base-button:focus-visible,
+  .dial-primary-solid-button:focus-visible,
+  .dial-primary-link-button:focus-visible,
+  .dial-neutral-outlined-button:focus-visible,
+  .dial-danger-solid-button:focus-visible,
+  .dial-danger-outlined-button:focus-visible,
+  .dial-neutral-rounded-button:focus-visible,
+  .dial-primary-ghost-button:focus-visible,
+  .dial-success-ghost-button:focus-visible,
+  .dial-secondary-ghost-button:focus-visible,
+  .dial-tertiary-ghost-button:focus-visible,
+  .dial-danger-ghost-button:focus-visible {
     @apply border-focus;
   }
 }
 
 /* 2.0 button styles */
 
-.dial-kit-base-button {
+/*
+ * Every 2.0 variant is listed here rather than pulling the base in with
+ * `@apply`: Tailwind v4's `@apply` only takes utilities. A variant's own rule
+ * comes later in this file, so its declarations still win over these.
+ */
+.dial-kit-base-button,
+.dial-kit-primary-solid-button,
+.dial-kit-neutral-solid-button,
+.dial-kit-danger-solid-button,
+.dial-kit-static-solid-button,
+.dial-kit-neutral-outlined-button,
+.dial-kit-danger-outlined-button,
+.dial-kit-starter-outlined-button,
+.dial-kit-primary-ghost-button,
+.dial-kit-danger-ghost-button,
+.dial-kit-primary-link-button {
   @apply flex flex-row items-center justify-center;
   @apply rounded-control border border-solid border-transparent;
   @apply disabled:cursor-not-allowed outline-offset-0;
@@ -17,12 +48,19 @@
  * A `Button` given an `href` renders an `<a>`, which has no disabled state and
  * so never matches `:disabled`. It carries `aria-disabled` instead.
  *
- * This must stay a separate top-level rule rather than nesting inside
- * `.dial-kit-base-button`: every variant class pulls that one in with
- * `@apply`, and `@apply` cannot inline a rule that contains nested CSS.
- * Both classes are always on the element, so the selector still matches.
+ * Listed per variant for the same reason as the base rule above.
  */
-.dial-kit-base-button[aria-disabled='true'] {
+.dial-kit-base-button[aria-disabled='true'],
+.dial-kit-primary-solid-button[aria-disabled='true'],
+.dial-kit-neutral-solid-button[aria-disabled='true'],
+.dial-kit-danger-solid-button[aria-disabled='true'],
+.dial-kit-static-solid-button[aria-disabled='true'],
+.dial-kit-neutral-outlined-button[aria-disabled='true'],
+.dial-kit-danger-outlined-button[aria-disabled='true'],
+.dial-kit-starter-outlined-button[aria-disabled='true'],
+.dial-kit-primary-ghost-button[aria-disabled='true'],
+.dial-kit-danger-ghost-button[aria-disabled='true'],
+.dial-kit-primary-link-button[aria-disabled='true'] {
   @apply cursor-not-allowed;
 }
 
@@ -30,8 +68,35 @@
  * `shadow-none` matters as much as the flat background: the resting shadow of
  * the solid variants is blue-tinted (`--shadow-xs-1`), so a disabled button
  * that keeps it reads as a grey pill floating in a blue halo.
+ *
+ * Both selectors per variant: a `Button` with an `href` renders an `<a>`, which
+ * never matches `:disabled` and carries `aria-disabled` instead — without the
+ * second half a disabled link keeps the enabled fill and shadow.
+ *
+ * The rule can sit above the variants because their hover and active rules are
+ * gated on `:not(:disabled):not([aria-disabled='true'])` rather than being
+ * overridden here: a disabled control must not react to the pointer at all, and
+ * leaving that to source order breaks the moment a rule moves. `:enabled` would
+ * not do — it never matches an `<a>`, so it would take the hover state away from
+ * enabled link buttons too.
  */
-.dial-kit-solid-button-disable {
+.dial-kit-solid-button-disable,
+.dial-kit-primary-solid-button:disabled,
+.dial-kit-primary-solid-button[aria-disabled='true'],
+.dial-kit-neutral-solid-button:disabled,
+.dial-kit-neutral-solid-button[aria-disabled='true'],
+.dial-kit-danger-solid-button:disabled,
+.dial-kit-danger-solid-button[aria-disabled='true'],
+.dial-kit-static-solid-button:disabled,
+.dial-kit-static-solid-button[aria-disabled='true'],
+.dial-kit-neutral-outlined-button:disabled,
+.dial-kit-neutral-outlined-button[aria-disabled='true'],
+.dial-kit-danger-outlined-button:disabled,
+.dial-kit-danger-outlined-button[aria-disabled='true'],
+.dial-kit-starter-outlined-button:disabled,
+.dial-kit-starter-outlined-button[aria-disabled='true'],
+.dial-kit-fab-button:disabled,
+.dial-kit-fab-button[aria-disabled='true'] {
   @apply text-control-disable-primary bg-none bg-control-disable-primary border-transparent shadow-none;
 }
 
@@ -82,7 +147,9 @@
  * taking a fifth `boxShadow` key that no Figma token backs. It draws the same
  * two colours as `shadow-xs`; only the offset and the blur differ.
  */
-.dial-kit-control-shadow {
+.dial-kit-control-shadow,
+.dial-kit-primary-solid-button,
+.dial-kit-fab-button {
   box-shadow:
     0 2px 12px 0 var(--shadow-xs-1, #2764d933),
     0 2px 6px 0 var(--shadow-xs-2, #161b2d08);
@@ -90,7 +157,7 @@
 
 /* Solid buttons */
 .dial-kit-primary-solid-button {
-  @apply dial-kit-control-shadow dial-kit-base-button text-control-permanent bg-control-accent-gradient;
+  @apply text-control-permanent bg-control-accent-gradient;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -104,7 +171,7 @@
 }
 
 .dial-kit-neutral-solid-button {
-  @apply dial-kit-base-button text-accent bg-control-accent-alpha;
+  @apply text-accent bg-control-accent-alpha;
   @apply border-accent-alpha;
 
   @media (hover: hover) {
@@ -119,7 +186,7 @@
 }
 
 .dial-kit-danger-solid-button {
-  @apply dial-kit-base-button text-control-permanent bg-control-error;
+  @apply text-control-permanent bg-control-error;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -133,7 +200,7 @@
 }
 
 .dial-kit-static-solid-button {
-  @apply dial-kit-base-button text-secondary bg-transparent;
+  @apply text-secondary bg-transparent;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -153,7 +220,7 @@
  * as focus.
  */
 .dial-kit-neutral-outlined-button {
-  @apply dial-kit-base-button text-secondary bg-transparent;
+  @apply text-secondary bg-transparent;
   @apply border-default focus-visible:outline-offset-1;
 
   @media (hover: hover) {
@@ -168,7 +235,7 @@
 }
 
 .dial-kit-danger-outlined-button {
-  @apply dial-kit-base-button text-error bg-transparent;
+  @apply text-error bg-transparent;
   @apply border-error;
 
   @media (hover: hover) {
@@ -192,7 +259,7 @@
  * fall back to the accent colour.
  */
 .dial-kit-starter-outlined-button {
-  @apply dial-kit-base-button text-secondary bg-control-neutral;
+  @apply text-secondary bg-control-neutral;
   @apply border-default;
 
   & svg {
@@ -217,40 +284,9 @@
   }
 }
 
-/*
- * Both selectors per variant: a `Button` with an `href` renders an `<a>`, which
- * never matches `:disabled` and carries `aria-disabled` instead — without the
- * second half a disabled link keeps the enabled fill and shadow.
- *
- * The hover and active rules of every variant above are gated on
- * `:not(:disabled):not([aria-disabled='true'])` rather than being overridden
- * here: a disabled control must not react to the pointer at all, and leaving
- * that to source order breaks the moment a rule moves. `:enabled` would not do
- * — it never matches an `<a>`, so it would take the hover state away from
- * enabled link buttons too.
- */
-.dial-kit-primary-solid-button:disabled,
-.dial-kit-primary-solid-button[aria-disabled='true'],
-.dial-kit-neutral-solid-button:disabled,
-.dial-kit-neutral-solid-button[aria-disabled='true'],
-.dial-kit-danger-solid-button:disabled,
-.dial-kit-danger-solid-button[aria-disabled='true'],
-.dial-kit-static-solid-button:disabled,
-.dial-kit-static-solid-button[aria-disabled='true'],
-.dial-kit-neutral-outlined-button:disabled,
-.dial-kit-neutral-outlined-button[aria-disabled='true'],
-.dial-kit-danger-outlined-button:disabled,
-.dial-kit-danger-outlined-button[aria-disabled='true'],
-.dial-kit-starter-outlined-button:disabled,
-.dial-kit-starter-outlined-button[aria-disabled='true'],
-.dial-kit-fab-button:disabled,
-.dial-kit-fab-button[aria-disabled='true'] {
-  @apply dial-kit-solid-button-disable;
-}
-
 /* Ghost buttons */
 .dial-kit-primary-ghost-button {
-  @apply dial-kit-base-button text-accent bg-transparent;
+  @apply text-accent bg-transparent;
 
   &.dial-kit-base-icon-button {
     @apply text-secondary;
@@ -278,7 +314,7 @@
 }
 
 .dial-kit-danger-ghost-button {
-  @apply dial-kit-base-button text-error bg-transparent;
+  @apply text-error bg-transparent;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -308,7 +344,7 @@
 /* Link buttons */
 .dial-kit-primary-link-button {
   /* `no-underline` is explicit because this variant also renders as an `<a>`. */
-  @apply dial-kit-base-button bg-transparent text-accent no-underline;
+  @apply bg-transparent text-accent no-underline;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -328,7 +364,7 @@
 
 .dial-kit-fab-button {
   @apply flex items-center justify-center rounded-full;
-  @apply bg-control-neutral dial-kit-control-shadow text-primary;
+  @apply bg-control-neutral text-primary;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
@@ -346,7 +382,25 @@
 }
 
 /* Legacy button styles */
-.dial-base-button {
+/*
+ * Variants share the base through this list, like the `:focus-visible` rule at
+ * the top of the file. The `*-disable` modifiers below are applied at each
+ * `:disabled` use instead, through their `dial-mixin-*` sets in mixins.scss: a
+ * legacy hover is not gated on `:disabled`, so those rules have to stay after it
+ * in source order.
+ */
+.dial-base-button,
+.dial-primary-solid-button,
+.dial-primary-link-button,
+.dial-neutral-outlined-button,
+.dial-danger-solid-button,
+.dial-danger-outlined-button,
+.dial-neutral-rounded-button,
+.dial-primary-ghost-button,
+.dial-success-ghost-button,
+.dial-secondary-ghost-button,
+.dial-tertiary-ghost-button,
+.dial-danger-ghost-button {
   @apply flex flex-row items-center gap-x-2 justify-center;
   @apply rounded border border-solid border-transparent;
 }
@@ -356,15 +410,15 @@
 }
 
 .dial-button-solid-disable {
-  @apply dial-button-disable text-controls-accent-disable bg-controls-disable-accent;
+  @apply dial-mixin-button-solid-disable;
 }
 
 .dial-button-outlined-disable {
-  @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+  @apply dial-mixin-button-outlined-disable;
 }
 
 .dial-primary-solid-button {
-  @apply dial-base-button bg-controls-accent-primary text-controls-permanent;
+  @apply bg-controls-accent-primary text-controls-permanent;
 
   @media (hover: hover) {
     &:hover {
@@ -400,7 +454,7 @@
 }
 
 .dial-primary-link-button {
-  @apply dial-base-button bg-transparent text-accent-primary px-2;
+  @apply bg-transparent text-accent-primary px-2;
 
   @media (hover: hover) {
     &:hover {
@@ -413,12 +467,12 @@
   }
 
   &:disabled {
-    @apply dial-button-disable text-controls-secondary-disable;
+    @apply cursor-not-allowed text-controls-secondary-disable;
   }
 }
 
 .dial-neutral-outlined-button {
-  @apply dial-base-button bg-transparent text-controls-neutral;
+  @apply bg-transparent text-controls-neutral;
   @apply border-default;
 
   @media (hover: hover) {
@@ -432,12 +486,12 @@
   }
 
   &:disabled {
-    @apply dial-button-outlined-disable;
+    @apply dial-mixin-button-outlined-disable;
   }
 }
 
 .dial-danger-solid-button {
-  @apply dial-base-button bg-controls-error text-controls-permanent;
+  @apply bg-controls-error text-controls-permanent;
 
   @media (hover: hover) {
     &:hover {
@@ -463,7 +517,7 @@
 }
 
 .dial-danger-outlined-button {
-  @apply dial-base-button text-error;
+  @apply text-error;
   @apply border-error;
 
   @media (hover: hover) {
@@ -477,7 +531,7 @@
   }
 
   &:disabled {
-    @apply dial-button-outlined-disable;
+    @apply dial-mixin-button-outlined-disable;
   }
 }
 
@@ -525,7 +579,7 @@
 .dial-secondary-ghost-button,
 .dial-tertiary-ghost-button,
 .dial-danger-ghost-button {
-  @apply dial-base-button bg-transparent;
+  @apply bg-transparent;
 }
 
 .dial-primary-ghost-button:disabled,
@@ -533,16 +587,16 @@
 .dial-secondary-ghost-button:disabled,
 .dial-tertiary-ghost-button:disabled,
 .dial-danger-ghost-button:disabled {
-  @apply dial-button-disable text-controls-secondary-disable bg-transparent;
+  @apply cursor-not-allowed text-controls-secondary-disable bg-transparent;
 }
 
 .dial-primary-solid-button:disabled,
 .dial-danger-solid-button:disabled {
-  @apply dial-button-solid-disable;
+  @apply dial-mixin-button-solid-disable;
 }
 
 .dial-neutral-rounded-button {
-  @apply dial-base-button bg-transparent text-controls-neutral;
+  @apply bg-transparent text-controls-neutral;
   @apply border-default rounded-full;
 
   @media (hover: hover) {
@@ -560,8 +614,19 @@
   }
 
   &:disabled {
-    @apply dial-button-disable border-transparent text-controls-primary-disable bg-controls-disable;
+    @apply dial-mixin-button-outlined-disable;
   }
+}
+
+/*
+ * The disabled colour of the 1.0 `IconButton`, whatever its variant. It was a
+ * `disabled:` utility on the component, which Tailwind v3 emitted unlayered
+ * after this file and so outranked the variants' own `:disabled` colours; in v4
+ * utilities are layered and would lose to them, so the rule lives here, after
+ * the legacy variants.
+ */
+.dial-icon-button:disabled {
+  @apply text-controls-secondary-disable;
 }
 
 /*
@@ -569,9 +634,9 @@
  * here, so keep these two rules last in this file and keep them at a single
  * class:
  *
- * - Last, because every variant class above pulls `.dial-kit-base-button` in
- *   with `@apply` — its radius included — so a rule placed earlier would lose
- *   to `.dial-kit-primary-solid-button` and friends.
+ * - Last, because every variant class above is listed in the
+ *   `.dial-kit-base-button` rule — its radius included — so a rule placed
+ *   before it would lose to `.dial-kit-primary-solid-button` and friends.
  * - Single-class, because a consumer that squares off a control with its own
  *   `rounded-*` utility has to keep winning: those utilities are emitted after
  *   this stylesheet, and a compound selector here would silently outrank them.

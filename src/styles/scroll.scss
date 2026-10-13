@@ -1,4 +1,4 @@
-@layer base {
+@layer ui.base {
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-track:hover,
   ::-webkit-scrollbar-corner,
@@ -7,11 +7,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply cursor-pointer rounded;
-    background-color: var(
-      --bg-control-neutral-active,
-      var(--bg-layer-4, #d1dbea)
-    );
+    @apply cursor-pointer rounded bg-control-neutral-active;
   }
 
   ::-webkit-scrollbar {
@@ -24,11 +20,7 @@
   }
 
   :hover {
-    scrollbar-color: var(
-        --bg-control-neutral-active,
-        var(--bg-layer-4, #d1dbea)
-      )
-      transparent;
+    scrollbar-color: var(--bg-control-neutral-active, #d1dbea) transparent;
   }
 
   .divide-y > :empty ~ :not([hidden]) {

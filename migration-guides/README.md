@@ -30,6 +30,7 @@ migration-guides/
 | 0.14.0 | [shadow-token-per-step-rename](0.14.0/shadow-token-per-step-rename.md) | Shadow scale rebuilt per step: `sm` moves to the side panels, controls keep their shadow under `dial-kit-control-shadow` |
 | 0.15.0 | [legacy-theme-variable-fallbacks-removal](0.15.0/legacy-theme-variable-fallbacks-removal.md) | Old theme variable names (`--bg-control-neutral-hover`, `--stroke-focus-black`, `--bg-control-accent-gradient-*`) dropped from the fallback chains |
 | 0.15.0 | [slider-redesign](0.15.0/slider-redesign.md) | `Slider` redrawn: 12px accent thumb with a hover/focus halo, accent-tint track; adds `showTooltip`, `showTicks`, `leftContent`, `rightContent` |
+| 0.16.0 | [tailwind-v4-stylesheet](0.16.0/tailwind-v4-stylesheet.md) | `styles.css` built with Tailwind v4: variant utilities move into `@layer ui`, v4 preflight, new browser baseline |
 
 ---
 

@@ -9,6 +9,14 @@ Versions match the git tags on the `development` branch.
 
 ## [0.16.0]
 
+### Breaking Changes
+
+- **`styles.css` — built with Tailwind CSS v4: variant utilities moved into `@layer ui`** — Tailwind v3 emitted every utility with a variant (`hover:`, `focus-visible:`, `disabled:`, `placeholder:`, `before:`, `mobile:`, `md:` …) after the `ui` layer, unlayered; v4 keeps them inside `@layer ui` with the rest. A host's unlayered CSS that used to tie or lose with them on specificity now always wins, and `hover:` applies only on devices that can hover. Base utilities and the kit's `dial-*` classes keep their cascade position.
+  See [migration guide](migration-guides/0.16.0/tailwind-v4-stylesheet.md).
+
+- **`styles.css` — Tailwind v4 preflight and browser baseline** — the stylesheet's preflight reaches every element on the host page, and v4's differs: `input`, `select` and `textarea` get a transparent background and no corner radius, `margin` and `padding` reset on every element, and the `hidden` attribute wins over a display utility. The v3 placeholder colour, the pointer cursor on buttons and the centred `<dialog>` are kept. The stylesheet now targets Safari 16.4+, Chrome 111+ and Firefox 128+. Tailwind v3's output already used native CSS nesting, so for most hosts this changes nothing.
+  See [migration guide](migration-guides/0.16.0/tailwind-v4-stylesheet.md).
+
 ### Changed
 
 - **`Popup` (2.0) — footer buttons split the row evenly on mobile** — below the `mobile` breakpoint (768px), where the popup fills the screen, the trailing `mainButtons` group now spans the footer and each of its buttons takes an equal share, so a Cancel/Confirm pair renders 50/50 and a single button fills the row. `additionalButtons` in the trailing group stretch with it; with `additionalButtonsOnLeft` they keep their natural width. Desktop is unchanged, a caller's `className` on a button still merges on top, and a custom `footer` node is not touched. The props are unchanged. Reported on the mobile dialogs in ai-dial-chat.

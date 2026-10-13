@@ -123,7 +123,7 @@ export const DialInputPopup: FC<DialInputPopupProps> = ({
           <input
             type="text"
             className={classNames(
-              'flex-1 min-w-0 bg-transparent outline-none border-none p-0 dial-small-text text-primary placeholder:text-secondary',
+              'flex-1 min-w-0 bg-transparent outline-hidden border-none p-0 dial-small-text text-primary placeholder:text-secondary',
               valueClassName,
             )}
             value={typeof selectedValue === 'string' ? selectedValue : ''}

@@ -145,14 +145,14 @@ export const DialAnalyticsBar: FC<DialAnalyticsBarProps> = ({
       aria-valuemax={maxValue}
       aria-label={resolvedAriaLabel}
       className={mergeClasses(
-        'w-full overflow-hidden rounded-sm',
+        'w-full overflow-hidden rounded-xs',
         inline ? 'h-1' : 'h-2',
         error ? 'bg-error' : 'bg-layer-1',
       )}
     >
       {!hideFill && (
         <div
-          className="h-full rounded-sm transition-[width] duration-300"
+          className="h-full rounded-xs transition-[width] duration-300"
           style={{ width: `${ratio * 100}%`, backgroundColor: color }}
         />
       )}

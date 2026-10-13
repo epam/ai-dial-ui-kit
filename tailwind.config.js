@@ -206,15 +206,8 @@ const textColorsToRemove = {
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{ts,tsx}', './src/**/*.scss'],
-  /*
-   * `shadow-sm` is the side bar / side panel / right panel step, and no
-   * component in the kit paints that surface — the sidebar deliberately draws
-   * no background of its own, so the host applies the shadow. Without the
-   * safelist the class is scanned out of the shipped stylesheet and a consumer
-   * that writes it against `@epam/ai-dial-ui-kit/styles.css` gets nothing.
-   */
-  safelist: ['shadow-sm'],
+  // Sources and the `shadow-sm` safelist are declared in
+  // `src/styles/tailwind-entry.scss` (`@source`): Tailwind v4 reads them there.
   theme: {
     backgroundColor: {
       ...backgroundsColors,
@@ -326,6 +319,18 @@ export default {
       },
       fontFamily: {
         DEFAULT: ['var(--theme-font, var(--font-inter))'],
+        // Tailwind v3's default stack, which preflight gives `html`. Tailwind
+        // 4.3 swapped its own default for an `-apple-system` stack; pinning it
+        // keeps the text of a host that sets no font unchanged.
+        sans: [
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+          '"Noto Color Emoji"',
+        ],
         // The kit ships no font file: the host supplies the face and we only
         // name it, mirroring the `--theme-font` / `--font-inter` hook above.
         mono: [

@@ -160,7 +160,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({
             aria-label={title ? undefined : ariaLabel}
             style={style}
             className={mergeClasses(
-              'flex max-h-[85dvh] w-full flex-col rounded-t-lg bg-layer-raised outline-none',
+              'flex max-h-[85dvh] w-full flex-col rounded-t-lg bg-layer-raised outline-hidden',
               'animate-slideUp motion-reduce:animate-none',
               className,
               DIAL_KIT_CLASS.bottomSheet,

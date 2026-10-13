@@ -12,13 +12,13 @@ describe('Dial UI Kit :: DialLoader', () => {
   test('applies full width by default', () => {
     render(<DialLoader />);
     const el = screen.getByRole('status');
-    expect(el).toHaveClass('w-full', 'h-full');
+    expect(el).toHaveClass('size-full');
   });
 
   test('renders inline when fullWidth is false', () => {
     render(<DialLoader fullWidth={false} />);
     const el = screen.getByRole('status');
-    expect(el).not.toHaveClass('w-full', 'h-full');
+    expect(el).not.toHaveClass('size-full');
   });
 
   test('respects custom aria label', () => {

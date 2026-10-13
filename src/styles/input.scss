@@ -1,6 +1,6 @@
 .dial-kit-input {
   @apply border border-secondary rounded-lg h-[40px];
-  @apply bg-layer-raised truncate dial-small-paragraph-text;
+  @apply bg-layer-raised truncate dial-mixin-small-paragraph-text;
   @apply w-full;
 
   &:not(:disabled):hover {
@@ -17,7 +17,6 @@
   }
 
   &:disabled {
-    @apply dial-kit-input-disable;
     &:not(:placeholder-shown) {
       @apply placeholder-secondary;
     }
@@ -27,16 +26,16 @@
 /*
  * Height and typography of the small variant live here rather than as
  * utilities on the component: these component classes are unlayered while
- * `@tailwind utilities` sits in `@layer ui`, so an `h-[24px]` utility would
+ * Tailwind's utilities sit in `@layer ui`, so an `h-[24px]` utility would
  * lose the cascade to `.dial-kit-input`. Must stay after the base rule.
  */
 .dial-kit-input-small {
-  @apply h-[24px] dial-tiny-text;
+  @apply h-[24px] dial-mixin-tiny-text;
 }
 
 /* Same cascade constraint as the small variant above. */
 .dial-kit-input-large {
-  @apply h-[48px] dial-body-paragraph-text;
+  @apply h-[48px] dial-mixin-body-paragraph-text;
 }
 
 /*
@@ -54,7 +53,13 @@
   }
 }
 
+/*
+ * The `:disabled` field is listed here rather than pulling this rule in with
+ * `@apply`, which in Tailwind v4 only takes utilities.
+ */
 .dial-kit-input-disable,
+.dial-kit-input:disabled,
+.dial-kit-input:disabled:not(:placeholder-shown),
 .dial-kit-input-disable:not(:placeholder-shown) {
   @apply cursor-not-allowed bg-layer-sunken text-control-disable-primary;
 }
@@ -79,7 +84,7 @@
 
 .dial-input {
   @apply border border-solid border-primary rounded h-[40px];
-  @apply bg-transparent truncate dial-small-text;
+  @apply bg-transparent truncate dial-mixin-small-text;
   @apply w-full outline-0;
 
   &:not(:disabled):hover {
@@ -97,14 +102,16 @@
   }
 
   &:disabled {
-    @apply dial-input-disable;
     &:not(:placeholder-shown) {
       @apply placeholder-secondary;
     }
   }
 }
 
+/* Listed like `.dial-kit-input:disabled` above. */
 .dial-input-disable,
+.dial-input:disabled,
+.dial-input:disabled:not(:placeholder-shown),
 .dial-input-disable:not(:placeholder-shown) {
   @apply cursor-not-allowed bg-controls-disable border-transparent text-controls-primary-disable;
 }

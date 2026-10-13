@@ -60,7 +60,7 @@ const getColorValue = (
 const ColorValue = ({ value }: { value: string }) => (
   <div className="inline-flex items-center gap-2">
     <span
-      className="size-4 shrink-0 rounded-sm border border-primary"
+      className="size-4 shrink-0 rounded-xs border border-primary"
       style={{
         backgroundColor: value !== 'N/A' ? value : 'transparent',
       }}

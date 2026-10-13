@@ -137,7 +137,7 @@ export const MenuItem: FC<MenuItemProps> = ({
       data-menu-item-row={rightControl ? '' : undefined}
       className={
         rightControl
-          ? 'flex h-full min-w-0 flex-1 items-center gap-2 truncate text-start focus-visible:outline-none'
+          ? 'flex h-full min-w-0 flex-1 items-center gap-2 truncate text-start focus-visible:outline-hidden'
           : rowClassName
       }
       {...props}

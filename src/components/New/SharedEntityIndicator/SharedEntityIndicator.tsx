@@ -51,7 +51,7 @@ export const SharedEntityIndicator: FC<SharedEntityIndicatorProps> = ({
       role="img"
       aria-label={label}
       className={mergeClasses(
-        'flex shrink-0 rounded-sm bg-layer-raised text-accent',
+        'flex shrink-0 rounded-xs bg-layer-raised text-accent',
         className,
         DIAL_KIT_CLASS.sharedEntityIndicator,
       )}
