@@ -145,6 +145,10 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ],
   ['popup', () => <Popup open header="Title" />],
   ['bottomSheet', () => <BottomSheet open title="Title" onClose={noop} />],
+  [
+    'bottomSheetOverlay',
+    () => <BottomSheet open title="Title" onClose={noop} />,
+  ],
   ['sideDrawer', () => <SideDrawer open header="Title" onClose={noop} />],
   [
     'confirmationPopup',
