@@ -32,17 +32,19 @@
  * the host's theme across the whole page.
  */
 @import 'tailwindcss/theme.css' layer(ui.theme) theme(reference inline);
+/* The kit's tokens; after Tailwind's defaults, so its keys win. */
+@import './theme.scss';
 @import 'tailwindcss/preflight.css' layer(ui.base);
 @import 'tailwindcss/utilities.css' layer(ui.utilities) source(none);
 
-@config '../../tailwind.config.js';
-
 @source '../**/*.{ts,tsx,scss}';
 /*
- * The `dial-mixin-*` utilities exist only to be `@apply`-ed by other rules;
- * scanning their definitions would ship each one as a class of its own.
+ * The `dial-mixin-*` utilities exist only to be `@apply`-ed by other rules,
+ * and the theme only declares tokens; scanning either would ship their names
+ * as classes of their own.
  */
 @source not './mixins.scss';
+@source not './theme.scss';
 /*
  * `shadow-sm` is the side bar / side panel / right panel step, and no
  * component in the kit paints that surface — the sidebar deliberately draws

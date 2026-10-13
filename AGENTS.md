@@ -116,7 +116,7 @@ Add a row to the table in `migration-guides/README.md`:
 
 ### Styling details
 
-- Tailwind CSS with custom design tokens defined as CSS variables in `tailwind.config.js`
+- Tailwind CSS v4 with custom design tokens defined as CSS variables in the `@theme` block of `src/styles/theme.scss`
 - Use `mergeClasses` (from `src/utils/merge-classes`) for Tailwind class merging
 - No inline styles or hardcoded values (hex colors, font sizes, etc.)
 - SCSS mixins in `src/styles/` for reusable patterns

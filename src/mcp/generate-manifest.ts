@@ -872,32 +872,41 @@ function buildStylesContent(): string {
 // ─── theming content ──────────────────────────────────────────────────────────
 
 function buildThemingContent(): string {
-  const tailwindConfig = readFileSync(
-    join(ROOT, 'tailwind.config.js'),
-    'utf-8',
-  );
+  const theme = readFileSync(join(SRC, 'styles', 'theme.scss'), 'utf-8');
 
-  // Extract CSS variable token groups from tailwind config
-  const tokenGroups: string[] = [];
-  const groupRe = /const (\w+)\s*=\s*\{([\s\S]*?)\n\};/g;
-  let groupMatch: RegExpExecArray | null;
-  while ((groupMatch = groupRe.exec(tailwindConfig)) !== null) {
-    const groupName = groupMatch[1];
-    const body = groupMatch[2];
-    const tokenRe = /'([^']+)':\s*'var\(--([^,]+),\s*([^)]+)\)'/g;
-    const tokens: string[] = [];
-    let tokenMatch: RegExpExecArray | null;
-    while ((tokenMatch = tokenRe.exec(body)) !== null) {
-      tokens.push(
-        `| \`${tokenMatch[1]}\` | \`var(--${tokenMatch[2]})\` | \`${tokenMatch[3]}\` |`,
-      );
+  // Extract CSS variable token groups from the theme. A group starts at a
+  // comment naming it (`/* backgroundsColors: … */`); the shadow scale has no
+  // such header and is listed as `shadowColors`.
+  const groups = new Map<string, string[]>();
+  const headerRe = /^\s*(?:\/\*|\*)\s*(\w+Colors?\w*):/;
+  const tokenRe =
+    /^\s*--(?:background-color|border-color|text-color|placeholder-color|shadow)-([\w-]+):\s*(.+?);/;
+  const varRe = /var\(--([\w-]+),\s*([^)]+)\)/g;
+  let groupName = '';
+  for (const line of theme.split(/\r?\n/)) {
+    const header = line.match(headerRe);
+    if (header) {
+      groupName = header[1];
+      continue;
     }
-    if (tokens.length > 0) {
-      tokenGroups.push(
-        `### ${groupName}\n| Tailwind class suffix | CSS variable | Default value |\n|---|---|---|\n${tokens.join('\n')}`,
+    const token = line.match(tokenRe);
+    if (!token) continue;
+    const name = line.trimStart().startsWith('--shadow-')
+      ? 'shadowColors'
+      : groupName;
+    const rows = groups.get(name) ?? groups.set(name, []).get(name)!;
+    for (const [, variable, fallback] of token[2].matchAll(varRe)) {
+      rows.push(
+        `| \`${token[1]}\` | \`var(--${variable})\` | \`${fallback.trim()}\` |`,
       );
     }
   }
+  const tokenGroups = [...groups]
+    .filter(([, rows]) => rows.length > 0)
+    .map(
+      ([name, rows]) =>
+        `### ${name}\n| Tailwind class suffix | CSS variable | Default value |\n|---|---|---|\n${rows.join('\n')}`,
+    );
 
   const staticContent = readFileSync(
     join(SRC, 'mcp', 'descriptions', 'theming.md'),

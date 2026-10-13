@@ -14,7 +14,7 @@ export const INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY = 400;
 
 /**
  * The panel sits one step of the overlay ladder (`z-interactive-tooltip`, see
- * `zIndex` in `tailwind.config.js`) above the surface it is anchored to — a
+ * `--z-index-*` in `src/styles/theme.scss`) above the surface it is anchored to — a
  * dropdown or select overlay, both `z-floating` — since it can be opened from
  * a row inside one of them.
  *
