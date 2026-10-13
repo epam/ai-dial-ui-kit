@@ -145,6 +145,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({
           'z-popup flex items-end bg-backdrop',
           themeScope,
           overlayClassName,
+          DIAL_KIT_CLASS.bottomSheetOverlay,
         )}
       >
         {/* Focus the panel itself, as `Popup` does: the first control is the
