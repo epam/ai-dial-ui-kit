@@ -9,12 +9,12 @@ export const dropdownBaseClassName = classNames(
 );
 
 export const dropdownListBaseClassName = classNames(
-  'z-floating overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-none',
+  'z-floating overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-hidden',
 );
 
 export const dropdownItemBaseClassName = classNames(
   'flex w-full cursor-pointer items-center gap-3',
-  'focus-visible:border-none focus-visible:outline-none',
+  'focus-visible:border-none focus-visible:outline-hidden',
   'hover:bg-accent-primary-alpha px-3',
   'dial-small-text h-[34px] rounded text-primary',
   DIAL_KIT_CLASS.menuItem,

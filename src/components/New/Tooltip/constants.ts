@@ -24,8 +24,8 @@ export const HOVER_OPEN_DELAY = 500;
 export const arrowClassName = 'fill-control-inverted';
 
 /**
- * Tooltips sit at the top of the overlay ladder (`z-tooltip`, see `zIndex` in
- * `tailwind.config.js`) — above popups (`z-popup`), dropdowns and the calendar
+ * Tooltips sit at the top of the overlay ladder (`z-tooltip`, see `--z-index-*` in
+ * `src/styles/theme.scss`) — above popups (`z-popup`), dropdowns and the calendar
  * (`z-floating`) and interactive tooltips — since they can be triggered by a
  * control inside any of them.
  *

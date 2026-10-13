@@ -186,7 +186,7 @@ export const SideDrawer: FC<SideDrawerProps> = ({
             inert={!open}
             style={style}
             className={mergeClasses(
-              'fixed inset-y-0 end-0 flex w-full flex-col overflow-hidden bg-layer-raised outline-none',
+              'fixed inset-y-0 end-0 flex w-full flex-col overflow-hidden bg-layer-raised outline-hidden',
               'desktop:w-[540px] desktop:rounded-s-xl desktop:border-s desktop:border-secondary',
               'transition-transform duration-300 motion-reduce:transition-none',
               open ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full',

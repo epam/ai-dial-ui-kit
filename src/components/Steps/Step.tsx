@@ -22,7 +22,7 @@ export const DialStep: FC<DialStepProps> = ({
   const stepClass =
     'h-[32px] flex flex-1 min-w-[180px] items-center dial-tiny-text cursor-pointer dial-step';
   const circleClass =
-    'w-[22px] h-[22px] flex justify-center items-center mr-2 rounded-full text-white';
+    'w-[22px] h-[22px] flex justify-center items-center mr-2 rounded-full';
 
   const getContent = () => {
     if (currentStep === step.id && step.status === StepStatus.ERROR) {

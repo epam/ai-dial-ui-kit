@@ -1,3 +1,13 @@
+/*
+ * Tailwind sits in the `ui` layer while the kit's `dial-*` classes below stay
+ * unlayered, so a `dial-*` rule always wins over a utility. The order is
+ * declared first because a layer's position is fixed where it first appears,
+ * and the partials that belong with preflight (`scroll.scss`, `surface.scss`)
+ * already write into `ui.base`.
+ */
+@layer ui.theme, ui.base, ui.components, ui.utilities;
+
+@import './mixins.scss';
 @import './typography.scss';
 @import './buttons.scss';
 @import './input.scss';
@@ -14,8 +24,58 @@
 @import './slider.scss';
 @import './surface.scss';
 
-@layer ui {
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+/*
+ * `reference inline` writes theme values straight into the utilities instead
+ * of declaring `--font-sans`, `--spacing`, `--radius-*`, `--color-*` on
+ * `:root`. Those names are Tailwind v4's own, so a host on Tailwind v4 declares
+ * them too, and the kit's copies — in a layer that comes later — would replace
+ * the host's theme across the whole page.
+ */
+@import 'tailwindcss/theme.css' layer(ui.theme) theme(reference inline);
+/* The kit's tokens; after Tailwind's defaults, so its keys win. */
+@import './theme.scss';
+@import 'tailwindcss/preflight.css' layer(ui.base);
+@import 'tailwindcss/utilities.css' layer(ui.utilities) source(none);
+
+@source '../**/*.{ts,tsx,scss}';
+/*
+ * The `dial-mixin-*` utilities exist only to be `@apply`-ed by other rules,
+ * and the theme only declares tokens; scanning either would ship their names
+ * as classes of their own.
+ */
+@source not './mixins.scss';
+@source not './theme.scss';
+/*
+ * `shadow-sm` is the side bar / side panel / right panel step, and no
+ * component in the kit paints that surface — the sidebar deliberately draws
+ * no background of its own, so the host applies the shadow. Without this the
+ * class is scanned out of the shipped stylesheet and a consumer that writes it
+ * against `@epam/ai-dial-ui-kit/styles.css` gets nothing.
+ */
+@source inline('shadow-sm');
+
+/*
+ * Tailwind v3 preflight behaviour that v4 dropped, kept because the
+ * stylesheet's preflight reaches every element on the host page, not only the
+ * kit's. Written after the preflight import so it wins inside `ui.base`.
+ */
+@layer ui.base {
+  input::placeholder,
+  textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  :disabled {
+    cursor: default;
+  }
+
+  dialog {
+    margin: auto;
+  }
 }

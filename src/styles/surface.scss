@@ -1,4 +1,4 @@
-@layer base {
+@layer ui.base {
   /*
    * A panel that owns its palette.
    *
@@ -10,7 +10,6 @@
    * to name a text color on every node inside it.
    */
   .dial-surface {
-    background-color: var(--bg-layer-raised, #fcfcfc);
-    color: var(--text-primary, #161b2d);
+    @apply bg-layer-raised text-primary;
   }
 }

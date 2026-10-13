@@ -144,7 +144,7 @@ export const DialAnalyticsBarGroup: FC<DialAnalyticsBarGroupProps> = ({
     ? [...new Set([...Object.keys(data), ...Object.keys(compareData)])]
     : [];
   const barClickClassName =
-    'cursor-pointer rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary';
+    'cursor-pointer rounded-xs text-left focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent-primary';
   const compareEntryClassName = 'group flex flex-col gap-1.5';
   const compareBarsClassName = mergeClasses(
     'flex flex-col gap-1.5 pl-2',

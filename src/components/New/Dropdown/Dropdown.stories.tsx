@@ -267,7 +267,7 @@ const TypeaheadExample = (args: DropdownProps) => {
         <textarea
           ref={textareaRef}
           aria-label="Message"
-          className="w-full resize-none rounded border border-secondary bg-layer-1 p-2 text-primary outline-none"
+          className="w-full resize-none rounded border border-secondary bg-layer-1 p-2 text-primary outline-hidden"
           rows={3}
           placeholder="Type / for commands…"
           value={value}

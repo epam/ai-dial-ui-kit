@@ -70,7 +70,7 @@ export const DialCheckbox: FC<DialCheckboxProps> = ({
 
   const checkboxClassName = classNames(
     'flex flex-row items-center cursor-pointer text-accent-primary small-medium min-w-0',
-    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:w-[18px] before:h-[18px] before:border before:border-hover before:rounded'}`,
+    `${checked || indeterminate ? '' : 'before:content-[""] before:inline-block before:size-[18px] before:border before:border-hover before:rounded'}`,
     disabled
       ? 'pointer-events-none text-secondary before:border-icon-secondary before:bg-layer-4'
       : '',

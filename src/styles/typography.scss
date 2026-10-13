@@ -11,15 +11,15 @@
 }
 
 .dial-h1-text {
-  @apply font-semibold text-[20px]/[28px];
+  @apply dial-mixin-h1-text;
 }
 
 .dial-h2-text {
-  @apply font-semibold text-[18px]/[26px];
+  @apply dial-mixin-h2-text;
 }
 
 .dial-h3-text {
-  @apply font-semibold text-[16px]/[24px];
+  @apply dial-mixin-h3-text;
 }
 
 .dial-body-text {
@@ -31,7 +31,7 @@
 }
 
 .dial-body-paragraph-text {
-  @apply font-normal text-[16px]/[26px];
+  @apply dial-mixin-body-paragraph-text;
 }
 
 .dial-body-paragraph-semi-text {
@@ -39,7 +39,7 @@
 }
 
 .dial-small-text {
-  @apply font-normal text-[14px]/[20px];
+  @apply dial-mixin-small-text;
 }
 
 .dial-small-semi-text {
@@ -47,7 +47,7 @@
 }
 
 .dial-small-paragraph-text {
-  @apply font-normal text-[14px]/[24px];
+  @apply dial-mixin-small-paragraph-text;
 }
 
 .dial-small-paragraph-semi-text {
@@ -55,7 +55,7 @@
 }
 
 .dial-tiny-text {
-  @apply font-normal text-[12px]/[16px];
+  @apply dial-mixin-tiny-text;
 }
 
 .dial-tiny-lead-text {
@@ -75,7 +75,7 @@
 }
 
 .dial-caption-lead-semi-text {
-  @apply font-semibold text-[10px]/[12px] tracking-[0.06em] uppercase;
+  @apply dial-mixin-caption-lead-semi-text;
 }
 
 .dial-code-text {
@@ -99,13 +99,13 @@
 }
 
 h1 {
-  @apply dial-h1-text;
+  @apply dial-mixin-h1-text;
 }
 
 h2 {
-  @apply dial-h2-text;
+  @apply dial-mixin-h2-text;
 }
 
 h3 {
-  @apply dial-h3-text;
+  @apply dial-mixin-h3-text;
 }

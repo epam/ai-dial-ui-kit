@@ -211,7 +211,7 @@ describe('Dial UI Kit :: MenuItem', () => {
     const row = screen.getByRole('option', { name: 'GPT-4o' });
     // The row is only the left part of the rectangle now, so the ring is drawn
     // by the wrapper around both of them.
-    expect(row).toHaveClass('focus-visible:outline-none');
+    expect(row).toHaveClass('focus-visible:outline-hidden');
     expect(row).toHaveAttribute('data-menu-item-row');
     expect(row.parentElement).toHaveClass(
       'has-[[data-menu-item-row]:focus-visible]:outline',

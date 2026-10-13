@@ -80,7 +80,7 @@ export const FolderPath: FC<FolderPathProps> = ({
               size={14}
               stroke={DIAL_KIT_ICON_STROKE}
               aria-hidden="true"
-              // eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value -- keep in sync with the source implementation's RTL mirroring
+              // Keep in sync with the source implementation's RTL mirroring.
               className="rtl:scale-x-[-1]"
             />
           }

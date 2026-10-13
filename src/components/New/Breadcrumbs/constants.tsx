@@ -55,7 +55,7 @@ export const segmentWidthClassName: Record<
 
 /** The box that draws a segment, around its icon and its label. */
 export const segmentClassName =
-  'flex min-w-0 flex-1 items-center gap-1 rounded-sm transition-colors';
+  'flex min-w-0 flex-1 items-center gap-1 rounded-xs transition-colors';
 
 /**
  * A segment the user can follow. Secondary until hovered, then accent — the
@@ -83,7 +83,7 @@ export const separatorClassName =
  * the segments on either side of it (see the README exception table).
  */
 export const overflowButtonClassName =
-  'dial-kit-minimum-target flex shrink-0 items-center rounded-sm text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
+  'dial-kit-minimum-target flex shrink-0 items-center rounded-xs text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
 
 /**
  * Smallest trail the collapse can produce: the root, the ellipsis and the
@@ -99,7 +99,7 @@ export const defaultSeparator: ReactNode = (
     size={DIAL_ICON_SIZE.SM}
     stroke={DIAL_KIT_ICON_STROKE}
     aria-hidden="true"
-    // eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value -- mirrors the chevron in RTL, where the trail reads right to left
+    // Mirrors the chevron in RTL, where the trail reads right to left.
     className="rtl:scale-x-[-1]"
   />
 );

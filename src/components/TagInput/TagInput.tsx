@@ -261,7 +261,7 @@ export const DialTagInput: FC<DialTagInputProps> = ({
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           className={classNames(
-            'dial-input outline-none !border-none w-full flex-1 !p-1 !h-auto',
+            'dial-input outline-hidden !border-none w-full flex-1 !p-1 !h-auto',
             collapseTagOverflow ? 'min-w-0' : 'min-w-[100px]',
           )}
           placeholder={placeholder ?? ''}

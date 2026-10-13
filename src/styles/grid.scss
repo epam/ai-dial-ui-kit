@@ -67,13 +67,13 @@
 
     /* Column titles: 10px semibold caps, as in the design's table header. */
     .ag-header-cell-text {
-      @apply dial-caption-lead-semi-text;
+      @apply dial-mixin-caption-lead-semi-text;
     }
 
     .ag-header-viewport,
     .ag-pinned-left-header {
       .ag-floating-filter input {
-        @apply m-0 px-2 py-0 dial-tiny-text;
+        @apply m-0 px-2 py-0 dial-mixin-tiny-text;
         height: 24px !important;
       }
     }

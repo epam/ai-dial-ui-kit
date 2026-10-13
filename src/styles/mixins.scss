@@ -1,0 +1,55 @@
+/*
+ * Utility sets that more than one rule in `src/styles/` needs. Tailwind v4's
+ * `@apply` takes only utilities, not a class like `.dial-h1-text`, so a set
+ * that two rules share is declared once here as an `@utility` and both rules
+ * `@apply` it.
+ *
+ * `tailwind-entry.scss` excludes this file from scanning (`@source not`), so
+ * the `dial-mixin-*` names are never picked up as candidates and never ship as
+ * utilities of their own. They exist only inside the rules that apply them. Do
+ * not reference them from a component's `className`.
+ */
+
+/* Type scale — the public `.dial-*-text` classes in typography.scss. */
+
+@utility dial-mixin-h1-text {
+  @apply font-semibold text-[20px]/[28px];
+}
+
+@utility dial-mixin-h2-text {
+  @apply font-semibold text-[18px]/[26px];
+}
+
+@utility dial-mixin-h3-text {
+  @apply font-semibold text-[16px]/[24px];
+}
+
+@utility dial-mixin-body-paragraph-text {
+  @apply font-normal text-[16px]/[26px];
+}
+
+@utility dial-mixin-small-text {
+  @apply font-normal text-[14px]/[20px];
+}
+
+@utility dial-mixin-small-paragraph-text {
+  @apply font-normal text-[14px]/[24px];
+}
+
+@utility dial-mixin-tiny-text {
+  @apply font-normal text-[12px]/[16px];
+}
+
+@utility dial-mixin-caption-lead-semi-text {
+  @apply font-semibold text-[10px]/[12px] tracking-[0.06em] uppercase;
+}
+
+/* Legacy (1.0) button disabled states — `.dial-button-*-disable` in buttons.scss. */
+
+@utility dial-mixin-button-solid-disable {
+  @apply cursor-not-allowed text-controls-accent-disable bg-controls-disable-accent;
+}
+
+@utility dial-mixin-button-outlined-disable {
+  @apply cursor-not-allowed border-transparent text-controls-primary-disable bg-controls-disable;
+}

@@ -2,7 +2,7 @@
   @apply min-h-[120px] whitespace-normal overflow-auto;
 
   &:focus {
-    @apply outline-none;
+    @apply outline-hidden;
   }
 
   &::selection {

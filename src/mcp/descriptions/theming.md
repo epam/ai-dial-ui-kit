@@ -37,7 +37,7 @@ Use these classes in your components:
   --text-error: #f76464;
   --stroke-primary: #696e7c;
   --controls-bg-accent-primary: #3664e2;
-  /* ... see tailwind.config.js for full list */
+  /* ... see src/styles/theme.scss for full list */
 }
 ```
 

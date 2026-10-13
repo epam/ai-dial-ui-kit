@@ -35,7 +35,7 @@ this file; do not duplicate the rubric there.
 - Components live in `src/components/<PascalName>/` and are co-located with
   `*.stories.tsx` (Storybook 10) and `*.spec.tsx` (Vitest + Testing Library).
 - Exported component names use the `Dial*` prefix (`DialButton`, `DialInput`, …).
-- Styling: Tailwind tokens defined as CSS variables in `tailwind.config.js`;
+- Styling: Tailwind tokens defined as CSS variables in `src/styles/theme.scss`;
   class merging via `mergeClasses` from `src/utils/merge-classes`. No inline
   styles, no hardcoded hex colors, no hardcoded `px` sizes that bypass tokens.
 - SCSS mixins under `src/styles/` for shared patterns.

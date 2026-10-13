@@ -10,6 +10,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import tailwindPlugin from 'eslint-plugin-tailwindcss';
 import globals from 'globals';
 import storybookPlugin from 'eslint-plugin-storybook';
+import { fileURLToPath } from 'node:url';
 
 export default [
   {
@@ -59,6 +60,16 @@ export default [
       },
     },
 
+    settings: {
+      tailwindcss: {
+        // Absolute: a relative path is resolved against the nearest
+        // package.json of each linted file, and `fixtures/*` have their own.
+        cssConfigPath: fileURLToPath(
+          new URL('./src/styles/tailwind-entry.scss', import.meta.url),
+        ),
+      },
+    },
+
     plugins: {
       react: reactPlugin,
       prettier: prettierPlugin,
@@ -82,6 +93,14 @@ export default [
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
       'tailwindcss/enforces-shorthand': 'error',
+      // Against Tailwind v4's open spacing scale it rewrites pixel values to
+      // rem steps (`w-[420px]` → `w-105`), which renders differently under a
+      // host that changes the root font size.
+      'tailwindcss/no-unnecessary-arbitrary-value': 'off',
+      // New with the v4 plugin; adopting the v4 spellings (`x!`, `shrink-0`)
+      // is a separate change from the migration itself.
+      'tailwindcss/enforces-canonical-classname': 'off',
+      'tailwindcss/important-modifier-suffix': 'off',
 
       'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
       'no-empty': 'error',

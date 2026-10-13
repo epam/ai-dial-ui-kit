@@ -172,7 +172,7 @@ The library uses CSS custom properties for comprehensive theming. Override these
 }
 ```
 
-Full list of variables is available [here](tailwind.config.js)
+Full list of variables is available [here](src/styles/theme.scss)
 
 Corner radii of the 2.0 controls are themable the same way. Each defaults to the
 fully rounded pill the buttons ship with, so setting nothing keeps the stock

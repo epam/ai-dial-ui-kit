@@ -50,7 +50,7 @@ export const DialLoader: FC<DialLoaderProps> = ({
       role="status"
       className={classNames({
         [loaderBaseClassName]: true,
-        ['w-full h-full']: fullWidth,
+        ['size-full']: fullWidth,
         [className || '']: !!className,
       })}
     >

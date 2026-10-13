@@ -4,7 +4,6 @@ import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 import path from 'path';
 
-import tailwindcss from 'tailwindcss';
 import { peerDependencies } from './package.json';
 
 /*
@@ -125,11 +124,6 @@ export default defineConfig({
           },
         },
       ],
-    },
-  },
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
     },
   },
 });

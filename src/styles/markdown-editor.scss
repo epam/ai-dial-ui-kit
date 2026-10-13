@@ -1,5 +1,5 @@
 /* 2.0 MarkdownEditor: card chrome + toolbar restyle, scoped over @uiw/react-md-editor's default CSS.
-   Colors go through the Tailwind token utilities from tailwind.config.js. The one
+   Colors go through the Tailwind token utilities from theme.scss. The one
    raw var() below is a stroke token used as a background-color, which has no
    matching `bg-*` utility (see the toolbar-divider note).
    Light is the primary theme for now; dark-theme parity is a follow-up. */

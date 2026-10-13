@@ -7,12 +7,12 @@ export const selectTriggerBaseClassName =
 export const selectOverlayBaseClassName = 'w-full rounded flex flex-col';
 
 export const selectOptionBaseClassName =
-  'flex w-full items-center justify-between gap-2 px-3 h-[34px] dial-small-text text-primary truncate hover:bg-accent-primary-alpha focus:bg-accent-primary-alpha focus:outline-none';
+  'flex w-full items-center justify-between gap-2 px-3 h-[34px] dial-small-text text-primary truncate hover:bg-accent-primary-alpha focus:bg-accent-primary-alpha focus:outline-hidden';
 
 export const selectOptionSelectedClassName = 'bg-accent-primary-alpha';
 
 export const selectOptionSingleSelectedClassName =
-  'bg-accent-primary-alpha border-l border-accent-primary border-1';
+  'bg-accent-primary-alpha border-l border-accent-primary';
 
 export const selectOptionDisabledClassName = 'opacity-75';
 export const dropdownMenuMaxHeight = 352;

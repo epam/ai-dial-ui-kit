@@ -139,7 +139,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
       return (
         <div className="flex h-full flex-1 items-end" aria-hidden="true">
           <div
-            className="min-h-2 w-full rounded-sm"
+            className="min-h-2 w-full rounded-xs"
             style={{ height: `${column.ratio * 100}%` }}
           />
         </div>
@@ -162,7 +162,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
         <div
           role="img"
           aria-label={ariaLabel}
-          className="flex min-h-2 w-full items-center justify-center rounded-sm border border-transparent"
+          className="flex min-h-2 w-full items-center justify-center rounded-xs border border-transparent"
           style={{ height: `${column.ratio * 100}%`, ...stripeStyle }}
         >
           {showCount && (
@@ -266,7 +266,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
                           aria-hidden="true"
                         >
                           <div
-                            className="min-h-2 w-full rounded-sm"
+                            className="min-h-2 w-full rounded-xs"
                             style={{ height: `${column.ratio * 100}%` }}
                           />
                         </div>
@@ -284,7 +284,7 @@ export const DialAnalyticsHistogram: FC<DialAnalyticsHistogramProps> = ({
                           role="img"
                           aria-label={label}
                           className={mergeClasses(
-                            'flex min-h-2 w-full items-center justify-center rounded-sm border',
+                            'flex min-h-2 w-full items-center justify-center rounded-xs border',
                             'border-transparent',
                           )}
                           style={{
