@@ -48,6 +48,11 @@ export const DIAL_KIT_CLASS = {
   popup: 'dial-kit-popup',
   /** The `role="dialog"` panel of a `BottomSheet`. */
   bottomSheet: 'dial-kit-bottom-sheet',
+  /**
+   * The backdrop of a `BottomSheet`: the portalled, scroll-locking layer on
+   * `z-popup` that holds the panel.
+   */
+  bottomSheetOverlay: 'dial-kit-bottom-sheet-overlay',
   /** The `role="dialog"` panel of a `SideDrawer`, open or closed. */
   sideDrawer: 'dial-kit-side-drawer',
   /** The `Popup` panel of a `ConfirmationPopup`, additive to `popup`. */
