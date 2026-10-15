@@ -12,6 +12,17 @@ export const editableContainerProps = {
   [EDITABLE_CONTAINER_ATTRIBUTE]: '',
 } as const;
 
+/**
+ * Marks a control that lives outside the editable field but acts on it (for
+ * example a "Cancel" button next to an inline folder-name editor). A pointer
+ * press or focus move onto such a control does not commit the edit, so the
+ * control's own click handler decides what happens.
+ */
+export const EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE = 'data-editable-ignore-outside';
+export const editableIgnoreOutsideProps = {
+  [EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE]: '',
+} as const;
+
 export interface UseEditableItemOptions {
   value: string;
   isEditing: boolean;
@@ -247,7 +258,11 @@ export function useEditableItem({
     const isInsideField = (node: Node | null): boolean => {
       if (!node) return false;
       const container = el.closest(`[${EDITABLE_CONTAINER_ATTRIBUTE}]`) ?? el;
-      return container.contains(node);
+      if (container.contains(node)) return true;
+      return (
+        node instanceof Element &&
+        node.closest(`[${EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE}]`) != null
+      );
     };
 
     const handlePointerDown = (e: PointerEvent) => {

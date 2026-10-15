@@ -668,7 +668,15 @@
     "kind": "value"
   },
   {
+    "name": "EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE",
+    "kind": "value"
+  },
+  {
     "name": "editableContainerProps",
+    "kind": "value"
+  },
+  {
+    "name": "editableIgnoreOutsideProps",
     "kind": "value"
   },
   {

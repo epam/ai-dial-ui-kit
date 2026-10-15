@@ -214,6 +214,32 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
     expect(onSave).not.toHaveBeenCalled();
   });
 
+  it('does not commit on a pointer press or focus move onto an ignore-outside control', () => {
+    const onCreateFolderSave = vi.fn();
+    render(
+      <>
+        <Harness
+          value="New folder"
+          isEditing={false}
+          isCreating
+          onCreateFolderSave={onCreateFolderSave}
+          onValidate={() => null}
+        />
+        <button data-testid="cancel" data-editable-ignore-outside>
+          Cancel
+        </button>
+      </>,
+    );
+
+    const cancel = screen.getByTestId('cancel');
+    act(() => {
+      fireEvent.pointerDown(cancel);
+      fireEvent.blur(screen.getByTestId('input'), { relatedTarget: cancel });
+    });
+
+    expect(onCreateFolderSave).not.toHaveBeenCalled();
+  });
+
   it('does not double-save when both the pointer press and blur fire', () => {
     const onSave = vi.fn();
     render(

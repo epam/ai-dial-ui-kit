@@ -22,6 +22,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`useEditableItem` — `data-editable-ignore-outside` keeps a control next to the editor from committing the edit** — the hook commits on any pointer press or focus move outside the field's `data-editable-container`, so a control that sits beside the editor and acts on it (a "Cancel" button under an inline folder-name editor) saved the edit before its own click handler could discard it. An element carrying `data-editable-ignore-outside`, or sitting inside one, no longer counts as outside. Spread `editableIgnoreOutsideProps` (`EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE`) onto the control's wrapper. Elements without the attribute behave as before. Requested for the Publish dialog's "Create new folder" Cancel in [ai-dial-chat](https://github.com/epam/ai-dial-chat).
+
 - **`BottomSheet` (2.0) — public class on the backdrop, `dial-kit-bottom-sheet-overlay`** — the panel carried `dial-kit-bottom-sheet`, but the backdrop that holds it had no stable class, so a host that embeds a sheet in its own floating panel and has to lift the whole sheet above that panel's stacking context fell back to `[class*='_backdrop_']` selectors on the hashed module class a wrapping library passes through `overlayClassName`. The backdrop now carries `dial-kit-bottom-sheet-overlay` (`DIAL_KIT_CLASS.bottomSheetOverlay`), after any `overlayClassName`. The class has no declarations, so nothing renders differently. Where the stacking context can be avoided altogether, `portalId` still renders the sheet inside the host's own element. Requested in [ai-dial-chat#9392](https://github.com/epam/ai-dial-chat/issues/9392).
 
 ### Changed
