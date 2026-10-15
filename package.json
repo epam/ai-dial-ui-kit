@@ -24,11 +24,6 @@
       "import": "./dist/grid.js",
       "require": "./dist/grid.cjs"
     },
-    "./file-manager": {
-      "types": "./dist/src/subpaths/file-manager.d.ts",
-      "import": "./dist/file-manager.js",
-      "require": "./dist/file-manager.cjs"
-    },
     "./editors": {
       "types": "./dist/src/subpaths/editors.d.ts",
       "import": "./dist/editors.js",

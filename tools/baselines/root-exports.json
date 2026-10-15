@@ -32,10 +32,6 @@
     "kind": "value"
   },
   {
-    "name": "BulkActionsToolbarOptions",
-    "kind": "type"
-  },
-  {
     "name": "Button",
     "kind": "value"
   },
@@ -304,10 +300,6 @@
     "kind": "value"
   },
   {
-    "name": "DialCopiedItem",
-    "kind": "type"
-  },
-  {
     "name": "DialDangerButton",
     "kind": "value"
   },
@@ -322,14 +314,6 @@
   {
     "name": "DialDateCellRendererProps",
     "kind": "type"
-  },
-  {
-    "name": "DialDeletedItem",
-    "kind": "type"
-  },
-  {
-    "name": "DialDestinationFolderPopup",
-    "kind": "value"
   },
   {
     "name": "DialDraggableItem",
@@ -360,32 +344,12 @@
     "kind": "type"
   },
   {
-    "name": "DialFileAcceptType",
-    "kind": "type"
-  },
-  {
     "name": "DialFileIcon",
     "kind": "value"
   },
   {
     "name": "DialFileIconProps",
     "kind": "type"
-  },
-  {
-    "name": "DialFileManager",
-    "kind": "value"
-  },
-  {
-    "name": "DialFileManagerActions",
-    "kind": "value"
-  },
-  {
-    "name": "DialFileManagerActionsRef",
-    "kind": "type"
-  },
-  {
-    "name": "DialFileManagerTabs",
-    "kind": "value"
   },
   {
     "name": "DialFileName",
@@ -405,10 +369,6 @@
   },
   {
     "name": "DialFolderName",
-    "kind": "value"
-  },
-  {
-    "name": "DialFoldersTree",
     "kind": "value"
   },
   {
@@ -680,10 +640,6 @@
     "kind": "value"
   },
   {
-    "name": "DialUploadFileItem",
-    "kind": "type"
-  },
-  {
     "name": "Dropdown",
     "kind": "value"
   },
@@ -760,18 +716,6 @@
     "kind": "type"
   },
   {
-    "name": "FileManagerColumnKey",
-    "kind": "value"
-  },
-  {
-    "name": "FileManagerGridRow",
-    "kind": "type"
-  },
-  {
-    "name": "FileManagerProvider",
-    "kind": "value"
-  },
-  {
     "name": "FlexibleActionsDirection",
     "kind": "value"
   },
@@ -826,10 +770,6 @@
   {
     "name": "GRID_THEME_PARAMS",
     "kind": "value"
-  },
-  {
-    "name": "GridOptions",
-    "kind": "type"
   },
   {
     "name": "GridProps",
@@ -954,10 +894,6 @@
   {
     "name": "MultiSelectTagsProps",
     "kind": "type"
-  },
-  {
-    "name": "NAME_COLUMN",
-    "kind": "value"
   },
   {
     "name": "NeutralButton",
@@ -1160,10 +1096,6 @@
     "kind": "value"
   },
   {
-    "name": "SIZE_COLUMN",
-    "kind": "value"
-  },
-  {
     "name": "Skeleton",
     "kind": "value"
   },
@@ -1292,10 +1224,6 @@
     "kind": "type"
   },
   {
-    "name": "ToolbarOptions",
-    "kind": "type"
-  },
-  {
     "name": "Tooltip",
     "kind": "value"
   },
@@ -1328,24 +1256,12 @@
     "kind": "value"
   },
   {
-    "name": "UPDATED_AT_COLUMN",
-    "kind": "value"
-  },
-  {
-    "name": "useDialFileManagerTabs",
-    "kind": "value"
-  },
-  {
     "name": "useEditableItem",
     "kind": "value"
   },
   {
     "name": "UseEditableItemOptions",
     "kind": "type"
-  },
-  {
-    "name": "useFileManagerContext",
-    "kind": "value"
   },
   {
     "name": "useThemeScope",

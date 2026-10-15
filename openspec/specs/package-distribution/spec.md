@@ -4,8 +4,8 @@
 
 Governs how `@epam/ai-dial-ui-kit` is built and packaged so that consumers who
 only need core components are not forced to load Grid (AG Grid) or editor
-(Monaco / `@uiw/*`) dependencies, while consumers who do use Grid, FileManager,
-or the JSON/Markdown editors keep full, unbroken functionality — all without
+(Monaco / `@uiw/*`) dependencies, while consumers who do use Grid or the
+JSON/Markdown editors keep full, unbroken functionality — all without
 dropping or renaming any existing export, subpath, or stylesheet.
 
 ## Requirements
@@ -66,22 +66,13 @@ If a curated `./core` (or equivalently named) export subpath is introduced as a 
   recommended switch from root to `./core` for consumers who need the
   strongest isolation guarantee
 
-### Requirement: Grid and FileManager features are isolated but fully functional when imported
+### Requirement: Grid features are isolated but fully functional when imported
 
-Both Grid generations (`DialGrid` and 2.0 `Grid`) and `DialFileManager` SHALL be excluded from the initial graph of consumers that do not import them, and SHALL perform their required AG Grid module registration exactly when a consumer's code actually renders that feature — not merely when a module that re-exports its binding is imported or evaluated.
+Both Grid generations (`DialGrid` and 2.0 `Grid`) SHALL be excluded from the initial graph of consumers that do not import them, and SHALL perform their required AG Grid module registration exactly when a consumer's code actually renders that feature — not merely when a module that re-exports its binding is imported or evaluated.
 
 #### Scenario: Grid fixture includes AG Grid but no editor dependencies
 
 - **WHEN** a consumer fixture statically imports `Grid` (or `DialGrid`) from
-  `@epam/ai-dial-ui-kit` and runs its production bundler build
-- **THEN** the fixture's feature graph includes `ag-grid-community` and
-  `ag-grid-react`, and its static initial graph excludes
-  `@monaco-editor/react`, `monaco-editor`, `@uiw/react-md-editor`, and
-  `@uiw/react-markdown-preview`
-
-#### Scenario: FileManager fixture includes AG Grid but no editor dependencies
-
-- **WHEN** a consumer fixture statically imports `DialFileManager` from
   `@epam/ai-dial-ui-kit` and runs its production bundler build
 - **THEN** the fixture's feature graph includes `ag-grid-community` and
   `ag-grid-react`, and its static initial graph excludes
@@ -153,7 +144,7 @@ Every export the package declares today, plus any new subpath added by this chan
 #### Scenario: New subpaths resolve under ESM, CJS, and TypeScript
 
 - **WHEN** a fixture imports from each newly declared subpath (e.g.
-  `./grid`, `./file-manager`, `./editors`) via `import`, `require`, and a
+  `./grid`, `./editors`) via `import`, `require`, and a
   TypeScript type-only import
 - **THEN** each resolves without error and exposes the symbols documented for
   that subpath

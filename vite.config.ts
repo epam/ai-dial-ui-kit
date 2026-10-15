@@ -53,15 +53,14 @@ export default defineConfig({
     lib: {
       // Multi-entry: 'dial-ui-kit' is the existing backward-compatible root
       // entry (kept as the input KEY so the CJS format's `[name]` naming
-      // below still produces `dial-ui-kit.cjs`); grid/file-manager/editors
-      // are curated subpaths. Each is a thin re-export barrel under
+      // below still produces `dial-ui-kit.cjs`); grid/editors are
+      // curated subpaths. Each is a thin re-export barrel under
       // src/subpaths/. The root entry remains tree-shakeable through
       // `preserveModules`, while the subpaths provide explicit feature
       // boundaries.
       entry: {
         'dial-ui-kit': './src/index.ts',
         grid: './src/subpaths/grid.ts',
-        'file-manager': './src/subpaths/file-manager.ts',
         editors: './src/subpaths/editors.ts',
       },
       name: 'dial-ui-kit',
@@ -69,7 +68,7 @@ export default defineConfig({
       // `fileName` is intentionally omitted: naming for both formats is now
       // fully driven by the per-format `rollupOptions.output` entries below.
       // The ES format uses `preserveModules` so that each
-      // source module (Button, Grid, FileManager, ...) is emitted as its
+      // source module (Button, Grid, ...) is emitted as its
       // own file - this is what lets a consumer's bundler tree-shake AG
       // Grid/Monaco/@uiw/* out of a static import that never reaches them.
       // The CJS format stays a single bundle per entry, matching the
@@ -82,12 +81,12 @@ export default defineConfig({
       // `peerDependencies` and thus always external, or
       // `@floating-ui/react`/`@tabler/icons-react`/`classnames`, which are
       // `dependencies` that are kept external): they stay bundled.
-      // Once `preserveModules` (below) isolates both Grid generations and
-      // FileManager into their own emitted modules, "bundled" and "peer"
+      // Once `preserveModules` (below) isolates both Grid generations into
+      // their own emitted modules, "bundled" and "peer"
       // are equivalent for tree-shaking (a consumer who never imports
-      // Grid/FileManager never evaluates that module either way), so
+      // Grid never evaluates that module either way), so
       // promoting AG Grid to a peer would only be a breaking,
-      // install-burden-shifting change for existing Grid/FileManager
+      // install-burden-shifting change for existing Grid
       // consumers with no tree-shaking benefit - not a free optimization to
       // fold in here. Revisit only via a dedicated future proposal.
       // Match peer package subpaths too (most notably react/jsx-runtime).

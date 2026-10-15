@@ -145,17 +145,6 @@ export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
 export { DialDropdownIcon } from './components/DropdownIcon/DropdownIcon';
 export type { DialDropdownIconProps } from './components/DropdownIcon/DropdownIcon';
 
-//File Manager
-export { DialFileManager } from './components/FileManager/FileManager';
-export type { FileManagerGridRow } from './components/FileManager/FileManagerContext';
-export type {
-  GridOptions,
-  ToolbarOptions,
-  BulkActionsToolbarOptions,
-} from './components/FileManager/FileManager';
-export { DialDestinationFolderPopup } from './components/FileManager/components/DestinationFolderPopup/DestinationFolderPopup';
-export { DialFoldersTree } from './components/FileManager/components/FoldersTree/FoldersTree';
-
 // Types
 export { EditorThemes } from './types/editor';
 export { ButtonVariant, ButtonAppearance } from './types/button';
@@ -173,11 +162,6 @@ export { ScreenResolution, TabOrientation, TabView } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { SelectSize, SelectVariant } from './types/select';
-export {
-  DialFileManagerTabs,
-  DialFileManagerActions,
-  FileManagerColumnKey,
-} from './types/file-manager';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
 export { ResizableContainerSide } from './types/resizable-container';
@@ -188,17 +172,12 @@ export {
 } from './types/skeleton';
 
 // Hooks
-export { useDialFileManagerTabs } from './components/FileManager/hooks/use-file-manager-tabs';
 export {
   EDITABLE_CONTAINER_ATTRIBUTE,
   editableContainerProps,
   useEditableItem,
 } from './hooks/use-editable-item';
 export type { UseEditableItemOptions } from './hooks/use-editable-item';
-
-// Context and Provider
-export { FileManagerProvider } from './components/FileManager/FileManagerProvider';
-export { useFileManagerContext } from './components/FileManager/hooks/use-file-manager-context';
 
 // Models
 export { StepStatus } from './models/step';
@@ -216,13 +195,6 @@ export {
   DialFileResourceType,
 } from './models/file';
 export type { DialRootFolder } from './models/file';
-export {
-  type DialCopiedItem,
-  type DialDeletedItem,
-  type DialUploadFileItem,
-  type DialFileManagerActionsRef,
-  type DialFileAcceptType,
-} from './models/file-manager';
 export { GridSelectionMode } from './models/selection-mode';
 
 // Utils
@@ -232,12 +204,6 @@ export { getTimezoneLabel } from './utils/timezone';
 export type { TimezoneLabelOptions } from './utils/timezone';
 
 // Constants
-export {
-  NAME_COLUMN,
-  SIZE_COLUMN,
-  UPDATED_AT_COLUMN,
-} from './constants/file-grid-columns';
-
 export {
   DIAL_ICON_SIZE,
   BASE_ICON_PROPS,

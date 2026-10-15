@@ -31,6 +31,7 @@ migration-guides/
 | 0.15.0 | [legacy-theme-variable-fallbacks-removal](0.15.0/legacy-theme-variable-fallbacks-removal.md) | Old theme variable names (`--bg-control-neutral-hover`, `--stroke-focus-black`, `--bg-control-accent-gradient-*`) dropped from the fallback chains |
 | 0.15.0 | [slider-redesign](0.15.0/slider-redesign.md) | `Slider` redrawn: 12px accent thumb with a hover/focus halo, accent-tint track; adds `showTooltip`, `showTicks`, `leftContent`, `rightContent` |
 | 0.16.0 | [tailwind-v4-stylesheet](0.16.0/tailwind-v4-stylesheet.md) | `styles.css` built with Tailwind v4: variant utilities move into `@layer ui`, v4 preflight, new browser baseline |
+| 0.16.0 | [legacy-file-manager-removal](0.16.0/legacy-file-manager-removal.md) | Legacy `DialFileManager`, its helpers and the `./file-manager` subpath removed; import them from `@epam/ai-dial-react-file-manager` |
 
 ---
 
