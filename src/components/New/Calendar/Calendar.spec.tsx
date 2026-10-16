@@ -219,17 +219,31 @@ describe('Dial UI Kit :: Calendar', () => {
       expect(screen.getByText(TIMEZONE_LABEL)).toBeInTheDocument();
     });
 
+    test('Should render the timezone hint on a disabled time field', () => {
+      render(<Calendar mode={CalendarMode.Time} showTimezone disabled />);
+      expect(screen.getByText(TIMEZONE_LABEL)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('--:--')).toBeDisabled();
+    });
+
     test('Should not show the timezone hint by default', () => {
       render(<Calendar mode={CalendarMode.Time} />);
       expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
     });
 
     test('Should not show the timezone hint in date mode even when showTimezone is set', () => {
-      render(<Calendar mode={CalendarMode.Date} showTimezone />);
+      render(
+        <Calendar
+          mode={CalendarMode.Date}
+          value={new Date(2026, 2, 11)}
+          showTimezone
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '11 Mar 2026' }));
       expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
     });
 
-    test('Should not show the timezone hint in datetime mode even when showTimezone is set', () => {
+    test('Should show the timezone hint on the datetime footer time field when showTimezone is set', () => {
       render(
         <Calendar
           mode={CalendarMode.DateTime}
@@ -237,7 +251,35 @@ describe('Dial UI Kit :: Calendar', () => {
           showTimezone
         />,
       );
-      expect(screen.queryByText(TIMEZONE_LABEL)).not.toBeInTheDocument();
+
+      fireEvent.click(
+        screen.getByRole('button', { name: '11 Mar 2026, 09:00' }),
+      );
+
+      const hint = screen.getByText(TIMEZONE_LABEL);
+      // The compact footer field caps the hint so it never covers the value.
+      expect(hint).toHaveClass('max-w-[60%]');
+      // The cap lands through `timezoneLabelClassName` and overrides the
+      // default pinning, rather than landing beside it.
+      expect(hint).toHaveClass('end-3');
+      expect(hint).not.toHaveClass('end-4');
+      // With the hint the footer field stretches across the row instead of
+      // keeping its compact fixed width.
+      expect(screen.getByLabelText('Time')).not.toHaveClass('w-[120px]');
+    });
+
+    test('Should keep the footer time field compact without the timezone hint', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          value={new Date(2026, 2, 11, 9, 0)}
+        />,
+      );
+
+      fireEvent.click(
+        screen.getByRole('button', { name: '11 Mar 2026, 09:00' }),
+      );
+      expect(screen.getByLabelText('Time')).toHaveClass('w-[120px]');
     });
 
     test('Should not show the timezone hint in weekday mode even when showTimezone is set', () => {
