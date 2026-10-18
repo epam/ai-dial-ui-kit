@@ -66,6 +66,16 @@ export const DateTime: Story = {
   },
 };
 
+export const DateTimeWithTimezone: Story = {
+  name: 'Date Time with timezone',
+  args: {
+    mode: CalendarMode.DateTime,
+    labelProps: { label: 'Start date' },
+    placeholder: 'Select date and time',
+    showTimezone: true,
+  },
+};
+
 export const Time: Story = {
   args: {
     mode: CalendarMode.Time,

@@ -86,7 +86,8 @@ export interface CalendarProps {
   fieldClassName?: string;
   /**
    * Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`, computed
-   * by `getTimezoneLabel`) at the trailing edge of the `time` field, naming
+   * by `getTimezoneLabel`) at the trailing edge of the time fields — the
+   * `time` mode field and the `datetime` popover footer's field — naming
    * the zone the entered time-of-day refers to.
    */
   showTimezone?: boolean;
@@ -205,6 +206,10 @@ interface TimeFieldProps {
   placeholder?: string;
   /** Timezone hint pinned over the field's trailing edge; omit for a bare input. */
   timezoneLabel?: string | null;
+  /** Merged onto the hint span after the default pinning classes, so a
+   * caller can reposition or cap the hint for its own layout — the compact
+   * `datetime` footer caps it so it never covers the masked value. */
+  timezoneLabelClassName?: string;
 }
 
 /**
@@ -223,6 +228,7 @@ const TimeField: FC<TimeFieldProps> = ({
   ariaLabel,
   placeholder = '--:--',
   timezoneLabel,
+  timezoneLabelClassName,
 }) => {
   const [draft, setDraft] = useState(value);
 
@@ -259,13 +265,19 @@ const TimeField: FC<TimeFieldProps> = ({
    * no DOM change; with it, the input keeps its own box (and border) and the
    * hint is pinned over the field's trailing padding, out of the input's
    * short masked value's way. `pointer-events-none` keeps clicks on the
-   * field reaching the input. */
+   * field reaching the input. `timezoneLabelClassName` merges after the
+   * pinning classes, so a caller can reposition the hint for its layout. */
   if (!timezoneLabel) return input;
 
   return (
     <div className="relative w-full">
       {input}
-      <span className="dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary">
+      <span
+        className={mergeClasses(
+          'dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary',
+          timezoneLabelClassName,
+        )}
+      >
         {timezoneLabel}
       </span>
     </div>
@@ -306,7 +318,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [maxDate] - Latest selectable date (date/datetime modes)
  * @param [locale="en-GB"] - BCP 47 locale tag used to localize month/weekday names and date formatting
  * @param [fieldClassName] - Additional classes merged onto the trigger field, overriding conflicting defaults
- * @param [showTimezone=false] - Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`) at the trailing edge of the `time` field
+ * @param [showTimezone=false] - Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`) at the trailing edge of the time fields (`time` mode and the `datetime` popover footer)
  */
 export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
@@ -604,7 +616,17 @@ export const Calendar: FC<CalendarProps> = ({
                   value={dateValue ? formatTimeLabel(dateValue) : ''}
                   onChange={handleTimeChange}
                   onBlur={onBlur}
-                  className="w-[120px] px-3 py-1.5"
+                  /* With the hint the field stretches across the row's
+                   * remaining width and the hint is pinned over its trailing
+                   * edge; without it, the field keeps its compact fixed
+                   * width. The compact footer field caps the hint at 60% of
+                   * the field so it never covers the masked value. */
+                  className={mergeClasses(
+                    !timezoneLabel && 'w-[120px]',
+                    'px-3 py-1.5',
+                  )}
+                  timezoneLabel={timezoneLabel}
+                  timezoneLabelClassName="end-3 max-w-[60%]"
                 />
               </div>
             )}
