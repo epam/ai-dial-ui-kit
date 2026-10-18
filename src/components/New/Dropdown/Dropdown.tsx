@@ -50,15 +50,25 @@ import {
   dropdownDividerClassName,
   dropdownItemListClassName,
   dropdownGap,
+  dropdownNoResultsClassName,
+  dropdownSearchClassName,
+  getDropdownListHeight,
 } from './constants';
 import { type DropdownItem } from '@/models/dropdown';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
+import { Search } from '@/components/New/Search/Search';
 
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
+import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DropdownSubMenuItem } from './DropdownSubMenuItem';
 import { getItemRole, resolveItemMark } from './item-mark';
+import {
+  filterDropdownItems,
+  highlightDropdownItems,
+  type DropdownItemFilter,
+} from './search';
 
 export interface DropdownProps {
   children: ReactNode;
@@ -101,6 +111,34 @@ export interface DropdownProps {
    * opens, matching the pre-existing behavior.
    */
   initialFocus?: 0 | -1 | RefObject<HTMLElement | null>;
+  /**
+   * Puts a search field above `items` that narrows them as the user types and
+   * highlights the match in each remaining label. The query is cleared when
+   * the menu closes.
+   */
+  searchable?: boolean;
+  /** Controlled query of the search field; when omitted, the dropdown keeps its own. */
+  searchValue?: string;
+  /** Fired with every edit of the search field, and with `''` when the menu closes. */
+  onSearchChange?: (value: string) => void;
+  /** Placeholder and accessible name of the search field. */
+  searchPlaceholder?: string;
+  /** Accessible name of the search field's clear button. */
+  searchClearLabel?: string;
+  /** Text shown, and announced, when the query leaves no items. */
+  noResultsLabel?: string;
+  /**
+   * Decides whether an item matches the query, which arrives trimmed and
+   * lower-cased. Defaults to a substring match on a string `label`. A submenu
+   * whose own row matches keeps all its children; otherwise it keeps only the
+   * matching ones, and disappears when none do.
+   */
+  filterItem?: DropdownItemFilter;
+  /**
+   * Number of rows the item list shows before it scrolls. The cap applies to
+   * the list alone, so a search field or header stays in view above it.
+   */
+  maxVisibleItems?: number;
 }
 
 /**
@@ -181,6 +219,11 @@ const getRefWidth = (el: ReferenceElement): number => {
  * <Dropdown closable renderOverlay={() => <div className="p-3">Custom content</div>}>
  *   <button type="button" className="px-3 py-2 rounded border">Custom</button>
  * </Dropdown>
+ *
+ * // Searchable menu, seven rows tall before it scrolls
+ * <Dropdown searchable maxVisibleItems={7} items={items}>
+ *   <button type="button" className="px-3 py-2 rounded border">Create</button>
+ * </Dropdown>
  * ```
  *
  * @param children - Trigger element(s) to anchor and open the menu
@@ -209,6 +252,14 @@ const getRefWidth = (el: ReferenceElement): number => {
  * @param [matchReferenceWidth=true] - Whether to match the reference element's width
  * @param [maxDropdownHeight] - Maximum height of the dropdown menu; when omitted, no limit is applied
  * @param [initialFocus] - Initial focus target inside the overlay on open, forwarded to `FloatingFocusManager`; when omitted, matches pre-existing behavior
+ * @param [searchable=false] - Show a search field above `items` that filters them and highlights the match
+ * @param [searchValue] - Controlled query of the search field
+ * @param [onSearchChange] - Fired with every edit of the search field, and with `''` when the menu closes
+ * @param [searchPlaceholder="Search"] - Placeholder and accessible name of the search field
+ * @param [searchClearLabel="Clear search"] - Accessible name of the search field's clear button
+ * @param [noResultsLabel="No results found"] - Text shown and announced when the query leaves no items
+ * @param [filterItem] - Item matcher; defaults to a case-insensitive substring match on a string `label`
+ * @param [maxVisibleItems] - Rows the item list shows before it scrolls
  */
 export const Dropdown: FC<DropdownProps> = ({
   children,
@@ -237,12 +288,30 @@ export const Dropdown: FC<DropdownProps> = ({
   matchReferenceWidth = true,
   maxDropdownHeight,
   initialFocus,
+  searchable = false,
+  searchValue,
+  onSearchChange,
+  searchPlaceholder = 'Search',
+  searchClearLabel = 'Clear search',
+  noResultsLabel = 'No results found',
+  filterItem,
+  maxVisibleItems,
 }) => {
   const themeScope = useThemeScope();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? !!open : uncontrolledOpen;
   const pointedElementRef = useRef<Element | null>(null);
+
+  const [uncontrolledQuery, setUncontrolledQuery] = useState('');
+  const query = searchValue ?? uncontrolledQuery;
+  const setQuery = useCallback(
+    (next: string) => {
+      if (searchValue === undefined) setUncontrolledQuery(next);
+      onSearchChange?.(next);
+    },
+    [searchValue, onSearchChange],
+  );
 
   /*
    * A hover-opened menu must not pull focus: the pointer is elsewhere and the
@@ -257,11 +326,14 @@ export const Dropdown: FC<DropdownProps> = ({
     (next: boolean, _event?: Event, reason?: OpenChangeReason) => {
       if (next) {
         setShouldFocusOverlay(reason !== 'hover' && reason !== 'safe-polygon');
+      } else if (searchable && query) {
+        // A closed menu drops its search, so reopening starts from the full list.
+        setQuery('');
       }
       if (!isControlled) setUncontrolledOpen(next);
       onOpenChange?.(next);
     },
-    [isControlled, onOpenChange],
+    [isControlled, onOpenChange, searchable, query, setQuery],
   );
 
   const listId = useId();
@@ -432,6 +504,13 @@ export const Dropdown: FC<DropdownProps> = ({
          through the React tree from outside this overlay's DOM; moving focus
          among this overlay's rows would pull it out of the open submenu. */
       if (!event.currentTarget.contains(event.target as Node)) return;
+      // In a text field Home/End move the caret, not the focus.
+      if (
+        event.target instanceof HTMLInputElement &&
+        (event.key === 'Home' || event.key === 'End')
+      ) {
+        return;
+      }
 
       const options = Array.from(
         event.currentTarget.querySelectorAll<HTMLElement>(
@@ -463,9 +542,19 @@ export const Dropdown: FC<DropdownProps> = ({
     [onItemClick, setOpen],
   );
 
+  const visibleItems = useMemo(() => {
+    if (!items || !searchable) return items;
+    return highlightDropdownItems(
+      filterDropdownItems(items, query, filterItem),
+      query,
+    );
+  }, [items, searchable, query, filterItem]);
+
   const overlayContent: ReactNode = useMemo(() => {
     if (renderOverlay) return renderOverlay();
-    if (!items) return null;
+    if (!visibleItems) return null;
+
+    const hasNoResults = searchable && visibleItems.length === 0;
 
     return (
       <>
@@ -473,16 +562,54 @@ export const Dropdown: FC<DropdownProps> = ({
           <>{typeof menuHeader === 'function' ? menuHeader() : menuHeader}</>
         )}
 
+        {searchable && (
+          <div
+            className={mergeClasses(
+              dropdownSearchClassName,
+              DIAL_KIT_CLASS.dropdownSearch,
+            )}
+          >
+            <Search
+              value={query}
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder}
+              clearLabel={searchClearLabel}
+              size={ElementSize.Small}
+              onChange={(next) => setQuery(next ?? '')}
+            />
+          </div>
+        )}
+
         <div
           role="none"
           className={mergeClasses(
             dropdownItemListClassName,
+            /* Under a search field or a row cap the list scrolls by itself,
+               so the field stays in view; the panel's own height cap still
+               shrinks it through `min-h-0`. */
+            (searchable || maxVisibleItems != null) &&
+              'min-h-0 flex-1 overflow-auto',
             overlayContentClassName,
             DIAL_KIT_CLASS.dropdownList,
           )}
+          style={
+            maxVisibleItems != null
+              ? { maxHeight: getDropdownListHeight(maxVisibleItems) }
+              : undefined
+          }
           aria-label="dropdown"
         >
-          {items.map((it) => {
+          {searchable && (
+            /* Always mounted, so a screen reader announces the text when a
+               query empties the list rather than missing a fresh region. */
+            <div
+              role="status"
+              className={hasNoResults ? dropdownNoResultsClassName : 'sr-only'}
+            >
+              {hasNoResults ? noResultsLabel : ''}
+            </div>
+          )}
+          {visibleItems.map((it) => {
             if (it.type === DropdownItemType.Divider) {
               return (
                 <div
@@ -570,14 +697,25 @@ export const Dropdown: FC<DropdownProps> = ({
     );
   }, [
     handleItemClick,
-    items,
+    visibleItems,
     menuFooter,
     menuHeader,
     renderOverlay,
     setOpen,
     overlayContentClassName,
     separatorClassName,
+    searchable,
+    query,
+    setQuery,
+    searchPlaceholder,
+    searchClearLabel,
+    noResultsLabel,
+    maxVisibleItems,
   ]);
+
+  // A list that scrolls by itself needs a column panel that does not scroll too.
+  const hasOwnListScroll =
+    !renderOverlay && (searchable || maxVisibleItems != null);
 
   const referenceProps = getReferenceProps({
     onContextMenu,
@@ -660,7 +798,9 @@ export const Dropdown: FC<DropdownProps> = ({
                 className={mergeClasses(
                   dropdownListBaseClassName,
                   !matchReferenceWidth && 'w-max',
-                  'overflow-auto',
+                  hasOwnListScroll
+                    ? 'flex flex-col overflow-hidden'
+                    : 'overflow-auto',
                   themeScope,
                   listClassName,
                 )}

@@ -81,6 +81,8 @@ export const DIAL_KIT_CLASS = {
    * on a submenu's own list. It is *not* the floating panel.
    */
   dropdownList: 'dial-kit-dropdown-list',
+  /** The search row above the item list of a `searchable` `Dropdown`. */
+  dropdownSearch: 'dial-kit-dropdown-search',
   /**
    * One row of a floating overlay: a dropdown item, a `Select` option, a
    * submenu trigger, or a submenu child. It sits on the element that draws the
