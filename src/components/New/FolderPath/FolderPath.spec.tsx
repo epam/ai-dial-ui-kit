@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { FolderPath } from './FolderPath';
 
 describe('Dial UI Kit :: FolderPath', () => {
@@ -113,6 +113,45 @@ describe('Dial UI Kit :: FolderPath', () => {
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
     expect(screen.queryByText(/ > /)).not.toBeInTheDocument();
+  });
+
+  test('Should fold the folder before the leaf into the ellipsis when the leaf still does not fit', async () => {
+    /*
+     * jsdom has no layout: the leaf reports a clipped label, the folder before
+     * it reports zero width (its minimum, since jsdom applies no min-width).
+     */
+    const widthOf = (element: HTMLElement, leaf: number, other: number) =>
+      element.textContent === 'Reports' ? leaf : other;
+    const scrollWidth = vi
+      .spyOn(HTMLElement.prototype, 'scrollWidth', 'get')
+      .mockImplementation(function (this: HTMLElement) {
+        return widthOf(this, 200, 0);
+      });
+    const clientWidth = vi
+      .spyOn(HTMLElement.prototype, 'clientWidth', 'get')
+      .mockImplementation(function (this: HTMLElement) {
+        return this.tagName === 'NAV' ? 300 : widthOf(this, 120, 0);
+      });
+
+    render(<FolderPath segments={['Shared', 'Team', 'Reports']} />);
+
+    await waitFor(() =>
+      expect(screen.getByText('Team')).toHaveClass('sr-only'),
+    );
+    expect(screen.getAllByRole('listitem')).toHaveLength(3);
+    expect(screen.getByText('Reports')).toBeInTheDocument();
+
+    scrollWidth.mockRestore();
+    clientWidth.mockRestore();
+  });
+
+  test('Should keep every segment of a path that fits', async () => {
+    render(<FolderPath segments={['Shared', 'Team', 'Reports']} />);
+
+    // Give the deferred measurement a frame to run.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    expect(screen.getByText('Team')).not.toHaveClass('sr-only');
   });
 
   test('Should hide decorative icons from assistive tech', () => {
