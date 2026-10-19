@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, test } from 'vitest';
 import { FolderPath } from './FolderPath';
 
@@ -70,6 +71,48 @@ describe('Dial UI Kit :: FolderPath', () => {
     expect(
       screen.getByRole('navigation', { name: 'Source folder' }),
     ).toBeInTheDocument();
+  });
+
+  test('Should collapse the middle of a long path into a non-interactive ellipsis', () => {
+    render(
+      <FolderPath segments={['Shared', 'Team', 'Sub', 'Project', 'Reports']} />,
+    );
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(4);
+    expect(screen.getByText('Shared')).toBeInTheDocument();
+    expect(screen.getByText('Project')).toBeInTheDocument();
+    expect(screen.getByText('Reports')).toBeInTheDocument();
+    // The hidden segments open no menu: nothing in the path is interactive.
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('Should keep the collapsed segments in the accessible text', () => {
+    render(
+      <FolderPath segments={['Shared', 'Team', 'Sub', 'Project', 'Reports']} />,
+    );
+
+    expect(screen.getByText('Team, Sub')).toHaveClass('sr-only');
+  });
+
+  test('Should show the full path in a tooltip when the ellipsis is hovered', async () => {
+    const user = userEvent.setup();
+    render(
+      <FolderPath segments={['Shared', 'Team', 'Sub', 'Project', 'Reports']} />,
+    );
+
+    await user.hover(screen.getByText('Team, Sub'));
+
+    expect(
+      await screen.findByText('Shared > Team > Sub > Project > Reports'),
+    ).toBeInTheDocument();
+  });
+
+  test('Should not collapse a path of three segments', () => {
+    render(<FolderPath segments={['Shared', 'Team', 'Reports']} />);
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(3);
+    expect(screen.queryByText(/ > /)).not.toBeInTheDocument();
   });
 
   test('Should hide decorative icons from assistive tech', () => {
