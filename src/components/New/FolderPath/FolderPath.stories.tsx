@@ -64,7 +64,7 @@ export const LongPathOverflow: Story = {
     docs: {
       description: {
         story:
-          'A path of more than three segments shows the first and the last two and collapses the rest into a non-interactive `…`. Hover it to see the full path (`Shared with me > … > Final Version`). A segment that still does not fit is truncated.',
+          'A path of more than three segments shows the first and the last two and collapses the rest into a non-interactive `…`. Hover it to see the full path (`Shared with me > … > Final Version`). When the row is too narrow, the folder before the leaf truncates first, down to about one character, then joins the `…`; only after that does the leaf truncate.',
       },
     },
   },
