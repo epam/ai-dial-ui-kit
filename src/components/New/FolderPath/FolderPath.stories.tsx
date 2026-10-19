@@ -64,7 +64,7 @@ export const LongPathOverflow: Story = {
     docs: {
       description: {
         story:
-          'When the total width of the path exceeds its container, DialBreadcrumb scrolls horizontally instead of wrapping.',
+          'A path of more than three segments shows the first and the last two and collapses the rest into a non-interactive `…`. Hover it to see the full path (`Shared with me > … > Final Version`). A segment that still does not fit is truncated.',
       },
     },
   },

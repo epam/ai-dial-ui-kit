@@ -36,6 +36,8 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **`FolderPath` (2.0) — a collapsed path shows the full path in a tooltip instead of a click menu** — a path of more than three segments collapsed its middle into a `…` button inherited from `DialBreadcrumb` that opened a dropdown of the hidden segments on click. In a read-only path every item in it was disabled, the menu listed only the hidden part, and inside a clickable card (the catalog card) the click also opened the card. The `…` is now plain, non-interactive text: hovering it shows the full path as `Shared > Team > Sub > Reports` in a `Tooltip`, and the hidden segments stay in the accessible text. Paths of three segments or fewer, the props and the public class are unchanged. Reported on the catalog cards in ai-dial-chat.
+
 - **`ConfirmationPopup` (2.0) — Cancel/Confirm split the row evenly on mobile** — the `Popup` mobile footer split did not reach `ConfirmationPopup`, which renders its own footer. Below the `mobile` breakpoint (768px) its Cancel and Confirm buttons now take an equal share of the row. Desktop is unchanged, `confirmClassName` still merges on top, and a caller's `footer` is not touched. Reported on the log-out confirmation in ai-dial-chat.
 
 - **Package — test declarations no longer published** — `dist/` carried 36 `.d.ts` files for specs, tests and mocks (`*.spec.ts`, `*.test.tsx`, `__tests__/`, `__mocks__/`), because the declaration build excluded only `*.spec.tsx` and stories. They are no longer emitted; the declarations `package.json` `exports` points to are unchanged.
