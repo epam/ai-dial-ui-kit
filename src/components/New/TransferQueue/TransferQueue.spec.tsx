@@ -199,18 +199,12 @@ describe('Dial UI Kit :: TransferQueue', () => {
       );
     });
 
-    test('shows the failed count only when an item failed', () => {
-      const { rerender } = renderQueue();
-      expect(screen.queryByText('1')).toBeNull();
+    test('shows no failed-item count, even when an item failed', () => {
+      renderQueue({
+        items: [makeItem({ status: TransferQueueItemStatus.Failed })],
+      });
 
-      rerender(
-        <TransferQueue
-          title="Importing 1 file"
-          items={[makeItem({ status: TransferQueueItemStatus.Failed })]}
-          onClose={vi.fn()}
-        />,
-      );
-      expect(screen.getByText('1')).toBeInTheDocument();
+      expect(screen.queryByText('1')).toBeNull();
     });
   });
 
@@ -297,13 +291,24 @@ describe('Dial UI Kit :: TransferQueue', () => {
       expect(onClose).toHaveBeenCalledOnce();
     });
 
+    test('closes at once when the only unfinished work failed', async () => {
+      const onClose = vi.fn();
+      renderQueue({
+        items: [
+          makeItem({ id: 'a', status: TransferQueueItemStatus.Success }),
+          makeItem({ id: 'b', status: TransferQueueItemStatus.Failed }),
+        ],
+        onClose,
+      });
+
+      await clickClose();
+
+      expect(onClose).toHaveBeenCalledOnce();
+      expect(screen.queryByRole('dialog')).toBeNull();
+    });
+
     test.each([
       ['in progress', [makeItem()], 'Some items are still in progress.'],
-      [
-        'failed',
-        [makeItem({ status: TransferQueueItemStatus.Failed })],
-        'Some items have failed.',
-      ],
       [
         'both',
         [

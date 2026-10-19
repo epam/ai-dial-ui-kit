@@ -10,8 +10,6 @@ import type { TransferQueueLabels } from './TransferQueue';
 
 interface TransferQueueHeaderProps {
   title: string;
-  /** The badge renders only when this is positive. */
-  failedCount: number;
   isCollapsed: boolean;
   /** Id of the rows container the collapse toggle controls. */
   itemsId: string;
@@ -20,10 +18,9 @@ interface TransferQueueHeaderProps {
   onClose: () => void;
 }
 
-/** Queue heading with its failed-item badge and the collapse and close controls. */
+/** Queue heading with the collapse and close controls. */
 export const TransferQueueHeader: FC<TransferQueueHeaderProps> = ({
   title,
-  failedCount,
   isCollapsed,
   itemsId,
   labels,
@@ -34,20 +31,9 @@ export const TransferQueueHeader: FC<TransferQueueHeaderProps> = ({
 
   return (
     <div className="mx-4 flex items-center justify-between border-b border-tertiary py-3">
-      <div className="flex min-w-0 items-center gap-2">
-        <span className="dial-small-paragraph-semi-text truncate text-primary">
-          {title}
-        </span>
-        {failedCount > 0 && (
-          /*
-           * On the filled --bg-control-error swatch, so it takes the on-control
-           * token; --text-tertiary would contrast at under 2:1 over that fill.
-           */
-          <span className="dial-small-paragraph-semi-text inline-flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-control-error px-1 text-control-permanent">
-            {failedCount}
-          </span>
-        )}
-      </div>
+      <span className="dial-small-paragraph-semi-text min-w-0 truncate text-primary">
+        {title}
+      </span>
       <div className="flex shrink-0 items-center gap-1">
         <GhostIconButton
           aria-label={
