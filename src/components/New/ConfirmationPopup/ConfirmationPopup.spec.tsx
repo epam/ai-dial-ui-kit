@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 import { ConfirmationPopup } from './ConfirmationPopup';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
+import { popupMainActionButtonClassName } from '@/components/New/Popup/constants';
 
 describe('Dial UI Kit :: ConfirmationPopup', () => {
   const baseProps = {
@@ -157,5 +158,25 @@ describe('Dial UI Kit :: ConfirmationPopup', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /cancel dialog/i }));
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  test('splits Cancel and Confirm evenly on mobile', () => {
+    render(
+      <ConfirmationPopup
+        open
+        header="Log out?"
+        cancelLabel="Cancel"
+        confirmLabel="Log out"
+        confirmClassName="custom-confirm"
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Cancel' })).toHaveClass(
+      popupMainActionButtonClassName,
+    );
+    expect(screen.getByRole('button', { name: 'Log out' })).toHaveClass(
+      popupMainActionButtonClassName,
+      'custom-confirm',
+    );
   });
 });

@@ -3,6 +3,7 @@ import { type FC, type ReactNode, useCallback } from 'react';
 import { Button } from '@/components/New/Button/Button';
 import { NeutralButton } from '@/components/New/Button/ButtonWrappers';
 import { Popup, type PopupProps } from '@/components/New/Popup/Popup';
+import { popupMainActionButtonClassName } from '@/components/New/Popup/constants';
 import { Spinner } from '@/components/Spinner/Spinner';
 import { ConfirmationPopupVariant } from '@/types/confirmation-popup';
 import { PopupSize } from '@/types/popup';
@@ -93,13 +94,17 @@ export const ConfirmationPopup: FC<ConfirmationPopupProps> = ({
   const defaultFooter = !isLoading ? (
     <div className={actionsBaseClassName}>
       <NeutralButton
+        className={popupMainActionButtonClassName}
         label={cancelLabel}
         onClick={() => (onCancel ? onCancel() : onClose?.())}
       />
       <Button
         variant={variantConfig[variant].confirm.variant}
         appearance={variantConfig[variant].confirm.appearance}
-        className={confirmClassName}
+        className={mergeClasses(
+          popupMainActionButtonClassName,
+          confirmClassName,
+        )}
         label={confirmLabel}
         disabled={disableConfirmButton}
         onClick={onConfirm}
