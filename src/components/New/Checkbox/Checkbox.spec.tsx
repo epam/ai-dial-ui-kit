@@ -237,4 +237,18 @@ describe('Dial UI Kit :: Checkbox', () => {
     expect(box).toHaveClass('dial-kit-minimum-target');
     expect(box).not.toHaveClass('dial-kit-enhanced-target');
   });
+
+  // Hover is CSS-only; the class wiring is all jsdom can see.
+  test('shows the hover state while its text label is hovered, not only the box', () => {
+    const { container } = render(
+      <Checkbox id="checkbox" labelProps={{ label: 'Accept terms' }} />,
+    );
+
+    expect(container.querySelector('[class~="group/choice"]')).not.toBeNull();
+    const box = container.querySelector('label[for="checkbox"]');
+    expect(box).toHaveClass(
+      'group-has-[label:hover]/choice:bg-control-accent-alpha-hover',
+    );
+    expect(box).not.toHaveClass('hover:bg-control-accent-alpha-hover');
+  });
 });

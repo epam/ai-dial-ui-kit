@@ -217,4 +217,37 @@ describe('Dial UI Kit :: Radio', () => {
     expect(caption).toBeInTheDocument();
     expect(control).toHaveAttribute('aria-describedby', caption.id);
   });
+
+  // Hover is CSS-only; the class wiring is all jsdom can see.
+  test('shows the hover state while its text label is hovered, not only the circle', () => {
+    const { container } = render(
+      <Radio
+        id="radio"
+        name="group"
+        value="a"
+        labelProps={{ label: 'Pro plan' }}
+      />,
+    );
+
+    expect(container.querySelector('[class~="group/choice"]')).not.toBeNull();
+    expect(container.querySelector('label[for="radio"]')).toHaveClass(
+      'group-has-[label:hover]/choice:bg-control-accent-alpha-hover',
+    );
+  });
+
+  test('has no hover state while disabled', () => {
+    const { container } = render(
+      <Radio
+        id="radio"
+        name="group"
+        value="a"
+        disabled
+        labelProps={{ label: 'Pro plan' }}
+      />,
+    );
+
+    expect(
+      container.querySelector('label[for="radio"]')?.className,
+    ).not.toMatch(/hover/);
+  });
 });

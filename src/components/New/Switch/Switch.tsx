@@ -71,7 +71,9 @@ export const Switch: FC<SwitchProps> = ({
     <div className="flex flex-col gap-1">
       <div
         className={mergeClasses(
-          'flex items-center gap-2',
+          // Named group: the control shows its hover state while either of its
+          // two <label>s (the control or the text) is hovered.
+          'group/choice flex items-center gap-2',
           className,
           DIAL_KIT_CLASS.switch,
         )}
@@ -104,8 +106,8 @@ export const Switch: FC<SwitchProps> = ({
               : mergeClasses(
                   'cursor-pointer',
                   isOn
-                    ? 'bg-control-accent hover:bg-control-accent-hover'
-                    : 'bg-control-neutral-default hover:bg-control-neutral-hover-strong',
+                    ? 'bg-control-accent group-has-[label:hover]/choice:bg-control-accent-hover'
+                    : 'bg-control-neutral-default group-has-[label:hover]/choice:bg-control-neutral-hover-strong',
                 ),
           )}
         >
