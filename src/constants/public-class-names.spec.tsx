@@ -391,6 +391,22 @@ describe('Dial UI Kit :: public class names', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('stamps the search row of a searchable dropdown', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown searchable items={[{ key: 'en', label: 'English' }]}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(
+      screen
+        .getByRole('textbox', { name: 'Search' })
+        .closest(`.${DIAL_KIT_CLASS.dropdownSearch}`),
+    ).toBeInTheDocument();
+  });
+
   test('stamps the icon and caret of a DialDropdownIcon trigger', () => {
     render(
       <DialDropdownIcon
@@ -441,6 +457,7 @@ describe('Dial UI Kit :: public class names', () => {
     const covered = new Set<string>([
       ...cases.map(([key]) => key),
       'dropdownList',
+      'dropdownSearch',
       'menuItem',
       'menuItemCheck',
       'dropdownIcon',

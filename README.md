@@ -304,6 +304,7 @@ breaking change and goes through the migration-guide process.
 | ------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `dropdown`          | `dial-kit-dropdown`               | The trigger wrapper of a `Dropdown`                                                              |
 | `dropdownList`      | `dial-kit-dropdown-list`          | The `role="none"` item list inside a dropdown overlay, and a submenu's own list. Both generations |
+| `dropdownSearch`    | `dial-kit-dropdown-search`        | The search row above the item list of a `searchable` `Dropdown`                                  |
 | `menuItem`          | `dial-kit-menuitem`               | One overlay row: a dropdown item, a `Select` option, a submenu trigger or child                   |
 | `menuItemCheck`     | `dial-kit-menuitem-check`         | The trailing check of a chosen `MenuItemMark.Check` row                                          |
 | `dropdownIcon`      | `dial-kit-dropdown-icon`          | The primary icon of a `DialDropdownIcon` trigger                                                 |

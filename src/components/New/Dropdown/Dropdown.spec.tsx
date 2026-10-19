@@ -1955,3 +1955,168 @@ describe('Dial UI Kit :: Dropdown — listStyle', () => {
     expect(panel.style.top).not.toBe('999px');
   });
 });
+
+describe('Dial UI Kit :: Dropdown — searchable', () => {
+  const searchItems: DropdownItem[] = [
+    { key: 'h1', type: DropdownItemType.PlainText, label: 'Create' },
+    { key: 'prompt', label: 'Prompt' },
+    {
+      key: 'skill',
+      label: 'Skill',
+      children: [
+        { key: 'skill-write', label: 'Write instructions' },
+        { key: 'skill-upload', label: 'Upload file' },
+      ],
+    },
+    { key: 'd1', type: DropdownItemType.Divider },
+    { key: 'h2', type: DropdownItemType.PlainText, label: 'Runners' },
+    { key: 'code', label: 'CodeApps' },
+    { key: 'custom', label: 'Custom App' },
+  ];
+
+  const renderSearchable = (
+    props: Partial<Parameters<typeof Dropdown>[0]> = {},
+  ) =>
+    render(
+      <Dropdown searchable items={searchItems} {...props}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+
+  const searchField = () => screen.getByRole('textbox', { name: 'Search' });
+  /* jsdom names a row with a <mark> inside as two words ("Cust om App"),
+     so a highlighted row is found by its text instead. */
+  const rowByText = (text: string) =>
+    screen.getAllByRole('menuitem').find((el) => el.textContent === text)!;
+
+  test('focuses the search field on open and narrows the rows as the user types', async () => {
+    const user = userEvent.setup();
+    renderSearchable();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    await waitFor(() => expect(searchField()).toHaveFocus());
+    await user.type(searchField(), 'app');
+
+    expect(screen.getAllByRole('menuitem').map((el) => el.textContent)).toEqual(
+      ['CodeApps', 'Custom App'],
+    );
+    expect(screen.queryByText('Create')).toBeNull();
+    expect(screen.getByText('Runners')).toBeInTheDocument();
+    expect(screen.queryByRole('separator')).toBeNull();
+  });
+
+  test('highlights the match in each remaining label', async () => {
+    const user = userEvent.setup();
+    renderSearchable();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.type(searchField(), 'cust');
+
+    expect(rowByText('Custom App').querySelector('mark')).toHaveTextContent(
+      'Cust',
+    );
+  });
+
+  test('keeps a whole submenu when its own label matches and only matching children otherwise', async () => {
+    const user = userEvent.setup();
+    renderSearchable();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    await user.type(searchField(), 'upload');
+    expect(screen.getAllByRole('menuitem').map((el) => el.textContent)).toEqual(
+      ['Skill'],
+    );
+
+    await user.click(screen.getByRole('menuitem', { name: 'Skill' }));
+    expect(
+      await screen.findByRole('menuitem', { name: 'Upload file' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('menuitem', { name: 'Write instructions' }),
+    ).toBeNull();
+  });
+
+  test('announces the no-results text when nothing matches', async () => {
+    const user = userEvent.setup();
+    renderSearchable({ noResultsLabel: 'Nothing here' });
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.type(searchField(), 'zzz');
+
+    expect(screen.queryAllByRole('menuitem')).toHaveLength(0);
+    expect(screen.getByRole('status')).toHaveTextContent('Nothing here');
+  });
+
+  test('clears the query when the menu closes', async () => {
+    const user = userEvent.setup();
+    const onSearchChange = vi.fn();
+    renderSearchable({ onSearchChange });
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.type(searchField(), 'code');
+    await user.click(rowByText('CodeApps'));
+
+    expect(onSearchChange).toHaveBeenLastCalledWith('');
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    expect(searchField()).toHaveValue('');
+    expect(screen.getAllByRole('menuitem')).toHaveLength(4);
+  });
+
+  test('renders a controlled query and reports edits', async () => {
+    const user = userEvent.setup();
+    const ControlledHost = () => {
+      const [value, setValue] = useState('prom');
+      return (
+        <Dropdown
+          searchable
+          items={searchItems}
+          searchValue={value}
+          onSearchChange={setValue}
+        >
+          <button type="button">Open</button>
+        </Dropdown>
+      );
+    };
+    render(<ControlledHost />);
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(searchField()).toHaveValue('prom');
+    expect(screen.getAllByRole('menuitem').map((el) => el.textContent)).toEqual(
+      ['Prompt'],
+    );
+  });
+
+  test('matches with a custom filterItem', async () => {
+    const user = userEvent.setup();
+    renderSearchable({
+      filterItem: (item, query) => item.key.startsWith(query),
+    });
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.type(searchField(), 'cu');
+
+    expect(screen.getAllByRole('menuitem').map((el) => el.textContent)).toEqual(
+      ['Custom App'],
+    );
+  });
+
+  test('leaves Home and End to the search field caret', async () => {
+    const user = userEvent.setup();
+    renderSearchable();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() => expect(searchField()).toHaveFocus());
+
+    await user.keyboard('{End}');
+    expect(searchField()).toHaveFocus();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Prompt' })).toHaveFocus();
+  });
+
+  test('caps the item list at maxVisibleItems rows', async () => {
+    const user = userEvent.setup();
+    renderSearchable({ maxVisibleItems: 3 });
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    const list = screen
+      .getByRole('menuitem', { name: 'Prompt' })
+      .closest<HTMLElement>('[role="none"]')!;
+    // 3 rows of 40px, two 2px gaps and the list's 8px inset.
+    expect(list.style.maxHeight).toBe('132px');
+  });
+});

@@ -1123,3 +1123,41 @@ export const WithInteractiveTooltipInSubMenu: Story = {
     ],
   },
 };
+
+/**
+ * `searchable` puts a search field above the items. Typing narrows them and
+ * highlights the match; a group heading or divider stays only while a row of
+ * its group does, and a sub-menu keeps just its matching children. The list
+ * scrolls under the field once it passes `maxVisibleItems` rows.
+ */
+export const Searchable: Story = {
+  name: 'Searchable',
+  args: {
+    placement: 'bottom-end',
+    searchable: true,
+    maxVisibleItems: 7,
+    matchReferenceWidth: false,
+    listClassName: 'w-[320px]',
+    items: [
+      { key: 'prompt', label: 'Prompt' },
+      {
+        key: 'skill',
+        label: 'Skill',
+        children: [
+          { key: 'skill-write', label: 'Write instructions' },
+          { key: 'skill-upload', label: 'Upload file' },
+        ],
+      },
+      { key: 'toolset', label: 'Toolset' },
+      { key: 'd1', type: DropdownItemType.Divider },
+      { key: 'runners', type: DropdownItemType.PlainText, label: 'Runners' },
+      { key: 'code-apps', label: 'CodeApps' },
+      { key: 'custom-app', label: 'Custom App' },
+      { key: 'debate', label: 'Debate Sentiment' },
+      { key: 'dial-loop', label: 'DIAL Loop' },
+      { key: 'entity', label: 'EntityExtractor' },
+      { key: 'external', label: 'External app' },
+      { key: 'ocr', label: 'Ocr' },
+    ],
+  },
+};
