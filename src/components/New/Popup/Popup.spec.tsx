@@ -29,6 +29,18 @@ describe('Dial UI Kit :: Popup', () => {
     expect(screen.getByText('Body content')).toBeInTheDocument();
   });
 
+  test('sets the title in Heading 3', () => {
+    render(
+      <Popup open header="Title">
+        <div>Body content</div>
+      </Popup>,
+    );
+
+    const title = screen.getByRole('heading', { name: 'Title' });
+    expect(title).toHaveClass('dial-h3-text');
+    expect(title).not.toHaveClass('dial-h1-text');
+  });
+
   test('merges overlayStyle over the overlay inline styles', () => {
     render(
       <Popup open header="Title" overlayStyle={{ overflow: 'hidden' }}>
