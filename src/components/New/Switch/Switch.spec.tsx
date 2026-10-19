@@ -108,4 +108,16 @@ describe('Dial UI Kit :: Switch', () => {
     expect(caption).toBeInTheDocument();
     expect(control).toHaveAttribute('aria-describedby', caption.id);
   });
+
+  // Hover is CSS-only; the class wiring is all jsdom can see.
+  test('shows the hover state while its text label is hovered, not only the track', () => {
+    const { container } = render(
+      <Switch id="switch" labelProps={{ label: 'Notifications' }} />,
+    );
+
+    expect(container.querySelector('[class~="group/choice"]')).not.toBeNull();
+    expect(container.querySelector('label[for="switch"]')).toHaveClass(
+      'group-has-[label:hover]/choice:bg-control-neutral-hover-strong',
+    );
+  });
 });

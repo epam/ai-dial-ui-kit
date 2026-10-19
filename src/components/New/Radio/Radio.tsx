@@ -83,7 +83,9 @@ export const Radio: FC<RadioProps> = ({
     <div className="flex flex-col gap-1">
       <div
         className={mergeClasses(
-          'flex items-center gap-2 ',
+          // Named group: the control shows its hover state while either of its
+          // two <label>s (the control or the text) is hovered.
+          'group/choice flex items-center gap-2',
           className,
           DIAL_KIT_CLASS.radio,
         )}
@@ -108,7 +110,7 @@ export const Radio: FC<RadioProps> = ({
         <label
           htmlFor={radioId}
           className={mergeClasses(
-            'group grid size-[20px] shrink-0 place-items-center rounded-full border transition-colors duration-200 hover:bg-control-accent-alpha-hover',
+            'group grid size-[20px] shrink-0 place-items-center rounded-full border transition-colors duration-200',
             // 20px is below the 24x24 minimum target, so grow the pointer target
             // without touching the rendered size. The 44px enhanced target would
             // overhang by 12px per side and swallow the adjacent label.
@@ -117,7 +119,7 @@ export const Radio: FC<RadioProps> = ({
             disabled
               ? 'cursor-not-allowed border-default bg-control-disable-primary'
               : mergeClasses(
-                  'cursor-pointer',
+                  'cursor-pointer group-has-[label:hover]/choice:bg-control-accent-alpha-hover',
                   isSelected
                     ? 'border border-accent bg-control-neutral'
                     : 'border-default bg-control-neutral',

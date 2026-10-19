@@ -62,10 +62,23 @@ export const CheckboxBox: FC<CheckboxBoxProps> = ({
           invalid && !isFilled && 'border-error bg-control-neutral',
           !invalid &&
             isFilled &&
-            'border-transparent bg-control-accent text-control-permanent hover:bg-control-accent-hover',
+            'border-transparent bg-control-accent text-control-permanent',
+          !invalid && !isFilled && 'border-default bg-control-neutral',
+          /*
+           * A control box reacts while either label of its `Checkbox` is hovered
+           * (the `group/choice` root); a decorative box only to its own hover,
+           * since the row around it owns the interaction.
+           */
+          !invalid &&
+            isFilled &&
+            (isControl
+              ? 'group-has-[label:hover]/choice:bg-control-accent-hover'
+              : 'hover:bg-control-accent-hover'),
           !invalid &&
             !isFilled &&
-            'border-default bg-control-neutral hover:border-accent hover:bg-control-accent-alpha-hover',
+            (isControl
+              ? 'group-has-[label:hover]/choice:border-accent group-has-[label:hover]/choice:bg-control-accent-alpha-hover'
+              : 'hover:border-accent hover:bg-control-accent-alpha-hover'),
         ),
     disabled ? 'cursor-not-allowed' : isControl && 'cursor-pointer',
     className,
