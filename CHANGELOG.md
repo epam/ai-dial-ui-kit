@@ -36,6 +36,8 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **`ConfirmationPopup` (2.0) — Cancel/Confirm split the row evenly on mobile** — the `Popup` mobile footer split did not reach `ConfirmationPopup`, which renders its own footer. Below the `mobile` breakpoint (768px) its Cancel and Confirm buttons now take an equal share of the row. Desktop is unchanged, `confirmClassName` still merges on top, and a caller's `footer` is not touched. Reported on the log-out confirmation in ai-dial-chat.
+
 - **Package — test declarations no longer published** — `dist/` carried 36 `.d.ts` files for specs, tests and mocks (`*.spec.ts`, `*.test.tsx`, `__tests__/`, `__mocks__/`), because the declaration build excluded only `*.spec.tsx` and stories. They are no longer emitted; the declarations `package.json` `exports` points to are unchanged.
 
 - **`MarkdownEditor` (2.0) — toolbar no longer overflows on narrow cards** — on a phone-width card the formatting group did not wrap, so its last buttons ran past the card edge and the edit/preview/fullscreen group dropped onto a second line at the start. The formatting group now wraps inside the card and the mode group stays at the inline end. Wide toolbars are unchanged ([ai-dial-chat#9389](https://github.com/epam/ai-dial-chat/issues/9389)).
