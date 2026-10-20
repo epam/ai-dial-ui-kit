@@ -57,6 +57,66 @@ const StatusIcon: FC<StatusIconProps> = ({ message, isError }) => {
   );
 };
 
+/* A 16px ring drawn with the spinner's tokens: secondary track, accent arc. */
+const RING_STROKE_WIDTH = 2;
+const RING_RADIUS = (DIAL_ICON_SIZE.SM - RING_STROKE_WIDTH) / 2;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+interface ProgressRingProps {
+  percent: number;
+  label: string;
+  className?: string;
+}
+
+/*
+ * Determinate counterpart of the row spinner, for an item whose `percent` is
+ * known. The arc starts at the top and grows clockwise; a full circle has no
+ * inherent direction, so it is not mirrored under `dir="rtl"`.
+ */
+const ProgressRing: FC<ProgressRingProps> = ({ percent, label, className }) => {
+  const value = Math.min(100, Math.max(0, Math.round(percent)));
+  const center = DIAL_ICON_SIZE.SM / 2;
+
+  return (
+    <span
+      role="progressbar"
+      aria-label={label}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={value}
+      className={mergeClasses('flex', className)}
+    >
+      <svg
+        width={DIAL_ICON_SIZE.SM}
+        height={DIAL_ICON_SIZE.SM}
+        viewBox={`0 0 ${DIAL_ICON_SIZE.SM} ${DIAL_ICON_SIZE.SM}`}
+        className="-rotate-90"
+        aria-hidden
+      >
+        <circle
+          cx={center}
+          cy={center}
+          r={RING_RADIUS}
+          fill="none"
+          strokeWidth={RING_STROKE_WIDTH}
+          className="stroke-(--stroke-secondary,#d1dbea)"
+        />
+        <circle
+          cx={center}
+          cy={center}
+          r={RING_RADIUS}
+          fill="none"
+          strokeWidth={RING_STROKE_WIDTH}
+          strokeLinecap="round"
+          strokeDasharray={RING_CIRCUMFERENCE}
+          strokeDashoffset={RING_CIRCUMFERENCE * (1 - value / 100)}
+          className="stroke-(--stroke-accent,#1d4ed8) transition-[stroke-dashoffset] duration-200 motion-reduce:transition-none"
+        />
+      </svg>
+    </span>
+  );
+};
+
 /** One queue row: the file's icon and name, plus a trailing status slot. */
 export const TransferQueueRow: FC<TransferQueueRowProps> = ({
   item,
@@ -64,6 +124,15 @@ export const TransferQueueRow: FC<TransferQueueRowProps> = ({
   onCancel,
 }) => {
   const isCanceled = item.status === TransferQueueItemStatus.Canceled;
+  /*
+   * The progress indicator fades out under hover/focus so the cancel control
+   * can show in the same cell, and takes no pointer events, since its own
+   * stacking context would otherwise paint it over the button.
+   */
+  const progressClassName = mergeClasses(
+    'pointer-events-none col-start-1 row-start-1 transition-opacity',
+    onCancel && 'group-focus-within:opacity-0 group-hover:opacity-0',
+  );
 
   return (
     <div className="group flex items-center gap-2 px-4 py-2">
@@ -83,20 +152,19 @@ export const TransferQueueRow: FC<TransferQueueRowProps> = ({
       />
       {item.status === TransferQueueItemStatus.InProgress && (
         <div className={mergeClasses(STATUS_SLOT_CLASS, 'grid')}>
-          {/*
-           * The spinner fades out under hover/focus so the cancel control can
-           * show in the same cell. It must not take pointer events: its own
-           * stacking context paints it over the button, which would otherwise
-           * never receive a click.
-           */}
-          <Spinner
-            size={DIAL_ICON_SIZE.SM}
-            ariaLabel={labels.itemProgressAriaLabel(item.name)}
-            className={mergeClasses(
-              'pointer-events-none col-start-1 row-start-1 transition-opacity',
-              onCancel && 'group-focus-within:opacity-0 group-hover:opacity-0',
-            )}
-          />
+          {typeof item.percent === 'number' ? (
+            <ProgressRing
+              percent={item.percent}
+              label={labels.itemProgressAriaLabel(item.name)}
+              className={progressClassName}
+            />
+          ) : (
+            <Spinner
+              size={DIAL_ICON_SIZE.SM}
+              ariaLabel={labels.itemProgressAriaLabel(item.name)}
+              className={progressClassName}
+            />
+          )}
           {onCancel && (
             <GhostIconButton
               aria-label={labels.cancelItemAriaLabel(item.name)}
