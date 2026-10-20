@@ -1,0 +1,49 @@
+/*
+ * The 2.0 `ResizeHandle`.
+ *
+ * The line is a pseudo-element, so no Tailwind utility and no consumer
+ * `className` can reach it. Its states are written here, flat rather than nested
+ * under `&`: nothing in the PostCSS chain flattens nesting, so a nested rule
+ * would ship as native CSS nesting and be dropped wholesale by a browser that
+ * does not support it.
+ */
+
+/* A thin line centered in the 8px hit area; accent only after the pointer rests on it. */
+.dial-resize-handle {
+  cursor: col-resize;
+}
+
+.dial-resize-handle::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: 0;
+  margin-inline: auto;
+  width: 1px;
+  background-color: var(--border-color-tertiary);
+}
+
+.dial-resize-handle:focus-visible {
+  outline: 2px solid var(--border-color-accent-focus);
+  outline-offset: -2px;
+}
+
+/* The themed arrow follows the pointer instead of the native cursor once the handle has positioned it. */
+.dial-resize-handle-cursor-ready {
+  cursor: none;
+}
+
+.dial-resize-handle-cursor-ready > .dial-resize-handle-arrow {
+  display: block;
+}
+
+.dial-resize-handle-hover::after {
+  width: 2px;
+  background-color: var(--border-color-accent);
+}
+
+.dial-resize-handle:active::after,
+.dial-resize-handle-dragging::after {
+  width: 2px;
+  background-color: var(--border-color-accent-focus);
+}

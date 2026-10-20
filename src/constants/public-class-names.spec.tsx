@@ -52,6 +52,7 @@ import { Radio } from '@/components/New/Radio/Radio';
 import { RadioGroup } from '@/components/New/RadioGroup/RadioGroup';
 import { RadioGroupPopupField } from '@/components/New/RadioGroupPopupField/RadioGroupPopupField';
 import { ResizableContainer } from '@/components/New/ResizableContainer/ResizableContainer';
+import { ResizeHandle } from '@/components/New/ResizeHandle/ResizeHandle';
 import { Search } from '@/components/New/Search/Search';
 import { SchemaRenderer } from '@/components/New/SchemaRenderer/SchemaRenderer';
 import { SegmentedControl } from '@/components/New/SegmentedControl/SegmentedControl';
@@ -141,6 +142,18 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
       <ResizableContainer minWidth={100} maxWidth={400}>
         Content
       </ResizableContainer>
+    ),
+  ],
+  [
+    'resizeHandle',
+    () => (
+      <ResizeHandle
+        width={300}
+        minWidth={200}
+        maxWidth={400}
+        onWidthChange={noop}
+        label="Resize"
+      />
     ),
   ],
   ['popup', () => <Popup open header="Title" />],
