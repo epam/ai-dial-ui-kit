@@ -381,7 +381,14 @@
     0 1px 4px 0 var(--shadow-xs-1, #2764d933),
     0 1px 2px 0 var(--shadow-xs-2, #161b2d08); /* blue-500 alpha-20, grey-950 alpha-3 */
   --shadow-sm: 0 8px 10px 0 var(--shadow-sm, #2764d914); /* blue-500 alpha-8 */
-  --shadow-md: 0 8px 24px 0 var(--shadow-md, #2764d90f); /* blue-500 alpha-6 */
+  /*
+   * Two layers, as the design's Shadow MD: a wide soft drop and a tight halo.
+   * A host that themed the single-layer token through `--shadow-md` keeps its
+   * colour on the drop layer.
+   */
+  --shadow-md:
+    0 10px 30px 9px var(--shadow-md-2, var(--shadow-md, #2764d90f)),
+    0 0 8px 2px var(--shadow-md-1, #2764d90a); /* blue-500 alpha-6, blue-500 alpha-4 */
   --shadow-lg: 0 8px 44px 0 var(--shadow-lg, #2764d914); /* blue-500 alpha-8 */
 
   /*
