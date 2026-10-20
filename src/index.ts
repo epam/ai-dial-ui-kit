@@ -452,6 +452,8 @@ export { CollapsibleSidebar } from './components/New/CollapsibleSidebar/Collapsi
 export type { CollapsibleSidebarProps } from './components/New/CollapsibleSidebar/CollapsibleSidebar';
 export { ResizableContainer } from './components/New/ResizableContainer/ResizableContainer';
 export type { ResizableContainerProps } from './components/New/ResizableContainer/ResizableContainer';
+export { ResizeHandle } from './components/New/ResizeHandle/ResizeHandle';
+export type { ResizeHandleProps } from './components/New/ResizeHandle/ResizeHandle';
 export { ConditionalResizableContainer } from './components/New/ResizableContainer/ConditionalResizableContainer';
 export type { ConditionalResizableContainerProps } from './components/New/ResizableContainer/ConditionalResizableContainer';
 export { NoDataContent } from './components/New/NoDataContent/NoDataContent';

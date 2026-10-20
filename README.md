@@ -288,6 +288,7 @@ breaking change and goes through the migration-guide process.
 | `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
 | `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
 | `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
+| `resizeHandle`       | `dial-kit-resize-handle`          | The `role="separator"` element of a `ResizeHandle`                    |
 | `popup`              | `dial-kit-popup`                  | The `role="dialog"` panel of a `Popup`                               |
 | `bottomSheet`        | `dial-kit-bottom-sheet`           | The `role="dialog"` panel of a `BottomSheet`                         |
 | `bottomSheetOverlay` | `dial-kit-bottom-sheet-overlay`   | The backdrop of a `BottomSheet`, which holds the panel               |
@@ -428,6 +429,7 @@ not AAA:
 | `Breadcrumbs` segment link | content | Exempt under the 2.5.5 *Inline* exception — a segment is a text link in a line of text, and expanding it would overlap the segments beside it |
 | `Breadcrumbs` overflow button | 16×16 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 14px per side and swallow the segments on either side of it in an inline trail |
 | `SegmentedControl` segment | 32px tall | Sits 4px from its neighbours inside a 40px track, so a 44px target would overhang 6px per side and swallow the adjacent segments; the segment is already wider than 24px on both axes |
+| `ResizeHandle` | 8px wide pointer strip | The handle has to sit exactly on the panel boundary, so a 44px-wide strip would swallow content on both sides of it — essential to the control. It is a focusable `separator`, so the resize is also available from the keyboard with the arrow keys |
 | `ResizableContainer` resize handle | 10px wide pointer strip | The handle has to sit exactly on the panel boundary, so a 44px-wide strip would swallow content on both sides of it — essential to the control. It is a focusable `separator`, so the resize is also available from the keyboard with the arrow keys |
 
 Give small-variant controls at least 20px of surrounding space if you need to reach

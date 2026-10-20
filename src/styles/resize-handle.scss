@@ -1,0 +1,62 @@
+/*
+ * The 2.0 `ResizeHandle`.
+ *
+ * The line is a pseudo-element, so no Tailwind utility and no consumer
+ * `className` can reach it. Its states are written here, flat rather than nested
+ * under `&`: nothing in the PostCSS chain flattens nesting, so a nested rule
+ * would ship as native CSS nesting and be dropped wholesale by a browser that
+ * does not support it.
+ *
+ * Colors come from `@apply`, not `var(--border-color-*)`: the theme is inlined
+ * into the utilities, so those custom properties are never declared and a
+ * `var()` on them resolves to nothing — an invisible line.
+ */
+
+/* A thin line centered in the 8px hit area, drawn as a border so it takes the theme's border colors. */
+.dial-resize-handle {
+  cursor: col-resize;
+}
+
+.dial-resize-handle::after {
+  @apply border-tertiary;
+
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: 0;
+  margin-inline: auto;
+  width: 0;
+  border-inline-start-style: solid;
+  border-inline-start-width: 1px;
+}
+
+.dial-resize-handle:focus-visible {
+  @apply outline-focus;
+
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: -2px;
+}
+
+/* The themed arrow follows the pointer instead of the native cursor once the handle has positioned it. */
+.dial-resize-handle-cursor-ready {
+  cursor: none;
+}
+
+.dial-resize-handle-cursor-ready > .dial-resize-handle-arrow {
+  display: block;
+}
+
+/* Accent only after the pointer has rested on the handle. */
+.dial-resize-handle-hover::after {
+  @apply border-accent;
+
+  border-inline-start-width: 2px;
+}
+
+.dial-resize-handle:active::after,
+.dial-resize-handle-dragging::after {
+  @apply border-accent-focus;
+
+  border-inline-start-width: 2px;
+}

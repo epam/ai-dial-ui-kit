@@ -41,6 +41,8 @@ export const DIAL_KIT_CLASS = {
   collapsibleSidebar: 'dial-kit-collapsible-sidebar',
   /** The content box inside a `ResizableContainer`'s resize frame. */
   resizableContainer: 'dial-kit-resizable-container',
+  /** The `role="separator"` element of a `ResizeHandle`. */
+  resizeHandle: 'dial-kit-resize-handle',
   /**
    * The `role="dialog"` panel of a `Popup`. Its backdrop is reached through
    * `overlayClassName`.
