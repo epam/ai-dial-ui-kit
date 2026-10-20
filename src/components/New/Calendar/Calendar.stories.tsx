@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A date/time picker supporting four selection modes: `date`, `datetime`, `time` and `weekday`. The date and datetime modes open a rounded month-grid popover; time renders a native time field; weekday renders a popover list of weekday names. Month/weekday names and date formatting are localized via the `locale` prop.',
+          'A date/time picker supporting four selection modes: `date`, `datetime`, `time` and `weekday`. The date and datetime modes open a rounded month-grid popover; time renders a typeable `HH:mm` field with a clock button that opens an hour/minute list popover (see the Time group); weekday renders a popover list of weekday names. Month/weekday names and date formatting are localized via the `locale` prop.',
       },
     },
   },
@@ -72,24 +72,6 @@ export const DateTimeWithTimezone: Story = {
     mode: CalendarMode.DateTime,
     labelProps: { label: 'Start date' },
     placeholder: 'Select date and time',
-    showTimezone: true,
-  },
-};
-
-export const Time: Story = {
-  args: {
-    mode: CalendarMode.Time,
-    labelProps: { label: 'Time' },
-    placeholder: undefined,
-  },
-};
-
-export const TimeWithTimezone: Story = {
-  name: 'Time with timezone',
-  args: {
-    mode: CalendarMode.Time,
-    labelProps: { label: 'Time' },
-    placeholder: undefined,
     showTimezone: true,
   },
 };

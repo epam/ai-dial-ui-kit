@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { CalendarMode } from '@/types/calendar';
@@ -127,6 +127,132 @@ describe('Dial UI Kit :: Calendar', () => {
   });
 
   describe('time mode', () => {
+    test('Should open the hour/minute popover from the clock button', () => {
+      render(<Calendar mode={CalendarMode.Time} value="09:30" />);
+
+      expect(screen.queryByRole('listbox', { name: 'Hours' })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+
+      expect(
+        screen.getByRole('listbox', { name: 'Hours' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('listbox', { name: 'Minutes' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('option', { name: '09', selected: true }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('option', { name: '30', selected: true }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should keep the minutes when an hour is picked and stay open', () => {
+      const onChange = vi.fn();
+      render(
+        <Calendar mode={CalendarMode.Time} value="09:30" onChange={onChange} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+      fireEvent.click(
+        within(screen.getByRole('listbox', { name: 'Hours' })).getByRole(
+          'option',
+          {
+            name: '14',
+          },
+        ),
+      );
+
+      expect(onChange).toHaveBeenCalledWith('14:30');
+      expect(
+        screen.getByRole('listbox', { name: 'Hours' }),
+      ).toBeInTheDocument();
+    });
+
+    test('Should default the other segment to 00 and close after picking minutes', () => {
+      const onChange = vi.fn();
+      render(
+        <Calendar mode={CalendarMode.Time} value="" onChange={onChange} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+      fireEvent.click(
+        within(screen.getByRole('listbox', { name: 'Minutes' })).getByRole(
+          'option',
+          { name: '45' },
+        ),
+      );
+
+      expect(onChange).toHaveBeenCalledWith('00:45');
+      expect(screen.queryByRole('listbox', { name: 'Minutes' })).toBeNull();
+    });
+
+    test('Should move focus between options with the arrow keys', () => {
+      render(<Calendar mode={CalendarMode.Time} value="09:00" />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+      const nine = within(
+        screen.getByRole('listbox', { name: 'Hours' }),
+      ).getByRole('option', { name: '09', selected: true });
+      nine.focus();
+      fireEvent.keyDown(nine, { key: 'ArrowDown' });
+
+      expect(
+        screen
+          .getByRole('listbox', { name: 'Hours' })
+          .querySelector('button:focus'),
+      ).toHaveTextContent('10');
+    });
+
+    test('Should close the popover on Escape', () => {
+      render(<Calendar mode={CalendarMode.Time} value="09:30" />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+      expect(
+        screen.getByRole('listbox', { name: 'Hours' }),
+      ).toBeInTheDocument();
+
+      fireEvent.keyDown(document.activeElement ?? document.body, {
+        key: 'Escape',
+      });
+      expect(screen.queryByRole('listbox', { name: 'Hours' })).toBeNull();
+    });
+
+    test('Should jump to the first and last option with Home and End and stop at the edges', () => {
+      render(<Calendar mode={CalendarMode.Time} value="09:00" />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Choose time' }));
+      const hours = screen.getByRole('listbox', { name: 'Hours' });
+      const selected = within(hours).getByRole('option', { selected: true });
+      selected.focus();
+
+      fireEvent.keyDown(selected, { key: 'End' });
+      expect(hours.querySelector('button:focus')).toHaveTextContent('23');
+
+      fireEvent.keyDown(document.activeElement as Element, {
+        key: 'ArrowDown',
+      });
+      expect(hours.querySelector('button:focus')).toHaveTextContent('23');
+
+      fireEvent.keyDown(document.activeElement as Element, { key: 'Home' });
+      expect(hours.querySelector('button:focus')).toHaveTextContent('00');
+
+      fireEvent.keyDown(document.activeElement as Element, { key: 'ArrowUp' });
+      expect(hours.querySelector('button:focus')).toHaveTextContent('00');
+    });
+
+    test('Should not render the clock button when showTimePicker is false or disabled', () => {
+      const { rerender } = render(
+        <Calendar mode={CalendarMode.Time} showTimePicker={false} />,
+      );
+      expect(screen.queryByRole('button', { name: 'Choose time' })).toBeNull();
+
+      rerender(<Calendar mode={CalendarMode.Time} disabled />);
+      expect(
+        screen.getByRole('button', { name: 'Choose time' }),
+      ).toBeDisabled();
+    });
+
     test('Should forward a custom placeholder to the time field', () => {
       render(<Calendar mode={CalendarMode.Time} placeholder="hh:mm" />);
       expect(screen.getByPlaceholderText('hh:mm')).toBeInTheDocument();

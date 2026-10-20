@@ -11,7 +11,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { IconChevronDown } from '@tabler/icons-react';
+import { IconChevronDown, IconClock } from '@tabler/icons-react';
 import {
   type FC,
   type FocusEventHandler,
@@ -45,6 +45,8 @@ import {
   calendarModeDefaultPlaceholder,
   calendarNavIcons,
   calendarPopoverClassName,
+  timePickerButtonClassName,
+  timePickerPopoverClassName,
 } from './constants';
 import {
   formatDateLabel,
@@ -61,6 +63,7 @@ import {
   setTimeOnDate,
 } from './utils';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { TimePickerPanel } from './TimePickerPanel';
 
 export type CalendarValue = Date | string | null;
 
@@ -91,6 +94,12 @@ export interface CalendarProps {
    * the zone the entered time-of-day refers to.
    */
   showTimezone?: boolean;
+  /**
+   * `time` mode only: shows a clock button at the field's trailing edge that
+   * opens an hour/minute list popover. The field stays typeable either way.
+   * @default true
+   */
+  showTimePicker?: boolean;
 }
 
 interface CalendarPopoverFieldProps {
@@ -210,12 +219,15 @@ interface TimeFieldProps {
    * caller can reposition or cap the hint for its own layout — the compact
    * `datetime` footer caps it so it never covers the masked value. */
   timezoneLabelClassName?: string;
+  /** Adds a clock button that opens the hour/minute list popover. */
+  picker?: boolean;
 }
 
 /**
  * A masked `"HH:mm"` text field. Deliberately avoids the native
  * `<input type="time">` picker overlay, whose look is browser-dependent and
- * doesn't match this design system.
+ * doesn't match this design system; with `picker` it offers its own
+ * hour/minute list popover instead.
  */
 const TimeField: FC<TimeFieldProps> = ({
   id,
@@ -229,8 +241,23 @@ const TimeField: FC<TimeFieldProps> = ({
   placeholder = '--:--',
   timezoneLabel,
   timezoneLabelClassName,
+  picker = false,
 }) => {
   const [draft, setDraft] = useState(value);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const themeScope = useThemeScope();
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isPickerOpen,
+    onOpenChange: (next) => setIsPickerOpen(disabled ? false : next),
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(8), flip({ padding: 8 }), shift({ padding: 8 })],
+  });
+
+  const dismiss = useDismiss(context);
+  const role = useRole(context, { role: 'dialog' });
+  const { getFloatingProps } = useInteractions([dismiss, role]);
 
   useEffect(() => {
     setDraft(value);
@@ -256,30 +283,86 @@ const TimeField: FC<TimeFieldProps> = ({
         calendarFieldBaseClassName,
         invalid && calendarFieldInvalidClassName,
         disabled && calendarFieldDisabledClassName,
+        picker && 'pe-12',
         className,
       )}
     />
   );
 
-  /* Without the hint the input is returned bare, so existing consumers see
-   * no DOM change; with it, the input keeps its own box (and border) and the
-   * hint is pinned over the field's trailing padding, out of the input's
-   * short masked value's way. `pointer-events-none` keeps clicks on the
+  /* Without the hint or the picker the input is returned bare, so existing
+   * consumers see no DOM change; with either, the input keeps its own box (and
+   * border) and the hint is pinned over the field's trailing padding, out of
+   * the input's short masked value's way. `pointer-events-none` keeps clicks on the
    * field reaching the input. `timezoneLabelClassName` merges after the
    * pinning classes, so a caller can reposition the hint for its layout. */
-  if (!timezoneLabel) return input;
+  if (!timezoneLabel && !picker) return input;
 
   return (
-    <div className="relative w-full">
+    <div
+      ref={picker ? refs.setReference : undefined}
+      className="relative w-full"
+    >
       {input}
-      <span
-        className={mergeClasses(
-          'dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary',
-          timezoneLabelClassName,
-        )}
-      >
-        {timezoneLabel}
-      </span>
+      {timezoneLabel && (
+        <span
+          className={mergeClasses(
+            'dial-small-paragraph-text pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 truncate text-secondary',
+            picker && 'end-12',
+            timezoneLabelClassName,
+          )}
+        >
+          {timezoneLabel}
+        </span>
+      )}
+      {picker && (
+        <>
+          <button
+            type="button"
+            aria-label="Choose time"
+            aria-haspopup="dialog"
+            aria-expanded={isPickerOpen}
+            disabled={disabled}
+            className={timePickerButtonClassName}
+            onClick={() => setIsPickerOpen((open) => !open)}
+          >
+            <IconClock
+              size={DIAL_ICON_SIZE.MD}
+              stroke={DIAL_KIT_ICON_STROKE}
+              aria-hidden="true"
+            />
+          </button>
+          {isPickerOpen && (
+            <FloatingPortal>
+              <FloatingFocusManager
+                context={context}
+                modal={false}
+                initialFocus={-1}
+                returnFocus
+              >
+                <div
+                  ref={refs.setFloating}
+                  style={floatingStyles}
+                  aria-label="Choose time"
+                  className={mergeClasses(
+                    timePickerPopoverClassName,
+                    themeScope,
+                  )}
+                  {...getFloatingProps()}
+                >
+                  <TimePickerPanel
+                    value={draft}
+                    onSelect={(next, done) => {
+                      setDraft(next);
+                      onChange(next);
+                      if (done) setIsPickerOpen(false);
+                    }}
+                  />
+                </div>
+              </FloatingFocusManager>
+            </FloatingPortal>
+          )}
+        </>
+      )}
     </div>
   );
 };
@@ -319,6 +402,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [locale="en-GB"] - BCP 47 locale tag used to localize month/weekday names and date formatting
  * @param [fieldClassName] - Additional classes merged onto the trigger field, overriding conflicting defaults
  * @param [showTimezone=false] - Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`) at the trailing edge of the time fields (`time` mode and the `datetime` popover footer)
+ * @param [showTimePicker=true] - `time` mode only: shows a clock button that opens an hour/minute list popover next to the typeable field
  */
 export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
@@ -336,6 +420,7 @@ export const Calendar: FC<CalendarProps> = ({
   locale = DEFAULT_CALENDAR_LOCALE,
   fieldClassName,
   showTimezone = false,
+  showTimePicker = true,
 }) => {
   const resolvedPlaceholder =
     placeholder ?? calendarModeDefaultPlaceholder[mode];
@@ -436,6 +521,7 @@ export const Calendar: FC<CalendarProps> = ({
           placeholder={resolvedPlaceholder}
           className={fieldClassName}
           timezoneLabel={timezoneLabel}
+          picker={showTimePicker}
         />
       </div>
     );
