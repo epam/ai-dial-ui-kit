@@ -272,7 +272,7 @@ export const ResizeHandle: FC<ResizeHandleProps> = ({
       onKeyDown={handleKeyDown}
       onDoubleClick={handleDoubleClick}
     >
-      {/* Drawn instead of a CSS cursor image, which cannot read theme tokens. */}
+      {/* Drawn instead of a CSS cursor image, which cannot read theme tokens. Pinned to the physical left: it is moved by screen coordinates, which a logical `start` would mirror off-screen in RTL. */}
       <Tooltip
         tooltip={tooltip}
         open={isHoverReady && !isDragging}
@@ -287,7 +287,7 @@ export const ResizeHandle: FC<ResizeHandleProps> = ({
           ref={cursorRef}
           aria-hidden="true"
           className={mergeClasses(
-            'pointer-events-none fixed start-0 top-0 z-tooltip hidden text-secondary',
+            'pointer-events-none fixed top-0 left-0 z-tooltip hidden text-secondary',
             'dial-resize-handle-arrow',
           )}
         >

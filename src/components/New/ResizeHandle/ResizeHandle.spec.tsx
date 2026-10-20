@@ -264,6 +264,15 @@ describe('Dial UI Kit :: ResizeHandle', () => {
     expect(screen.queryByText('Drag to resize')).toBeNull();
   });
 
+  test('pins the cursor arrow to the physical left so RTL does not move it off-screen', () => {
+    const { handle } = renderHandle({}, 'rtl');
+
+    const arrow = handle.querySelector('[aria-hidden="true"]');
+
+    expect(arrow).toHaveClass('left-0');
+    expect(arrow).not.toHaveClass('start-0');
+  });
+
   test('stamps the public class and accepts a custom class last-but-one', () => {
     const { handle } = renderHandle({ className: 'custom-class' });
 
