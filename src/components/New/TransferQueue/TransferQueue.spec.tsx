@@ -69,6 +69,24 @@ describe('Dial UI Kit :: TransferQueue', () => {
       ).toBeInTheDocument();
     });
 
+    test('show a determinate ring with the value when the row has a percent', () => {
+      renderQueue({ items: [makeItem({ percent: 42 })] });
+
+      const ring = screen.getByRole('progressbar', {
+        name: '"report.pdf" in progress',
+      });
+      expect(ring).toHaveAttribute('aria-valuenow', '42');
+      expect(
+        screen.queryByRole('img', { name: '"report.pdf" in progress' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('keep the spinner for a row without a percent', () => {
+      renderQueue();
+
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    });
+
     test('name a succeeded row', () => {
       renderQueue({
         items: [makeItem({ status: TransferQueueItemStatus.Success })],
@@ -246,7 +264,9 @@ describe('Dial UI Kit :: TransferQueue', () => {
     test('renders no bar while expanded', () => {
       renderQueue({ items: [makeItem({ percent: 40 })] });
 
-      expect(screen.queryByRole('progressbar')).toBeNull();
+      expect(
+        screen.queryByRole('progressbar', { name: 'Progress' }),
+      ).toBeNull();
     });
 
     test('renders no bar once nothing is in progress', async () => {
@@ -258,7 +278,9 @@ describe('Dial UI Kit :: TransferQueue', () => {
       });
       await collapse();
 
-      expect(screen.queryByRole('progressbar')).toBeNull();
+      expect(
+        screen.queryByRole('progressbar', { name: 'Progress' }),
+      ).toBeNull();
     });
   });
 
