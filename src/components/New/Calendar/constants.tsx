@@ -28,6 +28,12 @@ export const calendarFieldInvalidClassName = '!border-error'; // TODO: check aft
 export const calendarPopoverClassName =
   'z-floating flex w-[248px] flex-col gap-4 rounded-lg bg-layer-raised px-2 py-4 shadow-md';
 
+export const timePickerPopoverClassName =
+  'z-floating rounded-lg bg-layer-raised p-2 shadow-md';
+
+export const timePickerButtonClassName =
+  'absolute end-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-secondary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-hidden focus-visible:outline focus-visible:outline-focus disabled:cursor-not-allowed disabled:text-control-disable-primary disabled:hover:bg-transparent';
+
 export const calendarDayButtonBaseClassName =
   'flex size-10 items-center justify-center rounded-full dial-small-text text-primary hover:bg-control-accent-alpha-hover hover:text-primary focus:outline-hidden focus-visible:outline focus-visible:outline-focus';
 
