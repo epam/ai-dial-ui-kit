@@ -67,7 +67,11 @@ export interface TransferQueueLabels {
   closeConfirmHeader: string;
   /** Confirmation description when an item is in progress and none failed. */
   closeConfirmDescriptionInProgress: string;
-  /** Confirmation description when an item failed and none is in progress. */
+  /**
+   * Confirmation description when an item failed and none is in progress.
+   * @deprecated Never shown: closing asks for confirmation only while an item
+   * is in progress, since a failed one has nothing left to lose.
+   */
   closeConfirmDescriptionFailed: string;
   /** Confirmation description when items are both in progress and failed. */
   closeConfirmDescriptionMixed: string;
@@ -127,19 +131,14 @@ const getAggregatePercent = (items: TransferQueueItem[]): number =>
     ) / items.length,
   );
 
+/* Only reached while an item is in progress, the one case that confirms. */
 const getCloseConfirmDescription = (
-  hasInProgress: boolean,
   hasFailed: boolean,
   labels: TransferQueueLabels,
-): string => {
-  if (hasInProgress && hasFailed) {
-    return labels.closeConfirmDescriptionMixed;
-  }
-  if (hasFailed) {
-    return labels.closeConfirmDescriptionFailed;
-  }
-  return labels.closeConfirmDescriptionInProgress;
-};
+): string =>
+  hasFailed
+    ? labels.closeConfirmDescriptionMixed
+    : labels.closeConfirmDescriptionInProgress;
 
 /**
  * A floating panel listing the files of an upload, download, import or export
@@ -150,12 +149,12 @@ const getCloseConfirmDescription = (
  * Each row shows the file's `FileIcon` and name, and a trailing status: a
  * spinner (with a cancel control on hover or focus) while in progress, a check
  * on success, a warning or error icon whose reason is both its tooltip and its
- * accessible name, or "Canceled". The header carries the host's title, a count
- * of failed items, and collapse and close controls. Collapsed while work runs,
+ * accessible name, or "Canceled". The header carries the host's title and the
+ * collapse and close controls. Collapsed while work runs,
  * the rows are replaced by one aggregate `ProgressBar`.
  *
- * Closing while an item is in progress or has failed asks for confirmation
- * first. Once every item has succeeded the queue closes itself after
+ * Closing while an item is in progress asks for confirmation first; a queue
+ * whose items have all settled, failed ones included, closes straight away. Once every item has succeeded the queue closes itself after
  * `autoCloseDelay`; a warned or canceled row keeps it open so it can be read.
  *
  * The root is a polite `role="status"` live region. Positioning is left to
@@ -202,21 +201,20 @@ export const TransferQueue: FC<TransferQueueProps> = ({
     (item) => item.status === TransferQueueItemStatus.InProgress,
   ).length;
   const hasInProgress = inProgressCount > 0;
-  const failedCount = items.filter(
+  const hasFailed = items.some(
     (item) => item.status === TransferQueueItemStatus.Failed,
-  ).length;
-  const hasFailed = failedCount > 0;
+  );
   const isEverySucceeded =
     items.length > 0 &&
     items.every((item) => item.status === TransferQueueItemStatus.Success);
 
   const handleClose = useCallback(() => {
-    if (hasInProgress || hasFailed) {
+    if (hasInProgress) {
       setIsConfirmOpen(true);
     } else {
       onClose();
     }
-  }, [hasInProgress, hasFailed, onClose]);
+  }, [hasInProgress, onClose]);
 
   const handleConfirmClose = useCallback(() => {
     setIsConfirmOpen(false);
@@ -248,7 +246,6 @@ export const TransferQueue: FC<TransferQueueProps> = ({
     >
       <TransferQueueHeader
         title={title}
-        failedCount={failedCount}
         isCollapsed={isCollapsed}
         itemsId={itemsId}
         labels={labels}
@@ -291,11 +288,7 @@ export const TransferQueue: FC<TransferQueueProps> = ({
       <ConfirmationPopup
         open={isConfirmOpen}
         header={labels.closeConfirmHeader}
-        description={getCloseConfirmDescription(
-          hasInProgress,
-          hasFailed,
-          labels,
-        )}
+        description={getCloseConfirmDescription(hasFailed, labels)}
         confirmLabel={labels.closeConfirmLabel}
         cancelLabel={labels.closeCancelLabel}
         variant={ConfirmationPopupVariant.Danger}
