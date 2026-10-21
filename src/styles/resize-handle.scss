@@ -23,9 +23,9 @@
   content: '';
   position: absolute;
   inset-block: 0;
-  inset-inline: 0;
-  margin-inline: auto;
+  left: 50%;
   width: 0;
+  transform: translateX(-50%);
   border-inline-start-style: solid;
   border-inline-start-width: 1px;
 }
@@ -47,16 +47,30 @@
   display: block;
 }
 
-/* Accent only after the pointer has rested on the handle. */
-.dial-resize-handle-hover::after {
-  @apply border-accent;
-
-  border-inline-start-width: 2px;
+/* Only a short segment in the middle of the border line takes the accent, not its whole length. */
+.dial-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 3px;
+  height: 3rem;
+  transform: translate(-50%, -50%);
+  /* A border-only box: the color utilities below paint it, and the radius rounds both ends into a pill. */
+  border-style: solid;
+  border-width: 1.5px;
+  border-radius: 9999px;
+  border-color: transparent;
 }
 
-.dial-resize-handle:active::after,
-.dial-resize-handle-dragging::after {
-  @apply border-accent-focus;
+/* Accent only after the pointer has rested on the handle. */
+.dial-resize-handle-hover::before {
+  @apply border-accent;
+}
 
-  border-inline-start-width: 2px;
+.dial-resize-handle:active::before,
+.dial-resize-handle-dragging::before {
+  @apply border-accent-focus;
 }
