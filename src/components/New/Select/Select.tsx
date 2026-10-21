@@ -25,7 +25,7 @@ import {
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
 import { Input } from '@/components/New/Input/Input';
 import { Label, type LabelProps } from '@/components/New/Label/Label';
-import { DialNoDataContent } from '@/components/NoDataContent/NoDataContent';
+import { NoDataContent } from '@/components/New/NoDataContent/NoDataContent';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
@@ -41,7 +41,6 @@ import { SelectSubMenuItem } from './SelectSubMenuItem';
 import {
   selectOptionsScrollClassName,
   selectCloseIcon,
-  selectEmptyStateIcon,
   selectFieldIconClassName,
   selectListWidthClassName,
   selectOptionBaseClassName,
@@ -549,8 +548,8 @@ export const Select: FC<SelectProps> = ({
       <div role="none" className={selectOptionsScrollClassName}>
         {filtered.length === 0 ? (
           <div className="px-2 py-3">
-            <DialNoDataContent
-              icon={emptyStateIcon ?? selectEmptyStateIcon}
+            <NoDataContent
+              icon={emptyStateIcon}
               title={emptyStateTitle}
               description={emptyStateDescription}
             />

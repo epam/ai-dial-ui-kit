@@ -1,6 +1,5 @@
 import { IconChevronRight, IconSearch, IconX } from '@tabler/icons-react';
 
-import NoDataIcon from '@/assets/icons/no-data.svg?react';
 import {
   overlayGap,
   overlayItemClassName,
@@ -76,14 +75,6 @@ export const selectCloseIcon = (
   <IconX
     size={DIAL_ICON_SIZE.SM}
     stroke={DIAL_KIT_ICON_STROKE}
-    aria-hidden="true"
-  />
-);
-
-export const selectEmptyStateIcon = (
-  <NoDataIcon
-    width={DIAL_ICON_SIZE.LG}
-    height={DIAL_ICON_SIZE.LG}
     aria-hidden="true"
   />
 );
