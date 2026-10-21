@@ -2120,3 +2120,62 @@ describe('Dial UI Kit :: Dropdown — searchable', () => {
     expect(list.style.maxHeight).toBe('132px');
   });
 });
+
+describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
+  test('puts the popup state on a button trigger, not on the wrapper', () => {
+    const { container } = render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+
+    expect(button).toHaveAttribute('aria-haspopup', 'menu');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
+    expect(wrapper).not.toHaveAttribute('aria-haspopup');
+
+    openByClick();
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      screen.getByRole('menu').id,
+    );
+  });
+
+  test("keeps the trigger's own popup attributes", () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button" aria-haspopup="listbox">
+          Open
+        </button>
+      </Dropdown>,
+    );
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute(
+      'aria-haspopup',
+      'listbox',
+    );
+  });
+
+  test('keeps the popup state on the wrapper for a text trigger', () => {
+    const { container } = render(<Dropdown items={items}>Open</Dropdown>);
+    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  test('keeps the popup state on the wrapper for a context-menu trigger', () => {
+    const { container } = render(
+      <Dropdown items={items} trigger={[DropdownTrigger.ContextMenu]}>
+        <div>Cell</div>
+      </Dropdown>,
+    );
+    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
+      'aria-haspopup',
+      'menu',
+    );
+    expect(screen.getByText('Cell')).not.toHaveAttribute('aria-expanded');
+  });
+});

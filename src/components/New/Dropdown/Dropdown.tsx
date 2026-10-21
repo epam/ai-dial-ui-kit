@@ -24,7 +24,9 @@ import type {
   ReferenceElement,
 } from '@floating-ui/react';
 import {
+  cloneElement,
   Fragment,
+  isValidElement,
   useCallback,
   useEffect,
   useId,
@@ -33,6 +35,7 @@ import {
   useState,
   type CSSProperties,
   type FC,
+  type HTMLAttributes,
   type KeyboardEvent,
   type MouseEvent,
   type ReactNode,
@@ -717,10 +720,39 @@ export const Dropdown: FC<DropdownProps> = ({
   const hasOwnListScroll =
     !renderOverlay && (searchable || maxVisibleItems != null);
 
-  const referenceProps = getReferenceProps({
+  const {
+    'aria-haspopup': ariaHasPopup = 'menu',
+    'aria-expanded': ariaExpanded = isOpen,
+    'aria-controls': ariaControls = listId,
+    ...referenceProps
+  } = getReferenceProps({
     onContextMenu,
     onMouseDown: onPointerDown,
-  });
+  }) as HTMLAttributes<HTMLSpanElement>;
+
+  /*
+   * The wrapper `<span>` has no role, and ARIA forbids `aria-expanded` there,
+   * so a screen reader never hears the menu state. A single element trigger
+   * (the usual icon button) carries the popup attributes itself instead; the
+   * trigger's own values win, so a combobox keeps `aria-haspopup="listbox"`.
+   * Text or several nodes, and a context-menu-only trigger (a grid cell, not a
+   * control), leave them on the wrapper as before.
+   */
+  const triggerAria: HTMLAttributes<HTMLSpanElement> = {
+    'aria-haspopup': ariaHasPopup,
+    'aria-expanded': ariaExpanded,
+    'aria-controls': ariaControls,
+  };
+  const isElementTrigger =
+    isValidElement<HTMLAttributes<HTMLElement>>(children) &&
+    trigger.some((type) => type !== DropdownTrigger.ContextMenu);
+  const triggerNode = isElementTrigger
+    ? cloneElement(children, {
+        'aria-haspopup': children.props['aria-haspopup'] ?? ariaHasPopup,
+        'aria-expanded': children.props['aria-expanded'] ?? ariaExpanded,
+        'aria-controls': children.props['aria-controls'] ?? ariaControls,
+      })
+    : children;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -759,12 +791,10 @@ export const Dropdown: FC<DropdownProps> = ({
             className,
             DIAL_KIT_CLASS.dropdown,
           )}
-          aria-haspopup="menu"
-          aria-expanded={isOpen}
-          aria-controls={listId}
+          {...(isElementTrigger ? undefined : triggerAria)}
           {...referenceProps}
         >
-          {children}
+          {triggerNode}
         </span>
 
         {isOpen && (
