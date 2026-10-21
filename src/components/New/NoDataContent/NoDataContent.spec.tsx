@@ -25,6 +25,25 @@ describe('Dial UI Kit :: NoDataContent', () => {
     expect(icon).toHaveAttribute('aria-hidden', 'true');
   });
 
+  test('renders the action under the text', () => {
+    render(
+      <NoDataContent
+        title="No chats yet"
+        action={<button type="button">New chat</button>}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'New chat' }),
+    ).toBeInTheDocument();
+  });
+
+  test('omits the action wrapper when none is given', () => {
+    const { container } = render(<NoDataContent title="No results" />);
+
+    expect(container.firstElementChild?.children).toHaveLength(2);
+  });
+
   test('renders a custom icon instead of the default one', () => {
     render(<NoDataContent title="No results" icon={<span>Icon</span>} />);
 
