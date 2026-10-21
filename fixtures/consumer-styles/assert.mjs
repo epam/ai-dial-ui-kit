@@ -28,6 +28,9 @@ const rulesFor = (css, selector) =>
     ),
   ].map((m) => m[0]);
 
+// Off the kit's type scale on purpose; must match src/overrides.css.
+const OVERRIDE_LINE_HEIGHT = '17px';
+
 const css = read('dist/host.css');
 
 check(
@@ -62,8 +65,8 @@ const small = rulesFor(css, '.dial-small-text');
 check(
   'host override follows the kit rule',
   small.length >= 2 &&
-    small.at(-1).includes('line-height: 17px') &&
-    !small[0].includes('17px'),
+    small.at(-1).includes(`line-height: ${OVERRIDE_LINE_HEIGHT}`) &&
+    !small[0].includes(OVERRIDE_LINE_HEIGHT),
 );
 
 const sassCss = read('dist/host-from-sass.out.css');
@@ -76,7 +79,10 @@ check(
     '.dial-body-text',
     '.host-gap',
   ].every((selector) => rulesFor(sassCss, selector).length > 0) &&
-    rulesFor(sassCss, '.host-gap').some((r) => r.includes('padding-left: 4px')),
+    rulesFor(sassCss, '.host-gap').some((r) =>
+      // Tailwind lowers logical properties for its browser targets.
+      /padding-(inline-start|left): 4px/.test(r),
+    ),
 );
 
 let missingMixinsError = '';

@@ -9,8 +9,10 @@
 
 @source './index.html';
 
+// Proves the host's own Sass (`$` variables) survives compilation alongside
+// the kit's imports; assert.mjs checks the compiled value.
 $gap: 4px;
 
 .host-gap {
-  padding-left: $gap;
+  padding-inline-start: $gap;
 }

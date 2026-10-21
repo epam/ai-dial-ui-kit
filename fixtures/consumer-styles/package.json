@@ -10,7 +10,12 @@
   },
   "dependencies": {
     "@epam/ai-dial-ui-kit": "file:../.tarballs/ai-dial-ui-kit.tgz",
+    "@floating-ui/react": "^0.27.19",
+    "@tabler/icons-react": "^3.41.1",
     "@tailwindcss/cli": "^4.3.3",
+    "classnames": "^2.5.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "sass": "^1.99.0",
     "tailwindcss": "^4.3.3"
   }

@@ -1,3 +1,5 @@
+/* Deliberately off-scale: assert.mjs (OVERRIDE_LINE_HEIGHT) checks that this
+   host override comes after the kit rule and wins. */
 .dial-small-text {
   line-height: 17px;
 }
