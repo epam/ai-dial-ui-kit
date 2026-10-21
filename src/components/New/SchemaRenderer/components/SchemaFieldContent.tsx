@@ -1,4 +1,4 @@
-import type { FC, ReactElement } from 'react';
+import { useId, type FC, type ReactElement } from 'react';
 
 import { ErrorText } from '@/components/New/CaptionText/CaptionText';
 import { JsonSchemaType } from '@/types/json-schema';
@@ -44,6 +44,7 @@ import { SchemaPrimitiveField } from './SchemaPrimitiveField';
  * @param [suppressInlineError=false] - Leaves the required error to the caller, which renders it under its own label
  * @param [fieldId] - Id given to a primitive control, for a visible label to point at
  * @param [ariaLabel] - Accessible name of the control
+ * @param [ariaDescribedBy] - Id of an error the caller renders outside the control, linked to a primitive control
  */
 export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
   schema,
@@ -55,7 +56,9 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
   suppressInlineError = false,
   fieldId,
   ariaLabel,
+  ariaDescribedBy,
 }) => {
+  const inlineErrorId = useId();
   const { rootSchema, renderField, markTouched, touchedPaths, skipUntouched } =
     useSchemaContext();
   const resolved = resolveRef(schema, rootSchema);
@@ -126,8 +129,11 @@ export const SchemaFieldContent: FC<SchemaFieldContentProps> = ({
           invalid={isPrimitiveInvalid}
           id={fieldId}
           ariaLabel={ariaLabel}
+          ariaDescribedBy={
+            primitiveErrorMessage ? inlineErrorId : ariaDescribedBy
+          }
         />
-        <ErrorText text={primitiveErrorMessage} />
+        <ErrorText id={inlineErrorId} text={primitiveErrorMessage} />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Textarea, TextareaResize } from './Textarea';
 
@@ -70,5 +70,23 @@ describe('Dial UI Kit :: DialTextarea', () => {
     );
     const input = res.getByRole('textbox');
     expect(input.className).toContain('resize-y');
+  });
+});
+
+describe('Dial UI Kit :: Textarea — error and caption description', () => {
+  test('describes the textarea by its error and marks it invalid', () => {
+    render(
+      <Textarea labelProps={{ label: 'Notes' }} error="Notes are required" />,
+    );
+    const textarea = screen.getByRole('textbox', { name: 'Notes' });
+    expect(textarea).toHaveAccessibleDescription('Notes are required');
+    expect(textarea).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('describes the textarea by its caption when there is no error', () => {
+    render(<Textarea labelProps={{ label: 'Notes' }} caption="Markdown" />);
+    expect(
+      screen.getByRole('textbox', { name: 'Notes' }),
+    ).toHaveAccessibleDescription('Markdown');
   });
 });

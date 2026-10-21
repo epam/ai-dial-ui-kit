@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { CaptionText } from './CaptionText';
+import { CaptionText, ErrorText } from './CaptionText';
 
 describe('Dial UI Kit :: DialCaptionText', () => {
   test('Should render text when provided', () => {
@@ -48,5 +48,13 @@ describe('Dial UI Kit :: DialCaptionText', () => {
     expect(el).toHaveAttribute('aria-label', 'caption-label');
     expect(el.className).toContain('dial-tiny-text');
     expect(el.className).toContain('extra-class');
+  });
+});
+
+describe('Dial UI Kit :: CaptionText — semantics', () => {
+  test('renders an error without a live-region role', () => {
+    render(<ErrorText text="Required" />);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByText('Required')).toHaveClass('dial-kit-error-text');
   });
 });

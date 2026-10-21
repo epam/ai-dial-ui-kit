@@ -65,6 +65,7 @@ export interface SelectProps {
   error?: string;
   caption?: string;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
   searchable?: boolean;
   searchSize?: ElementSize;
   searchPlaceholder?: string;
@@ -160,6 +161,7 @@ export interface SelectProps {
  * @param [error] - Error message rendered below the field (does not by itself apply error styling, pass `invalid` too).
  * @param [caption] - Helper text rendered below the field when there is no `error`.
  * @param [ariaLabel] - Accessible name for the field; use it when there is no visible label.
+ * @param [ariaDescribedBy] - Ids of extra elements describing the field, e.g. an error rendered outside it; the field's own `error`/`caption` are linked automatically.
  * @param [searchable=false] - Show a search field in the overlay header.
  * @param [searchSize=ElementSize.Standard] - Size of the overlay search input when `searchable` is enabled.
  * @param [searchPlaceholder] - Placeholder for the overlay search input.
@@ -201,6 +203,7 @@ export const Select: FC<SelectProps> = ({
   error,
   caption,
   ariaLabel,
+  ariaDescribedBy,
   searchable = false,
   searchSize = ElementSize.Standard,
   searchPlaceholder,
@@ -231,6 +234,8 @@ export const Select: FC<SelectProps> = ({
   const generatedId = useId();
   const fieldId = id || generatedId;
   const listId = `list-${fieldId}`;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const captionId = !error && caption ? `${fieldId}-caption` : undefined;
   const isSmall = size === ElementSize.Small;
 
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -694,6 +699,11 @@ export const Select: FC<SelectProps> = ({
             aria-controls={listId}
             aria-autocomplete="none"
             aria-label={fieldAriaLabel}
+            aria-describedby={
+              [ariaDescribedBy, errorId, captionId].filter(Boolean).join(' ') ||
+              undefined
+            }
+            aria-invalid={error || invalid ? true : undefined}
             containerClassName="w-full"
             wrapperClassName={mergeClasses(
               !disabled && 'cursor-pointer',
@@ -715,8 +725,8 @@ export const Select: FC<SelectProps> = ({
           </Input>
         </Dropdown>
 
-        <ErrorText text={error} />
-        {!error && <CaptionText text={caption} />}
+        <ErrorText id={errorId} text={error} />
+        {!error && <CaptionText id={captionId} text={caption} />}
       </div>
     </div>
   );

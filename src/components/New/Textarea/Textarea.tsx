@@ -1,4 +1,5 @@
 import {
+  useId,
   type DetailedHTMLProps,
   type FC,
   type TextareaHTMLAttributes,
@@ -81,8 +82,15 @@ export const Textarea: FC<TextareaProps> = ({
   caption,
   id,
   invalid,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }) => {
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const captionId = !error && caption ? `${fieldId}-caption` : undefined;
+
   const textareaClassName = mergeClasses(
     'dial-kit-textarea dial-kit-input px-3 py-2',
     invalid && 'dial-kit-input-error',
@@ -93,17 +101,22 @@ export const Textarea: FC<TextareaProps> = ({
 
   return (
     <div className={mergeClasses('flex flex-col gap-2', containerClassName)}>
-      {labelProps && <Label {...labelProps} htmlFor={id} />}
+      {labelProps && <Label {...labelProps} htmlFor={fieldId} />}
       <div className="flex flex-col gap-1">
         <textarea
-          id={id}
+          id={fieldId}
           value={value || ''}
           className={textareaClassName}
           onChange={(event) => onChange?.(event.currentTarget.value)}
+          aria-describedby={
+            [ariaDescribedBy, errorId, captionId].filter(Boolean).join(' ') ||
+            undefined
+          }
+          aria-invalid={ariaInvalid ?? (error || invalid ? true : undefined)}
           {...props}
         />
-        <ErrorText text={error} />
-        {!error && <CaptionText text={caption} />}
+        <ErrorText id={errorId} text={error} />
+        {!error && <CaptionText id={captionId} text={caption} />}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ export interface SchemaPrimitiveFieldProps {
   invalid?: boolean;
   id?: string;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }
 
 const toSingleValue = (next: string | string[]): string | undefined =>
@@ -59,6 +60,7 @@ const toNumber = (next?: number | string): number | undefined =>
  * @param [invalid] - Whether the field has a validation error (applies error styling)
  * @param [id] - Id of the control, for a visible label to point at
  * @param [ariaLabel] - Accessible name of the control
+ * @param [ariaDescribedBy] - Id of the field's validation error, linked to text, number and select controls
  */
 export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
   schema,
@@ -67,6 +69,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
   invalid,
   id,
   ariaLabel,
+  ariaDescribedBy,
 }) => {
   const {
     texts,
@@ -103,6 +106,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       <Select
         id={id}
         ariaLabel={ariaLabel}
+        ariaDescribedBy={ariaDescribedBy}
         options={resourceOptions}
         value={value != null ? String(value) : undefined}
         invalid={invalid}
@@ -149,6 +153,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
       <Select
         id={id}
         ariaLabel={ariaLabel}
+        ariaDescribedBy={ariaDescribedBy}
         options={enumValues.map((v) => ({
           value: String(v),
           label: String(v),
@@ -180,6 +185,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         <NumberInput
           id={id}
           aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
           integer={schema.type === JsonSchemaType.Integer}
           value={toInputValue(value)}
           invalid={invalid}
@@ -199,6 +205,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
           <PasswordInput
             id={id}
             aria-label={ariaLabel}
+            aria-describedby={ariaDescribedBy}
             value={toInputValue(value)}
             invalid={invalid}
             disabled={readonly}
@@ -212,6 +219,7 @@ export const SchemaPrimitiveField: FC<SchemaPrimitiveFieldProps> = ({
         <Input
           id={id}
           aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
           value={toInputValue(value)}
           invalid={invalid}
           disabled={readonly}

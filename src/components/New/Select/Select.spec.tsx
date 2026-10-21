@@ -934,3 +934,26 @@ describe('Dial UI Kit :: Select — list layout', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 });
+
+describe('Dial UI Kit :: Select — error and caption description', () => {
+  test('describes the combobox by its error and marks it invalid', () => {
+    renderSelect({ error: 'Pick an operator', caption: 'Comparison' });
+    expect(getField()).toHaveAccessibleDescription('Pick an operator');
+    expect(getField()).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('describes the combobox by its caption and an external id', () => {
+    render(
+      <>
+        <span id="outside">Outside</span>
+        <Select
+          options={baseOptions}
+          ariaLabel="Operator"
+          caption="Comparison"
+          ariaDescribedBy="outside"
+        />
+      </>,
+    );
+    expect(getField()).toHaveAccessibleDescription('Outside Comparison');
+  });
+});

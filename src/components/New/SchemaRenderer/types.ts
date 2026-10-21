@@ -70,11 +70,13 @@ export interface SchemaFieldContentProps {
    * have no visible label next to their control, so this is what names it.
    */
   ariaLabel?: string;
+  /** Id of an error the caller renders outside the control, linked to a primitive control as its description. */
+  ariaDescribedBy?: string;
 }
 
 export interface SchemaFieldProps extends Omit<
   SchemaFieldContentProps,
-  'fieldId' | 'ariaLabel' | 'suppressInlineError'
+  'fieldId' | 'ariaLabel' | 'ariaDescribedBy' | 'suppressInlineError'
 > {
   label?: string;
 }

@@ -121,8 +121,9 @@ export const SchemaField: FC<SchemaFieldProps> = ({
           suppressInlineError
           fieldId={fieldId}
           ariaLabel={label}
+          ariaDescribedBy={error ? `${fieldId}-error` : undefined}
         />
-        <ErrorText text={error} />
+        <ErrorText id={`${fieldId}-error`} text={error} />
       </div>
     </div>
   );

@@ -376,3 +376,40 @@ describe('Dial UI Kit :: DialInput', () => {
     expect(input.value).toBe('150');
   });
 });
+
+describe('Dial UI Kit :: Input — error and caption description', () => {
+  test('describes the input by its error and marks it invalid', () => {
+    render(
+      <Input
+        labelProps={{ label: 'Name' }}
+        error="Name is required"
+        caption="Shown to everyone"
+      />,
+    );
+    const input = screen.getByRole('textbox', { name: 'Name' });
+    expect(input).toHaveAccessibleDescription('Name is required');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  test('describes the input by its caption when there is no error', () => {
+    render(
+      <Input labelProps={{ label: 'Name' }} caption="Shown to everyone" />,
+    );
+    const input = screen.getByRole('textbox', { name: 'Name' });
+    expect(input).toHaveAccessibleDescription('Shown to everyone');
+    expect(input).not.toHaveAttribute('aria-invalid');
+  });
+
+  test('keeps a caller aria-describedby ahead of its own error', () => {
+    render(
+      <>
+        <span id="hint">Hint</span>
+        <Input aria-label="Name" aria-describedby="hint" error="Required" />
+      </>,
+    );
+    expect(
+      screen.getByRole('textbox', { name: 'Name' }),
+    ).toHaveAccessibleDescription('Hint Required');
+  });
+});

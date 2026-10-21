@@ -13,9 +13,16 @@ export interface CaptionTextProps extends HTMLAttributes<HTMLSpanElement> {
  * aliases: HelperText|ValidationText
  * Design system 2.0
  *
+ * It carries no live-region role: a field caption or error is described, not
+ * announced. Give it an `id` and point the control's `aria-describedby` at it
+ * (the 2.0 form controls do this for their own `caption` / `error`). Wrap it in
+ * a `role="alert"` region only for a message that must interrupt, such as a
+ * failed submit.
+ *
  * @example
  * ```tsx
- * <CaptionText text="This field is required" variant={CaptionType.Error} />
+ * <input aria-describedby="name-error" aria-invalid />
+ * <CaptionText id="name-error" text="This field is required" variant={CaptionType.Error} />
  * ```
  *
  * @param [text] - The text to display. If undefined or empty, nothing is rendered
@@ -32,7 +39,6 @@ export const CaptionText: FC<CaptionTextProps> = ({
   return (
     <span
       {...props}
-      role="alert"
       className={mergeClasses(
         'dial-tiny-text',
         variant === CaptionType.Error ? 'text-error' : 'text-secondary',
