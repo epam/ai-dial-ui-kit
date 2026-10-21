@@ -458,6 +458,8 @@ export { ConditionalResizableContainer } from './components/New/ResizableContain
 export type { ConditionalResizableContainerProps } from './components/New/ResizableContainer/ConditionalResizableContainer';
 export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
+export { StateScreen } from './components/New/StateScreen/StateScreen';
+export type { StateScreenProps } from './components/New/StateScreen/StateScreen';
 export { TransferQueue } from './components/New/TransferQueue/TransferQueue';
 export type {
   TransferQueueItem,
