@@ -201,6 +201,15 @@ describe('Dial UI Kit :: SchemaRenderer (2.0)', () => {
   });
 
   describe('required fields', () => {
+    test('describes the field by its required error', () => {
+      renderFlat();
+
+      expect(
+        screen.getByRole('textbox', { name: /^Name/ }),
+      ).toHaveAccessibleDescription('"Name" is required');
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
+
     test('shows the required error immediately by default', () => {
       renderFlat();
 

@@ -38,6 +38,25 @@ describe('mergeClasses utility', () => {
     },
   );
 
+  test('lets a caller type-scale class replace the default one', () => {
+    expect(mergeClasses('dial-tiny-text text-error', 'dial-small-text')).toBe(
+      'text-error dial-small-text',
+    );
+    expect(mergeClasses('dial-h1-text', 'dial-caption-lead-semi-text')).toBe(
+      'dial-caption-lead-semi-text',
+    );
+  });
+
+  test('keeps public dial-kit-*-text classes beside a type-scale class', () => {
+    expect(
+      mergeClasses(
+        'dial-tiny-text',
+        'dial-kit-caption-text',
+        'dial-kit-error-text',
+      ),
+    ).toBe('dial-tiny-text dial-kit-caption-text dial-kit-error-text');
+  });
+
   test('preserves non-conflicting utilities', () => {
     expect(mergeClasses('truncate', 'min-w-0', 'max-w-full')).toBe(
       'truncate min-w-0 max-w-full',

@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useId,
   useRef,
   type ChangeEvent,
   type FC,
@@ -145,8 +146,15 @@ export const Input: FC<InputProps> = ({
   id,
   containerClassName,
   size = ElementSize.Standard,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }) => {
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const captionId = !error && caption ? `${fieldId}-caption` : undefined;
+
   return (
     <div
       className={mergeClasses(
@@ -155,12 +163,23 @@ export const Input: FC<InputProps> = ({
         containerClassName,
       )}
     >
-      {labelProps && <Label {...labelProps} htmlFor={id} />}
+      {labelProps && <Label {...labelProps} htmlFor={fieldId} />}
 
       <div className="flex flex-col gap-1">
-        <InputWrapper id={id} size={size} {...props} />
-        <ErrorText text={error} />
-        {!error && <CaptionText text={caption} />}
+        <InputWrapper
+          id={fieldId}
+          size={size}
+          aria-describedby={
+            [ariaDescribedBy, errorId, captionId].filter(Boolean).join(' ') ||
+            undefined
+          }
+          aria-invalid={
+            ariaInvalid ?? (error || props.invalid ? true : undefined)
+          }
+          {...props}
+        />
+        <ErrorText id={errorId} text={error} />
+        {!error && <CaptionText id={captionId} text={caption} />}
       </div>
     </div>
   );
