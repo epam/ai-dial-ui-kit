@@ -21,6 +21,7 @@ The AI DIAL UI Kit is an production-ready React component library designed to st
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Basic Usage](#basic-usage)
+  - [Optional: Tokens and type scale in your own Tailwind v4 stylesheet](#optional-tokens-and-type-scale-in-your-own-tailwind-v4-stylesheet)
 - [Development](#development)
   - [Prerequisites](#prerequisites-1)
   - [Development Setup](#development-setup)
@@ -94,6 +95,24 @@ import '@uiw/react-md-editor/markdown-editor.css';
 ```
 
 This ensures the CSS is loaded once per application rather than being bundled with each component instance, reducing bundle size.
+
+### Optional: Tokens and type scale in your own Tailwind v4 stylesheet
+
+`styles.css` already carries everything the kit's own components need. If your application also builds its own Tailwind v4 stylesheet and wants utilities generated from the kit's design tokens (`bg-layer-base`, `text-secondary`, …) or the kit's type scale (`dial-*-text`, `h1`–`h3`), import the kit's sources into it, in this order, after Tailwind's own import:
+
+```css
+@import 'tailwindcss';
+@import '@epam/ai-dial-ui-kit/styles/theme.css';
+@import '@epam/ai-dial-ui-kit/styles/mixins.css';
+@import '@epam/ai-dial-ui-kit/styles/typography.css';
+```
+
+- Tailwind v4 must be part of your build: the files use `@theme`, `@utility` and `@apply`. A host on Tailwind v3 keeps using `styles.css` only.
+- `typography.css` needs `mixins.css` before it; without it the build fails naming a `dial-mixin-*` utility.
+- `theme.css` writes token values into the utilities and declares nothing on `:root`, so it does not override your own theme. Every colour still reads the CSS variable your theme sets, with the kit's palette as fallback.
+- The `dial-*-text` classes are unlayered. To change one, redefine it in a rule that comes later in your stylesheet.
+- The files are plain `.css` on purpose: they contain Tailwind v4 syntax that Sass cannot parse. A Sass-based host keeps them as `@import`s with the `.css` extension (Sass passes them through to Tailwind) and spells Tailwind's own imports the same way (`@import 'tailwindcss/theme.css' layer(theme);`, …); a bare `@import 'tailwindcss'` does not work in a Sass file.
+- These three files are the only style sources the package exports. `styles.css` keeps working unchanged.
 
 ## Development
 

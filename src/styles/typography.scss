@@ -1,3 +1,12 @@
+/*
+ * Published as `@epam/ai-dial-ui-kit/styles/typography.css`; needs mixins.scss
+ * imported before it. The classes are unlayered, so a host overrides one with
+ * a later rule of its own. Renaming or removing a `.dial-*-text` class, or
+ * changing what the global `h1`-`h3` rules do, is a breaking change. Keep the
+ * file free of `@import`/`@use` and of Sass features: it is copied to
+ * `dist/styles/` as plain CSS, on its own.
+ */
+
 .dial-display1-text {
   @apply font-semibold text-[32px]/[48px];
 }

@@ -32,6 +32,18 @@
     "./styles.css": {
       "require": "./dist/index.css",
       "default": "./dist/index.css"
+    },
+    "./styles/theme.css": {
+      "style": "./dist/styles/theme.css",
+      "default": "./dist/styles/theme.css"
+    },
+    "./styles/mixins.css": {
+      "style": "./dist/styles/mixins.css",
+      "default": "./dist/styles/mixins.css"
+    },
+    "./styles/typography.css": {
+      "style": "./dist/styles/typography.css",
+      "default": "./dist/styles/typography.css"
     }
   },
   "bin": {
@@ -45,8 +57,9 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run build:css && npm run build:manifest && npm run build:mcp",
+    "build": "vite build && npm run build:css && npm run build:styles && npm run build:manifest && npm run build:mcp",
     "build:css": "tailwindcss -m -i ./src/styles/tailwind-entry.scss -o ./dist/index.css",
+    "build:styles": "node tools/copy-style-sources.mjs",
     "build:manifest": "tsx src/mcp/generate-manifest.ts",
     "build:mcp": "node tools/build-mcp.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

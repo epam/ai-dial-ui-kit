@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+@import '@epam/ai-dial-ui-kit/styles/theme.css';
+@import '@epam/ai-dial-ui-kit/styles/mixins.css';
+@import '@epam/ai-dial-ui-kit/styles/typography.css';
+@import './overrides.css';
+
+@source './index.html';

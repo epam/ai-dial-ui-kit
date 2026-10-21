@@ -11,6 +11,11 @@
  * Every colour reads the CSS variable a host theme sets, with the light
  * palette as its fallback. `tailwind-entry.scss` excludes this file from
  * scanning, so token names never turn into stray utilities.
+ *
+ * Published as `@epam/ai-dial-ui-kit/styles/theme.css`, so a key renamed or
+ * removed here breaks hosts that build utilities from it: treat that as a
+ * breaking change (CHANGELOG + migration guide). Keep the file free of
+ * `@import`/`@use`; it is copied to `dist/styles/` as plain CSS on its own, so use no Sass features either.
  */
 @theme inline reference {
   /* backgroundsColors: `bg-*`, `fill-*`, gradient stops. */

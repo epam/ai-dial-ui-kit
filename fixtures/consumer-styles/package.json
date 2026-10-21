@@ -1,0 +1,17 @@
+{
+  "name": "fixture-consumer-styles",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Consumer fixture: a Tailwind v4 host stylesheet that imports the kit's exported theme, mixins and typography SCSS from the packed tarball. Must compile, generate utilities from the kit's tokens, and let the host override a typography class.",
+  "scripts": {
+    "build": "node build.mjs",
+    "assert": "node assert.mjs && node resolve.mjs"
+  },
+  "dependencies": {
+    "@epam/ai-dial-ui-kit": "file:../.tarballs/ai-dial-ui-kit.tgz",
+    "@tailwindcss/cli": "^4.3.3",
+    "sass": "^1.99.0",
+    "tailwindcss": "^4.3.3"
+  }
+}

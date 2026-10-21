@@ -1,0 +1,16 @@
+// Sass-first host (Next.js with sass-loader): Sass runs first and passes the
+// `.css` imports through, then Tailwind resolves them.
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@epam/ai-dial-ui-kit/styles/theme.css';
+@import '@epam/ai-dial-ui-kit/styles/mixins.css';
+@import '@epam/ai-dial-ui-kit/styles/typography.css';
+
+@source './index.html';
+
+$gap: 4px;
+
+.host-gap {
+  padding-left: $gap;
+}

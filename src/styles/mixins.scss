@@ -8,6 +8,12 @@
  * the `dial-mixin-*` names are never picked up as candidates and never ship as
  * utilities of their own. They exist only inside the rules that apply them. Do
  * not reference them from a component's `className`.
+ *
+ * Published as `@epam/ai-dial-ui-kit/styles/mixins.css` because the exported
+ * typography.scss `@apply`s these names: a host must import this file first.
+ * Renaming one breaks that import order, so it is a breaking change. Keep the
+ * file free of `@import`/`@use` and of Sass features: it is copied to
+ * `dist/styles/` as plain CSS, on its own.
  */
 
 /* Type scale — the public `.dial-*-text` classes in typography.scss. */
