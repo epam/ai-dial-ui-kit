@@ -54,23 +54,19 @@
   top: 50%;
   left: 50%;
   z-index: 1;
-  box-sizing: border-box;
   width: 3px;
   height: 3rem;
   transform: translate(-50%, -50%);
-  /* A border-only box: the color utilities below paint it, and the radius rounds both ends into a pill. */
-  border-style: solid;
-  border-width: 1.5px;
   border-radius: 9999px;
-  border-color: transparent;
+  background-color: transparent;
 }
 
-/* Accent only after the pointer has rested on the handle. */
+/* One solid fill, so the segment is a single color. Shown only after the pointer has rested on the handle. */
 .dial-resize-handle-hover::before {
-  @apply border-accent;
+  @apply bg-gradient-1-hover;
 }
 
 .dial-resize-handle:active::before,
 .dial-resize-handle-dragging::before {
-  @apply border-accent-focus;
+  @apply bg-gradient-1-active;
 }
