@@ -53,6 +53,14 @@ describe('Dial UI Kit :: EntityIdentity', () => {
     expect(screen.queryByText('Model')).toBeNull();
   });
 
+  test('draws the icon image on the entity-icon plate', () => {
+    const { container } = render(
+      <EntityIdentity item={{ ...model, iconUrl: '/gemini.svg' }} />,
+    );
+
+    expect(container.querySelector('img')).toHaveClass('bg-entity-icon');
+  });
+
   test('falls back to the initials of the name without an icon', () => {
     render(<EntityIdentity item={model} />);
 

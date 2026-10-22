@@ -133,6 +133,27 @@ describe('Dial UI Kit :: Avatar', () => {
     );
   });
 
+  test('applies imageClassName to the image only, not to the initials', () => {
+    const { rerender } = render(
+      <Avatar
+        name="Ada Lovelace"
+        src="/ada.png"
+        alt="Ada"
+        imageClassName="bg-entity-icon"
+      />,
+    );
+
+    expect(screen.getByRole('img', { name: 'Ada' })).toHaveClass(
+      'bg-entity-icon',
+    );
+
+    rerender(<Avatar name="Ada Lovelace" imageClassName="bg-entity-icon" />);
+
+    expect(screen.getByText('AL').parentElement).not.toHaveClass(
+      'bg-entity-icon',
+    );
+  });
+
   test('tries a new src again after an earlier one failed', () => {
     const { rerender } = render(
       <Avatar name="Ada Lovelace" src="/broken.png" alt="Ada" />,

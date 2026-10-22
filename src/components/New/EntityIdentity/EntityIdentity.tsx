@@ -102,8 +102,9 @@ const getHeadingTag = (level: number): (typeof HEADING_TAGS)[number] =>
  *
  * The type label is plain uppercase text coloured by `item.type`. The icon is
  * a square `Avatar`, so a missing or broken image falls back to the initials of
- * the name. The icon is decorative: the name next to it already names the
- * entity.
+ * the name. The image sits on the `bg-entity-icon` plate, so a dark theme can
+ * keep a dark, transparent logo legible. The icon is decorative: the name next
+ * to it already names the entity.
  *
  * @example
  * ```tsx
@@ -158,6 +159,7 @@ export const EntityIdentity: FC<EntityIdentityProps> = ({
         src={item.iconUrl}
         size={iconSize}
         shape={AvatarShape.Square}
+        imageClassName="bg-entity-icon"
         className={mergeClasses('rounded-[14px]', iconClassName)}
       />
 
