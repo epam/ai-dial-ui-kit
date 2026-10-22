@@ -150,6 +150,62 @@ describe('Dial UI Kit :: PasswordInput', () => {
     ).toHaveAttribute('aria-pressed', 'false');
   });
 
+  test('isToggleHidden draws no toggle and leaves the field editable and masked', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        isToggleHidden
+        onChange={onChange}
+      />,
+    );
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(getField()).toBeEnabled();
+    expect(getField()).toHaveAttribute('type', 'password');
+
+    await user.type(getField(), 'a');
+    expect(onChange).toHaveBeenCalledWith('a');
+  });
+
+  test('a field revealed before its toggle is hidden comes back masked', async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Show password' }));
+    expect(getField()).toHaveAttribute('type', 'text');
+
+    rerender(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+        isToggleHidden
+      />,
+    );
+    expect(getField()).toHaveAttribute('type', 'password');
+
+    rerender(
+      <PasswordInput
+        id="pw"
+        labelProps={{ label: 'Password' }}
+        value="secret"
+      />,
+    );
+    expect(getField()).toHaveAttribute('type', 'password');
+    expect(
+      screen.getByRole('button', { name: 'Show password' }),
+    ).toHaveAttribute('aria-pressed', 'false');
+  });
+
   test('reports changes through the Input onChange signature', async () => {
     const onChange = vi.fn();
     const user = userEvent.setup();

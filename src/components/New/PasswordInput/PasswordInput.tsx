@@ -17,6 +17,8 @@ export interface PasswordInputProps extends Omit<
   showPasswordLabel?: string;
   /** Accessible name of the reveal toggle while the value is visible. */
   hidePasswordLabel?: string;
+  /** Hides the reveal toggle while the field stays editable, and keeps the value masked. */
+  isToggleHidden?: boolean;
 }
 
 /**
@@ -30,6 +32,9 @@ export interface PasswordInputProps extends Omit<
  *
  * A disabled field is masked with no toggle at all, and comes back masked if it
  * is enabled again.
+ *
+ * `isToggleHidden` does the same without disabling the field: use it when there
+ * is nothing to reveal, such as a stored secret the server never returns.
  *
  * @example
  * ```tsx
@@ -45,15 +50,18 @@ export interface PasswordInputProps extends Omit<
  * @param [hidePasswordLabel="Hide password"] - Accessible name of the toggle while the value is visible
  * @param [size=ElementSize.Standard] - Field height: standard is 40px, small is 24px
  * @param [disabled=false] - Disables the field, masks it, and hides the reveal toggle
+ * @param [isToggleHidden=false] - Hides the reveal toggle and keeps the value masked, leaving the field editable
  */
 export const PasswordInput: FC<PasswordInputProps> = ({
   showPasswordLabel = 'Show password',
   hidePasswordLabel = 'Hide password',
   disabled,
+  isToggleHidden,
   size = ElementSize.Standard,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const isToggleShown = !disabled && !isToggleHidden;
 
   /*
    * A disabled field is never revealed, and draws no toggle at all: there is
@@ -62,17 +70,18 @@ export const PasswordInput: FC<PasswordInputProps> = ({
    * disabled non-password field through a tooltip, which is why `type` stays
    * `password` here rather than only the toggle going away.)
    */
-  const isRevealed = isVisible && !disabled;
+  const isRevealed = isVisible && isToggleShown;
 
   /*
-   * Masking is also reset while disabled, so a field that is disabled and then
-   * enabled again — a form that locks its inputs during a request, say — comes
-   * back masked instead of silently restoring a reveal the user asked for
-   * before, with no toggle on screen to tell them it is still on.
+   * Masking is also reset while the toggle is gone (disabled or
+   * `isToggleHidden`), so a field that is disabled and then enabled again — a
+   * form that locks its inputs during a request, say — comes back masked
+   * instead of silently restoring a reveal the user asked for before, with no
+   * toggle on screen to tell them it is still on.
    */
   useEffect(() => {
-    if (disabled) setIsVisible(false);
-  }, [disabled]);
+    if (!isToggleShown) setIsVisible(false);
+  }, [isToggleShown]);
 
   return (
     <Input
@@ -85,7 +94,7 @@ export const PasswordInput: FC<PasswordInputProps> = ({
       disabled={disabled}
       type={isRevealed ? 'text' : 'password'}
       iconAfter={
-        disabled ? undefined : (
+        isToggleShown ? (
           <GhostIconButton
             size={ElementSize.Small}
             aria-label={isRevealed ? hidePasswordLabel : showPasswordLabel}
@@ -107,7 +116,7 @@ export const PasswordInput: FC<PasswordInputProps> = ({
             }
             onClick={() => setIsVisible((prev) => !prev)}
           />
-        )
+        ) : undefined
       }
     />
   );
