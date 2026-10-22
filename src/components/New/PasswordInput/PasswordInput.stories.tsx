@@ -35,6 +35,7 @@ const meta = {
   argTypes: {
     placeholder: { control: { type: 'text' } },
     disabled: { control: { type: 'boolean' } },
+    isToggleHidden: { control: { type: 'boolean' } },
     invalid: { control: { type: 'boolean' } },
     error: { control: { type: 'text' } },
     caption: { control: { type: 'text' } },
@@ -104,6 +105,25 @@ export const Disabled: Story = {
           'cannot act is not worth the space, and the value stays unreadable ' +
           'while the field is out of reach. Enabling the field again brings ' +
           'the toggle back, masked.',
+      },
+    },
+  },
+};
+
+export const ToggleHidden: Story = {
+  name: 'Toggle hidden',
+  args: {
+    labelProps: { label: 'Client Secret' },
+    placeholder: '••••••••••••',
+    isToggleHidden: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Hides the reveal toggle while the field stays editable and masked. ' +
+          'Use it when there is nothing to reveal, such as a stored secret the ' +
+          'server never returns; switch it off once the user types a new value.',
       },
     },
   },

@@ -25,6 +25,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`PasswordInput` (2.0) — `isToggleHidden`** — the reveal toggle could only be removed by disabling the field, so a host with nothing to reveal (a stored secret the server never returns) had to hide the button with a CSS selector on the kit's markup. `isToggleHidden` draws no toggle and keeps the value masked while the field stays editable; a reveal switched on before the toggle went away comes back masked. Additive.
+
 - **`Select` (2.0) — `ariaDescribedBy`** — ids of elements that describe the field from outside it, such as an error a form renders under its own label; the field's own `error` / `caption` are linked automatically. Additive.
 
 - **`mergeClasses` — the `dial-*-text` type scale is one conflict group** — a caller's `dial-small-text` passed to a component whose default is `dial-tiny-text` kept both classes, and the step declared later in `typography.scss` won whatever the caller asked for. A later type-scale class now replaces an earlier one, as `w-*` or `px-*` do. The public `dial-kit-*-text` classes are not part of the group. Reported from `ai-dial-chat`.
