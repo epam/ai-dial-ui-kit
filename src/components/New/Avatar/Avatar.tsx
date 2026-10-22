@@ -29,6 +29,8 @@ export interface AvatarProps {
   className?: string;
   /** Type-scale class for the initials. When set, it replaces the font size derived from `size`. */
   textClassName?: string;
+  /** Additional CSS classes applied only while the image is shown, e.g. a plate behind a transparent icon. */
+  imageClassName?: string;
   /** Called when the image fails to load, after the avatar has switched to initials. */
   onImageError?: (event: SyntheticEvent<HTMLImageElement>) => void;
 }
@@ -70,6 +72,7 @@ const SHAPE_CLASS: Record<AvatarShape, string> = {
  * @param [color] - Explicit colour pair overriding the deterministic pick from `name`
  * @param [className] - Additional CSS classes for the avatar
  * @param [textClassName] - Type-scale class for the initials, replacing the size-derived font size
+ * @param [imageClassName] - Additional CSS classes applied only while the image is shown
  * @param [onImageError] - Called when the image fails to load
  */
 export const Avatar: FC<AvatarProps> = ({
@@ -82,6 +85,7 @@ export const Avatar: FC<AvatarProps> = ({
   color,
   className,
   textClassName,
+  imageClassName,
   onImageError,
 }) => {
   /*
@@ -108,7 +112,7 @@ export const Avatar: FC<AvatarProps> = ({
         alt={alt}
         width={size}
         height={size}
-        className={mergeClasses(rootClassName(), 'object-cover')}
+        className={mergeClasses(rootClassName(imageClassName), 'object-cover')}
         onError={(event) => {
           setFailedSrc(src);
           onImageError?.(event);
