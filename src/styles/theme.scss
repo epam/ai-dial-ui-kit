@@ -24,6 +24,15 @@
     --bg-layer-raised,
     #fcfcfc
   ); /* grey-50 */
+  /*
+   * The plate behind an entity's icon image. Vendor logos are often a
+   * monochrome dark glyph on a transparent background, so a dark theme sets a
+   * light value here; unset, it follows the sunken layer.
+   */
+  --background-color-entity-icon: var(
+    --bg-entity-icon,
+    var(--bg-layer-sunken, #eef1f7)
+  ); /* grey-150 */
   --background-color-error: var(--bg-error, #f3d6d8); /* red-100 */
   --background-color-warning: var(--bg-warning, #faf0cf); /* yellow-100 */
   --background-color-info: var(--bg-info, #e1eaf9); /* blue-100 */
