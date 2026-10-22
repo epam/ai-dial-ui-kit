@@ -61,12 +61,9 @@
   background-color: transparent;
 }
 
-/* One solid fill, so the segment is a single color. Shown only after the pointer has rested on the handle. */
-.dial-resize-handle-hover::before {
-  @apply bg-gradient-1-hover;
-}
-
+/* One solid fill, so the segment is a single color. Shown after the pointer has rested on the handle, and kept while pressed or dragging. */
+.dial-resize-handle-hover::before,
 .dial-resize-handle:active::before,
 .dial-resize-handle-dragging::before {
-  @apply bg-gradient-1-active;
+  @apply bg-gradient-1-hover;
 }
