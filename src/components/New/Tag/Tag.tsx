@@ -54,7 +54,8 @@ export interface TagProps extends NativeTagProps {
  * actions with no way to tell which one it landed on.
  *
  * `outlined` and `selectable` draw no rim and are told apart by their fill;
- * `bordered` draws one, for a value chip on a surface its fill would vanish on.
+ * `bordered` draws one: the outlined `Badge`'s look, for a value the user can
+ * remove, on a surface the rimless fill would vanish on.
  * `TagAppearance.Selectable` is the filter chip of the 2.0 design: no fill
  * at all until it is selected, one hover tint shared by both states, a semibold
  * label once selected, and the state carried on `aria-pressed` rather than by

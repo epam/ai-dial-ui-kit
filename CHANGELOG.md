@@ -27,7 +27,7 @@ Versions match the git tags on the `development` branch.
 
 - **`SelectedEntityCard` (2.0)** — the card of a form field that holds one selected entity (a model, an agent, a toolset): its `EntityIdentity`, a skeleton while the catalog loads, its raw id when the catalog does not list it, or a placeholder when nothing is selected, with an optional details line and an error under it. Quick Apps' Default model card and the DIAL Loop editor's Model card were two copies of it. Additive.
 
-- **`Tag` (2.0) — `TagAppearance.Bordered`** — the compact value chip of a form field (an allowed host, a variable, an override): 24px tall, a 6px corner, a 1px `border-secondary` rim on `bg-layer-sunken`, and the small type scale. The 32px rimless pill vanished on a raised surface, so a form had to restyle the kit's markup to make its values visible. Additive.
+- **`Tag` (2.0) — `TagAppearance.Bordered`** — the compact value chip of a form field (an allowed host, a variable, an override): 24px tall, a 6px corner, the outlined `Badge`'s `border-tertiary` rim on `bg-layer-sunken` — a `Badge` the user can remove, and the small type scale. The 32px rimless pill vanished on a raised surface, so a form had to restyle the kit's markup to make its values visible. Additive.
 
 - **`EntityIdentity` (2.0) — `showType`** — leaves the type label out, for an identity next to a heading that already names the type (the Model block of a form). Additive.
 

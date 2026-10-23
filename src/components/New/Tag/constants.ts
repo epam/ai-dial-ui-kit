@@ -10,8 +10,9 @@ export const tagBaseClassName =
 
 /**
  * Shape and type scale per appearance, over `tagBaseClassName`. The bordered
- * chip is the compact value chip of a form field: 24px, a 6px corner and a
- * 1px rim, with the small type scale rather than the tiny one.
+ * chip is the compact value chip of a form field — the removable twin of
+ * `Badge`'s outlined label: its 24px, 6px corner and rim on the sunken layer,
+ * with the value in primary text on the small type scale.
  */
 export const tagShapeClassNames: Record<TagAppearance, string> = {
   [TagAppearance.Outlined]: 'dial-tiny-text',
@@ -39,7 +40,7 @@ export const tagStateClassNames: Record<
     selected: 'bg-control-accent-alpha text-primary',
   },
   [TagAppearance.Bordered]: {
-    default: 'border-secondary bg-layer-sunken text-primary',
+    default: 'border-tertiary bg-layer-sunken text-primary',
     selected: 'border-accent bg-control-accent-alpha text-primary',
   },
 };
