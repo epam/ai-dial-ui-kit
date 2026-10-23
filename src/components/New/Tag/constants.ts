@@ -9,10 +9,22 @@ export const tagBaseClassName =
   'inline-flex h-[32px] max-w-full items-center gap-1 rounded-full px-3';
 
 /**
- * Fill and text colour per appearance and selection. No tag draws a rim: the
- * two appearances are told apart by their fill — `outlined` sits on the raised
- * layer, `selectable` on nothing until it is selected, where it also steps its
- * label up from secondary to primary.
+ * Shape and type scale per appearance, over `tagBaseClassName`. The bordered
+ * chip is the compact value chip of a form field: 24px, a 6px corner and a
+ * 1px rim, with the small type scale rather than the tiny one.
+ */
+export const tagShapeClassNames: Record<TagAppearance, string> = {
+  [TagAppearance.Outlined]: 'dial-tiny-text',
+  [TagAppearance.Selectable]: 'dial-tiny-text',
+  [TagAppearance.Bordered]: 'h-[24px] rounded-md border px-2 dial-small-text',
+};
+
+/**
+ * Fill and text colour per appearance and selection. `outlined` and
+ * `selectable` draw no rim and are told apart by their fill — `outlined` sits
+ * on the raised layer, `selectable` on nothing until it is selected, where it
+ * also steps its label up from secondary to primary. `bordered` is the one with
+ * a rim, on the sunken layer.
  */
 export const tagStateClassNames: Record<
   TagAppearance,
@@ -25,6 +37,10 @@ export const tagStateClassNames: Record<
   [TagAppearance.Selectable]: {
     default: 'text-secondary',
     selected: 'bg-control-accent-alpha text-primary',
+  },
+  [TagAppearance.Bordered]: {
+    default: 'border-secondary bg-layer-sunken text-primary',
+    selected: 'border-accent bg-control-accent-alpha text-primary',
   },
 };
 
