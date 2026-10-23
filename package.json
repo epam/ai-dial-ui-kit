@@ -75,7 +75,7 @@
     ]
   },
   "overrides": {
-    "dompurify": "3.4.16",
+    "dompurify": "3.4.17",
     "esbuild": "0.28.1",
     "shell-quote": "1.11.0",
     "postcss-selector-parser": "^7.1.6",
@@ -137,8 +137,8 @@
     "@uiw/react-markdown-preview": "^5.2.0",
     "@uiw/react-md-editor": "^4.1.0",
     "@vitejs/plugin-react": "^4.6.0",
-    "@vitest/browser": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/browser": "^4.1.12",
+    "@vitest/coverage-v8": "^4.1.12",
     "concurrently": "^10.0.3",
     "esbuild": "0.28.1",
     "eslint": "^9.39.2",
@@ -167,6 +167,6 @@
     "vite": "^7.1.5",
     "vite-plugin-dts": "^5.1.2",
     "vite-plugin-svgr": "^4.5.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.12"
   }
 }
