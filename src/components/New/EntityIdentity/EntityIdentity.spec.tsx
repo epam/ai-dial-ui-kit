@@ -39,6 +39,12 @@ describe('Dial UI Kit :: EntityIdentity', () => {
     expect(screen.queryByText('1.0.3')).toBeNull();
   });
 
+  test('omits the type label when showType is false', () => {
+    render(<EntityIdentity item={model} showType={false} />);
+
+    expect(screen.queryByText('Model')).toBeNull();
+  });
+
   test('labels the type in English by default, uppercased and coloured by type', () => {
     render(<EntityIdentity item={{ ...model, type: EntityType.Agent }} />);
 

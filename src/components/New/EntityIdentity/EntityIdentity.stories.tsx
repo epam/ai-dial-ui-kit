@@ -31,6 +31,7 @@ const meta = {
       control: { type: 'number', min: 1, max: 6, step: 1 },
       description: 'Heading level of the name',
     },
+    showType: { control: 'boolean' },
     showVersion: { control: 'boolean' },
     hasFeaturedTag: { control: 'boolean' },
     query: { control: { type: 'text' } },
