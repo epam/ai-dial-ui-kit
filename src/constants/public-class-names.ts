@@ -163,6 +163,8 @@ export const DIAL_KIT_CLASS = {
   entityIdentity: 'dial-kit-entity-identity',
   /** The bordered card of a `SelectedEntityCard`, not the wrapper that also holds its error. */
   selectedEntityCard: 'dial-kit-selected-entity-card',
+  /** The `section` root of a `FormSection`: its heading row, description and content. */
+  formSection: 'dial-kit-form-section',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */

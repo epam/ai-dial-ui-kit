@@ -338,6 +338,7 @@ breaking change and goes through the migration-guide process.
 | `avatar`               | `dial-kit-avatar`                     | The root of an `Avatar`: the image, or the initials box that replaces it |
 | `entityIdentity`         | `dial-kit-entity-identity`              | The root row of an `EntityIdentity`: icon, type label, name and version |
 | `selectedEntityCard`   | `dial-kit-selected-entity-card`       | The bordered card of a `SelectedEntityCard`, not the wrapper that also holds its error |
+| `formSection`          | `dial-kit-form-section`               | The `section` root of a `FormSection`: heading row, description and content |
 | `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
 
 #### Controls
