@@ -64,6 +64,7 @@ import { Avatar } from '@/components/New/Avatar/Avatar';
 import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
+import { LabelledText } from '@/components/New/LabelledText/LabelledText';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
@@ -98,6 +99,7 @@ const items = [
 /** Rendered once per case; a portalled component lands outside the container. */
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
+  ['labelledText', () => <LabelledText label="Name" text="Value" />],
   ['progressBar', () => <ProgressBar value={50} />],
   [
     'progressBar',
