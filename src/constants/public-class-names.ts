@@ -100,13 +100,6 @@ export const DIAL_KIT_CLASS = {
    * state.
    */
   menuItemCheck: 'dial-kit-menuitem-check',
-  /** The primary icon of a `DialDropdownIcon` trigger. */
-  dropdownIcon: 'dial-kit-dropdown-icon',
-  /**
-   * The caret badge of a `DialDropdownIcon` trigger — the round plate the
-   * chevron sits on. Absent when `showCaret` is `false`.
-   */
-  dropdownIconCaret: 'dial-kit-dropdown-icon-caret',
   /** The bubble of a `Tooltip`, rendered by `TooltipContent` into a portal. */
   tooltip: 'dial-kit-tooltip',
   /** The panel of an `InteractiveTooltip` — the one whose content takes focus. */

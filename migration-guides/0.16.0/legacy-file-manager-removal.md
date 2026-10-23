@@ -25,11 +25,13 @@ exported under the same name by `@epam/ai-dial-react-file-manager`.
 | Types             | `FileManagerGridRow`, `GridOptions`, `ToolbarOptions`, `BulkActionsToolbarOptions`, `DialCopiedItem`, `DialDeletedItem`, `DialUploadFileItem`, `DialFileManagerActionsRef`, `DialFileAcceptType` |
 | Package subpath   | `@epam/ai-dial-ui-kit/file-manager`                                                                                                                                                              |
 
-These stay in the kit: `DialFileName`, `DialFolderName`, `DialFileIcon`,
-`DialSharedEntityIndicator`, `DialFile`, `DialRootFolder`, `DialFileNodeType`,
+These stay in the kit: `DialFile`, `DialRootFolder`, `DialFileNodeType`,
 `DialFilePermission`, `DialFileResourceType`, `DialItemType`,
 `wrapInRootFolder` and `useEditableItem`, plus the 2.0 `FileIcon`, `FileName`,
-`FolderName`, `SharedEntityIndicator` and `TransferQueue`.
+`FolderName`, `SharedEntityIndicator` and `TransferQueue`. The 1.0
+`DialFileName`, `DialFolderName`, `DialFileIcon` and
+`DialSharedEntityIndicator` are removed in the same release — see
+[unused-legacy-components-removal](unused-legacy-components-removal.md).
 
 ## Step-by-step migration
 

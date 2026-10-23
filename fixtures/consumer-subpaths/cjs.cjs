@@ -11,13 +11,7 @@ const assertExports = (label, module, names) => {
 };
 
 assertExports('root', root, ['Button', 'Grid']);
-assertExports('grid', grid, ['Grid', 'DialGrid', 'GridSelectionMode']);
-assertExports('editors', editors, [
-  'LazyDialJsonEditor',
-  'LazyDialMarkdownEditor',
-  'LazyDialMarkdownEditorContainer',
-  'LazyMarkdownEditor',
-  'EditorThemes',
-]);
+assertExports('grid', grid, ['Grid', 'GridSelectionMode']);
+assertExports('editors', editors, ['LazyMarkdownEditor', 'EditorThemes']);
 
 console.log('PASS: root and feature subpaths resolve under Node CJS.');

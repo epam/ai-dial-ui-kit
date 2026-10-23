@@ -56,8 +56,8 @@ export interface SegmentedControlProps<T extends string> {
  * revealing a panel, so it takes `role="radiogroup"` with `role="radio"`
  * segments. The group is a single tab stop — the selected segment holds it, and
  * the arrow keys, `Home` and `End` move the selection, per the ARIA radio-group
- * pattern. `DialSegmentedControl` (1.0) uses `tablist`/`tab` instead; that is
- * the behaviour this replaces.
+ * pattern. The removed 1.0 `DialSegmentedControl` used `tablist`/`tab`
+ * instead; that is the behaviour this replaced.
  *
  * An icon-only segment still needs a name: give it `aria-label`, since the icon
  * carries no text. A segment with a string `label` is named by it.
