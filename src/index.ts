@@ -329,6 +329,8 @@ export { InfoButton } from './components/New/InfoButton/InfoButton';
 export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
 export { Label } from './components/New/Label/Label';
+export type { LabelledTextProps } from './components/New/LabelledText/LabelledText';
+export { LabelledText } from './components/New/LabelledText/LabelledText';
 export { Textarea, TextareaResize } from './components/New/Textarea/Textarea';
 export { Input } from './components/New/Input/Input';
 export type { InputProps } from './components/New/Input/Input';
