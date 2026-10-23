@@ -23,7 +23,7 @@ const distEntry = path.resolve(process.cwd(), packageJson.exports['.'].import);
 const distEntryUrl = pathToFileURL(distEntry).href;
 
 // Browser-only side effects (window/document/self access, raw .css imports)
-// that surface when a non-SSR-safe module like DialJsonEditor is exposed
+// that surface when a non-SSR-safe module like an editor is exposed
 // from the main entry and pulled in by a Node/Next.js server build.
 const SSR_BROWSER_FAILURE =
   /window is not defined|document is not defined|self is not defined|ERR_UNKNOWN_FILE_EXTENSION|Unknown file extension "\.css"/i;
