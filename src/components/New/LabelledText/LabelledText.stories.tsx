@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A read-only label/value pair from the 2.0 design system: a small caption above a value. The value truncates with an ellipsis and shows a tooltip only when it is clipped. Rendered as a one-pair description list so the value is announced with its term.',
+          'A read-only label/value pair from the 2.0 design system: a small caption above a value. The value truncates with an ellipsis and shows a tooltip only when it is clipped. The caption is the kit `Label`.',
       },
     },
   },

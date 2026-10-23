@@ -281,7 +281,7 @@ breaking change and goes through the migration-guide process.
 | `captionText`   | `dial-kit-caption-text`   | The caption line under a field                                      |
 | `errorText`     | `dial-kit-error-text`     | A caption in its error variant, additive to `captionText`           |
 | `label`         | `dial-kit-label`          | The `Label` root, wrapping its `label` element and its info button   |
-| `labelledText`  | `dial-kit-labelled-text`  | The `dl` root of a `LabelledText`, wrapping its caption and value    |
+| `labelledText`  | `dial-kit-labelled-text`  | The root of a `LabelledText`, wrapping its caption and value    |
 
 #### Containers
 

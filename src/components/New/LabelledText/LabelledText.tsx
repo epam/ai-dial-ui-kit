@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { EllipsisTooltip } from '@/components/New/EllipsisTooltip/EllipsisTooltip';
+import { Label } from '@/components/New/Label/Label';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { mergeClasses } from '@/utils/merge-classes';
 
@@ -24,9 +25,10 @@ export interface LabelledTextProps {
  * aliases: LabelValue|DisplayText|ReadOnlyField|KeyValue
  * Design system 2.0
  *
- * Rendered as a one-pair description list (`dt` caption, `dd` value), so
- * assistive tech announces the value together with the term it belongs to.
- * It is not a form field: use `Label` with an input for editable values.
+ * The caption is the kit's `Label`, so it matches the other 2.0 fields. There is
+ * no control to point its `htmlFor` at: it sits beside the value and reads in
+ * DOM order. It is not a form field: use `Label` with an input for editable
+ * values.
  *
  * Without `children` the value is a single line capped at 200px that truncates;
  * the tooltip appears only while the text is actually clipped. With `children`
@@ -61,17 +63,17 @@ export const LabelledText: FC<LabelledTextProps> = ({
   const hasValue = !!children || text != null;
 
   return (
-    <dl
+    <div
       className={mergeClasses(
-        'm-0 flex flex-col gap-1',
+        'flex flex-col gap-1',
         !children && 'max-w-[200px]',
         className,
         DIAL_KIT_CLASS.labelledText,
       )}
     >
-      {label && <dt className="dial-tiny-text text-secondary">{label}</dt>}
+      <Label label={label} />
       {hasValue && (
-        <dd className="m-0 flex min-w-0 items-center gap-2 text-primary">
+        <div className="flex min-w-0 items-center gap-2 text-primary">
           {children ?? (
             <EllipsisTooltip
               text={text}
@@ -80,8 +82,8 @@ export const LabelledText: FC<LabelledTextProps> = ({
             />
           )}
           {!children && postfix}
-        </dd>
+        </div>
       )}
-    </dl>
+    </div>
   );
 };

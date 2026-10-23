@@ -1,16 +1,14 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { LabelledText } from './LabelledText';
 
 describe('Dial UI Kit :: LabelledText', () => {
-  test('exposes the text as the definition of the label term', () => {
+  test('renders the label and the text', () => {
     render(<LabelledText label="Endpoint" text="https://example.com" />);
 
-    expect(screen.getByRole('term')).toHaveTextContent('Endpoint');
-    expect(screen.getByRole('definition')).toHaveTextContent(
-      'https://example.com',
-    );
+    expect(screen.getByText('Endpoint')).toBeInTheDocument();
+    expect(screen.getByText('https://example.com')).toBeInTheDocument();
   });
 
   test('renders children instead of text', () => {
@@ -20,9 +18,8 @@ describe('Dial UI Kit :: LabelledText', () => {
       </LabelledText>,
     );
 
-    const definition = screen.getByRole('definition');
-    expect(within(definition).getByText('Custom content')).toBeInTheDocument();
-    expect(within(definition).queryByText('ignored')).not.toBeInTheDocument();
+    expect(screen.getByText('Custom content')).toBeInTheDocument();
+    expect(screen.queryByText('ignored')).not.toBeInTheDocument();
   });
 
   test('renders the postfix beside the text', () => {
@@ -35,17 +32,15 @@ describe('Dial UI Kit :: LabelledText', () => {
     );
 
     expect(
-      within(screen.getByRole('definition')).getByRole('button', {
-        name: 'Copy key',
-      }),
+      screen.getByRole('button', { name: 'Copy key' }),
     ).toBeInTheDocument();
   });
 
-  test('renders no definition when there is no value', () => {
-    render(<LabelledText label="Empty" />);
+  test('renders only the label when there is no value', () => {
+    const { container } = render(<LabelledText label="Empty" />);
 
-    expect(screen.getByRole('term')).toHaveTextContent('Empty');
-    expect(screen.queryByRole('definition')).not.toBeInTheDocument();
+    expect(screen.getByText('Empty')).toBeInTheDocument();
+    expect(container.firstElementChild?.children).toHaveLength(1);
   });
 
   test('caps the width of a plain value but not of custom content', () => {
