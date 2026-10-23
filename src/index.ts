@@ -416,6 +416,11 @@ export type {
   EntityIdentityLabels,
 } from './components/New/EntityIdentity/EntityIdentity';
 export { EntityType } from './types/entity-type';
+export { SelectedEntityCard } from './components/New/SelectedEntityCard/SelectedEntityCard';
+export type {
+  SelectedEntityCardProps,
+  SelectedEntityCardLabels,
+} from './components/New/SelectedEntityCard/SelectedEntityCard';
 export { SideDrawer } from './components/New/SideDrawer/SideDrawer';
 export type { SideDrawerProps } from './components/New/SideDrawer/SideDrawer';
 export { Tag } from './components/New/Tag/Tag';

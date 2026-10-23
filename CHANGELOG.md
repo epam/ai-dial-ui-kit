@@ -25,6 +25,12 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`SelectedEntityCard` (2.0)** — the card of a form field that holds one selected entity (a model, an agent, a toolset): its `EntityIdentity`, a skeleton while the catalog loads, its raw id when the catalog does not list it, or a placeholder when nothing is selected, with an optional details line and an error under it. Quick Apps' Default model card and the DIAL Loop editor's Model card were two copies of it. Additive.
+
+- **`EntityIdentity` (2.0) — `showType`** — leaves the type label out, for an identity next to a heading that already names the type (the Model block of a form). Additive.
+
+- **`EntityIdentity` (2.0) — `footer` follows the name** — the footer was pinned to the bottom of the text column with a 4px gap (`mt-auto pt-1`); it now sits right under the name, so a details line reads as part of the identity. A host that relied on the old gap adds its own.
+
 - **`PasswordInput` (2.0) — `isToggleHidden`** — the reveal toggle could only be removed by disabling the field, so a host with nothing to reveal (a stored secret the server never returns) had to hide the button with a CSS selector on the kit's markup. `isToggleHidden` draws no toggle and keeps the value masked while the field stays editable; a reveal switched on before the toggle went away comes back masked. Additive.
 
 - **`Select` (2.0) — `ariaDescribedBy`** — ids of elements that describe the field from outside it, such as an error a form renders under its own label; the field's own `error` / `caption` are linked automatically. Additive.

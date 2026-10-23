@@ -161,6 +161,8 @@ export const DIAL_KIT_CLASS = {
   avatar: 'dial-kit-avatar',
   /** The root row of an `EntityIdentity`: its icon, type label, name and version. */
   entityIdentity: 'dial-kit-entity-identity',
+  /** The bordered card of a `SelectedEntityCard`, not the wrapper that also holds its error. */
+  selectedEntityCard: 'dial-kit-selected-entity-card',
 
   /* ── Controls ──────────────────────────────────────────────────────────── */
   /** The row of a `Switch`: the control and its label. */
