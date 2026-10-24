@@ -158,7 +158,12 @@ export {
 } from './types/dropdown';
 export { MenuItemMark } from './types/menu-item';
 export { ElementSize } from './types/size';
-export { ScreenResolution, TabOrientation, TabView } from './types/tab';
+export {
+  ScreenResolution,
+  TabOrientation,
+  TabStatus,
+  TabView,
+} from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { SelectSize, SelectVariant } from './types/select';
