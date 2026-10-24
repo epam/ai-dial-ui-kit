@@ -9,7 +9,7 @@ import {
 import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { GRID_THEME_PARAMS } from './constants';
 import { Grid } from './Grid';
 import { DateCellRenderer } from './renderers/DateCellRenderer';
@@ -629,6 +629,62 @@ describe('Dial UI Kit :: Grid', () => {
       // a new light class rather than the one from the first render.
       expect(themeParamsClass(container)).not.toBe(darkClass);
       expect(screen.getByText('Alice')).toBeInTheDocument();
+    });
+  });
+
+  describe('appearance', () => {
+    const THIN_DIVIDER = '0.5px solid var(--stroke-tertiary, #E0E6F0)';
+
+    /** Renders the grid and returns the CSS of the theme it hands ag-Grid. */
+    const renderWith = async (appearance?: GridAppearance) => {
+      let css = '';
+
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          ariaLabel="Usage"
+          appearance={appearance}
+          onGridApiChange={(api) => {
+            css = (
+              api.getGridOption('theme') as unknown as {
+                _getParamsCss: () => string;
+              }
+            )._getParamsCss();
+          }}
+        />,
+      );
+
+      await screen.findByText('Alice');
+
+      return css;
+    };
+
+    const rowBorderOf = (css: string) =>
+      css.match(
+        /--ag-row-border:\s*var\(--ag-inherited-row-border,\s*([^;]+)\);/,
+      )?.[1] ?? null;
+
+    test('draws the framed grid with full-width row dividers by default', async () => {
+      const css = await renderWith();
+
+      expect(screen.getByRole('region', { name: 'Usage' })).not.toHaveClass(
+        'dial-kit-grid-chat',
+      );
+      expect(rowBorderOf(css)).toBe(THIN_DIVIDER);
+    });
+
+    test('marks the Chat table and leaves its inset row dividers to the stylesheet', async () => {
+      const css = await renderWith(GridAppearance.Chat);
+
+      expect(screen.getByRole('region', { name: 'Usage' })).toHaveClass(
+        'dial-kit-grid',
+        'dial-kit-grid-chat',
+      );
+      expect(rowBorderOf(css)).toBe('none');
+      expect(css).toMatch(
+        /--ag-wrapper-border:\s*var\(--ag-inherited-wrapper-border,\s*none\);/,
+      );
     });
   });
 });
