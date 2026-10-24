@@ -29,7 +29,7 @@ describe('Dial UI Kit :: Popup', () => {
     expect(screen.getByText('Body content')).toBeInTheDocument();
   });
 
-  test('sets the title in Heading 3', () => {
+  test('sets the title in Heading 2', () => {
     render(
       <Popup open header="Title">
         <div>Body content</div>
@@ -37,7 +37,7 @@ describe('Dial UI Kit :: Popup', () => {
     );
 
     const title = screen.getByRole('heading', { name: 'Title' });
-    expect(title).toHaveClass('dial-h3-text');
+    expect(title).toHaveClass('dial-h2-text');
     expect(title).not.toHaveClass('dial-h1-text');
   });
 
