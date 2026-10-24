@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
-import { TabOrientation } from '@/types/tab';
+import { TabOrientation, TabStatus } from '@/types/tab';
 import { Tabs, type TabsProps } from './Tabs';
 
 const tabs = [
@@ -565,5 +565,45 @@ describe('Dial UI Kit :: Tabs', () => {
         'true',
       );
     });
+  });
+
+  test.each([
+    [TabStatus.Error, 'Limits Error'],
+    [TabStatus.Warning, 'Limits Warning'],
+  ])('adds the %s status to the accessible name', (status, name) => {
+    render(
+      <Tabs
+        tabs={[{ id: 'limits', label: 'Limits', status }]}
+        activeTabId="limits"
+        onTabChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('tab', { name })).toBeInTheDocument();
+  });
+
+  test('uses the translated statusLabel when given', () => {
+    render(
+      <Tabs
+        tabs={[
+          {
+            id: 'limits',
+            label: 'Limits',
+            status: TabStatus.Error,
+            statusLabel: 'Fehler',
+          },
+        ]}
+        activeTabId="limits"
+        onTabChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('tab', { name: 'Limits Fehler' })).toBeVisible();
+  });
+
+  test('leaves the name untouched for tabs without a status', () => {
+    render(<Tabs tabs={tabs} activeTabId="all" onTabChange={vi.fn()} />);
+
+    expect(screen.getByRole('tab', { name: 'All' })).toBeInTheDocument();
   });
 });

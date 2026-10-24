@@ -158,7 +158,12 @@ export {
 } from './types/dropdown';
 export { MenuItemMark } from './types/menu-item';
 export { ElementSize } from './types/size';
-export { ScreenResolution, TabOrientation, TabView } from './types/tab';
+export {
+  ScreenResolution,
+  TabOrientation,
+  TabStatus,
+  TabView,
+} from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
 export { FormItemOrientation } from './types/form-item';
 export { SelectSize, SelectVariant } from './types/select';
@@ -465,6 +470,12 @@ export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
 export { StateScreen } from './components/New/StateScreen/StateScreen';
 export type { StateScreenProps } from './components/New/StateScreen/StateScreen';
+export { FormSection } from './components/New/FormSection/FormSection';
+export type {
+  FormSectionProps,
+  FormSectionHeadingLevel,
+} from './components/New/FormSection/FormSection';
+export { FormSectionVariant } from './types/form-section';
 export { TransferQueue } from './components/New/TransferQueue/TransferQueue';
 export type {
   TransferQueueItem,

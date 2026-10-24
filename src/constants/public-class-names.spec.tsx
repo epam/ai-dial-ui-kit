@@ -32,6 +32,7 @@ import { FileName } from '@/components/New/FileName/FileName';
 import { FolderName } from '@/components/New/FolderName/FolderName';
 import { FilterChips } from '@/components/New/FilterChips/FilterChips';
 import { FolderPath } from '@/components/New/FolderPath/FolderPath';
+import { FormSection } from '@/components/New/FormSection/FormSection';
 import { Highlight } from '@/components/New/Highlight/Highlight';
 import { IconButton } from '@/components/New/IconButton/IconButton';
 import { InfoButton } from '@/components/New/InfoButton/InfoButton';
@@ -237,6 +238,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     () => <EntityIdentity item={{ type: EntityType.Model, name: 'GPT-4o' }} />,
   ],
   ['selectedEntityCard', () => <SelectedEntityCard entityId="gpt-4o" />],
+  ['formSection', () => <FormSection title="Model" />],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [
