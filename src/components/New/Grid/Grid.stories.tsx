@@ -467,8 +467,9 @@ const ChatTableStory = (args: GridProps<ModelUsage>) => (
 
 /**
  * The "Chat table" of the design (`GridAppearance.Chat`): the grid draws the
- * borderless card itself — a 12px corner and the MD shadow — with dividers
- * between data rows that stop at the cell padding, and rounded hover and
+ * borderless card itself — a 12px corner and the MD shadow — with 12px of
+ * cell padding on both sides, dividers between data rows that stop at that
+ * padding, and rounded hover and
  * selected rows. Rows use the Relaxed density (84px).
  */
 export const ChatTable: StoryObj<GridProps<ModelUsage>> = {

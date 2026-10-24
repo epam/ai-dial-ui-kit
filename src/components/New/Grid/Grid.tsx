@@ -289,9 +289,14 @@ export const Grid = <T extends object>({
             ? GRID_THEME_PARAMS.oddRowBackgroundColor
             : GRID_THEME_PARAMS.backgroundColor,
           // The Chat table is a borderless card whose row dividers stop at the
-          // cell padding, so `styles/grid.scss` draws them instead.
+          // cell padding, so `styles/grid.scss` draws them instead. Its header
+          // and row cells take 12px on each side, not Balham's 8px.
           ...(isChat
-            ? { wrapperBorder: false, rowBorder: false }
+            ? {
+                wrapperBorder: false,
+                rowBorder: false,
+                cellHorizontalPadding: 12,
+              }
             : { wrapperBorder }),
         }),
     [alternateOddRowColors, colorScheme, wrapperBorder, isChat],

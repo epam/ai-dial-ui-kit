@@ -665,6 +665,11 @@ describe('Dial UI Kit :: Grid', () => {
         /--ag-row-border:\s*var\(--ag-inherited-row-border,\s*([^;]+)\);/,
       )?.[1] ?? null;
 
+    const cellPaddingOf = (css: string) =>
+      css.match(
+        /--ag-cell-horizontal-padding:\s*var\(--ag-inherited-cell-horizontal-padding,\s*([^;]+)\);/,
+      )?.[1] ?? null;
+
     test('draws the framed grid with full-width row dividers by default', async () => {
       const css = await renderWith();
 
@@ -672,6 +677,8 @@ describe('Dial UI Kit :: Grid', () => {
         'dial-kit-grid-chat',
       );
       expect(rowBorderOf(css)).toBe(THIN_DIVIDER);
+      // Balham's own `spacing * 2`, untouched.
+      expect(cellPaddingOf(css)).toMatch(/var\(--ag-spacing\)\s*\*\s*2/);
     });
 
     test('marks the Chat table and leaves its inset row dividers to the stylesheet', async () => {
@@ -682,6 +689,7 @@ describe('Dial UI Kit :: Grid', () => {
         'dial-kit-grid-chat',
       );
       expect(rowBorderOf(css)).toBe('none');
+      expect(cellPaddingOf(css)).toBe('12px');
       expect(css).toMatch(
         /--ag-wrapper-border:\s*var\(--ag-inherited-wrapper-border,\s*none\);/,
       );

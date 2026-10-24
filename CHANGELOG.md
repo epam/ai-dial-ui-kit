@@ -25,7 +25,7 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
-- **`Grid` (2.0) — `appearance` (`GridAppearance.Default` / `Chat`)** — `GridAppearance.Chat` draws the design's "Chat table": a borderless card with a 12px corner and the MD shadow, a full-width 1px line under the header, dividers between data rows that stop at the cell padding on both sides and sit on the 0.5px `stroke-tertiary` stroke, and hover and selected rows with a 12px corner and no divider. It ignores `wrapperBorder`. The root carries `dial-kit-grid-chat`. ai-dial-chat's usage and catalog tables wrapped the grid in their own card and could not inset the dividers or round the rows without restyling ag-Grid's markup. Additive.
+- **`Grid` (2.0) — `appearance` (`GridAppearance.Default` / `Chat`)** — `GridAppearance.Chat` draws the design's "Chat table": a borderless card with a 12px corner and the MD shadow, 12px of padding on both sides of every header and row cell, a full-width 1px line under the header, dividers between data rows that stop at the cell padding on both sides and sit on the 0.5px `stroke-tertiary` stroke, and hover and selected rows with a 12px corner and no divider. It ignores `wrapperBorder`. The root carries `dial-kit-grid-chat`. ai-dial-chat's usage and catalog tables wrapped the grid in their own card and could not inset the dividers or round the rows without restyling ag-Grid's markup. Additive.
 
 - **`FormSection` (2.0)** — a titled section of a form or a builder column: a heading with an optional action at its inline end, an optional description and the content, in a `section` named by its heading. `variant` (`FormSectionVariant.Row` / `Caption` / `Setting`) sets the type scale; `headingLevel` (2–6, default 3) picks the heading element so the section fits the host's outline. Quick Apps' builder `SectionRow` and the DIAL Loop editor's copy of it were two copies of it. The root carries `dial-kit-form-section` (`DIAL_KIT_CLASS.formSection`). Additive.
 
@@ -52,6 +52,10 @@ Versions match the git tags on the `development` branch.
 - **`Calendar` (2.0) — `time` mode opens an hour/minute picker, `showTimePicker`** — the `time` field was a bare masked `HH:mm` input, which is easy to mistype and gives no sense of what is valid. A clock button at the field's trailing edge now opens a popover with an hour and a minute column: picking an hour keeps the current minutes (or `00`), picking minutes closes the popover, and ArrowUp / ArrowDown / Home / End move between options. Typing `HH:mm` still works and `onChange` / `onBlur` fire as before, so consumers need no changes, but the field now renders inside a wrapper and shows the button; `showTimePicker={false}` restores the bare field. The `datetime` popover's time field is unchanged. Requested from `ai-dial-chat`.
 
 ### Changed
+
+- **`shadow-xs` and `shadow-lg` match the design's shadow scale** — `shadow-xs` was `0 1px 4px` blue alpha-20 over a `0 1px 2px` grey layer; it is now a single `0 0 8px 1px` blue alpha-20 halo, so a pressed button glows evenly instead of dropping down. `shadow-lg` was `0 8px 44px 0`; it is now `1px 10px 25px 12px`, same blue alpha-8. `shadow-sm` and `shadow-md` already matched. `--shadow-xs-2` no longer reaches `shadow-xs` and only colours the resting shadow of solid controls (`dial-kit-control-shadow`). Visual only; no token renamed.
+
+- **`Popup` (2.0) — the title is set in Heading 2** — the header title moves from `dial-h3-text` to `dial-h2-text`, the size the popup design gives it. It also reaches `ConfirmationPopup` and every popup built on `Popup`. Visual only.
 
 - **`Grid` (2.0) — hovered and selected rows lose their top and bottom outline** — 0.15.0 outlined them with an inset `--shadow-xs-1` shadow, which the table-cell design does not draw: a row's state is its fill alone, `--bg-control-accent-alpha-hover-subtle` on hover and `--bg-control-accent-alpha-active-subtle` when selected, both unchanged. Visual only; no prop changes.
 
