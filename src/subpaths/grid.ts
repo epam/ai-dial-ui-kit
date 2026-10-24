@@ -26,7 +26,7 @@ export { convertToDate as convertGridDateToDate } from '../components/Grid/rende
 // Grid (design system 2.0)
 export { Grid, GRID_SELECTION_COLUMN_ID } from '../components/New/Grid/Grid';
 export type { GridProps } from '../components/New/Grid/Grid';
-export { GridColorScheme } from '../types/grid';
+export { GridAppearance, GridColorScheme } from '../types/grid';
 export { DateCellRenderer } from '../components/New/Grid/renderers/DateCellRenderer';
 export type {
   DateCellRendererProps,

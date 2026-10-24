@@ -489,7 +489,7 @@ export {
 export { TransferQueueItemStatus } from './types/transfer-queue';
 export { Grid, GRID_SELECTION_COLUMN_ID } from './components/New/Grid/Grid';
 export type { GridProps } from './components/New/Grid/Grid';
-export { GridColorScheme } from './types/grid';
+export { GridAppearance, GridColorScheme } from './types/grid';
 export { DateCellRenderer } from './components/New/Grid/renderers/DateCellRenderer';
 export type {
   DateCellRendererProps,
