@@ -25,6 +25,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`FormSection` (2.0)** — a titled section of a form or a builder column: a heading with an optional action at its inline end, an optional description and the content, in a `section` named by its heading. `variant` (`FormSectionVariant.Row` / `Caption` / `Setting`) sets the type scale; `headingLevel` (2–6, default 3) picks the heading element so the section fits the host's outline. Quick Apps' builder `SectionRow` and the DIAL Loop editor's copy of it were two copies of it. The root carries `dial-kit-form-section` (`DIAL_KIT_CLASS.formSection`). Additive.
+
 - **`SelectedEntityCard` (2.0)** — the card of a form field that holds one selected entity (a model, an agent, a toolset): its `EntityIdentity`, a skeleton while the catalog loads, its raw id when the catalog does not list it, or a placeholder when nothing is selected, with an optional details line and an error under it. Quick Apps' Default model card and the DIAL Loop editor's Model card were two copies of it. Additive.
 
 - **`Tag` (2.0) — `TagAppearance.Bordered`** — the compact value chip of a form field (an allowed host, a variable, an override): 24px tall, a 6px corner, the outlined `Badge`'s `border-tertiary` rim on `bg-layer-sunken` — a `Badge` the user can remove, and the small type scale. The 32px rimless pill vanished on a raised surface, so a form had to restyle the kit's markup to make its values visible. Additive.
