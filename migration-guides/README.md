@@ -33,6 +33,7 @@ migration-guides/
 | 0.16.0 | [tailwind-v4-stylesheet](0.16.0/tailwind-v4-stylesheet.md) | `styles.css` built with Tailwind v4: variant utilities move into `@layer ui`, v4 preflight, new browser baseline |
 | 0.16.0 | [legacy-file-manager-removal](0.16.0/legacy-file-manager-removal.md) | Legacy `DialFileManager`, its helpers and the `./file-manager` subpath removed; import them from `@epam/ai-dial-react-file-manager` |
 | 0.16.0 | [caption-text-no-alert-role](0.16.0/caption-text-no-alert-role.md) | `CaptionText` / `ErrorText` drop `role="alert"`; 2.0 fields link their error and caption through `aria-describedby` |
+| 0.16.0 | [legacy-analytics-and-steps-removal](0.16.0/legacy-analytics-and-steps-removal.md) | Legacy `DialAnalytics*` components and 1.0 `DialSteps` removed; use the 2.0 `Analytics*` components and `Steps` |
 
 ---
 
