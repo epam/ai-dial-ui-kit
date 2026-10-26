@@ -258,6 +258,14 @@ export type { MultiSelectTagsProps } from './components/New/Select/MultiSelectTa
 export { InfoButton } from './components/New/InfoButton/InfoButton';
 export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
+export { AnalyticsCard } from './components/New/Analytics/Card/Card';
+export type { AnalyticsCardProps } from './components/New/Analytics/Card/Card';
+export { AnalyticsBar } from './components/New/Analytics/Bar/Bar';
+export type { AnalyticsBarProps } from './components/New/Analytics/Bar/Bar';
+export { AnalyticsBarGroup } from './components/New/Analytics/BarGroup/BarGroup';
+export type { AnalyticsBarGroupProps } from './components/New/Analytics/BarGroup/BarGroup';
+export { AnalyticsHistogram } from './components/New/Analytics/Histogram/Histogram';
+export type { AnalyticsHistogramProps } from './components/New/Analytics/Histogram/Histogram';
 export { Label } from './components/New/Label/Label';
 export type { LabelledTextProps } from './components/New/LabelledText/LabelledText';
 export { LabelledText } from './components/New/LabelledText/LabelledText';

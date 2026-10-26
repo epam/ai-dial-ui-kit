@@ -288,6 +288,10 @@ breaking change and goes through the migration-guide process.
 | Key                  | Class                             | Element                                                              |
 | -------------------- | --------------------------------- | -------------------------------------------------------------------- |
 | `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
+| `analyticsCard`      | `dial-kit-analytics-card`         | The root of an `AnalyticsCard`                                       |
+| `analyticsBar`       | `dial-kit-analytics-bar`          | The root of an `AnalyticsBar`, stacked or inline                     |
+| `analyticsBarGroup`  | `dial-kit-analytics-bar-group`    | The root of an `AnalyticsBarGroup`, which is its accordion           |
+| `analyticsHistogram` | `dial-kit-analytics-histogram`    | The root of an `AnalyticsHistogram`                                  |
 | `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
 | `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
 | `resizeHandle`       | `dial-kit-resize-handle`          | The `role="separator"` element of a `ResizeHandle`                    |

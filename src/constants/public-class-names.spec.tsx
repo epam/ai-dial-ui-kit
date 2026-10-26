@@ -66,6 +66,10 @@ import { SelectedEntityCard } from '@/components/New/SelectedEntityCard/Selected
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
 import { LabelledText } from '@/components/New/LabelledText/LabelledText';
+import { AnalyticsBar } from '@/components/New/Analytics/Bar/Bar';
+import { AnalyticsBarGroup } from '@/components/New/Analytics/BarGroup/BarGroup';
+import { AnalyticsCard } from '@/components/New/Analytics/Card/Card';
+import { AnalyticsHistogram } from '@/components/New/Analytics/Histogram/Histogram';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
@@ -101,6 +105,16 @@ const items = [
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
   ['labelledText', () => <LabelledText label="Name" text="Value" />],
+  ['analyticsCard', () => <AnalyticsCard title="Requests" value="12" />],
+  ['analyticsBar', () => <AnalyticsBar title="Score" value={0.5} />],
+  [
+    'analyticsBarGroup',
+    () => <AnalyticsBarGroup title="Group" data={{ a: 0.5 }} />,
+  ],
+  [
+    'analyticsHistogram',
+    () => <AnalyticsHistogram title="Latency" values={[0.1, 0.9]} />,
+  ],
   ['progressBar', () => <ProgressBar value={50} />],
   [
     'progressBar',

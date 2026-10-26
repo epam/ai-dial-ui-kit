@@ -39,6 +39,14 @@ export const DIAL_KIT_CLASS = {
   labelledText: 'dial-kit-labelled-text',
 
   /* ── Containers ────────────────────────────────────────────────────────── */
+  /** The root of an `AnalyticsCard`: the box holding its title, value and description. */
+  analyticsCard: 'dial-kit-analytics-card',
+  /** The root of an `AnalyticsBar`: the title row and track, stacked or inline. */
+  analyticsBar: 'dial-kit-analytics-bar',
+  /** The root of an `AnalyticsBarGroup`: its accordion, header and bars. */
+  analyticsBarGroup: 'dial-kit-analytics-bar-group',
+  /** The root of an `AnalyticsHistogram`: its title, axis and columns. */
+  analyticsHistogram: 'dial-kit-analytics-histogram',
   /** The `article` element of a `CardShell`. */
   cardShell: 'dial-kit-card-shell',
   /** The `aside` element of a `CollapsibleSidebar`. */
