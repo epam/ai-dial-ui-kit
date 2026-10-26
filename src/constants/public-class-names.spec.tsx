@@ -66,6 +66,8 @@ import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
 import { SelectedEntityCard } from '@/components/New/SelectedEntityCard/SelectedEntityCard';
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
+import { Steps } from '@/components/New/Steps/Steps';
+import { StepStatus } from '@/models/step';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
@@ -100,6 +102,16 @@ const items = [
 /** Rendered once per case; a portalled component lands outside the container. */
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
+  [
+    'steps',
+    () => (
+      <Steps
+        steps={[{ id: 'a', name: 'A', status: StepStatus.VALID }]}
+        currentStep="a"
+        onChangeStep={noop}
+      />
+    ),
+  ],
   ['progressBar', () => <ProgressBar value={50} />],
   [
     'progressBar',

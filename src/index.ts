@@ -333,6 +333,8 @@ export type { MultiSelectTagsProps } from './components/New/Select/MultiSelectTa
 export { InfoButton } from './components/New/InfoButton/InfoButton';
 export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
+export { Steps } from './components/New/Steps/Steps';
+export type { StepsProps } from './components/New/Steps/Steps';
 export { Label } from './components/New/Label/Label';
 export { Textarea, TextareaResize } from './components/New/Textarea/Textarea';
 export { Input } from './components/New/Input/Input';

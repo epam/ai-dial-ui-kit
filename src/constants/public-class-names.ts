@@ -37,6 +37,8 @@ export const DIAL_KIT_CLASS = {
   label: 'dial-kit-label',
 
   /* ── Containers ────────────────────────────────────────────────────────── */
+  /** The `ol` root of a `Steps`, holding one button per step. */
+  steps: 'dial-kit-steps',
   /** The `article` element of a `CardShell`. */
   cardShell: 'dial-kit-card-shell',
   /** The `aside` element of a `CollapsibleSidebar`. */

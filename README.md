@@ -286,6 +286,7 @@ breaking change and goes through the migration-guide process.
 
 | Key                  | Class                             | Element                                                              |
 | -------------------- | --------------------------------- | -------------------------------------------------------------------- |
+| `steps`              | `dial-kit-steps`                  | The `ol` root of a `Steps`                                           |
 | `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
 | `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
 | `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
