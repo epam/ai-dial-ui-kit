@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { describe, expect, test } from 'vitest';
 
-import { DialDropdownIcon } from '@/components/DropdownIcon/DropdownIcon';
 import { FabButton } from '@/components/FabButton/FabButton';
 import { ProgressBar } from '@/components/ProgressBar/ProgressBar';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
@@ -86,8 +85,8 @@ import { TabOrientation } from '@/types/tab';
  *
  * These cases query by the class on purpose — here the class is the feature
  * under test, not a locator standing in for a role. Where the element also has
- * a role, the component's own spec asserts the pairing; `MenuItem`,
- * `Dropdown` and `DropdownIcon` carry those.
+ * a role, the component's own spec asserts the pairing; `MenuItem`
+ * and `Dropdown` carry those.
  */
 
 const noop = () => undefined;
@@ -423,24 +422,6 @@ describe('Dial UI Kit :: public class names', () => {
       screen
         .getByRole('textbox', { name: 'Search' })
         .closest(`.${DIAL_KIT_CLASS.dropdownSearch}`),
-    ).toBeInTheDocument();
-  });
-
-  test('stamps the icon and caret of a DialDropdownIcon trigger', () => {
-    render(
-      <DialDropdownIcon
-        ariaLabel="Select model"
-        icon={<IconBrandOpenai />}
-        items={items}
-      />,
-    );
-
-    const trigger = screen.getByRole('button', { name: 'Select model' });
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIcon}`),
-    ).toBeInTheDocument();
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIconCaret}`),
     ).toBeInTheDocument();
   });
 

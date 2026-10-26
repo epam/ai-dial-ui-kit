@@ -1,23 +1,17 @@
 import { createRoot } from 'react-dom/client';
 import { Button } from '@epam/ai-dial-ui-kit';
-import {
-  LazyDialJsonEditor,
-  LazyDialMarkdownEditor,
-  LazyMarkdownEditor,
-} from '@epam/ai-dial-ui-kit/editors';
+import { LazyMarkdownEditor } from '@epam/ai-dial-ui-kit/editors';
 
 /**
  * Companion to `fixtures/consumer-mixed-grid-editor-loader`: the identical
- * scenario, except all three editor loaders are imported from
+ * scenario, except the editor loader is imported from
  * `@epam/ai-dial-ui-kit/editors` instead of the root. Confirms the
  * `./editors` subpath stays safe after the Section 9 shared-leaf-module
- * refactor (both entries now re-export the same leaf modules - see
+ * refactor (both entries re-export the same leaf module - see
  * `src/subpaths/editors.ts`'s comment).
  */
 Object.assign(window, {
   Button,
-  LazyDialJsonEditor,
-  LazyDialMarkdownEditor,
   LazyMarkdownEditor,
 });
 

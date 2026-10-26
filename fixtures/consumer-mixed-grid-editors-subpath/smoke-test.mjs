@@ -137,25 +137,19 @@ console.log(
   "This proves the dynamic import('./grid-feature') resolved at runtime and AG Grid rendered real row data, even with the ./editors loaders retained.",
 );
 
-/* Retention alone (Object.assign) never calls the loaders - confirm all
- * three are retained as real function references. Actually invoking one
+/* Retention alone (Object.assign) never calls the loader - confirm it is
+ * retained as a real function reference. Actually invoking it
  * from this bare Node smoke script hangs the process for reasons unrelated
  * to this fix - see
  * `fixtures/consumer-mixed-grid-editor-loader/smoke-test.mjs`'s matching
  * comment for the full explanation. That runtime path is already covered by
  * the library's own Vitest suite. */
-for (const loaderName of [
-  'LazyDialJsonEditor',
-  'LazyDialMarkdownEditor',
-  'LazyMarkdownEditor',
-]) {
+for (const loaderName of ['LazyMarkdownEditor']) {
   if (typeof globalThis.window[loaderName] !== 'function') {
     console.error(`FAIL: window.${loaderName} was not retained as a function.`);
     process.exit(1);
   }
 }
-console.log(
-  'OK: all three editor loaders retained as real function references.',
-);
+console.log('OK: the editor loader is retained as a real function reference.');
 
 process.exit(0);

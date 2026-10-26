@@ -86,7 +86,7 @@ function App() {
 
 ### Optional: Markdown Components CSS
 
-If you're using markdown-related components (`DialMarkdownEditor` or `DialMarkdownEditorContainer`), you need to import the required CSS files globally in your application (e.g., in your root layout or main entry point):
+If you're using the `MarkdownEditor` (loaded through `LazyMarkdownEditor`), you need to import the required CSS files globally in your application (e.g., in your root layout or main entry point):
 
 ```tsx
 import '@uiw/react-markdown-preview/markdown.css';
@@ -309,8 +309,6 @@ breaking change and goes through the migration-guide process.
 | `dropdownSearch`    | `dial-kit-dropdown-search`        | The search row above the item list of a `searchable` `Dropdown`                                  |
 | `menuItem`          | `dial-kit-menuitem`               | One overlay row: a dropdown item, a `Select` option, a submenu trigger or child                   |
 | `menuItemCheck`     | `dial-kit-menuitem-check`         | The trailing check of a chosen `MenuItemMark.Check` row                                          |
-| `dropdownIcon`      | `dial-kit-dropdown-icon`          | The primary icon of a `DialDropdownIcon` trigger                                                 |
-| `dropdownIconCaret` | `dial-kit-dropdown-icon-caret`    | Its caret badge. Absent when `showCaret` is `false`                                              |
 | `tooltip`           | `dial-kit-tooltip`                | The bubble of a `Tooltip`                                                                        |
 | `interactiveTooltip` | `dial-kit-interactive-tooltip`   | The panel of an `InteractiveTooltip`                                                             |
 | `ellipsisTooltip`   | `dial-kit-ellipsis-tooltip`       | The text element of an `EllipsisTooltip`, which is also its trigger                              |
@@ -385,9 +383,8 @@ they render: `ThemeScope` (a `display: contents` wrapper), `MultiSelectTags`
 (`Tag`s), and `TooltipContainer` / `TooltipTrigger`.
 
 Two neighbouring elements are reached through props instead, and keep being: a
-`Dropdown`'s floating panel takes `listClassName`, a `Popup`'s backdrop takes
-`overlayClassName`, and the `DialDropdownIcon` trigger button takes
-`buttonClassName`.
+`Dropdown`'s floating panel takes `listClassName`, and a `Popup`'s backdrop
+takes `overlayClassName`.
 
 ## ♿ Accessibility
 
@@ -500,12 +497,12 @@ npm install @epam/ai-dial-ui-kit
 npm install react react-dom
 ```
 
-Add the editor packages only if you use the `@epam/ai-dial-ui-kit/editors`
-subpath. They are optional peers, so `npm install` stays quiet without them, and
-the kit only reaches for them when a `Lazy*` editor actually mounts:
+Add the editor package only if you use the Markdown editor
+(`LazyMarkdownEditor`). It is an optional peer, so `npm install` stays quiet
+without it, and the kit only reaches for it when the editor actually mounts:
 
 ``` bash
-npm install monaco-editor @monaco-editor/react @uiw/react-md-editor
+npm install @uiw/react-md-editor
 ```
 
 2. Import style in the root layout of the project:
