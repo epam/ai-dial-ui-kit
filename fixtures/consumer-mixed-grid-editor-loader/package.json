@@ -6,7 +6,7 @@
   "description": "Regression fixture for Section 9 (isolate-heavy-feature-modules): eagerly imports Button AND the root LazyMarkdownEditor loader from @epam/ai-dial-ui-kit, AND reaches Grid only through a dynamic import('@epam/ai-dial-ui-kit/grid'). consumer-mixed-grid only exercises one eager root export (Button); this fixture proves whether a second eager root export that itself contains its own dynamic import() changes AG Grid's reachability from the static initial graph.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --dynamic-require ag-grid-community,ag-grid-react,@uiw/react-md-editor,@uiw/react-markdown-preview,@monaco-editor/react,monaco-editor --dynamic-after LazyMarkdownEditor:ag-grid-community",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --dynamic-require ag-grid-community,ag-grid-react,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-after LazyMarkdownEditor:ag-grid-community",
     "smoke": "node smoke-test.mjs"
   },
   "dependencies": {

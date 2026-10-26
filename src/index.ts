@@ -6,50 +6,17 @@ export { DialLabel } from './components/Label/Label';
 export { DialAccordion } from './components/Accordion/Accordion';
 export type { DialAccordionProps } from './components/Accordion/Accordion';
 export { DialIcon } from './components/Icon/Icon';
-export { DialNotification } from './components/Notification/Notification.tsx';
-export type { DialNotificationProps } from './components/Notification/Notification.tsx';
 export { DialLoader } from './components/Loader/Loader';
 export { Spinner } from './components/Spinner/Spinner';
 export type { SpinnerProps } from './components/Spinner/Spinner';
 export { ProgressBar } from './components/ProgressBar/ProgressBar';
 export type { ProgressBarProps } from './components/ProgressBar/ProgressBar';
-export { DialPagination } from './components/Pagination/Pagination';
-export type { DialPaginationProps } from './components/Pagination/Pagination';
-export { DialCheckbox } from './components/Checkbox/Checkbox';
-export { DialRadioButton } from './components/RadioButton/RadioButton';
-export { DialRadioGroup } from './components/RadioGroup/RadioGroup';
-export { DialSlider } from './components/Slider/Slider';
-export type { DialSliderProps } from './components/Slider/Slider';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export type { DialNoDataContentProps } from './components/NoDataContent/NoDataContent';
-export { DialCollapsibleSidebar } from './components/CollapsibleSidebar/CollapsibleSidebar';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
-export { DialDraggableItem } from './components/DraggableItem/DraggableItem';
-export { DialFileIcon } from './components/FileIcon/FileIcon';
-export type { DialFileIconProps } from './components/FileIcon/FileIcon';
-export { DialFormItem } from './components/FormItem/FormItem';
-export { DialSharedEntityIndicator } from './components/SharedEntityIndicator/SharedEntityIndicator';
-export { DialFileName } from './components/FileName/FileName';
-export { DialFolderName } from './components/FolderName/FolderName';
-export { DialResizableContainer } from './components/ResizableContainer/ResizableContainer';
-export { DialConditionalResizableContainer } from './components/ResizableContainer/ConditionalResizableContainer';
 export { Skeleton } from './components/Skeleton/Skeleton';
-
-// Grid
-export { DialGrid } from './components/Grid/Grid';
-export type { DialGridProps } from './components/Grid/Grid';
-export { DialDateCellRenderer } from './components/Grid/renderers/DateCellRenderer';
-export type {
-  DateValue as DialGridDateValue,
-  DialDateCellRendererProps,
-} from './components/Grid/renderers/DateCellRenderer';
-export {
-  DEFAULT_DATE_FORMAT_OPTIONS as DEFAULT_GRID_DATE_FORMAT_OPTIONS,
-  DEFAULT_LOCALE as DEFAULT_GRID_DATE_LOCALE,
-} from './components/Grid/renderers/constants';
-export { convertToDate as convertGridDateToDate } from './components/Grid/renderers/utils';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -80,9 +47,6 @@ export {
 export { DialCloseButton } from './components/CloseButton/CloseButton';
 export { DialRemoveButton } from './components/RemoveButton/RemoveButton';
 
-// Textareas
-export { DialTextarea } from './components/Textarea/Textarea';
-
 // Tooltip
 export { DialTooltip } from './components/Tooltip/Tooltip';
 export type { DialTooltipProps } from './components/Tooltip/Tooltip';
@@ -91,42 +55,17 @@ export { DialTooltipContent } from './components/Tooltip/TooltipContent';
 export { DialTooltipTrigger } from './components/Tooltip/TooltipTrigger';
 export type { DialTooltipContainerOptions } from './components/Tooltip/TooltipContext';
 
-// Switch
-export { DialSwitch } from './components/Switch/Switch';
-
-// Segmented Control
-export { DialSegmentedControl } from './components/SegmentedControl/SegmentedControl';
-export type { DialSegmentedControlProps } from './components/SegmentedControl/SegmentedControl';
-
-// Popups
-export { DialPopup } from './components/Popup/Popup';
-export { DialConfirmationPopup } from './components/ConfirmationPopup/ConfirmationPopup';
-export { DialRadioGroupPopupField } from './components/RadioGroupPopupField/RadioGroupPopupField';
-export { DialFormPopup } from './components/FormPopup/FormPopup';
-
 // Inputs
 export { DialInput } from './components/Input/Input';
 export type { DialInputButtonProps } from './components/Input/Button/InputButton';
 export type { DialInputProps } from './components/Input/Input';
-export { DialNumberInput } from './components/NumberInput/NumberInput';
-export { DialPasswordInput } from './components/PasswordInput/PasswordInput';
 
 // Selects and related components
-export { DialSearch } from './components/Search/Search';
-export type { DialSearchProps } from './components/Search/Search';
-export { DialInputPopup } from './components/InputPopup/InputPopup';
-export { DialAutocompleteInputValue } from './components/AutocompleteInput/AutocompleteInputValue';
-export { DialTagInput } from './components/TagInput/TagInput';
-export { DialSelect } from './components/Select/Select';
-export { DialSelectField } from './components/SelectField/SelectField';
 export { DialLoadFileArea } from './components/LoadFileArea/LoadFileArea';
 export { DialLoadFileAreaField } from './components/LoadFileArea/LoadFileAreaField';
 
 // Dropdowns
 export { DialDropdown } from './components/Dropdown/Dropdown';
-export { DialButtonDropdown } from './components/ButtonDropdown/ButtonDropdown';
-export { DialDropdownIcon } from './components/DropdownIcon/DropdownIcon';
-export type { DialDropdownIconProps } from './components/DropdownIcon/DropdownIcon';
 
 // Types
 export { EditorThemes } from './types/editor';
@@ -148,8 +87,6 @@ export {
   TabView,
 } from './types/tab';
 export type { DialBreadcrumbPathItem } from './models/breadcrumb';
-export { FormItemOrientation } from './types/form-item';
-export { SelectSize, SelectVariant } from './types/select';
 export { FlexibleActionsDirection } from './types/flexible-actions';
 export { DialItemType } from './types/item';
 export { ResizableContainerSide } from './types/resizable-container';
@@ -172,7 +109,6 @@ export { StepStatus } from './models/step';
 export type { Step } from './models/step';
 export type { RadioButtonWithContent } from './models/radio';
 export type { SelectOption } from './models/select';
-export type { SegmentedControlOption } from './models/segmented-control';
 export type { TabModel } from './models/tab';
 export type { DropdownItem } from './models/dropdown';
 export type { DialModifiedEntity } from './models/base-entity';
@@ -209,35 +145,23 @@ export {
 export { DIAL_KIT_CLASS } from './constants/public-class-names';
 
 // SchemaRenderer
-export { DialSchemaRenderer } from './components/SchemaRenderer/SchemaRenderer';
 export {
   SchemaRendererVariant,
   SchemaDisplayMode,
   SchemaOrientation,
   JsonSchemaType,
-} from './components/SchemaRenderer/types';
+} from './types/json-schema';
 export type {
-  DialSchemaRendererProps,
   JsonSchema,
   JsonSchemaDef,
   ValidationError,
   SchemaRendererTexts,
-} from './components/SchemaRenderer/types';
+} from './models/json-schema';
 export { SchemaRenderer } from './components/New/SchemaRenderer/SchemaRenderer';
 export type {
   SchemaRendererProps,
   SchemaRenderField,
 } from './components/New/SchemaRenderer/types';
-
-// JSON Editor - lazy loader to avoid loading in SSR. Re-exported from a
-// shared leaf module (not declared inline) so this entry and `./editors`
-// reference the same emitted chunk instead of each duplicating the loader's
-// own `import()` call - see that module's comment for why.
-export { LazyDialJsonEditor } from './components/JsonEditor/lazy';
-
-// Markdown Editor - lazy loader to avoid loading in SSR. Re-exported from a
-// shared leaf module - see `./components/JsonEditor/lazy`'s comment.
-export { LazyDialMarkdownEditor } from './components/MarkdownEditor/lazy';
 
 // new Components
 export { NotificationVariant, NotificationType } from './types/notification.ts';
@@ -299,7 +223,8 @@ export { ButtonDropdown } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { ButtonDropdownProps } from './components/New/ButtonDropdown/ButtonDropdown';
 export type { MarkdownEditorProps } from './components/New/MarkdownEditor/MarkdownEditor';
 // Markdown Editor (2.0) - lazy loader to avoid loading in SSR. Re-exported
-// from a shared leaf module - see `./components/JsonEditor/lazy`'s comment.
+// from a shared leaf module - see `./components/New/MarkdownEditor/lazy`'s
+// comment.
 export { LazyMarkdownEditor } from './components/New/MarkdownEditor/lazy';
 export {
   InlineSelect,
@@ -318,7 +243,17 @@ export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
 export { Steps } from './components/New/Steps/Steps';
 export type { StepsProps } from './components/New/Steps/Steps';
+export { AnalyticsCard } from './components/New/Analytics/Card/Card';
+export type { AnalyticsCardProps } from './components/New/Analytics/Card/Card';
+export { AnalyticsBar } from './components/New/Analytics/Bar/Bar';
+export type { AnalyticsBarProps } from './components/New/Analytics/Bar/Bar';
+export { AnalyticsBarGroup } from './components/New/Analytics/BarGroup/BarGroup';
+export type { AnalyticsBarGroupProps } from './components/New/Analytics/BarGroup/BarGroup';
+export { AnalyticsHistogram } from './components/New/Analytics/Histogram/Histogram';
+export type { AnalyticsHistogramProps } from './components/New/Analytics/Histogram/Histogram';
 export { Label } from './components/New/Label/Label';
+export type { LabelledTextProps } from './components/New/LabelledText/LabelledText';
+export { LabelledText } from './components/New/LabelledText/LabelledText';
 export { Textarea, TextareaResize } from './components/New/Textarea/Textarea';
 export { Input } from './components/New/Input/Input';
 export type { InputProps } from './components/New/Input/Input';

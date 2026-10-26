@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Consumer fixture: imports the 2.0 Grid from ai-dial-ui-kit. Its feature graph must include ag-grid-community/ag-grid-react but exclude Monaco/@uiw/* editor packages.",
+  "description": "Consumer fixture: imports the 2.0 Grid from ai-dial-ui-kit. Its feature graph must include ag-grid-community/ag-grid-react but exclude @uiw/* editor packages.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --require ag-grid-community,ag-grid-react --forbidden @monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --require ag-grid-community,ag-grid-react --forbidden @uiw/react-md-editor,@uiw/react-markdown-preview",
     "smoke": "node smoke-test.mjs"
   },
   "dependencies": {
