@@ -35,6 +35,8 @@ export const DIAL_KIT_CLASS = {
   errorText: 'dial-kit-error-text',
   /** The `Label` root, which wraps the `label` element and its info button. */
   label: 'dial-kit-label',
+  /** The root of a `LabelledText`, wrapping its caption and value. */
+  labelledText: 'dial-kit-labelled-text',
 
   /* ── Containers ────────────────────────────────────────────────────────── */
   /** The root of an `AnalyticsCard`: the box holding its title, value and description. */

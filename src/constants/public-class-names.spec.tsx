@@ -65,6 +65,7 @@ import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
 import { SelectedEntityCard } from '@/components/New/SelectedEntityCard/SelectedEntityCard';
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
+import { LabelledText } from '@/components/New/LabelledText/LabelledText';
 import { AnalyticsBar } from '@/components/New/Analytics/Bar/Bar';
 import { AnalyticsBarGroup } from '@/components/New/Analytics/BarGroup/BarGroup';
 import { AnalyticsCard } from '@/components/New/Analytics/Card/Card';
@@ -103,6 +104,7 @@ const items = [
 /** Rendered once per case; a portalled component lands outside the container. */
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
+  ['labelledText', () => <LabelledText label="Name" text="Value" />],
   ['analyticsCard', () => <AnalyticsCard title="Requests" value="12" />],
   ['analyticsBar', () => <AnalyticsBar title="Score" value={0.5} />],
   [

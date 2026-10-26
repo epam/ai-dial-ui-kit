@@ -267,6 +267,8 @@ export type { AnalyticsBarGroupProps } from './components/New/Analytics/BarGroup
 export { AnalyticsHistogram } from './components/New/Analytics/Histogram/Histogram';
 export type { AnalyticsHistogramProps } from './components/New/Analytics/Histogram/Histogram';
 export { Label } from './components/New/Label/Label';
+export type { LabelledTextProps } from './components/New/LabelledText/LabelledText';
+export { LabelledText } from './components/New/LabelledText/LabelledText';
 export { Textarea, TextareaResize } from './components/New/Textarea/Textarea';
 export { Input } from './components/New/Input/Input';
 export type { InputProps } from './components/New/Input/Input';
