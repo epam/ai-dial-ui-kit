@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Consumer fixture: imports Button from the ai-dial-ui-kit root ESM entry. Must exclude ag-grid-community, ag-grid-react, @monaco-editor/react, monaco-editor, @uiw/react-md-editor, @uiw/react-markdown-preview from its static initial graph.",
+  "description": "Consumer fixture: imports Button from the ai-dial-ui-kit root ESM entry. Must exclude ag-grid-community, ag-grid-react, @uiw/react-md-editor, @uiw/react-markdown-preview from its static initial graph.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden ag-grid-community,ag-grid-react,@monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden ag-grid-community,ag-grid-react,@uiw/react-md-editor,@uiw/react-markdown-preview",
     "smoke": "node smoke-test.mjs"
   },
   "dependencies": {

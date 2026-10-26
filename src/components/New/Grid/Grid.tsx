@@ -28,7 +28,7 @@ import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 import type { DropdownItem } from '@/models/dropdown';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { debounceFn } from '@/utils/debounce';
 import { baseColumnComparator, omitUndefined } from '@/utils/grid-comparators';
 import { registerAgGridModulesOnce } from '@/utils/grid-registration';
@@ -40,6 +40,7 @@ import { NoDataContent } from '../NoDataContent/NoDataContent';
 import { SelectionCell } from './components/SelectionCell';
 import { SelectionHeader } from './components/SelectionHeader';
 import {
+  GRID_CHAT_CLASS,
   GRID_HEADER_SELECT_CLASS,
   GRID_ROOT_CLASS,
   GRID_ROW_SELECT_CLASS,
@@ -116,6 +117,11 @@ export interface GridProps<T extends object = Record<string, unknown>> {
    * dark. Defaults to `light`, which leaves the current appearance unchanged.
    */
   colorScheme?: GridColorScheme;
+  /**
+   * Visual treatment. `Chat` draws the borderless "Chat table" card and
+   * ignores `wrapperBorder`. Defaults to `GridAppearance.Default`.
+   */
+  appearance?: GridAppearance;
 }
 
 /**
@@ -188,6 +194,7 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * @param [selectRowLabel] - Accessible name of a row's selection control.
  * @param [selectAllLabel='Select all rows'] - Accessible name of the select-all control.
  * @param [colorScheme='light'] - AG Grid color scheme. `dark` paints native controls dark.
+ * @param [appearance='default'] - Visual treatment; `chat` draws the borderless "Chat table".
  */
 export const Grid = <T extends object>({
   columnDefs,
@@ -215,6 +222,7 @@ export const Grid = <T extends object>({
   selectRowLabel,
   selectAllLabel = 'Select all rows',
   colorScheme = GridColorScheme.Light,
+  appearance = GridAppearance.Default,
 }: GridProps<T>) => {
   registerAgGridModulesOnce();
 
@@ -262,6 +270,8 @@ export const Grid = <T extends object>({
   const hasContextMenu = !!getContextMenuItems;
   const wrapsRenderers = !!wrapCustomCellRenderers;
 
+  const isChat = appearance === GridAppearance.Chat;
+
   const theme = useMemo(
     () =>
       themeBalham
@@ -278,9 +288,18 @@ export const Grid = <T extends object>({
           oddRowBackgroundColor: alternateOddRowColors
             ? GRID_THEME_PARAMS.oddRowBackgroundColor
             : GRID_THEME_PARAMS.backgroundColor,
-          wrapperBorder,
+          // The Chat table is a borderless card whose row dividers stop at the
+          // cell padding, so `styles/grid.scss` draws them instead. Its header
+          // and row cells take 12px on each side, not Balham's 8px.
+          ...(isChat
+            ? {
+                wrapperBorder: false,
+                rowBorder: false,
+                cellHorizontalPadding: 12,
+              }
+            : { wrapperBorder }),
         }),
-    [alternateOddRowColors, colorScheme, wrapperBorder],
+    [alternateOddRowColors, colorScheme, wrapperBorder, isChat],
   );
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
@@ -618,6 +637,7 @@ export const Grid = <T extends object>({
           isSelectionPinnedVisible &&
           GRID_SELECTION_VISIBLE_CLASS,
         withoutHeaderBorders && GRID_WITHOUT_HEADER_BORDERS_CLASS,
+        isChat && GRID_CHAT_CLASS,
         className,
       )}
       role="region"

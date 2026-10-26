@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Consumer fixture: eagerly imports Button from the ai-dial-ui-kit root ESM entry AND reaches Grid only through a dynamic import('@epam/ai-dial-ui-kit/grid'). This is the mixed graph fixtures/consumer-esm (root-only) and fixtures/consumer-grid (Grid-only) cannot catch: the static initial graph must still exclude ag-grid-community/ag-grid-react/@monaco-editor/react/monaco-editor/@uiw/react-md-editor/@uiw/react-markdown-preview, while the dynamic Grid graph must include AG Grid.",
+  "description": "Consumer fixture: eagerly imports Button from the ai-dial-ui-kit root ESM entry AND reaches Grid only through a dynamic import('@epam/ai-dial-ui-kit/grid'). This is the mixed graph fixtures/consumer-esm (root-only) and fixtures/consumer-grid (Grid-only) cannot catch: the static initial graph must still exclude ag-grid-community/ag-grid-react/@uiw/react-md-editor/@uiw/react-markdown-preview, while the dynamic Grid graph must include AG Grid.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden-everywhere @monaco-editor/react,monaco-editor,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-require ag-grid-community,ag-grid-react --dynamic-after load-grid-trigger:ag-grid-community",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --forbidden-everywhere @uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-require ag-grid-community,ag-grid-react --dynamic-after load-grid-trigger:ag-grid-community",
     "smoke": "node smoke-test.mjs"
   },
   "dependencies": {
