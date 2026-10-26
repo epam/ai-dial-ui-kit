@@ -1,16 +1,16 @@
 import type { FC, ReactNode } from 'react';
 
-import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import { Badge } from '@/components/New/Badge/Badge';
-import { BadgeColor, BadgeVariant } from '@/types/badge';
 import { Spinner } from '@/components/Spinner/Spinner';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
+import { BadgeColor, BadgeVariant } from '@/types/badge';
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   DEFAULT_ANALYTICS_BAR_COLOR_MAP,
   getAnalyticsBarColor,
   getAnalyticsBarRatio,
-} from '@/components/Analytics/Bar/utils';
+} from './utils';
 
 export interface AnalyticsBarProps {
   /**

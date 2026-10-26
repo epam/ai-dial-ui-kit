@@ -2,9 +2,9 @@ import { Fragment, type FC, type ReactNode } from 'react';
 
 import { Accordion } from '@/components/New/Accordion/Accordion';
 import { AnalyticsBar } from '@/components/New/Analytics/Bar/Bar';
-import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
-import { Spinner } from '@/components/Spinner/Spinner';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
+import { Spinner } from '@/components/Spinner/Spinner';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
 import { mergeClasses } from '@/utils/merge-classes';
 
