@@ -284,10 +284,6 @@
     "kind": "type"
   },
   {
-    "name": "DialAutocompleteInputValue",
-    "kind": "value"
-  },
-  {
     "name": "DialAnalyticsBar",
     "kind": "value"
   },
@@ -490,34 +486,6 @@
   {
     "name": "DialSecondaryIconButton",
     "kind": "value"
-  },
-  {
-    "name": "DialSegmentedControl",
-    "kind": "value"
-  },
-  {
-    "name": "DialSegmentedControlProps",
-    "kind": "type"
-  },
-  {
-    "name": "DialSelect",
-    "kind": "value"
-  },
-  {
-    "name": "DialSelectField",
-    "kind": "value"
-  },
-  {
-    "name": "DialSharedEntityIndicator",
-    "kind": "value"
-  },
-  {
-    "name": "DialSlider",
-    "kind": "value"
-  },
-  {
-    "name": "DialSliderProps",
-    "kind": "type"
   },
   {
     "name": "DialSteps",
