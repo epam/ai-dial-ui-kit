@@ -1,3 +1,4 @@
+import { IconAlertTriangle, IconExclamationCircle } from '@tabler/icons-react';
 import {
   useCallback,
   useId,
@@ -9,7 +10,9 @@ import {
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
-import { TabOrientation } from '@/types/tab';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+import { TabOrientation, TabStatus } from '@/types/tab';
 
 /** A single tab entry rendered by {@link Tabs}. */
 export interface TabItem {
@@ -23,6 +26,18 @@ export interface TabItem {
   icon?: ReactNode;
   /** Renders the tab greyed out and unselectable, and skips it during keyboard navigation. */
   disabled?: boolean;
+  /**
+   * Flags the tab as holding an error or a warning — typically a form section
+   * that failed validation. Draws a coloured icon after the label and adds the
+   * state to the tab's accessible name. Uses the {@link TabStatus} enum.
+   */
+  status?: TabStatus;
+  /**
+   * Already-translated text announced for `status`, appended to the tab's
+   * accessible name. Defaults to `'Error'` / `'Warning'`; pass it when the
+   * interface is localised.
+   */
+  statusLabel?: string;
 }
 
 export interface TabsProps {
@@ -59,6 +74,11 @@ export interface TabsProps {
   sectionLabelClassName?: string;
 }
 
+const DEFAULT_STATUS_LABEL: Record<TabStatus, string> = {
+  [TabStatus.Error]: 'Error',
+  [TabStatus.Warning]: 'Warning',
+};
+
 /** The two keys that move the selection, named per orientation. */
 const NAVIGATION_KEYS: Record<
   TabOrientation,
@@ -85,6 +105,10 @@ const NAVIGATION_KEYS: Record<
  * rows with the active one on a tinted pill rather than an underline, driven by
  * `ArrowUp` / `ArrowDown`. The rail is the shape to reach for when the tabs
  * label whole pages of a settings surface; the row, when they filter one.
+ *
+ * A tab with a `status` (`TabStatus.Error` or `TabStatus.Warning`) draws a
+ * coloured icon after its label, and the status text joins the tab's accessible
+ * name so the state reaches assistive tech as well as sighted users.
  *
  * `className` lands on whichever element is outermost: the heading wrapper when
  * `sectionLabel` is set, the `role="tablist"` itself when it is not.
@@ -281,6 +305,35 @@ export const Tabs: FC<TabsProps> = ({
             >
               {tab.label}
             </span>
+            {tab.status && (
+              <>
+                <span
+                  aria-hidden="true"
+                  className={mergeClasses(
+                    'flex shrink-0',
+                    tab.status === TabStatus.Error
+                      ? 'text-error'
+                      : 'text-warning',
+                    isVertical && tab.count == null && 'ms-auto',
+                  )}
+                >
+                  {tab.status === TabStatus.Error ? (
+                    <IconExclamationCircle
+                      size={DIAL_ICON_SIZE.SM}
+                      stroke={DIAL_KIT_ICON_STROKE}
+                    />
+                  ) : (
+                    <IconAlertTriangle
+                      size={DIAL_ICON_SIZE.SM}
+                      stroke={DIAL_KIT_ICON_STROKE}
+                    />
+                  )}
+                </span>
+                <span className="sr-only">
+                  {tab.statusLabel ?? DEFAULT_STATUS_LABEL[tab.status]}
+                </span>
+              </>
+            )}
             {tab.count != null && (
               <span
                 className={mergeClasses(

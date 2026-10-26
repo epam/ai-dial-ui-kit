@@ -12,7 +12,7 @@ import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { Grid, type GridProps } from './Grid';
@@ -106,6 +106,12 @@ const meta = {
       options: Object.values(GridColorScheme),
       description:
         'AG Grid color scheme. Dark paints native controls, including the date filter calendar, with the dark scheme.',
+    },
+    appearance: {
+      control: { type: 'select' },
+      options: Object.values(GridAppearance),
+      description:
+        'Visual treatment. Chat draws the borderless "Chat table" card with inset row dividers and rounded hover and selected rows.',
     },
     getContextMenuItems: { control: false },
     onSelectionChange: { control: false },
@@ -448,6 +454,33 @@ export const ComplexRows: StoryObj<GridProps<ModelUsage>> = {
     additionalGridOptions: { rowHeight: 84, domLayout: 'autoHeight' },
   },
   render: ComplexRowsStory,
+};
+
+const ChatTableStory = (args: GridProps<ModelUsage>) => (
+  <div className="bg-layer-base p-4">
+    <div className="flex flex-col gap-3 p-4">
+      <h2 className="dial-small-semi-text text-primary">Model tokens limits</h2>
+      <Grid<ModelUsage> {...args} />
+    </div>
+  </div>
+);
+
+/**
+ * The "Chat table" of the design (`GridAppearance.Chat`): the grid draws the
+ * borderless card itself — a 12px corner and the MD shadow — with 12px of
+ * cell padding on both sides, dividers between data rows that stop at that
+ * padding, and rounded hover and
+ * selected rows. Rows use the Relaxed density (84px).
+ */
+export const ChatTable: StoryObj<GridProps<ModelUsage>> = {
+  args: {
+    columnDefs: usageColumns,
+    rowData: modelUsage,
+    appearance: GridAppearance.Chat,
+    withoutHeaderBorders: true,
+    additionalGridOptions: { rowHeight: 84, domLayout: 'autoHeight' },
+  },
+  render: ChatTableStory,
 };
 
 interface LimitRow extends Record<string, unknown> {

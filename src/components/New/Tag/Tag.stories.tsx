@@ -23,9 +23,13 @@ const meta = {
     label: { control: 'text', description: 'Text content of the tag' },
     appearance: {
       control: 'radio',
-      options: [TagAppearance.Outlined, TagAppearance.Selectable],
+      options: [
+        TagAppearance.Outlined,
+        TagAppearance.Selectable,
+        TagAppearance.Bordered,
+      ],
       description:
-        'Outlined is the filled chip; selectable is the unfilled filter chip',
+        'Outlined is the filled chip; selectable is the unfilled filter chip; bordered is the compact rimmed value chip',
     },
     selected: {
       control: 'boolean',
@@ -165,6 +169,28 @@ export const Selectable: Story = {
   render: () => <SelectableFilters />,
 };
 
+/** The compact, rimmed value chip of a form field: a host, a variable, an override. */
+export const Bordered: Story = {
+  args: { label: 'MCP_TIMEOUT = 120000' },
+  render: () => (
+    <div className="flex flex-wrap gap-2 bg-layer-base p-6">
+      <Tag
+        label="bbc.com"
+        appearance={TagAppearance.Bordered}
+        closable
+        onRemove={() => {}}
+      />
+      <Tag
+        label="MCP_TIMEOUT = 120000"
+        appearance={TagAppearance.Bordered}
+        closable
+        onRemove={() => {}}
+      />
+      <Tag label="Read-only" appearance={TagAppearance.Bordered} />
+    </div>
+  ),
+};
+
 export const SelectableStates: Story = {
   args: { label: 'Tag' },
   render: () => (
@@ -229,6 +255,12 @@ export const AllVariants: Story = {
           appearance={TagAppearance.Selectable}
           selected
           onClick={() => {}}
+        />
+        <Tag
+          label="Bordered"
+          appearance={TagAppearance.Bordered}
+          closable
+          onRemove={() => {}}
         />
       </div>
     </div>
