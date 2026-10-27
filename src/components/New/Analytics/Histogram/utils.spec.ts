@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '../Bar/utils';
 import {
   buildHistogramColumns,
   formatHistogramColumnLabel,
@@ -7,7 +8,6 @@ import {
   getHistogramYMax,
   getHistogramYTicks,
 } from './utils';
-import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/Analytics/Bar/utils';
 
 const map = DEFAULT_ANALYTICS_BAR_COLOR_MAP;
 

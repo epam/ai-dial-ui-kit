@@ -2,22 +2,6 @@ export {
   DialCaptionText,
   DialErrorText,
 } from './components/CaptionText/CaptionText';
-export { DialAnalyticsCard } from './components/Analytics';
-export type { DialAnalyticsCardProps } from './components/Analytics';
-export { AnalyticsCardVariant } from './types/analytics';
-export { DialAnalyticsBar } from './components/Analytics';
-export type { DialAnalyticsBarProps } from './components/Analytics';
-export { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from './components/Analytics';
-export type {
-  AnalyticsBarColorStop,
-  AnalyticsCardCompareItem,
-} from './models/analytics';
-export { DialAnalyticsErrorTag } from './components/Analytics';
-export type { DialAnalyticsErrorTagProps } from './components/Analytics';
-export { DialAnalyticsBarGroup } from './components/Analytics';
-export type { DialAnalyticsBarGroupProps } from './components/Analytics';
-export { DialAnalyticsHistogram } from './components/Analytics';
-export type { DialAnalyticsHistogramProps } from './components/Analytics';
 export { DialLabel } from './components/Label/Label';
 export { DialAccordion } from './components/Accordion/Accordion';
 export type { DialAccordionProps } from './components/Accordion/Accordion';
@@ -27,7 +11,6 @@ export { Spinner } from './components/Spinner/Spinner';
 export type { SpinnerProps } from './components/Spinner/Spinner';
 export { ProgressBar } from './components/ProgressBar/ProgressBar';
 export type { ProgressBarProps } from './components/ProgressBar/ProgressBar';
-export { DialSteps } from './components/Steps/Steps';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export type { DialNoDataContentProps } from './components/NoDataContent/NoDataContent';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
@@ -258,10 +241,18 @@ export type { MultiSelectTagsProps } from './components/New/Select/MultiSelectTa
 export { InfoButton } from './components/New/InfoButton/InfoButton';
 export type { InfoButtonProps } from './components/New/InfoButton/InfoButton';
 export type { LabelProps } from './components/New/Label/Label';
+export { Steps } from './components/New/Steps/Steps';
+export type { StepsProps } from './components/New/Steps/Steps';
 export { AnalyticsCard } from './components/New/Analytics/Card/Card';
 export type { AnalyticsCardProps } from './components/New/Analytics/Card/Card';
+export { AnalyticsCardVariant } from './types/analytics';
 export { AnalyticsBar } from './components/New/Analytics/Bar/Bar';
 export type { AnalyticsBarProps } from './components/New/Analytics/Bar/Bar';
+export { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from './components/New/Analytics/Bar/utils';
+export type {
+  AnalyticsBarColorStop,
+  AnalyticsCardCompareItem,
+} from './models/analytics';
 export { AnalyticsBarGroup } from './components/New/Analytics/BarGroup/BarGroup';
 export type { AnalyticsBarGroupProps } from './components/New/Analytics/BarGroup/BarGroup';
 export { AnalyticsHistogram } from './components/New/Analytics/Histogram/Histogram';

@@ -39,6 +39,8 @@ export const DIAL_KIT_CLASS = {
   labelledText: 'dial-kit-labelled-text',
 
   /* ── Containers ────────────────────────────────────────────────────────── */
+  /** The `ol` root of a `Steps`, holding one button per step. */
+  steps: 'dial-kit-steps',
   /** The root of an `AnalyticsCard`: the box holding its title, value and description. */
   analyticsCard: 'dial-kit-analytics-card',
   /** The root of an `AnalyticsBar`: the title row and track, stacked or inline. */

@@ -287,6 +287,7 @@ breaking change and goes through the migration-guide process.
 
 | Key                  | Class                             | Element                                                              |
 | -------------------- | --------------------------------- | -------------------------------------------------------------------- |
+| `steps`              | `dial-kit-steps`                  | The `ol` root of a `Steps`                                           |
 | `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
 | `analyticsCard`      | `dial-kit-analytics-card`         | The root of an `AnalyticsCard`                                       |
 | `analyticsBar`       | `dial-kit-analytics-bar`          | The root of an `AnalyticsBar`, stacked or inline                     |

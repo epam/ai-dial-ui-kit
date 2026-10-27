@@ -1,7 +1,7 @@
+import { AnalyticsCardVariant } from '@/types/analytics';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { AnalyticsCard } from './Card';
-import { AnalyticsCardVariant } from '@/types/analytics';
 
 describe('Dial UI Kit :: AnalyticsCard', () => {
   test('renders title, value and description', () => {

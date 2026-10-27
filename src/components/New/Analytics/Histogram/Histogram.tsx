@@ -1,19 +1,19 @@
 import type { FC, ReactNode } from 'react';
 
-import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/Analytics/Bar/utils';
-import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
-import { Spinner } from '@/components/Spinner/Spinner';
-import { TooltipPlacement } from '@/types/tooltip';
+import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/New/Analytics/Bar/utils';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
+import { Spinner } from '@/components/Spinner/Spinner';
+import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 import type { AnalyticsBarColorStop } from '@/models/analytics';
+import { TooltipPlacement } from '@/types/tooltip';
 import { mergeClasses } from '@/utils/merge-classes';
-import type { AnalyticsHistogramColumn } from '@/components/Analytics/Histogram/utils';
 import {
   buildHistogramColumns,
   formatHistogramColumnLabel,
   getHistogramYMax,
   getHistogramYTicks,
-} from '@/components/Analytics/Histogram/utils';
+  type AnalyticsHistogramColumn,
+} from './utils';
 
 const HISTOGRAM_HEIGHT_PX = 128;
 

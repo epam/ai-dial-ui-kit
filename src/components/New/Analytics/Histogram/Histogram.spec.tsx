@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
+import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '../Bar/utils';
 import { AnalyticsHistogram } from './Histogram';
-import { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from '@/components/Analytics/Bar/utils';
 
 describe('Dial UI Kit :: AnalyticsHistogram', () => {
   test('renders the title', () => {

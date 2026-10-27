@@ -284,46 +284,6 @@
     "kind": "type"
   },
   {
-    "name": "DialAnalyticsBar",
-    "kind": "value"
-  },
-  {
-    "name": "DialAnalyticsBarGroup",
-    "kind": "value"
-  },
-  {
-    "name": "DialAnalyticsBarGroupProps",
-    "kind": "type"
-  },
-  {
-    "name": "DialAnalyticsBarProps",
-    "kind": "type"
-  },
-  {
-    "name": "DialAnalyticsCard",
-    "kind": "value"
-  },
-  {
-    "name": "DialAnalyticsCardProps",
-    "kind": "type"
-  },
-  {
-    "name": "DialAnalyticsErrorTag",
-    "kind": "value"
-  },
-  {
-    "name": "DialAnalyticsErrorTagProps",
-    "kind": "type"
-  },
-  {
-    "name": "DialAnalyticsHistogram",
-    "kind": "value"
-  },
-  {
-    "name": "DialAnalyticsHistogramProps",
-    "kind": "type"
-  },
-  {
     "name": "DialBreadcrumb",
     "kind": "value"
   },
@@ -485,10 +445,6 @@
   },
   {
     "name": "DialSecondaryIconButton",
-    "kind": "value"
-  },
-  {
-    "name": "DialSteps",
     "kind": "value"
   },
   {
