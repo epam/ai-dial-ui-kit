@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { describe, expect, test } from 'vitest';
 
-import { DialDropdownIcon } from '@/components/DropdownIcon/DropdownIcon';
 import { FabButton } from '@/components/FabButton/FabButton';
 import { ProgressBar } from '@/components/ProgressBar/ProgressBar';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
@@ -66,6 +65,13 @@ import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
 import { SelectedEntityCard } from '@/components/New/SelectedEntityCard/SelectedEntityCard';
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
+import { Steps } from '@/components/New/Steps/Steps';
+import { StepStatus } from '@/models/step';
+import { LabelledText } from '@/components/New/LabelledText/LabelledText';
+import { AnalyticsBar } from '@/components/New/Analytics/Bar/Bar';
+import { AnalyticsBarGroup } from '@/components/New/Analytics/BarGroup/BarGroup';
+import { AnalyticsCard } from '@/components/New/Analytics/Card/Card';
+import { AnalyticsHistogram } from '@/components/New/Analytics/Histogram/Histogram';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
@@ -86,8 +92,8 @@ import { TabOrientation } from '@/types/tab';
  *
  * These cases query by the class on purpose — here the class is the feature
  * under test, not a locator standing in for a role. Where the element also has
- * a role, the component's own spec asserts the pairing; `MenuItem`,
- * `Dropdown` and `DropdownIcon` carry those.
+ * a role, the component's own spec asserts the pairing; `MenuItem`
+ * and `Dropdown` carry those.
  */
 
 const noop = () => undefined;
@@ -100,6 +106,27 @@ const items = [
 /** Rendered once per case; a portalled component lands outside the container. */
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
+  [
+    'steps',
+    () => (
+      <Steps
+        steps={[{ id: 'a', name: 'A', status: StepStatus.VALID }]}
+        currentStep="a"
+        onChangeStep={noop}
+      />
+    ),
+  ],
+  ['labelledText', () => <LabelledText label="Name" text="Value" />],
+  ['analyticsCard', () => <AnalyticsCard title="Requests" value="12" />],
+  ['analyticsBar', () => <AnalyticsBar title="Score" value={0.5} />],
+  [
+    'analyticsBarGroup',
+    () => <AnalyticsBarGroup title="Group" data={{ a: 0.5 }} />,
+  ],
+  [
+    'analyticsHistogram',
+    () => <AnalyticsHistogram title="Latency" values={[0.1, 0.9]} />,
+  ],
   ['progressBar', () => <ProgressBar value={50} />],
   [
     'progressBar',
@@ -423,24 +450,6 @@ describe('Dial UI Kit :: public class names', () => {
       screen
         .getByRole('textbox', { name: 'Search' })
         .closest(`.${DIAL_KIT_CLASS.dropdownSearch}`),
-    ).toBeInTheDocument();
-  });
-
-  test('stamps the icon and caret of a DialDropdownIcon trigger', () => {
-    render(
-      <DialDropdownIcon
-        ariaLabel="Select model"
-        icon={<IconBrandOpenai />}
-        items={items}
-      />,
-    );
-
-    const trigger = screen.getByRole('button', { name: 'Select model' });
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIcon}`),
-    ).toBeInTheDocument();
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIconCaret}`),
     ).toBeInTheDocument();
   });
 

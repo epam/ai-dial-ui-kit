@@ -70,19 +70,19 @@ export default defineConfig({
       // The ES format uses `preserveModules` so that each
       // source module (Button, Grid, ...) is emitted as its
       // own file - this is what lets a consumer's bundler tree-shake AG
-      // Grid/Monaco/@uiw/* out of a static import that never reaches them.
+      // Grid/@uiw/* out of a static import that never reaches them.
       // The CJS format stays a single bundle per entry, matching the
       // pre-existing behavior: CJS `require()` output is a
       // compatibility/resolution guarantee only, never a tree-shaking one.
     },
     rollupOptions: {
       // `ag-grid-community`/`ag-grid-react` are deliberately NOT in
-      // `externalDependencyNames` above (unlike Monaco/`@uiw/*`, which are
+      // `externalDependencyNames` above (unlike `@uiw/*`, which is
       // `peerDependencies` and thus always external, or
       // `@floating-ui/react`/`@tabler/icons-react`/`classnames`, which are
       // `dependencies` that are kept external): they stay bundled.
-      // Once `preserveModules` (below) isolates both Grid generations into
-      // their own emitted modules, "bundled" and "peer"
+      // Once `preserveModules` (below) isolates the Grid into its own
+      // emitted modules, "bundled" and "peer"
       // are equivalent for tree-shaking (a consumer who never imports
       // Grid never evaluates that module either way), so
       // promoting AG Grid to a peer would only be a breaking,
@@ -105,8 +105,6 @@ export default defineConfig({
             'react-dom': 'ReactDOM',
             classnames: 'classNames',
             '@tabler/icons-react': 'TablerIcons',
-            'monaco-editor': 'monaco',
-            '@monaco-editor/react': 'MonacoEditor',
             '@floating-ui/react': 'FloatingUIReact',
           },
         },
@@ -127,8 +125,6 @@ export default defineConfig({
             'react-dom': 'ReactDOM',
             classnames: 'classNames',
             '@tabler/icons-react': 'TablerIcons',
-            'monaco-editor': 'monaco',
-            '@monaco-editor/react': 'MonacoEditor',
             '@floating-ui/react': 'FloatingUIReact',
           },
         },

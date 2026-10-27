@@ -35,8 +35,20 @@ export const DIAL_KIT_CLASS = {
   errorText: 'dial-kit-error-text',
   /** The `Label` root, which wraps the `label` element and its info button. */
   label: 'dial-kit-label',
+  /** The root of a `LabelledText`, wrapping its caption and value. */
+  labelledText: 'dial-kit-labelled-text',
 
   /* ── Containers ────────────────────────────────────────────────────────── */
+  /** The `ol` root of a `Steps`, holding one button per step. */
+  steps: 'dial-kit-steps',
+  /** The root of an `AnalyticsCard`: the box holding its title, value and description. */
+  analyticsCard: 'dial-kit-analytics-card',
+  /** The root of an `AnalyticsBar`: the title row and track, stacked or inline. */
+  analyticsBar: 'dial-kit-analytics-bar',
+  /** The root of an `AnalyticsBarGroup`: its accordion, header and bars. */
+  analyticsBarGroup: 'dial-kit-analytics-bar-group',
+  /** The root of an `AnalyticsHistogram`: its title, axis and columns. */
+  analyticsHistogram: 'dial-kit-analytics-histogram',
   /** The `article` element of a `CardShell`. */
   cardShell: 'dial-kit-card-shell',
   /** The `aside` element of a `CollapsibleSidebar`. */
@@ -100,13 +112,6 @@ export const DIAL_KIT_CLASS = {
    * state.
    */
   menuItemCheck: 'dial-kit-menuitem-check',
-  /** The primary icon of a `DialDropdownIcon` trigger. */
-  dropdownIcon: 'dial-kit-dropdown-icon',
-  /**
-   * The caret badge of a `DialDropdownIcon` trigger — the round plate the
-   * chevron sits on. Absent when `showCaret` is `false`.
-   */
-  dropdownIconCaret: 'dial-kit-dropdown-icon-caret',
   /** The bubble of a `Tooltip`, rendered by `TooltipContent` into a portal. */
   tooltip: 'dial-kit-tooltip',
   /** The panel of an `InteractiveTooltip` — the one whose content takes focus. */

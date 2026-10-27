@@ -16,24 +16,12 @@ export default defineConfig({
         find: '@',
         replacement: path.resolve(__dirname, './src'),
       },
-      {
-        find: 'monaco-editor',
-        replacement: path.resolve(
-          __dirname,
-          './src/__mocks__/monaco-editor.ts',
-        ),
-      },
     ],
   },
   test: {
     environment: 'jsdom',
     include: ['**/*.spec.tsx', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.ts'],
     setupFiles: ['./setupTests.ts'],
-    server: {
-      deps: {
-        inline: ['monaco-editor'],
-      },
-    },
     coverage: {
       reportsDirectory: './coverage/',
       reporter: ['text', 'json', 'html'],

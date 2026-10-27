@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Runtime rendering smoke test for the consumer-grid fixture.
- * Proves `Grid`/`DialGrid` actually renders - not just that the
+ * Proves `Grid` actually renders - not just that the
  * static module graph has the right shape (that's assert-static-graph.mjs's
  * job) - by executing the fixture's own production bundle in a jsdom
  * document and reading back one row's rendered cell text.
