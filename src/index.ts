@@ -245,8 +245,14 @@ export { Steps } from './components/New/Steps/Steps';
 export type { StepsProps } from './components/New/Steps/Steps';
 export { AnalyticsCard } from './components/New/Analytics/Card/Card';
 export type { AnalyticsCardProps } from './components/New/Analytics/Card/Card';
+export { AnalyticsCardVariant } from './types/analytics';
 export { AnalyticsBar } from './components/New/Analytics/Bar/Bar';
 export type { AnalyticsBarProps } from './components/New/Analytics/Bar/Bar';
+export { DEFAULT_ANALYTICS_BAR_COLOR_MAP } from './components/New/Analytics/Bar/utils';
+export type {
+  AnalyticsBarColorStop,
+  AnalyticsCardCompareItem,
+} from './models/analytics';
 export { AnalyticsBarGroup } from './components/New/Analytics/BarGroup/BarGroup';
 export type { AnalyticsBarGroupProps } from './components/New/Analytics/BarGroup/BarGroup';
 export { AnalyticsHistogram } from './components/New/Analytics/Histogram/Histogram';
