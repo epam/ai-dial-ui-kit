@@ -62,6 +62,19 @@ const DEFAULT_MIN_COLUMN_WIDTH = 150;
 /** Selection changes are coalesced: ag-Grid fires one event per row. */
 const SELECTION_DEBOUNCE_MS = 100;
 
+/** ag-Grid column types that right-align a column. */
+const RIGHT_ALIGNED_COLUMN_TYPES = ['rightAligned', 'numericColumn'];
+
+/**
+ * Whether the column is declared `type: 'rightAligned' | 'numericColumn'`.
+ * The grid's own text boxes carry `text-start`, so they are told explicitly
+ * rather than left to inherit the alignment ag-Grid puts on the cell.
+ */
+const isRightAligned = (colDef?: ColDef) =>
+  [colDef?.type ?? []]
+    .flat()
+    .some((type) => RIGHT_ALIGNED_COLUMN_TYPES.includes(type));
+
 export interface GridProps<T extends object = Record<string, unknown>> {
   /** Column definitions, in ag-Grid `ColDef` format. */
   columnDefs?: ColDef<T>[];
@@ -343,6 +356,7 @@ export const Grid = <T extends object>({
           className={mergeClasses(
             'size-full',
             disabled && 'cursor-not-allowed opacity-75',
+            isRightAligned(p.colDef) && 'text-end',
           )}
           disabled={disabled && !allowDisabledContextMenu}
         >
@@ -366,7 +380,10 @@ export const Grid = <T extends object>({
           // No `h-full`: a full-height text box puts its line at the top of the
           // row, while a cell renderer of its own natural height is centred by
           // `.ag-cell`. Mixing the two left the columns visibly out of line.
-          className="max-w-full dial-small-text text-primary"
+          className={mergeClasses(
+            'max-w-full dial-small-text text-primary',
+            isRightAligned(p.colDef) && 'text-end',
+          )}
           hideTooltip={disabled}
         />,
         disabled,

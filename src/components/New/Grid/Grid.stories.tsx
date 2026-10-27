@@ -175,6 +175,19 @@ export const WithContextMenu: Story = {
   },
 };
 
+/**
+ * Right-align a column with ag-Grid's own column `type`: `rightAligned`, or
+ * `numericColumn` (which also switches the filter to the number filter).
+ */
+export const RightAlignedColumn: Story = {
+  args: {
+    getContextMenuItems: (row) => [{ key: 'edit', label: `Edit ${row.name}` }],
+    columnDefs: columns.map((col) =>
+      col.field === 'price' ? { ...col, type: 'rightAligned' } : col,
+    ),
+  },
+};
+
 export const AlternatingRows: Story = {
   args: {
     alternateOddRowColors: true,

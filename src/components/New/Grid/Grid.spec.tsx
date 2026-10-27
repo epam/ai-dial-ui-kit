@@ -269,6 +269,29 @@ describe('Dial UI Kit :: Grid', () => {
       expect(customCell).toHaveClass('dial-small-text');
     });
 
+    test('right-aligns the text of a rightAligned column', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={[
+            testColumns[0],
+            { ...testColumns[1], type: 'rightAligned' },
+          ]}
+          rowData={testRows}
+        />,
+      );
+
+      const ageCell = (await screen.findByText('30')).closest('.ag-cell');
+      const nameText = await screen.findByText('Alice');
+
+      expect(ageCell).toHaveClass('ag-right-aligned-cell');
+      expect(screen.getByText('30')).toHaveClass('text-end');
+      expect(screen.getByText('30')).not.toHaveClass('text-start');
+      expect(nameText).toHaveClass('text-start');
+      expect(nameText.closest('.ag-cell')).not.toHaveClass(
+        'ag-right-aligned-cell',
+      );
+    });
+
     test('centres the content of a cell wrapped in a context menu', async () => {
       render(
         <Grid<TestRow>
