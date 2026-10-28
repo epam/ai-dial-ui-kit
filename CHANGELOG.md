@@ -61,6 +61,8 @@ Versions match the git tags on the `development` branch.
 
 ### Changed
 
+- **`Input`, `Select` and the other `.dial-kit-input` fields (2.0) — the focus ring is drawn inside the border** — the focus and active ring was an outline outside the field (`outline-offset-0`), so a host that wrapped a field in an `overflow: auto` or `hidden` box with no padding saw it cut off on the sides and bottom. The ring is now offset by `-1px`, so it lies over the 1px border, as the design draws it (a 1px `accent-focus` border, no outer ring), and no ancestor can clip it. An invalid field's ring does the same in the error color. Visual only; no prop changes.
+
 - **`shadow-xs` and `shadow-lg` match the design's shadow scale** — `shadow-xs` was `0 1px 4px` blue alpha-20 over a `0 1px 2px` grey layer; it is now a single `0 0 8px 1px` blue alpha-20 halo, so a pressed button glows evenly instead of dropping down. `shadow-lg` was `0 8px 44px 0`; it is now `1px 10px 25px 12px`, same blue alpha-8. `shadow-sm` and `shadow-md` already matched. `--shadow-xs-2` no longer reaches `shadow-xs` and only colours the resting shadow of solid controls (`dial-kit-control-shadow`). Visual only; no token renamed.
 
 - **`Popup` (2.0) — the title is set in Heading 2** — the header title moves from `dial-h3-text` to `dial-h2-text`, the size the popup design gives it. It also reaches `ConfirmationPopup` and every popup built on `Popup`. Visual only.
