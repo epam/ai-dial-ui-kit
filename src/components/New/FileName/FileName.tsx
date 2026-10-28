@@ -14,6 +14,12 @@ export interface FileNameProps {
   type?: DialItemType;
   /** Extension to pick the icon by, overriding the one in `name`. */
   fileExtension?: string;
+  /**
+   * Replaces the type icon (and the shared badge drawn on it), e.g. to mark a
+   * special folder. Its wrapper is `aria-hidden`; the name stays the item's
+   * accessible name. The `loading` spinner still takes the icon's place.
+   */
+  icon?: ReactNode;
   /** Draws the shared badge on the icon. */
   shared?: boolean;
   /** Replaces the icon with a spinner, which announces itself as a status. */
@@ -52,6 +58,10 @@ export interface FileNameProps {
  * the shared state, which only the badge shows, is announced by a
  * visually-hidden `sharedLabel` after the name instead.
  *
+ * Pass `icon` to draw your own in place of the type icon. The shared badge is
+ * part of the type icon, so it is not drawn then; the visually-hidden
+ * `sharedLabel` still announces the state.
+ *
  * While `loading` the icon is swapped for a `Spinner`, which is left in the
  * accessibility tree so the busy state is announced.
  *
@@ -69,6 +79,7 @@ export interface FileNameProps {
  * @param name - Full item name, with or without an extension
  * @param [type=DialItemType.File] - Whether the item is a file or a folder
  * @param [fileExtension] - Extension overriding the one in `name`
+ * @param [icon] - Replaces the type icon; the `loading` spinner still takes its place
  * @param [shared=false] - Draws the shared badge on the icon
  * @param [loading=false] - Replaces the icon with a spinner
  * @param [loadingLabel='Loading'] - Accessible name of the spinner
@@ -87,6 +98,7 @@ export const FileName: FC<FileNameProps> = ({
   name,
   type = DialItemType.File,
   fileExtension,
+  icon,
   shared = false,
   loading = false,
   loadingLabel,
@@ -108,18 +120,24 @@ export const FileName: FC<FileNameProps> = ({
       DIAL_KIT_CLASS.fileName,
     )}
   >
-    <FileIcon
-      name={name}
-      type={type}
-      fileExtension={fileExtension}
-      shared={shared}
-      loading={loading}
-      loadingLabel={loadingLabel}
-      size={iconSize}
-      sharedIndicatorClassName={sharedIndicatorClassName}
-      sharedIndicatorTooltip={sharedIndicatorTooltip}
-      decorative={!loading}
-    />
+    {icon != null && !loading ? (
+      <span aria-hidden className="flex shrink-0 items-center justify-center">
+        {icon}
+      </span>
+    ) : (
+      <FileIcon
+        name={name}
+        type={type}
+        fileExtension={fileExtension}
+        shared={shared}
+        loading={loading}
+        loadingLabel={loadingLabel}
+        size={iconSize}
+        sharedIndicatorClassName={sharedIndicatorClassName}
+        sharedIndicatorTooltip={sharedIndicatorTooltip}
+        decorative={!loading}
+      />
+    )}
     <div
       className={mergeClasses('flex min-w-0 flex-1', {
         'flex-col gap-1': !!details,
