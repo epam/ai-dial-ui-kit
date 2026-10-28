@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { IconBuilding } from '@tabler/icons-react';
+
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { DialItemType } from '@/types/item';
 import { FileName, type FileNameProps } from './FileName';
 
@@ -64,6 +67,14 @@ export const NoExtension: Story = {
 
 export const Folder: Story = {
   args: { name: 'Projects', type: DialItemType.Folder },
+};
+
+export const CustomIcon: Story = {
+  args: {
+    name: 'Acme',
+    type: DialItemType.Folder,
+    icon: <IconBuilding size={DIAL_ICON_SIZE.MD} />,
+  },
 };
 
 export const Shared: Story = {
