@@ -156,8 +156,13 @@
 }
 
 /* Solid buttons */
+/*
+ * The gradient starts at the border box: from the default padding box it
+ * tiles under the transparent 1px border, so each edge shows the far end of
+ * the gradient.
+ */
 .dial-kit-primary-solid-button {
-  @apply text-control-permanent bg-control-accent-gradient;
+  @apply text-control-permanent bg-control-accent-gradient bg-origin-border;
 
   @media (hover: hover) {
     &:hover:not(:disabled):not([aria-disabled='true']) {
