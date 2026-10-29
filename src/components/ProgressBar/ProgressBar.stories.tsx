@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { ProgressBarRole } from '@/types/progress-bar';
 import { ElementSize } from '@/types/size';
 import { ProgressBar } from './ProgressBar';
 
@@ -11,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A horizontal bar indicating progress toward a goal. Names itself from `labelProps.label`, falling back to `aria-label`.',
+          'A horizontal bar indicating progress toward a goal, or — with `role={ProgressBarRole.Meter}` — a level within a range such as capacity used. Names itself from `labelProps.label`, falling back to `aria-label`.',
       },
     },
   },
@@ -38,6 +39,12 @@ const meta = {
       control: 'text',
       description: 'Readout rendered at the end of the label row',
     },
+    role: {
+      control: 'radio',
+      options: Object.values(ProgressBarRole),
+      description:
+        'ARIA role: `progressbar` for a task on its way to done, `meter` for a level within a range',
+    },
     className: {
       control: 'text',
       description: 'Additional classes on the track element',
@@ -47,6 +54,7 @@ const meta = {
     value: 50,
     max: 100,
     size: ElementSize.Standard,
+    role: ProgressBarRole.Progressbar,
   },
 } satisfies Meta<typeof ProgressBar>;
 
@@ -103,6 +111,24 @@ export const CustomMax: Story = {
     max: 10,
     labelProps: { label: 'Uploading files' },
     'aria-valuetext': '3 of 10 files',
+  },
+};
+
+/**
+ * `ProgressBarRole.Meter` renders `role="meter"`, for a level inside a range
+ * that never completes — here, how much of a project's context capacity its
+ * files take. Pass `aria-valuetext` so the reading is announced in the same
+ * words the readout shows.
+ */
+export const Meter: Story = {
+  args: {
+    role: ProgressBarRole.Meter,
+    value: 3_400_000,
+    max: 10_000_000,
+    size: ElementSize.Small,
+    labelProps: { label: 'Project capacity' },
+    valueLabel: '34% used',
+    'aria-valuetext': '34% used',
   },
 };
 

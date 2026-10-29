@@ -44,7 +44,11 @@ import {
 
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
-import { DropdownTrigger, DropdownItemType } from '@/types/dropdown';
+import {
+  DropdownTrigger,
+  DropdownItemType,
+  DropdownOverlayRole,
+} from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 
 import {
@@ -114,6 +118,33 @@ export interface DropdownProps {
    * opens, matching the pre-existing behavior.
    */
   initialFocus?: 0 | -1 | RefObject<HTMLElement | null>;
+  /**
+   * Whether closing the overlay moves focus back to the trigger: on Escape, a
+   * chosen item, the close button or a controlled `open` flip. Focus that has
+   * already left the overlay is left where it went — an outside press on
+   * another control, or an item whose action focuses something else (e.g. a
+   * rename field). Defaults to `true`.
+   */
+  returnFocus?: boolean;
+  /**
+   * Role of the floating overlay, and with it the trigger's `aria-haspopup`.
+   * Applies to `renderOverlay` content only: the `items` list is always a
+   * menu. Arrow-key movement between options runs for `Menu` only; a `Dialog`
+   * or `None` overlay owns its keys. Defaults to `DropdownOverlayRole.Menu`.
+   */
+  overlayRole?: DropdownOverlayRole;
+  /**
+   * Accessible name of the overlay. Ignored with `DropdownOverlayRole.None`,
+   * whose role-less wrapper cannot be named. With neither this nor
+   * `overlayAriaLabelledBy`, a menu or a dialog is named by its trigger.
+   */
+  overlayAriaLabel?: string;
+  /**
+   * Id of the element that names the overlay, typically a heading inside
+   * `renderOverlay`. Wins over `overlayAriaLabel`. Ignored with
+   * `DropdownOverlayRole.None`.
+   */
+  overlayAriaLabelledBy?: string;
   /**
    * Puts a search field above `items` that narrows them as the user types and
    * highlights the match in each remaining label. The query is cleared when
@@ -206,6 +237,14 @@ const getRefWidth = (el: ReferenceElement): number => {
  * keeps the menu open across toggles. `MenuItemMark.Highlight` is the current
  * item of a navigation menu.
  *
+ * The overlay is a `menu` by default. A `renderOverlay` panel that is not a
+ * menu — a popover of free-form content — sets `overlayRole` to
+ * `DropdownOverlayRole.Dialog` (named by `overlayAriaLabel`,
+ * `overlayAriaLabelledBy` or, failing both, by the trigger), or to
+ * `DropdownOverlayRole.None` when its content carries its own role; the
+ * trigger's `aria-haspopup` follows the choice. Closing the overlay, Escape
+ * included, returns focus to the trigger unless `returnFocus` is `false`.
+ *
  * @example
  * ```tsx
  * // Simple items menu
@@ -221,6 +260,19 @@ const getRefWidth = (el: ReferenceElement): number => {
  * // Custom overlay content
  * <Dropdown closable renderOverlay={() => <div className="p-3">Custom content</div>}>
  *   <button type="button" className="px-3 py-2 rounded border">Custom</button>
+ * </Dropdown>
+ *
+ * // A panel that is not a menu: role="dialog", trigger aria-haspopup="dialog"
+ * <Dropdown
+ *   overlayRole={DropdownOverlayRole.Dialog}
+ *   overlayAriaLabelledBy="limits-title"
+ *   renderOverlay={() => (
+ *     <div className="p-3">
+ *       <h2 id="limits-title">Usage limits</h2>
+ *     </div>
+ *   )}
+ * >
+ *   <button type="button" className="px-3 py-2 rounded border">Limits</button>
  * </Dropdown>
  *
  * // Searchable menu, seven rows tall before it scrolls
@@ -255,6 +307,10 @@ const getRefWidth = (el: ReferenceElement): number => {
  * @param [matchReferenceWidth=true] - Whether to match the reference element's width
  * @param [maxDropdownHeight] - Maximum height of the dropdown menu; when omitted, no limit is applied
  * @param [initialFocus] - Initial focus target inside the overlay on open, forwarded to `FloatingFocusManager`; when omitted, matches pre-existing behavior
+ * @param [returnFocus=true] - Whether closing the overlay (Escape included) returns focus to the trigger
+ * @param [overlayRole=DropdownOverlayRole.Menu] - Role of a `renderOverlay` overlay, and the trigger's matching `aria-haspopup`; the `items` list is always a menu
+ * @param [overlayAriaLabel] - Accessible name of the overlay; ignored with `DropdownOverlayRole.None`
+ * @param [overlayAriaLabelledBy] - Id of the element naming the overlay; wins over `overlayAriaLabel`, ignored with `DropdownOverlayRole.None`
  * @param [searchable=false] - Show a search field above `items` that filters them and highlights the match
  * @param [searchValue] - Controlled query of the search field
  * @param [onSearchChange] - Fired with every edit of the search field, and with `''` when the menu closes
@@ -291,6 +347,10 @@ export const Dropdown: FC<DropdownProps> = ({
   matchReferenceWidth = true,
   maxDropdownHeight,
   initialFocus,
+  returnFocus = true,
+  overlayRole = DropdownOverlayRole.Menu,
+  overlayAriaLabel,
+  overlayAriaLabelledBy,
   searchable = false,
   searchValue,
   onSearchChange,
@@ -425,7 +485,19 @@ export const Dropdown: FC<DropdownProps> = ({
     },
   });
 
-  const role = useRole(context, { role: 'menu' });
+  // The item list is always a menu; only a custom overlay chooses its role.
+  const resolvedRole = renderOverlay ? overlayRole : DropdownOverlayRole.Menu;
+  const isMenu = resolvedRole === DropdownOverlayRole.Menu;
+  const isDialog = resolvedRole === DropdownOverlayRole.Dialog;
+  const triggerWrapperId = useId();
+
+  /* Disabled for `None`, which leaves the overlay role-less and the trigger
+     without `aria-haspopup`; `aria-expanded`/`aria-controls` are filled in
+     below either way. */
+  const role = useRole(context, {
+    role: isDialog ? 'dialog' : 'menu',
+    enabled: resolvedRole !== DropdownOverlayRole.None,
+  });
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
     hover,
@@ -501,6 +573,9 @@ export const Dropdown: FC<DropdownProps> = ({
    */
   const handleFloatingKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
+      /* Only a menu is arrow-navigated here: a dialog or a role-less panel may
+         hold a text area or a widget of its own whose arrow keys it owns. */
+      if (!isMenu) return;
       if (event.defaultPrevented) return;
       if (!OVERLAY_NAV_KEYS.includes(event.key)) return;
       /* A submenu renders through a portal, so its key events bubble here
@@ -529,7 +604,7 @@ export const Dropdown: FC<DropdownProps> = ({
         nextOptionIndex(event.key, currentIndex, options.length)
       ]?.focus();
     },
-    [],
+    [isMenu],
   );
 
   const handleItemClick = useCallback(
@@ -721,7 +796,7 @@ export const Dropdown: FC<DropdownProps> = ({
     !renderOverlay && (searchable || maxVisibleItems != null);
 
   const {
-    'aria-haspopup': ariaHasPopup = 'menu',
+    'aria-haspopup': ariaHasPopup,
     'aria-expanded': ariaExpanded = isOpen,
     'aria-controls': ariaControls = listId,
     ...referenceProps
@@ -729,6 +804,24 @@ export const Dropdown: FC<DropdownProps> = ({
     onContextMenu,
     onMouseDown: onPointerDown,
   }) as HTMLAttributes<HTMLSpanElement>;
+
+  /*
+   * A dialog needs a name. Without one from the caller it borrows the
+   * trigger's, the way Floating UI already labels a menu by its reference. A
+   * role-less (`None`) wrapper is generic and cannot be named at all.
+   */
+  const labelsByTrigger =
+    isDialog && !overlayAriaLabel && !overlayAriaLabelledBy;
+  const getOverlayNameProps = (): HTMLAttributes<HTMLDivElement> => {
+    if (resolvedRole === DropdownOverlayRole.None) return {};
+    if (overlayAriaLabelledBy) {
+      return { 'aria-labelledby': overlayAriaLabelledBy };
+    }
+    if (overlayAriaLabel) {
+      return { 'aria-label': overlayAriaLabel, 'aria-labelledby': undefined };
+    }
+    return labelsByTrigger ? { 'aria-labelledby': triggerWrapperId } : {};
+  };
 
   /*
    * The wrapper `<span>` has no role, and ARIA forbids `aria-expanded` there,
@@ -785,6 +878,7 @@ export const Dropdown: FC<DropdownProps> = ({
       <FloatingNode id={nodeId}>
         <span
           ref={refs.setReference}
+          id={labelsByTrigger ? triggerWrapperId : undefined}
           className={mergeClasses(
             dropdownBaseClassName,
             disabled && '!cursor-not-allowed opacity-75',
@@ -815,7 +909,7 @@ export const Dropdown: FC<DropdownProps> = ({
                     ? 0
                     : -1
               }
-              returnFocus
+              returnFocus={returnFocus}
             >
               <div
                 id={listId}
@@ -835,6 +929,7 @@ export const Dropdown: FC<DropdownProps> = ({
                   listClassName,
                 )}
                 {...getFloatingProps({ onKeyDown: handleFloatingKeyDown })}
+                {...getOverlayNameProps()}
               >
                 {closable && (
                   <div className="flex items-center justify-between px-2 pt-2">
