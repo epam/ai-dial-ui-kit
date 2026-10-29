@@ -2162,6 +2162,24 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     );
   });
 
+  test('puts the popup state on the trigger of a controlled dropdown with no trigger types', () => {
+    const { container } = render(
+      <Dropdown items={items} trigger={[]} open>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      screen.getByRole('menu').id,
+    );
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
+    expect(wrapper).not.toHaveAttribute('aria-controls');
+  });
+
   test('keeps the popup state on the wrapper for a text trigger', () => {
     const { container } = render(<Dropdown items={items}>Open</Dropdown>);
     expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
