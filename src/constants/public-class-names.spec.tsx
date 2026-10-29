@@ -41,6 +41,7 @@ import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/Interact
 import { Label } from '@/components/New/Label/Label';
 import { NoDataContent } from '@/components/New/NoDataContent/NoDataContent';
 import { StateScreen } from '@/components/New/StateScreen/StateScreen';
+import { LiveRegion } from '@/components/New/LiveRegion/LiveRegion';
 import { TransferQueue } from '@/components/New/TransferQueue/TransferQueue';
 import { TransferQueueItemStatus } from '@/types/transfer-queue';
 import { Notification } from '@/components/New/Notification/Notification';
@@ -136,6 +137,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['notification', () => <Notification message="Saved" />],
   ['noDataContent', () => <NoDataContent title="Nothing here" />],
   ['stateScreen', () => <StateScreen title="Access denied" />],
+  ['liveRegion', () => <LiveRegion />],
   [
     'transferQueue',
     () => (

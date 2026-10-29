@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CaptionType } from '@/types/caption';
+import { LiveRegionPoliteness } from '@/types/live-region';
 import { CaptionText } from './CaptionText';
 
 const meta = {
@@ -19,6 +20,12 @@ const meta = {
       control: { type: 'select' },
       options: [CaptionType.Error, CaptionType.Description],
       description: 'The visual style variant of the caption text.',
+    },
+    announce: {
+      control: { type: 'select' },
+      options: [undefined, ...Object.values(LiveRegionPoliteness)],
+      description:
+        'Render inside an always-mounted LiveRegion of this politeness.',
     },
     text: {
       control: { type: 'text' },
@@ -46,5 +53,20 @@ export const Default: Story = {};
 export const Error: Story = {
   args: {
     variant: CaptionType.Error,
+  },
+};
+
+export const Announced: Story = {
+  args: {
+    variant: CaptionType.Error,
+    announce: LiveRegionPoliteness.Assertive,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'With `announce`, the caption is rendered inside an always-mounted `LiveRegion`, present even while `text` is empty, so the message is read when it appears. `id` stays on the text element for `aria-describedby`.',
+      },
+    },
   },
 };

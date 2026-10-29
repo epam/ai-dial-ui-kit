@@ -20,6 +20,11 @@ export const DIAL_KIT_CLASS = {
   noDataContent: 'dial-kit-no-data-content',
   /** The `section` root of a `StateScreen`. */
   stateScreen: 'dial-kit-state-screen',
+  /**
+   * The always-mounted wrapper of a `LiveRegion` — also the wrapper `CaptionText`
+   * and `ErrorText` render when given `announce`.
+   */
+  liveRegion: 'dial-kit-live-region',
   /** The `role="status"` panel of a `TransferQueue`: header, rows and aggregate bar. */
   transferQueue: 'dial-kit-transfer-queue',
 
