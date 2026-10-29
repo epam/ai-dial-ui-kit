@@ -828,8 +828,9 @@ export const Dropdown: FC<DropdownProps> = ({
    * so a screen reader never hears the menu state. A single element trigger
    * (the usual icon button) carries the popup attributes itself instead; the
    * trigger's own values win, so a combobox keeps `aria-haspopup="listbox"`.
-   * Text or several nodes, and a context-menu-only trigger (a grid cell, not a
-   * control), leave them on the wrapper as before.
+   * An empty `trigger` (the child opens a controlled dropdown itself) counts
+   * as an element trigger too. Text or several nodes, and a context-menu-only
+   * trigger (a grid cell, not a control), leave them on the wrapper as before.
    */
   const triggerAria: HTMLAttributes<HTMLSpanElement> = {
     'aria-haspopup': ariaHasPopup,
@@ -838,7 +839,8 @@ export const Dropdown: FC<DropdownProps> = ({
   };
   const isElementTrigger =
     isValidElement<HTMLAttributes<HTMLElement>>(children) &&
-    trigger.some((type) => type !== DropdownTrigger.ContextMenu);
+    (trigger.length === 0 ||
+      trigger.some((type) => type !== DropdownTrigger.ContextMenu));
   const triggerNode = isElementTrigger
     ? cloneElement(children, {
         'aria-haspopup': children.props['aria-haspopup'] ?? ariaHasPopup,
