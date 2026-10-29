@@ -11,6 +11,7 @@ export { Spinner } from './components/Spinner/Spinner';
 export type { SpinnerProps } from './components/Spinner/Spinner';
 export { ProgressBar } from './components/ProgressBar/ProgressBar';
 export type { ProgressBarProps } from './components/ProgressBar/ProgressBar';
+export { ProgressBarRole } from './types/progress-bar';
 export { DialNoDataContent } from './components/NoDataContent/NoDataContent';
 export type { DialNoDataContentProps } from './components/NoDataContent/NoDataContent';
 export { DialLabelledText } from './components/LabelledText/LabelledText';
@@ -77,6 +78,7 @@ export {
   DropdownType,
   DropdownTrigger,
   DropdownItemType,
+  DropdownOverlayRole,
 } from './types/dropdown';
 export { MenuItemMark } from './types/menu-item';
 export { ElementSize } from './types/size';
@@ -164,7 +166,11 @@ export type {
 } from './components/New/SchemaRenderer/types';
 
 // new Components
-export { NotificationVariant, NotificationType } from './types/notification.ts';
+export {
+  NotificationVariant,
+  NotificationType,
+  NotificationSurface,
+} from './types/notification.ts';
 export { Notification } from './components/New/Notification/Notification';
 export { Highlight } from './components/New/Highlight/Highlight';
 export { CardShell } from './components/New/CardShell/CardShell';
@@ -308,6 +314,8 @@ export { CheckboxBox } from './components/New/Checkbox/CheckboxBox';
 export type { CheckboxBoxProps } from './components/New/Checkbox/CheckboxBox';
 export { ToggleIconButton } from './components/New/ToggleIconButton/ToggleIconButton';
 export type { ToggleIconButtonProps } from './components/New/ToggleIconButton/ToggleIconButton';
+export { ToggleChip } from './components/New/ToggleChip/ToggleChip';
+export type { ToggleChipProps } from './components/New/ToggleChip/ToggleChip';
 export { SegmentedControl } from './components/New/SegmentedControl/SegmentedControl';
 export type {
   SegmentedControlProps,

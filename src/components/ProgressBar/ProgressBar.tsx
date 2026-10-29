@@ -2,12 +2,16 @@ import type { FC, HTMLAttributes, ReactNode } from 'react';
 import { useId } from 'react';
 
 import { Label, type LabelProps } from '@/components/New/Label/Label';
+import { ProgressBarRole } from '@/types/progress-bar';
 import { ElementSize } from '@/types/size';
 import { resolveAccessibleName } from '@/utils/accessible-name';
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
-type NativeProgressBarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'>;
+type NativeProgressBarProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children' | 'role'
+>;
 
 export interface ProgressBarProps extends NativeProgressBarProps {
   value: number;
@@ -15,12 +19,32 @@ export interface ProgressBarProps extends NativeProgressBarProps {
   size?: ElementSize;
   labelProps?: LabelProps;
   valueLabel?: ReactNode;
+  role?: ProgressBarRole;
 }
 
 /**
- * A horizontal bar indicating progress toward a goal.
- * aliases: Progress|LoadingBar|Meter
+ * The name each role falls back to when neither `labelProps.label` nor
+ * `aria-label` names the bar.
+ */
+const FALLBACK_NAME: Record<ProgressBarRole, string> = {
+  [ProgressBarRole.Progressbar]: 'Progress',
+  [ProgressBarRole.Meter]: 'Meter',
+};
+
+/**
+ * A horizontal bar indicating progress toward a goal, or a level within a range.
+ * aliases: Progress|LoadingBar|Meter|Gauge|CapacityMeter|UsageBar
  * Design system 2.0
+ *
+ * `role` picks what the bar means. The default, `ProgressBarRole.Progressbar`,
+ * is a task on its way to done — an upload, an import. `ProgressBarRole.Meter`
+ * renders `role="meter"`: a level inside a known range that never completes —
+ * capacity used, a quota, a budget. Both carry `aria-valuemin`,
+ * `aria-valuemax`, `aria-valuenow` and, when given, `aria-valuetext`, and draw
+ * the same track and accent fill; the role changes only what a screen reader
+ * announces. The bar has no low / optimum / high colouring, so a meter that
+ * must change colour near its limit is restyled by the caller through
+ * `className`.
  *
  * Names itself from `labelProps.label` through `aria-labelledby`; without one it
  * falls back to `aria-label`, and finally to `Progress` so the bar is never
@@ -41,6 +65,13 @@ export interface ProgressBarProps extends NativeProgressBarProps {
  * <ProgressBar value={40} labelProps={{ label: 'Uploading' }} />
  * <ProgressBar value={3} max={10} aria-valuetext="3 of 10 files" />
  * <ProgressBar value={80} size={ElementSize.Small} />
+ * <ProgressBar
+ *   role={ProgressBarRole.Meter}
+ *   value={usedBytes}
+ *   max={maxBytes}
+ *   aria-label="Project capacity"
+ *   aria-valuetext="42% used"
+ * />
  *
  * <ProgressBar
  *   value={3.313182}
@@ -56,6 +87,7 @@ export interface ProgressBarProps extends NativeProgressBarProps {
  * @param [size=ElementSize.Standard] - Bar height: standard is 8px, small is 4px.
  * @param [labelProps] - Props of the {@link Label} rendered above the bar, which also names it.
  * @param [valueLabel] - Readout rendered at the end of the label row.
+ * @param [role=ProgressBarRole.Progressbar] - ARIA role of the bar: `progressbar` for a task's progress, `meter` for a level within a range. Without a label the bar is named `Progress` or `Meter` respectively.
  * @param [className] - Additional classes on the track element.
  */
 export const ProgressBar: FC<ProgressBarProps> = ({
@@ -64,6 +96,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   size = ElementSize.Standard,
   labelProps,
   valueLabel,
+  role = ProgressBarRole.Progressbar,
   id,
   className,
   'aria-label': ariaLabel,
@@ -85,14 +118,14 @@ export const ProgressBar: FC<ProgressBarProps> = ({
     <div
       {...props}
       id={barId}
-      role="progressbar"
+      role={role}
       aria-valuenow={clamped}
       aria-valuemin={0}
       aria-valuemax={safeMax}
       aria-labelledby={labelId}
       aria-label={resolveAccessibleName(
         ariaLabel,
-        hasLabel ? undefined : 'Progress',
+        hasLabel ? undefined : FALLBACK_NAME[role],
       )}
       className={mergeClasses(
         'w-full overflow-hidden rounded-full bg-control-disable-primary',

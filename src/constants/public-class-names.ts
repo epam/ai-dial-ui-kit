@@ -233,6 +233,8 @@ export const DIAL_KIT_CLASS = {
    * already carries.
    */
   toggleIconButton: 'dial-kit-toggle-icon-button',
+  /** The `<button aria-pressed>` of a `ToggleChip`. */
+  toggleChip: 'dial-kit-toggle-chip',
   /** A `CloseButton`, additive to `dial-kit-base-icon-button`. */
   closeButton: 'dial-kit-close-button',
   /** An `InfoButton`, additive to `dial-kit-base-icon-button`. */

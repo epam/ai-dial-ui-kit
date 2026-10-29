@@ -78,6 +78,7 @@ import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
 import { AutocompleteTagInput } from '@/components/New/AutocompleteTagInput/AutocompleteTagInput';
 import { Textarea } from '@/components/New/Textarea/Textarea';
+import { ToggleChip } from '@/components/New/ToggleChip/ToggleChip';
 import { ToggleIconButton } from '@/components/New/ToggleIconButton/ToggleIconButton';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
@@ -393,6 +394,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     'toggleIconButton',
     () => <ToggleIconButton icon={icon} aria-label="Favourite" />,
   ],
+  ['toggleChip', () => <ToggleChip label="Web search" />],
   ['closeButton', () => <CloseButton ariaLabel="Close" onClose={noop} />],
   ['infoButton', () => <InfoButton caption="More" aria-label="Info" />],
   ['buttonDropdown', () => <ButtonDropdown items={items} label="Actions" />],

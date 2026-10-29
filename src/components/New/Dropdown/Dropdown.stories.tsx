@@ -26,7 +26,11 @@ import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { type DropdownItem } from '@/models/dropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
+import {
+  DropdownItemType,
+  DropdownOverlayRole,
+  DropdownTrigger,
+} from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
 import { TooltipPlacement } from '@/types/tooltip';
@@ -153,6 +157,13 @@ const meta = {
     renderOverlay: { control: false },
     children: { control: false },
     initialFocus: { control: false },
+    returnFocus: { control: { type: 'boolean' } },
+    overlayRole: {
+      control: { type: 'select' },
+      options: Object.values(DropdownOverlayRole),
+    },
+    overlayAriaLabel: { control: { type: 'text' } },
+    overlayAriaLabelledBy: { control: { type: 'text' } },
   },
   args: {
     trigger: [DropdownTrigger.Click],
@@ -1160,4 +1171,93 @@ export const Searchable: Story = {
       { key: 'ocr', label: 'Ocr' },
     ],
   },
+};
+
+const DialogPanelExample = (args: DropdownProps) => (
+  <Dropdown
+    {...args}
+    items={undefined}
+    placement="bottom-end"
+    matchReferenceWidth={false}
+    overlayRole={DropdownOverlayRole.Dialog}
+    overlayAriaLabelledBy="dropdown-story-limits-title"
+    renderOverlay={() => (
+      <div className="flex w-[280px] flex-col gap-2 p-3">
+        <h2
+          id="dropdown-story-limits-title"
+          className="dial-small-paragraph-semi-text text-primary"
+        >
+          Usage limits
+        </h2>
+        <p className="dial-small-paragraph-text text-secondary">
+          12 of 50 requests used today.
+        </p>
+        <NeutralButton label="View details" />
+      </div>
+    )}
+  >
+    <TriggerBtn label="Limits" />
+  </Dropdown>
+);
+
+/**
+ * A panel of free-form content, not a list of actions: `overlayRole` set to
+ * `DropdownOverlayRole.Dialog` makes the overlay a `dialog`, named here by its
+ * heading through `overlayAriaLabelledBy`, and the trigger announces
+ * `aria-haspopup="dialog"`. Arrow keys are left to the content, and Escape
+ * returns focus to the trigger.
+ */
+export const DialogOverlay: Story = {
+  name: 'Dialog overlay (overlayRole=Dialog)',
+  args: {},
+  render: DialogPanelExample,
+};
+
+const NEWS = [
+  { title: 'Scheduled maintenance', text: 'Saturday, 02:00–04:00 UTC.' },
+  { title: 'New models available', text: 'Two new models are in the catalog.' },
+];
+
+const RegionPanelExample = (args: DropdownProps) => (
+  <Dropdown
+    {...args}
+    items={undefined}
+    placement="bottom-end"
+    matchReferenceWidth={false}
+    overlayRole={DropdownOverlayRole.None}
+    renderOverlay={() => (
+      <section
+        aria-label="Announcements"
+        tabIndex={0}
+        className="flex w-[320px] flex-col p-1"
+      >
+        <ul className="flex flex-col divide-y divide-tertiary">
+          {NEWS.map((entry) => (
+            <li key={entry.title} className="px-3 py-2">
+              <p className="dial-small-paragraph-semi-text text-primary">
+                {entry.title}
+              </p>
+              <p className="dial-small-paragraph-text text-secondary">
+                {entry.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  >
+    <TriggerBtn label="2 announcements" />
+  </Dropdown>
+);
+
+/**
+ * `DropdownOverlayRole.None` for content that brings its own semantics — here
+ * a labelled `<section>` region. The overlay wrapper renders without a role
+ * and the trigger drops `aria-haspopup`, keeping `aria-expanded` and
+ * `aria-controls` as a disclosure. Escape returns focus to the trigger.
+ */
+export const RegionOverlay: Story = {
+  name: 'Content with its own role (overlayRole=None)',
+  args: {},
+  render: RegionPanelExample,
 };

@@ -1,7 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, test, vi } from 'vitest';
-import { NotificationVariant } from '@/types/notification';
+import {
+  NotificationSurface,
+  NotificationType,
+  NotificationVariant,
+} from '@/types/notification';
 import { Notification } from './Notification';
+import {
+  ErrorToastNotification,
+  InfoMessageNotification,
+  WarningMessageNotification,
+} from './NotificationWrapper';
 
 describe('Dial UI Kit :: Notification', () => {
   test('Should render with message text', () => {
@@ -193,5 +202,157 @@ describe('Dial UI Kit :: Notification', () => {
     const notification = screen.getByRole('status');
     expect(notification.querySelector('.shrink-0.items-center')).toBeNull();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  describe('surface', () => {
+    const getIconWrapper = (notification: HTMLElement) =>
+      notification.querySelector('[aria-hidden="true"]');
+
+    test('Should draw the variant surface by default', () => {
+      render(
+        <Notification variant={NotificationVariant.Warning} message="Warn" />,
+      );
+
+      const notification = screen.getByRole('alert');
+      expect(notification).toHaveClass('bg-warning', 'text-warning');
+      expect(notification).not.toHaveClass('bg-layer-sunken');
+      // The icon inherits the surface's text colour; no colour of its own.
+      expect(getIconWrapper(notification)).not.toHaveClass('text-warning-icon');
+    });
+
+    test('Should render the same as the default for an explicit Variant surface', () => {
+      render(
+        <Notification
+          variant={NotificationVariant.Error}
+          surface={NotificationSurface.Variant}
+          message="Error"
+        />,
+      );
+
+      expect(screen.getByRole('alert')).toHaveClass('bg-error', 'text-error');
+    });
+
+    test.each([
+      [NotificationVariant.Info, 'status', 'text-info'],
+      [NotificationVariant.Success, 'status', 'text-success'],
+      [NotificationVariant.Warning, 'alert', 'text-warning-icon'],
+      [NotificationVariant.Error, 'alert', 'text-error'],
+      [NotificationVariant.Loading, 'status', 'text-info'],
+      [NotificationVariant.General, 'status', 'text-primary'],
+    ])(
+      'Should keep the %s role (%s) and colour its icon %s on the neutral surface',
+      (variant, expectedRole, iconClassName) => {
+        render(
+          <Notification
+            variant={variant}
+            surface={NotificationSurface.Neutral}
+            message="Neutral"
+          />,
+        );
+
+        // Loading's spinner brings its own status region; take the outer one.
+        const notification = screen.getAllByRole(expectedRole)[0];
+        expect(notification).toHaveClass('bg-layer-sunken', 'text-primary');
+        expect(notification).not.toHaveClass(
+          `bg-${variant}`,
+          `text-${variant}`,
+        );
+        expect(getIconWrapper(notification)).toHaveClass(iconClassName);
+      },
+    );
+
+    test('Should keep the variant icon on the neutral surface', () => {
+      const { container: variantContainer } = render(
+        <Notification variant={NotificationVariant.Warning} message="A" />,
+      );
+      const { container: neutralContainer } = render(
+        <Notification
+          variant={NotificationVariant.Warning}
+          surface={NotificationSurface.Neutral}
+          message="B"
+        />,
+      );
+
+      const iconOf = (root: HTMLElement) =>
+        root.querySelector('[aria-hidden="true"] svg')?.getAttribute('class');
+      expect(iconOf(neutralContainer)).toBe(iconOf(variantContainer));
+      expect(iconOf(neutralContainer)).toContain(
+        'tabler-icon-alert-triangle-filled',
+      );
+    });
+
+    test('Should still let the caller override the role on the neutral surface', () => {
+      render(
+        <Notification
+          variant={NotificationVariant.Warning}
+          surface={NotificationSurface.Neutral}
+          message="Static"
+          role="note"
+        />,
+      );
+
+      expect(screen.getByRole('note')).toHaveClass('bg-layer-sunken');
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
+
+    test('Should let a caller className win over the neutral surface', () => {
+      render(
+        <Notification
+          surface={NotificationSurface.Neutral}
+          message="Custom"
+          className="bg-layer-raised"
+        />,
+      );
+
+      const notification = screen.getByRole('status');
+      expect(notification).toHaveClass('bg-layer-raised');
+      expect(notification).not.toHaveClass('bg-layer-sunken');
+    });
+
+    test('Should render title, message and action on the neutral surface', () => {
+      render(
+        <Notification
+          variant={NotificationVariant.Warning}
+          type={NotificationType.SectionMessage}
+          surface={NotificationSurface.Neutral}
+          title="Log in required"
+          message="Scheduled tasks run while you are offline."
+          action={<button type="button">Log in</button>}
+        />,
+      );
+
+      const alert = screen.getByRole('alert');
+      expect(alert).toContainElement(screen.getByText('Log in required'));
+      expect(alert).toContainElement(
+        screen.getByRole('button', { name: 'Log in' }),
+      );
+    });
+
+    test.each([
+      [
+        'WarningMessageNotification',
+        WarningMessageNotification,
+        'alert',
+        'text-warning-icon',
+      ],
+      [
+        'InfoMessageNotification',
+        InfoMessageNotification,
+        'status',
+        'text-info',
+      ],
+      ['ErrorToastNotification', ErrorToastNotification, 'alert', 'text-error'],
+    ])(
+      'Should forward surface through %s',
+      (_name, Wrapper, expectedRole, iconClassName) => {
+        render(
+          <Wrapper surface={NotificationSurface.Neutral} message="Wrapped" />,
+        );
+
+        const notification = screen.getByRole(expectedRole);
+        expect(notification).toHaveClass('bg-layer-sunken');
+        expect(getIconWrapper(notification)).toHaveClass(iconClassName);
+      },
+    );
   });
 });

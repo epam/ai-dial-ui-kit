@@ -7,11 +7,17 @@ import {
 } from 'react';
 
 import { DialIcon } from '@/components/Icon/Icon';
-import { NotificationType, NotificationVariant } from '@/types/notification';
+import {
+  NotificationSurface,
+  NotificationType,
+  NotificationVariant,
+} from '@/types/notification';
 import { mergeClasses } from '@/utils/merge-classes';
 import { CloseButton } from '../CloseButton/CloseButton';
 import {
   alertBaseClassName,
+  notificationNeutralSurfaceClassName,
+  notificationNeutralSurfaceIconClassNameMap,
   notificationVariantClassNameMap,
   notificationVariantRoleMap,
   variantIcons,
@@ -24,6 +30,14 @@ export interface NotificationProps extends Omit<
 > {
   variant?: NotificationVariant;
   type?: NotificationType;
+  /**
+   * Surface the notification draws on. `NotificationSurface.Neutral` keeps the
+   * variant's icon, icon colour and live-region role but draws the neutral
+   * sunken layer (`bg-layer-sunken`) with primary text instead of the
+   * variant's coloured surface.
+   * @default NotificationSurface.Variant
+   */
+  surface?: NotificationSurface;
   title?: ReactNode;
   message: ReactNode;
   action?: ReactNode;
@@ -40,7 +54,9 @@ export interface NotificationProps extends Omit<
  * Design system 2.0
  *
  * Renders a colored container with an icon, message text, and an optional
- * close button.
+ * close button. `surface={NotificationSurface.Neutral}` swaps the coloured
+ * container for the neutral sunken layer and keeps the variant's icon, icon
+ * colour and role.
  *
  * The container is a live region whose politeness follows the variant: `error`
  * and `warning` use `role="alert"` (assertive, interrupts the screen reader),
@@ -82,6 +98,14 @@ export interface NotificationProps extends Omit<
  * />
  *
  * <Notification
+ *   variant={NotificationVariant.Warning}
+ *   type={NotificationType.SectionMessage}
+ *   surface={NotificationSurface.Neutral}
+ *   title="Log in required"
+ *   message="Scheduled tasks run while you are offline."
+ * />
+ *
+ * <Notification
  *   variant={NotificationVariant.Error}
  *   type={NotificationType.SectionMessage}
  *   title="Couldn't finish this response"
@@ -100,6 +124,7 @@ export interface NotificationProps extends Omit<
  *
  * @param [variant=NotificationVariant.Info] - Defines the visual style and icon of the alert
  * @param [type=NotificationType.Toast] - Defines the type of notification, either a toast or a section message
+ * @param [surface=NotificationSurface.Variant] - `Neutral` draws the neutral sunken surface while keeping the variant's icon, icon colour and role
  * @param [title] - Optional heading displayed above the message in semibold
  * @param message - Message text to display inside the alert
  * @param [action] - Optional control (typically a small `Button`) rendered at the inline end, after the text and before the close button; the caller supplies its accessible name
@@ -113,6 +138,7 @@ export interface NotificationProps extends Omit<
 export const Notification: FC<NotificationProps> = ({
   variant = NotificationVariant.Info,
   type = NotificationType.Toast,
+  surface = NotificationSurface.Variant,
   title,
   message,
   action,
@@ -129,6 +155,8 @@ export const Notification: FC<NotificationProps> = ({
     return variantIcons({ size: iconSize, stroke: iconStroke })[variant];
   }, [variant, iconSize, iconStroke]);
 
+  const isNeutralSurface = surface === NotificationSurface.Neutral;
+
   const resolvedTextClassName =
     textClassName ??
     (type === NotificationType.SectionMessage
@@ -143,7 +171,9 @@ export const Notification: FC<NotificationProps> = ({
       {...props}
       className={mergeClasses(
         alertBaseClassName,
-        notificationVariantClassNameMap[variant],
+        isNeutralSurface
+          ? notificationNeutralSurfaceClassName
+          : notificationVariantClassNameMap[variant],
         type === NotificationType.Toast &&
           'min-w-[200px] max-w-[600px] shadow-lg',
         type === NotificationType.SectionMessage &&
@@ -154,7 +184,14 @@ export const Notification: FC<NotificationProps> = ({
       )}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
-        <span aria-hidden="true" className="flex shrink-0">
+        <span
+          aria-hidden="true"
+          className={mergeClasses(
+            'flex shrink-0',
+            isNeutralSurface &&
+              notificationNeutralSurfaceIconClassNameMap[variant],
+          )}
+        >
           <DialIcon icon={icon} />
         </span>
         {title ? (
