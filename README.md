@@ -271,6 +271,7 @@ breaking change and goes through the migration-guide process.
 | `notification`  | `dial-kit-notification`   | The `Notification` surface, including every toast and section-message wrapper             |
 | `noDataContent` | `dial-kit-no-data-content` | The empty-state root of `NoDataContent`                                                 |
 | `stateScreen`   | `dial-kit-state-screen`   | The `section` root of a `StateScreen`                                                    |
+| `liveRegion`    | `dial-kit-live-region`    | The always-mounted wrapper of a `LiveRegion`, or of an `announce`d `CaptionText` / `ErrorText` |
 | `transferQueue` | `dial-kit-transfer-queue` | The `role="status"` panel of a `TransferQueue`: header, rows and aggregate bar           |
 
 #### Text

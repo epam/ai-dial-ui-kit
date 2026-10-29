@@ -396,6 +396,9 @@ export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
 export { StateScreen } from './components/New/StateScreen/StateScreen';
 export type { StateScreenProps } from './components/New/StateScreen/StateScreen';
+export { LiveRegion } from './components/New/LiveRegion/LiveRegion';
+export type { LiveRegionProps } from './components/New/LiveRegion/LiveRegion';
+export { LiveRegionElement, LiveRegionPoliteness } from './types/live-region';
 export { FormSection } from './components/New/FormSection/FormSection';
 export type {
   FormSectionProps,
