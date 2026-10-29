@@ -284,7 +284,7 @@ export const Starter: Story = {
     docs: {
       description: {
         story:
-          '`StarterButton` — a conversation starter. An outlined neutral pill with a secondary label and a default sparkles icon stroked with the accent gradient (`iconBefore` replaces it, `null` removes it), shown across its default, hover, active, focus, and disabled states.',
+          '`StarterButton` — a conversation starter. A transparent outlined pill, filled only on hover and press, with a secondary label and a default sparkles icon stroked with the accent gradient (`iconBefore` replaces it, `null` removes it), shown across its default, hover, active, focus, and disabled states.',
       },
     },
   },

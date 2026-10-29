@@ -255,8 +255,9 @@
 }
 
 /*
- * A conversation starter: a neutral pill whose icons are stroked with the
- * accent gradient while the label stays secondary. The icons are reached
+ * A conversation starter: a transparent pill with the default control stroke
+ * whose icons are stroked with the accent gradient while the label stays
+ * secondary; it fills only on hover and press. The icons are reached
  * through their `svg` because `Button` wraps each one in an unstyled span;
  * the CSS `stroke` property outranks Tabler's `stroke="currentColor"`
  * attribute and is inherited by every path. `StarterButton` sets
@@ -264,7 +265,7 @@
  * fall back to the accent colour.
  */
 .dial-kit-starter-outlined-button {
-  @apply text-secondary bg-control-neutral;
+  @apply text-secondary bg-transparent;
   @apply border-default;
 
   & svg {
