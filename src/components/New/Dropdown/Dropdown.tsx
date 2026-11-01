@@ -795,10 +795,15 @@ export const Dropdown: FC<DropdownProps> = ({
   const hasOwnListScroll =
     !renderOverlay && (searchable || maxVisibleItems != null);
 
+  /*
+   * The overlay, and `listId` with it, is mounted only while open, so a
+   * closed trigger must not point `aria-controls` at it: an IDREF to a missing
+   * element fails axe `aria-valid-attr-value`.
+   */
   const {
     'aria-haspopup': ariaHasPopup,
     'aria-expanded': ariaExpanded = isOpen,
-    'aria-controls': ariaControls = listId,
+    'aria-controls': ariaControls = isOpen ? listId : undefined,
     ...referenceProps
   } = getReferenceProps({
     onContextMenu,
