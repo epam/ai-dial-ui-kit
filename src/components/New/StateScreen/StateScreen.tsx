@@ -2,6 +2,8 @@ import { useId, type FC, type ReactNode } from 'react';
 
 import { mergeClasses } from '@/utils/merge-classes';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
+import { LiveRegionPoliteness } from '@/types/live-region';
+import { LiveRegion } from '../LiveRegion/LiveRegion';
 
 export interface StateScreenProps {
   /** Headline of the state, rendered as the page's `h1`. */
@@ -18,6 +20,12 @@ export interface StateScreenProps {
   titleClassName?: string;
   /** Additional CSS classes for the description. */
   descriptionClassName?: string;
+  /**
+   * Wraps the screen in a `LiveRegion` of this politeness, for a state that
+   * replaces content the user was working in (a load error, a crash). Omit it
+   * for a state the user navigated to.
+   */
+  announce?: LiveRegionPoliteness;
 }
 
 /**
@@ -48,6 +56,7 @@ export interface StateScreenProps {
  * @param [className] - Additional CSS classes for the container.
  * @param [titleClassName] - Additional CSS classes for the title.
  * @param [descriptionClassName] - Additional CSS classes for the description.
+ * @param [announce] - Wraps the screen in a `LiveRegion` of this politeness, for a state that replaces the user's content.
  */
 export const StateScreen: FC<StateScreenProps> = ({
   title,
@@ -57,10 +66,11 @@ export const StateScreen: FC<StateScreenProps> = ({
   className,
   titleClassName,
   descriptionClassName,
+  announce,
 }) => {
   const titleId = useId();
 
-  return (
+  const screen = (
     <section
       aria-labelledby={titleId}
       className={mergeClasses(
@@ -98,5 +108,13 @@ export const StateScreen: FC<StateScreenProps> = ({
       )}
       {action != null && <div className="mt-4">{action}</div>}
     </section>
+  );
+
+  if (announce == null) return screen;
+
+  return (
+    <LiveRegion politeness={announce} className="size-full">
+      {screen}
+    </LiveRegion>
   );
 };

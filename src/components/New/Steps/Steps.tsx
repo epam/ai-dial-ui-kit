@@ -70,7 +70,7 @@ const getCircleClass = (step: Step, isCurrent: boolean) => {
  * A step's number turns into a check once it is completed and the user has moved
  * on, and into an alert icon while a failed step is the active one. A step can
  * only be entered when every step before it is `StepStatus.VALID`; going back is
- * always allowed.
+ * always allowed. A step with `disabled` cannot be entered at all.
  *
  * The list is an ordered list, the active step carries `aria-current="step"`,
  * and a completed or failed step announces its status after its name.
@@ -158,11 +158,13 @@ export const Steps: FC<StepsProps> = ({
             <button
               type="button"
               aria-current={isCurrent ? 'step' : undefined}
+              disabled={step.disabled}
               onClick={() => handleStepChange(step.id)}
               className={mergeClasses(
                 'flex h-8 w-full cursor-pointer items-center border-t-2 text-start dial-tiny-text',
                 'focus-visible:outline focus-visible:outline-focus',
                 getStepClass(step, isCurrent),
+                'disabled:cursor-not-allowed disabled:text-control-disable-primary',
               )}
             >
               <span

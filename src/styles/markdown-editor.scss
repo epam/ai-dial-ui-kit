@@ -236,3 +236,8 @@
     @apply size-auto justify-start rounded-md px-2 py-1.5 text-left;
   }
 }
+
+/* `invalid`: the card border carries the error state, like Textarea's. */
+.dial-kit-markdown-editor-invalid .w-md-editor {
+  @apply border-error;
+}

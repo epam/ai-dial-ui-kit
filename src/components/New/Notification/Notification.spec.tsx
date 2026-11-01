@@ -355,4 +355,14 @@ describe('Dial UI Kit :: Notification', () => {
       },
     );
   });
+
+  test('names the close button with closeAriaLabel', () => {
+    render(
+      <Notification message="Saved" closable closeAriaLabel="Schließen" />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Schließen' }),
+    ).toBeInTheDocument();
+  });
 });

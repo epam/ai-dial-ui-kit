@@ -21,6 +21,10 @@ export interface MarkdownEditorProps {
   id?: string;
   /** Accessible name for the underlying textarea. Use it only where no visible label exists to pair with `id`. */
   ariaLabel?: string;
+  /** Ids of elements describing the textarea — typically an error rendered next to the editor. */
+  ariaDescribedBy?: string;
+  /** Draws the error border and sets `aria-invalid` on the textarea. */
+  invalid?: boolean;
   /** Whether to show the bottom drag bar that resizes the editor height. */
   showDragbar?: boolean;
 }
@@ -45,6 +49,8 @@ export interface MarkdownEditorProps {
  * @param [defaultPreview='edit'] - Initial edit/live/preview mode
  * @param [id] - `id` of the underlying textarea, for a visible `<label htmlFor>`
  * @param [ariaLabel] - Accessible name for the underlying textarea
+ * @param [ariaDescribedBy] - Ids of elements describing the textarea, e.g. its error
+ * @param [invalid=false] - Draws the error border and sets `aria-invalid` on the textarea
  * @param [showDragbar=true] - Whether to show the bottom drag bar that resizes the editor height
  */
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
@@ -57,6 +63,8 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   defaultPreview = 'edit',
   id,
   ariaLabel,
+  ariaDescribedBy,
+  invalid = false,
   showDragbar = true,
 }) => {
   const commands = useMemo(() => getMarkdownFormattingCommands(), []);
@@ -65,7 +73,11 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   return (
     <div
       data-color-mode={theme}
-      className={mergeClasses('dial-kit-markdown-editor', className)}
+      className={mergeClasses(
+        'dial-kit-markdown-editor',
+        invalid && 'dial-kit-markdown-editor-invalid',
+        className,
+      )}
     >
       <MDEditor
         value={value}
@@ -80,7 +92,13 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
          * to live on the element itself: a heading or a label rendered next to
          * the editor names nothing that assistive tech can associate with it.
          */
-        textareaProps={{ placeholder, id, 'aria-label': ariaLabel }}
+        textareaProps={{
+          placeholder,
+          id,
+          'aria-label': ariaLabel,
+          'aria-describedby': ariaDescribedBy,
+          'aria-invalid': invalid || undefined,
+        }}
       />
     </div>
   );

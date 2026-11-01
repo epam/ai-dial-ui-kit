@@ -80,6 +80,12 @@ export interface CalendarProps {
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
+  /**
+   * Ids of elements describing the field — typically an error rendered next
+   * to it. Lands on the focusable control: the masked input in `time` mode,
+   * the popover trigger otherwise.
+   */
+  ariaDescribedBy?: string;
   id?: string;
   className?: string;
   minDate?: Date;
@@ -116,6 +122,7 @@ interface CalendarPopoverFieldProps {
    * has to be wired up explicitly.
    */
   labelledBy?: string;
+  describedBy?: string;
   /** Accessible name for the popover, which is exposed as `role="dialog"`. */
   panelLabel: string;
 }
@@ -129,6 +136,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   fieldClassName,
   panel,
   labelledBy,
+  describedBy,
   panelLabel,
 }) => {
   const themeScope = useThemeScope();
@@ -161,6 +169,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
         aria-expanded={isOpen}
         aria-disabled={disabled}
         aria-labelledby={labelledBy}
+        aria-describedby={describedBy}
         tabIndex={disabled ? -1 : 0}
         className={mergeClasses(
           calendarFieldBaseClassName,
@@ -212,6 +221,7 @@ interface TimeFieldProps {
   invalid?: boolean;
   className?: string;
   ariaLabel?: string;
+  describedBy?: string;
   placeholder?: string;
   /** Timezone hint pinned over the field's trailing edge; omit for a bare input. */
   timezoneLabel?: string | null;
@@ -238,6 +248,7 @@ const TimeField: FC<TimeFieldProps> = ({
   invalid,
   className,
   ariaLabel,
+  describedBy,
   placeholder = '--:--',
   timezoneLabel,
   timezoneLabelClassName,
@@ -270,6 +281,8 @@ const TimeField: FC<TimeFieldProps> = ({
       inputMode="numeric"
       autoComplete="off"
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
+      aria-invalid={invalid || undefined}
       placeholder={placeholder}
       disabled={disabled}
       value={draft}
@@ -395,6 +408,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [placeholder] - Placeholder shown when there is no value; defaults to a mode-appropriate string ("Select date", "Select date and time", "--:--" or "Select day")
  * @param [disabled=false] - Disables the control
  * @param [invalid=false] - Applies error styling
+ * @param [ariaDescribedBy] - Ids of elements describing the field (e.g. its error), set on the focusable control
  * @param [id] - id applied to the control, linked to the label
  * @param [className] - Additional CSS classes applied to the outer container
  * @param [minDate] - Earliest selectable date (date/datetime modes)
@@ -413,6 +427,7 @@ export const Calendar: FC<CalendarProps> = ({
   placeholder,
   disabled = false,
   invalid = false,
+  ariaDescribedBy,
   id,
   className,
   minDate,
@@ -518,6 +533,7 @@ export const Calendar: FC<CalendarProps> = ({
           onBlur={onBlur}
           disabled={disabled}
           invalid={invalid}
+          describedBy={ariaDescribedBy}
           placeholder={resolvedPlaceholder}
           className={fieldClassName}
           timezoneLabel={timezoneLabel}
@@ -545,6 +561,7 @@ export const Calendar: FC<CalendarProps> = ({
           disabled={disabled}
           invalid={invalid}
           labelledBy={triggerLabelledBy}
+          describedBy={ariaDescribedBy}
           panelLabel={labelText ?? resolvedPlaceholder}
           fieldClassName={fieldClassName}
           trigger={
@@ -612,6 +629,7 @@ export const Calendar: FC<CalendarProps> = ({
         disabled={disabled}
         invalid={invalid}
         labelledBy={triggerLabelledBy}
+        describedBy={ariaDescribedBy}
         panelLabel={labelText ?? resolvedPlaceholder}
         fieldClassName={fieldClassName}
         trigger={

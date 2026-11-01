@@ -114,4 +114,23 @@ describe('Dial UI Kit :: Steps', () => {
       DIAL_KIT_CLASS.steps,
     );
   });
+
+  test('does not enter a disabled step even when every step before it is valid', async () => {
+    const onChangeStep = vi.fn();
+    render(
+      <Steps
+        steps={[
+          { id: 'step1', name: 'Step 1', status: StepStatus.VALID },
+          { id: 'step2', name: 'Step 2', disabled: true },
+        ]}
+        currentStep="step1"
+        onChangeStep={onChangeStep}
+      />,
+    );
+
+    const disabledStep = screen.getByRole('button', { name: 'Step 2' });
+    expect(disabledStep).toBeDisabled();
+    await userEvent.click(disabledStep);
+    expect(onChangeStep).not.toHaveBeenCalled();
+  });
 });
