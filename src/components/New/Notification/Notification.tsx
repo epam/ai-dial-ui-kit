@@ -42,6 +42,8 @@ export interface NotificationProps extends Omit<
   message: ReactNode;
   action?: ReactNode;
   closable?: boolean;
+  /** Accessible name of the close button, for hosts that localise it. */
+  closeAriaLabel?: string;
   iconSize?: number;
   iconStroke?: number;
   textClassName?: string;
@@ -131,6 +133,7 @@ export interface NotificationProps extends Omit<
  * @param [className] - Additional CSS classes applied to the alert container
  * @param [textClassName] - Additional CSS classes applied to the message text
  * @param [closable=false] - Whether the alert has a close button
+ * @param [closeAriaLabel='Close notification'] - Accessible name of the close button
  * @param [iconSize=24] - Size of the icon displayed in the alert
  * @param [iconStroke=2] - Stroke width of the icon displayed in the alert
  * @param [onClose] - Callback fired when the close button is clicked
@@ -146,6 +149,7 @@ export const Notification: FC<NotificationProps> = ({
   iconSize = 24,
   iconStroke = 2,
   closable = false,
+  closeAriaLabel = 'Close notification',
   onClose,
   children,
   textClassName,
@@ -222,7 +226,7 @@ export const Notification: FC<NotificationProps> = ({
       {closable && (
         <CloseButton
           className="shrink-0 self-start"
-          ariaLabel="Close notification"
+          ariaLabel={closeAriaLabel}
           onClose={(e) => onClose?.(e)}
         />
       )}

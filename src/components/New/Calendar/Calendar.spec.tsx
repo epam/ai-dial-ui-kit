@@ -437,6 +437,43 @@ describe('Dial UI Kit :: Calendar', () => {
   });
 
   describe('accessibility', () => {
+    test('Should describe the date trigger with ariaDescribedBy', () => {
+      render(
+        <>
+          <Calendar
+            mode={CalendarMode.Date}
+            labelProps={{ label: 'Start date' }}
+            ariaDescribedBy="start-error"
+            invalid
+          />
+          <span id="start-error">Start date is required</span>
+        </>,
+      );
+
+      expect(
+        screen.getByRole('button', { name: /Start date/ }),
+      ).toHaveAccessibleDescription('Start date is required');
+    });
+
+    test('Should describe the time input and mark it invalid', () => {
+      render(
+        <>
+          <Calendar
+            mode={CalendarMode.Time}
+            labelProps={{ label: 'Run at' }}
+            ariaDescribedBy="time-error"
+            invalid
+            showTimePicker={false}
+          />
+          <span id="time-error">Time is required</span>
+        </>,
+      );
+
+      const input = screen.getByRole('textbox', { name: 'Run at' });
+      expect(input).toHaveAccessibleDescription('Time is required');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
     test('Should name each day cell with its full date', () => {
       render(
         <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,
