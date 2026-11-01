@@ -2148,6 +2148,37 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     );
   });
 
+  test('points aria-controls at the overlay only while it is open', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+
+    expect(button).not.toHaveAttribute('aria-controls');
+
+    openByClick();
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      screen.getByRole('menu').id,
+    );
+  });
+
+  test('omits aria-controls on a closed trigger that passes undefined', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button" aria-controls={undefined}>
+          Open
+        </button>
+      </Dropdown>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' })).not.toHaveAttribute(
+      'aria-controls',
+    );
+  });
+
   test("keeps the trigger's own popup attributes", () => {
     render(
       <Dropdown items={items}>
