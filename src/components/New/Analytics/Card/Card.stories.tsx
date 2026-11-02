@@ -248,6 +248,68 @@ export const CompareCompactNegativeDelta: Story = {
   },
 };
 
+export const CompareStretchedRow: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Cards in a row stretch to the tallest one. The compare divider stays on the first line of the values in every card, and the description sits at the bottom of the card.',
+      },
+    },
+  },
+  render: () => (
+    <div className="flex items-stretch gap-4 text-primary">
+      <AnalyticsCard
+        title="Total runtime"
+        className="w-[260px]"
+        delta={110}
+        deltaUnit="s"
+        deltaPositive={false}
+        compareValues={[
+          {
+            title: 'Run #316',
+            value: (
+              <span className="flex flex-col gap-1">
+                <span>241s</span>
+                <span className="dial-small-text text-secondary">
+                  Model: 241s
+                </span>
+                <span className="dial-small-text text-secondary">
+                  Metrics: 0s
+                </span>
+              </span>
+            ),
+          },
+          {
+            title: 'Run #315',
+            value: (
+              <span className="flex flex-col gap-1">
+                <span>351s</span>
+                <span className="dial-small-text text-secondary">
+                  Model: 351s
+                </span>
+                <span className="dial-small-text text-secondary">
+                  Metrics: 0s
+                </span>
+              </span>
+            ),
+          },
+        ]}
+      />
+      <AnalyticsCard
+        title="Overall score"
+        className="w-[260px]"
+        delta={-0.547}
+        compareValues={[
+          { title: 'Run #316', value: '0.812' },
+          { title: 'Run #315', value: '0.265' },
+        ]}
+        description="Based on completed test cases"
+      />
+    </div>
+  ),
+};
+
 export const Grid: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-4 text-primary">
