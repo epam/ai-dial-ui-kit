@@ -52,6 +52,11 @@ const variantStyles: Record<
     container: string;
     title: string;
     value: string;
+    /**
+     * Height of the compare divider's cell — the line height of the variant's
+     * value type scale, so the divider is centred on the first line of the values.
+     */
+    compareDividerCell: string;
     showDescription: boolean;
   }
 > = {
@@ -59,12 +64,14 @@ const variantStyles: Record<
     container: 'bg-layer-3',
     title: 'dial-small-text text-secondary',
     value: 'dial-display2-text text-primary',
+    compareDividerCell: 'h-10',
     showDescription: true,
   },
   [AnalyticsCardVariant.Compact]: {
     container: 'bg-layer-2',
     title: 'dial-tiny-text text-secondary',
     value: 'dial-body-semi-text text-primary',
+    compareDividerCell: 'h-6',
     showDescription: false,
   },
 };
@@ -83,7 +90,13 @@ const variantStyles: Record<
  * **Compare mode** — pass `compareValues` to split the value area 50/50 between two
  * metrics, each with its own sub-title. Long sub-titles truncate to a single line and
  * show the full text in a tooltip. Pair with `delta` to show a change badge next
- * to the card title, and `deltaUnit` for a suffix such as `"s"`.
+ * to the card title, and `deltaUnit` for a suffix such as `"s"`. The divider is
+ * centred on the first line of the two values, so dividers line up across cards
+ * whose values differ in height.
+ *
+ * **Description placement** — when the card is stretched to the height of its row
+ * (a grid or flex row with equal-height items), the description sits at the
+ * bottom of the card with the free space between it and the value.
  *
  * @example
  * ```tsx
@@ -180,22 +193,30 @@ export const AnalyticsCard: FC<AnalyticsCardProps> = ({
       ) : isLoading ? (
         <Spinner size={18} fullWidth={false} className="self-start" />
       ) : compareValues ? (
-        <div className="flex items-center gap-3">
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <EllipsisTooltip
-              text={compareValues[0].title}
-              className="dial-tiny-text text-secondary"
-            />
-            <span className={styles.value}>{compareValues[0].value}</span>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-x-3 gap-y-0.5">
+          <EllipsisTooltip
+            text={compareValues[0].title}
+            className="col-start-1 dial-tiny-text text-secondary"
+          />
+          <EllipsisTooltip
+            text={compareValues[1].title}
+            className="col-start-3 dial-tiny-text text-secondary"
+          />
+          <span className={mergeClasses('col-start-1 min-w-0', styles.value)}>
+            {compareValues[0].value}
+          </span>
+          <div
+            aria-hidden="true"
+            className={mergeClasses(
+              'col-start-2 flex items-center self-start',
+              styles.compareDividerCell,
+            )}
+          >
+            <div className="h-4 w-px bg-controls-disable-accent" />
           </div>
-          <div className="h-4 w-px flex-shrink-0 bg-controls-disable-accent" />
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <EllipsisTooltip
-              text={compareValues[1].title}
-              className="dial-tiny-text text-secondary"
-            />
-            <span className={styles.value}>{compareValues[1].value}</span>
-          </div>
+          <span className={mergeClasses('col-start-3 min-w-0', styles.value)}>
+            {compareValues[1].value}
+          </span>
         </div>
       ) : (
         <span className={styles.value}>{value}</span>
@@ -206,7 +227,9 @@ export const AnalyticsCard: FC<AnalyticsCardProps> = ({
         styles.showDescription &&
         description != null &&
         description !== false && (
-          <span className="dial-tiny-text text-secondary">{description}</span>
+          <span className="mt-auto dial-tiny-text text-secondary">
+            {description}
+          </span>
         )}
     </div>
   );

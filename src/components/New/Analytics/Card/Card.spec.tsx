@@ -32,6 +32,29 @@ describe('Dial UI Kit :: AnalyticsCard', () => {
     );
   });
 
+  test('pins the description to the bottom of a card stretched to its row', () => {
+    render(<AnalyticsCard title="Users" value="3,201" description="now" />);
+
+    expect(screen.getByText('now').className).toMatch(/\bmt-auto\b/);
+  });
+
+  test('pins the description in compare mode too', () => {
+    render(
+      <AnalyticsCard
+        title="Score"
+        description="Based on completed test cases"
+        compareValues={[
+          { title: 'A', value: '90' },
+          { title: 'B', value: '85' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('Based on completed test cases').className).toMatch(
+      /\bmt-auto\b/,
+    );
+  });
+
   test('renders a ReactNode description', () => {
     render(
       <AnalyticsCard
@@ -175,6 +198,92 @@ describe('Dial UI Kit :: AnalyticsCard', () => {
       expect(screen.getByText('90').className).toMatch(
         /dial-body-semi-text.*text-primary/,
       );
+    });
+
+    test('places the sub-titles and values in the outer columns and the divider in the middle one', () => {
+      render(
+        <AnalyticsCard
+          title="Score"
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      expect(screen.getByText('A').className).toMatch(/col-start-1/);
+      expect(screen.getByText('90').className).toMatch(/col-start-1/);
+      expect(screen.getByText('B').className).toMatch(/col-start-3/);
+      expect(screen.getByText('85').className).toMatch(/col-start-3/);
+    });
+
+    test('hides the divider from assistive technology', () => {
+      const { container } = render(
+        <AnalyticsCard
+          title="Score"
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      const divider = container.querySelector('.w-px');
+      expect(divider?.parentElement).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    test('sizes the divider cell to the first line of the values so dividers line up across cards', () => {
+      const { container, rerender } = render(
+        <AnalyticsCard
+          title="Score"
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      const cell = () => container.querySelector('.w-px')?.parentElement;
+      expect(cell()?.className).toMatch(/\bh-10\b/);
+      expect(cell()?.className).toMatch(/self-start/);
+
+      rerender(
+        <AnalyticsCard
+          title="Score"
+          variant={AnalyticsCardVariant.Compact}
+          compareValues={[
+            { title: 'A', value: '90' },
+            { title: 'B', value: '85' },
+          ]}
+        />,
+      );
+
+      expect(cell()?.className).toMatch(/\bh-6\b/);
+    });
+
+    test('keeps the divider on the first line when a value has more lines below it', () => {
+      const { container } = render(
+        <AnalyticsCard
+          title="Cost"
+          compareValues={[
+            {
+              title: 'A',
+              value: (
+                <>
+                  <span>$120</span>
+                  <span>Model: $100</span>
+                  <span>Metrics: $20</span>
+                </>
+              ),
+            },
+            { title: 'B', value: '$110' },
+          ]}
+        />,
+      );
+
+      const cell = container.querySelector('.w-px')?.parentElement;
+      expect(cell?.className).toMatch(/self-start/);
+      expect(cell?.className).not.toMatch(/self-center|self-stretch/);
     });
 
     test('renders a positive delta badge with success styles and + prefix', () => {
