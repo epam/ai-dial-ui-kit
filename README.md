@@ -387,9 +387,10 @@ target already carries a stable class:
 | `MarkdownEditor`                              | `dial-kit-markdown-editor` |
 | `Grid`                                        | `dial-kit-grid` (exported as `GRID_ROOT_CLASS`) |
 
-Four more contribute no element of their own, and are addressed through what
+Five more contribute no element of their own, and are addressed through what
 they render: `ThemeScope` (a `display: contents` wrapper), `MultiSelectTags`
-(`Tag`s), and `TooltipContainer` / `TooltipTrigger`.
+(`Tag`s), `TooltipContainer` / `TooltipTrigger`, and `ErrorBoundary` (its
+`LiveRegion` and fallback `StateScreen`).
 
 Two neighbouring elements are reached through props instead, and keep being: a
 `Dropdown`'s floating panel takes `listClassName`, and a `Popup`'s backdrop

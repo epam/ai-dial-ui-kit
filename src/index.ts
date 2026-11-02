@@ -404,6 +404,8 @@ export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
 export { StateScreen } from './components/New/StateScreen/StateScreen';
 export type { StateScreenProps } from './components/New/StateScreen/StateScreen';
+export { ErrorBoundary } from './components/New/ErrorBoundary/ErrorBoundary';
+export type { ErrorBoundaryProps } from './components/New/ErrorBoundary/ErrorBoundary';
 export { LoginScreen } from './components/New/LoginScreen/LoginScreen';
 export type {
   LoginScreenProps,
