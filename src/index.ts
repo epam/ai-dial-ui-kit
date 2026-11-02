@@ -193,6 +193,7 @@ export { CalendarMode } from './types/calendar.ts';
 export { Calendar } from './components/New/Calendar/Calendar';
 export type {
   CalendarProps,
+  CalendarTimeFieldRenderProps,
   CalendarValue,
 } from './components/New/Calendar/Calendar';
 export { FolderPath } from './components/New/FolderPath/FolderPath';

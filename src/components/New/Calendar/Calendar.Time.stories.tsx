@@ -28,6 +28,7 @@ const meta = {
     fieldClassName: { control: { type: 'text' } },
     showTimezone: { control: { type: 'boolean' } },
     showTimePicker: { control: { type: 'boolean' } },
+    pickerButtonClassName: { control: { type: 'text' } },
   },
   args: {
     mode: CalendarMode.Time,
@@ -71,4 +72,20 @@ export const WithTimezone: Story = {
 export const TypingOnly: Story = {
   name: 'Typing only',
   args: { showTimePicker: false },
+};
+
+export const CompactPickerButton: Story = {
+  name: 'Compact picker button',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`pickerButtonClassName` is merged onto the clock button after its defaults, so `size-6 end-1.5` overrides the default `size-8 end-2`. Together with `fieldClassName` it fits the field into a denser layout, such as a custom `renderTimeField` control in the `datetime` popover.',
+      },
+    },
+  },
+  args: {
+    fieldClassName: 'px-3 py-1.5 pe-9',
+    pickerButtonClassName: 'size-6 end-1.5',
+  },
 };
