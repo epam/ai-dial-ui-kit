@@ -40,6 +40,7 @@ import { Input } from '@/components/New/Input/Input';
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { Label } from '@/components/New/Label/Label';
 import { NoDataContent } from '@/components/New/NoDataContent/NoDataContent';
+import { LoginScreen } from '@/components/New/LoginScreen/LoginScreen';
 import { StateScreen } from '@/components/New/StateScreen/StateScreen';
 import { LiveRegion } from '@/components/New/LiveRegion/LiveRegion';
 import { TransferQueue } from '@/components/New/TransferQueue/TransferQueue';
@@ -137,6 +138,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['skeleton', () => <Skeleton />],
   ['notification', () => <Notification message="Saved" />],
   ['noDataContent', () => <NoDataContent title="Nothing here" />],
+  ['loginScreen', () => <LoginScreen title="Welcome" />],
   ['stateScreen', () => <StateScreen title="Access denied" />],
   ['liveRegion', () => <LiveRegion />],
   [

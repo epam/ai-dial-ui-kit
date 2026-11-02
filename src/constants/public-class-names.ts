@@ -18,6 +18,8 @@ export const DIAL_KIT_CLASS = {
   notification: 'dial-kit-notification',
   /** The empty-state root of `NoDataContent`. */
   noDataContent: 'dial-kit-no-data-content',
+  /** The `section` root of a `LoginScreen`. */
+  loginScreen: 'dial-kit-login-screen',
   /** The `section` root of a `StateScreen`. */
   stateScreen: 'dial-kit-state-screen',
   /**
