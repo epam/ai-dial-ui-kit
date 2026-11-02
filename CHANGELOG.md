@@ -31,6 +31,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`LoginScreen` (2.0)** — the full-page sign-in screen DIAL Chat and Models Garden each built by hand: themed artwork (`gradient-1` / `gradient-2`) behind a centred card with the product mark, a focusable `h1`, state content (`children`: a spinner, an error with a retry, a notice) and one full-width link button per identity provider, with a decorative logo that is dropped when it fails to load. Edge-to-edge without the card surface on mobile. Fetching providers and building their URLs stay with the application. Stamps `DIAL_KIT_CLASS.loginScreen`. Additive.
+
 - **`Calendar`, `MarkdownEditor` (2.0) — `ariaDescribedBy`; `MarkdownEditor` — `invalid`** — a host rendering its own `ErrorText` under these controls had nothing to link it with: `Calendar` took `invalid` but no description, and `MarkdownEditor` took neither, so hosts patched the DOM. `Calendar` sets `aria-describedby` on the focusable control — the masked input in `time` mode, which also gets `aria-invalid`, and the popover trigger otherwise. `MarkdownEditor` sets `aria-describedby` and `aria-invalid` on its textarea, and `invalid` draws the card border in the error colour. Reported from pg-ai-chat. Additive.
 
 - **`StateScreen` (2.0) — `announce`** — wraps the screen in a `LiveRegion` of the given politeness, for a state that replaces content the user was working in (a load error, a crash), so hosts no longer wrap it in their own `role="alert"` div. Omitted, the screen renders exactly as before. Reported from pg-ai-chat. Additive.

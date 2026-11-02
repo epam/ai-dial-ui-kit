@@ -404,6 +404,11 @@ export { NoDataContent } from './components/New/NoDataContent/NoDataContent';
 export type { NoDataContentProps } from './components/New/NoDataContent/NoDataContent';
 export { StateScreen } from './components/New/StateScreen/StateScreen';
 export type { StateScreenProps } from './components/New/StateScreen/StateScreen';
+export { LoginScreen } from './components/New/LoginScreen/LoginScreen';
+export type {
+  LoginScreenProps,
+  LoginScreenProvider,
+} from './components/New/LoginScreen/LoginScreen';
 export { LiveRegion } from './components/New/LiveRegion/LiveRegion';
 export type { LiveRegionProps } from './components/New/LiveRegion/LiveRegion';
 export { LiveRegionElement, LiveRegionPoliteness } from './types/live-region';
