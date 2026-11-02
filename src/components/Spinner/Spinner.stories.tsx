@@ -44,6 +44,11 @@ export const FullWidth: Story = {
   args: { fullWidth: true },
 };
 
+export const FullScreen: Story = {
+  args: { fullScreen: true, size: 48, ariaLabel: 'Checking your session…' },
+  parameters: { layout: 'fullscreen' },
+};
+
 export const CustomSize: Story = {
   args: { size: 48 },
 };
