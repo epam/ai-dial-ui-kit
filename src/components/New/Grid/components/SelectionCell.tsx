@@ -24,6 +24,9 @@ export interface SelectionCellProps<T> {
  * The row node is the source of truth: the control subscribes to its
  * `rowSelected` event, so a selection made anywhere — another cell, the header,
  * or the `selectedRowIds` prop — is reflected here without refreshing the cell.
+ * It also follows the node's `selectable` flag, so a row a consumer's
+ * `rowSelection.isRowSelectable` rejects is drawn disabled rather than as a
+ * live control that ag-Grid silently refuses to select.
  */
 export const SelectionCell = <T,>({
   params,
@@ -31,19 +34,28 @@ export const SelectionCell = <T,>({
   label,
   radioName,
   rowId,
-  disabled,
+  disabled: isDisabledRow,
 }: SelectionCellProps<T>) => {
   const node = params.node as IRowNode<T>;
   const [isSelected, setIsSelected] = useState(() => !!node.isSelected());
+  const [isSelectable, setIsSelectable] = useState(() => node.selectable);
 
   useEffect(() => {
-    const sync = () => setIsSelected(!!node.isSelected());
+    const syncSelected = () => setIsSelected(!!node.isSelected());
+    const syncSelectable = () => setIsSelectable(node.selectable);
 
-    sync();
-    node.addEventListener('rowSelected', sync);
+    syncSelected();
+    syncSelectable();
+    node.addEventListener('rowSelected', syncSelected);
+    node.addEventListener('selectableChanged', syncSelectable);
 
-    return () => node.removeEventListener('rowSelected', sync);
+    return () => {
+      node.removeEventListener('rowSelected', syncSelected);
+      node.removeEventListener('selectableChanged', syncSelectable);
+    };
   }, [node]);
+
+  const disabled = isDisabledRow || !isSelectable;
 
   const select = (next: boolean) => {
     if (disabled) return;

@@ -490,6 +490,40 @@ describe('Dial UI Kit :: Grid', () => {
       ).not.toBeChecked();
     });
 
+    test('disables the control of a row the consumer isRowSelectable rejects', async () => {
+      const user = userEvent.setup();
+      const onSelectionChange = vi.fn();
+
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          selectionMode={GridSelectionMode.MULTIPLE}
+          selectRowLabel={(row) => `Select ${row.name}`}
+          onSelectionChange={onSelectionChange}
+          additionalGridOptions={{
+            rowSelection: {
+              mode: 'multiRow',
+              isRowSelectable: (node) => node.data?.id !== '3',
+            },
+          }}
+        />,
+      );
+
+      const rejected = await screen.findByRole('checkbox', {
+        name: 'Select Charlie',
+      });
+      await waitFor(() => expect(rejected).toBeDisabled());
+      expect(
+        screen.getByRole('checkbox', { name: 'Select Alice' }),
+      ).toBeEnabled();
+
+      await user.click(rejected);
+
+      expect(rejected).not.toBeChecked();
+      expect(onSelectionChange).not.toHaveBeenCalled();
+    });
+
     test('single mode renders radios and keeps one selected at a time', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
