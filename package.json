@@ -78,6 +78,12 @@
     "esbuild": "0.28.1",
     "shell-quote": "1.11.0",
     "postcss-selector-parser": "^7.1.6",
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.1"
+    },
+    "glob": {
+      "minimatch": "^11.0.1"
+    },
     "@tailwindcss/cli": {
       "@parcel/watcher": "2.6.0"
     }
