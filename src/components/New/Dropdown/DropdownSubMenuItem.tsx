@@ -1,5 +1,5 @@
 import { FloatingNode } from '@floating-ui/react';
-import { Fragment, useCallback, type FC, type MouseEvent } from 'react';
+import { Fragment, useCallback, useRef, type FC, type MouseEvent } from 'react';
 
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
@@ -26,6 +26,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
   item,
   onRootClose,
 }) => {
+  const initialFocus = useRef<0 | -1>(item.subMenuOpen ? 0 : -1);
   const {
     isOpen,
     nodeId,
@@ -34,7 +35,16 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
     context,
     getReferenceProps,
     getFloatingProps,
-  } = useSubMenuFloating(dropdownGap, 'menu', !!item.disabled);
+  } = useSubMenuFloating(
+    dropdownGap,
+    'menu',
+    !!item.disabled,
+    item.subMenuHoverOptions,
+    {
+      open: item.subMenuOpen,
+      onOpenChange: item.onSubMenuOpenChange,
+    },
+  );
 
   const handleChildClick = useCallback(
     (child: DropdownItem) => (e: MouseEvent) => {
@@ -87,6 +97,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
           context={context}
           getFloatingProps={getFloatingProps}
           role="menu"
+          initialFocus={initialFocus.current}
           surfaceClassName={
             item.renderSubMenu
               ? dropdownSubMenuClassName
@@ -123,6 +134,7 @@ export const DropdownSubMenuItem: FC<DropdownSubMenuItemProps> = ({
                     selected={!!child.checked}
                     danger={child.danger}
                     icon={child.icon}
+                    trailing={child.iconAfter}
                     label={child.label}
                     className={child.className}
                     rightControl={child.rightControl}

@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 import { ButtonDropdown } from './ButtonDropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
 import type { DropdownItem } from '@/models/dropdown';
@@ -9,6 +10,93 @@ describe('Dial UI Kit :: DialButtonDropdown', () => {
     { key: 'profile', label: 'Profile' },
     { key: 'logout', label: 'Logout' },
   ];
+
+  test('reports interactions without overriding controlled state and reflects external changes', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <ButtonDropdown
+        label="Create"
+        items={items}
+        open={false}
+        onOpenChange={onOpenChange}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'Create' }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    rerender(
+      <ButtonDropdown
+        label="Create"
+        items={items}
+        open
+        onOpenChange={onOpenChange}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Create' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    expect(screen.getByRole('menu', { name: 'Create' })).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
+  test('forwards searchable menu options and clears the query when dismissed', async () => {
+    const user = userEvent.setup();
+    const onSearchChange = vi.fn();
+    render(
+      <ButtonDropdown
+        label="Create"
+        items={items}
+        dropdownProps={{
+          searchable: true,
+          searchPlaceholder: 'Find action',
+          noResultsLabel: 'No actions',
+          onSearchChange,
+        }}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.type(
+      screen.getByRole('textbox', { name: 'Find action' }),
+      'zzz',
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('No actions');
+    await user.keyboard('{Escape}');
+    expect(onSearchChange).toHaveBeenLastCalledWith('');
+  });
+
+  test('can hide the chevron for an icon-only trigger', () => {
+    render(
+      <ButtonDropdown
+        aria-label="Create"
+        iconBefore={<span>+</span>}
+        iconAfter={null}
+        items={items}
+      />,
+    );
+    const trigger = screen.getByRole('button', { name: 'Create' });
+    expect(trigger).toHaveTextContent('+');
+    expect(trigger.querySelector('svg')).toBeNull();
+    fireEvent.click(trigger);
+    expect(screen.getByRole('menu', { name: 'Create' })).toBeInTheDocument();
+  });
+
+  test('keeps a disabled trigger from opening the dropdown', () => {
+    const onOpenChange = vi.fn();
+    render(
+      <ButtonDropdown
+        label="Create"
+        items={items}
+        disabled
+        onOpenChange={onOpenChange}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Create' }));
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
 
   test('Should render with title and button icon', () => {
     render(<ButtonDropdown title="Settings" items={items} />);

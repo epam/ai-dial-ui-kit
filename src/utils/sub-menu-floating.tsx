@@ -84,6 +84,11 @@ export interface SubMenuHoverOptions {
   move?: boolean;
 }
 
+export interface SubMenuOpenOptions {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
 /**
  * Shared floating state for right-side submenus.
  * Handles open state, Floating UI positioning, hover/dismiss/role interactions,
@@ -96,13 +101,25 @@ export function useSubMenuFloating(
   ariaRole: 'menu' | 'listbox' = 'menu',
   disabled = false,
   hoverOptions?: SubMenuHoverOptions,
+  openOptions?: SubMenuOpenOptions,
 ) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = openOptions?.open ?? internalOpen;
+  const onOpenChange = openOptions?.onOpenChange;
+  const controlledOpen = openOptions?.open;
+  const setIsOpen = useCallback(
+    (open: boolean) => {
+      if (controlledOpen === undefined) setInternalOpen(open);
+      onOpenChange?.(open);
+    },
+    [controlledOpen, onOpenChange],
+  );
+  const [rtl, setRtl] = useState(false);
   const nodeId = useFloatingNodeId();
 
   const { refs, elements, floatingStyles, context } = useFloating({
     nodeId,
-    placement: 'right-start',
+    placement: rtl ? 'left-start' : 'right-start',
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
@@ -112,6 +129,10 @@ export function useSubMenuFloating(
       shift({ padding: gap }),
     ],
   });
+
+  useEffect(() => {
+    if (elements.domReference) setRtl(isRtl(elements.domReference));
+  }, [elements.domReference, isOpen]);
 
   const hover = useHover(context, {
     enabled: !disabled,
@@ -168,7 +189,7 @@ export function useSubMenuFloating(
       setIsOpen(true);
       setShouldFocusFirstOption(true);
     },
-    [disabled],
+    [disabled, setIsOpen],
   );
 
   const handleFloatingKeyDown = useCallback(
@@ -198,7 +219,7 @@ export function useSubMenuFloating(
         nextSubMenuOptionIndex(event.key, currentIndex, options.length)
       ]?.focus();
     },
-    [refs.domReference],
+    [refs.domReference, setIsOpen],
   );
 
   const getReferenceProps = useCallback(
@@ -248,6 +269,8 @@ interface SubMenuPanelProps {
   surfaceClassName?: string;
   /** Extra classes appended to the default floating container classes. */
   className?: string;
+  /** Initial focus for a submenu restored in an already-open state. */
+  initialFocus?: 0 | -1;
   children: ReactNode;
 }
 
@@ -266,6 +289,7 @@ export const SubMenuPanel = ({
   role,
   surfaceClassName,
   className,
+  initialFocus = -1,
   children,
 }: SubMenuPanelProps) => {
   const themeScope = useThemeScope();
@@ -275,7 +299,7 @@ export const SubMenuPanel = ({
       <FloatingFocusManager
         context={context}
         modal={false}
-        initialFocus={-1}
+        initialFocus={initialFocus}
         returnFocus
       >
         <div

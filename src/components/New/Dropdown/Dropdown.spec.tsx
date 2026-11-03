@@ -29,6 +29,108 @@ const readPosition = (el: HTMLElement) =>
   el.style.transform || `${el.style.left}|${el.style.top}`;
 
 describe('Dial UI Kit :: Dropdown', () => {
+  test('restores a controlled submenu with focus and a name, and dismisses only that level', async () => {
+    const user = userEvent.setup();
+    const onSubMenuOpenChange = vi.fn();
+    const Harness = () => {
+      const [open, setOpen] = useState(true);
+      return (
+        <Dropdown
+          defaultOpen
+          items={[
+            {
+              key: 'tools',
+              label: 'Tools',
+              subMenuOpen: open,
+              onSubMenuOpenChange: (next) => {
+                setOpen(next);
+                onSubMenuOpenChange(next);
+              },
+              children: [
+                { key: 'a', label: 'Research', selectable: true },
+                { key: 'b', label: 'Browse', selectable: true },
+              ],
+            },
+          ]}
+        >
+          <button>Open</button>
+        </Dropdown>
+      );
+    };
+    render(<Harness />);
+    const first = await screen.findByRole('menuitemcheckbox', {
+      name: 'Research',
+    });
+    await waitFor(() => expect(first).toHaveFocus());
+    expect(screen.getByRole('menu', { name: 'Tools' })).toBeInTheDocument();
+    await user.keyboard('{ArrowDown}');
+    expect(
+      screen.getByRole('menuitemcheckbox', { name: 'Browse' }),
+    ).toHaveFocus();
+    await user.keyboard('{Escape}');
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('menu', { name: 'Tools' }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(onSubMenuOpenChange).toHaveBeenLastCalledWith(false);
+    expect(screen.getByRole('menu', { name: 'Open' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Tools' })).toHaveFocus();
+  });
+
+  test('does not mutate controlled submenu state and supports custom content without children', async () => {
+    const user = userEvent.setup();
+    const onSubMenuOpenChange = vi.fn();
+    const item = {
+      key: 'prompts',
+      label: 'Prompts',
+      subMenuOpen: false,
+      onSubMenuOpenChange,
+      renderSubMenu: () => <input aria-label="Find prompt" />,
+    };
+    const { rerender } = render(
+      <Dropdown defaultOpen items={[item]}>
+        <button>Open</button>
+      </Dropdown>,
+    );
+    await user.click(screen.getByRole('menuitem', { name: 'Prompts' }));
+    expect(onSubMenuOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    rerender(
+      <Dropdown defaultOpen items={[{ ...item, subMenuOpen: true }]}>
+        <button>Open</button>
+      </Dropdown>,
+    );
+    expect(
+      screen.getByRole('textbox', { name: 'Find prompt' }),
+    ).toBeInTheDocument();
+  });
+
+  test('preserves trailing content and disabled and danger states on item rows', () => {
+    const onClick = vi.fn();
+    render(
+      <Dropdown
+        defaultOpen
+        items={[
+          {
+            key: 'delete',
+            label: 'Delete',
+            iconAfter: <span data-testid="trailing">!</span>,
+            disabled: true,
+            danger: true,
+            onClick,
+          },
+        ]}
+      >
+        <button>Open</button>
+      </Dropdown>,
+    );
+    const row = screen.getByRole('menuitem', { name: /Delete/ });
+    expect(row).toBeDisabled();
+    expect(row).toContainElement(screen.getByTestId('trailing'));
+    fireEvent.click(row);
+    expect(onClick).not.toHaveBeenCalled();
+  });
   test('renders & toggles aria-expanded on open/close', () => {
     const { container } = render(
       <Dropdown items={items}>
