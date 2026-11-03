@@ -48,8 +48,7 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: Object.values(BreadcrumbsSize),
-      description:
-        "The trail's type scale: `dial-small-text` or `dial-h2-text`",
+      description: "The trail's type scale: `dial-tiny-text` or `dial-h2-text`",
     },
     separator: {
       control: false,
@@ -165,7 +164,7 @@ export const Truncated: Story = {
     docs: {
       description: {
         story:
-          'Each segment reveals its full label in a tooltip only once it is actually clipped. The root keeps its width, the middle gives way first, and the current page keeps the largest share of what is left.',
+          'Each segment reveals its full label in a tooltip only once it is actually clipped. The root keeps its width, the middle gives way first, and the current page truncates only once the middle has nothing left to give.',
       },
     },
   },

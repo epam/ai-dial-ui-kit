@@ -1,5 +1,5 @@
 export enum BreadcrumbsSize {
-  /** 14px `dial-small-text`, with a `dial-small-semi-text` current page. */
+  /** 12px `dial-tiny-text`, with a `dial-tiny-semi-text` current page. */
   Small = 'small',
   /**
    * 18px `dial-h2-text`, for a trail that doubles as the page heading. The

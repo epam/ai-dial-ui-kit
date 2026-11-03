@@ -6,11 +6,11 @@ import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { BreadcrumbsSize } from '@/types/breadcrumbs';
 
 /**
- * The `<nav>`. It clips rather than wraps: a breadcrumb that reflows onto a
- * second line moves the content below it, so the trail truncates its segments
- * instead (see `segmentWidthClassName`).
+ * The `<nav>`. It never clips, so a segment's focus ring stays whole: the
+ * trail does not wrap, its segments truncate instead (see
+ * `segmentWidthClassName`).
  */
-export const navClassName = 'w-full overflow-hidden';
+export const navClassName = 'w-full';
 
 /** The `<ol>` holding the segments and their separators. */
 export const listClassName =
@@ -24,7 +24,7 @@ export const itemClassName = 'flex min-w-0 items-center gap-2';
  * separator and the tooltip trigger inside it all read from one declaration.
  */
 export const sizeClassName: Record<BreadcrumbsSize, string> = {
-  [BreadcrumbsSize.Small]: 'dial-small-text',
+  [BreadcrumbsSize.Small]: 'dial-tiny-text',
   [BreadcrumbsSize.Heading]: 'dial-h2-text',
 };
 
@@ -34,35 +34,37 @@ export const sizeClassName: Record<BreadcrumbsSize, string> = {
  * variant that does not exist.
  */
 export const currentSizeClassName: Record<BreadcrumbsSize, string> = {
-  [BreadcrumbsSize.Small]: 'dial-small-semi-text',
+  [BreadcrumbsSize.Small]: 'dial-tiny-semi-text',
   [BreadcrumbsSize.Heading]: 'dial-h2-text',
 };
 
 /**
  * How each segment gives up width when the trail does not fit. The root keeps
- * its full label — it is the anchor the user navigates back to — the middle
- * segments truncate first, and the current page keeps the largest share of
- * what is left, since it names where the user actually is.
+ * its full label — it is the anchor the user navigates back to. The middle
+ * segments shrink a thousand times faster than the current page, so they
+ * truncate first, down to a letter and their chevron; only then does the
+ * current page, which names where the user actually is, give up its width.
+ * Nothing is capped, so a trail that fits is never truncated.
  */
 export const segmentWidthClassName: Record<
   'first' | 'middle' | 'last',
   string
 > = {
   first: 'shrink-0',
-  middle: 'min-w-0 max-w-[30%] shrink',
-  last: 'min-w-0 max-w-[51%] shrink',
+  middle: 'min-w-12 shrink-[1000]',
+  last: 'min-w-0 shrink',
 };
 
 /** The box that draws a segment, around its icon and its label. */
 export const segmentClassName =
-  'flex min-w-0 flex-1 items-center gap-1 rounded-xs transition-colors';
+  'flex min-w-0 flex-1 items-center gap-1 rounded transition-colors';
 
 /**
  * A segment the user can follow. Secondary until hovered, then accent — the
  * same pairing the kit's other inline links use.
  */
 export const linkSegmentClassName =
-  'text-secondary hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
+  'text-secondary hover:text-accent focus-visible:outline focus-visible:outline-offset-1 focus-visible:outline-focus';
 
 /**
  * The last segment: where the user is. Semibold and primary, and never a
@@ -83,7 +85,7 @@ export const separatorClassName =
  * the segments on either side of it (see the README exception table).
  */
 export const overflowButtonClassName =
-  'dial-kit-minimum-target flex shrink-0 items-center rounded-xs text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
+  'dial-kit-minimum-target flex shrink-0 items-center rounded-xs text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-offset-1 focus-visible:outline-focus';
 
 /**
  * Smallest trail the collapse can produce: the root, the ellipsis and the

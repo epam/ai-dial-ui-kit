@@ -204,15 +204,15 @@ describe('Dial UI Kit :: Breadcrumbs', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  test('draws the trail at dial-small-text by default, semibold on the current page', () => {
+  test('draws the trail at dial-tiny-text by default, semibold on the current page', () => {
     render(<Breadcrumbs items={TRAIL} />);
 
     screen
       .getAllByRole('listitem')
-      .forEach((item) => expect(item).toHaveClass('dial-small-text'));
+      .forEach((item) => expect(item).toHaveClass('dial-tiny-text'));
     expect(
       screen.getByText('DK Test with nested').closest('[aria-current="page"]'),
-    ).toHaveClass('dial-small-semi-text');
+    ).toHaveClass('dial-tiny-semi-text');
   });
 
   test('draws the trail at dial-h2-text when asked, semibold throughout', () => {
@@ -220,15 +220,31 @@ describe('Dial UI Kit :: Breadcrumbs', () => {
 
     screen.getAllByRole('listitem').forEach((item) => {
       expect(item).toHaveClass('dial-h2-text');
-      expect(item).not.toHaveClass('dial-small-text');
+      expect(item).not.toHaveClass('dial-tiny-text');
     });
     // `dial-h2-text` is semibold on its own, so the current page repeats it
-    // rather than stacking a small-text weight on top.
+    // rather than stacking a tiny-text weight on top.
     const current = screen
       .getByText('DK Test with nested')
       .closest('[aria-current="page"]');
     expect(current).toHaveClass('dial-h2-text');
-    expect(current).not.toHaveClass('dial-small-semi-text');
+    expect(current).not.toHaveClass('dial-tiny-semi-text');
+  });
+
+  test('lets the current page take the free width, truncating the middle first', () => {
+    render(<Breadcrumbs items={TRAIL} />);
+
+    const [root, middle, current] = screen.getAllByRole('listitem');
+    expect(root).toHaveClass('shrink-0');
+    expect(middle).toHaveClass('min-w-12', 'shrink-[1000]');
+    expect(current).toHaveClass('min-w-0', 'shrink');
+  });
+
+  test('never clips the trail, so a focus ring stays whole', () => {
+    render(<Breadcrumbs items={TRAIL} />);
+
+    expect(screen.getByRole('navigation')).not.toHaveClass('overflow-hidden');
+    expect(screen.getByRole('list')).not.toHaveClass('overflow-hidden');
   });
 
   test('sizes the ellipsis segment with the rest of the trail', () => {

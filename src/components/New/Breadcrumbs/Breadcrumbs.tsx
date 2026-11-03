@@ -63,7 +63,7 @@ export interface BreadcrumbsProps {
    */
   maxVisibleItems?: number;
   /**
-   * The trail's type scale: `dial-small-text` by default, or `dial-h2-text`
+   * The trail's type scale: `dial-tiny-text` by default, or `dial-h2-text`
    * for a trail that doubles as the page heading.
    */
   size?: BreadcrumbsSize;
@@ -99,7 +99,7 @@ export interface BreadcrumbsProps {
  * segment. Separators are decorative and hidden from assistive tech, so the
  * trail is announced as a list of links rather than a string of chevrons.
  *
- * The trail is drawn at `dial-small-text` by default; `size` switches it to
+ * The trail is drawn at `dial-tiny-text` by default; `size` switches it to
  * `dial-h2-text` for a trail that doubles as the page heading, where the
  * token's own semibold weight applies to every segment.
  *
@@ -120,7 +120,7 @@ export interface BreadcrumbsProps {
  *
  * @param items - The trail, outermost first; the last entry is the current page
  * @param [maxVisibleItems=4] - Segments drawn before the middle collapses behind an ellipsis menu
- * @param [size=BreadcrumbsSize.Small] - The trail's type scale: `dial-small-text` or `dial-h2-text`
+ * @param [size=BreadcrumbsSize.Small] - The trail's type scale: `dial-tiny-text` or `dial-h2-text`
  * @param [separator] - Node drawn between two segments; defaults to a right chevron
  * @param [ariaLabel='Breadcrumb'] - Accessible name for the `<nav>`
  * @param [overflowAriaLabel='Show hidden path segments'] - Accessible name for the ellipsis button
