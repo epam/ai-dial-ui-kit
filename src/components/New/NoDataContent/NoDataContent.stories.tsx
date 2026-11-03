@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconInbox, IconZoomCancel } from '@tabler/icons-react';
+import { IconZoomCancel } from '@tabler/icons-react';
 
 import { OutlinedButton } from '@/components/New/Button/ButtonWrappers';
 
@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Message shown in place of a list, table or grid that has nothing to show: an illustration, a title, a description and an optional action. Use "No [entities] yet" / "[Entities] will appear here once [condition]." for an empty default state, and "No [entities] found" / "Try a different search term or check your filters." after a search or filter. The icon is decorative and hidden from assistive tech; pass `live` where the content replaces a list the user has just filtered, so the message is announced.',
+          'Message shown in place of a list, table or grid that has nothing to show: an illustration, a title, a description and an optional action. Use "No [entities] yet" / "[Entities] will appear here once [condition]." for an empty default state, "[Entities] other people share with you will show up here." for Shared with me, and "No [entities] found" / "Try a different search term or check your filters." after a search or filter — drop the search or the filters part when the list has only one of them. The icon is decorative and hidden from assistive tech; pass `live` where the content replaces a list the user has just filtered, so the message is announced.',
       },
     },
   },
@@ -55,25 +55,36 @@ export const WithAction: Story = {
   },
 };
 
+export const SharedWithMe: Story = {
+  args: {
+    title: 'No chats yet',
+    description: 'Chats other people share with you will show up here.',
+  },
+};
+
 export const TitleOnly: Story = {
   args: {
-    title: 'Nothing here yet',
+    title: 'No chats yet',
     description: undefined,
   },
 };
 
+/**
+ * Replace the shared illustration only where the empty state is not a list —
+ * every empty list keeps the default card.
+ */
 export const CustomIcon: Story = {
   args: {
-    title: 'No results found',
+    title: 'No chats found',
     icon: <IconZoomCancel size={60} stroke={0.5} aria-hidden="true" />,
   },
 };
 
+/** After a search or filter, the message replaces the list and is announced. */
 export const Announced: Story = {
   args: {
-    title: 'No matching rows',
-    description: 'Adjust the filters to see more.',
-    icon: <IconInbox size={60} stroke={0.5} aria-hidden="true" />,
+    title: 'No chats found',
+    description: 'Try a different search term or check your filters.',
     live: true,
   },
 };

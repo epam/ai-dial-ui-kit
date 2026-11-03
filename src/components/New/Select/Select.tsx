@@ -91,6 +91,10 @@ export interface SelectProps {
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
+  /** Title when the search leaves no options, as "No [entities] found". Falls back to `emptyStateTitle`. */
+  filteredEmptyStateTitle?: string;
+  /** Description when the search leaves no options. Falls back to `emptyStateDescription`. */
+  filteredEmptyStateDescription?: string;
   disabled?: boolean;
   className?: string;
   fieldClassName?: string;
@@ -171,6 +175,8 @@ export interface SelectProps {
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
  * @param [emptyStateIcon] - Icon to display when there are no options.
+ * @param [filteredEmptyStateTitle] - Title when the search leaves no options, as "No [entities] found". Falls back to `emptyStateTitle`; the message is announced.
+ * @param [filteredEmptyStateDescription] - Description when the search leaves no options, as "Try a different search term". Falls back to `emptyStateDescription`.
  * @param [invalid] - Whether the select is in an invalid state, affecting styling.
  * @param [disabled=false] - Disable the control.
  * @param [className] - Additional CSS classes for the outer container.
@@ -214,6 +220,8 @@ export const Select: FC<SelectProps> = ({
   emptyStateTitle = 'No options available',
   emptyStateDescription,
   emptyStateIcon,
+  filteredEmptyStateTitle,
+  filteredEmptyStateDescription,
   disabled = false,
   className,
   fieldClassName,
@@ -553,10 +561,16 @@ export const Select: FC<SelectProps> = ({
       <div role="none" className={selectOptionsScrollClassName}>
         {filtered.length === 0 ? (
           <div className="px-2 py-3">
+            {/* A query that leaves nothing is the result of what the user just
+                typed, so that message is announced; an empty list is not. */}
             <NoDataContent
+              live={!!query}
               icon={emptyStateIcon}
-              title={emptyStateTitle}
-              description={emptyStateDescription}
+              title={(query && filteredEmptyStateTitle) || emptyStateTitle}
+              description={
+                (query && filteredEmptyStateDescription) ||
+                emptyStateDescription
+              }
             />
           </div>
         ) : (

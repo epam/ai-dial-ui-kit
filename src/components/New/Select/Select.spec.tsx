@@ -492,7 +492,28 @@ describe('Dial UI Kit :: Select', () => {
         },
       );
 
-      expect(screen.getByText('Nothing here')).toBeInTheDocument();
+      expect(screen.getByRole('status')).toHaveTextContent('Nothing here');
+    });
+
+    test('shows the filtered copy when the search leaves no options', () => {
+      renderSelect({
+        searchable: true,
+        emptyStateTitle: 'No fruits yet',
+        filteredEmptyStateTitle: 'No fruits found',
+        filteredEmptyStateDescription: 'Try a different search term.',
+      });
+
+      openSelect();
+      fireEvent.change(
+        screen.getByRole('textbox', { name: 'Search options' }),
+        { target: { value: 'zzz' } },
+      );
+
+      const emptyState = screen.getByRole('status');
+
+      expect(emptyState).toHaveTextContent('No fruits found');
+      expect(emptyState).toHaveTextContent('Try a different search term.');
+      expect(screen.queryByText('No fruits yet')).not.toBeInTheDocument();
     });
   });
 

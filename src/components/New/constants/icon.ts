@@ -13,8 +13,8 @@
  * icon, a menu item, a segmented-control segment — can match the ones the
  * components draw themselves.
  *
- * Two deliberate departures inside the library: the empty-state illustrations
- * (`NoDataContent`, the grid's no-rows overlay) use a much lighter stroke,
+ * Two deliberate departures inside the library: an icon passed as an
+ * empty-state illustration (`NoDataContent`'s `icon`) uses a much lighter stroke,
  * since a 1.5px line reads as a drawing at 16px and as a fence at 100px; and
  * the checkbox glyph uses a heavier one, because it is a control mark sized to
  * a 14px box rather than an icon from the set.
