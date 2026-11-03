@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import { IconDotsVertical, IconInbox } from '@tabler/icons-react';
+import { IconDotsVertical } from '@tabler/icons-react';
 import { useState, type FC } from 'react';
 
 import { Avatar } from '@/components/New/Avatar/Avatar';
 import { Badge } from '@/components/New/Badge/Badge';
+import { OutlinedButton } from '@/components/New/Button/ButtonWrappers';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { IconButton } from '@/components/New/IconButton/IconButton';
 import { Input } from '@/components/New/Input/Input';
@@ -206,12 +207,31 @@ export const Loading: Story = {
   },
 };
 
+/**
+ * No rows at all: "No [entities] yet", what makes them appear, and an optional
+ * way forward. The illustration is the shared empty-state card.
+ */
 export const Empty: Story = {
   args: {
     rowData: [],
     emptyStateTitle: 'No products yet',
-    emptyStateDescription: 'Create one to see it listed here.',
-    emptyStateIcon: <IconInbox size={100} stroke={0.5} aria-hidden="true" />,
+    emptyStateDescription: 'Products will appear here once you add one.',
+    emptyStateAction: <OutlinedButton label="Add product" />,
+  },
+};
+
+/**
+ * The column filters leave no rows: "No [entities] found" with a hint to change
+ * the search, announced to assistive tech. The story filters every row out;
+ * typing a column filter that matches nothing shows the same overlay.
+ */
+export const NoMatchingRows: Story = {
+  args: {
+    filteredEmptyStateTitle: 'No products found',
+    additionalGridOptions: {
+      isExternalFilterPresent: () => true,
+      doesExternalFilterPass: () => false,
+    },
   },
 };
 

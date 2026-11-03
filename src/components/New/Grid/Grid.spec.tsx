@@ -224,20 +224,67 @@ describe('Dial UI Kit :: Grid', () => {
     expect(onGridReady.mock.calls[0][0]).toBeDefined();
   });
 
-  test('announces the empty state when there are no rows', async () => {
-    render(
-      <Grid<TestRow>
-        columnDefs={testColumns}
-        rowData={[]}
-        emptyStateTitle="No results found"
-        emptyStateDescription="Try another search."
-      />,
-    );
+  describe('empty state', () => {
+    test('shows the "yet" copy and the action, unannounced, when there are no rows', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={[]}
+          emptyStateAction={<button type="button">Add person</button>}
+        />,
+      );
 
-    const emptyState = await screen.findByRole('status');
+      expect(await screen.findByText('No items yet')).toBeInTheDocument();
+      expect(
+        screen.getByText('Items will appear here once they are added.'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Add person' }),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
 
-    expect(emptyState).toHaveTextContent('No results found');
-    expect(emptyState).toHaveTextContent('Try another search.');
+    test('announces the no-rows message when emptyStateLive is set', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={[]}
+          emptyStateTitle="No people found"
+          emptyStateDescription="Try another search."
+          emptyStateLive
+        />,
+      );
+
+      const emptyState = await screen.findByRole('status');
+
+      expect(emptyState).toHaveTextContent('No people found');
+      expect(emptyState).toHaveTextContent('Try another search.');
+    });
+
+    test('announces the "found" copy when the filters leave no rows', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          filteredEmptyStateTitle="No people found"
+          emptyStateAction={<button type="button">Add person</button>}
+          additionalGridOptions={{
+            isExternalFilterPresent: () => true,
+            doesExternalFilterPass: () => false,
+          }}
+        />,
+      );
+
+      const emptyState = await screen.findByRole('status');
+
+      expect(emptyState).toHaveTextContent('No people found');
+      expect(emptyState).toHaveTextContent(
+        'Try a different search term or check your filters.',
+      );
+      expect(
+        screen.queryByRole('button', { name: 'Add person' }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   describe('cell alignment', () => {
