@@ -191,6 +191,25 @@ const isEnabledOption = (el: HTMLElement): boolean =>
 /** Keys that move focus between overlay options. */
 const OVERLAY_NAV_KEYS = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
 
+/** Elements that sit in the sequential (Tab) focus order. */
+const TABBABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[contenteditable="true"]',
+  '[tabindex]',
+]
+  .map((selector) => `${selector}:not([tabindex^="-"])`)
+  .join(', ');
+
+/** Returns `el` when it is tabbable itself, otherwise its first tabbable descendant. */
+const getFirstTabbable = (el: Element): HTMLElement | null => {
+  if (el.matches(TABBABLE_SELECTOR)) return el as HTMLElement;
+  return el.querySelector<HTMLElement>(TABBABLE_SELECTOR);
+};
+
 /**
  * Index the given key moves to. Arrow keys wrap around, and starting from
  * outside the option list (`currentIndex` of -1, e.g. focus still on a search
@@ -571,12 +590,62 @@ export const Dropdown: FC<DropdownProps> = ({
    * (its handler runs first, in the capture phase, and calls `preventDefault`)
    * is not moved a second time.
    */
+  /*
+   * The overlay is portalled to the end of `<body>`, so the browser's own Tab
+   * order would leave it for whatever follows the portal. Floating UI fixes
+   * that with tabbable `aria-hidden` focus guards, which fail axe
+   * `aria-hidden-focus`; the guards are off, so Tab is handled here instead.
+   *
+   * Moving focus to the trigger before the browser's default action runs makes
+   * that Tab (or Shift+Tab) continue from the trigger, which is the order the
+   * guards kept. A menu closes on any Tab (WAI-ARIA APG); a dialog or a
+   * role-less panel only when Tab would leave its first or last control.
+   */
+  const handleFloatingTab = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      const overlay = event.currentTarget;
+      if (!isMenu) {
+        // A submenu's key events bubble here through the React tree.
+        if (!overlay.contains(event.target as Node)) return;
+        const tabbables = Array.from(
+          overlay.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
+        );
+        const edge = event.shiftKey ? tabbables[0] : tabbables.at(-1);
+        const focused = overlay.ownerDocument.activeElement;
+        if (edge && focused !== edge && focused !== overlay) return;
+      }
+
+      const reference = refs.domReference.current;
+      const triggerTarget = reference ? getFirstTabbable(reference) : null;
+      if (!triggerTarget) {
+        // No trigger to continue from (a pointer-anchored context menu):
+        // stay put and let the focus manager return focus on close.
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      /* Not closed here: closing now would let the focus manager return
+         focus to the trigger after the browser has moved it on. Focus leaving
+         the trigger closes the overlay (`focus-out`); the timeout covers a
+         Tab that leaves the page, which fires no such event. */
+      triggerTarget.focus({ preventScroll: true });
+      setTimeout(() => {
+        if (refs.floating.current?.isConnected) setOpen(false);
+      });
+    },
+    [isMenu, refs.domReference, refs.floating, setOpen],
+  );
+
   const handleFloatingKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.defaultPrevented) return;
+      if (event.key === 'Tab') {
+        handleFloatingTab(event);
+        return;
+      }
       /* Only a menu is arrow-navigated here: a dialog or a role-less panel may
          hold a text area or a widget of its own whose arrow keys it owns. */
       if (!isMenu) return;
-      if (event.defaultPrevented) return;
       if (!OVERLAY_NAV_KEYS.includes(event.key)) return;
       /* A submenu renders through a portal, so its key events bubble here
          through the React tree from outside this overlay's DOM; moving focus
@@ -604,7 +673,7 @@ export const Dropdown: FC<DropdownProps> = ({
         nextOptionIndex(event.key, currentIndex, options.length)
       ]?.focus();
     },
-    [isMenu],
+    [isMenu, handleFloatingTab],
   );
 
   const handleItemClick = useCallback(
@@ -675,7 +744,6 @@ export const Dropdown: FC<DropdownProps> = ({
               ? { maxHeight: getDropdownListHeight(maxVisibleItems) }
               : undefined
           }
-          aria-label="dropdown"
         >
           {searchable && (
             /* Always mounted, so a screen reader announces the text when a
@@ -900,10 +968,13 @@ export const Dropdown: FC<DropdownProps> = ({
         </span>
 
         {isOpen && (
-          <FloatingPortal>
+          /* No focus guards: they are tabbable `aria-hidden` spans that fail
+             axe `aria-hidden-focus`. `handleFloatingTab` keeps the Tab order. */
+          <FloatingPortal preserveTabOrder={false}>
             <FloatingFocusManager
               context={context}
               modal={false}
+              guards={false}
               /* An explicit `initialFocus` prop wins outright — it's how a
                  host (e.g. a typeahead/command menu opened from a textarea)
                  opts out of focus theft entirely. Otherwise 0 puts focus on
