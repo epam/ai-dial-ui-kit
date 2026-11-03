@@ -2852,8 +2852,9 @@ describe('Dial UI Kit :: Dropdown — nested in another Dropdown trigger', () =>
 
     expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
     expect(container.querySelector('.row-menu')).not.toHaveAttribute('role');
-    expect(
-      screen.getByRole('button', { name: 'Row actions' }),
-    ).toHaveAttribute('aria-haspopup', 'menu');
+    expect(screen.getByRole('button', { name: 'Row actions' })).toHaveAttribute(
+      'aria-haspopup',
+      'menu',
+    );
   });
 });
