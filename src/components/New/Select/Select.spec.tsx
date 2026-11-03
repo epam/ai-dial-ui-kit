@@ -978,3 +978,26 @@ describe('Dial UI Kit :: Select — error and caption description', () => {
     expect(getField()).toHaveAccessibleDescription('Outside Comparison');
   });
 });
+
+describe('Dial UI Kit :: Select — overlay semantics', () => {
+  test('renders the listbox in a role-less overlay, not inside a menu', () => {
+    renderSelect();
+    openSelect();
+
+    // A listbox is not a child a `menu` may contain (axe aria-required-children).
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('moves between options with the arrow keys', async () => {
+    const user = userEvent.setup();
+    renderSelect();
+    await user.click(getField());
+    const first = await screen.findByRole('option', { name: 'Option 1' });
+    first.focus();
+
+    await user.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('option', { name: 'Option 2' })).toHaveFocus();
+  });
+});
