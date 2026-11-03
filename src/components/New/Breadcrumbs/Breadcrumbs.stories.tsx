@@ -49,7 +49,7 @@ const meta = {
       control: 'inline-radio',
       options: Object.values(BreadcrumbsSize),
       description:
-        "The trail's type scale: `dial-small-text` or `dial-h2-text`",
+        "The trail's type scale: `dial-small-text`, `dial-tiny-text` or `dial-h2-text`",
     },
     separator: {
       control: false,
@@ -113,6 +113,30 @@ export const Heading: Story = {
       description: {
         story:
           '`BreadcrumbsSize.Heading` draws the trail at `dial-h2-text`, for a path that doubles as the page title. The token is semibold, so every segment is — the current page included.',
+      },
+    },
+  },
+};
+
+export const Tiny: Story = {
+  args: {
+    ariaLabel: 'File path',
+    size: BreadcrumbsSize.Tiny,
+    items: [
+      { label: 'My files', href: '#' },
+      {
+        label: 'A folder with a name far too long to fit the row it sits in',
+        href: '#',
+      },
+      { label: 'Another long name that has to give way to the one before it' },
+    ],
+    className: 'max-w-[420px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`BreadcrumbsSize.Tiny` draws a 16px trail at `dial-tiny-text` for a dense header. It never clips, so a focus ring stays whole, and caps no segment: the middle gives way first, and the current page truncates only once the middle has nothing left to give.',
       },
     },
   },

@@ -8,9 +8,14 @@ import { BreadcrumbsSize } from '@/types/breadcrumbs';
 /**
  * The `<nav>`. It clips rather than wraps: a breadcrumb that reflows onto a
  * second line moves the content below it, so the trail truncates its segments
- * instead (see `segmentWidthClassName`).
+ * instead (see `segmentWidthClassName`). The tiny trail does not clip at all,
+ * so a segment's focus ring stays whole; its segments truncate on their own.
  */
-export const navClassName = 'w-full overflow-hidden';
+export const navClassName: Record<BreadcrumbsSize, string> = {
+  [BreadcrumbsSize.Small]: 'w-full overflow-hidden',
+  [BreadcrumbsSize.Tiny]: 'w-full',
+  [BreadcrumbsSize.Heading]: 'w-full overflow-hidden',
+};
 
 /** The `<ol>` holding the segments and their separators. */
 export const listClassName =
@@ -25,6 +30,7 @@ export const itemClassName = 'flex min-w-0 items-center gap-2';
  */
 export const sizeClassName: Record<BreadcrumbsSize, string> = {
   [BreadcrumbsSize.Small]: 'dial-small-text',
+  [BreadcrumbsSize.Tiny]: 'dial-tiny-text',
   [BreadcrumbsSize.Heading]: 'dial-h2-text',
 };
 
@@ -35,8 +41,11 @@ export const sizeClassName: Record<BreadcrumbsSize, string> = {
  */
 export const currentSizeClassName: Record<BreadcrumbsSize, string> = {
   [BreadcrumbsSize.Small]: 'dial-small-semi-text',
+  [BreadcrumbsSize.Tiny]: 'dial-tiny-semi-text',
   [BreadcrumbsSize.Heading]: 'dial-h2-text',
 };
+
+type SegmentPosition = 'first' | 'middle' | 'last';
 
 /**
  * How each segment gives up width when the trail does not fit. The root keeps
@@ -44,25 +53,50 @@ export const currentSizeClassName: Record<BreadcrumbsSize, string> = {
  * segments truncate first, and the current page keeps the largest share of
  * what is left, since it names where the user actually is.
  */
-export const segmentWidthClassName: Record<
-  'first' | 'middle' | 'last',
-  string
-> = {
+const cappedSegmentWidthClassName: Record<SegmentPosition, string> = {
   first: 'shrink-0',
   middle: 'min-w-0 max-w-[30%] shrink',
   last: 'min-w-0 max-w-[51%] shrink',
 };
 
+/**
+ * The tiny trail caps nothing, so a trail that fits is never truncated. Its
+ * middle segments shrink a thousand times faster than the current page, down
+ * to a letter and their chevron; only then does the current page give way.
+ */
+export const segmentWidthClassName: Record<
+  BreadcrumbsSize,
+  Record<SegmentPosition, string>
+> = {
+  [BreadcrumbsSize.Small]: cappedSegmentWidthClassName,
+  [BreadcrumbsSize.Tiny]: {
+    first: 'shrink-0',
+    middle: 'min-w-12 shrink-[1000]',
+    last: 'min-w-0 shrink',
+  },
+  [BreadcrumbsSize.Heading]: cappedSegmentWidthClassName,
+};
+
+/**
+ * The focus ring's shape, shared by the segments and the ellipsis button. The
+ * tiny trail draws the design's 1px offset around a 4px radius.
+ */
+export const focusRingClassName: Record<BreadcrumbsSize, string> = {
+  [BreadcrumbsSize.Small]: 'rounded-xs focus-visible:outline-offset-2',
+  [BreadcrumbsSize.Tiny]: 'rounded focus-visible:outline-offset-1',
+  [BreadcrumbsSize.Heading]: 'rounded-xs focus-visible:outline-offset-2',
+};
+
 /** The box that draws a segment, around its icon and its label. */
 export const segmentClassName =
-  'flex min-w-0 flex-1 items-center gap-1 rounded-xs transition-colors';
+  'flex min-w-0 flex-1 items-center gap-1 transition-colors';
 
 /**
  * A segment the user can follow. Secondary until hovered, then accent — the
  * same pairing the kit's other inline links use.
  */
 export const linkSegmentClassName =
-  'text-secondary hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
+  'text-secondary hover:text-accent focus-visible:outline focus-visible:outline-focus';
 
 /**
  * The last segment: where the user is. Semibold and primary, and never a
@@ -83,7 +117,7 @@ export const separatorClassName =
  * the segments on either side of it (see the README exception table).
  */
 export const overflowButtonClassName =
-  'dial-kit-minimum-target flex shrink-0 items-center rounded-xs text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-focus';
+  'dial-kit-minimum-target flex shrink-0 items-center text-secondary transition-colors hover:text-accent focus-visible:outline focus-visible:outline-focus';
 
 /**
  * Smallest trail the collapse can produce: the root, the ellipsis and the
