@@ -2313,12 +2313,12 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     expect(wrapper).not.toHaveAttribute('aria-controls');
   });
 
-  test('keeps the popup state on the wrapper for a text trigger', () => {
+  test('keeps aria-haspopup but not aria-expanded on the wrapper for a text trigger', () => {
     const { container } = render(<Dropdown items={items}>Open</Dropdown>);
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    // A role-less element may not carry aria-expanded (axe aria-allowed-attr).
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
   });
 
   test('keeps the popup state on the wrapper for a context-menu trigger', () => {
@@ -2327,10 +2327,9 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
         <div>Cell</div>
       </Dropdown>,
     );
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
-      'aria-haspopup',
-      'menu',
-    );
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
     expect(screen.getByText('Cell')).not.toHaveAttribute('aria-expanded');
   });
 });
@@ -2833,5 +2832,28 @@ describe('Dial UI Kit :: Dropdown — Tab order without focus guards', () => {
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'After' })).toHaveFocus(),
     );
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — nested in another Dropdown trigger', () => {
+  test('a row menu inside a context-menu Dropdown is not a menuitem', () => {
+    const { container } = render(
+      <div role="tree" aria-label="Folders">
+        <Dropdown items={items} trigger={[DropdownTrigger.ContextMenu]}>
+          <div role="treeitem" aria-selected={false} tabIndex={0}>
+            Row
+            <Dropdown items={items} className="row-menu">
+              <button type="button">Row actions</button>
+            </Dropdown>
+          </div>
+        </Dropdown>
+      </div>,
+    );
+
+    expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+    expect(container.querySelector('.row-menu')).not.toHaveAttribute('role');
+    expect(
+      screen.getByRole('button', { name: 'Row actions' }),
+    ).toHaveAttribute('aria-haspopup', 'menu');
   });
 });

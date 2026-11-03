@@ -873,6 +873,12 @@ export const Dropdown: FC<DropdownProps> = ({
     'aria-haspopup': ariaHasPopup,
     'aria-expanded': ariaExpanded = isOpen,
     'aria-controls': ariaControls = isOpen ? listId : undefined,
+    /* Floating UI makes the reference a `menuitem` when this Dropdown sits in
+       another floating node — e.g. a row's menu button inside a row-wide
+       context-menu Dropdown. That is not a submenu (`DropdownSubMenuItem`
+       builds those), and a bare `menuitem` outside a menu fails axe
+       `aria-required-parent` and its container's `aria-required-children`. */
+    role: __nestedReferenceRole,
     ...referenceProps
   } = getReferenceProps({
     onContextMenu,
@@ -904,11 +910,12 @@ export const Dropdown: FC<DropdownProps> = ({
    * trigger's own values win, so a combobox keeps `aria-haspopup="listbox"`.
    * An empty `trigger` (the child opens a controlled dropdown itself) counts
    * as an element trigger too. Text or several nodes, and a context-menu-only
-   * trigger (a grid cell, not a control), leave them on the wrapper as before.
+   * trigger (a grid cell or a tree row, not a control), leave the global
+   * `aria-haspopup` and `aria-controls` on the wrapper but never
+   * `aria-expanded`, which axe `aria-allowed-attr` rejects there.
    */
-  const triggerAria: HTMLAttributes<HTMLSpanElement> = {
+  const wrapperAria: HTMLAttributes<HTMLSpanElement> = {
     'aria-haspopup': ariaHasPopup,
-    'aria-expanded': ariaExpanded,
     'aria-controls': ariaControls,
   };
   const isElementTrigger =
@@ -961,7 +968,7 @@ export const Dropdown: FC<DropdownProps> = ({
             className,
             DIAL_KIT_CLASS.dropdown,
           )}
-          {...(isElementTrigger ? undefined : triggerAria)}
+          {...(isElementTrigger ? undefined : wrapperAria)}
           {...referenceProps}
         >
           {triggerNode}
