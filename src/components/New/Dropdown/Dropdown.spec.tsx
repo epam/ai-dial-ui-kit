@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { describe, expect, test, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { Dropdown } from './Dropdown';
 import {
   DropdownItemType,
@@ -2313,12 +2313,12 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     expect(wrapper).not.toHaveAttribute('aria-controls');
   });
 
-  test('keeps the popup state on the wrapper for a text trigger', () => {
+  test('keeps aria-haspopup but not aria-expanded on the wrapper for a text trigger', () => {
     const { container } = render(<Dropdown items={items}>Open</Dropdown>);
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    // A role-less element may not carry aria-expanded (axe aria-allowed-attr).
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
   });
 
   test('keeps the popup state on the wrapper for a context-menu trigger', () => {
@@ -2327,10 +2327,9 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
         <div>Cell</div>
       </Dropdown>,
     );
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
-      'aria-haspopup',
-      'menu',
-    );
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
     expect(screen.getByText('Cell')).not.toHaveAttribute('aria-expanded');
   });
 });
@@ -2732,5 +2731,130 @@ describe('Dial UI Kit :: Dropdown — focus return', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(screen.getByLabelText('Rename field')).toHaveFocus();
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — Tab order without focus guards', () => {
+  /* Floating UI drops its guards only where `inert` is supported, which every
+     target browser does and jsdom does not. */
+  beforeAll(() => {
+    Object.defineProperty(HTMLElement.prototype, 'inert', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
+  afterAll(() => {
+    delete (HTMLElement.prototype as { inert?: boolean }).inert;
+  });
+
+  const renderBetween = (overlay?: () => ReactNode) =>
+    render(
+      <>
+        <button type="button">Before</button>
+        <Dropdown
+          items={overlay ? undefined : items}
+          renderOverlay={overlay}
+          overlayRole={overlay ? DropdownOverlayRole.Dialog : undefined}
+        >
+          <button type="button">Open</button>
+        </Dropdown>
+        <button type="button">After</button>
+      </>,
+    );
+
+  test('renders no aria-hidden focus guard and no named role="none" list', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await screen.findByRole('menu');
+
+    expect(
+      document.querySelectorAll('[data-floating-ui-focus-guard]'),
+    ).toHaveLength(0);
+    const list = screen
+      .getByRole('menuitem', { name: 'Profile' })
+      .closest<HTMLElement>('[role="none"]')!;
+    expect(list).not.toHaveAttribute('aria-label');
+  });
+
+  test('Tab closes a menu and moves focus past the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus(),
+    );
+
+    await user.tab();
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus(),
+    );
+  });
+
+  test('Shift+Tab closes a menu and moves focus before the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus(),
+    );
+
+    await user.tab({ shift: true });
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Before' })).toHaveFocus(),
+    );
+  });
+
+  test('a dialog keeps Tab inside until its last control, then leaves after the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween(() => (
+      <>
+        <button type="button">First</button>
+        <button type="button">Last</button>
+      </>
+    ));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'First' })).toHaveFocus(),
+    );
+
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Last' })).toHaveFocus();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.tab();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus(),
+    );
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — nested in another Dropdown trigger', () => {
+  test('a row menu inside a context-menu Dropdown is not a menuitem', () => {
+    const { container } = render(
+      <div role="tree" aria-label="Folders">
+        <Dropdown items={items} trigger={[DropdownTrigger.ContextMenu]}>
+          <div role="treeitem" aria-selected={false} tabIndex={0}>
+            Row
+            <Dropdown items={items} className="row-menu">
+              <button type="button">Row actions</button>
+            </Dropdown>
+          </div>
+        </Dropdown>
+      </div>,
+    );
+
+    expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+    expect(container.querySelector('.row-menu')).not.toHaveAttribute('role');
+    expect(screen.getByRole('button', { name: 'Row actions' })).toHaveAttribute(
+      'aria-haspopup',
+      'menu',
+    );
   });
 });

@@ -30,6 +30,7 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
+import { DropdownOverlayRole } from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
@@ -685,6 +686,10 @@ export const Select: FC<SelectProps> = ({
           listClassName={mergeClasses(selectListWidthClassName, listClassName)}
           className="w-full"
           renderOverlay={renderOptionsList}
+          /* The overlay holds the `listbox`; as a `menu` it would contain a
+             child a menu may not (axe `aria-required-children`). */
+          overlayRole={DropdownOverlayRole.None}
+          optionArrowNavigation
         >
           <Input
             id={fieldId}
