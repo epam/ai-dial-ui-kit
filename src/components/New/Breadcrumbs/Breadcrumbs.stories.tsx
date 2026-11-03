@@ -48,7 +48,8 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: Object.values(BreadcrumbsSize),
-      description: "The trail's type scale: `dial-tiny-text` or `dial-h2-text`",
+      description:
+        "The trail's type scale: `dial-small-text`, `dial-tiny-text` or `dial-h2-text`",
     },
     separator: {
       control: false,
@@ -117,6 +118,30 @@ export const Heading: Story = {
   },
 };
 
+export const Tiny: Story = {
+  args: {
+    ariaLabel: 'File path',
+    size: BreadcrumbsSize.Tiny,
+    items: [
+      { label: 'My files', href: '#' },
+      {
+        label: 'A folder with a name far too long to fit the row it sits in',
+        href: '#',
+      },
+      { label: 'Another long name that has to give way to the one before it' },
+    ],
+    className: 'max-w-[420px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`BreadcrumbsSize.Tiny` draws a 16px trail at `dial-tiny-text` for a dense header. It never clips, so a focus ring stays whole, and caps no segment: the middle gives way first, and the current page truncates only once the middle has nothing left to give.',
+      },
+    },
+  },
+};
+
 export const Collapsed: Story = {
   args: { items: DEEP_PATH, ariaLabel: 'File path' },
   parameters: {
@@ -164,7 +189,7 @@ export const Truncated: Story = {
     docs: {
       description: {
         story:
-          'Each segment reveals its full label in a tooltip only once it is actually clipped. The root keeps its width, the middle gives way first, and the current page truncates only once the middle has nothing left to give.',
+          'Each segment reveals its full label in a tooltip only once it is actually clipped. The root keeps its width, the middle gives way first, and the current page keeps the largest share of what is left.',
       },
     },
   },

@@ -204,8 +204,19 @@ describe('Dial UI Kit :: Breadcrumbs', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  test('draws the trail at dial-tiny-text by default, semibold on the current page', () => {
+  test('draws the trail at dial-small-text by default, semibold on the current page', () => {
     render(<Breadcrumbs items={TRAIL} />);
+
+    screen
+      .getAllByRole('listitem')
+      .forEach((item) => expect(item).toHaveClass('dial-small-text'));
+    expect(
+      screen.getByText('DK Test with nested').closest('[aria-current="page"]'),
+    ).toHaveClass('dial-small-semi-text');
+  });
+
+  test('draws the trail at dial-tiny-text when asked, semibold on the current page', () => {
+    render(<Breadcrumbs items={TRAIL} size={BreadcrumbsSize.Tiny} />);
 
     screen
       .getAllByRole('listitem')
@@ -220,31 +231,49 @@ describe('Dial UI Kit :: Breadcrumbs', () => {
 
     screen.getAllByRole('listitem').forEach((item) => {
       expect(item).toHaveClass('dial-h2-text');
-      expect(item).not.toHaveClass('dial-tiny-text');
+      expect(item).not.toHaveClass('dial-small-text');
     });
     // `dial-h2-text` is semibold on its own, so the current page repeats it
-    // rather than stacking a tiny-text weight on top.
+    // rather than stacking a small-text weight on top.
     const current = screen
       .getByText('DK Test with nested')
       .closest('[aria-current="page"]');
     expect(current).toHaveClass('dial-h2-text');
-    expect(current).not.toHaveClass('dial-tiny-semi-text');
+    expect(current).not.toHaveClass('dial-small-semi-text');
   });
 
-  test('lets the current page take the free width, truncating the middle first', () => {
+  test('caps the middle and the current page of the default trail, clipping the nav', () => {
     render(<Breadcrumbs items={TRAIL} />);
+
+    const [root, middle, current] = screen.getAllByRole('listitem');
+    expect(root).toHaveClass('shrink-0');
+    expect(middle).toHaveClass('max-w-[30%]');
+    expect(current).toHaveClass('max-w-[51%]');
+    expect(screen.getByRole('navigation')).toHaveClass('overflow-hidden');
+  });
+
+  test('lets the current page of the tiny trail take the free width, truncating the middle first', () => {
+    render(<Breadcrumbs items={TRAIL} size={BreadcrumbsSize.Tiny} />);
 
     const [root, middle, current] = screen.getAllByRole('listitem');
     expect(root).toHaveClass('shrink-0');
     expect(middle).toHaveClass('min-w-12', 'shrink-[1000]');
     expect(current).toHaveClass('min-w-0', 'shrink');
+    expect(current).not.toHaveClass('max-w-[51%]');
   });
 
-  test('never clips the trail, so a focus ring stays whole', () => {
-    render(<Breadcrumbs items={TRAIL} />);
+  test('never clips the tiny trail, so a focus ring stays whole', () => {
+    render(<Breadcrumbs items={DEEP_TRAIL} size={BreadcrumbsSize.Tiny} />);
 
     expect(screen.getByRole('navigation')).not.toHaveClass('overflow-hidden');
     expect(screen.getByRole('list')).not.toHaveClass('overflow-hidden');
+    expect(screen.getByRole('link', { name: 'My files' })).toHaveClass(
+      'rounded',
+      'focus-visible:outline-offset-1',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Show hidden path segments' }),
+    ).toHaveClass('rounded', 'focus-visible:outline-offset-1');
   });
 
   test('sizes the ellipsis segment with the rest of the trail', () => {
