@@ -713,7 +713,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 </div>
               );
             }
-            if (it.children?.length) {
+            if (it.children?.length || it.renderSubMenu) {
               return (
                 <DropdownSubMenuItem
                   key={it.key}
@@ -740,6 +740,7 @@ export const Dropdown: FC<DropdownProps> = ({
                 selected={!!it.checked}
                 danger={it.danger}
                 icon={it.icon}
+                trailing={it.iconAfter}
                 label={it.label}
                 className={it.className}
                 rightControl={it.rightControl}

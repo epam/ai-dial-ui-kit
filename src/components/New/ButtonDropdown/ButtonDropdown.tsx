@@ -7,10 +7,25 @@ import { Dropdown, type DropdownProps } from '../Dropdown/Dropdown';
 import { getButtonChevron } from './constants';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
-export interface ButtonDropdownProps extends Omit<ButtonProps, 'iconAfter'> {
+export interface ButtonDropdownProps extends ButtonProps {
   items: DropdownItem[];
-  /** Menu options forwarded to the underlying `Dropdown`: the panel class and whether the panel matches the button's width. */
-  dropdownProps?: Pick<DropdownProps, 'listClassName' | 'matchReferenceWidth'>;
+  /** Controlled open state. When omitted, the button manages its own state. */
+  open?: boolean;
+  /** Initial open state for an uncontrolled button. Defaults to `false`. */
+  defaultOpen?: boolean;
+  /** Called when an interaction requests opening or closing the menu. */
+  onOpenChange?: (open: boolean) => void;
+  /** Menu presentation and search options forwarded to `Dropdown`. */
+  dropdownProps?: Omit<
+    DropdownProps,
+    | 'children'
+    | 'items'
+    | 'renderOverlay'
+    | 'open'
+    | 'defaultOpen'
+    | 'onOpenChange'
+    | 'disabled'
+  >;
 }
 
 /**
@@ -29,16 +44,26 @@ export interface ButtonDropdownProps extends Omit<ButtonProps, 'iconAfter'> {
  *
  * Inherits all props from Button.
  * @param [items] - DropdownItems with actions
- * @param [dropdownProps] - `listClassName` and `matchReferenceWidth` forwarded to the menu `Dropdown`
+ * @param [dropdownProps] - Menu presentation and search options forwarded to `Dropdown`
+ * @param [open] - Controlled open state
+ * @param [defaultOpen=false] - Initial uncontrolled open state
+ * @param [onOpenChange] - Called when the menu requests a state change
+ * @param [iconAfter] - Replaces the default rotating chevron; pass `null` to hide it
  */
 export const ButtonDropdown: FC<ButtonDropdownProps> = ({
   variant,
   appearance,
   items,
   dropdownProps,
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  disabled,
+  iconAfter,
   ...props
 }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isDropdownOpen = open ?? internalOpen;
   const icon = useMemo(() => {
     return getButtonChevron(isDropdownOpen);
   }, [isDropdownOpen]);
@@ -47,12 +72,21 @@ export const ButtonDropdown: FC<ButtonDropdownProps> = ({
     <div className={DIAL_KIT_CLASS.buttonDropdown}>
       <Dropdown
         {...dropdownProps}
+        overlayAriaLabel={
+          dropdownProps?.overlayAriaLabel ?? props['aria-label']
+        }
         items={items}
-        onOpenChange={(open) => setIsDropdownOpen(open)}
+        disabled={disabled}
+        open={isDropdownOpen}
+        onOpenChange={(nextOpen) => {
+          if (open === undefined) setInternalOpen(nextOpen);
+          onOpenChange?.(nextOpen);
+        }}
       >
         <Button
           {...props}
-          iconAfter={icon}
+          iconAfter={iconAfter === undefined ? icon : iconAfter}
+          disabled={disabled}
           variant={variant || ButtonVariant.Primary}
           appearance={appearance || ButtonAppearance.Solid}
           aria-haspopup="menu"

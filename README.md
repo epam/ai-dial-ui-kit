@@ -97,6 +97,20 @@ This ensures the CSS is loaded once per application rather than being bundled wi
 
 ## Development
 
+### Controlled dropdown menus
+
+`ButtonDropdown` accepts controlled `open` / `onOpenChange` or an uncontrolled
+`defaultOpen`. Its `dropdownProps` forwards search, placement and menu sizing
+options to `Dropdown`. Set `iconAfter={null}` for an icon-only trigger; otherwise
+the default chevron follows the effective open state.
+
+`DropdownItem.subMenuOpen` and `onSubMenuOpenChange` let a host retain the active
+submenu across presentation changes. Omitting them preserves the default
+uncontrolled behavior. An already-open submenu restores focus on mount, and the
+kit owns arrow navigation, RTL placement, Escape and focus return. `renderSubMenu`
+can provide custom content without placeholder `children`. Leaf items forward
+`iconAfter` as trailing content alongside the existing disabled/danger states.
+
 ### Prerequisites
 
 - Node.js >= 22.2.0

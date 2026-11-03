@@ -1261,3 +1261,34 @@ export const RegionOverlay: Story = {
   args: {},
   render: RegionPanelExample,
 };
+
+const ControlledSubmenuExample = () => {
+  const [open, setOpen] = useState(true);
+  const [checked, setChecked] = useState(false);
+  return (
+    <Dropdown
+      defaultOpen
+      items={[
+        {
+          key: 'tools',
+          label: 'Tools',
+          subMenuOpen: open,
+          onSubMenuOpenChange: setOpen,
+          children: [
+            {
+              key: 'research',
+              label: 'Research',
+              selectable: true,
+              checked,
+              onClick: () => setChecked(!checked),
+            },
+          ],
+        },
+      ]}
+    >
+      <Button label="Add" />
+    </Dropdown>
+  );
+};
+
+export const ControlledSubmenu: Story = { render: ControlledSubmenuExample };

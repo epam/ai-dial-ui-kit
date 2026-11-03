@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ButtonDropdown, type ButtonDropdownProps } from './ButtonDropdown';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
+import { useState } from 'react';
+import { IconPlus } from '@tabler/icons-react';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 
 const dropdownItems = [
   {
@@ -70,6 +73,38 @@ const meta: Meta<typeof ButtonDropdown> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const ControlledSearchExample = () => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  return (
+    <ButtonDropdown
+      label="Create"
+      items={dropdownItems}
+      open={open}
+      onOpenChange={setOpen}
+      dropdownProps={{
+        searchable: true,
+        searchValue: query,
+        onSearchChange: setQuery,
+        placement: 'bottom-end',
+        maxVisibleItems: 5,
+      }}
+    />
+  );
+};
+
+export const ControlledSearch: Story = { render: ControlledSearchExample };
+
+export const Floating: Story = {
+  args: {
+    'aria-label': 'Create',
+    iconBefore: <IconPlus aria-hidden stroke={DIAL_KIT_ICON_STROKE} />,
+    iconAfter: null,
+    className: 'size-12 rounded-full px-0',
+    items: dropdownItems,
+  },
+};
 
 const Example = (args: ButtonDropdownProps) => {
   return (
