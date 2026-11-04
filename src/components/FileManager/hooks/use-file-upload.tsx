@@ -461,7 +461,13 @@ export const useFileUpload = ({
         });
       }
 
-      if (files.length === 0 && e.dataTransfer.files?.length) {
+      // Dropped folders also appear in `dataTransfer.files` as zero-size File
+      // entries, so only fall back to it when no folder was skipped.
+      if (
+        files.length === 0 &&
+        !foldersSkipped &&
+        e.dataTransfer.files?.length
+      ) {
         files.push(...Array.from(e.dataTransfer.files));
       }
 
