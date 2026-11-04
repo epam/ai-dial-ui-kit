@@ -200,7 +200,7 @@ export const Tabs: FC<TabsProps> = ({
       );
       const lastIndex = selectable.length - 1;
 
-      let nextIndex = activeIndex;
+      let nextIndex: number;
       if (event.key === next) {
         nextIndex = activeIndex === lastIndex ? 0 : activeIndex + 1;
       } else if (event.key === previous) {

@@ -2,10 +2,7 @@ import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettierConfig from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import prettierPlugin from 'eslint-plugin-prettier';
-import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import tailwindPlugin from 'eslint-plugin-tailwindcss';
 import globals from 'globals';
@@ -71,25 +68,22 @@ export default [
     },
 
     plugins: {
-      react: reactPlugin,
       prettier: prettierPlugin,
       '@typescript-eslint': tsPlugin,
-      'jsx-a11y': jsxA11yPlugin,
       'react-hooks': reactHooksPlugin,
-      import: importPlugin,
       tailwindcss: tailwindPlugin,
       storybook: storybookPlugin,
     },
 
     rules: {
       ...tsPlugin.configs.recommended.rules,
-      ...importPlugin.configs.recommended.rules,
       ...tailwindPlugin.configs.recommended.rules,
       ...storybookPlugin.configs.recommended.rules,
       'react-hooks/exhaustive-deps': 'error',
-      'import/no-unresolved': 'off',
-      'import/no-duplicates': 'error',
-      'import/named': 'off',
+      // Core replacement for `import/no-duplicates`: eslint-plugin-import
+      // pins minimatch 3 and does not support ESLint 10. Type-only imports
+      // may stay separate, as they could under the plugin's rule.
+      'no-duplicate-imports': ['error', { allowSeparateTypeImports: true }],
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
       'tailwindcss/enforces-shorthand': 'error',
