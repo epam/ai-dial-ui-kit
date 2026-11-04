@@ -78,6 +78,8 @@
     "esbuild": "0.28.1",
     "shell-quote": "1.11.0",
     "postcss-selector-parser": "^7.1.6",
+    "minimatch@^9.0.0": "^11.0.4",
+    "minimatch@^10.0.0": "^11.0.4",
     "@typescript-eslint/typescript-estree": {
       "minimatch": "^11.0.1"
     },
@@ -116,7 +118,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@storybook/addon-a11y": "^10.4.4",
     "@storybook/addon-docs": "^10.4.4",
@@ -137,12 +139,9 @@
     "@vitest/coverage-v8": "^4.1.12",
     "concurrently": "^10.0.3",
     "esbuild": "0.28.1",
-    "eslint": "^9.39.2",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-storybook": "^10.4.4",
     "eslint-plugin-tailwindcss": "4.4.1-beta.1",
