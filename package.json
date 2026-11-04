@@ -81,9 +81,7 @@
     "@typescript-eslint/typescript-estree": {
       "minimatch": "^11.0.1"
     },
-    "glob": {
-      "minimatch": "^11.0.1"
-    },
+    "glob": "^14.0.3",
     "@tailwindcss/cli": {
       "@parcel/watcher": "2.6.0"
     }
