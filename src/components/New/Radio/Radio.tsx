@@ -115,7 +115,7 @@ export const Radio: FC<RadioProps> = ({
             // without touching the rendered size. The 44px enhanced target would
             // overhang by 12px per side and swallow the adjacent label.
             'dial-kit-minimum-target',
-            'peer-focus-visible:outline peer-focus-visible:outline-focus',
+            'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus',
             disabled
               ? 'cursor-not-allowed border-default bg-control-disable-primary'
               : mergeClasses(

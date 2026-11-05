@@ -122,6 +122,8 @@ Versions match the git tags on the `development` branch.
 
 ### Fixed
 
+- **`Radio` (2.0) — a visible focus ring** — a keyboard-focused radio drew a 1px outline flush against its own 1px border, so on a 20px circle the focus was barely visible and QA reported the options as unreachable by keyboard. The ring is now 2px and offset by 2px (WCAG 2.4.13), like `Switch`'s offset ring. `RadioGroup` inherits it. Reported from `ai-dial-chat` ([#9742](https://github.com/epam/ai-dial-chat/issues/9742): the Save panel's version choice).
+
 - **`Grid` (2.0) — a row that `rowSelection.isRowSelectable` rejects shows a disabled control** — the selection column disabled its checkbox or radio only for `disabledRowIds`. A row rejected by a consumer's `additionalGridOptions.rowSelection.isRowSelectable` kept a live-looking control that ag-Grid silently refused to select, so a click did nothing and gave no hint why. The control now also follows the row node's `selectable` flag and updates when it changes. Reported from `ai-dial-chat` ([#7663](https://github.com/epam/ai-dial-chat/issues/7663): folder rows in the attach dialog of a model without folder attachments).
 
 - **`Dropdown` (2.0) — a closed trigger no longer points `aria-controls` at a missing overlay** — the overlay is mounted only while open, but the trigger always carried `aria-controls` with the overlay's id, so while closed it referenced an element that was not in the DOM (axe `aria-valid-attr-value`). A trigger that passed `aria-controls={undefined}` while closed got the kit's id anyway, since `undefined` fell through to it. The attribute is now set only while the overlay is open. Reported from `ai-dial-chat` (the PDF thumbnails toggle).
