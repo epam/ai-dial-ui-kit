@@ -21,3 +21,8 @@ RUN mkdir -p /app/.next/cache && chmod -R 777 /app/.next
 
 # Expose Next.js port
 EXPOSE 3000
+
+# Nothing installs at runtime, and project overrides do not patch the
+# dependencies bundled with global npm/corepack/yarn, so remove them.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack /opt/yarn* \
+    && rm -f /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg
