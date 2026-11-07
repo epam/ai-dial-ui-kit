@@ -307,6 +307,73 @@ describe('Dial UI Kit :: FileManager :: useFileUpload', () => {
       );
     });
 
+    it('does not call onUploadFiles when only a folder is dropped', async () => {
+      const onUploadFiles = vi.fn();
+      const { result } = renderUseFileUpload({ onUploadFiles });
+
+      const folderAsFile = createMockFile('my-folder', 0);
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          items: [
+            {
+              kind: 'file',
+              webkitGetAsEntry: () => ({ isDirectory: true }),
+              getAsFile: () => folderAsFile,
+            },
+          ],
+          files: [folderAsFile],
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).not.toHaveBeenCalled();
+    });
+
+    it('uploads only the files when a folder and a file are dropped together', async () => {
+      const onUploadFiles = vi.fn();
+      const { result } = renderUseFileUpload({ onUploadFiles });
+
+      const folderAsFile = createMockFile('my-folder', 0);
+      const file = createMockFile('file1.txt', 1024);
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
+        dataTransfer: {
+          types: ['Files'],
+          items: [
+            {
+              kind: 'file',
+              webkitGetAsEntry: () => ({ isDirectory: true }),
+              getAsFile: () => folderAsFile,
+            },
+            {
+              kind: 'file',
+              webkitGetAsEntry: () => ({ isDirectory: false }),
+              getAsFile: () => file,
+            },
+          ],
+          files: [folderAsFile, file],
+        },
+      } as unknown as DragEvent;
+
+      await act(async () => {
+        await result.current.handleDrop(mockEvent, '/folder', []);
+      });
+
+      expect(onUploadFiles).toHaveBeenCalledWith(
+        [{ fileContent: file, name: 'file1.txt' }],
+        '/folder',
+      );
+    });
+
     it('does not call onUploadFiles when not dragging files', async () => {
       const onUploadFiles = vi.fn();
       const { result } = renderUseFileUpload({ onUploadFiles });

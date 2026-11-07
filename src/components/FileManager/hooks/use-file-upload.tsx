@@ -461,7 +461,11 @@ export const useFileUpload = ({
         });
       }
 
-      if (files.length === 0 && e.dataTransfer.files?.length) {
+      if (
+        files.length === 0 &&
+        !foldersSkipped &&
+        e.dataTransfer.files?.length
+      ) {
         files.push(...Array.from(e.dataTransfer.files));
       }
 
