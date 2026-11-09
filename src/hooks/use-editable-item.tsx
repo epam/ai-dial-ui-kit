@@ -37,6 +37,8 @@ interface UseEditableItemResult {
  * A React hook that manages the behavior of an inline-editable text input.
  * It provides validation handling, cancel/restore logic, auto-focus behavior,
  * keyboard shortcuts, and outside-click detection.
+ * During creation, Enter keeps an invalid value focused with its validation
+ * feedback so it can be corrected; Escape and outside blur still cancel it.
  *
  * @param {Object} options - Hook configuration options.
  * @param {string} options.value - Initial value for the editable input.
@@ -227,6 +229,8 @@ export function useEditableItem({
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        /* Explicit confirmation must not discard an invalid new item. */
+        if (isCreating && !validate(value)) return;
         inputRef.current?.blur();
       } else if (e.key === 'Escape') {
         e.preventDefault();
@@ -236,7 +240,7 @@ export function useEditableItem({
 
     el.addEventListener('keydown', handleKey);
     return () => el.removeEventListener('keydown', handleKey);
-  }, [isEditing, isCreating, cancel]);
+  }, [isEditing, isCreating, cancel, validate, value]);
 
   useEffect(() => {
     if ((!isEditing && !isCreating) || isLoading) return;

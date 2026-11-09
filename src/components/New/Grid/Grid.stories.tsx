@@ -1,13 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { IconDotsVertical, IconInbox } from '@tabler/icons-react';
-import { useState, type FC } from 'react';
+import { useMemo, useState, type FC } from 'react';
 
 import { Avatar } from '@/components/New/Avatar/Avatar';
 import { Badge } from '@/components/New/Badge/Badge';
+import { Button } from '@/components/New/Button/Button';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
+import { FolderName } from '@/components/New/FolderName/FolderName';
 import { IconButton } from '@/components/New/IconButton/IconButton';
 import { Input } from '@/components/New/Input/Input';
+import {
+  editableContainerProps,
+  useEditableItem,
+} from '@/hooks/use-editable-item';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
@@ -593,6 +599,173 @@ export const EditableCells: StoryObj<GridProps<LimitRow>> = {
   },
   render: EditableCellsStory,
 };
+
+interface FolderRow {
+  id: string;
+  name: string;
+  isTemporary?: boolean;
+}
+
+interface FolderCreationContext {
+  validateName: (name: string) => string | null;
+  onSave: (name: string) => void;
+  onCancel: () => void;
+}
+
+interface FolderNameCellProps extends ICellRendererParams<FolderRow> {
+  context: FolderCreationContext;
+}
+
+const FolderNameCell = ({ data, context }: FolderNameCellProps) => {
+  const isCreating = !!data?.isTemporary;
+  const { inputRef, value, onChange, invalid, invalidMessage } =
+    useEditableItem({
+      value: data?.name ?? '',
+      isEditing: isCreating,
+      isCreating,
+      onValidate: context.validateName,
+      onCreateFolderSave: context.onSave,
+      onCreateFolderCancel: context.onCancel,
+    });
+
+  if (!data) return null;
+  if (!isCreating) return <FolderName name={data.name} />;
+
+  return (
+    <div {...editableContainerProps} className="w-full py-2">
+      <Input
+        id="new-folder-name"
+        aria-label="Folder name"
+        inputRef={inputRef}
+        value={value}
+        onChange={onChange}
+        invalid={invalid}
+        error={invalidMessage}
+      />
+    </div>
+  );
+};
+
+const newFolderRow: FolderRow = {
+  id: 'temporary-folder',
+  name: 'New folder',
+  isTemporary: true,
+};
+
+const initialFolderRows: FolderRow[] = [
+  newFolderRow,
+  { id: 'folder-assets', name: 'assets' },
+  { id: 'folder-documents', name: 'documents' },
+];
+
+/* Keep columns stable so typing never rebuilds the input under the caret. */
+const folderColumns: ColDef<FolderRow>[] = [
+  {
+    field: 'name',
+    headerName: 'Folder name',
+    flex: 1,
+    filter: false,
+    floatingFilter: false,
+    sortable: false,
+    cellRenderer: FolderNameCell,
+    suppressKeyboardEvent: ({ event }) =>
+      event.target instanceof HTMLInputElement,
+  },
+];
+
+const FolderCreationGridStory = (args: GridProps<FolderRow>) => {
+  const [rows, setRows] = useState(() =>
+    initialFolderRows.map((row) => ({ ...row })),
+  );
+  const [result, setResult] = useState('');
+  const hasTemporaryRow = rows.some((row) => row.isTemporary);
+  const context = useMemo<FolderCreationContext>(
+    () => ({
+      validateName: (name) => {
+        const trimmed = name.trim();
+        if (!trimmed) return 'Enter a folder name';
+        if (
+          trimmed.includes('/') ||
+          trimmed.includes('\\') ||
+          trimmed === '.' ||
+          trimmed === '..'
+        ) {
+          return "Folder name can't contain / or \\, or be . or ..";
+        }
+        if (
+          rows.some(
+            (row) =>
+              !row.isTemporary &&
+              row.name.toLowerCase() === trimmed.toLowerCase(),
+          )
+        ) {
+          return 'An item with this name already exists here';
+        }
+        return null;
+      },
+      onSave: (name) => {
+        const savedName = name.trim();
+        setRows((current) =>
+          current.map((row) =>
+            row.isTemporary
+              ? { id: `folder-${savedName}`, name: savedName }
+              : row,
+          ),
+        );
+        setResult(`Created folder: ${savedName}`);
+      },
+      onCancel: () => {
+        setRows((current) => current.filter((row) => !row.isTemporary));
+        setResult('Folder creation cancelled');
+      },
+    }),
+    [rows],
+  );
+
+  return (
+    <div className="flex min-w-0 flex-col gap-4 bg-layer-base p-4">
+      <p className="dial-small-text">
+        Try an empty name, /, {'\\'}, ., .. or assets, then press Enter. The row
+        should stay editable with its error. Correct the name and press Enter to
+        create; press Escape or click outside to cancel.
+      </p>
+      <div>
+        <Button
+          variant={ButtonVariant.Neutral}
+          label="Create folder"
+          disabled={hasTemporaryRow}
+          onClick={() => {
+            setResult('');
+            setRows((current) => [{ ...newFolderRow }, ...current]);
+          }}
+        />
+      </div>
+      <Grid<FolderRow>
+        {...args}
+        rowData={rows}
+        additionalGridOptions={{ ...args.additionalGridOptions, context }}
+      />
+      <p className="dial-small-text" role="status">
+        {result}
+      </p>
+    </div>
+  );
+};
+
+/** A file-manager-style temporary row using the shared inline-editing hook. */
+export const FolderCreation = {
+  args: {
+    columnDefs: folderColumns,
+    ariaLabel: 'Folders',
+    getRowId: (row: FolderRow) => row.id,
+    additionalGridOptions: {
+      autoSizeStrategy: undefined,
+      domLayout: 'autoHeight',
+      getRowHeight: ({ data }) => (data?.isTemporary ? 120 : 40),
+    },
+  },
+  render: FolderCreationGridStory,
+} satisfies StoryObj<GridProps<FolderRow>>;
 
 const ControlledStory = (args: GridProps<Product>) => {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string>>(

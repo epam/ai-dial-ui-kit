@@ -7,6 +7,12 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- **`useEditableItem` — invalid folder creation stays open on Enter** — Enter now preserves the input's focus, entered name and validation feedback when creating an item with an invalid name, allowing the user to correct it. Escape, outside-click cancellation, rename fallback and non-blocking warnings retain their existing behavior. Reported in [ai-dial-chat #9554](https://github.com/epam/ai-dial-chat/issues/9554).
+
 ## [0.16.0]
 
 ### Breaking Changes

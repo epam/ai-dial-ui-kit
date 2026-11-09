@@ -1,6 +1,14 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import type { FC } from 'react';
+import { NotificationVariant } from '@/types/notification';
+import { FolderCreation as folderCreationStory } from '@/components/New/Grid/Grid.stories';
 import {
   useEditableItem,
   type UseEditableItemOptions,
@@ -14,12 +22,15 @@ const Harness: FC<UseEditableItemOptions> = (options) => {
     <div>
       <input
         data-testid="input"
+        aria-label="Item name"
         ref={inputRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={invalid}
       />
-      <span data-testid="message">{invalidMessage}</span>
+      <span data-testid="message" role="status">
+        {invalidMessage}
+      </span>
       <button data-testid="outside">outside</button>
     </div>
   );
@@ -233,4 +244,231 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
 
     expect(onSave).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('Dial UI Kit :: useEditableItem :: Enter key', () => {
+  const validateName = (value: string) => {
+    if (!value.trim()) return 'Enter a folder name';
+    if (value === 'assets') return 'An item with this name already exists here';
+    if (['/', '\\', '.', '..'].includes(value)) return 'Invalid folder name';
+    return null;
+  };
+
+  it.each(['', '   ', '/', '\\', '.', '..', 'assets'])(
+    'preserves focus, value and error after repeated Enter with invalid folder name %j',
+    (name) => {
+      const onCreateFolderSave = vi.fn();
+      const onCreateFolderCancel = vi.fn();
+      render(
+        <Harness
+          value="New folder"
+          isEditing
+          isCreating
+          onValidate={validateName}
+          onCreateFolderSave={onCreateFolderSave}
+          onCreateFolderCancel={onCreateFolderCancel}
+        />,
+      );
+
+      const input = screen.getByRole('textbox', { name: 'Item name' });
+      act(() => input.focus());
+      fireEvent.change(input, { target: { value: name } });
+      fireEvent.keyDown(input, { key: 'Enter' });
+      fireEvent.keyDown(input, { key: 'Enter' });
+
+      expect(input).toHaveFocus();
+      expect(input).toHaveValue(name);
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(screen.getByRole('status')).toHaveTextContent(validateName(name)!);
+      expect(onCreateFolderSave).not.toHaveBeenCalled();
+      expect(onCreateFolderCancel).not.toHaveBeenCalled();
+    },
+  );
+
+  it('saves a corrected folder name exactly once after invalid Enter', () => {
+    const onCreateFolderSave = vi.fn();
+    const onCreateFolderCancel = vi.fn();
+    render(
+      <Harness
+        value="New folder"
+        isEditing={false}
+        isCreating
+        onValidate={validateName}
+        onCreateFolderSave={onCreateFolderSave}
+        onCreateFolderCancel={onCreateFolderCancel}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Item name' });
+    act(() => input.focus());
+    fireEvent.change(input, { target: { value: '/' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    fireEvent.change(input, { target: { value: 'docs' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    fireEvent.blur(input);
+
+    expect(onCreateFolderSave).toHaveBeenCalledExactlyOnceWith('docs');
+    expect(onCreateFolderCancel).not.toHaveBeenCalled();
+    expect(input).not.toHaveFocus();
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+  });
+
+  it.each(['Escape', 'outside press'])(
+    'still cancels an invalid creation on %s after invalid Enter',
+    (action) => {
+      const onCreateFolderSave = vi.fn();
+      const onCreateFolderCancel = vi.fn();
+      render(
+        <Harness
+          value="New folder"
+          isEditing={false}
+          isCreating
+          onValidate={validateName}
+          onCreateFolderSave={onCreateFolderSave}
+          onCreateFolderCancel={onCreateFolderCancel}
+        />,
+      );
+
+      const input = screen.getByRole('textbox', { name: 'Item name' });
+      act(() => input.focus());
+      fireEvent.change(input, { target: { value: '/' } });
+      fireEvent.keyDown(input, { key: 'Enter' });
+      expect(onCreateFolderCancel).not.toHaveBeenCalled();
+
+      if (action === 'Escape') {
+        fireEvent.keyDown(input, { key: 'Escape' });
+      } else {
+        fireEvent.pointerDown(screen.getByRole('button', { name: 'outside' }));
+        fireEvent.blur(input);
+      }
+
+      expect(onCreateFolderCancel).toHaveBeenCalledTimes(1);
+      expect(onCreateFolderSave).not.toHaveBeenCalled();
+    },
+  );
+
+  it('keeps the existing rename fallback on invalid Enter', () => {
+    const onSave = vi.fn();
+    const onCancel = vi.fn();
+    render(
+      <Harness
+        value="original"
+        isEditing
+        onValidate={validateName}
+        onSave={onSave}
+        onCancel={onCancel}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Item name' });
+    act(() => input.focus());
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onSave).toHaveBeenCalledExactlyOnceWith('original');
+    expect(onCancel).not.toHaveBeenCalled();
+    expect(input).not.toHaveFocus();
+  });
+
+  it('allows Enter to create a folder with a non-blocking warning', () => {
+    const onCreateFolderSave = vi.fn();
+    render(
+      <Harness
+        value="New folder"
+        isEditing={false}
+        isCreating
+        onValidate={() => `${NotificationVariant.Warning}__Hidden folder`}
+        onCreateFolderSave={onCreateFolderSave}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Item name' });
+    act(() => input.focus());
+    fireEvent.change(input, { target: { value: '.docs' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onCreateFolderSave).toHaveBeenCalledExactlyOnceWith('.docs');
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+  });
+
+  it('allows Enter to create a folder without a validator', () => {
+    const onCreateFolderSave = vi.fn();
+    render(
+      <Harness
+        value="New folder"
+        isEditing={false}
+        isCreating
+        onCreateFolderSave={onCreateFolderSave}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Item name' });
+    act(() => input.focus());
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onCreateFolderSave).toHaveBeenCalledExactlyOnceWith('New folder');
+  });
+});
+
+describe('Dial UI Kit :: useEditableItem :: Storybook example', () => {
+  it('keeps the grid row editable on invalid Enter and creates after correction', async () => {
+    const FolderCreationExample = folderCreationStory.render;
+    render(<FolderCreationExample {...folderCreationStory.args} />);
+
+    const input = await screen.findByRole('textbox', { name: 'Folder name' });
+    act(() => input.focus());
+    fireEvent.change(input, { target: { value: '/' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue('/');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(
+      screen.getByText("Folder name can't contain / or \\, or be . or .."),
+    ).toBeVisible();
+
+    fireEvent.change(input, { target: { value: 'docs' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(await screen.findByText('docs')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole('textbox')).not.toBeInTheDocument(),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Created folder: docs',
+    );
+    expect(screen.getByRole('button', { name: 'Create folder' })).toBeEnabled();
+  });
+
+  it.each(['Escape', 'outside press'])(
+    'removes the temporary row on %s and lets the user start another creation',
+    async (action) => {
+      const FolderCreationExample = folderCreationStory.render;
+      render(<FolderCreationExample {...folderCreationStory.args} />);
+      const input = await screen.findByRole('textbox', { name: 'Folder name' });
+      act(() => input.focus());
+      fireEvent.change(input, { target: { value: '/' } });
+      fireEvent.keyDown(input, { key: 'Enter' });
+
+      if (action === 'Escape') {
+        fireEvent.keyDown(input, { key: 'Escape' });
+      } else {
+        fireEvent.pointerDown(screen.getByText('assets'));
+      }
+
+      expect(
+        await screen.findByText('Folder creation cancelled'),
+      ).toBeVisible();
+      await waitFor(() =>
+        expect(screen.queryByRole('textbox')).not.toBeInTheDocument(),
+      );
+      expect(screen.getByText('assets')).toBeVisible();
+      expect(screen.getByText('documents')).toBeVisible();
+      fireEvent.click(screen.getByRole('button', { name: 'Create folder' }));
+      expect(
+        await screen.findByRole('textbox', { name: 'Folder name' }),
+      ).toHaveValue('New folder');
+    },
+  );
 });
