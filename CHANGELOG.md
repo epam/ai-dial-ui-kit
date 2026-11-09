@@ -7,12 +7,6 @@ Versions match the git tags on the `development` branch.
 
 ---
 
-## [Unreleased]
-
-### Fixed
-
-- **`useEditableItem` — invalid folder creation stays open on Enter** — Enter now preserves the input's focus, entered name and validation feedback when creating an item with an invalid name, allowing the user to correct it. Escape, outside-click cancellation, rename fallback and non-blocking warnings retain their existing behavior. Reported in [ai-dial-chat #9554](https://github.com/epam/ai-dial-chat/issues/9554).
-
 ## [0.16.0]
 
 ### Breaking Changes
@@ -127,6 +121,8 @@ Versions match the git tags on the `development` branch.
 - **`Calendar` (2.0) — `showTimezone` now labels the `datetime` popover's time field too** — the timezone hint appeared only on the `time` mode field, so a `datetime` picker left the entered time-of-day unzoned. The popover footer's time field now shows the same hint at its trailing edge, capped at 60% of the field so it never covers the masked value, and stretches across the row's remaining width while the hint is present; with no hint the footer field keeps its compact fixed width. `time` mode is unchanged, and hosts that do not set `showTimezone` see no change.
 
 ### Fixed
+
+- **`useEditableItem` — invalid folder creation stays open on Enter** — Enter now preserves the input's focus, entered name and validation feedback when creating an item with an invalid name, allowing the user to correct it. Escape, outside-click cancellation, rename fallback and non-blocking warnings retain their existing behavior. Reported in [ai-dial-chat #9554](https://github.com/epam/ai-dial-chat/issues/9554).
 
 - **`Radio` (2.0) — a visible focus ring** — a keyboard-focused radio drew a 1px outline flush against its own 1px border, so on a 20px circle the focus was barely visible and QA reported the options as unreachable by keyboard. The ring is now 2px and offset by 2px (WCAG 2.4.13), like `Switch`'s offset ring. `RadioGroup` inherits it. Reported from `ai-dial-chat` ([#9742](https://github.com/epam/ai-dial-chat/issues/9742): the Save panel's version choice).
 
