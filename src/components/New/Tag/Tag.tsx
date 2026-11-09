@@ -15,6 +15,7 @@ import { mergeClasses } from '@/utils/merge-classes';
 import { GhostIconButton } from '../IconButton/IconButtonWrappers';
 import {
   tagBaseClassName,
+  tagShapeClassNames,
   tagHoverClassName,
   tagInteractiveClassName,
   tagStateClassNames,
@@ -39,9 +40,10 @@ export interface TagProps extends NativeTagProps {
  * aliases: Chip|Pill
  * Design system 2.0
  *
- * The tag has one height — the 32px pill of the 2.0 design. There is no `size`
- * prop: a tag sizes itself, and a caller that needs a different height is
- * usually reaching for a button.
+ * The tag is the 32px pill of the 2.0 design; `TagAppearance.Bordered` is the
+ * compact 24px value chip of a form field. There is no `size` prop: a tag sizes
+ * itself, and a caller that needs a different height is usually reaching for a
+ * button.
  *
  * The label truncates rather than wrapping, and carries a native `title` so the
  * full text stays reachable when it does.
@@ -51,7 +53,9 @@ export interface TagProps extends NativeTagProps {
  * the caller: a clickable tag that is also closable gives a screen reader two
  * actions with no way to tell which one it landed on.
  *
- * No tag draws a rim; the two appearances are told apart by their fill.
+ * `outlined` and `selectable` draw no rim and are told apart by their fill;
+ * `bordered` draws one: the outlined `Badge`'s look, for a value the user can
+ * remove, on a surface the rimless fill would vanish on.
  * `TagAppearance.Selectable` is the filter chip of the 2.0 design: no fill
  * at all until it is selected, one hover tint shared by both states, a semibold
  * label once selected, and the state carried on `aria-pressed` rather than by
@@ -78,7 +82,8 @@ export interface TagProps extends NativeTagProps {
  * @param label - Text content displayed inside the tag.
  * @param [icon] - Icon rendered before the label.
  * @param [appearance=TagAppearance.Outlined] - `outlined` is the filled chip on the raised
- * layer; `selectable` is the unfilled filter chip that tints and turns semibold when selected.
+ * layer; `selectable` is the unfilled filter chip that tints and turns semibold when selected;
+ * `bordered` is the compact rimmed value chip of a form field.
  * @param [selected=false] - Applies the accent-tinted selected styling.
  * @param [disabled=false] - Stops the tag responding: no click handling, no remove control. The design defines no disabled tag, so the colours stay put.
  * @param [closable=false] - Renders the remove button. Needs `onRemove` to appear.
@@ -131,7 +136,7 @@ export const Tag: FC<TagProps> = ({
       onKeyDown={handleKeyDown}
       className={mergeClasses(
         tagBaseClassName,
-        hasBoldLabel ? 'dial-tiny-semi-text' : 'dial-tiny-text',
+        hasBoldLabel ? 'dial-tiny-semi-text' : tagShapeClassNames[appearance],
         tagStateClassNames[appearance][selected ? 'selected' : 'default'],
         // The design defines no disabled tag, so a disabled one keeps its
         // colours and only stops responding.

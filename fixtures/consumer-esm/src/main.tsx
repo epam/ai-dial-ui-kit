@@ -5,7 +5,7 @@ import { Button } from '@epam/ai-dial-ui-kit';
  * Mandatory root ESM fixture:
  * a static import of a single basic component from the backward-compatible
  * root `@epam/ai-dial-ui-kit` entry. Its complete static initial graph must
- * exclude AG Grid and every editor-only (Monaco / `@uiw/*`) dependency.
+ * exclude AG Grid and every editor-only (`@uiw/*`) dependency.
  *
  * Deliberately avoided above: spelling out the exact forbidden package
  * specifiers `assert-static-graph.mjs` checks for. With `minify: false`

@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Spinner } from './Spinner';
@@ -45,5 +46,35 @@ describe('Dial UI Kit :: Spinner', () => {
   test('applies custom className to container', () => {
     render(<Spinner className="custom-class" />);
     expect(screen.getByRole('status')).toHaveClass('custom-class');
+  });
+
+  test('covers the viewport when fullScreen is true and not by default', () => {
+    const { rerender } = render(<Spinner />);
+    expect(screen.getByRole('status')).not.toHaveClass('fixed');
+
+    rerender(<Spinner fullScreen ariaLabel="Checking your session…" />);
+
+    expect(screen.getByRole('status')).toHaveClass(
+      'fixed',
+      'inset-0',
+      'z-popup',
+      'bg-layer-base',
+    );
+    expect(
+      screen.getByRole('img', { name: 'Checking your session…' }),
+    ).toBeInTheDocument();
+  });
+
+  test('makes the ring focusable only with a focusRef', () => {
+    const focusRef = createRef<HTMLDivElement>();
+    const { rerender } = render(<Spinner />);
+    expect(screen.getByRole('img')).not.toHaveAttribute('tabindex');
+
+    rerender(<Spinner fullScreen focusRef={focusRef} ariaLabel="Busy" />);
+    focusRef.current?.focus();
+
+    const ring = screen.getByRole('img', { name: 'Busy' });
+    expect(ring).toHaveAttribute('tabindex', '-1');
+    expect(ring).toHaveFocus();
   });
 });

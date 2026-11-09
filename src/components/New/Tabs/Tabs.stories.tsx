@@ -6,7 +6,7 @@ import {
 } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { TabOrientation } from '@/types/tab';
+import { TabOrientation, TabStatus } from '@/types/tab';
 import { Tabs, type TabsProps } from './Tabs';
 
 const InteractiveTabs = (args: TabsProps) => {
@@ -134,6 +134,20 @@ export const WithDisabledTabs: Story = {
   },
 };
 
+export const WithStatus: Story = {
+  render: InteractiveTabs,
+  args: {
+    ariaLabel: 'Form sections',
+    tabs: [
+      { id: 'general', label: 'General' },
+      { id: 'limits', label: 'Limits', status: TabStatus.Error },
+      { id: 'roles', label: 'Roles', status: TabStatus.Warning, count: 2 },
+    ],
+    activeTabId: 'general',
+    onTabChange: noop,
+  },
+};
+
 export const AllVariants: Story = {
   args: { tabs, activeTabId: 'all', onTabChange: noop },
   render: () => (
@@ -233,6 +247,15 @@ export const VerticalWithSectionLabel: Story = {
           'With `sectionLabel` the heading also names the tab list through `aria-labelledby`, so no separate `ariaLabel` is needed. The heading wrapper becomes the root, and `className` lands on it.',
       },
     },
+  },
+};
+
+export const VerticalWithStatus: Story = {
+  render: InteractiveTabs,
+  args: {
+    ...WithStatus.args,
+    orientation: TabOrientation.Vertical,
+    className: 'w-[240px]',
   },
 };
 

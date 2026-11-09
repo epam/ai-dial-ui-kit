@@ -12,8 +12,7 @@ below reflect what a real consumer's bundler would actually resolve.
 | --- | --- | --- |
 | `consumer-esm` | `{ Button }` from root | static graph excludes AG Grid + all editor packages; built bundle mounts an accessible button |
 | `consumer-grid` | `{ Grid }` (2.0) from root | static graph includes AG Grid, excludes editor packages |
-| `consumer-json-editor` | `LazyDialJsonEditor()` | Monaco present only in a dynamic chunk; AG Grid/`@uiw/*` absent |
-| `consumer-markdown-editor` | `LazyDialMarkdownEditor()` + `LazyMarkdownEditor()` | `@uiw/*` present only in a dynamic chunk; AG Grid/Monaco absent |
+| `consumer-markdown-editor` | `LazyMarkdownEditor()` | `@uiw/*` present only in a dynamic chunk; AG Grid absent |
 
 ## Regenerating the tarball and rebuilding a fixture
 

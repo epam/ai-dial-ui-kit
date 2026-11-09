@@ -6,7 +6,7 @@
   "description": "Companion to fixtures/consumer-mixed-grid-editor-loader: identical scenario (eager Button + retained editor loaders + Grid reached only via a dynamic import of a separate module), but the loaders are imported from @epam/ai-dial-ui-kit/editors instead of the root. Confirms the ./editors subpath stays safe after the Section 9 shared-leaf-module refactor, matching the 'passing variant' described in verification-report.md's Consumer follow-up section.",
   "scripts": {
     "build": "vite build",
-    "assert": "node ../shared/assert-static-graph.mjs --dist dist --dynamic-require ag-grid-community,ag-grid-react,@uiw/react-md-editor,@uiw/react-markdown-preview,@monaco-editor/react,monaco-editor --dynamic-after LazyMarkdownEditor:ag-grid-community",
+    "assert": "node ../shared/assert-static-graph.mjs --dist dist --dynamic-require ag-grid-community,ag-grid-react,@uiw/react-md-editor,@uiw/react-markdown-preview --dynamic-after LazyMarkdownEditor:ag-grid-community",
     "smoke": "node smoke-test.mjs"
   },
   "dependencies": {

@@ -414,6 +414,115 @@ describe('Dial UI Kit :: Calendar', () => {
     });
   });
 
+  describe('renderTimeField', () => {
+    const renderWithCustomField = (onChange = vi.fn()) => {
+      const renderTimeField = vi.fn(
+        ({ value, onChange: setTime, ariaLabel }) => (
+          <button type="button" onClick={() => setTime('18:45')}>
+            {`${ariaLabel} ${value}`}
+          </button>
+        ),
+      );
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          value={new Date(2026, 2, 11, 9, 0)}
+          onChange={onChange}
+          renderTimeField={renderTimeField}
+        />,
+      );
+      fireEvent.click(
+        screen.getByRole('button', { name: '11 Mar 2026, 09:00' }),
+      );
+      return { renderTimeField, onChange };
+    };
+
+    test('Should replace the footer time field with the custom control', () => {
+      renderWithCustomField();
+
+      expect(
+        screen.getByRole('button', { name: 'Time 09:00' }),
+      ).toBeInTheDocument();
+      expect(screen.queryByLabelText('Time')).not.toBeInTheDocument();
+    });
+
+    test('Should merge the time written by the custom control into the Date value', () => {
+      const { onChange } = renderWithCustomField();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Time 09:00' }));
+
+      const next = onChange.mock.calls[0][0] as Date;
+      expect(next.getFullYear()).toBe(2026);
+      expect(next.getMonth()).toBe(2);
+      expect(next.getDate()).toBe(11);
+      expect(next.getHours()).toBe(18);
+      expect(next.getMinutes()).toBe(45);
+    });
+
+    test('Should hand the Calendar onBlur to the custom control', () => {
+      const onBlur = vi.fn();
+      const renderTimeField = vi.fn(() => <span>custom</span>);
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          placeholder="Pick"
+          onBlur={onBlur}
+          renderTimeField={renderTimeField}
+        />,
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Pick' }));
+
+      expect(renderTimeField).toHaveBeenCalledWith(
+        expect.objectContaining({ onBlur }),
+      );
+    });
+
+    test('Should pass the timezone hint and an empty value before a date is chosen', () => {
+      const renderTimeField = vi.fn(() => <span>custom</span>);
+      render(
+        <Calendar
+          mode={CalendarMode.DateTime}
+          placeholder="Pick"
+          showTimezone
+          renderTimeField={renderTimeField}
+        />,
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Pick' }));
+
+      expect(renderTimeField).toHaveBeenCalledWith(
+        expect.objectContaining({
+          value: '',
+          timezoneLabel: '(GMT+01:00) Europe/Berlin',
+        }),
+      );
+    });
+  });
+
+  describe('pickerButtonClassName', () => {
+    test('Should keep the default clock button size when none is set', () => {
+      render(<Calendar mode={CalendarMode.Time} />);
+
+      expect(screen.getByRole('button', { name: 'Choose time' })).toHaveClass(
+        'size-8',
+        'end-2',
+      );
+    });
+
+    test('Should override the default clock button classes it conflicts with', () => {
+      render(
+        <Calendar
+          mode={CalendarMode.Time}
+          pickerButtonClassName="size-6 end-1.5"
+        />,
+      );
+
+      const button = screen.getByRole('button', { name: 'Choose time' });
+      expect(button).toHaveClass('size-6', 'end-1.5');
+      expect(button).not.toHaveClass('size-8');
+      expect(button).not.toHaveClass('end-2');
+    });
+  });
+
   describe('default placeholders per mode', () => {
     test('Should fall back to a mode-appropriate placeholder when none is provided', () => {
       const { rerender } = render(<Calendar mode={CalendarMode.Date} />);
@@ -437,6 +546,43 @@ describe('Dial UI Kit :: Calendar', () => {
   });
 
   describe('accessibility', () => {
+    test('Should describe the date trigger with ariaDescribedBy', () => {
+      render(
+        <>
+          <Calendar
+            mode={CalendarMode.Date}
+            labelProps={{ label: 'Start date' }}
+            ariaDescribedBy="start-error"
+            invalid
+          />
+          <span id="start-error">Start date is required</span>
+        </>,
+      );
+
+      expect(
+        screen.getByRole('button', { name: /Start date/ }),
+      ).toHaveAccessibleDescription('Start date is required');
+    });
+
+    test('Should describe the time input and mark it invalid', () => {
+      render(
+        <>
+          <Calendar
+            mode={CalendarMode.Time}
+            labelProps={{ label: 'Run at' }}
+            ariaDescribedBy="time-error"
+            invalid
+            showTimePicker={false}
+          />
+          <span id="time-error">Time is required</span>
+        </>,
+      );
+
+      const input = screen.getByRole('textbox', { name: 'Run at' });
+      expect(input).toHaveAccessibleDescription('Time is required');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
     test('Should name each day cell with its full date', () => {
       render(
         <Calendar mode={CalendarMode.Date} value={new Date(2026, 2, 11)} />,

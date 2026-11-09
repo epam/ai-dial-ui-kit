@@ -137,34 +137,26 @@ console.log(
   "This proves the dynamic import('./grid-feature') resolved at runtime and AG Grid rendered real row data, even with the root LazyMarkdownEditor loader retained.",
 );
 
-/* Retention alone (Object.assign) never calls the loaders - confirm all
- * three are retained as real function references, proving they survived
+/* Retention alone (Object.assign) never calls the loader - confirm it is
+ * retained as a real function reference, proving it survived
  * whatever tree-shaking happened (matching the static-graph assertion's
- * "dynamic-require" result for their target packages). Actually invoking
- * one from this bare Node smoke script - outside any React event/lifecycle,
+ * "dynamic-require" result for its target packages). Actually invoking
+ * it from this bare Node smoke script - outside any React event/lifecycle,
  * directly against the already-loaded production bundle's dynamic `import()`
  * - hangs the process for reasons unrelated to this fix (confirmed while
  * developing this fixture: the same `LazyMarkdownEditor()` call resolves and
  * renders correctly when invoked from inside a React click handler instead
  * of a bare top-level script `await`). That runtime path is already covered
  * by the library's own Vitest suite
- * (`src/components/JsonEditor/JsonEditor.spec.tsx`,
- * `src/components/MarkdownEditor/MarkdownEditor.spec.tsx`,
- * `src/components/New/MarkdownEditor/MarkdownEditor.spec.tsx`), which
+ * (`src/components/New/MarkdownEditor/MarkdownEditor.spec.tsx`), which
  * renders with Testing Library instead of executing a raw production
  * bundle from a standalone script. */
-for (const loaderName of [
-  'LazyDialJsonEditor',
-  'LazyDialMarkdownEditor',
-  'LazyMarkdownEditor',
-]) {
+for (const loaderName of ['LazyMarkdownEditor']) {
   if (typeof globalThis.window[loaderName] !== 'function') {
     console.error(`FAIL: window.${loaderName} was not retained as a function.`);
     process.exit(1);
   }
 }
-console.log(
-  'OK: all three editor loaders retained as real function references.',
-);
+console.log('OK: the editor loader is retained as a real function reference.');
 
 process.exit(0);

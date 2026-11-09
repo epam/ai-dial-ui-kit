@@ -5,7 +5,7 @@ import { Grid } from '@epam/ai-dial-ui-kit';
  * Grid feature fixture:
  * statically imports the 2.0 `Grid`. Its feature graph must include
  * ag-grid-community and ag-grid-react, but must still exclude every
- * editor-only dependency (Monaco, @uiw/*) - Grid must not drag editor code
+ * editor-only dependency (@uiw/*) - Grid must not drag editor code
  * in with it.
  *
  * `EXPECTED_CELL_TEXT` is read back by `smoke-test.mjs` as proof

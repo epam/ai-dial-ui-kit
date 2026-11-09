@@ -36,6 +36,14 @@ export interface NoDataContentProps {
  * secondary line and an optional action. The icon is decorative, so it is
  * hidden from assistive tech and the text carries the message on its own.
  *
+ * Copy follows the Patterns 2.0 empty-state behaviour:
+ * - default: "No [entities] yet" / "[Entities] will appear here once [condition]."
+ * - Shared with me: "No [entities] yet" / "[Entities] other people share with you will show up here."
+ * - after a search or filter: "No [entities] found" / "Try a different search
+ *   term or check your filters." — drop the part the list does not have — with `live`.
+ *
+ * Leave `icon` unset in a list, so every empty list shows the same card.
+ *
  * @example
  * ```tsx
  * <NoDataContent

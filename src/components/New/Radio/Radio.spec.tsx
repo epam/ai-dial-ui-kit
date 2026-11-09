@@ -250,4 +250,13 @@ describe('Dial UI Kit :: Radio', () => {
       container.querySelector('label[for="radio"]')?.className,
     ).not.toMatch(/hover/);
   });
+
+  test('draws a 2px focus ring offset from the control', () => {
+    const { container } = render(
+      <Radio id="radio" name="group" value="a" labelProps={{ label: 'Pro' }} />,
+    );
+    const control = container.querySelector('label[for="radio"]');
+    expect(control?.className).toMatch(/peer-focus-visible:outline-2/);
+    expect(control?.className).toMatch(/peer-focus-visible:outline-offset-2/);
+  });
 });

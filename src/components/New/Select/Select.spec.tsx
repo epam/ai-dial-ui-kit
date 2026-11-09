@@ -492,7 +492,28 @@ describe('Dial UI Kit :: Select', () => {
         },
       );
 
-      expect(screen.getByText('Nothing here')).toBeInTheDocument();
+      expect(screen.getByRole('status')).toHaveTextContent('Nothing here');
+    });
+
+    test('shows the filtered copy when the search leaves no options', () => {
+      renderSelect({
+        searchable: true,
+        emptyStateTitle: 'No fruits yet',
+        filteredEmptyStateTitle: 'No fruits found',
+        filteredEmptyStateDescription: 'Try a different search term.',
+      });
+
+      openSelect();
+      fireEvent.change(
+        screen.getByRole('textbox', { name: 'Search options' }),
+        { target: { value: 'zzz' } },
+      );
+
+      const emptyState = screen.getByRole('status');
+
+      expect(emptyState).toHaveTextContent('No fruits found');
+      expect(emptyState).toHaveTextContent('Try a different search term.');
+      expect(screen.queryByText('No fruits yet')).not.toBeInTheDocument();
     });
   });
 
@@ -955,5 +976,28 @@ describe('Dial UI Kit :: Select — error and caption description', () => {
       </>,
     );
     expect(getField()).toHaveAccessibleDescription('Outside Comparison');
+  });
+});
+
+describe('Dial UI Kit :: Select — overlay semantics', () => {
+  test('renders the listbox in a role-less overlay, not inside a menu', () => {
+    renderSelect();
+    openSelect();
+
+    // A listbox is not a child a `menu` may contain (axe aria-required-children).
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('moves between options with the arrow keys', async () => {
+    const user = userEvent.setup();
+    renderSelect();
+    await user.click(getField());
+    const first = await screen.findByRole('option', { name: 'Option 1' });
+    first.focus();
+
+    await user.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('option', { name: 'Option 2' })).toHaveFocus();
   });
 });

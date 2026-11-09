@@ -111,6 +111,18 @@ const TypographyShowcase = () => (
       />
       <TypographyRow className="dial-code-text" label="dial-code-text" />
       <TypographyRow
+        className="dial-code-semi-text"
+        label="dial-code-semi-text"
+      />
+      <TypographyRow
+        className="dial-tiny-code-text"
+        label="dial-tiny-code-text"
+      />
+      <TypographyRow
+        className="dial-tiny-code-semi-text"
+        label="dial-tiny-code-semi-text"
+      />
+      <TypographyRow
         className="dial-italic-text"
         label="dial-italic-text"
         sample="fx"

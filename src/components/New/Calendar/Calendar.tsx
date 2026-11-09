@@ -1,6 +1,8 @@
 import {
   FloatingFocusManager,
+  FloatingNode,
   FloatingPortal,
+  FloatingTree,
   autoUpdate,
   flip,
   offset,
@@ -8,6 +10,7 @@ import {
   useClick,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
   useInteractions,
   useRole,
 } from '@floating-ui/react';
@@ -67,6 +70,22 @@ import { TimePickerPanel } from './TimePickerPanel';
 
 export type CalendarValue = Date | string | null;
 
+/** Props handed to {@link CalendarProps.renderTimeField}. */
+export interface CalendarTimeFieldRenderProps {
+  /** Current time of day as `"HH:mm"`, or an empty string when no date is selected yet. */
+  value: string;
+  /** Call with a complete `"HH:mm"` string; the Calendar merges it into its `Date` value. */
+  onChange: (time: string) => void;
+  /** Forward to the field's input so the Calendar's `onBlur` keeps firing. */
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+  disabled: boolean;
+  invalid: boolean;
+  /** Accessible name for the field. */
+  ariaLabel: string;
+  /** Viewer's timezone hint when `showTimezone` is set, otherwise `null`. */
+  timezoneLabel: string | null;
+}
+
 export interface CalendarProps {
   mode?: CalendarMode;
   value?: CalendarValue;
@@ -80,6 +99,12 @@ export interface CalendarProps {
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
+  /**
+   * Ids of elements describing the field — typically an error rendered next
+   * to it. Lands on the focusable control: the masked input in `time` mode,
+   * the popover trigger otherwise.
+   */
+  ariaDescribedBy?: string;
   id?: string;
   className?: string;
   minDate?: Date;
@@ -100,6 +125,20 @@ export interface CalendarProps {
    * @default true
    */
   showTimePicker?: boolean;
+  /**
+   * `datetime` mode only: replaces the time field in the popover footer with
+   * a custom control, e.g. one that opens its own hour/minute picker. The
+   * default is the built-in typeable `HH:mm` field. The Calendar keeps owning
+   * the `Date` value — the control only reads and writes the `"HH:mm"` part.
+   */
+  renderTimeField?: (props: CalendarTimeFieldRenderProps) => ReactNode;
+  /**
+   * `time` mode only: classes merged onto the clock button after its
+   * defaults, so a conflicting utility such as `size-6` overrides the default
+   * `size-8`. Pairs with `fieldClassName` to fit the field and button into a
+   * denser layout, e.g. a custom `renderTimeField` control.
+   */
+  pickerButtonClassName?: string;
 }
 
 interface CalendarPopoverFieldProps {
@@ -116,11 +155,12 @@ interface CalendarPopoverFieldProps {
    * has to be wired up explicitly.
    */
   labelledBy?: string;
+  describedBy?: string;
   /** Accessible name for the popover, which is exposed as `role="dialog"`. */
   panelLabel: string;
 }
 
-const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
+const CalendarPopoverFieldInner: FC<CalendarPopoverFieldProps> = ({
   id,
   disabled,
   invalid,
@@ -129,12 +169,15 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   fieldClassName,
   panel,
   labelledBy,
+  describedBy,
   panelLabel,
 }) => {
   const themeScope = useThemeScope();
   const [isOpen, setIsOpen] = useState(false);
+  const nodeId = useFloatingNodeId();
 
   const { refs, floatingStyles, context } = useFloating({
+    nodeId,
     open: isOpen,
     onOpenChange: (next) => setIsOpen(disabled ? false : next),
     placement: 'bottom-start',
@@ -152,7 +195,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
   ]);
 
   return (
-    <>
+    <FloatingNode id={nodeId}>
       <div
         id={id}
         ref={refs.setReference}
@@ -161,6 +204,7 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
         aria-expanded={isOpen}
         aria-disabled={disabled}
         aria-labelledby={labelledBy}
+        aria-describedby={describedBy}
         tabIndex={disabled ? -1 : 0}
         className={mergeClasses(
           calendarFieldBaseClassName,
@@ -198,9 +242,21 @@ const CalendarPopoverField: FC<CalendarPopoverFieldProps> = ({
           </FloatingFocusManager>
         </FloatingPortal>
       )}
-    </>
+    </FloatingNode>
   );
 };
+
+/**
+ * Wraps the popover in its own `FloatingTree`, so a floating element opened
+ * from inside the panel — the popover of a custom `renderTimeField` control —
+ * counts as part of this popover. Without the tree, a click in that nested
+ * portal reads as an outside press and closes the calendar underneath it.
+ */
+const CalendarPopoverField: FC<CalendarPopoverFieldProps> = (props) => (
+  <FloatingTree>
+    <CalendarPopoverFieldInner {...props} />
+  </FloatingTree>
+);
 
 interface TimeFieldProps {
   id?: string;
@@ -212,6 +268,7 @@ interface TimeFieldProps {
   invalid?: boolean;
   className?: string;
   ariaLabel?: string;
+  describedBy?: string;
   placeholder?: string;
   /** Timezone hint pinned over the field's trailing edge; omit for a bare input. */
   timezoneLabel?: string | null;
@@ -221,6 +278,8 @@ interface TimeFieldProps {
   timezoneLabelClassName?: string;
   /** Adds a clock button that opens the hour/minute list popover. */
   picker?: boolean;
+  /** Merged onto the clock button after its defaults. */
+  pickerButtonClassName?: string;
 }
 
 /**
@@ -238,16 +297,23 @@ const TimeField: FC<TimeFieldProps> = ({
   invalid,
   className,
   ariaLabel,
+  describedBy,
   placeholder = '--:--',
   timezoneLabel,
   timezoneLabelClassName,
   picker = false,
+  pickerButtonClassName,
 }) => {
   const [draft, setDraft] = useState(value);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const themeScope = useThemeScope();
+  /* Registers the picker popover as a child of the enclosing calendar popover
+   * (a no-op outside one), so a click inside it is not an outside press there.
+   * It has no `FloatingNode` of its own: nothing opens from inside the picker. */
+  const nodeId = useFloatingNodeId();
 
   const { refs, floatingStyles, context } = useFloating({
+    nodeId,
     open: isPickerOpen,
     onOpenChange: (next) => setIsPickerOpen(disabled ? false : next),
     placement: 'bottom-start',
@@ -270,6 +336,8 @@ const TimeField: FC<TimeFieldProps> = ({
       inputMode="numeric"
       autoComplete="off"
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
+      aria-invalid={invalid || undefined}
       placeholder={placeholder}
       disabled={disabled}
       value={draft}
@@ -322,7 +390,10 @@ const TimeField: FC<TimeFieldProps> = ({
             aria-haspopup="dialog"
             aria-expanded={isPickerOpen}
             disabled={disabled}
-            className={timePickerButtonClassName}
+            className={mergeClasses(
+              timePickerButtonClassName,
+              pickerButtonClassName,
+            )}
             onClick={() => setIsPickerOpen((open) => !open)}
           >
             <IconClock
@@ -395,6 +466,7 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [placeholder] - Placeholder shown when there is no value; defaults to a mode-appropriate string ("Select date", "Select date and time", "--:--" or "Select day")
  * @param [disabled=false] - Disables the control
  * @param [invalid=false] - Applies error styling
+ * @param [ariaDescribedBy] - Ids of elements describing the field (e.g. its error), set on the focusable control
  * @param [id] - id applied to the control, linked to the label
  * @param [className] - Additional CSS classes applied to the outer container
  * @param [minDate] - Earliest selectable date (date/datetime modes)
@@ -403,6 +475,8 @@ const TimeField: FC<TimeFieldProps> = ({
  * @param [fieldClassName] - Additional classes merged onto the trigger field, overriding conflicting defaults
  * @param [showTimezone=false] - Shows the viewer's timezone (e.g. `(GMT+01:00) Europe/Berlin`) at the trailing edge of the time fields (`time` mode and the `datetime` popover footer)
  * @param [showTimePicker=true] - `time` mode only: shows a clock button that opens an hour/minute list popover next to the typeable field
+ * @param [pickerButtonClassName] - `time` mode only: classes merged onto the clock button after its defaults, so a conflicting utility overrides them
+ * @param [renderTimeField] - `datetime` mode only: renders a custom control in place of the popover footer's time field; receives the `"HH:mm"` value, `onChange`, `onBlur`, `disabled`, `invalid`, `ariaLabel` and `timezoneLabel`
  */
 export const Calendar: FC<CalendarProps> = ({
   mode = CalendarMode.Date,
@@ -413,6 +487,7 @@ export const Calendar: FC<CalendarProps> = ({
   placeholder,
   disabled = false,
   invalid = false,
+  ariaDescribedBy,
   id,
   className,
   minDate,
@@ -421,6 +496,8 @@ export const Calendar: FC<CalendarProps> = ({
   fieldClassName,
   showTimezone = false,
   showTimePicker = true,
+  renderTimeField,
+  pickerButtonClassName,
 }) => {
   const resolvedPlaceholder =
     placeholder ?? calendarModeDefaultPlaceholder[mode];
@@ -483,6 +560,8 @@ export const Calendar: FC<CalendarProps> = ({
     if (mode === CalendarMode.Date) close();
   };
 
+  const timeLabelValue = dateValue ? formatTimeLabel(dateValue) : '';
+
   const handleTimeChange = (time: string) => {
     onChange?.(setTimeOnDate(dateValue ?? new Date(), time));
   };
@@ -518,10 +597,12 @@ export const Calendar: FC<CalendarProps> = ({
           onBlur={onBlur}
           disabled={disabled}
           invalid={invalid}
+          describedBy={ariaDescribedBy}
           placeholder={resolvedPlaceholder}
           className={fieldClassName}
           timezoneLabel={timezoneLabel}
           picker={showTimePicker}
+          pickerButtonClassName={pickerButtonClassName}
         />
       </div>
     );
@@ -545,6 +626,7 @@ export const Calendar: FC<CalendarProps> = ({
           disabled={disabled}
           invalid={invalid}
           labelledBy={triggerLabelledBy}
+          describedBy={ariaDescribedBy}
           panelLabel={labelText ?? resolvedPlaceholder}
           fieldClassName={fieldClassName}
           trigger={
@@ -612,6 +694,7 @@ export const Calendar: FC<CalendarProps> = ({
         disabled={disabled}
         invalid={invalid}
         labelledBy={triggerLabelledBy}
+        describedBy={ariaDescribedBy}
         panelLabel={labelText ?? resolvedPlaceholder}
         fieldClassName={fieldClassName}
         trigger={
@@ -697,23 +780,35 @@ export const Calendar: FC<CalendarProps> = ({
             {mode === CalendarMode.DateTime && (
               <div className="flex items-center justify-between gap-3 border-t border-secondary pt-3">
                 <span className="dial-small-text text-primary">Time</span>
-                <TimeField
-                  ariaLabel="Time"
-                  value={dateValue ? formatTimeLabel(dateValue) : ''}
-                  onChange={handleTimeChange}
-                  onBlur={onBlur}
-                  /* With the hint the field stretches across the row's
-                   * remaining width and the hint is pinned over its trailing
-                   * edge; without it, the field keeps its compact fixed
-                   * width. The compact footer field caps the hint at 60% of
-                   * the field so it never covers the masked value. */
-                  className={mergeClasses(
-                    !timezoneLabel && 'w-[120px]',
-                    'px-3 py-1.5',
-                  )}
-                  timezoneLabel={timezoneLabel}
-                  timezoneLabelClassName="end-3 max-w-[60%]"
-                />
+                {renderTimeField ? (
+                  renderTimeField({
+                    value: timeLabelValue,
+                    onChange: handleTimeChange,
+                    onBlur,
+                    disabled,
+                    invalid,
+                    ariaLabel: 'Time',
+                    timezoneLabel,
+                  })
+                ) : (
+                  <TimeField
+                    ariaLabel="Time"
+                    value={timeLabelValue}
+                    onChange={handleTimeChange}
+                    onBlur={onBlur}
+                    /* With the hint the field stretches across the row's
+                     * remaining width and the hint is pinned over its trailing
+                     * edge; without it, the field keeps its compact fixed
+                     * width. The compact footer field caps the hint at 60% of
+                     * the field so it never covers the masked value. */
+                    className={mergeClasses(
+                      !timezoneLabel && 'w-[120px]',
+                      'px-3 py-1.5',
+                    )}
+                    timezoneLabel={timezoneLabel}
+                    timezoneLabelClassName="end-3 max-w-[60%]"
+                  />
+                )}
               </div>
             )}
           </>

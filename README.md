@@ -86,7 +86,7 @@ function App() {
 
 ### Optional: Markdown Components CSS
 
-If you're using markdown-related components (`DialMarkdownEditor` or `DialMarkdownEditorContainer`), you need to import the required CSS files globally in your application (e.g., in your root layout or main entry point):
+If you're using the `MarkdownEditor` (loaded through `LazyMarkdownEditor`), you need to import the required CSS files globally in your application (e.g., in your root layout or main entry point):
 
 ```tsx
 import '@uiw/react-markdown-preview/markdown.css';
@@ -96,6 +96,20 @@ import '@uiw/react-md-editor/markdown-editor.css';
 This ensures the CSS is loaded once per application rather than being bundled with each component instance, reducing bundle size.
 
 ## Development
+
+### Controlled dropdown menus
+
+`ButtonDropdown` accepts controlled `open` / `onOpenChange` or an uncontrolled
+`defaultOpen`. Its `dropdownProps` forwards search, placement and menu sizing
+options to `Dropdown`. Set `iconAfter={null}` for an icon-only trigger; otherwise
+the default chevron follows the effective open state.
+
+`DropdownItem.subMenuOpen` and `onSubMenuOpenChange` let a host retain the active
+submenu across presentation changes. Omitting them preserves the default
+uncontrolled behavior. An already-open submenu restores focus on mount, and the
+kit owns arrow navigation, RTL placement, Escape and focus return. `renderSubMenu`
+can provide custom content without placeholder `children`. Leaf items forward
+`iconAfter` as trailing content alongside the existing disabled/danger states.
 
 ### Prerequisites
 
@@ -270,7 +284,9 @@ breaking change and goes through the migration-guide process.
 | `skeleton`      | `dial-kit-skeleton`       | The root of a `Skeleton`                                                                 |
 | `notification`  | `dial-kit-notification`   | The `Notification` surface, including every toast and section-message wrapper             |
 | `noDataContent` | `dial-kit-no-data-content` | The empty-state root of `NoDataContent`                                                 |
+| `loginScreen`   | `dial-kit-login-screen`   | The `section` root of a `LoginScreen`                                                    |
 | `stateScreen`   | `dial-kit-state-screen`   | The `section` root of a `StateScreen`                                                    |
+| `liveRegion`    | `dial-kit-live-region`    | The always-mounted wrapper of a `LiveRegion`, or of an `announce`d `CaptionText` / `ErrorText` |
 | `transferQueue` | `dial-kit-transfer-queue` | The `role="status"` panel of a `TransferQueue`: header, rows and aggregate bar           |
 
 #### Text
@@ -281,12 +297,18 @@ breaking change and goes through the migration-guide process.
 | `captionText`   | `dial-kit-caption-text`   | The caption line under a field                                      |
 | `errorText`     | `dial-kit-error-text`     | A caption in its error variant, additive to `captionText`           |
 | `label`         | `dial-kit-label`          | The `Label` root, wrapping its `label` element and its info button   |
+| `labelledText`  | `dial-kit-labelled-text`  | The root of a `LabelledText`, wrapping its caption and value    |
 
 #### Containers
 
 | Key                  | Class                             | Element                                                              |
 | -------------------- | --------------------------------- | -------------------------------------------------------------------- |
+| `steps`              | `dial-kit-steps`                  | The `ol` root of a `Steps`                                           |
 | `cardShell`          | `dial-kit-card-shell`             | The `article` element of a `CardShell`                               |
+| `analyticsCard`      | `dial-kit-analytics-card`         | The root of an `AnalyticsCard`                                       |
+| `analyticsBar`       | `dial-kit-analytics-bar`          | The root of an `AnalyticsBar`, stacked or inline                     |
+| `analyticsBarGroup`  | `dial-kit-analytics-bar-group`    | The root of an `AnalyticsBarGroup`, which is its accordion           |
+| `analyticsHistogram` | `dial-kit-analytics-histogram`    | The root of an `AnalyticsHistogram`                                  |
 | `collapsibleSidebar` | `dial-kit-collapsible-sidebar`    | The `aside` element of a `CollapsibleSidebar`                        |
 | `resizableContainer` | `dial-kit-resizable-container`    | The content box inside a `ResizableContainer`'s resize frame         |
 | `resizeHandle`       | `dial-kit-resize-handle`          | The `role="separator"` element of a `ResizeHandle`                    |
@@ -309,8 +331,6 @@ breaking change and goes through the migration-guide process.
 | `dropdownSearch`    | `dial-kit-dropdown-search`        | The search row above the item list of a `searchable` `Dropdown`                                  |
 | `menuItem`          | `dial-kit-menuitem`               | One overlay row: a dropdown item, a `Select` option, a submenu trigger or child                   |
 | `menuItemCheck`     | `dial-kit-menuitem-check`         | The trailing check of a chosen `MenuItemMark.Check` row                                          |
-| `dropdownIcon`      | `dial-kit-dropdown-icon`          | The primary icon of a `DialDropdownIcon` trigger                                                 |
-| `dropdownIconCaret` | `dial-kit-dropdown-icon-caret`    | Its caret badge. Absent when `showCaret` is `false`                                              |
 | `tooltip`           | `dial-kit-tooltip`                | The bubble of a `Tooltip`                                                                        |
 | `interactiveTooltip` | `dial-kit-interactive-tooltip`   | The panel of an `InteractiveTooltip`                                                             |
 | `ellipsisTooltip`   | `dial-kit-ellipsis-tooltip`       | The text element of an `EllipsisTooltip`, which is also its trigger                              |
@@ -337,6 +357,8 @@ breaking change and goes through the migration-guide process.
 | `badge`                | `dial-kit-badge`                      | The root of a `Badge`: the label box, with its icon when it has one |
 | `avatar`               | `dial-kit-avatar`                     | The root of an `Avatar`: the image, or the initials box that replaces it |
 | `entityIdentity`         | `dial-kit-entity-identity`              | The root row of an `EntityIdentity`: icon, type label, name and version |
+| `selectedEntityCard`   | `dial-kit-selected-entity-card`       | The bordered card of a `SelectedEntityCard`, not the wrapper that also holds its error |
+| `formSection`          | `dial-kit-form-section`               | The `section` root of a `FormSection`: heading row, description and content |
 | `radioGroupPopupField` | `dial-kit-radio-group-popup-field`    | The root of a `RadioGroupPopupField`                           |
 
 #### Controls
@@ -358,6 +380,7 @@ breaking change and goes through the migration-guide process.
 | `tag`                  | `dial-kit-tag`                        | A `Tag` pill, including a `TagInput`'s rows                |
 | `filterChips`          | `dial-kit-filter-chips`               | The `role="group"` row of a `FilterChips`; its chips carry `dial-kit-tag` |
 | `toggleIconButton`     | `dial-kit-toggle-icon-button`         | A `ToggleIconButton`, additive to `dial-kit-base-icon-button` |
+| `toggleChip`           | `dial-kit-toggle-chip`                | The `<button aria-pressed>` of a `ToggleChip`              |
 | `closeButton`          | `dial-kit-close-button`               | A `CloseButton`, additive to `dial-kit-base-icon-button`    |
 | `infoButton`           | `dial-kit-info-button`                | An `InfoButton`, additive to `dial-kit-base-icon-button`    |
 | `buttonDropdown`       | `dial-kit-button-dropdown`            | The wrapper of a `ButtonDropdown`                          |
@@ -378,14 +401,14 @@ target already carries a stable class:
 | `MarkdownEditor`                              | `dial-kit-markdown-editor` |
 | `Grid`                                        | `dial-kit-grid` (exported as `GRID_ROOT_CLASS`) |
 
-Four more contribute no element of their own, and are addressed through what
+Five more contribute no element of their own, and are addressed through what
 they render: `ThemeScope` (a `display: contents` wrapper), `MultiSelectTags`
-(`Tag`s), and `TooltipContainer` / `TooltipTrigger`.
+(`Tag`s), `TooltipContainer` / `TooltipTrigger`, and `ErrorBoundary` (its
+`LiveRegion` and fallback `StateScreen`).
 
 Two neighbouring elements are reached through props instead, and keep being: a
-`Dropdown`'s floating panel takes `listClassName`, a `Popup`'s backdrop takes
-`overlayClassName`, and the `DialDropdownIcon` trigger button takes
-`buttonClassName`.
+`Dropdown`'s floating panel takes `listClassName`, and a `Popup`'s backdrop
+takes `overlayClassName`.
 
 ## ♿ Accessibility
 
@@ -424,6 +447,7 @@ not AAA:
 | Standard 2.0 fields (`Input`, `Select`, `RadioGroupPopupField`) | 40px tall | The pointer target spans the full field width but stays 4px short of 44 vertically; the height is a shared form design token, not a per-control choice. `.dial-kit-input` clips its overflow, so the pseudo-element cannot grow the target either |
 | `Tag` remove button | 16×16 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 14px per side and swallow the neighbouring tags of a `TagInput` row |
 | Clickable `Tag` | 32px tall | A 44px target would overhang 6px per side and swallow the neighbouring chips of a filter row; the tag is already wider than 24px on both axes |
+| `ToggleChip` | 32px tall | Same pill as a clickable `Tag`: a 44px target would overhang 6px per side and swallow the neighbouring chips of a toggle row; the chip is already wider than 24px on both axes |
 | `Radio` circle | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label selects the radio, so the practical target is wider |
 | `Checkbox` box | 20×20 rendered | Reaches 24×24 through `dial-kit-minimum-target`; a 44px target would overhang 12px per side and swallow the adjacent label. Clicking the label toggles the checkbox, so the practical target is wider |
 | `Slider` track row | 24px tall | The pointer target spans the full track width but is only 24px tall; a 44px row would add 20px of dead space to every form the slider sits in, and the thumb is dragged rather than tapped |
@@ -498,12 +522,12 @@ npm install @epam/ai-dial-ui-kit
 npm install react react-dom
 ```
 
-Add the editor packages only if you use the `@epam/ai-dial-ui-kit/editors`
-subpath. They are optional peers, so `npm install` stays quiet without them, and
-the kit only reaches for them when a `Lazy*` editor actually mounts:
+Add the editor package only if you use the Markdown editor
+(`LazyMarkdownEditor`). It is an optional peer, so `npm install` stays quiet
+without it, and the kit only reaches for it when the editor actually mounts:
 
 ``` bash
-npm install monaco-editor @monaco-editor/react @uiw/react-md-editor
+npm install @uiw/react-md-editor
 ```
 
 2. Import style in the root layout of the project:

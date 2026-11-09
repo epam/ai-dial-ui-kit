@@ -33,6 +33,30 @@ export const notificationVariantClassNameMap: Record<
   [NotificationVariant.General]: 'bg-layer-sunken text-primary',
 };
 
+/** Surface classes for `NotificationSurface.Neutral`, whatever the variant. */
+export const notificationNeutralSurfaceClassName =
+  'bg-layer-sunken text-primary';
+
+/**
+ * Icon colour per variant on `NotificationSurface.Neutral`.
+ *
+ * On the variant surface the icon inherits the container's text colour. The
+ * neutral surface sets primary text, so the icon names its status colour
+ * itself; `warning` uses the dedicated `text-warning-icon` token, as the design
+ * does for a warning triangle outside a warning surface.
+ */
+export const notificationNeutralSurfaceIconClassNameMap: Record<
+  NotificationVariant,
+  string
+> = {
+  [NotificationVariant.Info]: 'text-info',
+  [NotificationVariant.Success]: 'text-success',
+  [NotificationVariant.Warning]: 'text-warning-icon',
+  [NotificationVariant.Error]: 'text-error',
+  [NotificationVariant.Loading]: 'text-info',
+  [NotificationVariant.General]: 'text-primary',
+};
+
 /**
  * Live-region role per variant.
  *

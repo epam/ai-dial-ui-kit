@@ -9,7 +9,7 @@ import {
 import { describe, expect, test, vi } from 'vitest';
 
 import { GridSelectionMode } from '@/models/selection-mode';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { GRID_THEME_PARAMS } from './constants';
 import { Grid } from './Grid';
 import { DateCellRenderer } from './renderers/DateCellRenderer';
@@ -224,20 +224,67 @@ describe('Dial UI Kit :: Grid', () => {
     expect(onGridReady.mock.calls[0][0]).toBeDefined();
   });
 
-  test('announces the empty state when there are no rows', async () => {
-    render(
-      <Grid<TestRow>
-        columnDefs={testColumns}
-        rowData={[]}
-        emptyStateTitle="No results found"
-        emptyStateDescription="Try another search."
-      />,
-    );
+  describe('empty state', () => {
+    test('shows the "yet" copy and the action, unannounced, when there are no rows', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={[]}
+          emptyStateAction={<button type="button">Add person</button>}
+        />,
+      );
 
-    const emptyState = await screen.findByRole('status');
+      expect(await screen.findByText('No items yet')).toBeInTheDocument();
+      expect(
+        screen.getByText('Items will appear here once they are added.'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Add person' }),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
 
-    expect(emptyState).toHaveTextContent('No results found');
-    expect(emptyState).toHaveTextContent('Try another search.');
+    test('announces the no-rows message when emptyStateLive is set', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={[]}
+          emptyStateTitle="No people found"
+          emptyStateDescription="Try another search."
+          emptyStateLive
+        />,
+      );
+
+      const emptyState = await screen.findByRole('status');
+
+      expect(emptyState).toHaveTextContent('No people found');
+      expect(emptyState).toHaveTextContent('Try another search.');
+    });
+
+    test('announces the "found" copy when the filters leave no rows', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          filteredEmptyStateTitle="No people found"
+          emptyStateAction={<button type="button">Add person</button>}
+          additionalGridOptions={{
+            isExternalFilterPresent: () => true,
+            doesExternalFilterPass: () => false,
+          }}
+        />,
+      );
+
+      const emptyState = await screen.findByRole('status');
+
+      expect(emptyState).toHaveTextContent('No people found');
+      expect(emptyState).toHaveTextContent(
+        'Try a different search term or check your filters.',
+      );
+      expect(
+        screen.queryByRole('button', { name: 'Add person' }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   describe('cell alignment', () => {
@@ -267,6 +314,29 @@ describe('Dial UI Kit :: Grid', () => {
       expect(customCell).not.toHaveClass('h-full');
       expect(plainCell).toHaveClass('dial-small-text');
       expect(customCell).toHaveClass('dial-small-text');
+    });
+
+    test('right-aligns the text of a rightAligned column', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={[
+            testColumns[0],
+            { ...testColumns[1], type: 'rightAligned' },
+          ]}
+          rowData={testRows}
+        />,
+      );
+
+      const ageCell = (await screen.findByText('30')).closest('.ag-cell');
+      const nameText = await screen.findByText('Alice');
+
+      expect(ageCell).toHaveClass('ag-right-aligned-cell');
+      expect(screen.getByText('30')).toHaveClass('text-end');
+      expect(screen.getByText('30')).not.toHaveClass('text-start');
+      expect(nameText).toHaveClass('text-start');
+      expect(nameText.closest('.ag-cell')).not.toHaveClass(
+        'ag-right-aligned-cell',
+      );
     });
 
     test('centres the content of a cell wrapped in a context menu', async () => {
@@ -467,6 +537,40 @@ describe('Dial UI Kit :: Grid', () => {
       ).not.toBeChecked();
     });
 
+    test('disables the control of a row the consumer isRowSelectable rejects', async () => {
+      const user = userEvent.setup();
+      const onSelectionChange = vi.fn();
+
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          selectionMode={GridSelectionMode.MULTIPLE}
+          selectRowLabel={(row) => `Select ${row.name}`}
+          onSelectionChange={onSelectionChange}
+          additionalGridOptions={{
+            rowSelection: {
+              mode: 'multiRow',
+              isRowSelectable: (node) => node.data?.id !== '3',
+            },
+          }}
+        />,
+      );
+
+      const rejected = await screen.findByRole('checkbox', {
+        name: 'Select Charlie',
+      });
+      await waitFor(() => expect(rejected).toBeDisabled());
+      expect(
+        screen.getByRole('checkbox', { name: 'Select Alice' }),
+      ).toBeEnabled();
+
+      await user.click(rejected);
+
+      expect(rejected).not.toBeChecked();
+      expect(onSelectionChange).not.toHaveBeenCalled();
+    });
+
     test('single mode renders radios and keeps one selected at a time', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
@@ -629,6 +733,70 @@ describe('Dial UI Kit :: Grid', () => {
       // a new light class rather than the one from the first render.
       expect(themeParamsClass(container)).not.toBe(darkClass);
       expect(screen.getByText('Alice')).toBeInTheDocument();
+    });
+  });
+
+  describe('appearance', () => {
+    const THIN_DIVIDER = '0.5px solid var(--stroke-tertiary, #E0E6F0)';
+
+    /** Renders the grid and returns the CSS of the theme it hands ag-Grid. */
+    const renderWith = async (appearance?: GridAppearance) => {
+      let css = '';
+
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          ariaLabel="Usage"
+          appearance={appearance}
+          onGridApiChange={(api) => {
+            css = (
+              api.getGridOption('theme') as unknown as {
+                _getParamsCss: () => string;
+              }
+            )._getParamsCss();
+          }}
+        />,
+      );
+
+      await screen.findByText('Alice');
+
+      return css;
+    };
+
+    const rowBorderOf = (css: string) =>
+      css.match(
+        /--ag-row-border:\s*var\(--ag-inherited-row-border,\s*([^;]+)\);/,
+      )?.[1] ?? null;
+
+    const cellPaddingOf = (css: string) =>
+      css.match(
+        /--ag-cell-horizontal-padding:\s*var\(--ag-inherited-cell-horizontal-padding,\s*([^;]+)\);/,
+      )?.[1] ?? null;
+
+    test('draws the framed grid with full-width row dividers by default', async () => {
+      const css = await renderWith();
+
+      expect(screen.getByRole('region', { name: 'Usage' })).not.toHaveClass(
+        'dial-kit-grid-chat',
+      );
+      expect(rowBorderOf(css)).toBe(THIN_DIVIDER);
+      // Balham's own `spacing * 2`, untouched.
+      expect(cellPaddingOf(css)).toMatch(/var\(--ag-spacing\)\s*\*\s*2/);
+    });
+
+    test('marks the Chat table and leaves its inset row dividers to the stylesheet', async () => {
+      const css = await renderWith(GridAppearance.Chat);
+
+      expect(screen.getByRole('region', { name: 'Usage' })).toHaveClass(
+        'dial-kit-grid',
+        'dial-kit-grid-chat',
+      );
+      expect(rowBorderOf(css)).toBe('none');
+      expect(cellPaddingOf(css)).toBe('12px');
+      expect(css).toMatch(
+        /--ag-wrapper-border:\s*var\(--ag-inherited-wrapper-border,\s*none\);/,
+      );
     });
   });
 });

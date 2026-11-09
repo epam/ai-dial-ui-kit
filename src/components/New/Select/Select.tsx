@@ -30,6 +30,7 @@ import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import type { SelectOption } from '@/models/select';
 import { MenuItem } from '@/components/New/MenuItem/MenuItem';
+import { DropdownOverlayRole } from '@/types/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 import { ElementSize } from '@/types/size';
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
@@ -91,6 +92,10 @@ export interface SelectProps {
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   emptyStateIcon?: ReactNode;
+  /** Title when the search leaves no options, as "No [entities] found". Falls back to `emptyStateTitle`. */
+  filteredEmptyStateTitle?: string;
+  /** Description when the search leaves no options. Falls back to `emptyStateDescription`. */
+  filteredEmptyStateDescription?: string;
   disabled?: boolean;
   className?: string;
   fieldClassName?: string;
@@ -171,6 +176,8 @@ export interface SelectProps {
  * @param [emptyStateTitle="No options available"] - Title text when there are no options.
  * @param [emptyStateDescription] - Description text when there are no options.
  * @param [emptyStateIcon] - Icon to display when there are no options.
+ * @param [filteredEmptyStateTitle] - Title when the search leaves no options, as "No [entities] found". Falls back to `emptyStateTitle`; the message is announced.
+ * @param [filteredEmptyStateDescription] - Description when the search leaves no options, as "Try a different search term". Falls back to `emptyStateDescription`.
  * @param [invalid] - Whether the select is in an invalid state, affecting styling.
  * @param [disabled=false] - Disable the control.
  * @param [className] - Additional CSS classes for the outer container.
@@ -214,6 +221,8 @@ export const Select: FC<SelectProps> = ({
   emptyStateTitle = 'No options available',
   emptyStateDescription,
   emptyStateIcon,
+  filteredEmptyStateTitle,
+  filteredEmptyStateDescription,
   disabled = false,
   className,
   fieldClassName,
@@ -553,10 +562,16 @@ export const Select: FC<SelectProps> = ({
       <div role="none" className={selectOptionsScrollClassName}>
         {filtered.length === 0 ? (
           <div className="px-2 py-3">
+            {/* A query that leaves nothing is the result of what the user just
+                typed, so that message is announced; an empty list is not. */}
             <NoDataContent
+              live={!!query}
               icon={emptyStateIcon}
-              title={emptyStateTitle}
-              description={emptyStateDescription}
+              title={(query && filteredEmptyStateTitle) || emptyStateTitle}
+              description={
+                (query && filteredEmptyStateDescription) ||
+                emptyStateDescription
+              }
             />
           </div>
         ) : (
@@ -671,6 +686,10 @@ export const Select: FC<SelectProps> = ({
           listClassName={mergeClasses(selectListWidthClassName, listClassName)}
           className="w-full"
           renderOverlay={renderOptionsList}
+          /* The overlay holds the `listbox`; as a `menu` it would contain a
+             child a menu may not (axe `aria-required-children`). */
+          overlayRole={DropdownOverlayRole.None}
+          optionArrowNavigation
         >
           <Input
             id={fieldId}

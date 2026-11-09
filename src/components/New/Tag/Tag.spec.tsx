@@ -295,4 +295,34 @@ describe('Dial UI Kit :: Tag', () => {
       );
     });
   });
+
+  describe('bordered appearance', () => {
+    test('is the compact rimmed chip, with the small type scale', () => {
+      render(<Tag label="bbc.com" appearance={TagAppearance.Bordered} />);
+      const tag = screen.getByText('bbc.com').parentElement;
+      expect(tag).toHaveClass(
+        'h-[24px]',
+        'rounded-md',
+        'border',
+        'dial-small-text',
+      );
+      expect(tag).not.toHaveClass('h-[32px]', 'rounded-full', 'dial-tiny-text');
+    });
+
+    test('keeps its remove control', async () => {
+      const onRemove = vi.fn();
+      render(
+        <Tag
+          label="bbc.com"
+          appearance={TagAppearance.Bordered}
+          closable
+          onRemove={onRemove}
+        />,
+      );
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Remove bbc.com' }),
+      );
+      expect(onRemove).toHaveBeenCalledOnce();
+    });
+  });
 });

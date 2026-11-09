@@ -1,7 +1,15 @@
 import { Button } from '@/components/New/Button/Button';
+import { LinkButton } from '@/components/New/Button/ButtonWrappers';
+import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
+import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { NotificationVariant } from '@/types/notification';
+import {
+  NotificationSurface,
+  NotificationType,
+  NotificationVariant,
+} from '@/types/notification';
 import { ElementSize } from '@/types/size';
+import { IconArrowRight } from '@tabler/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Notification, type NotificationProps } from './Notification';
 import {
@@ -43,6 +51,13 @@ const meta = {
         NotificationVariant.General,
       ],
       description: 'Defines the visual style and icon of the alert',
+    },
+    surface: {
+      control: { type: 'select' },
+      options: [NotificationSurface.Variant, NotificationSurface.Neutral],
+      description:
+        "Surface the notification draws on. `neutral` keeps the variant's icon, icon colour and role on the neutral sunken layer",
+      table: { defaultValue: { summary: NotificationSurface.Variant } },
     },
     title: {
       control: { type: 'text' },
@@ -252,6 +267,55 @@ export const WithAction: Story = {
       description: {
         story:
           '`action` places a control at the inline end of the notification, after the text and before the close button, vertically centred against the text. Pass a small button with a visible label; it flips sides with the document direction.',
+      },
+    },
+  },
+};
+
+export const NeutralSurface: Story = {
+  render: () => (
+    <div className="p-6 flex flex-col gap-4 max-w-[720px]">
+      <WarningMessageNotification
+        surface={NotificationSurface.Neutral}
+        title="Log in to run scheduled tasks."
+        message="Scheduled tasks run on your behalf while you are offline."
+        action={
+          <LinkButton
+            label="Log in"
+            onClick={() => undefined}
+            iconAfter={
+              <IconArrowRight
+                size={DIAL_ICON_SIZE.SM}
+                stroke={DIAL_KIT_ICON_STROKE}
+                aria-hidden
+                className="rtl:scale-x-[-1]"
+              />
+            }
+          />
+        }
+      />
+      {[
+        NotificationVariant.Info,
+        NotificationVariant.Success,
+        NotificationVariant.Error,
+        NotificationVariant.Loading,
+      ].map((variant) => (
+        <Notification
+          key={variant}
+          variant={variant}
+          type={NotificationType.SectionMessage}
+          surface={NotificationSurface.Neutral}
+          title={variant}
+          message="The variant icon on the neutral surface"
+        />
+      ))}
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`surface={NotificationSurface.Neutral}` draws the neutral sunken layer (`bg-layer-sunken`) with primary text, while the variant still picks the icon, its status colour and the live-region role — a warning stays `role="alert"`. The first example is the Scheduled Tasks login banner from ai-dial-chat.',
       },
     },
   },

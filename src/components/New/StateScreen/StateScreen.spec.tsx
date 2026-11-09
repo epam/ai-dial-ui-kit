@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 
+import { LiveRegionPoliteness } from '@/types/live-region';
 import { StateScreen } from './StateScreen';
 
 describe('Dial UI Kit :: StateScreen', () => {
@@ -75,5 +76,21 @@ describe('Dial UI Kit :: StateScreen', () => {
       'custom-title',
     );
     expect(screen.getByText('Set up.')).toHaveClass('custom-description');
+  });
+
+  test('wraps the screen in a live region of the given politeness', () => {
+    const { rerender } = render(
+      <StateScreen
+        title="Couldn't load"
+        announce={LiveRegionPoliteness.Assertive}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toContainElement(
+      screen.getByRole('region', { name: "Couldn't load" }),
+    );
+
+    rerender(<StateScreen title="Couldn't load" />);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

@@ -27,6 +27,9 @@ Use these by default. They follow the design system type scale.
 | `.dial-caption-text`              | Caption                     | normal   | 10px / 12px                         |
 | `.dial-caption-lead-semi-text`    | Caption Lead (Semi Bold)    | semibold | 10px / 12px (+0.06em, uppercase)    |
 | `.dial-code-text`                 | Code                        | normal   | 14px / 20px (Fira Code / monospace) |
+| `.dial-code-semi-text`            | Code (Semi Bold)            | semibold | 14px / 20px (Fira Code / monospace) |
+| `.dial-tiny-code-text`            | Tiny Code                   | normal   | 12px / 16px (Fira Code / monospace) |
+| `.dial-tiny-code-semi-text`       | Tiny Code (Semi Bold)       | semibold | 12px / 16px (Fira Code / monospace) |
 | `.dial-italic-text`               | Italic                      | normal   | 18px / 22px (serif, italic)         |
 | `.dial-small-italic-text`         | Small Italic                | normal   | 14px / 20px (serif, italic)         |
 | `.dial-tiny-italic-text`          | Tiny Italic                 | normal   | 12px / 16px (serif, italic)         |
@@ -34,7 +37,9 @@ Use these by default. They follow the design system type scale.
 
 The three `*-lead-*` classes apply `text-transform: uppercase` themselves — pass them the sentence-case string, not a pre-uppercased one, so the accessible name stays readable.
 
-`.dial-code-text` resolves its family through `var(--theme-font-mono, var(--font-fira-code, 'Fira Code'))` before falling back to the system monospace stack. The kit ships no font file; the host provides the face.
+The four `*code*-text` classes (`.dial-code-text`, `.dial-code-semi-text`, `.dial-tiny-code-text`, `.dial-tiny-code-semi-text`) resolve their family through `var(--theme-font-mono, var(--font-fira-code, 'Fira Code'))` before falling back to the system monospace stack. The kit ships no font file; the host provides the face. Use `.dial-code-semi-text` instead of layering `font-semibold` on `.dial-code-text` (for example for JSON keys), and `.dial-tiny-code-text` for inline code inside `.dial-tiny-text` copy instead of setting only the font family.
+
+There is no display step above `.dial-display1-text` (32px / 48px). Hero headings larger than that are not part of the type scale yet.
 
 The `*-italic-text` classes use a serif italic face and are intended for mathematical and formula symbols. Their line-heights follow the corresponding typography size; the default 18px variant uses a fixed 22px line-height to keep standalone symbols vertically aligned without changing their container's height.
 

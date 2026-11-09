@@ -11,7 +11,6 @@ import {
   themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { IconZoomCancel } from '@tabler/icons-react';
 import {
   type FC,
   type ReactNode,
@@ -28,7 +27,7 @@ import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
 import type { DropdownItem } from '@/models/dropdown';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { debounceFn } from '@/utils/debounce';
 import { baseColumnComparator, omitUndefined } from '@/utils/grid-comparators';
 import { registerAgGridModulesOnce } from '@/utils/grid-registration';
@@ -36,10 +35,14 @@ import { mergeClasses } from '@/utils/merge-classes';
 
 import { Dropdown } from '../Dropdown/Dropdown';
 import { EllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
-import { NoDataContent } from '../NoDataContent/NoDataContent';
+import {
+  type GridEmptyStateParams,
+  selectGridEmptyStateOverlay,
+} from './components/GridEmptyState';
 import { SelectionCell } from './components/SelectionCell';
 import { SelectionHeader } from './components/SelectionHeader';
 import {
+  GRID_CHAT_CLASS,
   GRID_HEADER_SELECT_CLASS,
   GRID_ROOT_CLASS,
   GRID_ROW_SELECT_CLASS,
@@ -60,6 +63,19 @@ const DEFAULT_MIN_COLUMN_WIDTH = 150;
 
 /** Selection changes are coalesced: ag-Grid fires one event per row. */
 const SELECTION_DEBOUNCE_MS = 100;
+
+/** ag-Grid column types that right-align a column. */
+const RIGHT_ALIGNED_COLUMN_TYPES = ['rightAligned', 'numericColumn'];
+
+/**
+ * Whether the column is declared `type: 'rightAligned' | 'numericColumn'`.
+ * The grid's own text boxes carry `text-start`, so they are told explicitly
+ * rather than left to inherit the alignment ag-Grid puts on the cell.
+ */
+const isRightAligned = (colDef?: ColDef) =>
+  [colDef?.type ?? []]
+    .flat()
+    .some((type) => RIGHT_ALIGNED_COLUMN_TYPES.includes(type));
 
 export interface GridProps<T extends object = Record<string, unknown>> {
   /** Column definitions, in ag-Grid `ColDef` format. */
@@ -90,12 +106,26 @@ export interface GridProps<T extends object = Record<string, unknown>> {
   alternateOddRowColors?: boolean;
   /** Placeholder of the column filter inputs. */
   filterPlaceholder?: string;
-  /** Illustration of the empty state. */
+  /**
+   * Illustration of both empty states. Defaults to the shared placeholder-list
+   * card of `NoDataContent`; leave it unset so every empty list looks the same.
+   */
   emptyStateIcon?: ReactNode;
-  /** Headline of the empty state. */
+  /** Headline when there are no rows, as "No [entities] yet". */
   emptyStateTitle?: string;
-  /** Secondary line of the empty state. */
+  /** Secondary line when there are no rows, as "[Entities] will appear here once [condition]." */
   emptyStateDescription?: string;
+  /** Way forward when there are no rows, such as a create button. */
+  emptyStateAction?: ReactNode;
+  /**
+   * Announces the no-rows message. Turn it on when the host filters `rowData`
+   * itself, so the grid is empty because of a search. Defaults to `false`.
+   */
+  emptyStateLive?: boolean;
+  /** Headline when the column filters leave no rows, as "No [entities] found". */
+  filteredEmptyStateTitle?: string;
+  /** Secondary line when the column filters leave no rows. */
+  filteredEmptyStateDescription?: string;
   /** Shows the loading overlay. Defaults to `false`. */
   loading?: boolean;
   /** Draws a border around the grid. Defaults to `true`. */
@@ -116,6 +146,11 @@ export interface GridProps<T extends object = Record<string, unknown>> {
    * dark. Defaults to `light`, which leaves the current appearance unchanged.
    */
   colorScheme?: GridColorScheme;
+  /**
+   * Visual treatment. `Chat` draws the borderless "Chat table" card and
+   * ignores `wrapperBorder`. Defaults to `GridAppearance.Default`.
+   */
+  appearance?: GridAppearance;
 }
 
 /**
@@ -126,6 +161,13 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * Comes preconfigured with case-insensitive sorting, floating column filters,
  * columns sized to the available width, a row context menu, truncation
  * tooltips, and an empty state.
+ *
+ * The empty state follows the Patterns 2.0 empty-state behaviour and has two
+ * forms. A grid with no rows says "No [entities] yet" and can offer an action;
+ * a grid whose column filters leave nothing says "No [entities] found" and is
+ * announced, since the user has just changed a filter. A host that filters
+ * `rowData` itself passes the "found" copy as `emptyStateTitle` and sets
+ * `emptyStateLive`.
  *
  * The selection column renders the 2.0 `Checkbox` and `Radio` instead of
  * ag-Grid's own inputs, so selection looks and behaves like every other control
@@ -159,6 +201,16 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  *   getContextMenuItems={(row) => [{ key: 'edit', label: 'Edit' }]}
  * />
  *
+ * // An empty grid with a way forward
+ * <Grid<Product>
+ *   columnDefs={columns}
+ *   rowData={[]}
+ *   emptyStateTitle="No products yet"
+ *   emptyStateDescription="Products will appear here once you add one."
+ *   emptyStateAction={<OutlinedButton label="Add product" onClick={addProduct} />}
+ *   filteredEmptyStateTitle="No products found"
+ * />
+ *
  * // Dark native controls, including the date-filter calendar
  * <Grid<Product> columnDefs={columns} rowData={products} colorScheme={GridColorScheme.Dark} />
  * ```
@@ -177,9 +229,13 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * @param [getRowId] - Extracts the unique id of a row. Defaults to its `id` field.
  * @param [alternateOddRowColors=false] - Tints odd rows.
  * @param [filterPlaceholder='Enter value'] - Placeholder of the column filter inputs.
- * @param [emptyStateIcon] - Illustration of the empty state.
- * @param [emptyStateTitle='No results found'] - Headline of the empty state.
- * @param [emptyStateDescription] - Secondary line of the empty state.
+ * @param [emptyStateIcon] - Illustration of both empty states. Defaults to the shared placeholder-list card.
+ * @param [emptyStateTitle='No items yet'] - Headline when there are no rows.
+ * @param [emptyStateDescription='Items will appear here once they are added.'] - Secondary line when there are no rows.
+ * @param [emptyStateAction] - Way forward when there are no rows.
+ * @param [emptyStateLive=false] - Announce the no-rows message; for a host that filters `rowData` itself.
+ * @param [filteredEmptyStateTitle='No items found'] - Headline when the column filters leave no rows.
+ * @param [filteredEmptyStateDescription='Try a different search term or check your filters.'] - Secondary line when the column filters leave no rows.
  * @param [loading=false] - Shows the loading overlay.
  * @param [wrapperBorder=true] - Draws a border around the grid.
  * @param [withoutHeaderBorders=false] - Hides the vertical borders between header cells.
@@ -188,6 +244,7 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * @param [selectRowLabel] - Accessible name of a row's selection control.
  * @param [selectAllLabel='Select all rows'] - Accessible name of the select-all control.
  * @param [colorScheme='light'] - AG Grid color scheme. `dark` paints native controls dark.
+ * @param [appearance='default'] - Visual treatment; `chat` draws the borderless "Chat table".
  */
 export const Grid = <T extends object>({
   columnDefs,
@@ -205,8 +262,12 @@ export const Grid = <T extends object>({
   alternateOddRowColors = false,
   filterPlaceholder = 'Enter value',
   emptyStateIcon,
-  emptyStateTitle = 'No results found',
-  emptyStateDescription = "Sorry, we couldn't find any results for your search.",
+  emptyStateTitle = 'No items yet',
+  emptyStateDescription = 'Items will appear here once they are added.',
+  emptyStateAction,
+  emptyStateLive = false,
+  filteredEmptyStateTitle = 'No items found',
+  filteredEmptyStateDescription = 'Try a different search term or check your filters.',
   loading = false,
   wrapperBorder = true,
   withoutHeaderBorders = false,
@@ -215,6 +276,7 @@ export const Grid = <T extends object>({
   selectRowLabel,
   selectAllLabel = 'Select all rows',
   colorScheme = GridColorScheme.Light,
+  appearance = GridAppearance.Default,
 }: GridProps<T>) => {
   registerAgGridModulesOnce();
 
@@ -262,6 +324,8 @@ export const Grid = <T extends object>({
   const hasContextMenu = !!getContextMenuItems;
   const wrapsRenderers = !!wrapCustomCellRenderers;
 
+  const isChat = appearance === GridAppearance.Chat;
+
   const theme = useMemo(
     () =>
       themeBalham
@@ -278,9 +342,18 @@ export const Grid = <T extends object>({
           oddRowBackgroundColor: alternateOddRowColors
             ? GRID_THEME_PARAMS.oddRowBackgroundColor
             : GRID_THEME_PARAMS.backgroundColor,
-          wrapperBorder,
+          // The Chat table is a borderless card whose row dividers stop at the
+          // cell padding, so `styles/grid.scss` draws them instead. Its header
+          // and row cells take 12px on each side, not Balham's 8px.
+          ...(isChat
+            ? {
+                wrapperBorder: false,
+                rowBorder: false,
+                cellHorizontalPadding: 12,
+              }
+            : { wrapperBorder }),
         }),
-    [alternateOddRowColors, colorScheme, wrapperBorder],
+    [alternateOddRowColors, colorScheme, wrapperBorder, isChat],
   );
 
   const onGridSizeChanged = useCallback((e: GridSizeChangedEvent) => {
@@ -324,6 +397,7 @@ export const Grid = <T extends object>({
           className={mergeClasses(
             'size-full',
             disabled && 'cursor-not-allowed opacity-75',
+            isRightAligned(p.colDef) && 'text-end',
           )}
           disabled={disabled && !allowDisabledContextMenu}
         >
@@ -347,7 +421,10 @@ export const Grid = <T extends object>({
           // No `h-full`: a full-height text box puts its line at the top of the
           // row, while a cell renderer of its own natural height is centred by
           // `.ag-cell`. Mixing the two left the columns visibly out of line.
-          className="max-w-full dial-small-text text-primary"
+          className={mergeClasses(
+            'max-w-full dial-small-text text-primary',
+            isRightAligned(p.colDef) && 'text-end',
+          )}
           hideTooltip={disabled}
         />,
         disabled,
@@ -505,20 +582,32 @@ export const Grid = <T extends object>({
     }
   }, [gridApi, rowData]);
 
-  const emptyStateRenderer = useCallback(
-    () => (
-      <NoDataContent
-        live
-        title={emptyStateTitle}
-        description={emptyStateDescription}
-        icon={
-          emptyStateIcon ?? (
-            <IconZoomCancel size={100} stroke={0.5} aria-hidden="true" />
-          )
-        }
-      />
-    ),
-    [emptyStateTitle, emptyStateDescription, emptyStateIcon],
+  const emptyStateParams = useMemo<GridEmptyStateParams>(
+    () => ({
+      empty: {
+        title: emptyStateTitle,
+        description: emptyStateDescription,
+        icon: emptyStateIcon,
+        action: emptyStateAction,
+        live: emptyStateLive,
+      },
+      // The user has just changed a filter, so this one is always announced.
+      filtered: {
+        title: filteredEmptyStateTitle,
+        description: filteredEmptyStateDescription,
+        icon: emptyStateIcon,
+        live: true,
+      },
+    }),
+    [
+      emptyStateTitle,
+      emptyStateDescription,
+      emptyStateIcon,
+      emptyStateAction,
+      emptyStateLive,
+      filteredEmptyStateTitle,
+      filteredEmptyStateDescription,
+    ],
   );
 
   /*
@@ -618,6 +707,7 @@ export const Grid = <T extends object>({
           isSelectionPinnedVisible &&
           GRID_SELECTION_VISIBLE_CLASS,
         withoutHeaderBorders && GRID_WITHOUT_HEADER_BORDERS_CLASS,
+        isChat && GRID_CHAT_CLASS,
         className,
       )}
       role="region"
@@ -641,7 +731,8 @@ export const Grid = <T extends object>({
           loading={loading}
           suppressCellFocus
           suppressDragLeaveHidesColumns
-          noRowsOverlayComponent={emptyStateRenderer}
+          overlayComponentSelector={selectGridEmptyStateOverlay}
+          overlayComponentParams={emptyStateParams}
           rowData={rowData}
           rowSelection={rowSelection}
           onSelectionChanged={onSelectionChanged}

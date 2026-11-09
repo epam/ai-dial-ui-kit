@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { describe, expect, test, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { Dropdown } from './Dropdown';
-import { DropdownItemType, DropdownTrigger } from '@/types/dropdown';
+import {
+  DropdownItemType,
+  DropdownOverlayRole,
+  DropdownTrigger,
+} from '@/types/dropdown';
 import { type DropdownItem } from '@/models/dropdown';
 import { MenuItemMark } from '@/types/menu-item';
 import { IconCheck } from '@tabler/icons-react';
@@ -25,6 +29,108 @@ const readPosition = (el: HTMLElement) =>
   el.style.transform || `${el.style.left}|${el.style.top}`;
 
 describe('Dial UI Kit :: Dropdown', () => {
+  test('restores a controlled submenu with focus and a name, and dismisses only that level', async () => {
+    const user = userEvent.setup();
+    const onSubMenuOpenChange = vi.fn();
+    const Harness = () => {
+      const [open, setOpen] = useState(true);
+      return (
+        <Dropdown
+          defaultOpen
+          items={[
+            {
+              key: 'tools',
+              label: 'Tools',
+              subMenuOpen: open,
+              onSubMenuOpenChange: (next) => {
+                setOpen(next);
+                onSubMenuOpenChange(next);
+              },
+              children: [
+                { key: 'a', label: 'Research', selectable: true },
+                { key: 'b', label: 'Browse', selectable: true },
+              ],
+            },
+          ]}
+        >
+          <button>Open</button>
+        </Dropdown>
+      );
+    };
+    render(<Harness />);
+    const first = await screen.findByRole('menuitemcheckbox', {
+      name: 'Research',
+    });
+    await waitFor(() => expect(first).toHaveFocus());
+    expect(screen.getByRole('menu', { name: 'Tools' })).toBeInTheDocument();
+    await user.keyboard('{ArrowDown}');
+    expect(
+      screen.getByRole('menuitemcheckbox', { name: 'Browse' }),
+    ).toHaveFocus();
+    await user.keyboard('{Escape}');
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('menu', { name: 'Tools' }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(onSubMenuOpenChange).toHaveBeenLastCalledWith(false);
+    expect(screen.getByRole('menu', { name: 'Open' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Tools' })).toHaveFocus();
+  });
+
+  test('does not mutate controlled submenu state and supports custom content without children', async () => {
+    const user = userEvent.setup();
+    const onSubMenuOpenChange = vi.fn();
+    const item = {
+      key: 'prompts',
+      label: 'Prompts',
+      subMenuOpen: false,
+      onSubMenuOpenChange,
+      renderSubMenu: () => <input aria-label="Find prompt" />,
+    };
+    const { rerender } = render(
+      <Dropdown defaultOpen items={[item]}>
+        <button>Open</button>
+      </Dropdown>,
+    );
+    await user.click(screen.getByRole('menuitem', { name: 'Prompts' }));
+    expect(onSubMenuOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    rerender(
+      <Dropdown defaultOpen items={[{ ...item, subMenuOpen: true }]}>
+        <button>Open</button>
+      </Dropdown>,
+    );
+    expect(
+      screen.getByRole('textbox', { name: 'Find prompt' }),
+    ).toBeInTheDocument();
+  });
+
+  test('preserves trailing content and disabled and danger states on item rows', () => {
+    const onClick = vi.fn();
+    render(
+      <Dropdown
+        defaultOpen
+        items={[
+          {
+            key: 'delete',
+            label: 'Delete',
+            iconAfter: <span data-testid="trailing">!</span>,
+            disabled: true,
+            danger: true,
+            onClick,
+          },
+        ]}
+      >
+        <button>Open</button>
+      </Dropdown>,
+    );
+    const row = screen.getByRole('menuitem', { name: /Delete/ });
+    expect(row).toBeDisabled();
+    expect(row).toContainElement(screen.getByTestId('trailing'));
+    fireEvent.click(row);
+    expect(onClick).not.toHaveBeenCalled();
+  });
   test('renders & toggles aria-expanded on open/close', () => {
     const { container } = render(
       <Dropdown items={items}>
@@ -2144,6 +2250,37 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     );
   });
 
+  test('points aria-controls at the overlay only while it is open', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+
+    expect(button).not.toHaveAttribute('aria-controls');
+
+    openByClick();
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      screen.getByRole('menu').id,
+    );
+  });
+
+  test('omits aria-controls on a closed trigger that passes undefined', () => {
+    render(
+      <Dropdown items={items}>
+        <button type="button" aria-controls={undefined}>
+          Open
+        </button>
+      </Dropdown>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' })).not.toHaveAttribute(
+      'aria-controls',
+    );
+  });
+
   test("keeps the trigger's own popup attributes", () => {
     render(
       <Dropdown items={items}>
@@ -2158,12 +2295,30 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
     );
   });
 
-  test('keeps the popup state on the wrapper for a text trigger', () => {
-    const { container } = render(<Dropdown items={items}>Open</Dropdown>);
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
-      'aria-expanded',
-      'false',
+  test('puts the popup state on the trigger of a controlled dropdown with no trigger types', () => {
+    const { container } = render(
+      <Dropdown items={items} trigger={[]} open>
+        <button type="button">Open</button>
+      </Dropdown>,
     );
+    const button = screen.getByRole('button', { name: 'Open' });
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      screen.getByRole('menu').id,
+    );
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
+    expect(wrapper).not.toHaveAttribute('aria-controls');
+  });
+
+  test('keeps aria-haspopup but not aria-expanded on the wrapper for a text trigger', () => {
+    const { container } = render(<Dropdown items={items}>Open</Dropdown>);
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    // A role-less element may not carry aria-expanded (axe aria-allowed-attr).
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
   });
 
   test('keeps the popup state on the wrapper for a context-menu trigger', () => {
@@ -2172,10 +2327,534 @@ describe('Dial UI Kit :: Dropdown — trigger semantics', () => {
         <div>Cell</div>
       </Dropdown>,
     );
-    expect(container.querySelector('.dial-kit-dropdown')).toHaveAttribute(
+    const wrapper = container.querySelector('.dial-kit-dropdown')!;
+    expect(wrapper).toHaveAttribute('aria-haspopup', 'menu');
+    expect(wrapper).not.toHaveAttribute('aria-expanded');
+    expect(screen.getByText('Cell')).not.toHaveAttribute('aria-expanded');
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — overlayRole', () => {
+  const panel = () => (
+    <div>
+      <h2 id="panel-title">Usage limits</h2>
+      <button type="button">Details</button>
+    </div>
+  );
+
+  test('defaults to a menu overlay with a matching trigger', () => {
+    render(
+      <Dropdown renderOverlay={panel}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+    expect(button).toHaveAttribute('aria-haspopup', 'menu');
+
+    openByClick();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  test('Dialog puts role="dialog" on the overlay and aria-haspopup="dialog" on the trigger', () => {
+    render(
+      <Dropdown
+        overlayRole={DropdownOverlayRole.Dialog}
+        overlayAriaLabelledBy="panel-title"
+        renderOverlay={panel}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+    expect(button).toHaveAttribute('aria-haspopup', 'dialog');
+
+    openByClick();
+    const dialog = screen.getByRole('dialog', { name: 'Usage limits' });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute('aria-controls', dialog.id);
+  });
+
+  test('Dialog takes its name from overlayAriaLabel', () => {
+    render(
+      <Dropdown
+        overlayRole={DropdownOverlayRole.Dialog}
+        overlayAriaLabel="Limits panel"
+        renderOverlay={panel}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    expect(
+      screen.getByRole('dialog', { name: 'Limits panel' }),
+    ).toBeInTheDocument();
+  });
+
+  test('an unnamed Dialog is named by its trigger', () => {
+    render(
+      <Dropdown overlayRole={DropdownOverlayRole.Dialog} renderOverlay={panel}>
+        <button type="button">Show limits</button>
+      </Dropdown>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Show limits' }));
+    expect(
+      screen.getByRole('dialog', { name: 'Show limits' }),
+    ).toBeInTheDocument();
+  });
+
+  test('overlayAriaLabel overrides the trigger name of a menu', () => {
+    render(
+      <Dropdown overlayAriaLabel="Row actions" items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    expect(
+      screen.getByRole('menu', { name: 'Row actions' }),
+    ).toBeInTheDocument();
+  });
+
+  test('None leaves the overlay role-less and the trigger a disclosure', () => {
+    render(
+      <Dropdown
+        overlayRole={DropdownOverlayRole.None}
+        overlayAriaLabel="ignored"
+        renderOverlay={() => (
+          <section aria-label="Announcements">
+            <a href="#news">News</a>
+          </section>
+        )}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    const button = screen.getByRole('button', { name: 'Open' });
+    expect(button).not.toHaveAttribute('aria-haspopup');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+
+    openByClick();
+    const region = screen.getByRole('region', { name: 'Announcements' });
+    const wrapper = region.parentElement!;
+    expect(wrapper).not.toHaveAttribute('role');
+    expect(wrapper).not.toHaveAttribute('aria-label');
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute('aria-controls', wrapper.id);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('the items list stays a menu whatever overlayRole says', () => {
+    render(
+      <Dropdown overlayRole={DropdownOverlayRole.Dialog} items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute(
       'aria-haspopup',
       'menu',
     );
-    expect(screen.getByText('Cell')).not.toHaveAttribute('aria-expanded');
+    openByClick();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  test('a menu overlay walks its options with the arrow keys', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        renderOverlay={() => (
+          <div role="none">
+            <div role="menuitem" tabIndex={-1}>
+              One
+            </div>
+            <div role="menuitem" tabIndex={-1}>
+              Two
+            </div>
+          </div>
+        )}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    openByClick();
+    // No tabbable option, so the overlay itself takes the initial focus.
+    await waitFor(() => expect(screen.getByRole('menu')).toHaveFocus());
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'One' })).toHaveFocus();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Two' })).toHaveFocus();
+  });
+
+  test.each([DropdownOverlayRole.Dialog, DropdownOverlayRole.None])(
+    '%s does not take over the arrow keys of its content',
+    async (overlayRole) => {
+      const user = userEvent.setup();
+      render(
+        <Dropdown
+          overlayRole={overlayRole}
+          renderOverlay={() => (
+            <div role="listbox" aria-label="Choices">
+              <div role="option" aria-selected="false" tabIndex={0}>
+                One
+              </div>
+              <div role="option" aria-selected="false" tabIndex={-1}>
+                Two
+              </div>
+            </div>
+          )}
+        >
+          <button type="button">Open</button>
+        </Dropdown>,
+      );
+      openByClick();
+      const one = await screen.findByRole('option', { name: 'One' });
+      await waitFor(() => expect(one).toHaveFocus());
+      await user.keyboard('{ArrowDown}');
+      expect(one).toHaveFocus();
+    },
+  );
+
+  test('initialFocus still targets the given element in a dialog', async () => {
+    const Harness = () => {
+      const ref = useRef<HTMLButtonElement>(null);
+      return (
+        <Dropdown
+          overlayRole={DropdownOverlayRole.Dialog}
+          overlayAriaLabel="Panel"
+          initialFocus={ref}
+          renderOverlay={() => (
+            <div>
+              <button type="button">First</button>
+              <button type="button" ref={ref}>
+                Second
+              </button>
+            </div>
+          )}
+        >
+          <button type="button">Open</button>
+        </Dropdown>
+      );
+    };
+    render(<Harness />);
+    openByClick();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Second' })).toHaveFocus(),
+    );
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — focus return', () => {
+  /* jsdom ignores `focus()` options, so Floating UI concludes `preventScroll`
+     is unsupported and skips returning focus after an outside press. Reading
+     the option makes jsdom behave like a browser that supports it. */
+  const emulatePreventScrollSupport = () => {
+    const original = HTMLElement.prototype.focus;
+    return vi
+      .spyOn(HTMLElement.prototype, 'focus')
+      .mockImplementation(function (this: HTMLElement, options) {
+        void options?.preventScroll;
+        original.call(this, options);
+      });
+  };
+
+  const openMenuByClick = async (user: ReturnType<typeof userEvent.setup>) => {
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus(),
+    );
+  };
+
+  test('Escape closes a menu and returns focus to the trigger', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    await openMenuByClick(user);
+
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Open' })).toHaveFocus(),
+    );
+  });
+
+  test.each([DropdownOverlayRole.Dialog, DropdownOverlayRole.None])(
+    'Escape returns focus from a controlled %s overlay to the trigger',
+    async (overlayRole) => {
+      const user = userEvent.setup();
+      const Harness = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <Dropdown
+            open={open}
+            onOpenChange={setOpen}
+            overlayRole={overlayRole}
+            renderOverlay={() => (
+              <section aria-label="Announcements" tabIndex={0}>
+                <a href="#news">News</a>
+              </section>
+            )}
+          >
+            <button type="button">Open</button>
+          </Dropdown>
+        );
+      };
+      render(<Harness />);
+      await user.click(screen.getByRole('button', { name: 'Open' }));
+      await waitFor(() =>
+        expect(
+          screen.getByRole('region', { name: 'Announcements' }),
+        ).toHaveFocus(),
+      );
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.queryByRole('region')).not.toBeInTheDocument();
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Open' })).toHaveFocus(),
+      );
+    },
+  );
+
+  test('choosing an item returns focus to the trigger', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown items={items}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    await openMenuByClick(user);
+
+    await user.keyboard('{Enter}');
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Open' })).toHaveFocus(),
+    );
+  });
+
+  test('the close button returns focus to the trigger', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown
+        closable
+        overlayRole={DropdownOverlayRole.Dialog}
+        renderOverlay={() => <p>Panel</p>}
+      >
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Close dropdown' }),
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Open' })).toHaveFocus(),
+    );
+  });
+
+  test('returnFocus={false} leaves focus off the trigger after Escape', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dropdown items={items} returnFocus={false}>
+        <button type="button">Open</button>
+      </Dropdown>,
+    );
+    await openMenuByClick(user);
+
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.getByRole('button', { name: 'Open' })).not.toHaveFocus();
+  });
+
+  test('an outside press on another control leaves focus on that control', async () => {
+    const focusSpy = emulatePreventScrollSupport();
+    const user = userEvent.setup();
+    render(
+      <div>
+        <input aria-label="Elsewhere" />
+        <Dropdown items={items}>
+          <button type="button">Open</button>
+        </Dropdown>
+      </div>,
+    );
+    await openMenuByClick(user);
+    const input = screen.getByLabelText('Elsewhere');
+
+    /* A browser runs microtasks between `pointerdown` (which dismisses the
+       menu) and `mousedown` (whose default action focuses the input);
+       user-event dispatches both in one stack, so the sequence is spelled
+       out here in browser order. */
+    fireEvent.pointerDown(input);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    fireEvent.mouseDown(input);
+    input.focus();
+    fireEvent.pointerUp(input);
+    fireEvent.mouseUp(input);
+    fireEvent.click(input);
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(input).toHaveFocus();
+    focusSpy.mockRestore();
+  });
+
+  test('an item that moves focus elsewhere keeps it there', async () => {
+    const user = userEvent.setup();
+    render(
+      <div>
+        <input aria-label="Rename field" />
+        <Dropdown
+          items={[
+            {
+              key: 'rename',
+              label: 'Rename',
+              onClick: () => screen.getByLabelText('Rename field').focus(),
+            },
+          ]}
+        >
+          <button type="button">Open</button>
+        </Dropdown>
+      </div>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.click(await screen.findByRole('menuitem', { name: 'Rename' }));
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.getByLabelText('Rename field')).toHaveFocus();
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — Tab order without focus guards', () => {
+  /* Floating UI drops its guards only where `inert` is supported, which every
+     target browser does and jsdom does not. */
+  beforeAll(() => {
+    Object.defineProperty(HTMLElement.prototype, 'inert', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
+  afterAll(() => {
+    delete (HTMLElement.prototype as { inert?: boolean }).inert;
+  });
+
+  const renderBetween = (overlay?: () => ReactNode) =>
+    render(
+      <>
+        <button type="button">Before</button>
+        <Dropdown
+          items={overlay ? undefined : items}
+          renderOverlay={overlay}
+          overlayRole={overlay ? DropdownOverlayRole.Dialog : undefined}
+        >
+          <button type="button">Open</button>
+        </Dropdown>
+        <button type="button">After</button>
+      </>,
+    );
+
+  test('renders no aria-hidden focus guard and no named role="none" list', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await screen.findByRole('menu');
+
+    expect(
+      document.querySelectorAll('[data-floating-ui-focus-guard]'),
+    ).toHaveLength(0);
+    const list = screen
+      .getByRole('menuitem', { name: 'Profile' })
+      .closest<HTMLElement>('[role="none"]')!;
+    expect(list).not.toHaveAttribute('aria-label');
+  });
+
+  test('Tab closes a menu and moves focus past the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus(),
+    );
+
+    await user.tab();
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus(),
+    );
+  });
+
+  test('Shift+Tab closes a menu and moves focus before the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus(),
+    );
+
+    await user.tab({ shift: true });
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Before' })).toHaveFocus(),
+    );
+  });
+
+  test('a dialog keeps Tab inside until its last control, then leaves after the trigger', async () => {
+    const user = userEvent.setup();
+    renderBetween(() => (
+      <>
+        <button type="button">First</button>
+        <button type="button">Last</button>
+      </>
+    ));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'First' })).toHaveFocus(),
+    );
+
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Last' })).toHaveFocus();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.tab();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus(),
+    );
+  });
+});
+
+describe('Dial UI Kit :: Dropdown — nested in another Dropdown trigger', () => {
+  test('a row menu inside a context-menu Dropdown is not a menuitem', () => {
+    const { container } = render(
+      <div role="tree" aria-label="Folders">
+        <Dropdown items={items} trigger={[DropdownTrigger.ContextMenu]}>
+          <div role="treeitem" aria-selected={false} tabIndex={0}>
+            Row
+            <Dropdown items={items} className="row-menu">
+              <button type="button">Row actions</button>
+            </Dropdown>
+          </div>
+        </Dropdown>
+      </div>,
+    );
+
+    expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+    expect(container.querySelector('.row-menu')).not.toHaveAttribute('role');
+    expect(screen.getByRole('button', { name: 'Row actions' })).toHaveAttribute(
+      'aria-haspopup',
+      'menu',
+    );
   });
 });

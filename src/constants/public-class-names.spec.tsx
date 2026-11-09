@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { describe, expect, test } from 'vitest';
 
-import { DialDropdownIcon } from '@/components/DropdownIcon/DropdownIcon';
 import { FabButton } from '@/components/FabButton/FabButton';
 import { ProgressBar } from '@/components/ProgressBar/ProgressBar';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
@@ -32,6 +31,7 @@ import { FileName } from '@/components/New/FileName/FileName';
 import { FolderName } from '@/components/New/FolderName/FolderName';
 import { FilterChips } from '@/components/New/FilterChips/FilterChips';
 import { FolderPath } from '@/components/New/FolderPath/FolderPath';
+import { FormSection } from '@/components/New/FormSection/FormSection';
 import { Highlight } from '@/components/New/Highlight/Highlight';
 import { IconButton } from '@/components/New/IconButton/IconButton';
 import { InfoButton } from '@/components/New/InfoButton/InfoButton';
@@ -40,7 +40,9 @@ import { Input } from '@/components/New/Input/Input';
 import { InteractiveTooltip } from '@/components/New/InteractiveTooltip/InteractiveTooltip';
 import { Label } from '@/components/New/Label/Label';
 import { NoDataContent } from '@/components/New/NoDataContent/NoDataContent';
+import { LoginScreen } from '@/components/New/LoginScreen/LoginScreen';
 import { StateScreen } from '@/components/New/StateScreen/StateScreen';
+import { LiveRegion } from '@/components/New/LiveRegion/LiveRegion';
 import { TransferQueue } from '@/components/New/TransferQueue/TransferQueue';
 import { TransferQueueItemStatus } from '@/types/transfer-queue';
 import { Notification } from '@/components/New/Notification/Notification';
@@ -62,13 +64,22 @@ import { SharedEntityIndicator } from '@/components/New/SharedEntityIndicator/Sh
 import { Badge } from '@/components/New/Badge/Badge';
 import { Avatar } from '@/components/New/Avatar/Avatar';
 import { EntityIdentity } from '@/components/New/EntityIdentity/EntityIdentity';
+import { SelectedEntityCard } from '@/components/New/SelectedEntityCard/SelectedEntityCard';
 import { EntityType } from '@/types/entity-type';
 import { Switch } from '@/components/New/Switch/Switch';
+import { Steps } from '@/components/New/Steps/Steps';
+import { StepStatus } from '@/models/step';
+import { LabelledText } from '@/components/New/LabelledText/LabelledText';
+import { AnalyticsBar } from '@/components/New/Analytics/Bar/Bar';
+import { AnalyticsBarGroup } from '@/components/New/Analytics/BarGroup/BarGroup';
+import { AnalyticsCard } from '@/components/New/Analytics/Card/Card';
+import { AnalyticsHistogram } from '@/components/New/Analytics/Histogram/Histogram';
 import { Tabs } from '@/components/New/Tabs/Tabs';
 import { Tag } from '@/components/New/Tag/Tag';
 import { TagInput } from '@/components/New/TagInput/TagInput';
 import { AutocompleteTagInput } from '@/components/New/AutocompleteTagInput/AutocompleteTagInput';
 import { Textarea } from '@/components/New/Textarea/Textarea';
+import { ToggleChip } from '@/components/New/ToggleChip/ToggleChip';
 import { ToggleIconButton } from '@/components/New/ToggleIconButton/ToggleIconButton';
 import { Tooltip } from '@/components/New/Tooltip/Tooltip';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
@@ -84,8 +95,8 @@ import { TabOrientation } from '@/types/tab';
  *
  * These cases query by the class on purpose — here the class is the feature
  * under test, not a locator standing in for a role. Where the element also has
- * a role, the component's own spec asserts the pairing; `MenuItem`,
- * `Dropdown` and `DropdownIcon` carry those.
+ * a role, the component's own spec asserts the pairing; `MenuItem`
+ * and `Dropdown` carry those.
  */
 
 const noop = () => undefined;
@@ -98,6 +109,27 @@ const items = [
 /** Rendered once per case; a portalled component lands outside the container. */
 const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['spinner', () => <Spinner />],
+  [
+    'steps',
+    () => (
+      <Steps
+        steps={[{ id: 'a', name: 'A', status: StepStatus.VALID }]}
+        currentStep="a"
+        onChangeStep={noop}
+      />
+    ),
+  ],
+  ['labelledText', () => <LabelledText label="Name" text="Value" />],
+  ['analyticsCard', () => <AnalyticsCard title="Requests" value="12" />],
+  ['analyticsBar', () => <AnalyticsBar title="Score" value={0.5} />],
+  [
+    'analyticsBarGroup',
+    () => <AnalyticsBarGroup title="Group" data={{ a: 0.5 }} />,
+  ],
+  [
+    'analyticsHistogram',
+    () => <AnalyticsHistogram title="Latency" values={[0.1, 0.9]} />,
+  ],
   ['progressBar', () => <ProgressBar value={50} />],
   [
     'progressBar',
@@ -106,7 +138,9 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
   ['skeleton', () => <Skeleton />],
   ['notification', () => <Notification message="Saved" />],
   ['noDataContent', () => <NoDataContent title="Nothing here" />],
+  ['loginScreen', () => <LoginScreen title="Welcome" />],
   ['stateScreen', () => <StateScreen title="Access denied" />],
+  ['liveRegion', () => <LiveRegion />],
   [
     'transferQueue',
     () => (
@@ -235,6 +269,8 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     'entityIdentity',
     () => <EntityIdentity item={{ type: EntityType.Model, name: 'GPT-4o' }} />,
   ],
+  ['selectedEntityCard', () => <SelectedEntityCard entityId="gpt-4o" />],
+  ['formSection', () => <FormSection title="Model" />],
 
   ['switch', () => <Switch labelProps={{ label: 'On' }} onChange={noop} />],
   [
@@ -360,6 +396,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     'toggleIconButton',
     () => <ToggleIconButton icon={icon} aria-label="Favourite" />,
   ],
+  ['toggleChip', () => <ToggleChip label="Web search" />],
   ['closeButton', () => <CloseButton ariaLabel="Close" onClose={noop} />],
   ['infoButton', () => <InfoButton caption="More" aria-label="Info" />],
   ['buttonDropdown', () => <ButtonDropdown items={items} label="Actions" />],
@@ -419,24 +456,6 @@ describe('Dial UI Kit :: public class names', () => {
       screen
         .getByRole('textbox', { name: 'Search' })
         .closest(`.${DIAL_KIT_CLASS.dropdownSearch}`),
-    ).toBeInTheDocument();
-  });
-
-  test('stamps the icon and caret of a DialDropdownIcon trigger', () => {
-    render(
-      <DialDropdownIcon
-        ariaLabel="Select model"
-        icon={<IconBrandOpenai />}
-        items={items}
-      />,
-    );
-
-    const trigger = screen.getByRole('button', { name: 'Select model' });
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIcon}`),
-    ).toBeInTheDocument();
-    expect(
-      trigger.querySelector(`.${DIAL_KIT_CLASS.dropdownIconCaret}`),
     ).toBeInTheDocument();
   });
 

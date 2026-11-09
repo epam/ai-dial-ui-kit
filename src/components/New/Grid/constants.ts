@@ -4,6 +4,9 @@ export const GRID_ROOT_CLASS = 'dial-kit-grid';
 /** Present only while a selection column is rendered. Drives its reveal. */
 export const GRID_WITH_SELECTION_CLASS = 'dial-kit-grid-with-selection';
 
+/** Present on `GridAppearance.Chat`: the "Chat table" card, dividers and rows. */
+export const GRID_CHAT_CLASS = 'dial-kit-grid-chat';
+
 export const GRID_WITHOUT_HEADER_BORDERS_CLASS =
   'dial-kit-grid-without-header-borders';
 

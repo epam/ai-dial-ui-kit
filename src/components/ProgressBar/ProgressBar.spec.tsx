@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
+import { ProgressBarRole } from '@/types/progress-bar';
 import { ElementSize } from '@/types/size';
 import { ProgressBar } from './ProgressBar';
 
@@ -167,6 +168,77 @@ describe('Dial UI Kit :: ProgressBar', () => {
     render(<ProgressBar value={50} />);
 
     expect(screen.getByRole('progressbar')).toHaveClass('h-2');
+  });
+
+  test('renders a progressbar by default', () => {
+    render(<ProgressBar value={50} />);
+
+    expect(screen.queryByRole('meter')).not.toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  });
+
+  test('renders a meter with its range and value', () => {
+    render(
+      <ProgressBar
+        role={ProgressBarRole.Meter}
+        value={300}
+        max={1000}
+        aria-label="Project capacity"
+        aria-valuetext="30% used"
+      />,
+    );
+
+    const meter = screen.getByRole('meter', { name: 'Project capacity' });
+
+    expect(meter).toHaveAttribute('aria-valuemin', '0');
+    expect(meter).toHaveAttribute('aria-valuemax', '1000');
+    expect(meter).toHaveAttribute('aria-valuenow', '300');
+    expect(meter).toHaveAttribute('aria-valuetext', '30% used');
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
+  test('leaves aria-valuetext off a meter when none is given', () => {
+    render(
+      <ProgressBar
+        role={ProgressBarRole.Meter}
+        value={20}
+        aria-label="Quota"
+      />,
+    );
+
+    expect(screen.getByRole('meter')).not.toHaveAttribute('aria-valuetext');
+  });
+
+  test('clamps a meter value above max', () => {
+    render(
+      <ProgressBar
+        role={ProgressBarRole.Meter}
+        value={1200}
+        max={1000}
+        aria-label="Project capacity"
+      />,
+    );
+
+    expect(screen.getByRole('meter')).toHaveAttribute('aria-valuenow', '1000');
+  });
+
+  test('names an unlabelled meter Meter rather than Progress', () => {
+    render(<ProgressBar role={ProgressBarRole.Meter} value={20} />);
+
+    expect(screen.getByRole('meter')).toHaveAccessibleName('Meter');
+  });
+
+  test('names a meter from its visible label', () => {
+    render(
+      <ProgressBar
+        role={ProgressBarRole.Meter}
+        value={20}
+        labelProps={{ label: 'Storage' }}
+        valueLabel="20 / 100 GB"
+      />,
+    );
+
+    expect(screen.getByRole('meter')).toHaveAccessibleName('Storage');
   });
 
   test('applies a custom className to the track', () => {

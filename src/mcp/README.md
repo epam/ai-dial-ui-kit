@@ -80,7 +80,7 @@ The kit ships two generations of components. **Generation 2.0 is the current des
 - 2.0 components are exported **without** the `Dial` prefix: `Button`, `Input`, `Select`, `Popup`.
 - 1.0 components are the legacy `Dial*` set. Most have a 2.0 replacement.
 - `searchEntity("component", …)` ranks 2.0 above 1.0 and reports a **Use instead** column; `getEntityDetails` states the generation and flags a superseded component.
-- Reach for a 1.0 component **only** when it has no 2.0 replacement (nothing in **Use instead**) — e.g. `DialGrid`, `DialTabs`.
+- Reach for a 1.0 component **only** when it has no 2.0 replacement (nothing in **Use instead**) — e.g. `DialTabs`, `DialSteps`.
 - Do not mix generations for the same control in one screen.
 
 ## MCP Tools
@@ -126,9 +126,9 @@ User: "Build a file upload form with validation and error messages"
 
 Agent:
   1. Calls searchEntity("component", "file upload")
-  2. Finds DialFileInput, DialFormItem (1.0, no 2.0 replacement) and Notification (2.0)
-  3. Calls getEntityDetails("component", "DialFileInput")  → props, examples
-  4. Calls getEntityDetails("component", "DialFormItem")   → how to wire up validation
+  2. Finds FileDropzone, Label and Notification (2.0)
+  3. Calls getEntityDetails("component", "FileDropzone")   → props, examples
+  4. Calls getEntityDetails("component", "Label")          → how to label the field and show its error
   5. Calls getEntityDetails("component", "Notification")   → error display
   6. Calls getEntityDetails("component", "Button")         → the 2.0 submit button
   7. Generates complete form code with types and error handling
@@ -214,7 +214,7 @@ interface ComponentEntry {
   examples: string[];            // TSX from JSDoc @example
   sourceFile: string;            // path in src/
   lazy?: {
-    loaderExportName: string;    // "LazyDialJsonEditor"
+    loaderExportName: string;    // "LazyMarkdownEditor"
     packageImport: string;       // "@epam/ai-dial-ui-kit"
     ssr: false;                  // intended for client-only dynamic imports
     nextDynamicExample: string;  // copyable Next.js dynamic() snippet
@@ -264,7 +264,7 @@ interface ExportEntry {
 
 **Agents confuse similar components or pick the wrong one**
 - Improve JSDoc descriptions to clearly distinguish purpose and use cases
-- Example: for `DialInput` vs `DialTextarea`, explicitly describe when to use each (single-line vs multi-line, character limits, resize behavior, etc.)
+- Example: for `Input` vs `Textarea`, explicitly describe when to use each (single-line vs multi-line, character limits, resize behavior, etc.)
 - Add `@example` blocks showing common, realistic usage patterns that highlight the differences
 
 ## Files

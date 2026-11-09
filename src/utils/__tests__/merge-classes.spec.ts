@@ -47,6 +47,18 @@ describe('mergeClasses utility', () => {
     );
   });
 
+  test.each([
+    'dial-code-semi-text',
+    'dial-tiny-code-text',
+    'dial-tiny-code-semi-text',
+  ])(
+    'lets the code step %s replace and be replaced by another type-scale class',
+    (step) => {
+      expect(mergeClasses('dial-code-text', step)).toBe(step);
+      expect(mergeClasses(step, 'dial-tiny-text')).toBe('dial-tiny-text');
+    },
+  );
+
   test('keeps public dial-kit-*-text classes beside a type-scale class', () => {
     expect(
       mergeClasses(

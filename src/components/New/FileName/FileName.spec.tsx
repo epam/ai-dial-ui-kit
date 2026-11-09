@@ -80,4 +80,50 @@ describe('Dial UI Kit :: FileName', () => {
     expect(container.firstChild).toHaveClass('custom');
     expect(screen.getByText('a.txt')).toHaveClass('font-bold');
   });
+
+  test('draws a custom icon instead of the type icon', () => {
+    const { container } = render(
+      <FileName
+        name="Acme"
+        type={DialItemType.Folder}
+        icon={<svg data-testid="unit-icon" />}
+      />,
+    );
+
+    expect(screen.getByTestId('unit-icon')).toBeInTheDocument();
+    expect(container.querySelectorAll('svg')).toHaveLength(1);
+  });
+
+  test('keeps a custom icon out of the accessibility tree', () => {
+    render(<FileName name="Acme" icon={<svg data-testid="unit-icon" />} />);
+
+    expect(screen.getByTestId('unit-icon').parentElement).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+  });
+
+  test('draws the type icon when icon is null', () => {
+    const { container } = render(<FileName name="a.txt" icon={null} />);
+
+    expect(container.querySelector('svg')).toHaveAttribute(
+      'width',
+      String(DIAL_ICON_SIZE.MD),
+    );
+  });
+
+  test('swaps a custom icon for the spinner while loading', () => {
+    render(
+      <FileName name="Acme" loading icon={<svg data-testid="unit-icon" />} />,
+    );
+
+    expect(screen.queryByTestId('unit-icon')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  test('still announces the shared state with a custom icon', () => {
+    render(<FileName name="Acme" shared icon={<svg />} />);
+
+    expect(screen.getByText('Shared')).toHaveClass('sr-only');
+  });
 });

@@ -14,12 +14,10 @@
     "@epam/ai-dial-ui-kit": "file:../.tarballs/ai-dial-ui-kit.tgz",
     "@floating-ui/react": "^0.27.19",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@monaco-editor/react": "^4.7.0",
     "@tabler/icons-react": "^3.41.1",
     "@uiw/react-markdown-preview": "^5.2.0",
     "@uiw/react-md-editor": "^4.1.0",
     "classnames": "^2.5.1",
-    "monaco-editor": "^0.55.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

@@ -31,6 +31,8 @@ export interface DropdownItem {
   key: string;
   label?: ReactNode;
   icon?: ReactNode;
+  /** Decorative trailing content for a leaf row. Submenu rows retain their caret. */
+  iconAfter?: ReactNode;
   disabled?: boolean;
   danger?: boolean;
   /**
@@ -62,6 +64,10 @@ export interface DropdownItem {
   className?: string;
   onClick?: (info: { key: string; domEvent: MouseEvent }) => void;
   children?: DropdownItem[];
+  /** Controlled submenu state; when omitted, the submenu manages its own state. */
+  subMenuOpen?: boolean;
+  /** Called when hover, keyboard or dismissal requests a submenu state change. */
+  onSubMenuOpenChange?: (open: boolean) => void;
   /** Content rendered above the children list in this item's submenu panel. */
   menuHeader?: ReactNode | (() => ReactNode);
   /** Content rendered below the children list in this item's submenu panel. */

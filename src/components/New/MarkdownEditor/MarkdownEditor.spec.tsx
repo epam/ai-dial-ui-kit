@@ -195,4 +195,24 @@ describe('Dial UI Kit :: MarkdownEditor', () => {
 
     expect(container.querySelector('.w-md-editor-bar')).not.toBeInTheDocument();
   });
+
+  test('links the textarea to its error and marks it invalid', () => {
+    const { container } = render(
+      <>
+        <MarkdownEditor
+          ariaLabel="Prompt"
+          ariaDescribedBy="prompt-error"
+          invalid
+        />
+        <span id="prompt-error">Prompt is required</span>
+      </>,
+    );
+
+    const textarea = screen.getByRole('textbox', { name: 'Prompt' });
+    expect(textarea).toHaveAccessibleDescription('Prompt is required');
+    expect(textarea).toHaveAttribute('aria-invalid', 'true');
+    expect(container.firstChild).toHaveClass(
+      'dial-kit-markdown-editor-invalid',
+    );
+  });
 });

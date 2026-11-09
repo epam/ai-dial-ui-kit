@@ -36,6 +36,8 @@ export interface EntityIdentityProps {
   item: EntityIdentityItem;
   /** User-visible strings; pass translated ones in a localised app. */
   labels?: EntityIdentityLabels;
+  /** Whether to show the type label above the name. */
+  showType?: boolean;
   /** Whether to show `item.version` next to the name. */
   showVersion?: boolean;
   /** Whether to show the featured chip when `item.isFeatured` is true. */
@@ -116,6 +118,7 @@ const getHeadingTag = (level: number): (typeof HEADING_TAGS)[number] =>
  *
  * @param item - The entity to display
  * @param [labels] - User-visible strings
+ * @param [showType=true] - Whether to show the type label
  * @param [showVersion=true] - Whether to show the version
  * @param [hasFeaturedTag=true] - Whether to show the featured chip for a featured entity
  * @param [iconSize=48] - Icon size in px
@@ -127,6 +130,7 @@ const getHeadingTag = (level: number): (typeof HEADING_TAGS)[number] =>
 export const EntityIdentity: FC<EntityIdentityProps> = ({
   item,
   labels,
+  showType = true,
   showVersion = true,
   hasFeaturedTag = true,
   iconSize = 48,
@@ -145,6 +149,9 @@ export const EntityIdentity: FC<EntityIdentityProps> = ({
   const isFeaturedShown = hasFeaturedTag && !!item.isFeatured;
   const hasCornerContent = statusBadge != null || isFeaturedShown;
   const version = showVersion ? item.version : undefined;
+  const typeLabel = showType
+    ? (labels?.type ?? DEFAULT_TYPE_LABEL[item.type])
+    : undefined;
 
   return (
     <div
@@ -169,36 +176,39 @@ export const EntityIdentity: FC<EntityIdentityProps> = ({
           footer != null && 'self-stretch',
         )}
       >
-        <div className="relative flex items-center justify-between">
-          <span
-            className={mergeClasses(
-              'uppercase',
-              typeClassName,
-              TYPE_TEXT_CLASS[item.type],
+        {(hasCornerContent || typeLabel) && (
+          <div className="relative flex items-center justify-between">
+            {typeLabel && (
+              <span
+                className={mergeClasses(
+                  'uppercase',
+                  typeClassName,
+                  TYPE_TEXT_CLASS[item.type],
+                )}
+              >
+                {typeLabel}
+              </span>
             )}
-          >
-            {labels?.type ?? DEFAULT_TYPE_LABEL[item.type]}
-          </span>
-          {hasCornerContent && (
-            <div className="absolute end-0 top-[-6px] flex items-center gap-2">
-              {statusBadge}
-              {isFeaturedShown && (
-                <span
-                  className={mergeClasses(
-                    'flex h-6 items-center justify-center rounded-2xl px-2',
-                    'dial-caption-lead-semi-text',
-                    TYPE_BG_CLASS[item.type],
-                    TYPE_TEXT_CLASS[item.type],
-                    featuredChipClassName,
-                  )}
-                >
-                  {labels?.featured ?? 'Featured'}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
+            {hasCornerContent && (
+              <div className="absolute end-0 top-[-6px] flex items-center gap-2">
+                {statusBadge}
+                {isFeaturedShown && (
+                  <span
+                    className={mergeClasses(
+                      'flex h-6 items-center justify-center rounded-2xl px-2',
+                      'dial-caption-lead-semi-text',
+                      TYPE_BG_CLASS[item.type],
+                      TYPE_TEXT_CLASS[item.type],
+                      featuredChipClassName,
+                    )}
+                  >
+                    {labels?.featured ?? 'Featured'}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex min-w-0 items-center gap-2">
           {/* `shrink` + `min-w-0` (not `flex-1`) keep the version next to the
               name while still letting the name give way to an ellipsis. */}
@@ -226,8 +236,7 @@ export const EntityIdentity: FC<EntityIdentityProps> = ({
             />
           )}
         </div>
-
-        {footer != null && <div className="mt-auto pt-1">{footer}</div>}
+        {footer != null && footer}
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import { IconDotsVertical, IconInbox } from '@tabler/icons-react';
+import { IconDotsVertical } from '@tabler/icons-react';
 import { useMemo, useState, type FC } from 'react';
 
 import { Avatar } from '@/components/New/Avatar/Avatar';
 import { Badge } from '@/components/New/Badge/Badge';
 import { Button } from '@/components/New/Button/Button';
+import { OutlinedButton } from '@/components/New/Button/ButtonWrappers';
 import { Dropdown } from '@/components/New/Dropdown/Dropdown';
 import { FolderName } from '@/components/New/FolderName/FolderName';
 import { IconButton } from '@/components/New/IconButton/IconButton';
@@ -18,7 +19,7 @@ import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { GridColorScheme } from '@/types/grid';
+import { GridAppearance, GridColorScheme } from '@/types/grid';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { Grid, type GridProps } from './Grid';
@@ -113,6 +114,12 @@ const meta = {
       description:
         'AG Grid color scheme. Dark paints native controls, including the date filter calendar, with the dark scheme.',
     },
+    appearance: {
+      control: { type: 'select' },
+      options: Object.values(GridAppearance),
+      description:
+        'Visual treatment. Chat draws the borderless "Chat table" card with inset row dividers and rounded hover and selected rows.',
+    },
     getContextMenuItems: { control: false },
     onSelectionChange: { control: false },
     onGridApiChange: { control: false },
@@ -175,6 +182,19 @@ export const WithContextMenu: Story = {
   },
 };
 
+/**
+ * Right-align a column with ag-Grid's own column `type`: `rightAligned`, or
+ * `numericColumn` (which also switches the filter to the number filter).
+ */
+export const RightAlignedColumn: Story = {
+  args: {
+    getContextMenuItems: (row) => [{ key: 'edit', label: `Edit ${row.name}` }],
+    columnDefs: columns.map((col) =>
+      col.field === 'price' ? { ...col, type: 'rightAligned' } : col,
+    ),
+  },
+};
+
 export const AlternatingRows: Story = {
   args: {
     alternateOddRowColors: true,
@@ -193,12 +213,31 @@ export const Loading: Story = {
   },
 };
 
+/**
+ * No rows at all: "No [entities] yet", what makes them appear, and an optional
+ * way forward. The illustration is the shared empty-state card.
+ */
 export const Empty: Story = {
   args: {
     rowData: [],
     emptyStateTitle: 'No products yet',
-    emptyStateDescription: 'Create one to see it listed here.',
-    emptyStateIcon: <IconInbox size={100} stroke={0.5} aria-hidden="true" />,
+    emptyStateDescription: 'Products will appear here once you add one.',
+    emptyStateAction: <OutlinedButton label="Add product" />,
+  },
+};
+
+/**
+ * The column filters leave no rows: "No [entities] found" with a hint to change
+ * the search, announced to assistive tech. The story filters every row out;
+ * typing a column filter that matches nothing shows the same overlay.
+ */
+export const NoMatchingRows: Story = {
+  args: {
+    filteredEmptyStateTitle: 'No products found',
+    additionalGridOptions: {
+      isExternalFilterPresent: () => true,
+      doesExternalFilterPass: () => false,
+    },
   },
 };
 
@@ -454,6 +493,33 @@ export const ComplexRows: StoryObj<GridProps<ModelUsage>> = {
     additionalGridOptions: { rowHeight: 84, domLayout: 'autoHeight' },
   },
   render: ComplexRowsStory,
+};
+
+const ChatTableStory = (args: GridProps<ModelUsage>) => (
+  <div className="bg-layer-base p-4">
+    <div className="flex flex-col gap-3 p-4">
+      <h2 className="dial-small-semi-text text-primary">Model tokens limits</h2>
+      <Grid<ModelUsage> {...args} />
+    </div>
+  </div>
+);
+
+/**
+ * The "Chat table" of the design (`GridAppearance.Chat`): the grid draws the
+ * borderless card itself — a 12px corner and the MD shadow — with 12px of
+ * cell padding on both sides, dividers between data rows that stop at that
+ * padding, and rounded hover and
+ * selected rows. Rows use the Relaxed density (84px).
+ */
+export const ChatTable: StoryObj<GridProps<ModelUsage>> = {
+  args: {
+    columnDefs: usageColumns,
+    rowData: modelUsage,
+    appearance: GridAppearance.Chat,
+    withoutHeaderBorders: true,
+    additionalGridOptions: { rowHeight: 84, domLayout: 'autoHeight' },
+  },
+  render: ChatTableStory,
 };
 
 interface LimitRow extends Record<string, unknown> {

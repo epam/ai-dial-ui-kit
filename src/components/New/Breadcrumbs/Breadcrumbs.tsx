@@ -22,6 +22,7 @@ import {
   currentSegmentClassName,
   currentSizeClassName,
   defaultSeparator,
+  focusRingClassName,
   itemClassName,
   linkSegmentClassName,
   listClassName,
@@ -63,8 +64,9 @@ export interface BreadcrumbsProps {
    */
   maxVisibleItems?: number;
   /**
-   * The trail's type scale: `dial-small-text` by default, or `dial-h2-text`
-   * for a trail that doubles as the page heading.
+   * The trail's type scale: `dial-small-text` by default, `dial-tiny-text` for
+   * a dense header, or `dial-h2-text` for a trail that doubles as the page
+   * heading.
    */
   size?: BreadcrumbsSize;
   /** Node drawn between two segments. Defaults to a right chevron, mirrored in RTL. */
@@ -100,8 +102,10 @@ export interface BreadcrumbsProps {
  * trail is announced as a list of links rather than a string of chevrons.
  *
  * The trail is drawn at `dial-small-text` by default; `size` switches it to
- * `dial-h2-text` for a trail that doubles as the page heading, where the
- * token's own semibold weight applies to every segment.
+ * `dial-tiny-text` for a dense header — a trail that never clips, so a focus
+ * ring stays whole, and caps no segment, so its current page takes the free
+ * width — or to `dial-h2-text` for a trail that doubles as the page heading,
+ * where the token's own semibold weight applies to every segment.
  *
  * Labels are the caller's to translate; the two accessible names default to
  * English and take an override.
@@ -120,7 +124,7 @@ export interface BreadcrumbsProps {
  *
  * @param items - The trail, outermost first; the last entry is the current page
  * @param [maxVisibleItems=4] - Segments drawn before the middle collapses behind an ellipsis menu
- * @param [size=BreadcrumbsSize.Small] - The trail's type scale: `dial-small-text` or `dial-h2-text`
+ * @param [size=BreadcrumbsSize.Small] - The trail's type scale: `dial-small-text`, `dial-tiny-text` or `dial-h2-text`
  * @param [separator] - Node drawn between two segments; defaults to a right chevron
  * @param [ariaLabel='Breadcrumb'] - Accessible name for the `<nav>`
  * @param [overflowAriaLabel='Show hidden path segments'] - Accessible name for the ellipsis button
@@ -194,6 +198,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
     const interactive = !isCurrent && (!!item.href || !!item.onClick);
     const contentClassName = mergeClasses(
       segmentClassName,
+      focusRingClassName[size],
       interactive
         ? linkSegmentClassName
         : isCurrent
@@ -215,7 +220,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
         className={mergeClasses(
           itemClassName,
           sizeClassName[size],
-          segmentWidthClassName[
+          segmentWidthClassName[size][
             isCurrent ? 'last' : isFirst ? 'first' : 'middle'
           ],
         )}
@@ -260,7 +265,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
     <nav
       aria-label={ariaLabel}
       className={mergeClasses(
-        navClassName,
+        navClassName[size],
         className,
         DIAL_KIT_CLASS.breadcrumbs,
       )}
@@ -289,7 +294,10 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
               <button
                 type="button"
                 aria-label={overflowAriaLabel}
-                className={overflowButtonClassName}
+                className={mergeClasses(
+                  overflowButtonClassName,
+                  focusRingClassName[size],
+                )}
               >
                 <IconDots
                   size={DIAL_ICON_SIZE.SM}

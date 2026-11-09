@@ -377,18 +377,15 @@
 
   /*
    * Shadows: the four steps of the design scale, and nothing else. xs —
-   * Button-Pressed, the one step that still draws two layers, a wide blue
-   * over a tight grey. The resting shadow of a solid control has no step
-   * here: it used to be `sm`, and stayed where it was when `sm` moved onto
-   * the side panels, so it lives in `buttons.scss` as
-   * `dial-kit-control-shadow` rather than as a fifth key. sm — Side Bar, Side
-   * Panel, right panel; md — Button-Hover, Card-Default, Input; lg —
-   * Card-Hover. All three are a single wide blue layer: the grey layer would
-   * only muddy it at this size.
+   * Chat Button-Pressed, an even blue halo with no offset. The resting
+   * shadow of a solid control has no step here: it used to be `sm`, and
+   * stayed where it was when `sm` moved onto the side panels, so it lives in
+   * `buttons.scss` as `dial-kit-control-shadow` rather than as a fifth key —
+   * the only place `--shadow-xs-2` is still drawn. sm — Side Bar, Side Panel,
+   * right panel; md — Button-Hover, Card-Default, Input; lg — Card-Hover.
+   * xs and lg are a single blue layer, sm and md two.
    */
-  --shadow-xs:
-    0 1px 4px 0 var(--shadow-xs-1, #2764d933),
-    0 1px 2px 0 var(--shadow-xs-2, #161b2d08); /* blue-500 alpha-20, grey-950 alpha-3 */
+  --shadow-xs: 0 0 8px 1px var(--shadow-xs-1, #2764d933); /* blue-500 alpha-20 */
   /*
    * Two-layer Shadow SM and Shadow MD, as in the design: a drop and a halo.
    * A host that themed a single-layer token through `--shadow-sm` /
@@ -400,7 +397,7 @@
   --shadow-md:
     0 10px 30px 9px var(--shadow-md-2, var(--shadow-md, #2764d90f)),
     0 0 8px 2px var(--shadow-md-1, #2764d90a); /* blue-500 alpha-6, blue-500 alpha-4 */
-  --shadow-lg: 0 8px 44px 0 var(--shadow-lg, #2764d914); /* blue-500 alpha-8 */
+  --shadow-lg: 1px 10px 25px 12px var(--shadow-lg, #2764d914); /* blue-500 alpha-8 */
 
   /*
    * Corner radii. `--radius` is the bare `rounded`. The control radii are

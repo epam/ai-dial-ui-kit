@@ -9,7 +9,7 @@
 
   &:focus-within,
   &:active:not(:has(> input:disabled)) {
-    @apply outline outline-accent-focus outline-offset-0;
+    @apply outline outline-accent-focus -outline-offset-1;
   }
 
   &:not(:placeholder-shown) {

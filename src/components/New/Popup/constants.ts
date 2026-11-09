@@ -10,7 +10,7 @@ export const popupHeaderClassName =
   'flex flex-row items-center justify-between px-6 py-4';
 
 export const popupTitleClassName =
-  'flex-1 min-w-0 mr-3 truncate dial-h3-text text-primary';
+  'flex-1 min-w-0 mr-3 truncate dial-h2-text text-primary';
 
 /** Rule under the header. Opt-in: by default sections are separated by spacing. */
 export const popupHeaderDividerClassName = 'border-b border-tertiary';

@@ -76,6 +76,44 @@ export const DateTimeWithTimezone: Story = {
   },
 };
 
+export const DateTimeWithCustomTimeField: Story = {
+  name: 'Date Time with custom time field',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Pass `renderTimeField` to replace the popover footer\'s time field. The control sets its own look: here `fieldClassName` and `pickerButtonClassName` fit the field and its clock button into the footer\'s compact row, and `className` sets the width (`120px`, as the default footer field). This example renders the `time` mode `Calendar`, whose clock button opens the hour/minute list popover. The `datetime` Calendar keeps owning the `Date` value; the custom control only reads and writes the `"HH:mm"` part. The control also receives `timezoneLabel`; this example does not show it, because the footer row has no room for a long timezone beside a standalone field.',
+      },
+    },
+  },
+  args: {
+    mode: CalendarMode.DateTime,
+    labelProps: { label: 'Start date' },
+    placeholder: 'Select date and time',
+    renderTimeField: ({
+      value,
+      onChange,
+      onBlur,
+      disabled,
+      invalid,
+      ariaLabel,
+    }) => (
+      <Calendar
+        mode={CalendarMode.Time}
+        value={value}
+        onChange={(next) => typeof next === 'string' && onChange(next)}
+        onBlur={onBlur}
+        disabled={disabled}
+        invalid={invalid}
+        labelProps={{ label: ariaLabel, className: 'sr-only' }}
+        className="w-[120px] gap-y-0"
+        fieldClassName="px-3 py-1.5 pe-9"
+        pickerButtonClassName="size-6 end-1.5"
+      />
+    ),
+  },
+};
+
 export const Weekday: Story = {
   args: {
     mode: CalendarMode.Weekday,
