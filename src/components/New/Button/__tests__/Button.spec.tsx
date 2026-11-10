@@ -438,6 +438,61 @@ describe('Dial UI Kit :: DialButton', () => {
     });
   });
 
+  describe('Inverted', () => {
+    test('Should draw the inverted link styles without padding or an enhanced target', () => {
+      render(
+        <LinkButton variant={ButtonVariant.Inverted} label="View details" />,
+      );
+
+      const button = screen.getByRole('button', { name: 'View details' });
+      expect(button).toHaveClass('dial-kit-inverted-link-button');
+      expect(button).not.toHaveClass('dial-kit-primary-link-button');
+      expect(button).not.toHaveClass('px-4');
+      expect(button).not.toHaveClass('dial-kit-enhanced-target');
+    });
+
+    test('Should be natively disabled when rendered as a button', () => {
+      render(
+        <LinkButton
+          variant={ButtonVariant.Inverted}
+          label="View details"
+          disabled
+        />,
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'View details' }),
+      ).toBeDisabled();
+    });
+
+    test('Should render a link with an href, and drop it when disabled', () => {
+      const { rerender } = render(
+        <LinkButton
+          variant={ButtonVariant.Inverted}
+          label="View details"
+          href="/details"
+        />,
+      );
+
+      const link = screen.getByRole('link', { name: 'View details' });
+      expect(link).toHaveAttribute('href', '/details');
+      expect(link).toHaveClass('dial-kit-inverted-link-button');
+
+      rerender(
+        <LinkButton
+          variant={ButtonVariant.Inverted}
+          label="View details"
+          href="/details"
+          disabled
+        />,
+      );
+
+      const disabledLink = screen.getByText('View details').closest('a');
+      expect(disabledLink).not.toHaveAttribute('href');
+      expect(disabledLink).toHaveAttribute('aria-disabled', 'true');
+    });
+  });
+
   test.each([
     [
       ButtonVariant.Primary,

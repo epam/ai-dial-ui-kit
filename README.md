@@ -394,6 +394,7 @@ target already carries a stable class:
 | --------------------------------------------- | ----------------- |
 | `Button` and its six variant wrappers         | `dial-kit-base-button` (plus a per-variant class such as `dial-kit-primary-solid-button`) |
 | `IconButton` and its five variant wrappers    | `dial-kit-base-icon-button` |
+| `Link`                                        | `dial-kit-base-link` (plus a per-variant class such as `dial-kit-link-inverted`) |
 | `FabButton`                                   | `dial-kit-fab-button` |
 | `Input`                                       | `dial-kit-input` |
 | `Textarea`                                    | `dial-kit-textarea` |

@@ -95,6 +95,12 @@ type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
  * and no longer reacts to hover or focus. Do not use it on a trigger that has
  * an action of its own, since the same tap would run both.
  *
+ * The panel is an inverted surface (`bg-control-inverted`,
+ * `text-control-inverted`), like {@link Tooltip}. Content placed on it needs
+ * inverted styles: a link button takes `ButtonVariant.Inverted`, a text
+ * link `LinkVariant.Inverted`. Text inherits the panel's color, so avoid
+ * `text-primary` / `text-secondary` inside it.
+ *
  * @example
  * ```tsx
  * <InteractiveTooltip
@@ -102,9 +108,11 @@ type ElementWithRef = ReactElement<{ ref?: Ref<unknown> }>;
  *   content={
  *     <>
  *       <p>Lets the model write and execute Python in an isolated sandbox.</p>
- *       <Button variant={ButtonVariant.Primary} appearance={ButtonAppearance.Link}>
- *         View details
- *       </Button>
+ *       <Button
+ *         variant={ButtonVariant.Inverted}
+ *         appearance={ButtonAppearance.Link}
+ *         label="View details"
+ *       />
  *     </>
  *   }
  * >

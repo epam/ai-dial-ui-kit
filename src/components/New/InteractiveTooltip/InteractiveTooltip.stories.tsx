@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A hover panel that, unlike Tooltip, can hold its own interactive content. It opens next to the trigger on hover or focus and stays open while the pointer moves into the panel, so buttons and links inside it can be used. Renders nothing on a mobile screen, where there is no hover to reveal it, unless it is opened by click or tap (`trigger`).',
+          'A hover panel that, unlike Tooltip, can hold its own interactive content. It opens next to the trigger on hover or focus and stays open while the pointer moves into the panel, so buttons and links inside it can be used. The panel is an inverted surface, so its content needs inverted styles — `ButtonVariant.Inverted` for a link button, `LinkVariant.Inverted` for a text link. Renders nothing on a mobile screen, where there is no hover to reveal it, unless it is opened by click or tap (`trigger`).',
       },
     },
   },
@@ -86,7 +86,7 @@ const meta = {
           between formats.
         </p>
         <Button
-          variant={ButtonVariant.Primary}
+          variant={ButtonVariant.Inverted}
           appearance={ButtonAppearance.Link}
           label="View details"
         />

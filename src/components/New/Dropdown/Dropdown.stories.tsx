@@ -1059,7 +1059,7 @@ export const MarkedItems: Story = {
 
 const viewDetailsButton = (
   <Button
-    variant={ButtonVariant.Primary}
+    variant={ButtonVariant.Inverted}
     appearance={ButtonAppearance.Link}
     label="View details"
   />

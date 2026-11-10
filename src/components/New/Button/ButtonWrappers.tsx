@@ -215,6 +215,14 @@ export const StarterButton: FC<ButtonVariantProps> = ({
  * <LinkButton label="Open dashboard" href="https://example.com" target="_blank" />
  * ```
  *
+ * On an inverted surface, such as an `InteractiveTooltip` panel, pass
+ * `ButtonVariant.Inverted`:
+ *
+ * @example
+ * ```tsx
+ * <LinkButton variant={ButtonVariant.Inverted} label="View details" />
+ * ```
+ *
  * Inherits all properties from the `ButtonProps`
  */
 export const LinkButton = ButtonAppearanceCreator(

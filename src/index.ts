@@ -71,6 +71,7 @@ export { DialDropdown } from './components/Dropdown/Dropdown';
 // Types
 export { EditorThemes } from './types/editor';
 export { ButtonVariant, ButtonAppearance } from './types/button';
+export { LinkVariant } from './types/link';
 export { RadioGroupOrientation } from './types/radio-group';
 export { PopupSize } from './types/popup';
 export { ConfirmationPopupVariant } from './types/confirmation-popup';
@@ -221,6 +222,8 @@ export {
   StaticIconButton,
 } from './components/New/IconButton/IconButtonWrappers';
 export { Button } from './components/New/Button/Button';
+export { Link } from './components/New/Link/Link';
+export type { LinkProps } from './components/New/Link/Link';
 export { IconButton } from './components/New/IconButton/IconButton';
 export type { ButtonProps } from './components/New/Button/Button';
 export type { IconButtonProps } from './components/New/IconButton/IconButton';
