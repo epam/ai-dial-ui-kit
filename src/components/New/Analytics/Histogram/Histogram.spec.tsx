@@ -201,6 +201,46 @@ describe('Dial UI Kit :: AnalyticsHistogram', () => {
       });
     });
 
+    test('striped bars are outlined by an inline border color; compare bars keep a transparent border', () => {
+      render(
+        <AnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.5, 0.3]}
+          valueTitle="results"
+        />,
+      );
+
+      const primaryBar = screen.getByRole('img', {
+        name: '1 out of 1 results',
+      });
+      expect(primaryBar.style.borderColor).not.toBe('');
+      expect(primaryBar).not.toHaveClass('border-transparent');
+
+      screen
+        .getAllByRole('img', { name: '1 out of 2 results' })
+        .forEach((bar) => {
+          expect(bar).toHaveClass('border-transparent');
+        });
+    });
+
+    test('separates the two bars of a compared column with a gap', () => {
+      render(
+        <AnalyticsHistogram
+          title="Distribution"
+          values={[0.5]}
+          compareValues={[0.5, 0.3]}
+          valueTitle="results"
+        />,
+      );
+
+      const primaryBar = screen.getByRole('img', {
+        name: '1 out of 1 results',
+      });
+      // img → tooltip trigger → column wrapper holding both bars
+      expect(primaryBar.parentElement?.parentElement).toHaveClass('gap-0.5');
+    });
+
     test('normalizes both datasets against the global max', () => {
       // primary: 1 value in "0.4-0.5";  compare: 2 values in "0.4-0.5" → globalMax=2
       render(

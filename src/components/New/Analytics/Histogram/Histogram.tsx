@@ -17,6 +17,11 @@ import {
 
 const HISTOGRAM_HEIGHT_PX = 128;
 
+const STRIPE_ANGLE_DEG = 135;
+const STRIPE_WIDTH_PX = 1;
+// Perpendicular distance between stripe starts, from the design's 16px pattern tile (3 lines per tile at 45°).
+const STRIPE_PERIOD_PX = 3.77;
+
 export interface AnalyticsHistogramProps {
   /** Title rendered above the histogram. */
   title: ReactNode;
@@ -150,7 +155,7 @@ export const AnalyticsHistogram: FC<AnalyticsHistogramProps> = ({
 
     const stripeStyle = striped
       ? {
-          backgroundImage: `repeating-linear-gradient(135deg, ${column.color} 0px, ${column.color} 1px, transparent 1px, transparent 4px)`,
+          backgroundImage: `repeating-linear-gradient(${STRIPE_ANGLE_DEG}deg, ${column.color} 0px, ${column.color} ${STRIPE_WIDTH_PX}px, transparent ${STRIPE_WIDTH_PX}px, transparent ${STRIPE_PERIOD_PX}px)`,
           borderColor: column.color,
         }
       : { backgroundColor: column.color };
@@ -164,7 +169,10 @@ export const AnalyticsHistogram: FC<AnalyticsHistogramProps> = ({
         <div
           role="img"
           aria-label={ariaLabel}
-          className="flex min-h-2 w-full items-center justify-center rounded-xs border border-transparent"
+          className={mergeClasses(
+            'flex min-h-2 w-full items-center justify-center rounded-xs border',
+            !striped && 'border-transparent',
+          )}
           style={{ height: `${column.ratio * 100}%`, ...stripeStyle }}
         >
           {showCount && (
@@ -235,7 +243,10 @@ export const AnalyticsHistogram: FC<AnalyticsHistogramProps> = ({
                     const primaryLabel = `${column.count} out of ${total} ${valueTitle}`;
                     const compareLabel = `${compareCol.count} out of ${compareTotal} ${valueTitle}`;
                     return (
-                      <div key={index} className="flex h-full flex-1 items-end">
+                      <div
+                        key={index}
+                        className="flex h-full flex-1 items-end gap-0.5"
+                      >
                         {renderBar(
                           column,
                           buildCompareTooltip(
