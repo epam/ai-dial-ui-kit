@@ -7,6 +7,13 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [0.17.0]
+
+### Breaking Changes
+
+- **`Select` (2.0) — single-select value moved out of the input** — the selected label (with `prefix`) and `customSelectedValue` are drawn in the field's content slot instead of as the `<input>`'s value. A focused native input scrolls a long value to its caret, so a narrow field showed the tail of the label once focused; the content slot clips at the end and keeps the full text in a tooltip. The input's `value` is now always empty for single selects, and the combobox's accessible name includes the selected text (`Operator, Option 1`), so an exact-name query for the field name no longer matches once a value is selected.
+  See [migration guide](migration-guides/0.17.0/select-single-value-content-slot.md).
+
 ## [0.16.0]
 
 ### Breaking Changes
