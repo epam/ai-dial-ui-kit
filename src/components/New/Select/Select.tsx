@@ -400,10 +400,18 @@ export const Select: FC<SelectProps> = ({
     !isMobile;
 
   /**
-   * Values an `<input>` cannot hold — the tags of a multi-select, an option's
-   * `labelNode`, an option description — are rendered in the field's content
-   * slot instead, and the input itself is collapsed to zero width.
+   * A single-select's display string — the selected label (with `prefix`), a
+   * `labelNode`, a description, or `customSelectedValue` when nothing matches —
+   * is rendered in the content slot, and the input is collapsed to zero width.
+   * A focused `<input>` ignores `text-overflow: ellipsis` and scrolls to the
+   * caret, so the string must not live in the input's value. Multi-select tags
+   * use the same slot.
    */
+  const unmatchedCustomValue =
+    !multiple && !singleSelectedOption && customSelectedValue && value
+      ? customSelectedValue
+      : undefined;
+
   const fieldContent = useMemo(() => {
     if (multiple) {
       if (!hasSelection) return null;
@@ -433,17 +441,18 @@ export const Select: FC<SelectProps> = ({
       );
     }
 
-    if (!singleSelectedOption) return null;
-    if (!singleSelectedOption.labelNode && !singleSelectedOption.description) {
-      return null;
-    }
+    if (!singleSelectedOption && !unmatchedCustomValue) return null;
 
     return (
       <span className="flex min-w-0 flex-1 items-center gap-2">
         <EllipsisTooltip
-          text={singleSelectedOption.labelNode ?? selectedLabel}
+          text={
+            singleSelectedOption
+              ? (singleSelectedOption.labelNode ?? selectedLabel)
+              : unmatchedCustomValue
+          }
         />
-        {singleSelectedOption.description && (
+        {singleSelectedOption?.description && (
           <span className="truncate text-secondary dial-tiny-text">
             {singleSelectedOption.description}
           </span>
@@ -460,14 +469,8 @@ export const Select: FC<SelectProps> = ({
     selectedLabel,
     selectedValues,
     singleSelectedOption,
+    unmatchedCustomValue,
   ]);
-
-  const fieldValue = (() => {
-    if (multiple || fieldContent) return '';
-    if (selectedLabel) return selectedLabel;
-    if (customSelectedValue && value) return customSelectedValue;
-    return '';
-  })();
 
   const labelText =
     typeof labelProps?.label === 'string' ? labelProps.label : undefined;
@@ -483,7 +486,7 @@ export const Select: FC<SelectProps> = ({
           ? selectedValues
               .map((v) => options.find((o) => o.value === v)?.label ?? v)
               .join(', ')
-          : selectedLabel,
+          : (selectedLabel ?? unmatchedCustomValue),
       ]
         .filter(Boolean)
         .join(', ') || undefined
@@ -696,7 +699,6 @@ export const Select: FC<SelectProps> = ({
             size={size}
             disabled={disabled}
             invalid={invalid}
-            value={fieldValue}
             placeholder={fieldContent ? undefined : placeholder}
             readOnly
             iconBefore={multiple ? undefined : singleSelectedOption?.icon}

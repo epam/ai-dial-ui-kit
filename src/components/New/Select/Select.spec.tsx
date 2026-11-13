@@ -53,8 +53,12 @@ describe('Dial UI Kit :: Select', () => {
     fireEvent.click(screen.getByRole('option', { name: 'Option 1' }));
     expect(field).toHaveAttribute('aria-expanded', 'false');
 
-    // ensure the field shows the selected value
-    expect(field).toHaveValue('Option 1');
+    // The label is drawn in the content slot. The input stays empty so focus
+    // cannot scroll a long value to its tail.
+    expect(field).toHaveValue('');
+    expect(field).not.toHaveAttribute('placeholder');
+    expect(field.parentElement).toHaveTextContent('Option 1');
+    expect(field).toHaveAccessibleName('Operator, Option 1');
   });
 
   test('renders the field through the 2.0 Input', () => {
@@ -115,12 +119,19 @@ describe('Dial UI Kit :: Select', () => {
 
   test('respects defaultValue in uncontrolled single mode', () => {
     renderSelect({ defaultValue: 'opt-1' });
-    expect(getField()).toHaveValue('Option 1');
+    const field = getField();
+    expect(field).toHaveValue('');
+    expect(field.parentElement).toHaveTextContent('Option 1');
+    expect(screen.getByText('Option 1')).toHaveClass('truncate', 'text-start');
+    expect(field).toHaveAccessibleName('Operator, Option 1');
   });
 
   test('prefixes the selected value when prefix is given', () => {
     renderSelect({ defaultValue: 'opt-1', prefix: 'Filter:' });
-    expect(getField()).toHaveValue('Filter: Option 1');
+    const field = getField();
+    expect(field).toHaveValue('');
+    expect(field.parentElement).toHaveTextContent('Filter: Option 1');
+    expect(field).toHaveAccessibleName('Operator, Filter: Option 1');
   });
 
   test('tints the selected option, which is how a select list marks it', () => {
@@ -390,9 +401,10 @@ describe('Dial UI Kit :: Select', () => {
 
       // The tags live in the field's content slot, so the input itself is empty
       // and the selection has to be announced through the name.
-      expect(
-        screen.getByRole('combobox', { name: 'Operator, Option 1, Option 2' }),
-      ).toBeInTheDocument();
+      const field = screen.getByRole('combobox', {
+        name: 'Operator, Option 1, Option 2',
+      });
+      expect(field).toHaveValue('');
       expect(screen.getByText('Option 1')).toBeInTheDocument();
       expect(screen.getByText('Option 2')).toBeInTheDocument();
     });
@@ -562,7 +574,42 @@ describe('Dial UI Kit :: Select', () => {
       expect(screen.getByText('The first one')).toBeInTheDocument();
       expect(
         screen.getByRole('combobox', { name: 'Operator, Option 1' }),
-      ).toBeInTheDocument();
+      ).toHaveValue('');
+    });
+
+    test('a long label is clipped in the content slot and named in full', () => {
+      render(
+        <div className="w-[120px]">
+          <Select
+            ariaLabel="Operator"
+            value="long"
+            options={[{ value: 'long', label: 'Test case name' }]}
+          />
+        </div>,
+      );
+
+      const field = screen.getByRole('combobox', {
+        name: 'Operator, Test case name',
+      });
+      expect(field).toHaveValue('');
+      expect(field).toHaveClass('w-0', 'min-w-0', 'flex-none', 'p-0');
+      expect(screen.getByText('Test case name')).toHaveClass(
+        'truncate',
+        'text-start',
+      );
+    });
+
+    test('a custom selected value is shown when no option matches', () => {
+      renderSelect({
+        value: 'missing',
+        customSelectedValue: 'Custom Selected Value',
+      });
+
+      const field = screen.getByRole('combobox', {
+        name: 'Operator, Custom Selected Value',
+      });
+      expect(field).toHaveValue('');
+      expect(field.parentElement).toHaveTextContent('Custom Selected Value');
     });
   });
 
@@ -643,7 +690,10 @@ describe('Dial UI Kit :: Select', () => {
       openSelect();
       await user.hover(screen.getByText('Group').closest('button')!);
       fireEvent.click((await screen.findByText('G One')).closest('button')!);
-      expect(getField()).toHaveValue('G One');
+      const field = getField();
+      expect(field).toHaveValue('');
+      expect(field.parentElement).toHaveTextContent('G One');
+      expect(field).toHaveAccessibleName('Operator, G One');
     });
 
     test('parent trigger shows selected state when a child is selected', async () => {
@@ -683,9 +733,9 @@ describe('Dial UI Kit :: Select', () => {
       openSelect();
       await user.hover(screen.getByText('Group').closest('button')!);
 
-      const selectedChild = (await screen.findByText('G One')).closest(
-        'button',
-      )!;
+      const selectedChild = await screen.findByRole('option', {
+        name: 'G One',
+      });
       expect(selectedChild).toHaveClass('bg-control-accent-alpha');
       expect(screen.getByText('G Two').closest('button')!).not.toHaveClass(
         'bg-control-accent-alpha',
@@ -712,9 +762,9 @@ describe('Dial UI Kit :: Select', () => {
       await user.hover(screen.getByText('Group').closest('button')!);
 
       expect(
-        (await screen.findByText('G One'))
-          .closest('button')!
-          .querySelector('.tabler-icon-check'),
+        (await screen.findByRole('option', { name: 'G One' })).querySelector(
+          '.tabler-icon-check',
+        ),
       ).toBeInTheDocument();
     });
 
