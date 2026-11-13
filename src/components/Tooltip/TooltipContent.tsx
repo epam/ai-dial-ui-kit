@@ -47,7 +47,15 @@ export const DialTooltipContent: FC<Props> = ({ style, ...props }) => {
           context.getFloatingProps(props).className as string,
         )}
       >
-        {props.children}
+        {/*
+          Caps the bubble at `max(50vh, 240px)` (less its `py-1` and 1px
+          borders) and scrolls longer content inside it. The scroll is on an
+          inner element because the arrow sits outside the bubble's box and
+          `overflow` on the bubble would clip it.
+        */}
+        <div className="max-h-[calc(max(50vh,240px)-0.5rem-2px)] overflow-y-auto">
+          {props.children}
+        </div>
         <FloatingArrow
           ref={context.arrowRef}
           context={context.context}

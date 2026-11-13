@@ -42,6 +42,29 @@ export const arrowClassName = 'fill-control-inverted';
  * takes no shadow of its own: both `xs` layers blur 4px or less, so there is
  * nothing to see around a 7px triangle that the box's own shadow does not
  * already carry.
+ *
+ * Links inside the bubble take the inverted link style: the bubble's own
+ * inverted text colour, underlined, so they stay readable on the inverted
+ * surface in both themes.
  */
 export const tooltipClassName =
-  'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';
+  'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs [&_a]:text-control-inverted [&_a]:underline [&_a:hover]:no-underline';
+
+/**
+ * Wraps the tooltip content so a long description scrolls inside the bubble
+ * instead of running off screen. The design caps the bubble at
+ * `max(50vh, 240px)` — the 240px floor keeps it from collapsing to a few lines
+ * on short screens — so the cap here is that value less the bubble's own
+ * vertical padding (`py-2`, 1rem).
+ *
+ * The scroll lives on this inner element rather than on the bubble: the arrow
+ * sits outside the bubble's box, and `overflow` on the bubble would clip it.
+ *
+ * The scrollbar uses the bubble's inverted text colour — the opposite-mode
+ * colour to the surface — so it is visible on the inverted bubble in a light
+ * page and a dark one alike. It is always shown (not only on hover as the
+ * global scrollbar is) because the bubble is not scrollable by pointer hover
+ * alone: it closes when the pointer leaves the trigger.
+ */
+export const tooltipScrollClassName =
+  'max-h-[calc(max(50vh,240px)-1rem)] overflow-y-auto [scrollbar-color:color-mix(in_srgb,var(--text-color-control-inverted)_50%,transparent)_transparent] [&::-webkit-scrollbar-thumb]:bg-[color-mix(in_srgb,var(--text-color-control-inverted)_50%,transparent)]';

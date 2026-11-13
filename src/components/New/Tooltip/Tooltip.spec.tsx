@@ -223,6 +223,41 @@ describe('Dial UI Kit :: Tooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveClass('max-w-[376px]');
   });
 
+  test('Should scroll long content inside a bubble capped at half the screen', () => {
+    render(
+      <Tooltip tooltip="Very long text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    // jsdom does no layout, so only the classes can be checked here — the
+    // compiled rule is verified in dist/index.css. The scroll sits on an inner
+    // element so the arrow, outside the bubble's box, is not clipped.
+    const scroller = screen.getByText('Very long text');
+    expect(scroller).toHaveClass(
+      'max-h-[calc(max(50vh,240px)-1rem)]',
+      'overflow-y-auto',
+    );
+    expect(screen.getByRole('tooltip')).not.toHaveClass('overflow-y-auto');
+  });
+
+  test('Should style links inside the bubble with the inverted link style', () => {
+    render(
+      <Tooltip
+        tooltip={<a href="https://example.com">Read more</a>}
+        initialOpen
+      >
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    expect(screen.getByRole('tooltip')).toHaveClass(
+      '[&_a]:text-control-inverted',
+      '[&_a]:underline',
+    );
+    expect(screen.getByRole('link', { name: 'Read more' })).toBeInTheDocument();
+  });
+
   test('Should lift the bubble off the surface underneath', () => {
     render(
       <Tooltip tooltip="Tooltip text" initialOpen>
