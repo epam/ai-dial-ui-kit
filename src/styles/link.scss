@@ -1,0 +1,81 @@
+/*
+ * The 2.0 `Link`: an underlined text link for running copy.
+ *
+ * Hover and active are gated on `:not([aria-disabled='true'])` rather than
+ * overridden by the disabled rule, as in buttons.scss: a disabled link must not
+ * react to the pointer at all. Hover sits inside `@media (hover: hover)` so a
+ * touch tap does not leave it stuck on.
+ */
+.dial-kit-base-link {
+  @apply underline decoration-from-font rounded;
+  text-underline-position: from-font;
+  @apply focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus;
+
+  &[aria-disabled='true'] {
+    @apply cursor-not-allowed;
+  }
+}
+
+.dial-kit-link-primary {
+  @apply text-accent;
+
+  @media (hover: hover) {
+    &:hover:not([aria-disabled='true']) {
+      @apply text-control-accent-hover;
+    }
+  }
+
+  &:active:not([aria-disabled='true']) {
+    @apply text-control-accent-active;
+  }
+
+  &[aria-disabled='true'] {
+    @apply text-control-disable-secondary;
+  }
+}
+
+.dial-kit-link-neutral {
+  @apply text-primary;
+
+  @media (hover: hover) {
+    &:hover:not([aria-disabled='true']) {
+      @apply text-secondary;
+    }
+  }
+
+  &:active:not([aria-disabled='true']) {
+    @apply text-secondary;
+  }
+
+  &[aria-disabled='true'] {
+    @apply text-control-disable-secondary;
+  }
+}
+
+/*
+ * Shared with `ButtonVariant.Inverted` so the two cannot drift apart. Only
+ * colors live here: the link takes its underline, offset and radius from
+ * `dial-kit-base-link`, the button its shape from the 2.0 button base. This
+ * file is imported after buttons.scss, so the focus color wins over the base
+ * list's `outline-focus`.
+ */
+.dial-kit-link-inverted,
+.dial-kit-inverted-link-button {
+  @apply text-control-inverted;
+  @apply focus-visible:outline-inverted-focus;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
+      @apply text-control-inverted-hover;
+    }
+  }
+
+  &:active:not(:disabled):not([aria-disabled='true']) {
+    @apply text-control-inverted-active;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    @apply text-control-inverted-disabled;
+  }
+}

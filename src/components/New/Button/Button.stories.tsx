@@ -256,6 +256,52 @@ export const AsLink: Story = {
   },
 };
 
+const INVERTED_LINK_STATES = [
+  { label: 'Default', id: 'inverted-link-default' },
+  { label: 'Hover', id: 'inverted-link-hover' },
+  { label: 'Active', id: 'inverted-link-active' },
+  { label: 'Focus', id: 'inverted-link-focus' },
+  { label: 'Disable', id: 'inverted-link-disable', disabled: true },
+];
+
+export const InvertedLink: Story = {
+  render: () => (
+    <div className="grid grid-cols-[auto_auto_auto] items-center gap-x-8 gap-y-4 rounded-xl bg-control-inverted p-6">
+      {INVERTED_LINK_STATES.map(({ label, id, disabled }) => (
+        <Fragment key={id}>
+          <span className="text-sm text-control-inverted">{label}</span>
+          {[ElementSize.Standard, ElementSize.Small].map((size) => (
+            <LinkButton
+              key={size}
+              id={`${id}-${size}`}
+              variant={ButtonVariant.Inverted}
+              label="View details"
+              size={size}
+              disabled={disabled}
+            />
+          ))}
+        </Fragment>
+      ))}
+    </div>
+  ),
+  parameters: {
+    pseudo: {
+      hover: ['#inverted-link-hover-standard', '#inverted-link-hover-small'],
+      active: ['#inverted-link-active-standard', '#inverted-link-active-small'],
+      focusVisible: [
+        '#inverted-link-focus-standard',
+        '#inverted-link-focus-small',
+      ],
+    },
+    docs: {
+      description: {
+        story:
+          '`ButtonVariant.Inverted` with `ButtonAppearance.Link` — a link button for an inverted surface such as an `InteractiveTooltip` panel, in its standard and small sizes across default, hover, active, focus, and disabled states. It shares its colours and focus ring with the inverted `Link` and, like the primary link button, is not underlined.',
+      },
+    },
+  },
+};
+
 const STARTER_STATES = [
   { label: 'Default', id: 'starter-default' },
   { label: 'Hover', id: 'starter-hover' },

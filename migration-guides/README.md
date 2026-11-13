@@ -36,6 +36,7 @@ migration-guides/
 | 0.16.0 | [legacy-analytics-and-steps-removal](0.16.0/legacy-analytics-and-steps-removal.md) | Legacy `DialAnalytics*` components and 1.0 `DialSteps` removed; use the 2.0 `Analytics*` components and `Steps` |
 | 0.16.0 | [grid-empty-state-pattern](0.16.0/grid-empty-state-pattern.md) | `Grid` empty state: shared illustration, "yet"/"found" copy with new `filteredEmptyState*`, `emptyStateAction` and `emptyStateLive`; no-rows message no longer announced by default |
 | 0.16.0 | [unused-legacy-components-removal](0.16.0/unused-legacy-components-removal.md) | 34 unused 1.0 components (`DialSelect`, `DialPopup`, `DialGrid`, `LazyDialJsonEditor` …) and `DialSchemaRenderer` removed in favour of their 2.0 counterparts; Monaco is no longer a peer |
+| 0.17.0 | [interactive-tooltip-inverted-panel](0.17.0/interactive-tooltip-inverted-panel.md) | `InteractiveTooltip` panel is inverted (`bg-control-inverted`); links on it move to `ButtonVariant.Inverted` / `LinkVariant.Inverted` |
 | 0.17.0 | [select-single-value-content-slot](0.17.0/select-single-value-content-slot.md) | Single `Select` draws its selected label in the content slot, not the input value; the combobox name includes the selected text |
 
 ---

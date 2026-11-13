@@ -182,6 +182,10 @@
   --border-color-gradient-1: var(--stroke-gradient-1, #5976e9); /* blue-300 */
   --border-color-gradient-2: var(--stroke-gradient-2, #885df2); /* Violet-300 */
   --border-color-focus: var(--stroke-focus, #161b2d); /* grey-1000 */
+  --border-color-inverted-focus: var(
+    --stroke-inverted-focus,
+    #fcfcfc
+  ); /* grey-50 */
   --border-color-accent-focus: var(
     --stroke-accent-focus,
     #6785fb
@@ -225,22 +229,34 @@
     --text-control-inverted,
     #fcfcfc
   ); /* grey-50 */
+  --text-color-control-inverted-hover: var(
+    --text-control-inverted-hover,
+    #eef1f7
+  ); /* grey-150 */
+  --text-color-control-inverted-active: var(
+    --text-control-inverted-active,
+    #e8eef5
+  );
+  --text-color-control-inverted-disabled: var(
+    --text-control-inverted-disabled,
+    #acb3c3
+  ); /* grey-450 */
   --text-color-control-disable-primary: var(
     --text-control-disable-primary,
     #848e9c
   ); /* grey-600 */
   --text-color-control-disable-secondary: var(
     --text-control-disable-secondary,
-    #dce0e8
-  ); /* grey-300 */
+    #848e9c
+  ); /* grey-600 */
   --text-color-control-accent-hover: var(
     --text-control-accent-hover,
     #5976e9
   ); /* blue-300 */
   --text-color-control-accent-active: var(
     --text-control-accent-active,
-    #6785fb
-  ); /* blue-200 */
+    #6e8af7
+  );
 
   /* placeholderColor: `placeholder-*`. */
   --placeholder-color-primary: var(--text-primary, #161b2d); /* grey-1000 */

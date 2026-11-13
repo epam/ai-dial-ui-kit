@@ -526,7 +526,7 @@ const favouriteSkills: SelectOption[] = [
             prices, recent releases.
           </p>
           <Button
-            variant={ButtonVariant.Primary}
+            variant={ButtonVariant.Inverted}
             appearance={ButtonAppearance.Link}
             label="View details"
           />
@@ -549,7 +549,7 @@ const favouriteSkills: SelectOption[] = [
             so you can check the work.
           </p>
           <Button
-            variant={ButtonVariant.Primary}
+            variant={ButtonVariant.Inverted}
             appearance={ButtonAppearance.Link}
             label="View details"
           />
@@ -604,7 +604,7 @@ export const WithWideInteractiveTooltip: Story = {
                 wrapping across many narrow lines.
               </p>
               <Button
-                variant={ButtonVariant.Primary}
+                variant={ButtonVariant.Inverted}
                 appearance={ButtonAppearance.Link}
                 label="View details"
               />
@@ -649,7 +649,7 @@ export const WithInteractiveTooltipInSubMenu: Story = {
                     to check.
                   </p>
                   <Button
-                    variant={ButtonVariant.Primary}
+                    variant={ButtonVariant.Inverted}
                     appearance={ButtonAppearance.Link}
                     label="View details"
                   />

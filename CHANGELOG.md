@@ -11,8 +11,21 @@ Versions match the git tags on the `development` branch.
 
 ### Breaking Changes
 
+- **`InteractiveTooltip` — panel is inverted: `bg-layer-0` / `text-primary` → `bg-control-inverted` / `text-control-inverted`** — the panel was a light card while the plain `Tooltip` is an inverted bubble; the design draws both inverted, so they now match. Content that sets light-surface colors loses contrast on it: a `ButtonVariant.Primary` link button moves to the new `ButtonVariant.Inverted`, a text link to `Link` with `LinkVariant.Inverted`, and `text-primary` / `text-secondary` should be dropped so text inherits the panel color. `contentClassName="bg-layer-0 text-primary"` keeps the old look. This also applies to a `Dropdown` item's and a `Select` option's `interactiveTooltip`.
+  See [migration guide](migration-guides/0.17.0/interactive-tooltip-inverted-panel.md).
+
 - **`Select` (2.0) — single-select value moved out of the input** — the selected label (with `prefix`) and `customSelectedValue` are drawn in the field's content slot instead of as the `<input>`'s value. A focused native input scrolls a long value to its caret, so a narrow field showed the tail of the label once focused; the content slot clips at the end and keeps the full text in a tooltip. The input's `value` is now always empty for single selects, and the combobox's accessible name includes the selected text (`Operator, Option 1`), so an exact-name query for the field name no longer matches once a value is selected.
   See [migration guide](migration-guides/0.17.0/select-single-value-content-slot.md).
+
+### Added
+
+- **`Link` (2.0)** — the kit had no text link: the only link style was `Button` with `ButtonAppearance.Link`, which is button-shaped and blue. `Link` is an underlined `<a>` for running copy, per Figma "Links in text", with `variant` (`LinkVariant.Primary` — accent, semibold; `Neutral` — primary text, regular; `Inverted` — for inverted surfaces), `size` (`ElementSize.Standard` 14/24, `Small` 12/16) and `disabled`. A disabled link drops its `href`, leaves the tab order and is marked `aria-disabled`, keeping `role="link"`. No new public class: it is addressed through `dial-kit-base-link`. Additive.
+
+- **`ButtonVariant.Inverted`** — a link button for inverted surfaces such as the `InteractiveTooltip` panel, used with `ButtonAppearance.Link` (or `LinkButton`). It shares its colors, states and focus ring with the inverted `Link` and, like the primary link button, is not underlined. New theme tokens `--text-control-inverted-hover`, `--text-control-inverted-active`, `--text-control-inverted-disabled` and `--stroke-inverted-focus`. Additive.
+
+### Fixed
+
+- **`theme.scss` — two stale light-theme fallbacks** — `--text-control-accent-active` fell back to `#6785fb` and `--text-control-disable-secondary` to `#dce0e8`; the design and the themes config use `#6e8af7` and `#848e9c`. Only visible without a loaded theme: the pressed primary link button is a shade different, and `text-control-disable-secondary` had no users before `Link`.
 
 ## [0.16.0]
 

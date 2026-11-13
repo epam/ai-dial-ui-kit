@@ -154,7 +154,8 @@ describe('Dial UI Kit :: InteractiveTooltip', () => {
 
     expect(screen.getByText('Panel text')).toHaveClass(
       'custom-content',
-      'bg-layer-0',
+      'bg-control-inverted',
+      'text-control-inverted',
     );
   });
 
@@ -173,7 +174,7 @@ describe('Dial UI Kit :: InteractiveTooltip', () => {
 
     // `twMerge` resolves the conflicting `bg-*` utility rather than applying both.
     expect(panel).toHaveClass('bg-layer-raised');
-    expect(panel).not.toHaveClass('bg-layer-0');
+    expect(panel).not.toHaveClass('bg-control-inverted');
   });
 
   test('Should open on hover, and notify onOpenChange, when uncontrolled', async () => {

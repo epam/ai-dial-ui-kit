@@ -28,4 +28,5 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
   },
   [ButtonVariant.Static]: {},
   [ButtonVariant.Starter]: {},
+  [ButtonVariant.Inverted]: {},
 };

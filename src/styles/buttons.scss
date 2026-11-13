@@ -37,7 +37,8 @@
 .dial-kit-starter-outlined-button,
 .dial-kit-primary-ghost-button,
 .dial-kit-danger-ghost-button,
-.dial-kit-primary-link-button {
+.dial-kit-primary-link-button,
+.dial-kit-inverted-link-button {
   @apply flex flex-row items-center justify-center;
   @apply rounded-control border border-solid border-transparent;
   @apply disabled:cursor-not-allowed outline-offset-0;
@@ -60,7 +61,8 @@
 .dial-kit-starter-outlined-button[aria-disabled='true'],
 .dial-kit-primary-ghost-button[aria-disabled='true'],
 .dial-kit-danger-ghost-button[aria-disabled='true'],
-.dial-kit-primary-link-button[aria-disabled='true'] {
+.dial-kit-primary-link-button[aria-disabled='true'],
+.dial-kit-inverted-link-button[aria-disabled='true'] {
   @apply cursor-not-allowed;
 }
 
@@ -366,6 +368,15 @@
   &[aria-disabled='true'] {
     @apply text-control-disable-primary;
   }
+}
+
+/*
+ * A link button on an inverted surface. Its colors, states and focus-ring
+ * color are shared with the inverted `Link` in link.scss; like the primary
+ * link button it is not underlined.
+ */
+.dial-kit-inverted-link-button {
+  @apply bg-transparent no-underline;
 }
 
 .dial-kit-fab-button {

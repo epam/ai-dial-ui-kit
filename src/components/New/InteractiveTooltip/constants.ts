@@ -18,14 +18,13 @@ export const INTERACTIVE_TOOLTIP_HOVER_OPEN_DELAY = 400;
  * dropdown or select overlay, both `z-floating` — since it can be opened from
  * a row inside one of them.
  *
- * By style this is a neutral floating panel rather than the coloured
- * `Notification` banner: it shares the raised-card shape a dropdown or the
- * calendar use (`shadow-md`, `rounded-xl`), on the base `bg-layer-0` surface
- * rather than their raised one — the panel is opened over content, not
- * stacked inside another panel. `contentClassName` can still replace it with
- * any other background: `twMerge` resolves the conflicting `bg-*` utility.
+ * By style this is the inverted panel, matching the plain `Tooltip`
+ * (`bg-control-inverted`, `text-control-inverted`), with the raised-card shape
+ * a dropdown or the calendar use (`shadow-md`, `rounded-xl`).
+ * `contentClassName` can still replace it with any other background:
+ * `twMerge` resolves the conflicting `bg-*` utility.
  * Padding and width are the panel's own, sized for a block of copy and
  * controls rather than a menu row.
  */
 export const interactiveTooltipClassName =
-  'z-interactive-tooltip max-w-[320px] rounded-xl bg-layer-0 p-4 dial-small-text text-primary shadow-md';
+  'z-interactive-tooltip max-w-[320px] rounded-xl bg-control-inverted p-4 dial-small-text text-control-inverted shadow-md';

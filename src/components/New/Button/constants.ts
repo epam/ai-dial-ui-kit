@@ -23,6 +23,9 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
   [ButtonVariant.Starter]: {
     [ButtonAppearance.Outlined]: 'dial-kit-starter-outlined-button',
   },
+  [ButtonVariant.Inverted]: {
+    [ButtonAppearance.Link]: 'dial-kit-inverted-link-button',
+  },
 
   // TODO: remove these once we have a design for the icon button variants
   [ButtonVariant.Success]: {},
