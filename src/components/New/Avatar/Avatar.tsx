@@ -112,6 +112,9 @@ export const Avatar: FC<AvatarProps> = ({
         alt={alt}
         width={size}
         height={size}
+        /* Decode off the main thread: an avatar never needs to paint in the
+           same frame as the surrounding layout, and lists render many. */
+        decoding="async"
         className={mergeClasses(rootClassName(imageClassName), 'object-cover')}
         onError={(event) => {
           setFailedSrc(src);

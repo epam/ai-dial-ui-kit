@@ -110,6 +110,7 @@ describe('Dial UI Kit :: Avatar', () => {
     const image = screen.getByRole('img', { name: 'Ada Lovelace' });
     expect(image.tagName).toBe('IMG');
     expect(image).toHaveAttribute('src', '/ada.png');
+    expect(image).toHaveAttribute('decoding', 'async');
     expect(screen.queryByText('AL')).toBeNull();
   });
 
