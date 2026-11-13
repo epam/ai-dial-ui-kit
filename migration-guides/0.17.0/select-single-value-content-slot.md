@@ -16,13 +16,13 @@ display string now does.
 
 ## What changed
 
-| Before                                                                        | After                                                                                        |
-| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Selected label (with `prefix`) is the input's `value`                         | Selected label (with `prefix`) is rendered in the content slot; the input's `value` is `''`  |
-| `customSelectedValue` is the input's `value`                                  | `customSelectedValue` is rendered in the content slot; the input's `value` is `''`           |
-| Combobox accessible name is the field name, e.g. `Operator`                   | Combobox accessible name includes the selected text, e.g. `Operator, Option 1`               |
-| Plain labels never show a tooltip                                             | A truncated plain label shows its full text in a tooltip                                     |
-| `expect(field).toHaveValue('Option 1')`                                       | `expect(field).toHaveValue('')` and `toHaveAccessibleName('Operator, Option 1')`             |
+| Before                                                      | After                                                                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Selected label (with `prefix`) is the input's `value`       | Selected label (with `prefix`) is rendered in the content slot; the input's `value` is `''` |
+| `customSelectedValue` is the input's `value`                | `customSelectedValue` is rendered in the content slot; the input's `value` is `''`          |
+| Combobox accessible name is the field name, e.g. `Operator` | Combobox accessible name includes the selected text, e.g. `Operator, Option 1`              |
+| Plain labels never show a tooltip                           | A truncated plain label shows its full text in a tooltip                                    |
+| `expect(field).toHaveValue('Option 1')`                     | `expect(field).toHaveValue('')` and `toHaveAccessibleName('Operator, Option 1')`            |
 
 Props are unchanged. The placeholder still shows when nothing is selected, and
 multi-select tags, `labelNode`, option descriptions and the overlay search field
