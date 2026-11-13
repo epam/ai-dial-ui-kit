@@ -8,7 +8,11 @@ import { type CSSProperties, type FC, type HTMLProps, useRef } from 'react';
 
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { useHasHover } from '@/hooks/use-has-hover';
-import { arrowClassName, tooltipClassName } from './constants';
+import {
+  arrowClassName,
+  tooltipClassName,
+  tooltipScrollClassName,
+} from './constants';
 import { useTooltipContext } from './TooltipContext';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
 
@@ -62,7 +66,7 @@ export const TooltipContent: FC<TooltipContentProps> = ({
           DIAL_KIT_CLASS.tooltip,
         )}
       >
-        {props.children}
+        <div className={tooltipScrollClassName}>{props.children}</div>
         <FloatingArrow
           ref={context.arrowRef}
           context={context.context}

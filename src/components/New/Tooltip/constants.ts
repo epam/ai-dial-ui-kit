@@ -45,3 +45,24 @@ export const arrowClassName = 'fill-control-inverted';
  */
 export const tooltipClassName =
   'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';
+
+/**
+ * Wraps the tooltip content so a long description scrolls inside the bubble
+ * instead of running off screen. The design caps the bubble at
+ * `max(50vh, 240px)` — the 240px floor keeps it from collapsing to a few lines
+ * on short screens — so the cap here is that value less the bubble's own
+ * vertical padding (`py-2`, 1rem).
+ *
+ * The scroll lives on this inner element rather than on the bubble: the arrow
+ * sits outside the bubble's box, and `overflow` on the bubble would clip it.
+ *
+ * The scrollbar follows the design tokens: the thumb is Controls/Background/
+ * Neutral-active (`bg-control-neutral-active`) on a track of Controls/
+ * Background/Inverted (`bg-control-inverted`, the bubble's own surface). The
+ * neutral thumb contrasts with the inverted bubble in a light page and a dark
+ * one alike. It is always shown (not only on hover as the global scrollbar is)
+ * because the bubble closes when the pointer leaves the trigger. Firefox takes
+ * `scrollbar-color`, WebKit the pseudo-elements.
+ */
+export const tooltipScrollClassName =
+  'max-h-[calc(max(50vh,240px)-1rem)] overflow-y-auto [scrollbar-color:theme(--background-color-control-neutral-active)_theme(--background-color-control-inverted)] [&::-webkit-scrollbar-thumb]:bg-control-neutral-active [&::-webkit-scrollbar-track]:bg-control-inverted';
