@@ -41,7 +41,12 @@ const renderFlat = (props: Partial<SchemaRendererProps> = {}) =>
   );
 
 const chooseOption = (comboboxName: string, optionName: string) => {
-  fireEvent.click(screen.getByRole('combobox', { name: comboboxName }));
+  // A selected label is part of the combobox name ("Mode, fast"), so match the
+  // field's own name whether or not a value is already chosen.
+  const name = new RegExp(
+    `^${comboboxName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:,|$)`,
+  );
+  fireEvent.click(screen.getByRole('combobox', { name }));
   fireEvent.click(screen.getByRole('option', { name: optionName }));
 };
 
@@ -84,8 +89,8 @@ describe('Dial UI Kit :: SchemaRenderer (2.0)', () => {
         screen.getByRole('spinbutton', { name: 'Ratio' }),
       ).toBeInTheDocument();
       expect(screen.getByRole('switch', { name: 'Enabled' })).toBeChecked();
-      expect(screen.getByRole('combobox', { name: 'Mode' })).toHaveValue(
-        'fast',
+      expect(screen.getByRole('combobox', { name: 'Mode, fast' })).toHaveValue(
+        '',
       );
       expect(screen.getByLabelText('Token')).toHaveAttribute(
         'type',
@@ -622,8 +627,8 @@ describe('Dial UI Kit :: SchemaRenderer (2.0)', () => {
         />,
       );
 
-      expect(screen.getByRole('combobox', { name: 'Auth' })).toHaveValue(
-        'Basic',
+      expect(screen.getByRole('combobox', { name: 'Auth, Basic' })).toHaveValue(
+        '',
       );
       expect(screen.getByRole('textbox', { name: /^User/ })).toHaveValue(
         'root',
@@ -689,8 +694,8 @@ describe('Dial UI Kit :: SchemaRenderer (2.0)', () => {
     test('shows no editor while the null variant is selected', () => {
       render(<SchemaRenderer schema={nullableSchema} />);
 
-      expect(screen.getByRole('combobox', { name: 'Alias' })).toHaveValue(
-        'null',
+      expect(screen.getByRole('combobox', { name: 'Alias, null' })).toHaveValue(
+        '',
       );
       expect(
         screen.queryByRole('textbox', { name: 'Alias' }),
