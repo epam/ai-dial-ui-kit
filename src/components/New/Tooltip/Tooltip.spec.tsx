@@ -239,23 +239,11 @@ describe('Dial UI Kit :: Tooltip', () => {
       'overflow-y-auto',
     );
     expect(screen.getByRole('tooltip')).not.toHaveClass('overflow-y-auto');
-  });
-
-  test('Should style links inside the bubble with the inverted link style', () => {
-    render(
-      <Tooltip
-        tooltip={<a href="https://example.com">Read more</a>}
-        initialOpen
-      >
-        <button>Trigger</button>
-      </Tooltip>,
+    // Scrollbar tokens: Neutral-active thumb on an Inverted track.
+    expect(scroller).toHaveClass(
+      '[&::-webkit-scrollbar-thumb]:bg-control-neutral-active',
+      '[&::-webkit-scrollbar-track]:bg-control-inverted',
     );
-
-    expect(screen.getByRole('tooltip')).toHaveClass(
-      '[&_a]:text-control-inverted',
-      '[&_a]:underline',
-    );
-    expect(screen.getByRole('link', { name: 'Read more' })).toBeInTheDocument();
   });
 
   test('Should lift the bubble off the surface underneath', () => {

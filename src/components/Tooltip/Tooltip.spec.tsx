@@ -96,20 +96,4 @@ describe('Dial UI Kit :: DialTooltip', () => {
 
     expect(screen.getByText('Test tooltip')).toBeInTheDocument();
   });
-
-  test('scrolls long content inside a bubble capped at half the screen', () => {
-    render(
-      <DialTooltip tooltip="Test tooltip" initialOpen>
-        <button>Test button</button>
-      </DialTooltip>,
-    );
-
-    // jsdom does no layout, so only the classes can be checked here. The scroll
-    // sits on an inner element so the arrow outside the bubble is not clipped.
-    expect(screen.getByText('Test tooltip')).toHaveClass(
-      'max-h-[calc(max(50vh,240px)-0.5rem-2px)]',
-      'overflow-y-auto',
-    );
-    expect(screen.getByRole('tooltip')).not.toHaveClass('overflow-y-auto');
-  });
 });

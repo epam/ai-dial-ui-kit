@@ -42,13 +42,9 @@ export const arrowClassName = 'fill-control-inverted';
  * takes no shadow of its own: both `xs` layers blur 4px or less, so there is
  * nothing to see around a 7px triangle that the box's own shadow does not
  * already carry.
- *
- * Links inside the bubble take the inverted link style: the bubble's own
- * inverted text colour, underlined, so they stay readable on the inverted
- * surface in both themes.
  */
 export const tooltipClassName =
-  'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs [&_a]:text-control-inverted [&_a]:underline [&_a:hover]:no-underline';
+  'z-tooltip max-w-[376px] whitespace-pre-wrap break-words rounded-lg bg-control-inverted px-3 py-2 dial-small-text text-control-inverted shadow-xs';
 
 /**
  * Wraps the tooltip content so a long description scrolls inside the bubble
@@ -60,11 +56,13 @@ export const tooltipClassName =
  * The scroll lives on this inner element rather than on the bubble: the arrow
  * sits outside the bubble's box, and `overflow` on the bubble would clip it.
  *
- * The scrollbar uses the bubble's inverted text colour — the opposite-mode
- * colour to the surface — so it is visible on the inverted bubble in a light
- * page and a dark one alike. It is always shown (not only on hover as the
- * global scrollbar is) because the bubble is not scrollable by pointer hover
- * alone: it closes when the pointer leaves the trigger.
+ * The scrollbar follows the design tokens: the thumb is Controls/Background/
+ * Neutral-active (`bg-control-neutral-active`) on a track of Controls/
+ * Background/Inverted (`bg-control-inverted`, the bubble's own surface). The
+ * neutral thumb contrasts with the inverted bubble in a light page and a dark
+ * one alike. It is always shown (not only on hover as the global scrollbar is)
+ * because the bubble closes when the pointer leaves the trigger. Firefox takes
+ * `scrollbar-color`, WebKit the pseudo-elements.
  */
 export const tooltipScrollClassName =
-  'max-h-[calc(max(50vh,240px)-1rem)] overflow-y-auto [scrollbar-color:color-mix(in_srgb,var(--text-color-control-inverted)_50%,transparent)_transparent] [&::-webkit-scrollbar-thumb]:bg-[color-mix(in_srgb,var(--text-color-control-inverted)_50%,transparent)]';
+  'max-h-[calc(max(50vh,240px)-1rem)] overflow-y-auto [scrollbar-color:theme(--background-color-control-neutral-active)_theme(--background-color-control-inverted)] [&::-webkit-scrollbar-thumb]:bg-control-neutral-active [&::-webkit-scrollbar-track]:bg-control-inverted';

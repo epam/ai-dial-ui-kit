@@ -143,29 +143,6 @@ export const VeryLongContent: Story = {
   },
 };
 
-export const WithLink: Story = {
-  args: {
-    initialOpen: true,
-    tooltip: (
-      <>
-        Some details.{' '}
-        <a href="https://example.com" target="_blank" rel="noreferrer">
-          Learn more
-        </a>
-      </>
-    ),
-    children: <Button label="Trigger" />,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Links inside a tooltip use the inverted link style: the tooltip text colour, underlined.',
-      },
-    },
-  },
-};
-
 export const OnAWrappedTrigger: Story = {
   args: {
     asChild: false,

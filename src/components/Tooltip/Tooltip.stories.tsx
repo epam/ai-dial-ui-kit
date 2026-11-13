@@ -129,25 +129,6 @@ export const LongContent: Story = {
   },
 };
 
-export const VeryLongContent: Story = {
-  args: {
-    children: <DialButton label="Very long tooltip" />,
-    initialOpen: true,
-    tooltip: Array.from(
-      { length: 40 },
-      (_, i) => `Citation_Test_Reference (${i + 1}).pdf`,
-    ).join('\n'),
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The bubble is never taller than `max(50vh, 240px)`. Content that is taller scrolls inside it.',
-      },
-    },
-  },
-};
-
 export const InitiallyOpen: Story = {
   args: {
     children: <DialButton label="Initially open" />,
