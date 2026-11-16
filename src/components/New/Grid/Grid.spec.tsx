@@ -621,6 +621,45 @@ describe('Dial UI Kit :: Grid', () => {
         screen.getByRole('checkbox', { name: 'Select Charlie' }),
       ).not.toBeChecked();
     });
+
+    test('controlled: re-checks a selected row that leaves rowData and comes back', async () => {
+      const selectedRowIds = new Set(['1']);
+      const renderGrid = (rows: TestRow[]) => (
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={rows}
+          selectionMode={GridSelectionMode.MULTIPLE}
+          selectRowLabel={(row) => `Select ${row.name}`}
+          selectedRowIds={selectedRowIds}
+        />
+      );
+      const alice = testRows.filter((row) => row.id === '1');
+      const bob = testRows.filter((row) => row.id === '2');
+
+      const { rerender } = render(renderGrid(alice));
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole('checkbox', { name: 'Select Alice' }),
+        ).toBeChecked(),
+      );
+
+      rerender(renderGrid(bob));
+      await waitFor(() =>
+        expect(
+          screen.getByRole('checkbox', { name: 'Select Bob' }),
+        ).not.toBeChecked(),
+      );
+      // Let the debounced selection change for the removed row settle.
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      rerender(renderGrid(alice));
+      await waitFor(() =>
+        expect(
+          screen.getByRole('checkbox', { name: 'Select Alice' }),
+        ).toBeChecked(),
+      );
+    });
   });
 
   describe('color scheme', () => {

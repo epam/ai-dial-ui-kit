@@ -651,16 +651,24 @@ export const Grid = <T extends object>({
     selectionMode,
   ]);
 
+  /*
+    New row data builds new row nodes, which start unselected. A controlled
+    grid re-applies `selectedRowIds`: the grid's own record has already
+    dropped any selected row that left the data, so a row that comes back
+    would otherwise render unchecked while the consumer still holds it.
+  */
   useEffect(() => {
-    if (gridApi && rowData && selectedNodesRef.current.size) {
-      selectedNodesRef.current.forEach((id) => {
+    const idsToRestore = selectedRowIds ?? selectedNodesRef.current;
+
+    if (gridApi && rowData && idsToRestore.size) {
+      idsToRestore.forEach((id) => {
         const node = gridApi.getRowNode(id);
         if (node && !node.isSelected()) {
           node.setSelected(true, false, SelectionEventSourceType.API);
         }
       });
     }
-  }, [gridApi, rowData]);
+  }, [gridApi, rowData, selectedRowIds]);
 
   useEffect(() => {
     if (gridApi && selectedRowIds) {
