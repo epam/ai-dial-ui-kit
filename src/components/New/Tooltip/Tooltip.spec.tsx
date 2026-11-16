@@ -223,6 +223,29 @@ describe('Dial UI Kit :: Tooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveClass('max-w-[376px]');
   });
 
+  test('Should scroll long content inside a bubble capped at half the screen', () => {
+    render(
+      <Tooltip tooltip="Very long text" initialOpen>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+
+    // jsdom does no layout, so only the classes can be checked here — the
+    // compiled rule is verified in dist/index.css. The scroll sits on an inner
+    // element so the arrow, outside the bubble's box, is not clipped.
+    const scroller = screen.getByText('Very long text');
+    expect(scroller).toHaveClass(
+      'max-h-[calc(max(50vh,240px)-1rem)]',
+      'overflow-y-auto',
+    );
+    expect(screen.getByRole('tooltip')).not.toHaveClass('overflow-y-auto');
+    // Scrollbar tokens: Neutral-active thumb on an Inverted track.
+    expect(scroller).toHaveClass(
+      '[&::-webkit-scrollbar-thumb]:bg-control-neutral-active',
+      '[&::-webkit-scrollbar-track]:bg-control-inverted',
+    );
+  });
+
   test('Should lift the bubble off the surface underneath', () => {
     render(
       <Tooltip tooltip="Tooltip text" initialOpen>
