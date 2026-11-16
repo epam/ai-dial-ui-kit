@@ -124,6 +124,25 @@ export const LongContent: Story = {
   },
 };
 
+export const VeryLongContent: Story = {
+  args: {
+    initialOpen: true,
+    tooltip: Array.from(
+      { length: 40 },
+      (_, i) => `Citation_Test_Reference (${i + 1}).pdf`,
+    ).join('\n'),
+    children: <Button label="Trigger" />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The bubble is never taller than `max(50vh, 240px)`. Content that is taller scrolls inside it, with a scrollbar in the inverted tooltip colours.',
+      },
+    },
+  },
+};
+
 export const OnAWrappedTrigger: Story = {
   args: {
     asChild: false,
