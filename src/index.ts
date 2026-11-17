@@ -101,7 +101,9 @@ export {
 // Hooks
 export {
   EDITABLE_CONTAINER_ATTRIBUTE,
+  EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE,
   editableContainerProps,
+  editableIgnoreOutsideProps,
   useEditableItem,
 } from './hooks/use-editable-item';
 export type { UseEditableItemOptions } from './hooks/use-editable-item';

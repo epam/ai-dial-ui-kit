@@ -239,4 +239,99 @@ describe('Dial UI Kit :: SideDrawer', () => {
       ),
     ).toBe('blue');
   });
+
+  describe('footer', () => {
+    test('renders mainButtons and additionalButtons below the body, outside the scroll area', () => {
+      render(
+        <SideDrawer
+          open
+          header="Publish"
+          onClose={vi.fn()}
+          additionalButtons={[{ label: 'Back' }]}
+          mainButtons={[{ label: 'Cancel' }, { label: 'Publish' }]}
+        >
+          Body
+        </SideDrawer>,
+      );
+
+      const body = screen.getByText('Body');
+      const buttons = screen.getAllByRole('button', {
+        name: /^(Back|Cancel|Publish)$/,
+      });
+      expect(buttons.map((button) => button.textContent)).toEqual([
+        'Back',
+        'Cancel',
+        'Publish',
+      ]);
+      buttons.forEach((button) => expect(body).not.toContainElement(button));
+    });
+
+    test('calls a footer button handler', async () => {
+      const onClick = vi.fn();
+      render(
+        <SideDrawer
+          open
+          header="Publish"
+          onClose={vi.fn()}
+          mainButtons={[{ label: 'Publish', onClick }]}
+        />,
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: 'Publish' }));
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    test('draws a rule above the footer only with footerDivider', () => {
+      const { rerender } = render(
+        <SideDrawer
+          open
+          header="Publish"
+          onClose={vi.fn()}
+          mainButtons={[{ label: 'Publish' }]}
+        />,
+      );
+      const footer = () =>
+        screen.getByRole('button', { name: 'Publish' }).parentElement
+          ?.parentElement;
+      expect(footer()).not.toHaveClass('border-t');
+
+      rerender(
+        <SideDrawer
+          open
+          header="Publish"
+          onClose={vi.fn()}
+          footerDivider
+          mainButtons={[{ label: 'Publish' }]}
+        />,
+      );
+      expect(footer()).toHaveClass('border-t');
+    });
+
+    test('lets a footer node replace the structured buttons', () => {
+      render(
+        <SideDrawer
+          open
+          header="Publish"
+          onClose={vi.fn()}
+          footer={<div>Custom footer</div>}
+          mainButtons={[{ label: 'Ignored' }]}
+        />,
+      );
+
+      expect(screen.getByText('Custom footer')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Ignored' })).toBeNull();
+    });
+
+    test('renders no footer without buttons', () => {
+      render(
+        <SideDrawer open header="Publish" onClose={vi.fn()}>
+          Body
+        </SideDrawer>,
+      );
+
+      expect(
+        screen.queryByRole('button', { name: /Publish|Cancel/ }),
+      ).toBeNull();
+    });
+  });
 });
