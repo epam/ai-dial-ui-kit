@@ -29,7 +29,11 @@ Versions match the git tags on the `development` branch.
 
 - **`ButtonVariant.Inverted`** — a link button for inverted surfaces such as the `InteractiveTooltip` panel, used with `ButtonAppearance.Link` (or `LinkButton`). It shares its colors, states and focus ring with the inverted `Link` and, like the primary link button, is not underlined. New theme tokens `--text-control-inverted-hover`, `--text-control-inverted-active`, `--text-control-inverted-disabled` and `--stroke-inverted-focus`. Additive.
 
+- **`SchemaRenderer` (2.0) — `reorderableArrays`** — array items could only be added at the end and removed, so changing their order meant deleting and retyping items, although for many arrays (cards, links, tabs in display order) the order is the value. With `reorderableArrays`, each item gets "Move up" and "Move down" buttons next to remove; the first item cannot move up and the last cannot move down, and nothing is shown when `readonly` or for one item. Focus stays on the moved item and the new position is announced through a visually hidden `LiveRegion`. New `texts` keys `moveItemUpAriaLabel`, `moveItemDownAriaLabel` and `itemMovedAnnouncement` (with `{position}` and `{total}` placeholders). Off by default. Additive. Requested in [#1030](https://github.com/epam/ai-dial-ui-kit/issues/1030).
+
 ### Fixed
+
+- **`SchemaRenderer` (2.0) — array items keep their state on removal** — items were keyed by their index, so removing an item moved its expanded or collapsed state onto the next one. Items now have stable keys.
 
 - **`theme.scss` — two stale light-theme fallbacks** — `--text-control-accent-active` fell back to `#6785fb` and `--text-control-disable-secondary` to `#dce0e8`; the design and the themes config use `#6e8af7` and `#848e9c`. Only visible without a loaded theme: the pressed primary link button is a shade different, and `text-control-disable-secondary` had no users before `Link`.
 

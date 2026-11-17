@@ -50,6 +50,7 @@ const flatHeadingClassName = 'dial-small-semi-text text-primary';
  * @param [inputClassName] - Additional classes for the container of every text, number and select field
  * @param [variant=SchemaRendererVariant.Sections] - `Sections` wraps every top-level property in a collapsible card; `Flat` renders primitives as labelled fields; `FlatSections` puts every property under a plain heading
  * @param [skipUntouched=false] - When true, required-field errors appear only after the user has interacted with a field
+ * @param [reorderableArrays=false] - When true, array items get "Move up" and "Move down" buttons; not shown when readonly
  * @param [acceptableResourceTypes] - Live options for properties flagged with `dial:resource: true`, keyed by resource type
  * @param [renderField] - Override the rendered control for any field by path; return `defaultElement` to fall back to built-in rendering
  * @param [onChange] - Called with the full form value on every change
@@ -70,6 +71,7 @@ export const SchemaRenderer: FC<SchemaRendererProps> = ({
   onDefaultValues,
   renderField,
   skipUntouched = false,
+  reorderableArrays = false,
   acceptableResourceTypes,
 }) => {
   const mergedTexts = useMemo(
@@ -132,6 +134,7 @@ export const SchemaRenderer: FC<SchemaRendererProps> = ({
         touchedPaths,
         markTouched,
         skipUntouched,
+        reorderableArrays,
       }}
     >
       <div

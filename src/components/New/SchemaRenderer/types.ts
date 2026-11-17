@@ -35,6 +35,12 @@ export interface SchemaRendererProps {
    */
   skipUntouched?: boolean;
   /**
+   * When `true`, every array item gets "Move up" and "Move down" buttons next to
+   * its remove button, so the order of items can be changed. Off by default.
+   * Hidden in a `readonly` form and for an array with one item.
+   */
+  reorderableArrays?: boolean;
+  /**
    * Live resource options for schema properties flagged with `dial:resource: true`.
    * Keyed by the resource type name referenced in a property's `acceptableResourceTypes`
    * array; each value provides the selectable entries for that resource type (a string
@@ -92,4 +98,5 @@ export interface SchemaRendererContextValue {
   touchedPaths?: ReadonlySet<string>;
   markTouched?: (path: string) => void;
   skipUntouched?: boolean;
+  reorderableArrays?: boolean;
 }

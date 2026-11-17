@@ -215,6 +215,24 @@ const resourceSchema: JsonSchema = {
   required: ['external_service'],
 };
 
+const quickLinksSchema: JsonSchema = {
+  properties: {
+    applications: {
+      title: 'Applications',
+      description: 'Cards on the home page, in this order.',
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          title: { title: 'Title', type: 'string' },
+          href: { title: 'Link', type: 'string' },
+        },
+        required: ['title', 'href'],
+      },
+    },
+  },
+};
+
 const LiveSchemaRenderer = (args: SchemaRendererProps) => {
   const [value, setValue] = useState<Record<string, unknown>>({});
 
@@ -264,6 +282,10 @@ const meta = {
       control: 'boolean',
       description: 'Show required errors only after interaction',
     },
+    reorderableArrays: {
+      control: 'boolean',
+      description: 'Show move up and move down buttons on array items',
+    },
     defaultValue: { control: 'object', description: 'Initial form value' },
     texts: { control: 'object', description: 'Overrides for visible strings' },
   },
@@ -273,6 +295,7 @@ const meta = {
     readonly: false,
     defaultExpanded: true,
     skipUntouched: false,
+    reorderableArrays: false,
   },
 } satisfies Meta<typeof SchemaRenderer>;
 
@@ -302,6 +325,28 @@ export const ArrayOfVariants: Story = {
     schema: toolsSchema,
     defaultValue: {
       tools: [{ type: 'rest-api', name: 'Weather', url: '' }],
+    },
+  },
+};
+
+export const ReorderableArrays: Story = {
+  args: {
+    schema: quickLinksSchema,
+    reorderableArrays: true,
+    defaultValue: {
+      applications: [
+        { title: 'Chat', href: 'https://chat.example.com' },
+        { title: 'Models', href: 'https://models.example.com' },
+        { title: 'Admin', href: 'https://admin.example.com' },
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'With `reorderableArrays`, each array item gets "Move up" and "Move down" buttons next to remove. The first item cannot move up and the last cannot move down. Focus stays on the moved item, and the new position is announced to screen readers. Collapse an item and move it: its state moves with it.',
+      },
     },
   },
 };
