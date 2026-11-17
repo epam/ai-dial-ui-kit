@@ -12,6 +12,17 @@ export const editableContainerProps = {
   [EDITABLE_CONTAINER_ATTRIBUTE]: '',
 } as const;
 
+/**
+ * Marks an element outside the field whose press must not commit the edit, for
+ * example a Cancel button that is about to cancel it. A press on the element
+ * (or a descendant), and the focus moving to it, leave the edit open for the
+ * host to resolve.
+ */
+export const EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE = 'data-editable-ignore-outside';
+export const editableIgnoreOutsideProps = {
+  [EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE]: '',
+} as const;
+
 export interface UseEditableItemOptions {
   value: string;
   isEditing: boolean;
@@ -250,14 +261,37 @@ export function useEditableItem({
       return container.contains(node);
     };
 
+    const isIgnoredElement = (node: Node | null): boolean =>
+      node instanceof Element &&
+      node.closest(`[${EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE}]`) != null;
+
+    /*
+     * A press on an ignored element can move focus away from the input without
+     * a related target (some browsers do not focus a pressed button), so the
+     * press is remembered and the blur it causes is skipped once.
+     */
+    let ignoredPressPending = false;
+
     const handlePointerDown = (e: PointerEvent) => {
-      if (!isInsideField(e.target as Node | null)) {
+      const target = e.target as Node | null;
+      if (isIgnoredElement(target)) {
+        ignoredPressPending = true;
+        return;
+      }
+      ignoredPressPending = false;
+      if (!isInsideField(target)) {
         saveOnBlur();
       }
     };
 
     const handleBlur = (e: FocusEvent) => {
-      if (!isInsideField(e.relatedTarget as Node | null)) {
+      const next = e.relatedTarget as Node | null;
+      if (isIgnoredElement(next)) return;
+      if (next == null && ignoredPressPending) {
+        ignoredPressPending = false;
+        return;
+      }
+      if (!isInsideField(next)) {
         saveOnBlur();
       }
     };

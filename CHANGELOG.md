@@ -7,6 +7,16 @@ Versions match the git tags on the `development` branch.
 
 ---
 
+## [0.16.5]
+
+### Added
+
+- **`SideDrawer` — footer** — a drawer had no footer, so each consumer rebuilt a bordered, padded action row by hand. `SideDrawer` now takes the `Popup` footer API: `mainButtons`, `additionalButtons`, `additionalButtonsOnLeft`, `footerDivider`, `footer` (a node that overrides the buttons) and `footerClassName`. The footer is pinned below the scrolling body and splits the row on mobile. `Popup` and `SideDrawer` share one internal `PopupFooter`.
+
+- **`ButtonVariant.Tertiary` + `ButtonAppearance.Ghost` (2.0 `Button`)** — the 2.0 `Button` declared `Tertiary` but mapped it to no styles, so it fell back to primary solid with a console warning. It now renders `dial-kit-tertiary-ghost-button`: accent text, accent-alpha hover and active fills, per Figma "Buttons" (Type=Ghost).
+
+- **`useEditableItem` — `EDITABLE_IGNORE_OUTSIDE_ATTRIBUTE` / `editableIgnoreOutsideProps`** — the hook commits on any press outside the field, including one on a Cancel button that is about to cancel the edit, so hosts had to intercept the press themselves. An element marked with the attribute (or a descendant) no longer counts as outside: pressing it, or focus moving to it, leaves the edit open for the host to resolve.
+
 ## [0.16.0]
 
 ### Breaking Changes

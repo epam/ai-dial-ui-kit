@@ -10,9 +10,11 @@ import {
 import { IconChevronLeft } from '@tabler/icons-react';
 import { useId, type CSSProperties, type FC, type ReactNode } from 'react';
 
+import type { ButtonProps } from '@/components/New/Button/Button';
 import { CloseButton } from '@/components/New/CloseButton/CloseButton';
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
 import { GhostIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import { PopupFooter } from '@/components/New/Popup/PopupFooter';
 import { useThemeScope } from '@/components/New/ThemeScope/ThemeScope';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
@@ -47,6 +49,18 @@ export interface SideDrawerProps {
   closeOnOutsideClick?: boolean;
   /** Content of the drawer, scrolled when it is taller than the viewport. */
   children?: ReactNode;
+  /** Custom footer node, pinned below the scrolling body; overrides `mainButtons` and `additionalButtons`. */
+  footer?: ReactNode;
+  /** Additional CSS classes for the footer row. */
+  footerClassName?: string;
+  /** Primary footer buttons, aligned to the trailing edge; each defaults to `ButtonVariant.Neutral`. */
+  mainButtons?: ButtonProps[];
+  /** Secondary footer buttons, next to `mainButtons` unless moved left. */
+  additionalButtons?: ButtonProps[];
+  /** Whether `additionalButtons` sit on the leading edge. */
+  additionalButtonsOnLeft?: boolean;
+  /** Whether a rule is drawn above the footer. */
+  footerDivider?: boolean;
   /** Additional CSS classes for the drawer panel, e.g. a different desktop width. */
   className?: string;
   /** Additional CSS classes for the backdrop. */
@@ -89,6 +103,11 @@ export interface SideDrawerProps {
  * `headerActions`, and the close button. A string `header` renders an `<h2>`
  * that names the dialog; for a node, pass `ariaLabel`.
  *
+ * The footer follows `Popup` too and stays pinned below the scrolling body:
+ * declare it as data with `mainButtons` / `additionalButtons` (spacing, order,
+ * the neutral default and the split-row layout below the `mobile` breakpoint
+ * come with it), or pass a `footer` node.
+ *
  * @example
  * ```tsx
  * <SideDrawer open={isOpen} header="Publish" onClose={() => setIsOpen(false)}>
@@ -109,6 +128,12 @@ export interface SideDrawerProps {
  * @param [hideClose=false] - Whether the close button is left out
  * @param [closeOnOutsideClick=true] - Whether a press on the backdrop closes the drawer
  * @param [children] - Content of the drawer
+ * @param [footer] - Custom footer node; overrides `mainButtons` and `additionalButtons`
+ * @param [footerClassName] - Additional CSS classes for the footer row
+ * @param [mainButtons] - Primary footer buttons, aligned to the trailing edge
+ * @param [additionalButtons] - Secondary footer buttons, next to `mainButtons` unless moved left
+ * @param [additionalButtonsOnLeft=false] - Whether `additionalButtons` sit on the leading edge
+ * @param [footerDivider=false] - Whether a rule is drawn above the footer
  * @param [className] - Additional CSS classes for the drawer panel
  * @param [overlayClassName] - Additional CSS classes for the backdrop
  * @param [headerClassName] - Additional CSS classes for the header row
@@ -132,6 +157,12 @@ export const SideDrawer: FC<SideDrawerProps> = ({
   hideClose = false,
   closeOnOutsideClick = true,
   children,
+  footer,
+  footerClassName,
+  mainButtons,
+  additionalButtons,
+  additionalButtonsOnLeft = false,
+  footerDivider = false,
   className,
   overlayClassName,
   headerClassName,
@@ -248,6 +279,18 @@ export const SideDrawer: FC<SideDrawerProps> = ({
             >
               {children}
             </div>
+            {/* A `footer` node stays authoritative over the structured props, as in `Popup`. */}
+            {footer !== undefined ? (
+              footer
+            ) : (
+              <PopupFooter
+                mainButtons={mainButtons}
+                additionalButtons={additionalButtons}
+                additionalButtonsOnLeft={additionalButtonsOnLeft}
+                footerDivider={footerDivider}
+                className={mergeClasses('shrink-0', footerClassName)}
+              />
+            )}
           </div>
         </FloatingFocusManager>
       </FloatingOverlay>

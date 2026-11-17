@@ -459,6 +459,11 @@ describe('Dial UI Kit :: DialButton', () => {
       ButtonAppearance.Outlined,
       'dial-kit-neutral-outlined-button',
     ],
+    [
+      ButtonVariant.Tertiary,
+      ButtonAppearance.Ghost,
+      'dial-kit-tertiary-ghost-button',
+    ],
   ])(
     'applies mapped class for variant %s',
     (variant, appearance, expectedClass) => {

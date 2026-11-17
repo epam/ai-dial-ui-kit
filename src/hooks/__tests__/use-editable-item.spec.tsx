@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import type { FC } from 'react';
 import {
+  editableIgnoreOutsideProps,
   useEditableItem,
   type UseEditableItemOptions,
 } from '../use-editable-item';
@@ -232,5 +233,71 @@ describe('Dial UI Kit :: useEditableItem :: outside click (blur)', () => {
     });
 
     expect(onSave).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Dial UI Kit :: useEditableItem :: ignored outside elements', () => {
+  const renderWithCancel = (onSave: () => void, onCancel: () => void) =>
+    render(
+      <>
+        <Harness value="folder" isEditing onSave={onSave} onCancel={onCancel} />
+        <button data-testid="cancel" {...editableIgnoreOutsideProps}>
+          <span data-testid="cancel-label">Cancel</span>
+        </button>
+      </>,
+    );
+
+  it('does not commit on a pointer press on an ignored element or its descendant', () => {
+    const onSave = vi.fn();
+    renderWithCancel(onSave, vi.fn());
+
+    act(() => {
+      fireEvent.pointerDown(screen.getByTestId('cancel'));
+      fireEvent.pointerDown(screen.getByTestId('cancel-label'));
+    });
+
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it('does not commit when focus moves to an ignored element', () => {
+    const onSave = vi.fn();
+    renderWithCancel(onSave, vi.fn());
+
+    act(() => {
+      fireEvent.blur(screen.getByTestId('input'), {
+        relatedTarget: screen.getByTestId('cancel'),
+      });
+    });
+
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it('skips the one blur without a related target that follows an ignored press', () => {
+    const onSave = vi.fn();
+    renderWithCancel(onSave, vi.fn());
+    const input = screen.getByTestId('input');
+
+    act(() => {
+      fireEvent.pointerDown(screen.getByTestId('cancel'));
+      fireEvent.blur(input);
+    });
+    expect(onSave).not.toHaveBeenCalled();
+
+    act(() => {
+      fireEvent.blur(input);
+    });
+    expect(onSave).toHaveBeenCalledWith('folder');
+  });
+
+  it('still commits on a press elsewhere after an ignored press', () => {
+    const onSave = vi.fn();
+    renderWithCancel(onSave, vi.fn());
+
+    act(() => {
+      fireEvent.pointerDown(screen.getByTestId('cancel'));
+      fireEvent.pointerDown(document.body);
+    });
+
+    expect(onSave).toHaveBeenCalledWith('folder');
   });
 });
