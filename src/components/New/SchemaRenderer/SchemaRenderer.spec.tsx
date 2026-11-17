@@ -475,6 +475,197 @@ describe('Dial UI Kit :: SchemaRenderer (2.0)', () => {
         screen.getByRole('button', { name: 'Item 2: dog' }),
       ).toBeInTheDocument();
     });
+
+    test('keeps the collapsed state on its item when an earlier item is removed', async () => {
+      const user = userEvent.setup();
+      render(
+        <SchemaRenderer
+          schema={{
+            properties: {
+              links: {
+                title: 'Links',
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: { name: { type: 'string' } },
+                },
+              },
+            },
+          }}
+          defaultValue={{ links: [{ name: 'Alpha' }, { name: 'Beta' }] }}
+        />,
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Item 2: Beta' }));
+      await user.click(
+        screen.getByRole('button', { name: 'Remove item: Item 1: Alpha' }),
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Item 1: Beta' }),
+      ).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+
+  describe('reorderable arrays', () => {
+    const linksSchema: JsonSchema = {
+      properties: {
+        links: {
+          title: 'Links',
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: { name: { title: 'Name', type: 'string' } },
+          },
+        },
+      },
+    };
+    const links = [{ name: 'Alpha' }, { name: 'Beta' }, { name: 'Gamma' }];
+
+    const renderLinks = (props: Partial<SchemaRendererProps> = {}) =>
+      render(
+        <SchemaRenderer
+          schema={linksSchema}
+          defaultValue={{ links }}
+          reorderableArrays
+          {...props}
+        />,
+      );
+
+    test('shows no move buttons without reorderableArrays', () => {
+      renderLinks({ reorderableArrays: undefined });
+
+      expect(
+        screen.queryByRole('button', { name: /^Move (up|down)/ }),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
+
+    test('moves an item up and down', async () => {
+      const user = userEvent.setup();
+      const onPropertyChange = vi.fn();
+      renderLinks({ onPropertyChange });
+
+      await user.click(
+        screen.getByRole('button', { name: 'Move down: Item 1: Alpha' }),
+      );
+      expect(onPropertyChange).toHaveBeenLastCalledWith('links', [
+        { name: 'Beta' },
+        { name: 'Alpha' },
+        { name: 'Gamma' },
+      ]);
+
+      await user.click(
+        screen.getByRole('button', { name: 'Move up: Item 3: Gamma' }),
+      );
+      expect(onPropertyChange).toHaveBeenLastCalledWith('links', [
+        { name: 'Beta' },
+        { name: 'Gamma' },
+        { name: 'Alpha' },
+      ]);
+      expect(
+        screen
+          .getAllByRole('textbox', { name: 'Name' })
+          .map((input) => (input as HTMLInputElement).value),
+      ).toEqual(['Beta', 'Gamma', 'Alpha']);
+    });
+
+    test('disables moving the first item up and the last item down', () => {
+      renderLinks();
+
+      expect(
+        screen.getByRole('button', { name: 'Move up: Item 1: Alpha' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Move down: Item 1: Alpha' }),
+      ).toBeEnabled();
+      expect(
+        screen.getByRole('button', { name: 'Move up: Item 3: Gamma' }),
+      ).toBeEnabled();
+      expect(
+        screen.getByRole('button', { name: 'Move down: Item 3: Gamma' }),
+      ).toBeDisabled();
+    });
+
+    test('keeps focus on the moved item, switching buttons at the end', async () => {
+      const user = userEvent.setup();
+      renderLinks();
+
+      await user.click(
+        screen.getByRole('button', { name: 'Move down: Item 1: Alpha' }),
+      );
+      expect(
+        screen.getByRole('button', { name: 'Move down: Item 2: Alpha' }),
+      ).toHaveFocus();
+
+      await user.keyboard('{Enter}');
+      expect(
+        screen.getByRole('button', { name: 'Move up: Item 3: Alpha' }),
+      ).toHaveFocus();
+    });
+
+    test('announces the new position', async () => {
+      const user = userEvent.setup();
+      renderLinks();
+
+      expect(screen.getByRole('status')).toBeEmptyDOMElement();
+
+      await user.click(
+        screen.getByRole('button', { name: 'Move up: Item 2: Beta' }),
+      );
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Moved to position 1 of 3',
+      );
+    });
+
+    test('moves the collapsed state with the item', async () => {
+      const user = userEvent.setup();
+      renderLinks();
+
+      await user.click(screen.getByRole('button', { name: 'Item 1: Alpha' }));
+      await user.click(
+        screen.getByRole('button', { name: 'Move down: Item 1: Alpha' }),
+      );
+
+      expect(
+        screen.getByRole('button', { name: 'Item 2: Alpha' }),
+      ).toHaveAttribute('aria-expanded', 'false');
+      expect(
+        screen.getByRole('button', { name: 'Item 1: Beta' }),
+      ).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    test('hides the move buttons when readonly or with one item', () => {
+      const { unmount } = renderLinks({ readonly: true });
+      expect(
+        screen.queryByRole('button', { name: /^Move (up|down)/ }),
+      ).not.toBeInTheDocument();
+      unmount();
+
+      renderLinks({ defaultValue: { links: [{ name: 'Alpha' }] } });
+      expect(
+        screen.queryByRole('button', { name: /^Move (up|down)/ }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('takes its labels and announcement from texts', async () => {
+      const user = userEvent.setup();
+      renderLinks({
+        texts: {
+          moveItemUpAriaLabel: 'Nach oben',
+          moveItemDownAriaLabel: 'Nach unten',
+          itemMovedAnnouncement: 'Position {position} von {total}',
+        },
+      });
+
+      expect(
+        screen.getByRole('button', { name: 'Nach oben: Item 2: Beta' }),
+      ).toBeInTheDocument();
+      await user.click(
+        screen.getByRole('button', { name: 'Nach unten: Item 2: Beta' }),
+      );
+      expect(screen.getByRole('status')).toHaveTextContent('Position 3 von 3');
+    });
   });
 
   describe('oneOf', () => {

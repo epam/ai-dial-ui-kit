@@ -61,6 +61,15 @@ export interface SchemaRendererTexts {
   enumSelectPlaceholder: string;
   selectTypePlaceholder: string;
   removeItemAriaLabel: string;
+  /** Accessible name of an array item's "Move up" button; the item title is appended. */
+  moveItemUpAriaLabel: string;
+  /** Accessible name of an array item's "Move down" button; the item title is appended. */
+  moveItemDownAriaLabel: string;
+  /**
+   * Screen reader announcement after an array item is moved. `{position}` is
+   * replaced with the item's new 1-based position, `{total}` with the item count.
+   */
+  itemMovedAnnouncement: string;
   removeFieldAriaLabel: string;
   typeColumnHeader: string;
   entryTypeString: string;
