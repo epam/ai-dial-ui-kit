@@ -335,3 +335,47 @@ export const Starter: Story = {
     },
   },
 };
+
+const TERTIARY_STATES = [
+  { label: 'Default', id: 'tertiary-default' },
+  { label: 'Hover', id: 'tertiary-hover' },
+  { label: 'Active', id: 'tertiary-active' },
+  { label: 'Focus', id: 'tertiary-focus' },
+  { label: 'Disable', id: 'tertiary-disable', disabled: true },
+];
+
+export const TertiaryGhost: Story = {
+  render: () => (
+    <div className="grid grid-cols-[auto_auto_auto] items-center gap-x-8 gap-y-4">
+      {TERTIARY_STATES.map(({ label, id, disabled }) => (
+        <Fragment key={id}>
+          <span className="text-sm text-secondary">{label}</span>
+          {[ElementSize.Standard, ElementSize.Small].map((size) => (
+            <Button
+              key={size}
+              id={`${id}-${size}`}
+              variant={ButtonVariant.Tertiary}
+              appearance={ButtonAppearance.Ghost}
+              label="Create new folder"
+              size={size}
+              disabled={disabled}
+            />
+          ))}
+        </Fragment>
+      ))}
+    </div>
+  ),
+  parameters: {
+    pseudo: {
+      hover: ['#tertiary-hover-standard', '#tertiary-hover-small'],
+      active: ['#tertiary-active-standard', '#tertiary-active-small'],
+      focusVisible: ['#tertiary-focus-standard', '#tertiary-focus-small'],
+    },
+    docs: {
+      description: {
+        story:
+          '`ButtonVariant.Tertiary` with `ButtonAppearance.Ghost` — a ghost button with accent text and the accent-alpha hover and active fills, per Figma "Buttons" (Type=Ghost).',
+      },
+    },
+  },
+};

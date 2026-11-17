@@ -27,8 +27,11 @@ export const variantClassMap: Record<ButtonVariant, Record<string, string>> = {
     [ButtonAppearance.Link]: 'dial-kit-inverted-link-button',
   },
 
+  [ButtonVariant.Tertiary]: {
+    [ButtonAppearance.Ghost]: 'dial-kit-tertiary-ghost-button',
+  },
+
   // TODO: remove these once we have a design for the icon button variants
   [ButtonVariant.Success]: {},
   [ButtonVariant.Secondary]: {},
-  [ButtonVariant.Tertiary]: {},
 };

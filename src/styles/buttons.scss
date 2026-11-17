@@ -36,6 +36,7 @@
 .dial-kit-danger-outlined-button,
 .dial-kit-starter-outlined-button,
 .dial-kit-primary-ghost-button,
+.dial-kit-tertiary-ghost-button,
 .dial-kit-danger-ghost-button,
 .dial-kit-primary-link-button,
 .dial-kit-inverted-link-button {
@@ -60,6 +61,7 @@
 .dial-kit-danger-outlined-button[aria-disabled='true'],
 .dial-kit-starter-outlined-button[aria-disabled='true'],
 .dial-kit-primary-ghost-button[aria-disabled='true'],
+.dial-kit-tertiary-ghost-button[aria-disabled='true'],
 .dial-kit-danger-ghost-button[aria-disabled='true'],
 .dial-kit-primary-link-button[aria-disabled='true'],
 .dial-kit-inverted-link-button[aria-disabled='true'] {
@@ -321,6 +323,25 @@
   }
 }
 
+/*
+ * Tertiary ghost, per Figma "Buttons" (Type=Ghost): accent text, accent-alpha
+ * hover/active fills. Figma has a single ghost style, so the colors match the
+ * primary ghost button.
+ */
+.dial-kit-tertiary-ghost-button {
+  @apply text-accent bg-transparent;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
+      @apply bg-control-accent-alpha-hover;
+    }
+  }
+
+  &:active:not(:disabled):not([aria-disabled='true']) {
+    @apply bg-control-accent-alpha-active;
+  }
+}
+
 .dial-kit-danger-ghost-button {
   @apply text-error bg-transparent;
 
@@ -344,6 +365,8 @@
 
 .dial-kit-primary-ghost-button:disabled,
 .dial-kit-primary-ghost-button[aria-disabled='true'],
+.dial-kit-tertiary-ghost-button:disabled,
+.dial-kit-tertiary-ghost-button[aria-disabled='true'],
 .dial-kit-danger-ghost-button:disabled,
 .dial-kit-danger-ghost-button[aria-disabled='true'] {
   @apply text-control-disable-primary bg-transparent;

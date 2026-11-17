@@ -67,3 +67,31 @@ export const WithBack: Story = {
   render: (args) => <Demo {...args} />,
   args: { header: 'Credentials', onBack: () => {} },
 };
+
+/** A footer declared as data: the same `mainButtons` / `additionalButtons` API as `Popup`. The body scrolls above it. */
+export const WithFooter: Story = {
+  render: (args) => <Demo {...args} />,
+  args: {
+    header: 'Publish',
+    footerDivider: true,
+    mainButtons: [
+      { label: 'Cancel' },
+      { label: 'Publish', variant: ButtonVariant.Primary },
+    ],
+  },
+};
+
+/** `additionalButtonsOnLeft` puts the secondary group on the leading edge. */
+export const WithFooterAdditionalButtons: Story = {
+  render: (args) => <Demo {...args} />,
+  args: {
+    header: 'Publish',
+    footerDivider: true,
+    additionalButtonsOnLeft: true,
+    additionalButtons: [{ label: 'Reset' }],
+    mainButtons: [
+      { label: 'Cancel' },
+      { label: 'Publish', variant: ButtonVariant.Primary },
+    ],
+  },
+};
