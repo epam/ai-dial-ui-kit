@@ -1,13 +1,18 @@
-import { type FC, type ReactNode, useId, useState } from 'react';
+import { type FC, type ReactNode, type Ref, useId, useState } from 'react';
 import {
   IconAlertTriangle,
+  IconArrowDown,
+  IconArrowUp,
   IconCheck,
   IconChevronDown,
   IconTrash,
 } from '@tabler/icons-react';
 
 import { DIAL_KIT_ICON_STROKE } from '@/components/New/constants/icon';
-import { DangerIconButton } from '@/components/New/IconButton/IconButtonWrappers';
+import {
+  DangerIconButton,
+  GhostIconButton,
+} from '@/components/New/IconButton/IconButtonWrappers';
 import { InfoButton } from '@/components/New/InfoButton/InfoButton';
 import { DIAL_ICON_SIZE } from '@/constants/icon';
 import { DIAL_KIT_CLASS } from '@/constants/public-class-names';
@@ -24,6 +29,12 @@ export interface SchemaSectionProps {
   onRemove?: () => void;
   defaultExpanded?: boolean;
   removeItemAriaLabel?: string;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  moveUpAriaLabel?: string;
+  moveDownAriaLabel?: string;
+  moveUpButtonRef?: Ref<HTMLButtonElement>;
+  moveDownButtonRef?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -31,9 +42,12 @@ export interface SchemaSectionProps {
  * aliases: CollapsibleSchemaSection|SchemaCard
  * Design system 2.0
  *
- * Only the chevron and the title sit inside the toggle button. The info button
- * and the remove button are its siblings, since a button nested in a button is
- * invalid and its clicks would toggle the section too.
+ * Only the chevron and the title sit inside the toggle button. The info button,
+ * the move buttons and the remove button are its siblings, since a button
+ * nested in a button is invalid and its clicks would toggle the section too.
+ *
+ * The move buttons appear as a pair when `onMoveUp` or `onMoveDown` is given;
+ * the one without a handler is disabled, as at the first or last array item.
  *
  * @example
  * ```tsx
@@ -51,6 +65,12 @@ export interface SchemaSectionProps {
  * @param [onRemove] - If provided, shows a remove button in the header
  * @param [defaultExpanded=true] - Whether the section starts expanded
  * @param [removeItemAriaLabel='Remove item'] - Accessible name of the remove button
+ * @param [onMoveUp] - Moves the item one position up; shows the move buttons
+ * @param [onMoveDown] - Moves the item one position down; shows the move buttons
+ * @param [moveUpAriaLabel='Move up'] - Accessible name of the move-up button
+ * @param [moveDownAriaLabel='Move down'] - Accessible name of the move-down button
+ * @param [moveUpButtonRef] - Ref to the move-up button, used to keep focus on a moved item
+ * @param [moveDownButtonRef] - Ref to the move-down button, used to keep focus on a moved item
  */
 export const SchemaSection: FC<SchemaSectionProps> = ({
   title,
@@ -62,10 +82,17 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
   onRemove,
   defaultExpanded = true,
   removeItemAriaLabel = 'Remove item',
+  onMoveUp,
+  onMoveDown,
+  moveUpAriaLabel = 'Move up',
+  moveDownAriaLabel = 'Move down',
+  moveUpButtonRef,
+  moveDownButtonRef,
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const contentId = useId();
   const isTopLevel = level === 0;
+  const isMovable = onMoveUp !== undefined || onMoveDown !== undefined;
 
   return (
     <div
@@ -132,6 +159,41 @@ export const SchemaSection: FC<SchemaSectionProps> = ({
             aria-hidden="true"
             className="shrink-0 text-success"
           />
+        )}
+
+        {isMovable && (
+          <>
+            <GhostIconButton
+              ref={moveUpButtonRef}
+              size={ElementSize.Small}
+              icon={
+                <IconArrowUp
+                  size={DIAL_ICON_SIZE.SM}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                  aria-hidden="true"
+                />
+              }
+              aria-label={moveUpAriaLabel}
+              disabled={!onMoveUp}
+              onClick={onMoveUp}
+              className="shrink-0"
+            />
+            <GhostIconButton
+              ref={moveDownButtonRef}
+              size={ElementSize.Small}
+              icon={
+                <IconArrowDown
+                  size={DIAL_ICON_SIZE.SM}
+                  stroke={DIAL_KIT_ICON_STROKE}
+                  aria-hidden="true"
+                />
+              }
+              aria-label={moveDownAriaLabel}
+              disabled={!onMoveDown}
+              onClick={onMoveDown}
+              className="shrink-0"
+            />
+          </>
         )}
 
         {onRemove && (
