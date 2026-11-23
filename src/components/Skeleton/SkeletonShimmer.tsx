@@ -8,9 +8,11 @@ export interface SkeletonShimmerProps extends HTMLAttributes<HTMLDivElement> {
   active?: boolean;
   /**
    * Text announced to assistive technology while loading, e.g. "Loading
-   * plugins". Rendered in a live region beside the container, and announced as
-   * soon as it mounts — so while the skeleton is still hidden by the timing
-   * delay (`placeholderClassName`), pass it only once `showSkeleton` is `true`.
+   * plugins". The live region beside the container is always rendered, so it
+   * exists before the text arrives and the announcement is reliable. `invisible`
+   * does not silence it, so while the skeleton is hidden by the timing delay
+   * (`placeholderClassName`) leave `label` empty and pass it only once
+   * `showSkeleton` is `true`.
    */
   label?: string;
   /** The skeleton placeholders (`Skeleton` circles and bars). They are `aria-hidden`. */
@@ -34,9 +36,12 @@ export interface SkeletonShimmerProps extends HTMLAttributes<HTMLDivElement> {
  * - **Reduced motion.** With `prefers-reduced-motion: reduce` the band does not
  *   animate and stays out of view, leaving a static skeleton.
  * - **Accessibility.** The container is `aria-busy="true"` and its content is
- *   `aria-hidden`, so placeholders are neither read nor focusable. `label` is
- *   announced from a live region rendered next to the container, because an
- *   `aria-busy` region does not announce its own changes. `aria-busy` is always
+ *   `aria-hidden` and `inert`, so placeholders are neither read nor focusable.
+ *   `label` is announced from a live region rendered next to the container
+ *   (always mounted, so the text is announced reliably when it arrives),
+ *   because an `aria-busy` region does not announce its own changes. The band
+ *   colour is the `--skeleton-shimmer-color` CSS variable (default: white at
+ *   70%), so a host can tone it down in a dark theme. `aria-busy` is always
  *   set after your props are spread, so a caller cannot override it.
  *
  * Do not give the container a fixed height. Render it in the same slot as the
@@ -93,16 +98,16 @@ export const SkeletonShimmer: FC<SkeletonShimmerProps> = ({
         DIAL_KIT_CLASS.skeletonShimmer,
       )}
     >
-      <div aria-hidden="true" className="contents">
+      <div aria-hidden="true" inert className="contents">
         {children}
       </div>
       {active && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-[-50%] w-1/2 bg-linear-to-r from-transparent via-white/70 to-transparent motion-safe:animate-skeleton-shimmer"
+          className="pointer-events-none absolute inset-y-0 left-[-50%] w-1/2 bg-linear-to-r from-transparent via-(--skeleton-shimmer-color,rgb(255_255_255/0.7)) to-transparent motion-safe:animate-skeleton-shimmer"
         />
       )}
     </div>
-    {label && <LiveRegion visuallyHidden>{label}</LiveRegion>}
+    <LiveRegion visuallyHidden>{label}</LiveRegion>
   </>
 );

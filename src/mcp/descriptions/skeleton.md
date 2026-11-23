@@ -74,7 +74,7 @@ const PluginList = ({ isLoading, plugins }: Props) => {
 };
 ```
 
-`SkeletonShimmer` renders its `label` in a live region **next to** the container, not inside it: an `aria-busy` region does not announce its own changes. For a reliable announcement, keep a `LiveRegion` mounted in the parent for the whole load instead of relying on the label of a component that mounts only after the delay.
+`SkeletonShimmer` renders its `label` in a live region **next to** the container, not inside it: an `aria-busy` region does not announce its own changes. The region is always rendered, so it is already in the page when the text arrives — mount `SkeletonShimmer` with `showPlaceholder` (from the start of the load) and pass `label` only once `showSkeleton` is `true`.
 
 ## Scope: wrap only the loaded content
 
@@ -87,7 +87,7 @@ Example — a component laid out as `<Button> <Content> <Search>`: only `<Conten
 
 ```tsx
 <div className="flex flex-col gap-4">
-  <DialButton title="Add" /> {/* real */}
+  <Button label="Add" /> {/* real */}
   {/* content slot: the same element and layout role (flex-1, grid cell, …) for skeleton and content */}
   <div className="min-h-0 flex-1">
     {showPlaceholder && (
@@ -170,7 +170,7 @@ One motion source, provided by `SkeletonShimmer`: a single band that crosses the
 
 - **One** wave over the whole list container — **not one per row**. Never put a `SkeletonShimmer` per row.
 - Left → right, **1.5 s**, `linear`, `infinite`, animated with `transform: translateX` (not `background-position`).
-- Band: white gradient peaking at **70% opacity**, about **50%** of the container width, starting fully off the left edge and ending fully off the right edge.
+- Band: white gradient peaking at **70% opacity**, about **50%** of the container width, starting fully off the left edge and ending fully off the right edge. The peak colour is the `--skeleton-shimmer-color` CSS variable (default `rgb(255 255 255 / 0.7)`); a host can override it, for example to tone the band down in a dark theme.
 - `prefers-reduced-motion: reduce` → no animation; the static skeleton stays. `SkeletonShimmer` handles this itself.
 - Only the loading area animates. Header, input and footer stay static and **interactive**, so the popup never looks frozen.
 - **One primary indicator.** Do not run a spinner and a shimmer at full strength together — keep one primary and make the other quiet or static (e.g. a small spinner in the input beside a "Scanning…" caption while the list shimmers).
@@ -188,15 +188,15 @@ It returns `showSkeleton` and `showContent`, plus `showPlaceholder` and `placeho
 
 **Do not render nothing during the delay.** A container whose height depends on its content (popup, dropdown, card) would be empty and **0 high** for those 400 ms — and for the whole load if the skeleton is the only thing holding its height. Mount the skeleton from the start with `showPlaceholder` and pass `placeholderClassName` to `SkeletonShimmer`: it is `invisible` during the delay (the rows hold the space, nothing is drawn) and empty once the skeleton is shown. A fast response then still never flashes a placeholder, and the container never collapses. Use `showSkeleton` only where the space is held by something else.
 
-**Pass `label` only while the skeleton is visible:** `label={showSkeleton ? 'Loading…' : undefined}`. `invisible` hides the drawing, not the `label` live region, which is announced as soon as it mounts — a bare `label` would announce "Loading" on every load, including fast ones the user never sees a skeleton for. For a reliable announcement keep a `LiveRegion` mounted in the parent for the whole load instead (see [Accessibility](#accessibility)).
+**Pass `label` only while the skeleton is visible:** `label={showSkeleton ? 'Loading…' : undefined}`. `invisible` hides the drawing, not the live region — a `label` set during the delay would announce "Loading" on every load, including fast ones the user never sees a skeleton for. The live region itself is always mounted from the start of the load, so the text that arrives when the skeleton shows is announced reliably (see [Accessibility](#accessibility)).
 
 ## Accessibility
 
 `SkeletonShimmer` sets these for you:
 
 - `aria-busy="true"` on the loading container.
-- `aria-hidden="true"` on the placeholders and on the shimmer band, so they are neither read nor focusable.
-- A `role="status"` announcement of `label`, in a live region beside the container.
+- `aria-hidden="true"` and `inert` on the placeholders, and `aria-hidden="true"` on the shimmer band, so they are neither read nor focusable.
+- A `role="status"` announcement of `label`, in an always-mounted live region beside the container.
 
 You still own:
 
@@ -243,7 +243,7 @@ A `Suspense` fallback is a loading state, and `fallback={null}` inside a popup, 
     </div>
   )}
 >
-  <Button title="Open" />
+  <Button label="Open" />
 </Dropdown>
 ```
 

@@ -185,6 +185,25 @@ describe('Dial UI Kit :: useSkeletonTiming', () => {
     expect(result.current.placeholderClassName).toBe('');
   });
 
+  it('does not replay the reveal after a fast reload that showed no skeleton', () => {
+    const { result, rerender } = renderHook(
+      ({ loading }) => useSkeletonTiming(loading),
+      { initialProps: { loading: true } },
+    );
+    advance(SKELETON_DELAY_MS);
+    rerender({ loading: false });
+    advance(SKELETON_MIN_DURATION_MS);
+    expect(result.current.contentClassName).toBe(
+      'motion-safe:animate-skeleton-reveal',
+    );
+
+    rerender({ loading: true });
+    advance(SKELETON_DELAY_MS - 100);
+    rerender({ loading: false });
+    expect(result.current.showContent).toBe(true);
+    expect(result.current.contentClassName).toBe('');
+  });
+
   it('shows content straight away when not loading', () => {
     const { result } = renderHook(() => useSkeletonTiming(false));
     expect(result.current.showContent).toBe(true);

@@ -74,9 +74,28 @@ describe('Dial UI Kit :: SkeletonShimmer', () => {
     expect(getContainer(container)).not.toContainElement(status);
   });
 
-  it('renders no live region without a label', () => {
+  it('keeps an empty live region mounted without a label', () => {
     render(<SkeletonShimmer />);
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+  });
+
+  it('keeps the same live region when the label arrives later', () => {
+    const { rerender } = render(<SkeletonShimmer />);
+    const status = screen.getByRole('status');
+    rerender(<SkeletonShimmer label="Loading plugins" />);
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toHaveTextContent('Loading plugins');
+  });
+
+  it('makes the placeholders inert so controls inside cannot take focus', () => {
+    const { container } = render(
+      <SkeletonShimmer>
+        <button type="button">Hidden action</button>
+      </SkeletonShimmer>,
+    );
+    expect(getContainer(container).querySelector('.contents')).toHaveAttribute(
+      'inert',
+    );
   });
 
   it('keeps caller props and className on the container', () => {

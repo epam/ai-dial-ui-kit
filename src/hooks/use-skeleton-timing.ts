@@ -83,6 +83,8 @@ export const useSkeletonTiming = (
   useEffect(() => {
     if (loading) {
       if (showSkeleton) return undefined;
+      // No skeleton is on screen, so a reveal from an earlier load must not replay.
+      setRevealed(false);
       const timer = setTimeout(() => {
         shownAt.current = Date.now();
         setRevealed(false);
