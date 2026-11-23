@@ -11,6 +11,7 @@ Storybook documents components for humans. The MCP server documents them for AI 
 - **Read exact props and types** — required fields, defaults, enums, component-specific behaviors
 - **Access code examples** — copy-paste usage patterns for common scenarios
 - **Query theming & typography** — available design tokens, CSS classes, color variables
+- **Build loading states** — the skeleton guide describes how to compose placeholders for any component
 
 This lets agents generate accurate, type-safe, on-brand component code without guessing or hallucinating APIs.
 
@@ -89,6 +90,10 @@ Use these two tools for all UI kit discovery and documentation needs: `searchEnt
 
 > **Note:** Do not use `grep`, `glob`, `find`, or similar file system tools to discover components. The MCP tools provide accurate, structured metadata. File system searches miss examples, miss type information, and are slower.
 
+## Loading States
+
+When a component or screen loads data from a server, call `getEntityDetails("skeleton")` **before** writing the loading state and follow it. Build skeletons from `Skeleton` primitives (circles and bars) that mirror the real layout; do not invent your own placeholder markup or use a bare spinner in place of the content.
+
 ## Breaking Changes & Migration
 
 When you encounter type errors after a package upgrade, or when a prop no longer exists on a component:
@@ -118,6 +123,7 @@ Both tools accept an `entity` enum parameter:
 | `constant` | Exported constants — values, descriptions |
 | `typography` | Full CSS utility class reference (`.dial-h1-text`, `.dial-small-text`, etc.) |
 | `theming` | Full theme token system — CSS variable names, color tokens, Tailwind mapping |
+| `skeleton` | Guide for building loading skeletons for any component or screen with the `Skeleton` primitives — sizes, tones, shimmer, timing, accessibility |
 
 ## Example: Building a File Upload Form
 
@@ -191,6 +197,7 @@ interface Manifest {
   };
   styles: string;                // typography CSS class reference (markdown)
   theming: string;               // theming/token reference (markdown)
+  skeleton: string;              // skeleton loading guide (markdown)
   components: ComponentEntry[];
   types: TypeEntry[];
   hooks: ExportEntry[];
@@ -272,6 +279,7 @@ interface ExportEntry {
 ```
 src/mcp/
   README.md               ← this file
+  descriptions/           ← static guides: typography.md, theming.md, skeleton.md
   types.ts                ← manifest schema types
   generate-manifest.ts    ← build-time manifest generator
   server.ts               ← MCP server entry point

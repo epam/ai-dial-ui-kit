@@ -7,6 +7,7 @@ import { describe, expect, test } from 'vitest';
 import { FabButton } from '@/components/FabButton/FabButton';
 import { ProgressBar } from '@/components/ProgressBar/ProgressBar';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
+import { SkeletonShimmer } from '@/components/Skeleton/SkeletonShimmer';
 import { Spinner } from '@/components/Spinner/Spinner';
 import { Accordion } from '@/components/New/Accordion/Accordion';
 import { Breadcrumbs } from '@/components/New/Breadcrumbs/Breadcrumbs';
@@ -136,6 +137,7 @@ const cases: Array<[keyof typeof DIAL_KIT_CLASS, () => ReactNode]> = [
     () => <ProgressBar value={50} labelProps={{ label: 'Upload' }} />,
   ],
   ['skeleton', () => <Skeleton />],
+  ['skeletonShimmer', () => <SkeletonShimmer />],
   ['notification', () => <Notification message="Saved" />],
   ['noDataContent', () => <NoDataContent title="Nothing here" />],
   ['loginScreen', () => <LoginScreen title="Welcome" />],

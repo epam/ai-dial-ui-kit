@@ -18,6 +18,8 @@ export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { Skeleton } from './components/Skeleton/Skeleton';
+export { SkeletonShimmer } from './components/Skeleton/SkeletonShimmer';
+export type { SkeletonShimmerProps } from './components/Skeleton/SkeletonShimmer';
 
 // Navigation
 export { DialTabs } from './components/Tabs/Tabs';
@@ -108,6 +110,15 @@ export {
   useEditableItem,
 } from './hooks/use-editable-item';
 export type { UseEditableItemOptions } from './hooks/use-editable-item';
+export {
+  SKELETON_DELAY_MS,
+  SKELETON_MIN_DURATION_MS,
+  useSkeletonTiming,
+} from './hooks/use-skeleton-timing';
+export type {
+  UseSkeletonTimingOptions,
+  UseSkeletonTimingResult,
+} from './hooks/use-skeleton-timing';
 
 // Models
 export { StepStatus } from './models/step';

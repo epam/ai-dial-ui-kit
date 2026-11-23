@@ -484,6 +484,22 @@
   --animate-spin-steps: spin 0.75s steps(8, end) infinite;
   --animate-fadeIn: fadeIn 100ms ease-in;
   --animate-slideUp: slideUp 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  /* The `SkeletonShimmer` band, and the fade from a skeleton to its content. */
+  --animate-skeleton-shimmer: skeleton-shimmer 1.5s linear infinite;
+  --animate-skeleton-reveal: fadeIn 180ms ease-out;
+
+  /*
+   * The band is half the container wide and starts fully off its left edge;
+   * 300% of its own width carries it fully off the right edge.
+   */
+  @keyframes skeleton-shimmer {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(300%);
+    }
+  }
 
   @keyframes fadeIn {
     0% {

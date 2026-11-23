@@ -112,7 +112,8 @@ type EntityKind =
   | 'type'
   | 'constant'
   | 'typography'
-  | 'theming';
+  | 'theming'
+  | 'skeleton';
 
 const ENTITY_KINDS: EntityKind[] = [
   'component',
@@ -122,6 +123,7 @@ const ENTITY_KINDS: EntityKind[] = [
   'constant',
   'typography',
   'theming',
+  'skeleton',
 ];
 
 const ENTITY_HINT = ENTITY_KINDS.join(' | ');
@@ -347,7 +349,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'searchEntity',
       description:
-        'Search for UI kit entities (components, hooks, utils, types, constants) by name or description. Returns a summary list of matches. For typography and theming, returns the full reference content regardless of query.\n\nComponents come in two generations and results are ranked 2.0 first. Generation 2.0 is the current design system (exported without the `Dial` prefix — `Button`, `Input`, `Select`); generation 1.0 is the legacy set (`Dial*`). Default to the 2.0 component. A 1.0 result carries "Use instead" when a 2.0 replacement exists — pick that replacement. Only use a 1.0 component when it has no replacement listed.\n\nExamples:\n  searchEntity("component", "button") → Button (2.0) ranked above DialButton (1.0)\n  searchEntity("hook", "click") → lists hooks with "click" in name/description\n  searchEntity("typography") → returns full typography CSS class reference',
+        'Search for UI kit entities (components, hooks, utils, types, constants) by name or description. Returns a summary list of matches. For typography, theming and skeleton, returns the full reference content regardless of query. Use `skeleton` before building a loading placeholder for any component or screen.\n\nComponents come in two generations and results are ranked 2.0 first. Generation 2.0 is the current design system (exported without the `Dial` prefix — `Button`, `Input`, `Select`); generation 1.0 is the legacy set (`Dial*`). Default to the 2.0 component. A 1.0 result carries "Use instead" when a 2.0 replacement exists — pick that replacement. Only use a 1.0 component when it has no replacement listed.\n\nExamples:\n  searchEntity("component", "button") → Button (2.0) ranked above DialButton (1.0)\n  searchEntity("hook", "click") → lists hooks with "click" in name/description\n  searchEntity("typography") → returns full typography CSS class reference\n  searchEntity("skeleton") → returns the skeleton loading guide',
       inputSchema: {
         type: 'object',
         properties: {
@@ -369,7 +371,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'getEntityDetails',
       description:
-        'Get full documentation for a specific UI kit entity by exact name — props table, examples, signatures, type members, etc. For typography and theming, returns the full reference content (name not required).\n\nA component response states its generation. If it reports being superseded by a 2.0 component, look that one up instead of using the 1.0 entry.\n\nExamples:\n  getEntityDetails("component", "Button") → full props + examples for the 2.0 button\n  getEntityDetails("component", "DialButton") → 1.0 button, flagged as superseded by `Button`\n  getEntityDetails("type", "ButtonSize") → enum values\n  getEntityDetails("hook", "useClickOutside") → signature + description\n  getEntityDetails("theming") → full CSS variable and token reference',
+        'Get full documentation for a specific UI kit entity by exact name — props table, examples, signatures, type members, etc. For typography, theming and skeleton, returns the full reference content (name not required).\n\nA component response states its generation. If it reports being superseded by a 2.0 component, look that one up instead of using the 1.0 entry.\n\nExamples:\n  getEntityDetails("component", "Button") → full props + examples for the 2.0 button\n  getEntityDetails("component", "DialButton") → 1.0 button, flagged as superseded by `Button`\n  getEntityDetails("type", "ButtonSize") → enum values\n  getEntityDetails("hook", "useClickOutside") → signature + description\n  getEntityDetails("theming") → full CSS variable and token reference\n  getEntityDetails("skeleton") → how to build a loading skeleton with the Skeleton primitives',
       inputSchema: {
         type: 'object',
         properties: {
@@ -382,7 +384,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           name: {
             type: 'string',
             description:
-              'Exact entity name (e.g. "DialButton", "useClickOutside", "ButtonSize"). Not required for typography and theming.',
+              'Exact entity name (e.g. "DialButton", "useClickOutside", "ButtonSize"). Not required for typography, theming and skeleton.',
           },
         },
         required: ['entity'],
@@ -434,6 +436,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (entity === 'theming') {
       return { content: [{ type: 'text', text: manifest.theming }] };
+    }
+
+    if (entity === 'skeleton') {
+      return { content: [{ type: 'text', text: manifest.skeleton }] };
     }
 
     if (entity === 'component') {
@@ -562,6 +568,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (entity === 'theming') {
       return { content: [{ type: 'text', text: manifest.theming }] };
+    }
+
+    if (entity === 'skeleton') {
+      return { content: [{ type: 'text', text: manifest.skeleton }] };
     }
 
     const entityName = typeof a.name === 'string' ? a.name.trim() : '';

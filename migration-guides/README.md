@@ -38,6 +38,7 @@ migration-guides/
 | 0.16.0 | [unused-legacy-components-removal](0.16.0/unused-legacy-components-removal.md) | 34 unused 1.0 components (`DialSelect`, `DialPopup`, `DialGrid`, `LazyDialJsonEditor` …) and `DialSchemaRenderer` removed in favour of their 2.0 counterparts; Monaco is no longer a peer |
 | 0.17.0 | [interactive-tooltip-inverted-panel](0.17.0/interactive-tooltip-inverted-panel.md) | `InteractiveTooltip` panel is inverted (`bg-control-inverted`); links on it move to `ButtonVariant.Inverted` / `LinkVariant.Inverted` |
 | 0.17.0 | [select-single-value-content-slot](0.17.0/select-single-value-content-slot.md) | Single `Select` draws its selected label in the content slot, not the input value; the combobox name includes the selected text |
+| 0.17.0 | [skeleton-classname-precedence](0.17.0/skeleton-classname-precedence.md) | `Skeleton` variant bars and circles: the caller's `className` now wins over the variant's radius, position, background and animation |
 
 ---
 
