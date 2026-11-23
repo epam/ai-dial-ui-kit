@@ -87,7 +87,6 @@ export const useSkeletonTiming = (
       setRevealed(false);
       const timer = setTimeout(() => {
         shownAt.current = Date.now();
-        setRevealed(false);
         setShowSkeleton(true);
       }, delay);
       return () => clearTimeout(timer);
