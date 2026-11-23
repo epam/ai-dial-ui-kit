@@ -126,6 +126,43 @@ describe('Dial UI Kit :: Skeleton', () => {
     expect(container.querySelector('.flex.gap-4')).toBeInTheDocument();
   });
 
+  it.each([SkeletonVariant.Text, SkeletonVariant.Rectangular])(
+    'lets className override the radius of the %s variant',
+    (variant) => {
+      const { container } = render(
+        <Skeleton variant={variant} className="rounded-xl bg-layer-sunken" />,
+      );
+      const element = container.firstChild as HTMLElement;
+      expect(element).toHaveClass('rounded-xl', 'bg-layer-sunken');
+      expect(element).not.toHaveClass('rounded');
+      expect(element).not.toHaveClass('bg-layer-raised');
+    },
+  );
+
+  it('lets className override the overlay positioning of a variant skeleton', () => {
+    const { container } = render(
+      <Skeleton
+        variant={SkeletonVariant.Rectangular}
+        width={100}
+        height={100}
+        className="absolute"
+        overlay={<span data-testid="overlay-icon" />}
+      />,
+    );
+    const element = container.firstChild as HTMLElement;
+    expect(element).toHaveClass('absolute');
+    expect(element).not.toHaveClass('relative');
+  });
+
+  it('lets className override the animation of a variant skeleton', () => {
+    const { container } = render(
+      <Skeleton variant={SkeletonVariant.Text} className="animate-none" />,
+    );
+    const element = container.firstChild as HTMLElement;
+    expect(element).toHaveClass('animate-none');
+    expect(element).not.toHaveClass('animate-pulse');
+  });
+
   it('applies custom className', () => {
     const { container } = render(<Skeleton className="custom-class" />);
     expect(container.firstChild).toHaveClass('custom-class');

@@ -11,6 +11,12 @@ export const DIAL_KIT_CLASS = {
   /** The root of a `Skeleton`, wrapping its avatar and text rows. */
   skeleton: 'dial-kit-skeleton',
   /**
+   * The `aria-busy` container of a `SkeletonShimmer`: the box that clips the
+   * shimmer band and holds the skeleton placeholders. Its `label` live region
+   * is a sibling, not a child.
+   */
+  skeletonShimmer: 'dial-kit-skeleton-shimmer',
+  /**
    * The `Notification` surface. Present on every wrapper too — the toast and
    * section-message variants of error, info, success, warning, loading and
    * general all render this component.

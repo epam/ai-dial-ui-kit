@@ -18,7 +18,7 @@ This file is read by Cursor, Codex, and other agent harnesses alongside project 
 
 ## Component work checklist
 
-- **Naming**: Exported components use the `Dial*` prefix (e.g. `DialButton`, `DialInput`).
+- **Naming**: Generation 2.0 components are exported **without** a prefix (`Button`, `Input`, `Select`) and are the default for new work and for examples. The `Dial*` prefix (`DialButton`, `DialInput`) is the legacy 1.0 convention: keep it only when editing a 1.0 component, never in new code or docs.
 - **Files**: Prefer colocating `Component.tsx`, `Component.stories.tsx`, `Component.spec.tsx` under `src/components/<Name>/`.
 - **API**: Extend native HTML/React props where appropriate; export prop types when consumers need them.
 - **Styles**: Tailwind + existing tokens/utilities; keep a11y (labels, roles, keyboard) in mind.
@@ -119,6 +119,8 @@ Add a row to the table in `migration-guides/README.md`:
 - Tailwind CSS v4 with custom design tokens defined as CSS variables in the `@theme` block of `src/styles/theme.scss`
 - Use `mergeClasses` (from `src/utils/merge-classes`) for Tailwind class merging
 - No inline styles or hardcoded values (hex colors, font sizes, etc.)
+- **Tailwind palette colors are hardcoded too.** `white`, `black`, `gray-*` and the rest of the palette, including `/NN` opacity modifiers (`via-white/70`), do not follow the theme. Use a theme token from `src/styles/theme.scss`, or a CSS variable with a fallback (`via-(--name,rgb(255_255_255/0.7))`) when a host needs to override the value.
+- **MCP descriptions** (`src/mcp/descriptions/*.md`) are copied verbatim by agents: examples use 2.0 components and real props only (`Button` takes `label`, not `title`).
 - SCSS mixins in `src/styles/` for reusable patterns
 
 ### Public class names
@@ -168,6 +170,8 @@ Conformance target is **WCAG 2.2 Level AA**, plus **2.5.5 Target Size (Enhanced,
 - **Only fall back to a tooltip when nothing else names the control.** As an `aria-label` it overrides the element's own content, so a component with a visible label must gate the fallback on that label being absent (see `New/Button`).
 - **Never write `aria-label={props['aria-label']}` after spreading `{...props}`** — the spread already applied it, so the line is a no-op. It has been introduced by copy-paste in four button components; delete it rather than propagating it.
 - **Decorative icons get `aria-hidden="true"`.** Tabler icons render a bare `<svg>` with no `role` and no title, so they need it explicitly.
+- **Mount a `LiveRegion` before its text.** Render it unconditionally and change only its content, never `{label && <LiveRegion>…</LiveRegion>}`: a region that mounts together with its message is often read late or not at all (the rule from the `LiveRegion` JSDoc).
+- **`aria-hidden` does not remove focus.** It leaves descendants in the Tab order. A subtree that callers can fill (children, slots) gets `inert` as well, and docs must not call it "not focusable" without it.
 
 ### Target size
 

@@ -117,12 +117,17 @@ export const Skeleton: FC<SkeletonProps> = ({
   );
 
   if (variant !== SkeletonVariant.Default) {
+    // The caller's `className` goes last so it can override the variant's
+    // radius (e.g. `rounded-xl` on a `Text` bar) — merged earlier it lost to
+    // the variant's own `rounded`.
     const variantClass = mergeClasses(
-      baseClass,
+      'bg-layer-raised',
+      active && 'animate-pulse',
       variant === SkeletonVariant.Circular && 'rounded-full',
       variant === SkeletonVariant.Rectangular && 'rounded',
       variant === SkeletonVariant.Text && 'rounded',
       !!overlay && 'relative',
+      className,
     );
 
     const style: CSSProperties = {};

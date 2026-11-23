@@ -282,6 +282,7 @@ breaking change and goes through the migration-guide process.
 | `spinner`       | `dial-kit-spinner`        | The `role="status"` root of a `Spinner`                                                  |
 | `progressBar`   | `dial-kit-progress-bar`   | The outermost element of a `ProgressBar` — its wrapper, or the track when it has neither label nor readout |
 | `skeleton`      | `dial-kit-skeleton`       | The root of a `Skeleton`                                                                 |
+| `skeletonShimmer` | `dial-kit-skeleton-shimmer` | The `aria-busy` container of a `SkeletonShimmer` (its `label` live region is a sibling) |
 | `notification`  | `dial-kit-notification`   | The `Notification` surface, including every toast and section-message wrapper             |
 | `noDataContent` | `dial-kit-no-data-content` | The empty-state root of `NoDataContent`                                                 |
 | `loginScreen`   | `dial-kit-login-screen`   | The `section` root of a `LoginScreen`                                                    |

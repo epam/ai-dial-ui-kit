@@ -869,6 +869,12 @@ function buildStylesContent(): string {
   );
 }
 
+// ─── skeleton guide ───────────────────────────────────────────────────────────
+
+function buildSkeletonContent(): string {
+  return readFileSync(join(SRC, 'mcp', 'descriptions', 'skeleton.md'), 'utf-8');
+}
+
 // ─── theming content ──────────────────────────────────────────────────────────
 
 function buildThemingContent(): string {
@@ -1000,6 +1006,7 @@ function buildManifest(): Manifest {
     kit: buildKitInfo(),
     styles: buildStylesContent(),
     theming: buildThemingContent(),
+    skeleton: buildSkeletonContent(),
     components,
     types: dedupedTypes,
     hooks,

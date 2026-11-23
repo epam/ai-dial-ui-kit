@@ -73,6 +73,8 @@ export interface Manifest {
   kit: KitInfo;
   styles: string;
   theming: string;
+  /** Skeleton loading guide (markdown) — how to compose placeholders. */
+  skeleton: string;
   components: ComponentEntry[];
   types: TypeEntry[];
   hooks: ExportEntry[];

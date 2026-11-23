@@ -6,9 +6,10 @@ alwaysApply: false
 
 # AI DIAL UI Kit — TS/React
 
-- **TypeScript**: After edits in this repo, run **`npm run typecheck`**. Fix all reported errors before finishing (including in `*.stories.tsx` / `*.spec.tsx` you touched). Prefer strict typings over `any`; match existing `Dial*` prop patterns.
-- **Exports**: Public API lives in `src/index.ts`. Export `Dial*` components and `export type { …Props }` when needed.
-- **Components**: `src/components/<PascalName>/` with `.tsx` implementation; use `Dial` prefix for exported names.
+- **TypeScript**: After edits in this repo, run **`npm run typecheck`**. Fix all reported errors before finishing (including in `*.stories.tsx` / `*.spec.tsx` you touched). Prefer strict typings over `any`; match the prop patterns of nearby 2.0 components.
+- **Exports**: Public API lives in `src/index.ts`. Export components and `export type { …Props }` when needed.
+- **Components**: `src/components/<PascalName>/` with `.tsx` implementation; 2.0 components are exported without a prefix (`Button`). `Dial*` is the legacy 1.0 convention, kept only when editing a 1.0 component.
+- **Colors and a11y**: Tailwind palette colors (`white`, `gray-*`, `/NN` modifiers) are hardcoded — use theme tokens or a CSS variable with a fallback. Mount a `LiveRegion` unconditionally, and give a fillable `aria-hidden` subtree `inert`. See AGENTS.md.
 - **Stories**: `*.stories.tsx` alongside the component; use Storybook 10 patterns already in the repo.
 - **Tests**: `*.spec.tsx` or `__tests__/` with Vitest + Testing Library; mirror user-visible behavior and a11y where relevant.
 - **Styles**: Tailwind + `tailwind-merge` / `mergeClasses` where the codebase already does; follow `eslint-plugin-tailwindcss` rules.
