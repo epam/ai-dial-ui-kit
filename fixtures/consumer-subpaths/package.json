@@ -6,7 +6,7 @@
   "description": "Packed-artifact resolution checks for the root and every public feature subpath under Node ESM, Node CJS, and TypeScript.",
   "scripts": {
     "build": "npm run typecheck && npm run test:esm && npm run test:cjs",
-    "typecheck": "node generate-root-surface.mjs && tsc --noEmit",
+    "typecheck": "node generate-root-surface.mjs && tsc --noEmit && tsc --noEmit -p tsconfig.nodenext.json",
     "test:esm": "node esm.mjs",
     "test:cjs": "node cjs.cjs"
   },

@@ -466,6 +466,14 @@ export const Grid = <T extends object>({
     [isUserSelectionEvent, resolveRowId],
   );
 
+  /*
+    ag-Grid's `rowSelection.hideDisabledCheckboxes`, honoured by this
+    component's own selection column, which ag-Grid knows nothing about.
+  */
+  const hideDisabledCheckboxes =
+    typeof additionalGridOptions?.rowSelection === 'object' &&
+    additionalGridOptions.rowSelection.hideDisabledCheckboxes === true;
+
   const selectionColumn = useMemo<ColDef<T> | undefined>(() => {
     if (!selectionMode) return undefined;
 
@@ -495,6 +503,7 @@ export const Grid = <T extends object>({
               callbacksRef.current.selectRowLabel?.(p.data) ?? 'Select row'
             }
             disabled={disabledRowIds?.has(rowId)}
+            hideWhenDisabled={hideDisabledCheckboxes}
           />
         );
       },
@@ -505,6 +514,7 @@ export const Grid = <T extends object>({
     resolveRowId,
     disabledRowIds,
     radioGroupName,
+    hideDisabledCheckboxes,
   ]);
 
   const wrapRendererIfNeeded = useCallback(

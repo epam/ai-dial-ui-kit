@@ -15,6 +15,11 @@ export interface SelectionCellProps<T> {
   radioName: string;
   rowId: string;
   disabled?: boolean;
+  /**
+   * Draws nothing, instead of a disabled control, for a row that cannot be
+   * selected. The cell itself stays, so the column keeps its width.
+   */
+  hideWhenDisabled?: boolean;
 }
 
 /**
@@ -35,6 +40,7 @@ export const SelectionCell = <T,>({
   radioName,
   rowId,
   disabled: isDisabledRow,
+  hideWhenDisabled,
 }: SelectionCellProps<T>) => {
   const node = params.node as IRowNode<T>;
   const [isSelected, setIsSelected] = useState(() => !!node.isSelected());
@@ -67,6 +73,8 @@ export const SelectionCell = <T,>({
       SelectionEventSourceType.CHECKBOX_SELECTED,
     );
   };
+
+  if (disabled && hideWhenDisabled) return null;
 
   if (mode === GridSelectionMode.SINGLE) {
     return (
