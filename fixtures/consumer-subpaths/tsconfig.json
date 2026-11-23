@@ -8,5 +8,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["types.ts", "root-surface.generated.ts"]
+  "include": ["types.ts", "types-not-any.ts", "root-surface.generated.ts"]
 }

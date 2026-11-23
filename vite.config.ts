@@ -5,6 +5,7 @@ import svgr from 'vite-plugin-svgr';
 import path from 'path';
 
 import { peerDependencies } from './package.json';
+import { addDtsRelativeExtensions } from './tools/dts-relative-extensions.mjs';
 
 /*
  * Every peer is external by definition - the consumer installs it. On top of
@@ -42,6 +43,12 @@ export default defineConfig({
         '**/__tests__/**',
         '**/__mocks__/**',
       ],
+      // `node16`/`nodenext` consumers need `.js` on every relative import in
+      // an ES module declaration file - see the helper for the details.
+      beforeWriteFile: addDtsRelativeExtensions({
+        root: __dirname,
+        outDir: path.resolve(__dirname, 'dist'),
+      }),
     }),
   ],
   resolve: {
