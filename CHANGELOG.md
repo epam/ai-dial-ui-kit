@@ -19,6 +19,8 @@ Versions match the git tags on the `development` branch.
 
 ### Added
 
+- **`Grid` (2.0) — `rowSelection.hideDisabledCheckboxes` hides the control of a row that cannot be selected** — the selection column drew a disabled checkbox or radio for every row `isRowSelectable` rejects, and ag-Grid's `hideDisabledCheckboxes` could not help because the controls are not ag-Grid's. `additionalGridOptions.rowSelection.hideDisabledCheckboxes: true` now draws nothing in those cells, keeping the column width. Reported from `ai-dial-chat` (folder rows in the attach dialog).
+
 - **`SideDrawer` — footer** — a drawer had no footer, so each consumer rebuilt a bordered, padded action row by hand. `SideDrawer` now takes the `Popup` footer API: `mainButtons`, `additionalButtons`, `additionalButtonsOnLeft`, `footerDivider`, `footer` (a node that overrides the buttons) and `footerClassName`. The footer is pinned below the scrolling body and splits the row on mobile. `Popup` and `SideDrawer` share one internal `PopupFooter`.
 
 - **`ButtonVariant.Tertiary` + `ButtonAppearance.Ghost` (2.0 `Button`)** — the 2.0 `Button` declared `Tertiary` but mapped it to no styles, so it fell back to primary solid with a console warning. It now renders `dial-kit-tertiary-ghost-button`: accent text, accent-alpha hover and active fills, per Figma "Buttons" (Type=Ghost).

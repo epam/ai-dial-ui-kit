@@ -571,6 +571,33 @@ describe('Dial UI Kit :: Grid', () => {
       expect(onSelectionChange).not.toHaveBeenCalled();
     });
 
+    test('draws no control for a rejected row when hideDisabledCheckboxes is set', async () => {
+      render(
+        <Grid<TestRow>
+          columnDefs={testColumns}
+          rowData={testRows}
+          selectionMode={GridSelectionMode.MULTIPLE}
+          selectRowLabel={(row) => `Select ${row.name}`}
+          additionalGridOptions={{
+            rowSelection: {
+              mode: 'multiRow',
+              isRowSelectable: (node) => node.data?.id !== '3',
+              hideDisabledCheckboxes: true,
+            },
+          }}
+        />,
+      );
+
+      expect(
+        await screen.findByRole('checkbox', { name: 'Select Alice' }),
+      ).toBeEnabled();
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('checkbox', { name: 'Select Charlie' }),
+        ).toBeNull(),
+      );
+    });
+
     test('single mode renders radios and keeps one selected at a time', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
