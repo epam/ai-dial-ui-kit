@@ -3,6 +3,7 @@ import {
   autoUpdate,
   flip,
   offset,
+  safePolygon,
   shift,
   useDismiss,
   useFloating,
@@ -91,6 +92,12 @@ export const useTooltip = ({
     enabled: controlledOpen == null,
     mouseOnly: isTriggerClickable,
     delay: { open: HOVER_OPEN_DELAY, close: 0 },
+    /*
+     * Lets the pointer travel from the trigger into the bubble without closing
+     * it, so a tooltip capped at `max(50vh,240px)` can actually be scrolled.
+     * Leaving the trigger in any other direction still closes it at once.
+     */
+    handleClose: safePolygon(),
   });
   const focus = useFocus(data.context, {
     enabled: controlledOpen == null,
