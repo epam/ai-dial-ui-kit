@@ -4,6 +4,7 @@ type Module = typeof import('../element-size-observer');
 
 let observeElementSize: Module['observeElementSize'];
 let scheduleMeasure: Module['scheduleMeasure'];
+let measureAfterLayout: Module['measureAfterLayout'];
 
 let constructedObservers = 0;
 let observedElements: Element[] = [];
@@ -82,7 +83,7 @@ beforeEach(async () => {
   // The module keeps its observer, its listener and its frame in module scope,
   // so every test needs a fresh copy of it.
   vi.resetModules();
-  ({ observeElementSize, scheduleMeasure } =
+  ({ observeElementSize, scheduleMeasure, measureAfterLayout } =
     await import('../element-size-observer'));
 });
 
@@ -144,6 +145,31 @@ describe('Dial UI Kit :: observeElementSize', () => {
 
     expect(onMeasured).toHaveBeenCalledTimes(1);
     expect(untouched).not.toHaveBeenCalled();
+  });
+
+  test('Should measure inside the observer notification, without waiting for a frame', () => {
+    const element = document.createElement('span');
+    const measure = vi.fn();
+
+    observe(element, measure);
+    notifyResize?.([resizeEntryFor(element)], {} as ResizeObserver);
+
+    // The notification runs after layout, so the read is free there; a frame
+    // later the layout would be stale and the read would force a reflow.
+    expect(measure).toHaveBeenCalledTimes(1);
+    expect(frames).toHaveLength(0);
+  });
+
+  test('Should drop a frame measurement the observer notification already covered', () => {
+    const element = document.createElement('span');
+    const measure = vi.fn();
+
+    observe(element, measure);
+    scheduleMeasure(measure);
+    notifyResize?.([resizeEntryFor(element)], {} as ResizeObserver);
+    runFrame();
+
+    expect(measure).toHaveBeenCalledTimes(1);
   });
 
   test('Should stop measuring an element once it is unobserved', () => {
@@ -256,5 +282,52 @@ describe('Dial UI Kit :: scheduleMeasure', () => {
     runFrame();
 
     expect(measure).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('Dial UI Kit :: measureAfterLayout', () => {
+  test('Should ask the observer for a post-layout notification instead of a frame', () => {
+    const element = document.createElement('span');
+    const measure = vi.fn();
+
+    observe(element, measure);
+    measureAfterLayout(element, measure);
+
+    // Observing again makes the observer report the element after the next
+    // layout, even when its size did not change.
+    expect(unobservedElements).toEqual([element]);
+    expect(observedElements).toEqual([element, element]);
+    expect(frames).toHaveLength(0);
+    expect(measure).not.toHaveBeenCalled();
+  });
+
+  test('Should fall back to a frame for an element that is not being watched', () => {
+    const measure = vi.fn();
+
+    measureAfterLayout(document.createElement('span'), measure);
+
+    expect(frames).toHaveLength(1);
+
+    runFrame();
+
+    expect(measure).toHaveBeenCalledTimes(1);
+  });
+
+  test('Should fall back to a frame where ResizeObserver is unavailable', async () => {
+    unsubscribes.forEach((unsubscribe) => unsubscribe());
+    unsubscribes = [];
+    // @ts-expect-error -- simulating an environment without ResizeObserver
+    delete globalThis.ResizeObserver;
+    vi.resetModules();
+    const fresh = await import('../element-size-observer');
+    const element = document.createElement('span');
+    const measure = vi.fn();
+    const unsubscribe = fresh.observeElementSize(element, measure);
+
+    fresh.measureAfterLayout(element, measure);
+    runFrame();
+
+    expect(measure).toHaveBeenCalledTimes(1);
+    unsubscribe();
   });
 });

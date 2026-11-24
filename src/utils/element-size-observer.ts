@@ -48,12 +48,19 @@ const handleWindowResize = () => {
   callbacks.forEach(scheduleMeasure);
 };
 
+// A `ResizeObserver` callback runs right after layout, before paint, so reading
+// layout there is free. Deferring it to an animation frame used to be the cost:
+// by the next frame the page had changed again, and the first read forced a
+// synchronous reflow of the whole document — on a cold load, several of them
+// inside the frames that paint the page. The measurement runs here instead,
+// and drops any copy of it still queued for a frame.
 const handleResizeEntries = (entries: ResizeObserverEntry[]) => {
   entries.forEach((entry) => {
     const callback = callbacks.get(entry.target);
 
     if (callback) {
-      scheduleMeasure(callback);
+      pending.delete(callback);
+      callback();
     }
   });
 };
@@ -71,8 +78,36 @@ const teardown = () => {
 };
 
 /**
- * Watches an element's box for size changes and calls back — batched through
- * {@link scheduleMeasure} — whenever it may need re-measuring.
+ * Measures a watched element once its next layout is done, without forcing
+ * one: observing an element again makes the shared `ResizeObserver` deliver a
+ * fresh notification after the next layout, even when the box size did not
+ * change. Use it when something other than the box size — the text, say —
+ * may have changed what the measurement reads.
+ *
+ * Without a `ResizeObserver`, or for an element that is not being watched,
+ * `fallback` is queued through {@link scheduleMeasure} instead.
+ *
+ * @param element - An element passed to {@link observeElementSize}
+ * @param fallback - Its measurement callback
+ */
+export const measureAfterLayout = (
+  element: Element,
+  fallback: SizeCallback,
+) => {
+  if (observer && callbacks.has(element)) {
+    observer.unobserve(element);
+    observer.observe(element);
+    return;
+  }
+
+  scheduleMeasure(fallback);
+};
+
+/**
+ * Watches an element's box for size changes and calls back whenever it may
+ * need re-measuring: straight from the `ResizeObserver` notification, which
+ * runs after layout, or batched through {@link scheduleMeasure} on a window
+ * resize.
  *
  * A parent can resize without the window doing so, which is what the
  * `ResizeObserver` covers; the `window.resize` listener stays for environments
