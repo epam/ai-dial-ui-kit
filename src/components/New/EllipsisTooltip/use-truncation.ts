@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import {
+  measureAfterLayout,
   observeElementSize,
   scheduleMeasure,
 } from '@/utils/element-size-observer';
@@ -71,11 +72,18 @@ export const useTruncation = <T extends HTMLElement>(text: ReactNode) => {
     return observeElementSize(element, measure);
   }, [measure]);
 
+  // A new text may not change the box size, so the observer would stay quiet;
+  // asking it for a post-layout notification measures the new text without
+  // forcing a reflow, which an animation-frame read would.
   useEffect(() => {
     isTextNodeRef.current = typeof text !== 'string';
 
-    remeasure();
-  }, [text, remeasure]);
+    const element = ref.current;
+
+    if (element) {
+      measureAfterLayout(element, measure);
+    }
+  }, [text, measure]);
 
   return { ref, isTruncated, textContent, remeasure };
 };
