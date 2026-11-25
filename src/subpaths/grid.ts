@@ -11,7 +11,12 @@
 
 export { Grid, GRID_SELECTION_COLUMN_ID } from '../components/New/Grid/Grid';
 export type { GridProps } from '../components/New/Grid/Grid';
-export { GridAppearance, GridColorScheme } from '../types/grid';
+export type { GridLoadingCellParams } from '../components/New/Grid/components/GridLoadingSkeleton';
+export {
+  GridAppearance,
+  GridColorScheme,
+  GridLoadingAppearance,
+} from '../types/grid';
 export { DateCellRenderer } from '../components/New/Grid/renderers/DateCellRenderer';
 export type {
   DateCellRendererProps,

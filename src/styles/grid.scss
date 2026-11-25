@@ -15,6 +15,31 @@
     }
   }
 
+  /* The body skeleton is independent of AG Grid's exclusive loading overlay. */
+  .dial-kit-grid-skeleton-overlay {
+    position: absolute;
+    inset-inline: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: auto;
+  }
+
+  /* Empty-state overlays are not meaningful until the loading state ends. */
+  &.dial-kit-grid-skeleton-loading {
+    .ag-overlay-no-rows-wrapper,
+    .ag-overlay-no-matching-rows-wrapper {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  /* An empty auto-height grid has no body rows to hold space for the overlay. */
+  &.dial-kit-grid-skeleton-empty-auto-height
+    .ag-layout-auto-height
+    .ag-body-viewport {
+    min-height: var(--dial-kit-grid-skeleton-min-height);
+  }
+
   .ag-cell {
     @apply flex items-center;
 

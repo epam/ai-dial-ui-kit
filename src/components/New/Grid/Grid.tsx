@@ -12,9 +12,11 @@ import {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import {
+  type CSSProperties,
   type FC,
   type ReactNode,
   useCallback,
+  useContext,
   useEffect,
   useId,
   useMemo,
@@ -22,19 +24,32 @@ import {
   useState,
 } from 'react';
 
+import { createPortal } from 'react-dom';
+
 import { useIsMobileScreen } from '@/hooks/use-is-mobile-screen';
 import { useIsTabletScreen } from '@/hooks/use-is-tablet-screen';
+import { useSkeletonTiming } from '@/hooks/use-skeleton-timing';
 import type { DropdownItem } from '@/models/dropdown';
 import { GridSelectionMode } from '@/models/selection-mode';
 import { DropdownTrigger } from '@/types/dropdown';
-import { GridAppearance, GridColorScheme } from '@/types/grid';
+import {
+  GridAppearance,
+  GridColorScheme,
+  GridLoadingAppearance,
+} from '@/types/grid';
 import { debounceFn } from '@/utils/debounce';
 import { baseColumnComparator, omitUndefined } from '@/utils/grid-comparators';
 import { registerAgGridModulesOnce } from '@/utils/grid-registration';
 import { mergeClasses } from '@/utils/merge-classes';
 
-import { Dropdown } from '../Dropdown/Dropdown';
+import { Dropdown, type DropdownProps } from '../Dropdown/Dropdown';
 import { EllipsisTooltip } from '../EllipsisTooltip/EllipsisTooltip';
+import { LiveRegion } from '../LiveRegion/LiveRegion';
+import {
+  GridLoadingSkeleton,
+  GridLoadingSkeletonContext,
+  type GridLoadingCellParams,
+} from './components/GridLoadingSkeleton';
 import {
   type GridEmptyStateParams,
   selectGridEmptyStateOverlay,
@@ -76,6 +91,18 @@ const isRightAligned = (colDef?: ColDef) =>
   [colDef?.type ?? []]
     .flat()
     .some((type) => RIGHT_ALIGNED_COLUMN_TYPES.includes(type));
+
+/** Close row-owned portals as the rows become inert, without rebuilding columns. */
+const GridContextMenu: FC<DropdownProps> = ({ disabled, ...props }) => {
+  const { suppressEmptyState } = useContext(GridLoadingSkeletonContext);
+  return (
+    <Dropdown
+      {...props}
+      disabled={suppressEmptyState || disabled}
+      returnFocus={!suppressEmptyState}
+    />
+  );
+};
 
 export interface GridProps<T extends object = Record<string, unknown>> {
   /** Column definitions, in ag-Grid `ColDef` format. */
@@ -128,6 +155,12 @@ export interface GridProps<T extends object = Record<string, unknown>> {
   filteredEmptyStateDescription?: string;
   /** Shows the loading overlay. Defaults to `false`. */
   loading?: boolean;
+  /** Loading overlay style. Defaults to the existing ag-Grid spinner. */
+  loadingAppearance?: GridLoadingAppearance;
+  /** Screen-reader announcement when the skeleton becomes visible. */
+  loadingLabel?: string;
+  /** Draws a custom placeholder in a data column; returning null leaves it empty. */
+  renderLoadingCell?: (params: GridLoadingCellParams) => ReactNode;
   /** Draws a border around the grid. Defaults to `true`. */
   wrapperBorder?: boolean;
   /** Hides the vertical borders between header cells. Defaults to `false`. */
@@ -178,6 +211,12 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * Selection works controlled or uncontrolled: pass `selectedRowIds` to own it,
  * or read `onSelectionChange` and let the grid keep its own. A `sort` declared
  * on a column is honoured — 1.0 stripped it on startup.
+ *
+ * `GridLoadingAppearance.Skeleton` overlays the existing rows without changing
+ * the data or selection. It waits 400 ms before drawing and stays visible for
+ * at least 500 ms. The header remains interactive. `renderLoadingCell` can
+ * supply column-specific placeholders; the selection column stays empty.
+ * The skeleton uses `additionalGridOptions.rowHeight` (or the default height).
  *
  * @example
  * ```tsx
@@ -237,6 +276,9 @@ export interface GridProps<T extends object = Record<string, unknown>> {
  * @param [filteredEmptyStateTitle='No items found'] - Headline when the column filters leave no rows.
  * @param [filteredEmptyStateDescription='Try a different search term or check your filters.'] - Secondary line when the column filters leave no rows.
  * @param [loading=false] - Shows the loading overlay.
+ * @param [loadingAppearance='spinner'] - Loading overlay style.
+ * @param [loadingLabel='Loading'] - Screen-reader announcement for the visible skeleton.
+ * @param [renderLoadingCell] - Renders a custom, non-interactive placeholder for a column.
  * @param [wrapperBorder=true] - Draws a border around the grid.
  * @param [withoutHeaderBorders=false] - Hides the vertical borders between header cells.
  * @param [selectionMode] - Renders a selection column of checkboxes or radios.
@@ -269,6 +311,9 @@ export const Grid = <T extends object>({
   filteredEmptyStateTitle = 'No items found',
   filteredEmptyStateDescription = 'Try a different search term or check your filters.',
   loading = false,
+  loadingAppearance = GridLoadingAppearance.Spinner,
+  loadingLabel = 'Loading',
+  renderLoadingCell,
   wrapperBorder = true,
   withoutHeaderBorders = false,
   allowDisabledContextMenu = false,
@@ -280,7 +325,32 @@ export const Grid = <T extends object>({
 }: GridProps<T>) => {
   registerAgGridModulesOnce();
 
+  const {
+    defaultColDef: consumerDefaultColDef,
+    rowSelection: consumerRowSelection,
+    loading: consumerLoading,
+    overlayComponentSelector: consumerOverlaySelector,
+    onGridReady: consumerOnGridReady,
+    ...restAdditionalGridOptions
+  } = additionalGridOptions ?? {};
+
   const [gridApi, setGridApi] = useState<GridApi<T> | undefined>();
+  const [gridRoot, setGridRoot] = useState<HTMLElement | null>(null);
+  const [emptyAutoHeight, setEmptyAutoHeight] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const useSkeleton = loadingAppearance === GridLoadingAppearance.Skeleton;
+  const effectiveLoading = consumerLoading ?? loading;
+  const { showSkeleton, showPlaceholder } = useSkeletonTiming(
+    useSkeleton && effectiveLoading,
+  );
+  const skeletonLoading = useSkeleton && showPlaceholder;
+  const configuredRowHeight = additionalGridOptions?.rowHeight;
+  const skeletonRowHeight =
+    typeof configuredRowHeight === 'number' &&
+    Number.isFinite(configuredRowHeight) &&
+    configuredRowHeight > 0
+      ? configuredRowHeight
+      : ROW_HEIGHT;
   const isMobileScreen = useIsMobileScreen();
   const isTabletScreen = useIsTabletScreen();
   const selectedNodesRef = useRef<Set<string>>(new Set());
@@ -385,7 +455,7 @@ export const Grid = <T extends object>({
       }
 
       return (
-        <Dropdown
+        <GridContextMenu
           trigger={[DropdownTrigger.ContextMenu]}
           items={
             p.data
@@ -402,7 +472,7 @@ export const Grid = <T extends object>({
           disabled={disabled && !allowDisabledContextMenu}
         >
           <span className="block min-w-0 max-w-full flex-1">{content}</span>
-        </Dropdown>
+        </GridContextMenu>
       );
     },
     [hasContextMenu, allowDisabledContextMenu],
@@ -555,12 +625,6 @@ export const Grid = <T extends object>({
     return selectionColumn ? [selectionColumn, ...columns] : columns;
   }, [columnDefs, wrapsRenderers, wrapRendererIfNeeded, selectionColumn]);
 
-  const {
-    defaultColDef: consumerDefaultColDef,
-    rowSelection: consumerRowSelection,
-    ...restAdditionalGridOptions
-  } = additionalGridOptions ?? {};
-
   const defaultColDef: ColDef<T> = useMemo(
     () => ({
       minWidth: DEFAULT_MIN_COLUMN_WIDTH,
@@ -582,7 +646,10 @@ export const Grid = <T extends object>({
     e.api.sizeColumnsToFit();
 
     setGridApi(e.api as GridApi<T>);
-    additionalGridOptions?.onGridReady?.(e);
+    setGridRoot(
+      gridRef.current?.querySelector<HTMLElement>('.ag-root') ?? null,
+    );
+    consumerOnGridReady?.(e);
     onGridApiChange?.(e.api as GridApi<T>);
   };
 
@@ -715,49 +782,220 @@ export const Grid = <T extends object>({
     }
   }, [gridApi, isUserSelectionEvent, selectedRowIds]);
 
+  // Keep all covered row containers out of the accessibility tree and Tab
+  // order; the header remains available. Remember pre-existing inert states.
+  useEffect(() => {
+    if (!skeletonLoading || !gridApi || !gridRoot) return;
+    const priorInert = new Map<HTMLElement, boolean>();
+    const makeRowsInert = () => {
+      const containers = gridRoot.querySelectorAll<HTMLElement>(
+        ':scope > .ag-floating-top, :scope > .ag-body > .ag-body-viewport, :scope > .ag-sticky-top, :scope > .ag-sticky-bottom, :scope > .ag-floating-bottom',
+      );
+      const active = document.activeElement;
+      if (
+        active &&
+        Array.from(containers).some((node) => node.contains(active))
+      ) {
+        const firstColumn = gridApi.getAllDisplayedColumns()[0];
+        if (firstColumn) gridApi.setFocusedHeader(firstColumn);
+      }
+      containers.forEach((node) => {
+        if (!priorInert.has(node)) {
+          priorInert.set(node, node.hasAttribute('inert'));
+          node.setAttribute('inert', '');
+        }
+      });
+    };
+    makeRowsInert();
+    // AG Grid can replace body containers when its layout changes.
+    const observer = new MutationObserver((records) => {
+      if (
+        records.some(
+          ({ target }) =>
+            target === gridRoot ||
+            (target instanceof Element && target.classList.contains('ag-body')),
+        )
+      ) {
+        makeRowsInert();
+      }
+    });
+    observer.observe(gridRoot, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      priorInert.forEach((wasInert, node) => {
+        if (!wasInert) node.removeAttribute('inert');
+      });
+    };
+  }, [gridApi, gridRoot, skeletonLoading]);
+
+  // Consumer-supplied empty overlays may stay mounted while the data is
+  // unknown. Hide their wrapper without disturbing active/export overlays.
+  useEffect(() => {
+    if (!skeletonLoading || !gridRoot) return;
+    const saved = new Map<
+      HTMLElement,
+      { hidden: string | null; ariaHidden: string | null; inert: string | null }
+    >();
+    const restore = (node: HTMLElement) => {
+      const previous = saved.get(node);
+      if (!previous) return;
+      for (const [name, value] of [
+        ['hidden', previous.hidden],
+        ['aria-hidden', previous.ariaHidden],
+        ['inert', previous.inert],
+      ] as const) {
+        if (value === null) node.removeAttribute(name);
+        else node.setAttribute(name, value);
+      }
+      saved.delete(node);
+    };
+    const sync = () => {
+      const emptyWrappers = new Set(
+        gridRoot.querySelectorAll<HTMLElement>(
+          '.ag-overlay-no-rows-wrapper, .ag-overlay-no-matching-rows-wrapper',
+        ),
+      );
+      saved.forEach((_, node) => {
+        if (!emptyWrappers.has(node)) restore(node);
+      });
+      emptyWrappers.forEach((node) => {
+        if (saved.has(node)) return;
+        saved.set(node, {
+          hidden: node.getAttribute('hidden'),
+          ariaHidden: node.getAttribute('aria-hidden'),
+          inert: node.getAttribute('inert'),
+        });
+        node.setAttribute('hidden', '');
+        node.setAttribute('aria-hidden', 'true');
+        node.setAttribute('inert', '');
+      });
+    };
+    sync();
+    const observer = new MutationObserver((records) => {
+      if (
+        records.some(
+          ({ target }) =>
+            target === gridRoot ||
+            (target instanceof Element &&
+              (target.classList.contains('ag-overlay-panel') ||
+                target.classList.contains('ag-overlay-wrapper'))),
+        )
+      )
+        sync();
+    });
+    observer.observe(gridRoot, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    return () => {
+      observer.disconnect();
+      saved.forEach((_, node) => restore(node));
+    };
+  }, [gridRoot, skeletonLoading]);
+
+  useEffect(() => {
+    if (
+      !gridApi ||
+      !skeletonLoading ||
+      additionalGridOptions?.domLayout !== 'autoHeight'
+    ) {
+      setEmptyAutoHeight(false);
+      return;
+    }
+    const update = () =>
+      setEmptyAutoHeight(gridApi.getDisplayedRowCount() === 0);
+    update();
+    gridApi.addEventListener('modelUpdated', update);
+    return () => {
+      if (!gridApi.isDestroyed())
+        gridApi.removeEventListener('modelUpdated', update);
+    };
+  }, [gridApi, skeletonLoading, additionalGridOptions?.domLayout]);
+
   return (
-    <div
-      className={mergeClasses(
-        GRID_ROOT_CLASS,
-        'size-full',
-        selectionMode && GRID_WITH_SELECTION_CLASS,
-        selectionMode &&
-          isSelectionPinnedVisible &&
-          GRID_SELECTION_VISIBLE_CLASS,
-        withoutHeaderBorders && GRID_WITHOUT_HEADER_BORDERS_CLASS,
-        isChat && GRID_CHAT_CLASS,
-        className,
-      )}
-      role="region"
-      aria-label={ariaLabel}
-      aria-busy={loading}
-    >
-      {/* ag-Grid renders its own `role="grid"` inside, so this wrapper stays a
+    <>
+      <div
+        ref={gridRef}
+        className={mergeClasses(
+          GRID_ROOT_CLASS,
+          useSkeleton && 'dial-kit-grid-skeleton',
+          skeletonLoading && 'dial-kit-grid-skeleton-loading',
+          skeletonLoading &&
+            emptyAutoHeight &&
+            'dial-kit-grid-skeleton-empty-auto-height',
+          'size-full',
+          selectionMode && GRID_WITH_SELECTION_CLASS,
+          selectionMode &&
+            isSelectionPinnedVisible &&
+            GRID_SELECTION_VISIBLE_CLASS,
+          withoutHeaderBorders && GRID_WITHOUT_HEADER_BORDERS_CLASS,
+          isChat && GRID_CHAT_CLASS,
+          className,
+        )}
+        role="region"
+        style={
+          skeletonLoading && emptyAutoHeight
+            ? ({
+                '--dial-kit-grid-skeleton-min-height': `${skeletonRowHeight * 3}px`,
+              } as CSSProperties)
+            : undefined
+        }
+        aria-label={ariaLabel}
+        aria-busy={useSkeleton ? skeletonLoading : effectiveLoading}
+      >
+        {/* ag-Grid renders its own `role="grid"` inside, so this wrapper stays a
           plain scroll container rather than claiming a table role of its own. */}
-      <div className="h-full overflow-x-auto">
-        <AgGridReact<T>
-          rowModelType="clientSide"
-          headerHeight={ROW_HEIGHT}
-          rowHeight={ROW_HEIGHT}
-          cellSelection={false}
-          theme={theme}
-          autoSizeStrategy={{ type: 'fitGridWidth' }}
-          columnDefs={computedColumnDefs}
-          defaultColDef={defaultColDef}
-          onGridSizeChanged={onGridSizeChanged}
-          onGridReady={onGridReady}
-          loading={loading}
-          suppressCellFocus
-          suppressDragLeaveHidesColumns
-          overlayComponentSelector={selectGridEmptyStateOverlay}
-          overlayComponentParams={emptyStateParams}
-          rowData={rowData}
-          rowSelection={rowSelection}
-          onSelectionChanged={onSelectionChanged}
-          getRowId={agGridGetRowId}
-          {...restAdditionalGridOptions}
-        />
+        <div className="h-full overflow-x-auto">
+          <GridLoadingSkeletonContext.Provider
+            value={{
+              showSkeleton,
+              suppressEmptyState: skeletonLoading,
+              rowHeight: skeletonRowHeight,
+              selectionColumnId: GRID_SELECTION_COLUMN_ID,
+              renderCell: renderLoadingCell,
+            }}
+          >
+            <AgGridReact<T>
+              rowModelType="clientSide"
+              headerHeight={ROW_HEIGHT}
+              rowHeight={ROW_HEIGHT}
+              cellSelection={false}
+              theme={theme}
+              autoSizeStrategy={{ type: 'fitGridWidth' }}
+              columnDefs={computedColumnDefs}
+              defaultColDef={defaultColDef}
+              onGridSizeChanged={onGridSizeChanged}
+              onGridReady={onGridReady}
+              loading={useSkeleton ? false : effectiveLoading}
+              suppressCellFocus
+              suppressDragLeaveHidesColumns
+              overlayComponentSelector={
+                consumerOverlaySelector ?? selectGridEmptyStateOverlay
+              }
+              overlayComponentParams={emptyStateParams}
+              rowData={rowData}
+              rowSelection={rowSelection}
+              onSelectionChanged={onSelectionChanged}
+              getRowId={agGridGetRowId}
+              {...restAdditionalGridOptions}
+            />
+            {skeletonLoading &&
+              gridApi &&
+              gridRoot &&
+              createPortal(
+                <GridLoadingSkeleton api={gridApi} gridRoot={gridRoot} />,
+                gridRoot,
+              )}
+          </GridLoadingSkeletonContext.Provider>
+        </div>
       </div>
-    </div>
+      {useSkeleton && (
+        <LiveRegion visuallyHidden>
+          {showSkeleton ? loadingLabel : ''}
+        </LiveRegion>
+      )}
+    </>
   );
 };

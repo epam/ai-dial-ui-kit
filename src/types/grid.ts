@@ -17,3 +17,9 @@ export enum GridAppearance {
   Default = 'default',
   Chat = 'chat',
 }
+
+/** Loading overlay drawn by the grid. */
+export enum GridLoadingAppearance {
+  Spinner = 'spinner',
+  Skeleton = 'skeleton',
+}

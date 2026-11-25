@@ -18,6 +18,15 @@ export { DialLabelledText } from './components/LabelledText/LabelledText';
 export { DialTag } from './components/Tag/Tag';
 export { DialEllipsisTooltip } from './components/EllipsisTooltip/EllipsisTooltip';
 export { Skeleton } from './components/Skeleton/Skeleton';
+export type { SkeletonProps } from './components/Skeleton/Skeleton';
+export {
+  SKELETON_BAR_CLASS_NAME,
+  SKELETON_BAR_HEIGHT,
+  SKELETON_BAR_WIDTHS,
+  SKELETON_CIRCLE_SIZE_CARD,
+  SKELETON_CIRCLE_SIZE_LIST,
+  SKELETON_SHORT_BAR_WIDTH,
+} from './components/Skeleton/constants';
 export { SkeletonShimmer } from './components/Skeleton/SkeletonShimmer';
 export type { SkeletonShimmerProps } from './components/Skeleton/SkeletonShimmer';
 
@@ -99,6 +108,7 @@ export {
   SkeletonVariant,
   SkeletonAvatarSize,
   SkeletonAvatarShape,
+  SkeletonTone,
 } from './types/skeleton';
 
 // Hooks
@@ -450,7 +460,12 @@ export {
 export { TransferQueueItemStatus } from './types/transfer-queue';
 export { Grid, GRID_SELECTION_COLUMN_ID } from './components/New/Grid/Grid';
 export type { GridProps } from './components/New/Grid/Grid';
-export { GridAppearance, GridColorScheme } from './types/grid';
+export type { GridLoadingCellParams } from './components/New/Grid/components/GridLoadingSkeleton';
+export {
+  GridAppearance,
+  GridColorScheme,
+  GridLoadingAppearance,
+} from './types/grid';
 export { DateCellRenderer } from './components/New/Grid/renderers/DateCellRenderer';
 export type {
   DateCellRendererProps,

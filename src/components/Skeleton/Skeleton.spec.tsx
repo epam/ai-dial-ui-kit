@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { Skeleton } from './Skeleton';
 import {
   SkeletonVariant,
+  SkeletonTone,
   SkeletonAvatarSize,
   SkeletonAvatarShape,
 } from '@/types/skeleton';
@@ -125,6 +126,102 @@ describe('Dial UI Kit :: Skeleton', () => {
     );
     expect(container.querySelector('.flex.gap-4')).toBeInTheDocument();
   });
+
+  it.each([
+    SkeletonVariant.Text,
+    SkeletonVariant.Circular,
+    SkeletonVariant.Rectangular,
+  ])('uses the raised background by default for %s', (variant) => {
+    const { container } = render(<Skeleton variant={variant} />);
+    expect(container.firstChild).toHaveClass('bg-layer-raised');
+  });
+
+  it.each([
+    [SkeletonTone.Dark, 'bg-layer-sunken'],
+    [SkeletonTone.Light, 'bg-layer-base'],
+  ])('applies %s tone to every default placeholder', (tone, background) => {
+    const { container } = render(
+      <Skeleton tone={tone} avatar paragraph={{ rows: 2 }} />,
+    );
+    const placeholders = container.querySelectorAll(`.${background}`);
+    expect(placeholders).toHaveLength(4); // avatar, title and two rows
+    expect(container.querySelector('.bg-layer-raised')).not.toBeInTheDocument();
+    expect(container.firstChild).not.toHaveAttribute('tone');
+  });
+
+  it('preserves the raised background on all default placeholders without a tone', () => {
+    const { container } = render(<Skeleton avatar paragraph={{ rows: 2 }} />);
+    expect(container.querySelectorAll('.bg-layer-raised')).toHaveLength(4);
+  });
+
+  it.each([
+    [SkeletonVariant.Text, SkeletonTone.Dark, 'bg-layer-sunken'],
+    [SkeletonVariant.Text, SkeletonTone.Light, 'bg-layer-base'],
+    [SkeletonVariant.Circular, SkeletonTone.Dark, 'bg-layer-sunken'],
+    [SkeletonVariant.Circular, SkeletonTone.Light, 'bg-layer-base'],
+    [SkeletonVariant.Rectangular, SkeletonTone.Dark, 'bg-layer-sunken'],
+    [SkeletonVariant.Rectangular, SkeletonTone.Light, 'bg-layer-base'],
+  ])(
+    'applies %s / %s tone without forwarding it to the DOM',
+    (variant, tone, background) => {
+      const { container } = render(<Skeleton variant={variant} tone={tone} />);
+      expect(container.firstChild).toHaveClass(background);
+      expect(container.firstChild).not.toHaveClass('bg-layer-raised');
+      expect(container.firstChild).not.toHaveAttribute('tone');
+    },
+  );
+
+  it.each([SkeletonVariant.Default, SkeletonVariant.Text])(
+    'lets className override the tone on %s placeholders',
+    (variant) => {
+      const { container } = render(
+        <Skeleton
+          variant={variant}
+          tone={SkeletonTone.Dark}
+          className="bg-layer-base"
+          avatar
+          paragraph={{ rows: 2 }}
+        />,
+      );
+      const placeholders =
+        variant === SkeletonVariant.Default
+          ? container.querySelectorAll('.h-4, .rounded-full')
+          : [container.firstChild];
+      expect(placeholders).toHaveLength(
+        variant === SkeletonVariant.Default ? 4 : 1,
+      );
+      placeholders.forEach((element) => {
+        expect(element).toHaveClass('bg-layer-base');
+        expect(element).not.toHaveClass('bg-layer-sunken');
+      });
+    },
+  );
+
+  it.each([SkeletonVariant.Default, SkeletonVariant.Text])(
+    'lets color override the tone on %s placeholders',
+    (variant) => {
+      const { container } = render(
+        <Skeleton
+          variant={variant}
+          tone={SkeletonTone.Light}
+          color="rgb(1, 2, 3)"
+          avatar
+          paragraph={{ rows: 2 }}
+        />,
+      );
+      const placeholders =
+        variant === SkeletonVariant.Default
+          ? container.querySelectorAll('.h-4, .rounded-full')
+          : [container.firstChild];
+      expect(placeholders).toHaveLength(
+        variant === SkeletonVariant.Default ? 4 : 1,
+      );
+      placeholders.forEach((element) => {
+        expect(element).toHaveClass('bg-layer-base');
+        expect(element).toHaveStyle({ backgroundColor: 'rgb(1, 2, 3)' });
+      });
+    },
+  );
 
   it.each([SkeletonVariant.Text, SkeletonVariant.Rectangular])(
     'lets className override the radius of the %s variant',

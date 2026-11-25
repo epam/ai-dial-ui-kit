@@ -2,7 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { IconPhoto, IconUser } from '@tabler/icons-react';
 import { Skeleton } from './Skeleton';
 import {
+  SKELETON_BAR_CLASS_NAME,
+  SKELETON_BAR_HEIGHT,
+  SKELETON_CIRCLE_SIZE_LIST,
+} from './constants';
+import {
   SkeletonVariant,
+  SkeletonTone,
   SkeletonAvatarSize,
   SkeletonAvatarShape,
 } from '@/types/skeleton';
@@ -28,6 +34,12 @@ const meta: Meta<typeof Skeleton> = {
       control: 'select',
       options: Object.values(SkeletonVariant),
       description: 'Skeleton variant',
+    },
+    tone: {
+      control: 'select',
+      options: Object.values(SkeletonTone),
+      description:
+        'Dark (sunken) or light (base) token background; omitted preserves the raised background. className and color can override it.',
     },
     width: {
       control: 'text',
@@ -128,6 +140,45 @@ export const TextVariant: Story = {
     height: '20px',
     active: true,
   },
+};
+
+export const Tones: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Dark marks primary lines and circles; light marks secondary lines. Without a tone, Skeleton keeps its existing raised background.',
+      },
+    },
+  },
+  render: () => (
+    <div className="w-80 max-w-full rounded bg-layer-raised p-4">
+      <div className="flex items-start gap-3">
+        <Skeleton
+          variant={SkeletonVariant.Circular}
+          tone={SkeletonTone.Dark}
+          width={SKELETON_CIRCLE_SIZE_LIST}
+          height={SKELETON_CIRCLE_SIZE_LIST}
+        />
+        <div className="flex flex-1 flex-col gap-3">
+          <Skeleton
+            variant={SkeletonVariant.Text}
+            tone={SkeletonTone.Dark}
+            width="70%"
+            height={SKELETON_BAR_HEIGHT}
+            className={SKELETON_BAR_CLASS_NAME}
+          />
+          <Skeleton
+            variant={SkeletonVariant.Text}
+            tone={SkeletonTone.Light}
+            width="45%"
+            height={SKELETON_BAR_HEIGHT}
+            className={SKELETON_BAR_CLASS_NAME}
+          />
+        </div>
+      </div>
+    </div>
+  ),
 };
 
 export const SmallTextVariant: Story = {
