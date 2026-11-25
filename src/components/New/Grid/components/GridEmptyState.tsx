@@ -4,10 +4,14 @@ import type {
   OverlayType,
 } from 'ag-grid-community';
 
+import { useContext } from 'react';
+
 import {
   NoDataContent,
   type NoDataContentProps,
 } from '@/components/New/NoDataContent/NoDataContent';
+
+import { GridLoadingSkeletonContext } from './GridLoadingSkeleton';
 
 /** What the grid shows for each of its two empty states. */
 export interface GridEmptyStateParams {
@@ -29,9 +33,14 @@ export const GridEmptyState = ({
   overlayType,
   empty,
   filtered,
-}: GridEmptyStateProps) => (
-  <NoDataContent {...(overlayType === 'noMatchingRows' ? filtered : empty)} />
-);
+}: GridEmptyStateProps) => {
+  const { suppressEmptyState } = useContext(GridLoadingSkeletonContext);
+  return suppressEmptyState ? (
+    <span hidden />
+  ) : (
+    <NoDataContent {...(overlayType === 'noMatchingRows' ? filtered : empty)} />
+  );
+};
 
 /**
  * Hands the two empty overlays to {@link GridEmptyState} and leaves the rest —

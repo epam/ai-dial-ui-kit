@@ -5,6 +5,11 @@ export enum SkeletonVariant {
   Rectangular = 'rectangular',
 }
 
+export enum SkeletonTone {
+  Sunken = 'sunken',
+  Base = 'base',
+}
+
 export enum SkeletonAvatarSize {
   Small = 'small',
   Default = 'default',

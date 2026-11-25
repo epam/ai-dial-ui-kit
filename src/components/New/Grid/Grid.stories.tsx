@@ -19,7 +19,11 @@ import { GridSelectionMode } from '@/models/selection-mode';
 import { AvatarShape } from '@/types/avatar';
 import { BadgeVariant } from '@/types/badge';
 import { ButtonAppearance, ButtonVariant } from '@/types/button';
-import { GridAppearance, GridColorScheme } from '@/types/grid';
+import {
+  GridAppearance,
+  GridColorScheme,
+  GridLoadingAppearance,
+} from '@/types/grid';
 import { ElementSize } from '@/types/size';
 import { mergeClasses } from '@/utils/merge-classes';
 import { Grid, type GridProps } from './Grid';
@@ -105,6 +109,11 @@ const meta = {
       description: 'Renders a selection column of checkboxes or radios',
     },
     loading: { control: { type: 'boolean' } },
+    loadingAppearance: {
+      control: { type: 'select' },
+      options: Object.values(GridLoadingAppearance),
+    },
+    renderLoadingCell: { control: false },
     alternateOddRowColors: { control: { type: 'boolean' } },
     wrapperBorder: { control: { type: 'boolean' } },
     withoutHeaderBorders: { control: { type: 'boolean' } },
@@ -211,6 +220,33 @@ export const Loading: Story = {
   args: {
     loading: true,
   },
+};
+
+/** The skeleton retains the header, column widths, row height, and selection. */
+export const SkeletonLoading: Story = {
+  args: {
+    loading: true,
+    loadingAppearance: GridLoadingAppearance.Skeleton,
+    loadingLabel: 'Loading products',
+    selectionMode: GridSelectionMode.MULTIPLE,
+    additionalGridOptions: { rowHeight: 44 },
+  },
+};
+
+/** An empty auto-height grid reserves enough room for its loading placeholders. */
+export const SkeletonLoadingAutoHeight: Story = {
+  args: {
+    loading: true,
+    loadingAppearance: GridLoadingAppearance.Skeleton,
+    loadingLabel: 'Loading products',
+    rowData: [],
+    additionalGridOptions: { domLayout: 'autoHeight', rowHeight: 68 },
+  },
+  render: (args) => (
+    <div className="bg-layer-base p-4">
+      <Grid<Product> {...args} />
+    </div>
+  ),
 };
 
 /**

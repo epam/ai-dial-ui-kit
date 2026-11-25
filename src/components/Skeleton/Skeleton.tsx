@@ -7,6 +7,7 @@ import {
 import { mergeClasses } from '@/utils/merge-classes';
 import {
   SkeletonVariant,
+  SkeletonTone,
   SkeletonAvatarSize,
   SkeletonAvatarShape,
 } from '@/types/skeleton';
@@ -26,6 +27,8 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   loading?: boolean;
   children?: ReactNode;
   variant?: SkeletonVariant;
+  /** Token-based background; omitted preserves the raised background. */
+  tone?: SkeletonTone;
   width?: string | number;
   height?: string | number;
   overlay?: ReactNode;
@@ -85,6 +88,7 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
  * @param [loading=true] - Display the skeleton when true
  * @param [children] - Content to be displayed when loading is false
  * @param [variant=SkeletonVariant.Default] - Skeleton variant
+ * @param [tone] - Dark (sunken) or light (base) token background; defaults to raised. `className` and `color` can override it.
  * @param [width] - Width of the skeleton
  * @param [height] - Height of the skeleton
  * @param [className] - Additional CSS classes
@@ -99,6 +103,7 @@ export const Skeleton: FC<SkeletonProps> = ({
   loading = true,
   children,
   variant = SkeletonVariant.Default,
+  tone,
   width,
   height,
   overlay,
@@ -110,8 +115,15 @@ export const Skeleton: FC<SkeletonProps> = ({
     return <>{children}</>;
   }
 
+  const toneClass =
+    tone === SkeletonTone.Sunken
+      ? 'bg-layer-sunken'
+      : tone === SkeletonTone.Base
+        ? 'bg-layer-base'
+        : 'bg-layer-raised';
+
   const baseClass = mergeClasses(
-    'bg-layer-raised',
+    toneClass,
     active && 'animate-pulse',
     className,
   );
@@ -121,7 +133,7 @@ export const Skeleton: FC<SkeletonProps> = ({
     // radius (e.g. `rounded-xl` on a `Text` bar) — merged earlier it lost to
     // the variant's own `rounded`.
     const variantClass = mergeClasses(
-      'bg-layer-raised',
+      toneClass,
       active && 'animate-pulse',
       variant === SkeletonVariant.Circular && 'rounded-full',
       variant === SkeletonVariant.Rectangular && 'rounded',
