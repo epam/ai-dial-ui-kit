@@ -94,12 +94,12 @@ const isRightAligned = (colDef?: ColDef) =>
 
 /** Close row-owned portals as the rows become inert, without rebuilding columns. */
 const GridContextMenu: FC<DropdownProps> = ({ disabled, ...props }) => {
-  const { suppressEmptyState } = useContext(GridLoadingSkeletonContext);
+  const { rowsInert } = useContext(GridLoadingSkeletonContext);
   return (
     <Dropdown
       {...props}
-      disabled={suppressEmptyState || disabled}
-      returnFocus={!suppressEmptyState}
+      disabled={rowsInert || disabled}
+      returnFocus={!rowsInert}
     />
   );
 };
@@ -343,7 +343,11 @@ export const Grid = <T extends object>({
   const { showSkeleton, showPlaceholder } = useSkeletonTiming(
     useSkeleton && effectiveLoading,
   );
+  // `skeletonLoading` covers the delay too: it only keeps the empty state from
+  // flashing. `rowsInert` starts with the visible skeleton, so a fast load never
+  // moves focus, closes menus or blocks clicks.
   const skeletonLoading = useSkeleton && showPlaceholder;
+  const rowsInert = useSkeleton && showSkeleton;
   const configuredRowHeight = additionalGridOptions?.rowHeight;
   const skeletonRowHeight =
     typeof configuredRowHeight === 'number' &&
@@ -785,7 +789,7 @@ export const Grid = <T extends object>({
   // Keep all covered row containers out of the accessibility tree and Tab
   // order; the header remains available. Remember pre-existing inert states.
   useEffect(() => {
-    if (!skeletonLoading || !gridApi || !gridRoot) return;
+    if (!rowsInert || !gridApi || !gridRoot) return;
     const priorInert = new Map<HTMLElement, boolean>();
     const makeRowsInert = () => {
       const containers = gridRoot.querySelectorAll<HTMLElement>(
@@ -826,74 +830,7 @@ export const Grid = <T extends object>({
         if (!wasInert) node.removeAttribute('inert');
       });
     };
-  }, [gridApi, gridRoot, skeletonLoading]);
-
-  // Consumer-supplied empty overlays may stay mounted while the data is
-  // unknown. Hide their wrapper without disturbing active/export overlays.
-  useEffect(() => {
-    if (!skeletonLoading || !gridRoot) return;
-    const saved = new Map<
-      HTMLElement,
-      { hidden: string | null; ariaHidden: string | null; inert: string | null }
-    >();
-    const restore = (node: HTMLElement) => {
-      const previous = saved.get(node);
-      if (!previous) return;
-      for (const [name, value] of [
-        ['hidden', previous.hidden],
-        ['aria-hidden', previous.ariaHidden],
-        ['inert', previous.inert],
-      ] as const) {
-        if (value === null) node.removeAttribute(name);
-        else node.setAttribute(name, value);
-      }
-      saved.delete(node);
-    };
-    const sync = () => {
-      const emptyWrappers = new Set(
-        gridRoot.querySelectorAll<HTMLElement>(
-          '.ag-overlay-no-rows-wrapper, .ag-overlay-no-matching-rows-wrapper',
-        ),
-      );
-      saved.forEach((_, node) => {
-        if (!emptyWrappers.has(node)) restore(node);
-      });
-      emptyWrappers.forEach((node) => {
-        if (saved.has(node)) return;
-        saved.set(node, {
-          hidden: node.getAttribute('hidden'),
-          ariaHidden: node.getAttribute('aria-hidden'),
-          inert: node.getAttribute('inert'),
-        });
-        node.setAttribute('hidden', '');
-        node.setAttribute('aria-hidden', 'true');
-        node.setAttribute('inert', '');
-      });
-    };
-    sync();
-    const observer = new MutationObserver((records) => {
-      if (
-        records.some(
-          ({ target }) =>
-            target === gridRoot ||
-            (target instanceof Element &&
-              (target.classList.contains('ag-overlay-panel') ||
-                target.classList.contains('ag-overlay-wrapper'))),
-        )
-      )
-        sync();
-    });
-    observer.observe(gridRoot, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => {
-      observer.disconnect();
-      saved.forEach((_, node) => restore(node));
-    };
-  }, [gridRoot, skeletonLoading]);
+  }, [gridApi, gridRoot, rowsInert]);
 
   useEffect(() => {
     if (
@@ -913,6 +850,24 @@ export const Grid = <T extends object>({
         gridApi.removeEventListener('modelUpdated', update);
     };
   }, [gridApi, skeletonLoading, additionalGridOptions?.domLayout]);
+
+  const skeletonContext = useMemo(
+    () => ({
+      showSkeleton,
+      suppressEmptyState: skeletonLoading,
+      rowsInert,
+      rowHeight: skeletonRowHeight,
+      selectionColumnId: GRID_SELECTION_COLUMN_ID,
+      renderCell: renderLoadingCell,
+    }),
+    [
+      showSkeleton,
+      skeletonLoading,
+      rowsInert,
+      skeletonRowHeight,
+      renderLoadingCell,
+    ],
+  );
 
   return (
     <>
@@ -948,15 +903,7 @@ export const Grid = <T extends object>({
         {/* ag-Grid renders its own `role="grid"` inside, so this wrapper stays a
           plain scroll container rather than claiming a table role of its own. */}
         <div className="h-full overflow-x-auto">
-          <GridLoadingSkeletonContext.Provider
-            value={{
-              showSkeleton,
-              suppressEmptyState: skeletonLoading,
-              rowHeight: skeletonRowHeight,
-              selectionColumnId: GRID_SELECTION_COLUMN_ID,
-              renderCell: renderLoadingCell,
-            }}
-          >
+          <GridLoadingSkeletonContext.Provider value={skeletonContext}>
             <AgGridReact<T>
               rowModelType="clientSide"
               headerHeight={ROW_HEIGHT}

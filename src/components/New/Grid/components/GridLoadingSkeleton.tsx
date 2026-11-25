@@ -29,7 +29,10 @@ export interface GridLoadingCellParams {
 
 export interface GridLoadingSkeletonState {
   showSkeleton: boolean;
+  /** Hide the empty state while the data is unknown (delay and skeleton). */
   suppressEmptyState: boolean;
+  /** The skeleton is visible: rows are inert and row menus are closed. */
+  rowsInert: boolean;
   rowHeight: number;
   selectionColumnId: string;
   renderCell?: (params: GridLoadingCellParams) => ReactNode;
@@ -39,6 +42,7 @@ export const GridLoadingSkeletonContext =
   createContext<GridLoadingSkeletonState>({
     showSkeleton: false,
     suppressEmptyState: false,
+    rowsInert: false,
     rowHeight: ROW_HEIGHT,
     selectionColumnId: '',
   });
@@ -47,6 +51,10 @@ export const GridLoadingSkeletonContext =
  * A non-interactive overlay that leaves the grid's real rows and selection
  * intact. Placeholders are not AG Grid rows and the entire overlay is hidden
  * and inert, so it adds no accessible rows and does not change `aria-rowcount`.
+ * During the initial delay it is transparent and does not capture the pointer.
+ *
+ * Limitation: layout is LTR only. The `translateX(-scrollLeft)` offset and the
+ * left/center/right container order do not mirror under `dir="rtl"`.
  */
 export const GridLoadingSkeleton = ({
   api,
@@ -167,7 +175,9 @@ export const GridLoadingSkeleton = ({
                 ]
               }
               height={SKELETON_BAR_HEIGHT}
-              tone={rowIndex % 2 === 0 ? SkeletonTone.Dark : SkeletonTone.Light}
+              tone={
+                rowIndex % 2 === 0 ? SkeletonTone.Sunken : SkeletonTone.Base
+              }
               className={SKELETON_BAR_CLASS_NAME}
             />
           )}
@@ -178,7 +188,10 @@ export const GridLoadingSkeleton = ({
   return (
     <div
       aria-hidden="true"
-      className="dial-kit-grid-skeleton-overlay"
+      className={mergeClasses(
+        'dial-kit-grid-skeleton-overlay',
+        !showSkeleton && 'dial-kit-grid-skeleton-overlay-pending',
+      )}
       style={insets}
     >
       <div

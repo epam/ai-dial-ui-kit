@@ -137,8 +137,8 @@ describe('Dial UI Kit :: Skeleton', () => {
   });
 
   it.each([
-    [SkeletonTone.Dark, 'bg-layer-sunken'],
-    [SkeletonTone.Light, 'bg-layer-base'],
+    [SkeletonTone.Sunken, 'bg-layer-sunken'],
+    [SkeletonTone.Base, 'bg-layer-base'],
   ])('applies %s tone to every default placeholder', (tone, background) => {
     const { container } = render(
       <Skeleton tone={tone} avatar paragraph={{ rows: 2 }} />,
@@ -155,12 +155,12 @@ describe('Dial UI Kit :: Skeleton', () => {
   });
 
   it.each([
-    [SkeletonVariant.Text, SkeletonTone.Dark, 'bg-layer-sunken'],
-    [SkeletonVariant.Text, SkeletonTone.Light, 'bg-layer-base'],
-    [SkeletonVariant.Circular, SkeletonTone.Dark, 'bg-layer-sunken'],
-    [SkeletonVariant.Circular, SkeletonTone.Light, 'bg-layer-base'],
-    [SkeletonVariant.Rectangular, SkeletonTone.Dark, 'bg-layer-sunken'],
-    [SkeletonVariant.Rectangular, SkeletonTone.Light, 'bg-layer-base'],
+    [SkeletonVariant.Text, SkeletonTone.Sunken, 'bg-layer-sunken'],
+    [SkeletonVariant.Text, SkeletonTone.Base, 'bg-layer-base'],
+    [SkeletonVariant.Circular, SkeletonTone.Sunken, 'bg-layer-sunken'],
+    [SkeletonVariant.Circular, SkeletonTone.Base, 'bg-layer-base'],
+    [SkeletonVariant.Rectangular, SkeletonTone.Sunken, 'bg-layer-sunken'],
+    [SkeletonVariant.Rectangular, SkeletonTone.Base, 'bg-layer-base'],
   ])(
     'applies %s / %s tone without forwarding it to the DOM',
     (variant, tone, background) => {
@@ -177,7 +177,7 @@ describe('Dial UI Kit :: Skeleton', () => {
       const { container } = render(
         <Skeleton
           variant={variant}
-          tone={SkeletonTone.Dark}
+          tone={SkeletonTone.Sunken}
           className="bg-layer-base"
           avatar
           paragraph={{ rows: 2 }}
@@ -203,7 +203,7 @@ describe('Dial UI Kit :: Skeleton', () => {
       const { container } = render(
         <Skeleton
           variant={variant}
-          tone={SkeletonTone.Light}
+          tone={SkeletonTone.Base}
           color="rgb(1, 2, 3)"
           avatar
           paragraph={{ rows: 2 }}

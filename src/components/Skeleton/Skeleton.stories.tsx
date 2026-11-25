@@ -156,21 +156,21 @@ export const Tones: Story = {
       <div className="flex items-start gap-3">
         <Skeleton
           variant={SkeletonVariant.Circular}
-          tone={SkeletonTone.Dark}
+          tone={SkeletonTone.Sunken}
           width={SKELETON_CIRCLE_SIZE_LIST}
           height={SKELETON_CIRCLE_SIZE_LIST}
         />
         <div className="flex flex-1 flex-col gap-3">
           <Skeleton
             variant={SkeletonVariant.Text}
-            tone={SkeletonTone.Dark}
+            tone={SkeletonTone.Sunken}
             width="70%"
             height={SKELETON_BAR_HEIGHT}
             className={SKELETON_BAR_CLASS_NAME}
           />
           <Skeleton
             variant={SkeletonVariant.Text}
-            tone={SkeletonTone.Light}
+            tone={SkeletonTone.Base}
             width="45%"
             height={SKELETON_BAR_HEIGHT}
             className={SKELETON_BAR_CLASS_NAME}

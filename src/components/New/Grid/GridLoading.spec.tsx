@@ -75,10 +75,10 @@ describe('Grid skeleton loading', () => {
         'aria-busy',
         'false',
       );
+      expect(container.querySelector('.ag-body-viewport')).not.toHaveAttribute(
+        'inert',
+      );
     }, wait);
-    expect(container.querySelector('.ag-body-viewport')).not.toHaveAttribute(
-      'inert',
-    );
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
@@ -234,12 +234,13 @@ describe('Grid skeleton loading', () => {
       const { rerender } = render(<Grid<Row> {...props} loading />);
 
       await screen.findByText('Loading people', {}, wait);
+      // jsdom loads no CSS: the hiding is the `visibility: hidden` rule that
+      // `grid.scss` scopes to this class, so assert the hook it keys on.
       await waitFor(() => {
-        const overlay = screen.getByText('Consumer empty overlay');
-        expect(overlay).not.toBeVisible();
-        expect(
-          overlay.closest('[aria-hidden="true"][inert]'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Consumer empty overlay')).toBeInTheDocument();
+        expect(screen.getByRole('region', { name: 'Data grid' })).toHaveClass(
+          'dial-kit-grid-skeleton-loading',
+        );
       }, wait);
       rerender(<Grid<Row> {...props} />);
       await waitFor(

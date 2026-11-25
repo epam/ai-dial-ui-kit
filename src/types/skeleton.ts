@@ -6,8 +6,8 @@ export enum SkeletonVariant {
 }
 
 export enum SkeletonTone {
-  Dark = 'dark',
-  Light = 'light',
+  Sunken = 'sunken',
+  Base = 'base',
 }
 
 export enum SkeletonAvatarSize {

@@ -116,9 +116,9 @@ export const Skeleton: FC<SkeletonProps> = ({
   }
 
   const toneClass =
-    tone === SkeletonTone.Dark
+    tone === SkeletonTone.Sunken
       ? 'bg-layer-sunken'
-      : tone === SkeletonTone.Light
+      : tone === SkeletonTone.Base
         ? 'bg-layer-base'
         : 'bg-layer-raised';
 

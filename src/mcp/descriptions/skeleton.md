@@ -8,16 +8,16 @@ A skeleton shows the shape of the content while it loads. It replaces **only the
 
 **Use the kit component's built-in skeleton when one exists.** Otherwise reuse a suitable kit recipe or an existing shared skeleton for the same layout; only then compose the kit primitives described below. Do not create a second loading implementation for a component that already owns one.
 
-| Situation                                                            | Use                                                                                                                                                                                                           |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Grid with a version of the kit that exposes its skeleton loading API | `Grid` with `loading`, `loadingAppearance={GridLoadingAppearance.Skeleton}` and a localised `loadingLabel`. Leave the data and selection with the grid; do not swap in placeholder rows.                      |
-| A reusable skeleton already matches the content                      | Reuse that composition for the loading state and, where appropriate, the `Suspense` fallback.                                                                                                                 |
-| No suitable built-in state or recipe                                 | Compose `Skeleton` and `SkeletonShimmer`, driven by `useSkeletonTiming`. Extract a shared composition if multiple consumers need the same structure.                                                          |
-| A column or slot needs a different shape                             | Use the owning component's customization point and return kit `Skeleton` primitives, or `null` for a column with no loaded content. Do not replace the component's shimmer, timing or accessibility behavior. |
+| Situation                                       | Use                                                                                                                                                                                                           |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Grid on kit 0.17.0 or later                     | `Grid` with `loading`, `loadingAppearance={GridLoadingAppearance.Skeleton}` and a localised `loadingLabel`. Leave the data and selection with the grid; do not swap in placeholder rows.                      |
+| A reusable skeleton already matches the content | Reuse that composition for the loading state and, where appropriate, the `Suspense` fallback.                                                                                                                 |
+| No suitable built-in state or recipe            | Compose `Skeleton` and `SkeletonShimmer`, driven by `useSkeletonTiming`. Extract a shared composition if multiple consumers need the same structure.                                                          |
+| A column or slot needs a different shape        | Use the owning component's customization point and return kit `Skeleton` primitives, or `null` for a column with no loaded content. Do not replace the component's shimmer, timing or accessibility behavior. |
 
-**Version availability:** `GridLoadingAppearance.Skeleton`, `loadingLabel`, `renderLoadingCell`, `SkeletonTone` and the `SKELETON_*` sizing exports are present in the in-progress UI-kit implementation. Use them only after the kit version installed by the consumer includes them. Do not assume they are available in an earlier published version.
+**Version availability:** `GridLoadingAppearance.Skeleton`, `loadingLabel`, `renderLoadingCell`, `SkeletonTone` and the `SKELETON_*` sizing exports are available from `@epam/ai-dial-ui-kit` 0.17.0. Do not assume they exist in an earlier version.
 
-For example, in a compatible kit version:
+For example, from 0.17.0:
 
 ```tsx
 import { Grid, GridLoadingAppearance } from '@epam/ai-dial-ui-kit';
@@ -38,14 +38,14 @@ import { Grid, GridLoadingAppearance } from '@epam/ai-dial-ui-kit';
 - **Use kit primitives for every visible placeholder.** Draw bars and circles with `Skeleton`, and use one `SkeletonShimmer` for the loading region. Do not build shapes from styled `div`s or add application-specific skeleton colors, radii, gradients, keyframes or animation.
 - **Separate layout from appearance.** Flex/grid layout, spacing, clipping and responsive slot sizing belong to the surrounding component. Skeleton tone, standard sizes, radius and motion come from kit props, exported constants and `SkeletonShimmer`. Dynamic measurements needed to match an existing layout, such as actual grid column widths, are layout exceptions—not a reason to recreate placeholder styling.
 - **Prefer shared recipes to copies.** Keep a reusable skeleton composition beside its owning feature when no kit recipe fits, and use it in both ordinary loading and `Suspense`. Reusable kit-level bar, circle and list-row recipes are a possible future addition; they are **not public components today**.
-- **Use the installed version's public API.** On compatible versions use `SkeletonTone` and the exported `SKELETON_*` constants below. On earlier versions, use the documented kit token classes and standard sizes until the consumer upgrades; do not invent app-specific styles.
+- **Use the kit's public API.** From 0.17.0 use `SkeletonTone` and the exported `SKELETON_*` constants below. Before 0.17.0, use the documented kit token classes and standard sizes until the consumer upgrades; do not invent app-specific styles.
 
 ## Primitives
 
 | Part      | Stands in for          | Use                                                                                                                  |
 | --------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Container | The real block         | `SkeletonShimmer` — in the real block's slot, sized by its placeholders. It carries the shimmer and ARIA attributes. |
-| Circle    | Images, avatars, icons | `Skeleton` with `SkeletonVariant.Circular`, a shared circle size and `SkeletonTone.Dark`.                            |
+| Circle    | Images, avatars, icons | `Skeleton` with `SkeletonVariant.Circular`, a shared circle size and `SkeletonTone.Sunken`.                          |
 | Bar       | Text                   | `Skeleton` with `SkeletonVariant.Text`, `SKELETON_BAR_HEIGHT`, `SKELETON_BAR_CLASS_NAME` and a `SkeletonTone`.       |
 | Shimmer   | Loading motion         | Built into `SkeletonShimmer`: one band over the whole container.                                                     |
 | Timing    | When to show           | `useSkeletonTiming(isLoading)` — delay, minimum display time, reveal fade.                                           |
@@ -56,7 +56,7 @@ Inside a `SkeletonShimmer` the per-element pulse of every `Skeleton` is switched
 
 ## Minimal example
 
-This example uses the in-progress tone and sizing exports; use it after upgrading to a kit release that contains them.
+This example uses the tone and sizing exports available from 0.17.0.
 
 ```tsx
 import {
@@ -94,7 +94,7 @@ const PluginList = ({ isLoading, plugins }: Props) => {
               variant={SkeletonVariant.Text}
               width={width}
               height={SKELETON_BAR_HEIGHT}
-              tone={SkeletonTone.Dark}
+              tone={SkeletonTone.Sunken}
               className={SKELETON_BAR_CLASS_NAME}
             />
           ))}
@@ -166,18 +166,18 @@ A skeleton collapses to 0 when nothing in it has height of its own. The shimmer 
 
 ## Tone
 
-Two tones, both from **kit tokens**. On a compatible kit version, set `tone` rather than repeating a background class.
+Two tones, both from **kit tokens**. From 0.17.0, set `tone` rather than repeating a background class.
 
-| Tone  | Prop                        | Use for                                          |
-| ----- | --------------------------- | ------------------------------------------------ |
-| Dark  | `tone={SkeletonTone.Dark}`  | Primary lines: titles, list-item names, circles. |
-| Light | `tone={SkeletonTone.Light}` | Secondary lines: subtitles, descriptions.        |
+| Tone   | Prop                         | Token             | Use for                                          |
+| ------ | ---------------------------- | ----------------- | ------------------------------------------------ |
+| Sunken | `tone={SkeletonTone.Sunken}` | `bg-layer-sunken` | Primary lines: titles, list-item names, circles. |
+| Base   | `tone={SkeletonTone.Base}`   | `bg-layer-base`   | Secondary lines: subtitles, descriptions.        |
 
 - **Prefer the kit API.** Do not use the `color` prop, hex values, app-specific CSS variables or background overrides for skeleton colour. The kit's tones follow the host's theme.
 - With no `tone`, `Skeleton` retains its existing `bg-layer-raised` background, which can be nearly invisible on a raised surface. Choose the appropriate tone explicitly.
-- Older kit versions without `SkeletonTone` can use their existing token classes: `bg-layer-sunken` for dark and `bg-layer-base` for light. Replace those with the tone prop after upgrading.
+- Before 0.17.0 (no `SkeletonTone`), use the token classes from the table above directly, and switch to the tone prop after upgrading.
 
-Use `SKELETON_BAR_HEIGHT` (20 px) and `SKELETON_BAR_CLASS_NAME` (12 px radius) for bars, and `SKELETON_CIRCLE_SIZE_LIST` / `SKELETON_CIRCLE_SIZE_CARD` (24 / 48 px) for circles. `SKELETON_SHORT_BAR_WIDTH` supplies a short bar width, and `SKELETON_BAR_WIDTHS` supplies deterministic widths to cycle through. Circles are fully round. These constants are in-progress exports; verify the consumer's installed version before importing them.
+Use `SKELETON_BAR_HEIGHT` (20 px) and `SKELETON_BAR_CLASS_NAME` (12 px radius) for bars, and `SKELETON_CIRCLE_SIZE_LIST` / `SKELETON_CIRCLE_SIZE_CARD` (24 / 48 px) for circles. `SKELETON_SHORT_BAR_WIDTH` supplies a short bar width, and `SKELETON_BAR_WIDTHS` supplies deterministic widths to cycle through. Circles are fully round. These constants are available from 0.17.0.
 
 ## Sizing rules
 
@@ -298,7 +298,7 @@ A `loading` prop on `Dropdown` is not provided today; until it is, use the two p
 2. List the data that loads. Keep controls, search, headers and footers real, outside the shimmer ([Scope](#scope-wrap-only-the-loaded-content)). Preserve the component's data and selection where supported.
 3. Render the skeleton in the **same slot** as the real content. In content-sized slots, placeholders carry the height; an already-sized region may be filled or measured ([Height](#height-follow-the-content-or-its-existing-slot)).
 4. Use `Skeleton` for each bar or circle and one `SkeletonShimmer` for the loading area. Do not create custom placeholder styles or motion.
-5. Use the kit's tones and sizing constants when the installed version provides them ([Tone](#tone), [Sizing](#sizing-rules)); use layout classes only for layout.
+5. Use the kit's tones and sizing constants (0.17.0+) ([Tone](#tone), [Sizing](#sizing-rules)); use layout classes only for layout.
 6. Apply the [rhythm](#rhythm): fixed widths, alternating tone. Share a composition when the same structure is reused.
 7. Use `useSkeletonTiming(isLoading)` unless the component owns timing; render the skeleton on `showPlaceholder` with `placeholderClassName`, then show the resolved state on `showContent`.
 8. Check the order of states: loading → error → empty → content. Do not show an empty or error state until loading and the skeleton's minimum display time have finished ([Loading versus empty](#loading-versus-empty)).
@@ -310,5 +310,5 @@ A `loading` prop on `Dropdown` is not provided today; until it is, use the two p
 
 - **`Skeleton` on its own** still pulses per element (`animate-pulse`, via `active`, default `true`) and has no `prefers-reduced-motion` guard. Use it inside `SkeletonShimmer`, which switches the pulse off; do not use a bare `Skeleton` list for a loading region.
 - **`Skeleton` does not set `aria-hidden`** itself. `SkeletonShimmer` hides its children; a `Skeleton` used outside it needs `aria-hidden="true"` from you.
-- **Defaults** — with no tone, `Skeleton` uses `bg-layer-raised`, and `Text` / `Rectangular` have a 4 px radius. On compatible versions use a `SkeletonTone` and `SKELETON_BAR_CLASS_NAME` for the prescribed bar appearance.
+- **Defaults** — with no tone, `Skeleton` uses `bg-layer-raised`, and `Text` / `Rectangular` have a 4 px radius. From 0.17.0 use a `SkeletonTone` and `SKELETON_BAR_CLASS_NAME` for the prescribed bar appearance.
 - **The `color` prop** exists on `Skeleton` for custom colours, but this guide does not use it: prefer the kit tokens.
